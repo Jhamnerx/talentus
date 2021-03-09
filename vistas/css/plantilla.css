@@ -1,0 +1,410 @@
+
+*{
+  margin:0px;
+  padding:0px;
+  list-style: none;
+  text-decoration: none;
+  font-family: 'Ubunt', sans-serif;
+}
+
+
+/*=============================================
+LOADER
+=============================================*/
+#spinner-content {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    position: fixed;
+    z-index: 1000;
+}
+
+.spinner-hidden {
+    opacity: 0;
+    z-index: -1;
+    animation: hiddenspinner 1s linear;
+}
+
+@keyframes hiddenspinner {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.spinner {
+    margin: 40vh auto;
+    width: 50px;
+    height: 90px;
+    text-align: center;
+    font-size: 10px;
+}
+
+.spinner > div {
+    background-color: #052c52;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+    -webkit-animation-delay: -0.9s;
+    animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+    -webkit-animation-delay: -0.8s;
+    animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+    0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+    20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+    0%, 40%, 100% {
+        transform: scaleY(0.4);
+        -webkit-transform: scaleY(0.4);
+    }  20% {
+           transform: scaleY(1.0);
+           -webkit-transform: scaleY(1.0);
+       }
+}
+
+
+
+.almacen{
+	color: #ffffff;
+
+}
+.almacen:hover{
+	color: #052c52;
+
+}
+
+.info-box:hover{
+	transition: .3s all ease;
+	opacity:.8;
+	transform: scale(1.1,1.1);
+	box-shadow: 0px 0px 13px 5px #052c52;
+}
+/*=============================================
+ESCRITORIO GRANDE (LG revisamos en 1366px en adelante)
+=============================================*/
+@media (min-width:1200px){
+
+
+}
+
+/*=============================================
+ESCRITORIO MEDIANO O TABLET HORIZONTAL (MD revisamos en 1024px)
+=============================================*/
+
+@media (max-width:1199px) and (min-width:992px){
+
+
+}
+
+/*=============================================
+ESCRITORIO PEQUEÑO O TABLET VERTICAL (SM revisamos en 768px)
+=============================================*/
+@media (max-width:991px) and (min-width:768px){
+
+	.paddingFix{
+		padding-top: 10px;
+
+	}
+	.tblListadoArcticulos input{
+
+		width: 70px;
+
+	}
+	
+}
+/*=============================================
+MOVIL (XS revisamos en 320px)
+=============================================*/
+@media (max-width:767px){
+
+	.paddingFix{
+		padding-top: 10px;
+
+	}
+	.tblListadoArcticulos input{
+
+		width: 40px;
+
+	}
+	.tablaAddIngresos tr td:nth-child(3), .tablaAddIngresos tr th:nth-child(3){
+	/*Vamos a ocultar la segunda columna*/
+	  border:1px dashed darkgreen;
+	  display:none;
+	}
+	.tablaAddIngresos tr td:nth-child(1), .tablaAddIngresos tr th:nth-child(1){
+	  width: 20px;
+
+	}
+
+
+
+  
+}
+
+
+/*=============================================
+REDES SOCIALES
+=============================================*/
+
+.redSocial{
+    width:30px;
+    height:30px;
+    text-align: center;
+    line-height:30px;
+}
+
+/*FACEBOOK*/
+
+.facebookBlanco{
+    color:white;
+    background: black;
+}
+
+.facebookNegro{
+    color:black;
+    background: white;
+}
+
+.facebookColor{
+    color:white;
+    background: #4278c9;
+}
+
+/*YOUTUBE*/
+
+.youtubeColor{
+    color:white;
+    background: #d6513e;
+}
+
+.youtubeBlanco{
+    color:white;
+    background: black;
+}
+
+.youtubeNegro{
+    color:black;
+    background: white;
+}
+
+/*TWITTER*/
+
+.twitterColor{
+    color:white;
+    background: #60b6ff;
+}
+
+.twitterBlanco{
+    color:white;
+    background: black;
+}
+
+.twitterNegro{
+    color:black;
+    background: white;
+}
+
+/*GOOGLE PLUS*/
+
+.google-plusColor{
+    color:white;
+    background: #f51919;
+}
+
+.google-plusBlanco{
+    color:white;
+    background: black;
+}
+
+.google-plusNegro{
+    color:black;
+    background: white;
+}
+
+/*INSTAGRAM*/
+
+.instagramColor{
+    color:white;
+    background:linear-gradient(45deg, #fca925, #ee1d5f,  #6350a2);
+
+}
+
+.instagramBlanco{
+    color:white;
+    background: black;
+}
+
+.instagramNegro{
+    color:black;
+    background: white;
+}
+
+/*PINTEREST*/
+
+.pinterestColor{
+    color:white;
+    background: #d11515;
+
+}
+
+.pinterestBlanco{
+    color:white;
+    background: black;
+}
+
+.pinterestNegro{
+    color:black;
+    background: white;
+}
+
+.autocomplete-suggestions { border: 1px solid #999; background: #FFF; overflow: auto; }
+.autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+.autocomplete-selected { background: #F0F0F0; }
+.autocomplete-suggestions strong { font-weight: normal; color: #3399FF; }
+.autocomplete-group { padding: 2px 5px; }
+.autocomplete-group strong { display: block; border-bottom: 1px solid #000; }
+
+
+.tooltipb {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltipb .tooltipbtext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #052c52;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Position the tooltipb */
+  position: absolute;
+  z-index: 1;
+}
+
+.tooltipb:hover .tooltipbtext {
+  visibility: visible;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Table ]*/
+
+.limiter {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container-table100 {
+  width: 100%;
+  min-height: 100vh;
+  background: #d1d1d1;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 33px 30px;
+}
+
+.wrap-table100 {
+  width: 1300px;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Table ]*/
+table {
+  width: 100%;
+  background-color: #fff;
+}
+
+th, td {
+  font-weight: unset;
+  padding-right: 10px;
+}
+
+.column100 {
+  width: 130px;
+  padding-left: 25px;
+}
+
+.column100.column1 {
+  width: 215px;
+  padding-left: 42px;
+}
+
+.row100.head th {
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+
+.row100 td {
+  padding-top: 14px;
+  padding-bottom: 12px;
+}
+
+
+/*==================================================================
+[ Ver4 ]*/
+
+.table100.ver4 td {
+  font-size: 16px;
+  color: #808080;
+}
+
+.table100.ver4 th {
+  color: #fff;
+  text-transform: uppercase;
+  background-color: #fa4251;
+}
+
+.table100.ver4 .row100:hover td {
+  color: #fa4251;
+}
+
+.table100.ver4 .hov-column-ver4 {
+  background-color: #ffebed;
+}
+
+.table100.ver4 .hov-column-head-ver4 {
+  background-color: #f95462 !important;
+}
+
+.table100.ver4 .row100 td:hover {
+  background-color: #ffebed;
+  color: #fa4251;
+}

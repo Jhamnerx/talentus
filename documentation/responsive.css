@@ -1,0 +1,20 @@
+@media only screen and (max-width:992px ){
+	.temp-header__logo h2 {
+		font-size: 22px;
+	}
+}
+
+@media only screen and (max-width:768px ){
+	.temp-wrapper__sidebar.affix{
+
+		position: static !important;
+
+		width: 100%;
+	}
+	.temp-wrapper__sidebar{
+		margin-left: 0 !important;
+	}
+	.temp-header__logo h2 {
+		font-size: 20px;
+	}
+}

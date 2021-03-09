@@ -1,0 +1,398 @@
+.style_form input:focus:invalid, .contact_form textarea:focus:invalid {
+    background: #fff url(img/invalid.png) no-repeat 98% center;
+    box-shadow: 0 0 5px #d45252;
+    border-color: #b03535
+}
+.style_form input:required:valid, .contact_form textarea:required:valid select:required {
+    background: #fff url(img/valid.png) no-repeat 98% center;
+    box-shadow: 0 0 5px #5cd053;
+    border-color: #28921f;
+}
+.style_form input:required, .contact_form textarea:required select:required {
+    background: #fff url(img/red_asterisk.png) no-repeat 98% center;
+}
+
+
+/* ============ DEFAULTS =========== */
+
+.form-heading {
+    padding: 0 15px 15px 15px;
+    color: #3C4857;
+    ;
+}
+
+form.formIngreso {
+    background: #fff;
+    padding: 0 15px 15px 15px;
+    position: relative;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 6px 10px -4px rgba(0, 0, 0, 0.15);
+}
+
+.form-control {
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    width: 100%;
+    height: 40px;
+    display: block;
+    border: 1px solid #DDD;
+    color: #3C4857;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background-position: -100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    font-size: 14px;
+    font-weight: 100;
+    margin-bottom: 15px;
+}
+
+.form-control:focus {
+    border: 1px solid #f55a4e !important;
+    box-shadow: none;
+    outline: 0 none;
+}
+
+.img-fluid {
+    margin-bottom: 15px;
+}
+
+
+/* ============ MODAL =========== */
+
+
+button.close {
+    color: #f55a4e;
+    outline: none;
+}
+
+.close {
+    color: #3C4857;
+    opacity: 0.9;
+}
+
+
+/* ============ LABEL =========== */
+
+label {
+    color: #3C4857;
+    font-weight: 300;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    display: inline-block;
+    font-size: 12px;
+}
+
+.floating-label {
+    -webkit-transform: translateY(-18px);
+    transform: translateY(-18px);
+    position: absolute
+}
+
+.label-required:before {
+    content: '*';
+    color: #f55a4e;
+    position: absolute;
+    margin-left: -15px
+}
+
+
+/* ============ INPUT =========== */
+
+input[type=email],
+input[type=text],
+textarea,
+input[type=password],
+input[type=number] {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 15px;
+    width: 100%;
+    border: 1px solid #DDD;
+    border-radius: 4px;
+    padding: 8px;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background-position: -1920px 0;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    color: #3C4857;
+    font-size: 13px;
+    font-weight: 100;
+}
+
+input[type=email].input-active,
+input[type=email]:focus,
+input[type=text].input-active,
+input[type=text]:focus,
+textarea.input-active,
+textarea:focus,
+input[type=password].input-active,
+input[type=password]:focus,
+input[type=number].input-active,
+input[type=number]:focus {
+    background-position: 0 0;
+    box-shadow: none;
+    outline: 0;
+    border: 1px solid #f55a4e;
+}
+
+input[type=email].input-active,
+input[type=email]:focus:after,
+input[type=text].input-active,
+input[type=text]:focus:after,
+textarea.input-active,
+textarea:focus:after,
+input[type=password].input-active,
+input[type=password]:focus:after,
+input[type=number].input-active,
+input[type=number]:focus:after {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 15px;
+    width: 100%;
+    border: none;
+    padding: 15px 0;
+    border-bottom: solid 1px #DDD;
+    will-change: background-position;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 96%, #DDD 96%);
+    background-position: -1920px 0;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    color: #000;
+    font-size: 14px;
+}
+
+input[type=email]::-webkit-input-placeholder,
+input[type=text]::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder,
+input[type=password]::-webkit-input-placeholder,
+input[type=number]::-webkit-input-placeholder {
+    transition: all .2s cubic-bezier(.64, .09, .08, 1);
+    color: #3C4857;
+}
+
+input[type=radio]:after,
+input[type=radio]:before {
+    content: '';
+    position: absolute;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1)
+}
+
+input[type=checkbox] {
+    position: relative;
+    cursor: pointer;
+    top: -2px;
+    margin-left: -1px;
+    margin: 5px 12px 5px 0px;
+}
+
+input[type=checkbox]:before {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f55a4e;
+    border-radius: 3px;
+    background: #fff;
+    position: absolute;
+    top: -2px;
+    margin-left: -1px;
+}
+
+input[type=checkbox]:after {
+    content: '✓';
+    color: #fff;
+    background: #f55a4e;
+    position: absolute;
+    top: -2px;
+    margin-left: -1px;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #f55a4e;
+    border-radius: 3px;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.64, .09, .08, 1);
+    will-change: opacity
+}
+
+input[type=checkbox]:checked:after {
+    opacity: 1
+}
+
+input[type=radio] {
+    position: relative;
+    top: 2px;
+    left: 2px;
+    margin: 0 8px;
+    cursor: pointer
+}
+
+input[type=radio]:before {
+    background-color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #f55a4e;
+    display: inline-block;
+    top: -5px;
+    left: -8px;
+    background-image: radial-gradient(circle, #f55a4e 60%, #fff 70%);
+    background-size: 0;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    will-change: background-size;
+    z-index: 2
+}
+
+input[type=radio]:after {
+    width: 20px;
+    height: 20px;
+    background: #fff;
+    border-radius: 50%
+}
+
+input[type=radio]:checked:before {
+    background-size: 14px 14px
+}
+
+textarea.form-control {
+    padding: 10px 15px;
+    height: auto;
+    margin-bottom: 15px;
+}
+
+::placeholder {
+    color: #3C4857 !important;
+}
+
+
+/* ============ BUTTONS =========== */
+
+.modern-button {
+    margin: 15px 0;
+    padding: 8px 24px;
+    border-radius: 50px;
+    color: #fff;
+    transition: all .3s cubic-bezier(.64, .09, .08, 1);
+    font-size: 14px;
+    font-weight: 100;
+    outline: none;
+}
+
+.modern-red {
+    background: #f55a4e;
+    border: 1px solid #f55a4e;
+    box-shadow: 0 12px 20px -10px rgba(244, 67, 54, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(244, 67, 54, 0.2);
+}
+
+.modern-red:hover {
+    border: 1px solid #dc5146;
+    background: #dc5146;
+}
+
+
+/* ============ RATINGS =========== */
+
+.rating {
+    position: relative;
+    text-align: center;
+    padding: 15px 0;
+}
+
+.rating .rating-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.rating .rating-wrapper > input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    z-index: -1;
+}
+
+.rating .rating-wrapper > label {
+    float: right;
+    padding-right: 2px;
+    padding-left: 2px;
+    color: #3C4857;
+    cursor: pointer;
+}
+
+.rating .rating-wrapper > label {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.rating.star .rating-wrapper > label {
+    font-size: 32px;
+}
+
+.rating.star .rating-wrapper > input:checked ~ label {
+    color: #f55a4e;
+}
+
+.rating.star .rating-wrapper > input:hover ~ label {
+    color: #f55a4e;
+}
+
+.rating .control-label {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
+/* ============ FONT AWESOME SOCIAL ICONS =========== */
+
+.social-line {
+    margin: 10px 0;
+}
+
+.social-line a {
+    font-size: 18px;
+    color: #3C4857;
+}
+
+.social-line .fa-facebook {
+    background-color: #3b5998;
+    color: #fff;
+    border-radius: 50px;
+    height: 36px;
+    width: 36px;
+    min-width: 36px;
+    padding: 11px 8px 8px 8px;
+}
+
+.social-line .fa-twitter {
+    background-color: #55acee;
+    color: #fff;
+    border-radius: 50px;
+    height: 36px;
+    width: 36px;
+    min-width: 36px;
+    padding: 11px 8px 8px 8px;
+}
+
+.social-line .fa-google-plus {
+    background-color: #dd4b39;
+    color: #fff;
+    height: 36px;
+    width: 36px;
+    min-width: 36px;
+    border-radius: 50px;
+    padding: 11px 8px 8px 8px;
+}

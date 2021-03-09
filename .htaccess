@@ -1,0 +1,13 @@
+# Impedir que se pueda ver el listado de contenidos de un directorio
+
+Options All -Indexes
+
+# Url Amigables
+
+RewriteEngine On
+RewriteRule ^([-a-zA-Z0-9/]+)$ index.php?ruta=$1
+
+#REGLAS PARA ARCHIVOS ESTATICO
+RewriteRule ^(scripts|css|js)/(.+)\.(.+)\.(js|css)$ $1/$2.$4 [L]
+RewriteRule ^(scripts|css|images|js)/(.+)\.(.+)\.(js|css|jpg|gif|png)$ $1/$2.$4 [L]
+RewriteRule ^(.*)\.[\d]{10}\.(css|js)$ $1.$2 [L]

@@ -1,0 +1,52 @@
+input[type="file"] {
+    cursor: pointer;
+}
+
+a.btn-file {
+    background-color: #189094;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    text-shadow: none;
+    display: inline-block;
+    cursor: pointer;
+}
+.file-btn input[type="file"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    opacity: 0;
+}
+/*=============================================
+FOTO PERFIL
+=============================================*/
+.upload-msg-perfil {
+    text-align: center;
+    padding: 50px;
+    font-size: 22px;
+    color: #aaa;
+    width: 260px;
+    margin: 50px auto;
+    border: 1px solid #aaa;
+}
+
+.upload-perfil .upload-perfil-wrap,
+.upload-perfil .upload-result-perfil,
+.upload-perfil.ready .upload-msg-perfil {
+    display: none;
+}
+.upload-perfil.ready .upload-perfil-wrap {
+    display: block;
+}
+.upload-perfil.ready .upload-result-perfil {
+    display: inline-block;    
+}
+.upload-perfil-wrap {
+    width: 320px;
+    height: 355px;
+}

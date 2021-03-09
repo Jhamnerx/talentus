@@ -1,0 +1,116 @@
+			.contrato{
+			  font-size: 14px;
+			  color: #000;
+			}
+			.page1{
+			  background-repeat: no-repeat;
+			  background-size: 100%;
+			  width: 21cm;
+			  height: 29.7cm;
+			  position: relative;
+			  left: 0px;
+			  top: 0px;
+
+
+			}
+			.page2{
+			  background-repeat: no-repeat;
+			  background-size: 100%;
+			  top: 10px;
+			  width: 21cm;
+			  height: 29.7cm;
+			  position: relative;
+			  left: 0px;
+			  top: 0px;
+
+
+
+			}
+			.page3{
+			  background-repeat: no-repeat;
+			  background-size: 100%;
+			  top: 10px;
+			  width: 21cm;
+			  height: 29.7cm;
+			  position: relative;
+			  left: 0px;
+			  top: 0px;
+			}
+
+
+			.page4{
+			  background-repeat: no-repeat;
+			  background-size: 100%;
+			  top: 10px;
+			  width: 21cm;
+			  height: 29.7cm;
+			  position: relative;
+			  left: 0px;
+			  top: 0px;
+			}
+			
+
+			*{
+			    margin:0px;
+			    padding:0px;
+			    list-style: none;
+			    text-decoration: none;
+			    font-family: "Ubunt", sans-serif;
+			}
+
+			ul, ol{
+			    padding:0px;
+			}
+
+			a:visited, a:link, a:focus, a:hover, a:active{
+			    list-style: none;
+			    text-decoration: none;
+			}
+
+			.barraSuperior{
+			    background:#052c52;
+			    opacity: 0.90;
+			}
+
+			.barraSuperior a{
+			    color:white;
+			}
+
+			.backColor, .backColor a{
+			    background:#47bac1;
+			    color:white;
+			}
+			.fondoBreadcrumb{
+			    margin-bottom:0px;
+			    background: rgba(0,0,0,0);
+			}
+
+			.pdf{
+			    position: relative;
+			    top:10px;
+
+			    left: 1000px;}
+			.fecha{
+			    position:absolute;
+			    bottom:170px;
+			    left:100px;
+			    font-family:Arial, Helvetica, sans-serif;
+			    font-size:16px;
+			    }
+			.button{
+
+			    border: 1px solid #fff;
+			    padding: 15px;
+			    text-align: center;
+			    text-decoration: none;
+			    display: inline-block;
+			    font-size: 13px;
+			    margin: 4px 2px;
+			    cursor: pointer;
+			}
+			.titulo_options{
+			    font-size: 16px;
+			    color: #000;
+
+
+			}

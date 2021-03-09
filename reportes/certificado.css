@@ -1,0 +1,277 @@
+  .pdf{
+    position: relative;
+    top:10px;
+
+    left: 1000px;}
+.fecha{
+    position:absolute;
+    bottom:210px;
+    left:100px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:16px;
+    }
+.button{
+
+    border: 1px solid #fff;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.titulo_options{
+    font-size: 16px;
+    color: #000;
+
+
+}
+
+    .certificado{
+    background-image: url(../public/img/acta.jpg);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    width: 21cm;
+    height: 29.7cm;
+    position: relative;
+    left: 0px;
+    top: 0px;
+    font-size: 15px;
+    color: #000;
+    }
+    .numeracion{
+    position:absolute;
+    right: 30px;
+    top: 30px;
+    color:#F00;
+    font-family:Arial, Helvetica, sans-serif;
+    font-style:!important;
+    font-weight:bold;
+    font-size:26px;}
+.titulo{
+    position:absolute;
+    left: 350px;
+    top: 100px;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:26px;
+    text-align: center;
+    }
+
+.modelo{
+    position:absolute;
+    left: 120px;
+    top: 195px;
+    font-family:Arial, Helvetica, sans-serif;
+    text-justify:auto;
+    font-weight:bold;
+
+}
+.acredita{
+    position:absolute;
+    left: 120px;
+    top: 260px;
+    font-family:Arial, Helvetica, sans-serif;
+    text-justify:auto;
+    font-weight:bold;
+
+}
+.caracteristicas{
+    position:absolute;
+    left: 120px;
+    top: 350px;
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+.caracteristicas_info{
+    position:absolute;
+    left: 120px;
+    top: 390px;
+    font-family:Arial, Helvetica, sans-serif;
+
+
+}
+.caracteristicas_info table td{
+      color: #000;
+}
+.caracteristicas_info table{
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+
+.certifica{
+
+
+    display: none;
+
+    }
+
+.info_cliente{
+    position:absolute;
+    left: 100px;
+    top: 550px;
+    font-family:Arial, Helvetica, sans-serif;
+
+}
+
+.fin_cobertura{
+    position:absolute;
+    left: 100px;
+    top: 650px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.descripcion{
+    position:absolute;
+    top:370px;
+    font-family:Arial, Helvetica, sans-serif;
+    left:200px;
+    display: none;}
+.sello{
+    position: absolute;
+    bottom: 135px;
+    left: 115px;
+}
+
+*{
+    margin:0px;
+    padding:0px;
+    list-style: none;
+    text-decoration: none;
+    font-family: 'Ubunt', sans-serif;
+}
+
+ul, ol{
+    padding:0px;
+}
+
+a:visited, a:link, a:focus, a:hover, a:active{
+    list-style: none;
+    text-decoration: none;
+}
+
+.barraSuperior{
+    background:#052c52;
+    opacity: 0.90;
+}
+
+.barraSuperior a{
+    color:white;
+}
+
+.backColor, .backColor a{
+    background:#47bac1;
+    color:white;
+}
+.fondoBreadcrumb{
+    margin-bottom:0px;
+    background: rgba(0,0,0,0);
+}
+
+/*=============================================
+TOP
+=============================================*/
+
+#top ul{
+    padding-top:8px;
+}
+
+#top ul li{
+    display:inline;
+    line-height:30px;
+    margin:0px 5px;
+    color:white;
+}
+
+.social ul li a i{
+    font-size:18px;
+    margin:0 1px;
+}
+
+/*=============================================
+REDES SOCIALES
+=============================================*/
+
+.redSocial{
+    width:30px;
+    height:30px;
+    text-align: center;
+    line-height:30px;
+}
+
+/*FACEBOOK*/
+
+.facebookBlanco{
+    color:white;
+}
+
+.facebookNegro{
+    color:black;
+}
+
+.facebookColor{
+    color:white;
+    background:#46639f;
+}
+
+/*YOUTUBE*/
+
+.youtubeColor{
+    color:white;
+    background:#d6513e;
+}
+
+.youtubeBlanco{
+    color:white;
+}
+
+.youtubeNegro{
+    color:black;
+}
+
+/*TWITTER*/
+
+.twitterColor{
+    color:white;
+    background:#0ab2e6;
+}
+
+.twitterBlanco{
+    color:white;
+}
+
+.twitterNegro{
+    color:black;
+}
+
+/*GOOGLE PLUS*/
+
+.googleColor{
+    color:white;
+    background:#d71617;
+}
+
+.googleBlanco{
+    color:white;
+}
+
+.googleNegro{
+    color:black;
+}
+
+/*INSTAGRAM*/
+
+.instagramColor{
+    color:white;
+    background:linear-gradient(45deg, #fca925, #ee1d5f,  #6350a2);
+
+}
+
+.instagramBlanco{
+    color:white;
+}
+
+.instagramNegro{
+    color:black;
+}

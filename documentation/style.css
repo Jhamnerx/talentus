@@ -1,0 +1,122 @@
+
+body{
+  font-family: 'Montserrat', sans-serif;
+}
+/*========================================
+=            style for header            =
+========================================*/
+
+.temp-header__logo {
+ border-bottom: 1px solid #bababa;
+ text-align: center;
+}
+.temp-header__logo h1{
+  font-size: 26px;
+  text-transform: uppercase;
+  color: #052c52;
+  font-weight: bold;
+}
+.temp-header__logo h2{
+  display: inline-block;
+}
+
+
+/*=====  End of style for header  ======*/
+ /*=======================================
+ =            sidebar section            =
+ =======================================*/
+ 
+ .temp-wrapper__sidebar{
+  background-color: #052c52;
+  margin-left: -15px;
+  top:0;
+  height: 100vh;
+}
+.temp-wrapper__sidebar.affix{
+  width: 24%;
+}
+.temp-wrapper__list-wrap{
+  list-style: none;
+  padding: 15px;
+}
+.temp-wrapper__sidebar li a{
+  color: #fff;
+  font-size: 16px;
+}
+.temp-wrapper__sidebar li a i{
+  margin-right: 15px;
+}
+.temp-wrapper__sidebar li a:hover{
+  text-decoration: none;
+}
+.temp-wrapper__sidebar li a:focus{
+  outline: none;
+  text-decoration: none;
+}
+.temp-wrapper__sidebar li{
+  padding-bottom: 15px;
+  padding-top: 15px;
+}
+
+/*=====  End of sidebar section  ======*/
+ /*=======================================
+ =            content section            =
+ =======================================*/
+ .temp-wrapper__content h2 {
+  font-size: 23px;
+  margin-bottom: 60px;
+  margin-top: 30px;
+  position: relative;
+  color: #12565D;
+}
+.temp-wrapper__content h2 :after{
+  background: #bababa none repeat scroll 0 0;
+  bottom: -28px;
+  content: "";
+  height: 1px;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+.temp-wrapper__content p{
+  line-height: 31px;
+}
+/*general section*/
+.temp-wrapper__content-container ul{
+  list-style: none;
+
+}
+.temp-wrapper__content-container h4{
+  margin-top: 40px;
+}
+.temp-wrapper__content-container ul li{
+  margin-bottom: 15px;
+  margin-top: 15px;
+  color: #000;
+}
+.temp-wrapper__content-container ul li i{
+  margin-right: 15px;
+}
+.temp-wrapper__content-container ul li span{
+  color: #052c52;
+  font-weight: 500;
+}
+/*end*/
+
+/*file structure*/
+.temp-wrapper__content-container img{
+  width: 100%;
+}
+/*end*/
+.temp-wrapper__temp-link {
+  color: red;
+  font-weight: 500;
+  margin-left: 15px;
+}
+.temp-wrapper__inner-content{
+  padding-top: 5px;
+}
+.temp-wrapper__main-content{
+  padding-top: 5px;
+}
+/*=====  End of content section  ======*/
