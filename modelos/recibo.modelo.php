@@ -14,7 +14,7 @@ class ModeloRecibos{
 		if($item != null){
 
 			if ($cant != 0) {
-				
+
 				$stmt = Conexion::conectar()->prepare("SELECT * FROM $tabla WHERE $item = :$item");
 
 				$stmt -> bindParam(":".$item, $valor, PDO::PARAM_STR);
@@ -47,9 +47,9 @@ class ModeloRecibos{
 		}
 
 		$stmt -> close();
-		
+
 		$stmt = null;
-	
+
 	}
 
 	/*=============================================
@@ -67,9 +67,9 @@ class ModeloRecibos{
 
 
 		$stmt -> close();
-		
+
 		$stmt = null;
-	
+
 	}
 
 	/*=============================================
@@ -88,9 +88,9 @@ class ModeloRecibos{
 		return $stmt -> fetchAll();
 
 		$stmt -> close();
-		
+
 		$stmt = null;
-	
+
 	}
 
 	/*=============================================
@@ -107,10 +107,10 @@ class ModeloRecibos{
 		if($stmt -> execute()){
 
 			return 1;
-		
+
 		}else{
 
-			return 0;	
+			return 0;
 
 		}
 
@@ -123,11 +123,11 @@ class ModeloRecibos{
 	GUARDAR RECIBO
 	=============================================*/
 
-	static public function mdlGuardarRecibo($tabla, $datos){	
+	static public function mdlGuardarRecibo($tabla, $datos){
 
 		$dbh = Conexion::conectar();
 
-		$stmt = $dbh->prepare("INSERT INTO $tabla(idcliente, empresa, num_recibo, tipoPago, total_recibo, divisa, fecha, estado) VALUES (:idcliente, :empresa, :num_recibo, :tipoPago, :total_recibo, :divisa, :fecha, 1)");
+		$stmt = $dbh->prepare("INSERT INTO $tabla(idcliente, empresa, num_recibo, tipoPago, total_recibo, divisa, fechaPago, fecha, estado) VALUES (:idcliente, :empresa, :num_recibo, :tipoPago, :total_recibo, :divisa, :fechaPago, :fecha, 1)");
 
 		$stmt->bindParam(":idcliente", $datos["idcliente"], PDO::PARAM_INT);
 		$stmt->bindParam(":empresa", $datos["empresa"], PDO::PARAM_STR);
@@ -136,9 +136,10 @@ class ModeloRecibos{
 		$stmt->bindParam(":total_recibo", $datos["total_recibo"], PDO::PARAM_STR);
 		$stmt->bindParam(":divisa", $datos["divisa"], PDO::PARAM_STR);
 		$stmt->bindParam(":fecha", $datos["fecha"], PDO::PARAM_STR);
+		$stmt->bindParam(":fechaPago", $datos["fechaPago"], PDO::PARAM_STR);
 
 
-		
+
 
 		$stmt->execute();
 		$id = $dbh->lastInsertId();
@@ -153,7 +154,7 @@ class ModeloRecibos{
 	=============================================*/
 
 	static public function mdlGuardarReciboDetalle($tabla, $datos){
-		
+
 		$num_elementos = 0;
 
 		while ($num_elementos < count($datos["item"])){
@@ -170,7 +171,7 @@ class ModeloRecibos{
 
 			$num_elementos++;
 
-			
+
 
 		}
 		return 1;
@@ -189,10 +190,10 @@ class ModeloRecibos{
 		if($stmt -> execute()){
 
 			return 1;
-		
+
 		}else{
 
-			return 0;	
+			return 0;
 
 		}
 
@@ -213,10 +214,10 @@ class ModeloRecibos{
 		if($stmt -> execute()){
 
 			return 1;
-		
+
 		}else{
 
-			return 0;	
+			return 0;
 
 		}
 
@@ -232,7 +233,7 @@ class ModeloRecibos{
 
 	static public function mdlEditarRecibo($tabla, $datos){
 
-		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET idcliente = :idcliente, empresa = :empresa, num_recibo = :num_recibo, tipoPago = :tipoPago, total_recibo = :total_recibo, divisa = :divisa, fecha = :fecha WHERE id = :id");
+		$stmt = Conexion::conectar()->prepare("UPDATE $tabla SET idcliente = :idcliente, empresa = :empresa, num_recibo = :num_recibo, tipoPago = :tipoPago, total_recibo = :total_recibo, divisa = :divisa, fechaPago = :fechaPago, fecha = :fecha WHERE id = :id");
 
 		$stmt->bindParam(":id", $datos["id"], PDO::PARAM_INT);
 		$stmt->bindParam(":idcliente", $datos["idcliente"], PDO::PARAM_INT);
@@ -242,28 +243,29 @@ class ModeloRecibos{
 		$stmt->bindParam(":total_recibo", $datos["total_recibo"], PDO::PARAM_STR);
 		$stmt->bindParam(":divisa", $datos["divisa"], PDO::PARAM_STR);
 		$stmt->bindParam(":fecha", $datos["fecha"], PDO::PARAM_STR);
+		$stmt->bindParam(":fechaPago", $datos["fechaPagoEditar"], PDO::PARAM_STR);
 
 		if($stmt -> execute()){
 
 			return 1;
-		
+
 		}else{
 
-			return 0;	
+			return 0;
 
 		}
 
 		$stmt -> close();
 
 		$stmt = null;
-		
+
 	}
 	/*=============================================
 	ACTUALIZAR DETALLE RECIBO
 	=============================================*/
 
 	static public function mdlEditarReciboDetalle($tabla, $datos){
-		
+
 		$num_elementos = 0;
 
 		while ($num_elementos < count($datos["item"])){
@@ -280,7 +282,7 @@ class ModeloRecibos{
 
 			$num_elementos++;
 
-			
+
 
 		}
 		return 1;
@@ -301,10 +303,10 @@ class ModeloRecibos{
 		if($stmt -> execute()){
 
 			return 1;
-		
+
 		}else{
 
-			return 0;	
+			return 0;
 
 		}
 

@@ -1,13 +1,13 @@
-<?php 
+<?php
 require_once '../controladores/recibo.controlador.php';
 require_once '../modelos/recibo.modelo.php';
 
 class AjaxRecibo
 {
-	
+
 	/*=============================================
   	GUARDAR RECIBO
-  	=============================================*/	
+  	=============================================*/
   	public $idcliente;
   	public $nEmpresa;
   	public $num_recibo;
@@ -15,6 +15,7 @@ class AjaxRecibo
   	public $total_recibo;
   	public $divisa;
   	public $fecha;
+		public $fechaPago;
   	public $item;
   	public $cantidad;
   	public $precio;
@@ -29,6 +30,7 @@ class AjaxRecibo
 	  				   "tipoPago"=>$this->tipoPago,
 	  				   "total_recibo"=>$this->total_recibo,
 	  				   "fecha"=>$this->fecha,
+							 "fechaPago"=>$this->fechaPago,
 	  				   "divisa"=>$this->divisa,
 	  				   "item"=>$this->item,
 	  				   "cantidad"=>$this->cantidad,
@@ -44,7 +46,7 @@ class AjaxRecibo
 
 	/*=============================================
   	EDITAR RECIBO
-  	=============================================*/	
+  	=============================================*/
   	public $clienteIdEditar;
   	public $idDetalle;
   	public $idReciboEditar;
@@ -54,6 +56,7 @@ class AjaxRecibo
   	public $total_reciboEditar;
   	public $divisaEditar;
   	public $fechaEditar;
+		public $fechaPagoEditar;
   	public $itemEditar;
   	public $cantidadEditar;
   	public $precioEditar;
@@ -70,6 +73,7 @@ class AjaxRecibo
 	  				   "tipoPago"=>$this->tipoPagoEditar,
 	  				   "total_recibo"=>$this->total_reciboEditar,
 	  				   "fecha"=>$this->fechaEditar,
+							 "fechaPagoEditar" =>$this->fechaPagoEditar,
 	  				   "divisa"=>$this->divisaEditar,
 	  				   "item"=>$this->itemEditar,
 	  				   "cantidad"=>$this->cantidadEditar,
@@ -84,7 +88,7 @@ class AjaxRecibo
 
 	/*=============================================
   	MOSTRAR RECIBO
-  	=============================================*/	
+  	=============================================*/
   	public $idRecibo;
 
   	public function ajaxMostrarRecibo(){
@@ -98,7 +102,7 @@ class AjaxRecibo
   	}
 	/*=============================================
   	MOSTRAR RECIBOS REPORTE
-  	=============================================*/	
+  	=============================================*/
   	public $FechaRecibo;
 
   	public function ajaxMostrarRecibos(){
@@ -112,7 +116,7 @@ class AjaxRecibo
   	}
 	/*=============================================
   	DETALLE RECIBO
-  	=============================================*/	
+  	=============================================*/
   	public $idRecibo_detalle;
 
   	public function ajaxDetalleRecibo(){
@@ -141,7 +145,7 @@ class AjaxRecibo
 
   /*=============================================
   CAMBIAR ESTADO RECIBO
-  =============================================*/	
+  =============================================*/
 
   public $activarRecibo;
   public $idReciboEstado;
@@ -152,7 +156,7 @@ class AjaxRecibo
 
 
     $estado = ModeloRecibos::mdlActualizarRecibo("recibo", $this->itemEstado, $this->activarRecibo, "id", $this->idReciboEstado);
-  
+
 
     echo $estado;
 
@@ -172,6 +176,7 @@ if (isset($_POST["nameEmpresa"])) {
 	$guardarRecibo -> tipoPago = $_POST["tipoPago"];
 	$guardarRecibo -> total_recibo = $_POST["total_recibo"];
 	$guardarRecibo -> fecha = $_POST["fecha_hora"];
+	$guardarRecibo -> fechaPago = $_POST["fechaPagoRecibo"];
 	$guardarRecibo -> divisa = $_POST["divisa"];
 	$guardarRecibo -> item = $_POST["item"];
 	$guardarRecibo -> cantidad = $_POST["cantidad"];
@@ -193,6 +198,7 @@ if (isset($_POST["clienteIdEditar"])) {
 	$editarRecibo -> tipoPagoEditar = $_POST["tipoPagoEditar"];
 	$editarRecibo -> total_reciboEditar = $_POST["total_reciboEditar"];
 	$editarRecibo -> fechaEditar = $_POST["fechaEditar"];
+	$editarRecibo -> fechaPagoEditar = $_POST["fechaPagoReciboEditar"];
 	$editarRecibo -> divisaEditar = $_POST["divisaEditar"];
 	$editarRecibo -> itemEditar = $_POST["itemEditar"];
 	$editarRecibo -> cantidadEditar = $_POST["cantidadEditar"];

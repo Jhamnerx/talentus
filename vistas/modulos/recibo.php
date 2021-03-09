@@ -83,7 +83,10 @@
              <option value="DEPOSITO EN CUENTA">DEPOSITO EN CTA</option>
           </select>
         </div>
-
+        <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-12">
+          <label>Fecha de pago:</label>
+          <input type="date" class="form-control fecha fechaPagoRecibo" name="fechaPagoRecibo" required="">
+        </div>
         <div class="form-group col-xs-12">
           <a data-toggle="modal" href="#modalAgregarArticuloRecibo">
             <button onclick="agregarDetalleRecibos()" id="btnAgregarArt" type="button" class="btn btn-primary"> <span class="fa fa-plus"></span> Agregar</button>
@@ -296,8 +299,14 @@ MODAL EDITAR RECIBO
                  <option value="CREDITO">CREDITO</option>
                  <option value="CONTADO">CONTADO</option>
                  <option value="EFECTIVO">EFECTIVO</option>
+                 <option value="DEPOSITO EN CUENTA">DEPOSITO EN CTA</option>
               </select>
 
+            </div>
+
+            <div class="form-group col-sm-6 col-xs-12">
+              <label>Fecha de pago:</label>
+              <input type="date" class="form-control fecha fechaPagoReciboEditar" name="fechaPagoReciboEditar" required="">
             </div>
 
             <div class="form-group col-lg-12 col-xs-12">

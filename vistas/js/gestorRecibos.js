@@ -3,7 +3,7 @@
 
 // 	url:"ajax/tablaRecibos.ajax.php",
 // 	success:function(respuesta){
-		
+
 // 		console.log(respuesta);
 
 // 	}
@@ -63,7 +63,7 @@ $(".btnAgregarRecibo").on("click", function(){
 		$(".btnCancelar").show();
 		detalles=0;
 		$("#btnAgregarArt").show();
-		
+
 		localStorage.removeItem("listaProductosRecibo");
 })
 
@@ -87,11 +87,11 @@ function marcarImpuesto()
   	var tipo_comprobante=$(".tipo_comprobante option:selected").text();
   	if (tipo_comprobante=='Factura + IGV' || tipo_comprobante=='Factura IGV INC')
     {
-        $(".impuesto").val(impuesto); 
+        $(".impuesto").val(impuesto);
     }
     else
     {
-        $(".impuesto").val("0"); 
+        $(".impuesto").val("0");
     }
   }
 
@@ -313,7 +313,7 @@ function evaluarGuardarRecibo(){
 	}
 	else
 	{
-	  $(".guardarRecibo").hide(); 
+	  $(".guardarRecibo").hide();
 	  cont=0;
 	}
 }
@@ -336,7 +336,7 @@ function limpiarFormRecibo()
 	$(".total").val("");
 	$(".filas").remove();
 	$(".total").html("0");
-	
+
 	//Obtenemos la fecha actual
 	var now = new Date();
 	var day = ("0" + now.getDate()).slice(-2);
@@ -441,8 +441,8 @@ $(".guardarRecibo").click(function(){
 			success: function(respuesta){
 
 
-				console.log(respuesta);
-				
+				//console.log(respuesta);
+
 				if(respuesta != null){
 
 					swal({
@@ -486,7 +486,7 @@ $(".guardarRecibo").click(function(){
 			  // }
 			})
 	}
-	
+
 })
 
 
@@ -547,15 +547,16 @@ $(".tablaRecibos tbody").on("click", ".btnEditarRecibo", function(){
 			$("#modalEditarRecibo .idReciboEditar").val(Recibo.id);
 			$("#modalEditarRecibo .nEmpresa").val(Recibo.empresa);
 			$("#modalEditarRecibo .fechaEditar").val(Recibo.fecha);
+			$("#modalEditarRecibo .fechaPagoReciboEditar").val(Recibo.fechaPago);
 			$("#modalEditarRecibo .divisaEditar").val(Recibo.divisa);
 			$("#modalEditarRecibo .num_reciboEditar").val(Recibo.num_recibo);
 			$("#modalEditarRecibo .tipoPagoEditar").val(Recibo.tipoPago);
 			$("#modalEditarRecibo .totalEditar").html(Recibo.total_recibo);
 			$("#modalEditarRecibo .total_reciboEditar").val(Recibo.total_recibo);
 			$("#modalEditarRecibo .clienteIdEditar").val(Recibo.idcliente);
-			
-			
-			
+
+
+
 			if(respuesta != null){
 
 				if (Recibo.idcliente != null) {
@@ -582,13 +583,13 @@ $(".tablaRecibos tbody").on("click", ".btnEditarRecibo", function(){
 
 								$("#modalEditarRecibo .clienteEditar").val(respuesta.nombre +" "+respuesta.apellido)
 							}
-							
+
 
 						}
 					})
 				}
 
-				
+
 
 				var datosRecibo = new FormData();
 				datosRecibo.append("idRecibo_detalle", idRecibo);
@@ -669,8 +670,8 @@ $(".btnGuardarEditar").click(function(){
 			success: function(respuesta){
 
 
-				console.log(respuesta);
-				
+			//	console.log(respuesta);
+
 				if(respuesta != null){
 
 					swal({
@@ -714,7 +715,7 @@ $(".btnGuardarEditar").click(function(){
 			  // }
 			})
 	}
-	
+
 })
 
 
@@ -817,13 +818,13 @@ $("#modalEditarRecibo").on("click", ".CambiarEstado", function(e){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
       		console.log(respuesta);
 
       		tablaRecibos.ajax.reload();
-      	    
 
-      	} 	 
+
+      	}
 
   	});
 
@@ -843,7 +844,7 @@ $("#modalEditarRecibo").on("click", ".CambiarEstado", function(e){
                 //location.reload();
               }
      	});
-  	
+
   	}if(estado == 1){
   		iziToast.show({
               title: '<h4><label class="label-warning">RECIBO MARCADO</label></h4>',
@@ -883,12 +884,12 @@ $(".tablaRecibos tbody").on("click", ".btnActivar", function(){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
 
       		//console.log(respuesta);
-      	    
 
-      	} 	 
+
+      	}
 
   	});
 
@@ -913,7 +914,7 @@ $(".tablaRecibos tbody").on("click", ".btnActivar", function(){
                 //location.reload();
               }
      	});
-  	
+
   	}else{
 
   		$(this).addClass('btn-success');

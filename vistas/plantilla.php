@@ -1,16 +1,16 @@
-<html>
+<html lang="es">
 <head>
-  <?php 
+  <?php
 
     /*=============================================
     MANTENER LA RUTA FIJA DEL PROYECTO
     =============================================*/
-    
+
     $url = Ruta::ctrRuta();
 
     $datosEmpresa = ModeloPlantilla::mdlSeleccionarPlantilla("plantilla");
 
-    $datos = json_decode($datosEmpresa["empresa"],true);    
+    $datos = json_decode($datosEmpresa["empresa"],true);
 
 
 
@@ -23,7 +23,7 @@
   <link rel="icon" href="<?php echo $url; ?>vistas/img/plantilla/icono.png">
 
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  
+
   <!--=====================================
   PLUGINS DE CSS
   ======================================-->
@@ -38,7 +38,7 @@
 
   <!-- Theme style -->
   <link rel="stylesheet" href="<?php echo $url; ?>vistas/dist/css/AdminLTE.min.css">
-  
+
   <link rel="stylesheet" href="<?php echo $url; ?>vistas/dist/css/skins/_all-skins.css">
 
   <!-- iCheck -->
@@ -79,7 +79,7 @@
 
    <link rel="stylesheet" href="<?php echo $url; ?>vistas/js/plugins/croppie/croppie.css">
 
-   
+
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
 
   <!--=====================================
@@ -87,7 +87,7 @@
   ======================================-->
 
   <link rel="stylesheet" href="<?php echo $url; Utiles::auto_version('vistas/css/plantilla.css'); ?>" type="text/css">
-  
+
   <link rel="stylesheet" href="<?php echo $url; Utiles::auto_version('vistas/css/login.css');?>" type="text/css" >
   <link rel="stylesheet" href="<?php echo $url; Utiles::auto_version('vistas/css/formstyle.css');?>" type="text/css" >
   <link rel="stylesheet" href="<?php echo $url; Utiles::auto_version('vistas/css/usuarios.css');?>" type="text/css" >
@@ -165,7 +165,7 @@
 
    <script src="<?php echo $url; ?>vistas/js/plugins/izitoast/iziToast.min.js"></script>
    <script src="<?php echo $url; ?>vistas/js/plugins/croppie/croppie.min.js"></script>
-   
+
    <script src="<?php echo $url; ?>vistas/js/plugins/kendo.all.min.js"></script>
 
   <!-- Select2 -->
@@ -264,7 +264,7 @@ if (isset($_SESSION["validarSesion"]) && $_SESSION["validarSesion"] == "ok") {
             include "modulos/".$rutas[0].".php";
 
 
-          
+
         }else{
 
           include "modulos/inicio.php";
@@ -294,7 +294,7 @@ if (isset($_SESSION["validarSesion"]) && $_SESSION["validarSesion"] == "ok") {
 
 
 
- 
+
 ?>
 
 <!--=====================================
