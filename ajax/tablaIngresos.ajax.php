@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "../controladores/ingresos.controlador.php";
 require_once "../controladores/persona.controlador.php";
 require_once "../modelos/ingresos.modelo.php";
@@ -7,11 +7,11 @@ require_once "../modelos/persona.modelo.php";
 
 
 /**
- * 
+ *
  */
 class TablaIngresos
 {
-	
+
 	public function mostrarTabla()
 	{
 		$item = null;
@@ -30,14 +30,14 @@ class TablaIngresos
 	    }
 
 	 	$datosJson = '{
-			 
+
 			  "data": [ ';
 
 		for($i = 0; $i < count($ingresos); $i++){
 
 			/*=============================================
 			PROVEEDOR
-			=============================================*/ 
+			=============================================*/
 
 
 		    $item = "id";
@@ -50,10 +50,10 @@ class TablaIngresos
 
 			/*=============================================
 			REVISAR ESTADO
-			=============================================*/ 
+			=============================================*/
 
 			if($ingresos[$i]["estado"] == 0){
-				
+
 				$colorEstado = "label-danger";
 				$textoEstado = "Desactivado";
 				$estadoIngreso = 1;
@@ -86,18 +86,23 @@ class TablaIngresos
   			$fecha=date_format(date_create($ingresos[$i]["fecha_hora"]),"d/m/Y");
   			$date = DateTime::createFromFormat("d/m/Y", $fecha);
   			$dia = strftime("%d", $date->getTimestamp());
-			$mes = strftime("%B",$date->getTimestamp());
-			$year = strftime("%Y",$date->getTimestamp());
+				$mes = strftime("%B",$date->getTimestamp());
+				$year = strftime("%Y",$date->getTimestamp());
 
-			$fechaFormat = $dia." de ".$mes." del ".$year;
+				$fechaFormat = $dia." de ".$mes." del ".$year;
+				if ($proveedor) {
+					if ($proveedor["apellido"] == null) {
 
-	        if ($proveedor["apellido"] == "null") {
 	            $nombre_cliente = $proveedor["nombre"];
 
 	        }else{
 
 	            $nombre_cliente = $proveedor["nombre"]. " ".$proveedor["apellido"];
 	        }
+				}else {
+					 $nombre_cliente = "<em>Proveedor sin datos</em>";
+				}
+
 
 			$datosJson	 .= '[
 				      "'.($i+1).'",
@@ -109,7 +114,7 @@ class TablaIngresos
 				      "'.$ingresos[$i]["divisa"]." ".$ingresos[$i]["total_compra"].'",
 				      "'.$fechaFormat.'",
 				      "'.$estado.'"
-				      
+
 				    ],';
 
 		}
@@ -118,8 +123,8 @@ class TablaIngresos
 		$datosJson = substr($datosJson, 0, -1);
 
 		$datosJson.=  ']
-			  
-		}'; 
+
+		}';
 
 		echo $datosJson;
 
@@ -128,6 +133,6 @@ class TablaIngresos
 
 /*=============================================
 ACTIVAR TABLA DE CATEGORÍAS
-=============================================*/ 
+=============================================*/
 $activar = new TablaIngresos();
 $activar -> mostrarTabla();
