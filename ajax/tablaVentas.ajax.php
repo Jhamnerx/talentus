@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once "../controladores/ventas.controlador.php";
 require_once "../controladores/persona.controlador.php";
 require_once "../controladores/usuarios.controlador.php";
@@ -9,11 +9,11 @@ require_once "../modelos/usuarios.modelo.php";
 
 
 /**
- * 
+ *
  */
 class TablaVentas
 {
-	
+
 	public function mostrarTabla()
 	{
 		$item = null;
@@ -32,14 +32,14 @@ class TablaVentas
 	    }
 
 	 	$datosJson = '{
-			 
+
 			  "data": [ ';
 
 		for($i = 0; $i < count($ventas); $i++){
 
 			/*=============================================
 			cliente
-			=============================================*/ 
+			=============================================*/
 
 
 		    $item = "id";
@@ -50,10 +50,10 @@ class TablaVentas
 
 			/*=============================================
 			REVISAR ESTADO
-			=============================================*/ 
+			=============================================*/
 
 			if($ventas[$i]["estado"] == 0){
-				
+
 				$colorEstado = "label-danger";
 				$textoEstado = "Anulado";
 				$estadoVenta = 1;
@@ -86,23 +86,27 @@ class TablaVentas
   			$fecha=date_format(date_create($ventas[$i]["fecha_hora"]),"d/m/Y");
   			$date = DateTime::createFromFormat("d/m/Y", $fecha);
   			$dia = strftime("%d", $date->getTimestamp());
-			$mes = strftime("%B",$date->getTimestamp());
-			$year = strftime("%Y",$date->getTimestamp());
+				$mes = strftime("%B",$date->getTimestamp());
+				$year = strftime("%Y",$date->getTimestamp());
 
-			$fechaFormat = $dia." de ".$mes." del ".$year;
-
-	        if ($cliente["apellido"] == "null") {
+				$fechaFormat = $dia." de ".$mes." del ".$year;
+				if ($cliente) {
+					if ($cliente["apellido"] == "null") {
 	            $nombre_cliente = $cliente["nombre"];
 
 	        }else{
 
 	            $nombre_cliente = $cliente["nombre"]. " ".$cliente["apellido"];
 	        }
+				}else {
+					$nombre_cliente = "<em>Cliente sin datos</em>";
+				}
+
 
 	        //info usuarioi
 	        $usuario = ControladorUsuarios::ctrMostrarUsuarios("id", $ventas[$i]["idusuario"]);
 
-	        
+
 			$datosJson	 .= '[
 				      "'.($i+1).'",
 				      "'.$acciones.'",
@@ -114,7 +118,7 @@ class TablaVentas
 				      "'.$ventas[$i]["divisa"]." ".$ventas[$i]["total_venta"].'",
 				      "'.$fechaFormat.'",
 				      "'.$estado.'"
-				      
+
 				    ],';
 
 		}
@@ -123,8 +127,8 @@ class TablaVentas
 		$datosJson = substr($datosJson, 0, -1);
 
 		$datosJson.=  ']
-			  
-		}'; 
+
+		}';
 
 		echo $datosJson;
 
@@ -133,6 +137,6 @@ class TablaVentas
 
 /*=============================================
 ACTIVAR TABLA DE VENTAS
-=============================================*/ 
+=============================================*/
 $activar = new Tablaventas();
 $activar -> mostrarTabla();
