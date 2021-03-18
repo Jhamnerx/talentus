@@ -6,7 +6,7 @@ CARGAR LA TABLA DINÁMICA DE Cliente
 
 // 	url:"ajax/tablaCliente.ajax.php",
 // 	success:function(respuesta){
-		
+
 // 		console.log("respuesta", respuesta);
 
 // 	}
@@ -70,12 +70,12 @@ $(".tablaCliente tbody").on("click", ".btnActivar", function(){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
 
       		console.log(respuesta);
-      	    
 
-      	} 	 
+
+      	}
 
   	});
 
@@ -100,7 +100,7 @@ $(".tablaCliente tbody").on("click", ".btnActivar", function(){
                 //location.reload();
               }
      	});
-  	
+
   	}else{
 
   		$(this).addClass('btn-success');
@@ -142,7 +142,7 @@ $(document).on("keyup", ".validarClienteJ ", function(){
 
 
 	if (NombreCliente != "") {
-	
+
 		var datos = new FormData();
 		datos.append("NombreCliente", NombreCliente);
 
@@ -155,7 +155,7 @@ $(document).on("keyup", ".validarClienteJ ", function(){
 		    processData: false,
 		    dataType: "json",
 		    success:function(respuesta){
-		    	
+
 		    	console.log("respuesta", respuesta);
 
 		    	if(respuesta){
@@ -165,124 +165,126 @@ $(document).on("keyup", ".validarClienteJ ", function(){
 		    	}else{
 
 
-					/*=============================================
-					GUARDAR Cliente
-					=============================================*/
-					$(".guardarCliente").click(function(){
 
 
-						/*=============================================
-						PREGUNTAMOS SI LOS CAMPOS OBLIGATORIOS ESTÁN LLENOS
-						=============================================*/
-
-						if($(".numDocumento").val() != ""){
-
-							/*=============================================
-							ALMACENAMOS TODOS LOS CAMPOS DE ClienteR
-							=============================================*/
-							var tipoCliente = $(".seleccionarTipoPersona").val();
-							var nombreClienteJ = $(".nombreClienteJ").val();
-							var nombreClienteN= $(".nombreClienteN").val();
-							var apellidoCliente = $(".apellidoCliente").val();
-							var tipoDocumento = $(".tipoDocumento").val();
-							var numDocumento = $(".numDocumento").val();
-							var direccionCliente = $(".direccionCliente").val();
-							var telefonoCliente = $(".telefonoCliente").val();
-
-							var emailCliente = $(".emailCliente").val();
-
-
-							var datosCliente = new FormData();
-
-
-							if (tipoCliente == "juridica") {
-
-								datosCliente.append("tipo", "Cliente");
-								datosCliente.append("nombrePersona", nombreClienteJ);
-								console.log(nombreClienteJ);
-								datosCliente.append("apellidoPersona", null);
-								datosCliente.append("guardarPersona", 1);
-								datosCliente.append("tipoDocumento", tipoDocumento);
-								datosCliente.append("numDocumento", numDocumento);
-								datosCliente.append("direccionPersona", direccionCliente);
-								datosCliente.append("telefonoPersona", telefonoCliente);
-								datosCliente.append("emailPersona", emailCliente);
-
-
-							}else{
-
-								datosCliente.append("tipo", "Cliente");
-								datosCliente.append("nombrePersona", nombreClienteN);
-								console.log(nombreClienteN);
-								console.log(apellidoCliente);
-								datosCliente.append("apellidoPersona", apellidoCliente);
-								datosCliente.append("guardarPersona", 1);
-								datosCliente.append("tipoDocumento", tipoDocumento);
-								datosCliente.append("numDocumento", numDocumento);
-								datosCliente.append("direccionPersona", direccionCliente);
-								datosCliente.append("telefonoPersona", telefonoCliente);
-								datosCliente.append("emailPersona", emailCliente);
-							}
-
-
-							$.ajax({
-								url:"ajax/persona.ajax.php",
-								method: "POST",
-								data: datosCliente,
-								cache: false,
-								contentType: false,
-								processData: false,
-								success: function(respuesta){
-									
-									console.log("respuesta", respuesta);
-
-									if(respuesta == 1){
-
-										swal({
-										  type: "success",
-										  title: "El Cliente ha sido guardado correctamente",
-										  showConfirmButton: true,
-										  confirmButtonText: "Cerrar"
-										  }).then(function(result){
-											if (result.value) {
-
-											window.location = "clientes";
-
-											}
-										})
-									}
-
-								}
-
-							})
-
-
-						}else{
-
-							 swal({
-						      title: "Llenar todos los campos obligatorios",
-						      type: "error",
-						      confirmButtonText: "¡Cerrar!"
-						    });
-
-							return;
-						}
-
-
-					})
-
-
-		    	}   
+		    	}
 
 		    }
 
 		  })
-	
+
 
 	}
 
 
 });
+
+/*=============================================
+GUARDAR Cliente
+=============================================*/
+$(".guardarCliente").click(function(){
+
+
+	/*=============================================
+	PREGUNTAMOS SI LOS CAMPOS OBLIGATORIOS ESTÁN LLENOS
+	=============================================*/
+
+	if($(".numDocumento").val() != ""){
+
+		/*=============================================
+		ALMACENAMOS TODOS LOS CAMPOS DE ClienteR
+		=============================================*/
+		var tipoCliente = $(".seleccionarTipoPersona").val();
+		var nombreClienteJ = $(".nombreClienteJ").val();
+		var nombreClienteN= $(".nombreClienteN").val();
+		var apellidoCliente = $(".apellidoCliente").val();
+		var tipoDocumento = $(".tipoDocumento").val();
+		var numDocumento = $(".numDocumento").val();
+		var direccionCliente = $(".direccionCliente").val();
+		var telefonoCliente = $(".telefonoCliente").val();
+
+		var emailCliente = $(".emailCliente").val();
+
+
+		var datosCliente = new FormData();
+
+
+		if (tipoCliente == "juridica") {
+
+			datosCliente.append("tipo", "Cliente");
+			datosCliente.append("nombrePersona", nombreClienteJ);
+			console.log(nombreClienteJ);
+			datosCliente.append("apellidoPersona", null);
+			datosCliente.append("guardarPersona", 1);
+			datosCliente.append("tipoDocumento", tipoDocumento);
+			datosCliente.append("numDocumento", numDocumento);
+			datosCliente.append("direccionPersona", direccionCliente);
+			datosCliente.append("telefonoPersona", telefonoCliente);
+			datosCliente.append("emailPersona", emailCliente);
+
+
+		}else{
+
+			datosCliente.append("tipo", "Cliente");
+			datosCliente.append("nombrePersona", nombreClienteN);
+			console.log(nombreClienteN);
+			console.log(apellidoCliente);
+			datosCliente.append("apellidoPersona", apellidoCliente);
+			datosCliente.append("guardarPersona", 1);
+			datosCliente.append("tipoDocumento", tipoDocumento);
+			datosCliente.append("numDocumento", numDocumento);
+			datosCliente.append("direccionPersona", direccionCliente);
+			datosCliente.append("telefonoPersona", telefonoCliente);
+			datosCliente.append("emailPersona", emailCliente);
+		}
+
+
+		$.ajax({
+			url:"ajax/persona.ajax.php",
+			method: "POST",
+			data: datosCliente,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(respuesta){
+
+				console.log("respuesta", respuesta);
+
+				if(respuesta == 1){
+
+					swal({
+						type: "success",
+						title: "El Cliente ha sido guardado correctamente",
+						showConfirmButton: true,
+						confirmButtonText: "Cerrar"
+						}).then(function(result){
+						if (result.value) {
+
+						window.location = "clientes";
+
+						}
+					})
+				}
+
+			}
+
+		})
+
+
+	}else{
+
+		 swal({
+				title: "Llenar todos los campos obligatorios",
+				type: "error",
+				confirmButtonText: "¡Cerrar!"
+			});
+
+		return;
+	}
+
+
+})
+
 /*=============================================
 EDITAR Cliente
 =============================================*/
@@ -321,7 +323,7 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 
 				$("#modalEditarCliente .nombreClienteN").val(respuesta["nombre"]);
 				$("#modalEditarCliente .apellidoCliente").val(respuesta["apellido"]);
-				
+
 
 
 
@@ -333,22 +335,22 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 
 				$("#modalEditarCliente .nombreClienteJ").val(respuesta["nombre"]);
 			}
-			
+
 			$("#modalEditarCliente .tipoDocumento").val(respuesta["tipo_documento"]);
 			$("#modalEditarCliente .numDocumento").val(respuesta["num_documento"]);
 			$("#modalEditarCliente .direccionCliente").val(respuesta["direccion"]);
 
-			
+
 
 			/*=============================================
 			CARGAMOS LOS TELEFONOS
-			=============================================*/	
-			
+			=============================================*/
+
 			if(respuesta["telefono"] != null){
 
 				$("#modalEditarCliente .editarTelefonoCliente").html('<div class="input-group">'+
-      
-        		'<span class="input-group-addon"><i class="fa fa-phone"></i></span>'+ 
+
+        		'<span class="input-group-addon"><i class="fa fa-phone"></i></span>'+
 
 				'<input data-role="tagsinput" type="text" class="form-control tagsInputTelefono input-lg telefonoCliente" value="'+respuesta["telefono"]+'" placeholder="TELEFONO (coma)" name="telefonoCliente">'+
 
@@ -359,8 +361,8 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 			}else{
 
 				$("#modalEditarCliente .editarTelefonoCliente").html('<div class="input-group">'+
-      
-        		'<span class="input-group-addon"><i class="fa fa-phone"></i></span>'+ 
+
+        		'<span class="input-group-addon"><i class="fa fa-phone"></i></span>'+
 
 				'<input data-role="tagsinput" type="text" class="form-control tagsInputTelefono input-lg telefonoCliente" placeholder="TELEFONO (coma)" name="telefonoCliente">'+
 
@@ -372,12 +374,12 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 
 			/*=============================================
 			CARGAMOS LOS EMAIL'S
-			=============================================*/	
+			=============================================*/
 			if(respuesta["email"] != null){
 
 				$("#modalEditarCliente .editarEmailCliente").html('<div class="input-group">'+
-      
-        		'<span class="input-group-addon"><i class="fa fa-envelope"></i></span>'+ 
+
+        		'<span class="input-group-addon"><i class="fa fa-envelope"></i></span>'+
 
 				'<input data-role="tagsinput" type="text" class="form-control tagsInput input-lg emailCliente" value="'+respuesta["email"]+'" placeholder="EMAIL (comas)" name="emailCliente">'+
 
@@ -388,8 +390,8 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 			}else{
 
 				$("#modalEditarCliente .editarEmailCliente").html('<div class="input-group">'+
-      
-        		'<span class="input-group-addon"><i class="fa fa-envelope"></i></span>'+ 
+
+        		'<span class="input-group-addon"><i class="fa fa-envelope"></i></span>'+
 
 				'<input data-role="tagsinput" type="text" class="form-control tagsInput input-lg emailCliente" placeholder="EMAIL (comas)" name="emailCliente">'+
 
@@ -402,7 +404,7 @@ $(".tablaCliente tbody").on("click", ".btnEditarCliente", function(){
 
 			$(".bootstrap-tagsinput").css({"padding":"12px",
 										   "width":"110%"})
-			
+
 
 
 
@@ -476,7 +478,7 @@ $(".editarCliente").click(function(){
 			contentType: false,
 			processData: false,
 			success: function(respuesta){
-				
+
 				console.log(respuesta);
 
 				if(respuesta == 1){
@@ -495,7 +497,7 @@ $(".editarCliente").click(function(){
 					})
 				}else{
 
-					
+
 				}
 
 			}
