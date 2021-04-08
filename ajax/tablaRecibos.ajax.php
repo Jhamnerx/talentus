@@ -1,4 +1,4 @@
-<?php 
+<?php
 date_default_timezone_set("America/Lima");
 require_once "../controladores/recibo.controlador.php";
 require_once "../controladores/persona.controlador.php";
@@ -10,11 +10,11 @@ require_once "../modelos/usuarios.modelo.php";
 
 
 /**
- * 
+ *
  */
 class TablaRecibos
 {
-	
+
 	public function mostrarTabla()
 	{
 		$item = null;
@@ -33,14 +33,14 @@ class TablaRecibos
 	    }
 
 	 	$datosJson = '{
-			 
+
 			  "data": [ ';
 
 		for($i = 0; $i < count($recibos); $i++){
 
 			/*=============================================
 			cliente
-			=============================================*/ 
+			=============================================*/
 
 
 		    $item = "id";
@@ -51,10 +51,10 @@ class TablaRecibos
 
 			/*=============================================
 			REVISAR ESTADO
-			=============================================*/ 
+			=============================================*/
 
 			if($recibos[$i]["estado"] == 0){
-				
+
 				$colorEstado = "label-success";
 				$textoEstado = "Cancelado";
 				$estadoRecibo = 1;
@@ -72,10 +72,10 @@ class TablaRecibos
 
 			/*=============================================
 			REVISAR ESTADO
-			=============================================*/ 
+			=============================================*/
 
 			if($recibos[$i]["anulado"] == 0){
-				
+
 				$colorEstado = "btn-danger";
 				$textoEstado = "Anulado";
 				$estadoRecibo = 1;
@@ -104,12 +104,13 @@ class TablaRecibos
   			$fecha=date_format(date_create($recibos[$i]["fecha"]),"d/m/Y");
   			$date = DateTime::createFromFormat("d/m/Y", $fecha);
   			$dia = strftime("%d", $date->getTimestamp());
-			$mes = strftime("%B",$date->getTimestamp());
-			$year = strftime("%Y",$date->getTimestamp());
+				$mes = strftime("%B",$date->getTimestamp());
+				$year = strftime("%Y",$date->getTimestamp());
 
-			$fechaFormat = $dia." de ".$mes." del ".$year;
+				$fechaFormat = $dia." de ".$mes." del ".$year;
 
 	        if ($cliente["apellido"] == "null") {
+						
 	            $nombre_cliente = $cliente["nombre"];
 
 	        }else{
@@ -118,7 +119,7 @@ class TablaRecibos
 	        }
 
 
-	        
+
 			$datosJson	 .= '[
 				      "'.($i+1).'",
 				      "'.$acciones.'",
@@ -137,8 +138,8 @@ class TablaRecibos
 		$datosJson = substr($datosJson, 0, -1);
 
 		$datosJson.=  ']
-			  
-		}'; 
+
+		}';
 
 		echo $datosJson;
 
@@ -147,6 +148,6 @@ class TablaRecibos
 
 /*=============================================
 ACTIVAR TABLA DE RECIBOS
-=============================================*/ 
+=============================================*/
 $activar = new Tablarecibos();
 $activar -> mostrarTabla();

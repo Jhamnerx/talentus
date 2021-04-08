@@ -8,7 +8,7 @@ class AjaxPersona{
 
   /*=============================================
   ACTIVAR PERSONA
-  =============================================*/ 
+  =============================================*/
 
   public $activarPersona;
   public $activarId;
@@ -18,7 +18,7 @@ class AjaxPersona{
 
 
     $estado = ModeloPersona::mdlActualizarPersona("persona", "estado", $this->activarPersona, "id", $this->activarId);
-  
+
 
     echo $estado;
 
@@ -26,7 +26,7 @@ class AjaxPersona{
   }
   /*=============================================
   MOSTRAR PERSONAS
-  =============================================*/ 
+  =============================================*/
 
   public $tipoPersona;
 
@@ -46,7 +46,7 @@ class AjaxPersona{
 
   /*=============================================
   GUARDAR PERSONA
-  =============================================*/ 
+  =============================================*/
 
   public $tipo;
   public $nombrePersona;
@@ -59,8 +59,8 @@ class AjaxPersona{
 
   public function ajaxGuardarPersona(){
     $datos = array("tipo"=>$this->tipo,
-             "nombre"=>trim($this->nombrePersona),
-             "apellido"=>isset($this->apellidoPersona)? trim($this->apellidoPersona):null,
+             "nombre"=>strtoupper(trim($this->nombrePersona)),
+             "apellido"=>isset($this->apellidoPersona)? strtoupper(trim($this->apellidoPersona)):null,
              "tipo_documento"=>$this->tipoDocumento,
              "num_documento"=>$this->numDocumento,
              "direccion"=>trim($this->direccionPersona),
@@ -78,7 +78,7 @@ class AjaxPersona{
 
   /*=============================================
   MOSTRAR PERSONA
-  =============================================*/ 
+  =============================================*/
 
   public $idPersona;
 
@@ -95,7 +95,7 @@ class AjaxPersona{
   }
   /*=============================================
   MOSTRAR PERSONA
-  =============================================*/ 
+  =============================================*/
 
   public $NombreCliente;
 
@@ -112,7 +112,7 @@ class AjaxPersona{
   }
   /*=============================================
   EDITAR PERSONA
-  =============================================*/ 
+  =============================================*/
 
   public $idEditarPersona;
   public $tipoEditarPersona;

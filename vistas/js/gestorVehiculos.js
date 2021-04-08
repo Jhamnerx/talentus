@@ -1,16 +1,16 @@
 /*=============================================
 CARGAR LA TABLA DINÁMICA DE VEHICULOS
 =============================================*/
-
+// 
 // $.ajax({
-
+//
 // 	url:"ajax/tablaVehiculos.ajax.php",
 // 	success:function(respuesta){
-		
+//
 // 		console.log("respuesta", respuesta);
-
+//
 // 	}
-
+//
 // })
 
 $(".tablaVehiculos").DataTable({
@@ -70,10 +70,10 @@ $(".tablaVehiculos tbody").on("click", ".btnActivar", function(){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
-      	    
+      	success: function(respuesta){
 
-      	} 	 
+
+      	}
 
   	});
 
@@ -97,7 +97,7 @@ $(".tablaVehiculos tbody").on("click", ".btnActivar", function(){
                 //location.reload();
               }
      	});
-  	
+
   	}else{
 
   		$(this).addClass('btn-success');
@@ -123,7 +123,7 @@ $(".tablaVehiculos tbody").on("click", ".btnActivar", function(){
 
 })
 // CARGAR FLOTA
-// 
+//
 function cargarVehiculos(){
 $('#modalAgregarActa .idvehiculo').html('');
 $('#modalEditarActa .idvehiculo').html('');
@@ -153,7 +153,7 @@ $('#modalEditarActa .idvehiculo').html('');
 				$('.idvehiculo').append(newOption).trigger('change');
 				//$('.editaractavehiculo').append(newOption).trigger('change');
 
-				
+
 
 			 }
 
@@ -167,7 +167,7 @@ $('#modalEditarActa .idvehiculo').html('');
 
 
 // CARGAR FLOTA
-// 
+//
 function cargarFlota(){
 
 // $('#modalEditarVehiculo .idflota').html('');
@@ -197,7 +197,7 @@ function cargarFlota(){
 				//$(".idflota").append('<option value="'+flota.id+'">'+flota.nombre+'</option>');
 				$('.idflota').append(newOption).trigger('change');
 
-				
+
 
 			 }
 
@@ -289,15 +289,15 @@ $(".tablaVehiculos tbody").on("click", ".btnEditarVehiculo", function(){
 	    	$("#modalEditarVehiculo .editarColor").val(respuesta["color"]);
 	    	$("#modalEditarVehiculo .editarMotor").val(respuesta["motor"]);
 	    	$("#modalEditarVehiculo .editarSerie").val(respuesta["serie"]);
-	    	
+
 	    	$("#modalEditarVehiculo .editarSim").val(respuesta["sim"]);
 	    	$("#modalEditarVehiculo .editarOperador").val(respuesta["operador"]);
 	    	$("#modalEditarVehiculo .editarDescripcioVehiculo").val(respuesta["descripcion"]);
 	    	$("#modalEditarVehiculo .editarDispositivo").val(respuesta["dispositivo"]);
 	    	$("#modalEditarVehiculo .editaridgps").val(respuesta["idgps"]);
 	    	//$("#modalEditarVehiculo .editaridflota").val(respuesta["flota"]).trigger("change");
-	    
-			
+
+
 			if ($("#modalEditarVehiculo .editaridflota").find("option[value='" + respuesta["flota"] + "']").length) {
 
 				$('#modalEditarVehiculo .editaridflota').val(respuesta["flota"]).trigger('change');
@@ -307,14 +307,14 @@ $(".tablaVehiculos tbody").on("click", ".btnEditarVehiculo", function(){
 
 				$('#modalEditarVehiculo .dispositivo').val(respuesta["dispositivo"]).trigger('change');
 			}
-			
+
 			//
 
 
 
-			
 
-			
+
+
 	    }
 
 	})
@@ -381,7 +381,7 @@ $(document).on("keyup", ".comprobarSim", function(){
 
 	var numeroSim = $(this).val();
 	if (numeroSim != "") {
-	
+
 		var datos = new FormData();
 		datos.append("numeroSim", numeroSim);
 
@@ -394,19 +394,19 @@ $(document).on("keyup", ".comprobarSim", function(){
 		    processData: false,
 		    dataType: "json",
 		    success:function(respuesta){
-		    	
+
 		    	console.log("respuesta", respuesta);
 
 		    	if(respuesta){
 
 		    		$(".addAlert").append('<p class="AlertaSim warning" style="font-size: 13px; color: red">Numero '+respuesta["sim"]+' registrado en la placa '+respuesta["placa"]+'</p>')
 		    		$(".comprobarSim").val("");
-		    	}   
+		    	}
 
 		    }
 
 		  })
-	
+
 
 	}
 

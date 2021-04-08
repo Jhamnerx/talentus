@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 require_once "../controladores/vehiculos.controlador.php";
 require_once "../controladores/flotas.controlador.php";
@@ -11,14 +11,14 @@ class TablaVehiculos{
 
   /*=============================================
   MOSTRAR LA TABLA DE VEHICULOS
-  =============================================*/ 
+  =============================================*/
 
  	public function mostrarTabla(){
 
 	 	$item = null;
 	 	$valor = null;
 
-	 	$vehiculos = ControladorVehiculos::ctrMostrarVehiculos($item, $valor);	
+	 	$vehiculos = ControladorVehiculos::ctrMostrarVehiculos($item, $valor);
 
 
 	 	if(count($vehiculos) == 0){
@@ -32,17 +32,17 @@ class TablaVehiculos{
 	    }
 
 	    $datosJson = '{
-		 
+
 		  "data": [ ';
 
 		for($i = 0; $i < count($vehiculos); $i++){
 
 			/*=============================================
 			REVISAR ESTADO
-			=============================================*/ 
+			=============================================*/
 
 			if($vehiculos[$i]["estado"] == 0){
-				
+
 				$colorEstado = "btn-danger";
 				$textoEstado = "Desactivado";
 				$estadoVehiculo = 1;
@@ -56,15 +56,22 @@ class TablaVehiculos{
 			}
 
 		 	$estado = "<button value='".$textoEstado."' class='btn ".$colorEstado." btn-xs btnActivar' estadoVehiculo='".$estadoVehiculo."' idVehiculo='".$vehiculos[$i]["id"]."'>".$textoEstado."</button>";
-		 	
+
 		 	/*=============================================
   			CREAR LAS ACCIONES
   			=============================================*/
-	    
+
 		    $acciones = "<div class='btn-group'><button class='btn btn-warning btnEditarVehiculo' idVehiculo='".$vehiculos[$i]["id"]."' data-toggle='modal' data-target='#modalEditarVehiculo'><i class='fa fa-pencil'></i></button></div>";
 
 		    $flota = ControladorFlotas::ctrMostrarFlotas("id", $vehiculos[$i]["flota"]);
 		    $dispositivo = ControladorDispositivos::ctrMostrarDispositivos("id", $vehiculos[$i]["dispositivo"]);
+
+        if ($flota) {
+          $nombreFlota = $flota["nombre"];
+
+        }else {
+          $nombreFlota ="<em>sin datos</em>";
+        }
 
 		    $datosJson	 .= '[
 				      "'.($i+1).'",
@@ -74,7 +81,7 @@ class TablaVehiculos{
 				      "'.$vehiculos[$i]["modelo"].'",
 				      "'.$vehiculos[$i]["tipo"].'",
 				      "'.$vehiculos[$i]["year"].'",
-				      "'.$flota["nombre"].'",
+				      "'.$nombreFlota.'",
 				      "'.$vehiculos[$i]["sim"].'",
 				      "'.$dispositivo["modelo"].'",
 				      "'.$estado.'"
@@ -87,8 +94,8 @@ class TablaVehiculos{
 		$datosJson = substr($datosJson, 0, -1);
 
 		$datosJson.=  ']
-			  
-		}'; 
+
+		}';
 
 		echo $datosJson;
 
@@ -99,7 +106,7 @@ class TablaVehiculos{
 
 /*=============================================
 ACTIVAR TABLA DE SERVICIOS
-=============================================*/ 
+=============================================*/
 
 	$activar = new TablaVehiculos();
 	$activar -> mostrarTabla();

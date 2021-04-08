@@ -3,14 +3,14 @@ CARGAR LA TABLA DINÁMICA DE CATEGORÍAS
 =============================================*/
 
 // $.ajax({
-
+//
 // 	url:"ajax/tablaIngresos.ajax.php",
 // 	success:function(respuesta){
-		
+//
 // 		console.log(respuesta);
-
+//
 // 	}
-
+//
 // })
 
 $(".tablaIngresos").DataTable({
@@ -85,7 +85,7 @@ $(".tablaAddIngresos").DataTable({
 
 
 // CARGAR PROVEEDOR
-// 
+//
 function CargarProveedor(){
  	var datos = new FormData();
  	datos.append("tipoPersona", "Proveedor");
@@ -113,7 +113,7 @@ function CargarProveedor(){
 				}
 
 
-				
+
 
 			}
 
@@ -231,7 +231,7 @@ $(".guardarProveedorIn").click(function(){
 
 // 		$(".modalAgregarProveedorIn .personaNatural").show();
 // 		$(".modalAgregarProveedorIn .personaJuridica").hide();
-	
+
 // 	}else{
 
 // 		$(".modalAgregarProveedorIn .personaJuridica").show();
@@ -294,11 +294,11 @@ function marcarImpuesto()
   	var tipo_comprobante=$(".tipo_comprobante option:selected").text();
   	if (tipo_comprobante=='Factura + IGV' || tipo_comprobante=='Factura IGV INC')
     {
-        $(".impuesto").val(impuesto); 
+        $(".impuesto").val(impuesto);
     }
     else
     {
-        $(".impuesto").val("0"); 
+        $(".impuesto").val("0");
     }
   }
 
@@ -358,13 +358,13 @@ function agregarDetalleIngresos(idarticulo, stock){
 			//listado.concat(localStorage.getItem("listaProductosCompra"));
 		}
 
-		
+
 
 		if (stock >= 1) {
 			listado.push({"idProducto":idarticulo});
 			localStorage.setItem("listaProductosCompra", JSON.stringify(listado));
 		}
-		
+
 
 		/**
 		 * AGREGAR PRODUCTO
@@ -387,7 +387,7 @@ function agregarDetalleIngresos(idarticulo, stock){
 			modificarSubototalesIngreso();
 			evaluarIngreso();
 
-	    	
+
     	}
 
 	}
@@ -484,13 +484,13 @@ function calcularTotales(){
 	var total = 0.0;
 
 	for (var i = 0; i <sub.length; i++) {
-		
+
 		total += document.getElementsByName("subtotal")[i].value;
 	}
 
 	// $("#total").html(simbolo + " "+ total);
 	// $("#total_compra").val(total);
-	
+
 	$("#total").html(simbolo + " "+ total.toFixed(2));
 	$("#total_compra").val(total.toFixed(2));
 	console.log(simbolo);
@@ -507,7 +507,7 @@ function evaluarIngreso(){
 	}
 	else
 	{
-	  $(".guardarIngreso").hide(); 
+	  $(".guardarIngreso").hide();
 	  cont=0;
 	}
 }
@@ -519,7 +519,7 @@ function eliminarDetalleCompra(indice){
 	detalles=detalles-1;
 	evaluarIngreso();
 
-	
+
 
 	var idProducto = $(".filas");
 
@@ -553,7 +553,7 @@ function limpiarForm()
 	$(".total_compra").val("");
 	$(".filas").remove();
 	$(".total").html("0");
-	
+
 	//Obtenemos la fecha actual
 	var now = new Date();
 	var day = ("0" + now.getDate()).slice(-2);
@@ -648,7 +648,7 @@ $(".guardarIngreso").click(function(){
 			  // }
 			})
 	}
-	
+
 })
 
 /*=============================================
@@ -672,7 +672,7 @@ MOSTRAR INGRESO
 			var ingreso = JSON.parse(respuesta);
 
 
-			
+
 			if(respuesta != null){
 				$(".idproveedor").val(ingreso.idproveedor);
 				$(".tipo_comprobante").val(ingreso.tipo_comprobante);
@@ -730,7 +730,7 @@ MOSTRAR INGRESO
 $(".tablaIngresos tbody").on("click", ".btnEliminarIngreso", function(){
 
 	var idanular = $(this).attr("idingreso");
-	
+
 
 	var datos = new FormData();
  	datos.append("idanular", idanular);
@@ -743,7 +743,7 @@ $(".tablaIngresos tbody").on("click", ".btnEliminarIngreso", function(){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
 
       		//console.log(respuesta);
 
@@ -769,8 +769,7 @@ $(".tablaIngresos tbody").on("click", ".btnEliminarIngreso", function(){
 	 			});
       		}
 
-      	} 	 
+      	}
 
   	});
 })
-

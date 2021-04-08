@@ -3,14 +3,14 @@ CARGAR LA TABLA DINÁMICA DE CONTRATOS
 =============================================*/
 
 // $.ajax({
-
-// 	url:"ajax/tablaContratos.ajax.php",
+//
+// 	url:"ajax/tablaVehiculosCont.ajax.php",
 // 	success:function(respuesta){
-		
+//
 // 		console.log("respuesta", respuesta);
-
+//
 // 	}
-
+//
 // })
 
 
@@ -95,7 +95,7 @@ $(".tablaAddVehiculoContratos").DataTable({
 
 
 // CARGAR Cliente
-// 
+//
 function cargarClienteContrato(){
  	var datos = new FormData();
  	datos.append("tipoPersona", "Cliente");
@@ -125,7 +125,7 @@ function cargarClienteContrato(){
 				}
 
 
-				
+
 
 			}
 
@@ -169,7 +169,7 @@ $(".guardarContrato").click(function(){
 
 
 				//console.log(respuesta);
-				
+
 				if(respuesta != null){
 					swal({
 							  type: "success",
@@ -351,7 +351,7 @@ $(".modalAgregarCliente .seleccionarTipoPersona").change(function(){
 
 		$(".modalAgregarCliente .personaNatural").show();
 		$(".modalAgregarCliente .personaJuridica").hide();
-	
+
 	}else{
 
 		$(".modalAgregarCliente .personaJuridica").show();
@@ -487,12 +487,12 @@ function ActualizarCaracteristicas(caract, estado, idContrato){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
 
       		//console.log(respuesta);
-      	    
 
-      	} 	 
+
+      	}
 
   	});
 }
@@ -518,12 +518,12 @@ $(".tablaContratos tbody").on("click", ".btnActivar", function(){
 	  	cache: false,
       	contentType: false,
       	processData: false,
-      	success: function(respuesta){ 
+      	success: function(respuesta){
 
       		console.log(respuesta);
-      	    
 
-      	} 	 
+
+      	}
 
   	});
 
@@ -549,7 +549,7 @@ $(".tablaContratos tbody").on("click", ".btnActivar", function(){
                 //location.reload();
               }
      	});
-  	
+
   	}else{
 
   		$(this).addClass('btn-success');
@@ -632,7 +632,7 @@ function agregarVehiculo(idvehiculo){
 
 			listado.push({"idvehiculo":idvehiculo});
 			localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
-			
+
 
 			/**
 			 * AGREGAR VEHICULO
@@ -649,9 +649,9 @@ function agregarVehiculo(idvehiculo){
 			    	detalles=detalles+1;
 			    	$('#detallesvehiculos').append(fila);
 			    	evaluar();
-	    		
+
 	    	}
-		
+
 	    }
 
 	})
@@ -672,7 +672,7 @@ function evaluar(){
 	}
 	else
 	{
-	  $(".guardarContrato").hide(); 
+	  $(".guardarContrato").hide();
 	  cont=0;
 	}
 }
@@ -683,7 +683,7 @@ function eliminarDetalleVehiculos(indice){
 	detalles=detalles-1;
 	evaluar();
 
-	
+
 
 	var idVehiculo = $(".filas");
 
@@ -710,7 +710,7 @@ function eliminarDetalleVehiculos(indice){
 function limpiar()
 {
 	$(".filas").remove();
-	
+
 	//Obtenemos la fecha actual
 	var nowc = new Date();
 	var dayc = ("0" + nowc.getDate()).slice(-2);

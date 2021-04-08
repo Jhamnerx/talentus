@@ -1,4 +1,4 @@
-<?php 
+<?php
 $ventasTotales = 0;
 
 $totalVenta = "";
@@ -28,7 +28,15 @@ $servicios = ControladorServicios::ctrMostrarServicios(null, null);
 $vehiculos = ControladorVehiculos::ctrMostrarVehiculos(null, null);
 
 $clientes = ControladorPersona::ctrMostrarPersona("tipo", "Cliente", 0);
+
 $notificaciones = ControladorNotificaciones::ctrMostrarNotificaciones(null, null);
+
+$flotas = ControladorFlotas::ctrMostrarFlotas(null, null);
+
+
+$contratos = ControladorContratos::ctrMostrarContratos(null, null, 2);
+
+$actas = ControladorActas::ctrMostrarActa(null, null);
 
 
 
@@ -40,31 +48,89 @@ CAJAS SUPERIORES
 
 <!-- col -->
 <div class="col-lg-3 col-xs-6">
+  <div class="info-box">
+    <span class="info-box-icon bg-aqua"><i class="fa fa-car"></i></span>
 
-  <!-- small box -->
-  <div class="small-box bg-aqua">
-    
-    <!-- inner -->
-    <div class="inner">
-      
-      <h3><?php  echo count($vehiculos); ?></h3>
-      <p>Vehiculos</p>
-    
+    <div class="info-box-content">
+      <span class="info-box-text">Vehiculos</span>
+      <span class="info-box-number"><?php  echo count($vehiculos); ?><small></small></span>
     </div>
-    <!-- inner -->
-
-    <!-- icon -->
-    <div class="icon">
-    
-      <i class="fa fa-car"></i>
-    
-    </div>
-    <!-- icon -->
-    
-    <a href="vehiculo" class="small-box-footer">Más Info <i class="fa fa-arrow-circle-right"></i></a>
-  
   </div>
-  <!-- small-box -->
+
+
+</div>
+<!-- col -->
+<div class="col-lg-3 col-xs-6">
+  <div class="info-box">
+    <span class="info-box-icon bg-aqua"><i class="fa fa-car"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Flotas</span>
+      <span class="info-box-number"><?php  echo count($flotas); ?><small></small></span>
+    </div>
+  </div>
+
+
+</div>
+<!--===========================================================================-->
+
+<!-- col -->
+<div class="col-lg-3 col-xs-6">
+
+  <div class="info-box">
+    <span class="info-box-icon bg-green"><i class="ion ion-stats-bars"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Clientes</span>
+      <span class="info-box-number"><?php  echo count($clientes); ?><small></small></span>
+    </div>
+  </div>
+
+</div>
+<!-- col -->
+<!-- col -->
+<div class="col-lg-3 col-xs-6">
+
+  <div class="info-box">
+    <span class="info-box-icon bg-green"><i class="fa fa-file-pdf-o"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Contratos</span>
+      <span class="info-box-number"><?php  echo count($contratos); ?><small></small></span>
+    </div>
+  </div>
+
+</div>
+<!-- col -->
+
+<!-- col -->
+<div class="col-lg-3 col-xs-6">
+
+  <div class="info-box">
+    <span class="info-box-icon bg-green"><i class="fa fa-file-pdf-o"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Actas</span>
+      <span class="info-box-number"><?php  echo count($actas); ?><small></small></span>
+    </div>
+  </div>
+
+</div>
+<!-- col -->
+<!--===========================================================================-->
+
+<!-- col -->
+<div class="col-lg-3 col-xs-6">
+
+  <div class="info-box">
+    <span class="info-box-icon bg-yellow"><i class="ion ion-person-add"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Usuarios</span>
+      <span class="info-box-number"><?php  echo count($usuarios); ?><small></small></span>
+    </div>
+  </div>
+
 
 </div>
 <!-- col -->
@@ -73,132 +139,29 @@ CAJAS SUPERIORES
 
 <!-- col -->
 <div class="col-lg-3 col-xs-6">
-  
-  <!-- small box -->
-  <div class="small-box bg-green">
+  <div class="info-box">
+    <span class="info-box-icon bg-red"><i class="ion ion-pie-graph"></i></span>
 
-    <!-- inner -->
-    <div class="inner">
-      
-      <h3><?php echo count($clientes); ?></h3>
-
-      <p>Clientes</p>
-    
+    <div class="info-box-content">
+      <span class="info-box-text">Productos</span>
+      <span class="info-box-number"><?php  echo count($servicios); ?><small></small></span>
     </div>
-    <!-- inner -->
-    
-    <!-- icon -->
-    <div class="icon">
-      
-      <i class="ion ion-stats-bars"></i>
-    
-    </div>
-    <!-- icon -->
-
-    <a href="clientes" class="small-box-footer">Ver Más <i class="fa fa-arrow-circle-right"></i></a>
-  
   </div>
-  <!-- small box -->
-
-</div>
-<!-- col -->
-
-<!--===========================================================================-->
-
-<!-- col -->
-<div class="col-lg-3 col-xs-6">
-  
-  <!-- small box -->
-  <div class="small-box bg-yellow">
-    
-    <!-- inner -->
-    <div class="inner">
-    
-      <h3><?php echo count($usuarios); ?></h3>
-
-      <p>Usuarios</p>
-    
-    </div>
-    <!-- inner -->
-
-    <!-- icon -->
-    <div class="icon">
-      
-      <i class="ion ion-person-add"></i>
-    
-    </div>
-    <!-- icon -->
-
-    <a href="usuarios" class="small-box-footer">Más Info <i class="fa fa-arrow-circle-right"></i></a>
-  
-  </div>
-  <!-- small box -->
-
-</div>
-<!-- col -->
-
-<!--===========================================================================-->
-
-<!-- col -->
-<div class="col-lg-3 col-xs-6">
-  
-  <!-- small box -->
-  <div class="small-box bg-red">
-  
-    <!-- inner -->
-    <div class="inner">
-    
-      <h3><?php echo count($servicios); ?></h3>
-
-      <p>Productos</p>
-
-    </div>
-    <!-- inner -->
-    
-    <!-- icon -->
-    <div class="icon">
-      
-      <i class="ion ion-pie-graph"></i>
-    
-    </div>
-    <!-- icon -->
-    
-    <a href="servicios" class="small-box-footer">Más Info <i class="fa fa-arrow-circle-right"></i></a>
-  
-  </div>
-  <!-- small box -->
 
 </div>
 <!-- col -->
 
 <!-- col -->
 <div class="col-lg-3 col-xs-6">
-  
-  <!-- small box -->
-  <div class="small-box bg-red">
-  
-    <!-- inner -->
-    <div class="inner">
-    
-      <h3><?php echo count($notificaciones); ?></h3>
+  <div class="info-box">
+    <span class="info-box-icon bg-red"><i class="ion ion-pie-graph"></i></span>
 
-      <p>Notificaciones</p>
-
+    <div class="info-box-content">
+      <span class="info-box-text">Notificaciones</span>
+      <span class="info-box-number"><?php  echo count($notificaciones); ?><small></small></span>
     </div>
-    <!-- inner -->
-    
-    <!-- icon -->
-    <div class="icon">
-      
-      <i class="fa fa-bell-o"></i>
-    
-    </div>
-    <!-- icon -->
-    
-    <a href="notificaciones" class="small-box-footer">Más Info <i class="fa fa-arrow-circle-right"></i></a>
-  
   </div>
-  <!-- small box -->
+
 
 </div>
 <!-- col -->

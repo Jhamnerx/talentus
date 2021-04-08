@@ -21,7 +21,7 @@
 
 
     <div class="box agregarContratos" style="display:none;">
-        
+
       <form method="post" enctype="multipart/form-data" name="formularioContrato" id="formularioContrato" class="style_form formularioContrato">
         <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12">
           <label>Cliente(*):</label>
@@ -35,7 +35,7 @@
                 <button type="button" class="btn btn-danger btnAgregarCliente" data-toggle="modal" data-target="#modalAgregarCliente">...</button>
               </div>
               <!-- /btn-group -->
-              
+
           </div>
         </div>
         <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
@@ -47,7 +47,7 @@
         <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
           <label>Ciudad(*):</label>
           <select name="ciudad" class="form-control ciudad" required="">
-            <?php 
+            <?php
 
             $ciudad = ControladorPlantilla::ctrSeleccionarCiudad();
 
@@ -68,9 +68,9 @@
 
           <label>
             <input type="checkbox" class="flat-red fondo" name="fondo">
-            Fondo  
+            Fondo
           </label> <br>
-          
+
           <label>
             <input type="checkbox" class="flat-red sello" name="sello">
              Sello
@@ -79,7 +79,7 @@
 
 
         <div class="form-group col-xs-12">
-          <a data-toggle="modal" href="#modalAgregarArticuloContrato">           
+          <a data-toggle="modal" href="#modalAgregarArticuloContrato">
             <button id="btnAgregarVehiculo" type="button" class="btn btn-primary"> <span class="fa fa-plus"></span> Agregar Vehiculo</button>
           </a>
         </div>
@@ -95,11 +95,11 @@
                   <th></th>
                   <th></th>
                   <th>
-                  
-                  </th> 
+
+                  </th>
               </tfoot>
               <tbody>
-                
+
               </tbody>
           </table>
         </div>
@@ -119,16 +119,16 @@
 
 
     <div class="box listaContratos">
-      <?php 
+      <?php
 
 
       if ($_SESSION["ventas"] == "true") {
-        
+
        ?>
       <div class="box-header with-border">
-         
+
         <button class="btn btn-primary btnAgregarContrato">
-          
+
           Añadir Contratos
 
         </button>
@@ -138,9 +138,9 @@
       <div class="box-body">
 
         <table class="table table-bordered table-striped dt-responsive table-hover tablaContratos" width="100%">
-        
+
           <thead>
-         
+
             <tr>
                 <th style="width:10px">#</th>
                 <th>Descargar</th>
@@ -152,21 +152,21 @@
                 <th>Caracteristicas</th>
                 <th>Estado</th>
                 <th>Editar</th>
-               
 
-            </tr> 
 
-          </thead>   
-     
+            </tr>
+
+          </thead>
+
         </table>
-          
+
       </div>
-      <?php 
+      <?php
         }else{
 
 
           echo '<div class="alert alert-danger alert-dismissible">
-                
+
                 <h4><i class="icon fa fa-ban"></i> No tienes permisos!</h4>
                 Lo Sentimos no tienes permisos para acceder a esta pagina.
               </div>';
@@ -183,18 +183,18 @@ MODAL AÑADIR VEHICULO
 ======================================-->
 
 <div id="modalAgregarArticuloContrato" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog modal-md">
-    
+
     <div class="modal-content">
       <!--=====================================
       CABEZA DEL MODAL
       ======================================-->
-      
+
       <div class="modal-header" style="background:#3c8dbc; color:white">
-        
+
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        
+
         <h4 class="modal-title">Agregar Vehiculos</h4>
 
       </div>
@@ -202,14 +202,14 @@ MODAL AÑADIR VEHICULO
       CUERPO DEL MODAL
       ======================================-->
       <div class="modal-body">
-          
+
         <div class="box-body">
-          <table class="table table-bordered table-striped dt-responsive table-hover tablaAddVehiculoContratos" width="100%">
-      
+          <table class="table table-bordered table-striped dt-responsive table-responsive table-hover tablaAddVehiculoContratos" width="100%">
+
             <thead>
-           
+
               <tr>
-             
+
                <th style="width:10px">#</th>
                <th>Placa</th>
                <th>Marca</th>
@@ -217,10 +217,10 @@ MODAL AÑADIR VEHICULO
                <th>Flota</th>
                <th>Acciones</th>
 
-              </tr> 
+              </tr>
 
-            </thead>   
-       
+            </thead>
+
           </table>
 
         </div>
@@ -230,12 +230,12 @@ MODAL AÑADIR VEHICULO
         ======================================-->
 
         <div class="modal-footer">
-          
+
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
         </div>
       </div>
-      
+
 
     </div>
 
@@ -248,9 +248,9 @@ MODAL EDITAR CONTRATO
 ======================================-->
 
 <div id="modalEditarContrato" class="modal fade" role="dialog">
-  
+
   <div class="modal-dialog">
-    
+
     <div class="modal-content">
 
       <form method="post" enctype="multipart/form-data">
@@ -258,11 +258,11 @@ MODAL EDITAR CONTRATO
         <!--=====================================
         CABEZA DEL MODAL
         ======================================-->
-        
+
         <div class="modal-header" style="background:#3c8dbc; color:white">
-          
+
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          
+
           <h4 class="modal-title">Editar Contrato</h4>
 
         </div>
@@ -272,20 +272,20 @@ MODAL EDITAR CONTRATO
         ======================================-->
 
         <div class="modal-body">
-          
+
           <div class="box-body">
 
             <div class="form-group col-xs-12">
               <label>Cliente(*):</label>
               <div class="input-group">
-                
+
                 <span class="input-group-addon"><i class="fa fa-th"></i></span>
 
-                <input type="text" class="form-control input-md editarClienteContrato" placeholder="Cliente" name="editarClienteContrato" readonly=""> 
+                <input type="text" class="form-control input-md editarClienteContrato" placeholder="Cliente" name="editarClienteContrato" readonly="">
 
                 <input type="hidden" class="editarIdContrato" name="editarIdContrato">
 
-              </div> 
+              </div>
 
             </div>
 
@@ -294,22 +294,22 @@ MODAL EDITAR CONTRATO
             <div class="form-group col-sm-6 col-xs-12">
               <label>Fecha(*):</label>
               <div class="input-group">
-                
+
                 <span class="input-group-addon"><i class="fa fa-th"></i></span>
-                
+
 
                 <input type="text" class="form-control pull-right editarFechaContrato datepicker" id="datepickerEditar" name="editarFechaContrato">
-              </div> 
+              </div>
 
             </div>
 
             <div class="form-group col-sm-6 col-xs-12">
               <label>Ciudad(*):</label>
               <div class="input-group">
-                
+
                 <span class="input-group-addon"><i class="fa fa-th"></i></span>
                 <select name="contratoEditarciudad" class="form-control contratoEditarciudad" required="">
-                  <?php 
+                  <?php
 
                   $ciudad = ControladorPlantilla::ctrSeleccionarCiudad();
 
@@ -322,7 +322,7 @@ MODAL EDITAR CONTRATO
                    ?>
 
                 </select>
-              </div> 
+              </div>
 
             </div>
 
@@ -338,7 +338,7 @@ MODAL EDITAR CONTRATO
         ======================================-->
 
         <div class="modal-footer">
-          
+
           <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Salir</button>
 
           <button type="submit" class="btn btn-primary">Guardar cambios</button>
@@ -349,7 +349,7 @@ MODAL EDITAR CONTRATO
 
       <?php
 
-        
+
            $editarContrato = new ControladorContratos();
            $editarContrato -> ctrEditarContrato();
 
@@ -364,7 +364,7 @@ MODAL EDITAR CONTRATO
 
  <?php
 
-        
+
     $eliminarContrato = new ControladorContratos();
     $eliminarContrato -> ctrEliminarContrato();
 
@@ -373,6 +373,6 @@ MODAL EDITAR CONTRATO
 
 
 
-<?php 
+<?php
 include "modals/clientes.php";
  ?>
