@@ -1,0 +1,107 @@
+.h1 {
+    @apply text-4xl font-extrabold tracking-tighter;
+}
+
+.h2 {
+    @apply text-3xl font-extrabold tracking-tighter;
+}
+
+.h3 {
+    @apply text-3xl font-extrabold;
+}
+
+.h4 {
+    @apply text-2xl font-extrabold tracking-tight;
+}
+
+@screen md {
+    .h1 {
+        @apply text-5xl;
+    }
+
+    .h2 {
+        @apply text-4xl;
+    }
+}
+
+
+.btn,
+.btn-sm {
+    @apply font-medium inline-flex items-center justify-center border border-transparent rounded leading-snug transition duration-150 ease-in-out;
+}
+
+.btn {
+    @apply px-8 py-3;
+}
+
+.btn-sm {
+    @apply px-4 py-2;
+}
+
+
+.contact-input,
+.contact-textarea,
+.contact-multiselect,
+.contact-select,
+.contact-checkbox,
+.contact-radio {
+    @apply bg-white border border-gray-300 focus:border-gray-400;
+}
+
+.contact-input,
+.contact-textarea,
+.contact-multiselect,
+.contact-select,
+.contact-checkbox {
+    @apply rounded;
+}
+
+.contact-input,
+.contact-textarea,
+.contact-multiselect,
+.contact-select {
+    @apply leading-snug py-3 px-4;
+}
+
+.contact-input,
+.contact-textarea {
+    @apply placeholder-gray-500;
+}
+
+.contact-select {
+    @apply pr-10;
+}
+
+.contact-checkbox,
+.contact-radio {
+    @apply text-teal-600;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.dark {
+    .h4 {
+        @apply font-bold;
+    }
+
+    .contact-input,
+    .contact-textarea,
+    .contact-multiselect,
+    .contact-select,
+    .contact-checkbox,
+    .contact-radio {
+        @apply bg-gray-800 border border-gray-600 focus:border-gray-500;
+    }
+
+    .contact-input,
+    .contact-textarea {
+        @apply placeholder-gray-400;
+    }
+}
