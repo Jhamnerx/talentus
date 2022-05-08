@@ -71,9 +71,10 @@ class ContactosController extends Controller
      * @param  \App\Models\Contactos  $contactos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contactos $contactos)
+    public function update(ContactosRequest $request, Contactos $contacto)
     {
-        dd($request->all());
+        $contacto->update($request->all());
+        return redirect()->route('admin.vehiculos.contactos.index')->with('update', 'El contacto se actualizo con exito');
     }
 
     /**
