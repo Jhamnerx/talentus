@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
         Empresa::factory(1)->create();
         Categoria::factory(100)->create();
         Lineas::factory(600)->create();
-        SimCard::factory(5000)->create();
+        SimCard::factory(500)->create();
         $this->call(ProductoSeeder::class);
         $this->call(ModelosDispositivoSeeder::class);
         $this->call(PlantillaSeeder::class);
@@ -52,9 +52,9 @@ class DatabaseSeeder extends Seeder
         VentasFacturas::factory(50)->create();
         Recibos::factory(60)->create();
         Contratos::factory(70)->create();
-        Flotas::factory(30)->create();
+        Flotas::factory(300)->create();
         Contactos::factory(30)->create();
-        Vehiculos::factory(5)->create();
+        Vehiculos::factory(50)->create();
         Reportes::factory(60)->create();
         $this->call(CiudadesSeeder::class);
         Actas::factory(60)->create();

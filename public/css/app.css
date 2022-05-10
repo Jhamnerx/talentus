@@ -1110,6 +1110,10 @@ select {
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 .my-20 {
   margin-top: 5rem;
   margin-bottom: 5rem;
@@ -1362,6 +1366,9 @@ select {
 .h-2 {
   height: 0.5rem;
 }
+.h-14 {
+  height: 3.5rem;
+}
 .h-full {
   height: 100%;
 }
@@ -1376,9 +1383,6 @@ select {
 }
 .h-28 {
   height: 7rem;
-}
-.h-14 {
-  height: 3.5rem;
 }
 .max-h-full {
   max-height: 100%;

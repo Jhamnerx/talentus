@@ -101,9 +101,11 @@ Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('ad
 
 Route::get('search/clientes', [SearchController::class, 'clientes'])->name('search.clientes');
 Route::get('search/flotas', [SearchController::class, 'flotas'])->name('search.flotas');
+Route::get('search/flota', [SearchController::class, 'flota'])->name('search.flota');
 Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('busqueda.clientes');
 Route::get('search/sim_card', [SearchController::class, 'sim_card'])->name('search.sim_card');
 Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.lineas');
+Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
 
 // VERIFICAR
 

@@ -16,13 +16,9 @@ class VehiculosIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $vehiculos = Vehiculos::whereHas('lineas', function ($query) {
+        $vehiculos = Vehiculos::whereHas('sim_card', function ($query) {
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
-                ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
                 ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
-        })->orwhereHas('modelos_dispositivos', function ($query) {
-            $query->where('modelo', 'LIKE', '%' . $this->search . '%')
-                ->orWhere('marca', 'LIKE', '%' . $this->search . '%');
         })->orwhereHas('flotas', function ($query) {
             $query->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orwhereHas('dispositivos', function ($query) {

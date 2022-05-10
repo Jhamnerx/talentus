@@ -1,7 +1,6 @@
 <div>
 
     <!-- Basic Modal -->
-
     <!-- Start -->
     <div x-data="{ modalOpen: @entangle('modalOpen') }">
 
@@ -33,6 +32,7 @@
             x-transition:leave="transition ease-in-out duration-200"
             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
             x-cloak>
+
             <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-6/12 max-h-full"
                 @keydown.escape.window="modalOpen = false">
                 <!-- Modal header -->
@@ -48,6 +48,7 @@
                         </button>
                     </div>
                 </div>
+                {!! Form::open(['route' => 'admin.vehiculos.store', 'id' => 'form']) !!}
                 <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
 
@@ -58,8 +59,11 @@
                             <label class="block text-sm font-medium mb-1" for="placa">Placa: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
-                                <input placeholder="ABC-780" name="placa" id="placa" class="form-input w-full pl-9 valid:border-emerald-300
-                            required:border-rose-300 invalid:border-rose-300 peer" type="text" />
+
+                                {!! Form::text('placa', null, ['placeholder' => 'ABC-780', 'class' =>'form-input w-full
+                                pl-9 valid:border-emerald-300
+                                required:border-rose-300 invalid:border-rose-300 peer', 'required']) !!}
+
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -82,13 +86,20 @@
                                     </svg>
                                 </div>
                             </div>
+                            @error('placa')
+
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{$message}}
+                            </p>
+
+                            @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="marca">Marca:</label>
                             <div class="relative">
-                                <input placeholder="TOYOTA" name="marca" id="marca" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('marca', null, ['placeholder' => 'TOYOTA','class' => 'form-input w-full
+                                pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -106,8 +117,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo:</label>
                             <div class="relative">
-                                <input placeholder="HILUX" name="modelo" id="modelo" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('modelo', null, ['placeholder' => 'HILUX','class' => 'form-input w-full
+                                pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -125,8 +136,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="tipo">Tipo:</label>
                             <div class="relative">
-                                <input id="tipo" name="tipo" placeholder="PICK UP" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('tipo', null, ['placeholder' => 'PICK UP', 'class' => 'form-input w-full
+                                pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -144,8 +155,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="year">Año:</label>
                             <div class="relative">
-                                <input id="year" name="year" placeholder="2019" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('year', null, ['placeholder' => '2019', 'class' => 'form-input w-full
+                                pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
@@ -175,8 +186,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="color">Color:</label>
                             <div class="relative">
-                                <input id="color" name="color" placeholder="BLANCO ROJO AZUL"
-                                    class="form-input w-full pl-9" type="text" />
+                                {!! Form::text('color', null, ['placeholder' => 'BLANCO ROJO AZUL', 'class' =>
+                                'form-input w-full pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
@@ -197,8 +208,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                <input id="motor" name="motor" placeholder="1GDG066086" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('motor', null, ['placeholder' => '1GDG066086', 'class' => 'form-input
+                                w-full pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2" xmlns="
@@ -225,8 +236,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="serie">Serie:</label>
                             <div class="relative">
-                                <input id="serie" name="serie" placeholder="8AJHA8CD9K2629775"
-                                    class="form-input w-full pl-9" type="text" />
+                                {!! Form::text('serie', null, ['placeholder' => '8AJHA8CD9K2629775', 'class' =>
+                                'form-input w-full pl-9']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -243,137 +254,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-span-12 sm:col-span-12">
+                        <div class="col-span-12 sm:col-span-12 selectFlota" wire:ignore>
+                            <label class="block text-sm font-medium mb-1" for="flotas_id">Flota:</label>
 
-                            <div x-data="select({data: @entangle('data')})" x-init="init()" @click.away="closeListbox()"
-                                @keydown.escape="closeListbox()" class="relative">
-                                <span class="inline-block w-full rounded-md shadow-sm">
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                            {!! Form::select('flotas_id', [], null, ['class' => 'flotas_id w-full', 'required']) !!}
 
-                                        <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path
-                                                    d="M38,23a1,1,0,0,1-.707-.293l-6-6a1,1,0,0,1,0-1.414l8-8a1,1,0,0,1,1.414,0l6,6a1,1,0,0,1,0,1.414l-2,2a1,1,0,0,1-1.414,0L41,14.414,38.414,17l2.293,2.293a1,1,0,0,1,0,1.414l-2,2A1,1,0,0,1,38,23Z"
-                                                    fill="#eba40a"></path>
-                                                <path
-                                                    d="M44.061,3.939a1.5,1.5,0,0,0-2.122,0L17.923,27.956a10.027,10.027,0,1,0,2.121,2.121L44.061,6.061A1.5,1.5,0,0,0,44.061,3.939ZM12,43a7,7,0,1,1,4.914-11.978c.011.012.014.027.025.039s.027.014.039.025A6.995,6.995,0,0,1,12,43Z"
-                                                    fill="#ffd764"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    <button x-ref="button" @click.prevent="toggleListboxVisibility()"
-                                        :aria-expanded="open" aria-haspopup="listbox"
-                                        class="relative z-0 w-full py-2 pl-3 pr-10 text-left transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md cursor-default focus:outline-none focus:shadow-outline-blue focus:border-blue-300 sm:text-sm sm:leading-5">
-                                        <span x-show="! open" x-text="value in options ? options[value] : placeholder"
-                                            :class="{ 'text-gray-500': ! (value in options) }"
-                                            class="block truncate pl-9"></span>
-                                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                            @error('flotas_id')
 
-                                            <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                                <g class="nc-icon-wrapper">
-                                                    <path
-                                                        d="M32.874,10.405a.99.99,0,0,0-.353-.369l-8-4.889a1,1,0,0,0-1.042,0l-8,4.889a.99.99,0,0,0-.353.369L24,15.828Z"
-                                                        fill="#a0e6ee"></path>
-                                                    <path
-                                                        d="M15.126,10.405a1,1,0,0,0-.126.484v8.878a1,1,0,0,0,.479.853l8,4.889a1,1,0,0,0,.521.147V15.828Z"
-                                                        fill="#6cc4f5"></path>
-                                                    <path
-                                                        d="M32.874,10.405a1,1,0,0,1,.126.484v8.878a1,1,0,0,1-.479.853l-8,4.889a1,1,0,0,1-.521.147V15.828Z"
-                                                        fill="#2594d0"></path>
-                                                    <path
-                                                        d="M47.874,19.589a.99.99,0,0,0-.353-.369l-8-4.889a1,1,0,0,0-1.042,0l-8,4.889a.99.99,0,0,0-.353.369L39,25.013Z"
-                                                        fill="#a0e6ee"></path>
-                                                    <path
-                                                        d="M30.126,19.589a1,1,0,0,0-.126.485v8.878a1,1,0,0,0,.479.853l8,4.889a1,1,0,0,0,.521.147V25.013Z"
-                                                        fill="#6cc4f5"></path>
-                                                    <path
-                                                        d="M47.874,19.589a1,1,0,0,1,.126.485v8.878a1,1,0,0,1-.479.853l-8,4.889a1,1,0,0,1-.521.147V25.013Z"
-                                                        fill="#2594d0"></path>
-                                                    <path
-                                                        d="M17.874,19.589a.99.99,0,0,0-.353-.369l-8-4.889a1,1,0,0,0-1.042,0l-8,4.889a.99.99,0,0,0-.353.369L9,25.013Z"
-                                                        fill="#a0e6ee"></path>
-                                                    <path
-                                                        d="M.126,19.589A1,1,0,0,0,0,20.074v8.878a1,1,0,0,0,.479.853l8,4.889A1,1,0,0,0,9,34.841V25.013Z"
-                                                        fill="#6cc4f5"></path>
-                                                    <path
-                                                        d="M17.874,19.589a1,1,0,0,1,.126.485v8.878a1,1,0,0,1-.479.853l-8,4.889A1,1,0,0,1,9,34.841V25.013Z"
-                                                        fill="#2594d0"></path>
-                                                    <path
-                                                        d="M32.874,29.577a.99.99,0,0,0-.353-.369l-8-4.889a1,1,0,0,0-1.042,0l-8,4.889a.99.99,0,0,0-.353.369L24,35Z"
-                                                        fill="#a0e6ee"></path>
-                                                    <path
-                                                        d="M15.126,29.577a1,1,0,0,0-.126.484v8.878a1,1,0,0,0,.479.853l8,4.889a1,1,0,0,0,.521.147V35Z"
-                                                        fill="#6cc4f5"></path>
-                                                    <path
-                                                        d="M32.874,29.577a1,1,0,0,1,.126.484v8.878a1,1,0,0,1-.479.853l-8,4.889a1,1,0,0,1-.521.147V35Z"
-                                                        fill="#2594d0"></path>
-                                                </g>
-                                            </svg>
-                                        </div>
-                                        <input x-ref="search" x-show="open" x-model="search"
-                                            @keydown.enter.stop.prevent="selectOption()"
-                                            @keydown.arrow-up.prevent="focusPreviousOption()"
-                                            @keydown.arrow-down.prevent="focusNextOption()" type="text"
-                                            class="form-input w-full pl-9 focus:outline-none" />
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{$message}}
+                            </p>
 
-                                        <input type="hidden" x-model="selected" name="flotas_id">
-                                        <span
-                                            class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none pl-9">
-                                            <svg class="w-5 h-5 text-gray-400" viewBox="0 0 20 20" fill="none"
-                                                stroke="currentColor">
-                                                <path d="M7 7l3-3 3 3m0 6l-3 3-3-3" stroke-width="1.5"
-                                                    stroke-linecap="round" stroke-linejoin="round"></path>
-                                            </svg>
-                                        </span>
-                                    </button>
-                                </span>
+                            @enderror
 
-                                <div x-show="open" x-transition:leave="transition ease-in duration-100"
-                                    x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak
-                                    class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg pl-9">
-                                    <ul x-ref="listbox" @keydown.enter.stop.prevent="selectOption()"
-                                        @keydown.arrow-up.prevent="focusPreviousOption()"
-                                        @keydown.arrow-down.prevent="focusNextOption()" role="listbox"
-                                        :aria-activedescendant="focusedOptionIndex ? name + 'Option' + focusedOptionIndex : null"
-                                        tabindex="-1"
-                                        class="py-1 overflow-auto text-base leading-6 rounded-md shadow-xs max-h-60 focus:outline-none sm:text-sm sm:leading-5">
-                                        <template x-for="(key, index) in Object.keys(options)" :key="index">
-                                            <li :id="name + 'Option' + focusedOptionIndex" @click="selectOption()"
-                                                @mouseenter="focusedOptionIndex = index"
-                                                @mouseleave="focusedOptionIndex = null" role="option"
-                                                :aria-selected="focusedOptionIndex === index"
-                                                :class="{ 'text-white bg-indigo-600': index === focusedOptionIndex, 'text-gray-900': index !== focusedOptionIndex }"
-                                                class="relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9">
-                                                <span x-text="Object.values(options)[index]"
-                                                    :class="{ 'font-semibold': index === focusedOptionIndex, 'font-normal': index !== focusedOptionIndex }"
-                                                    class="block font-normal truncate"></span>
 
-                                                <span x-show="key === value"
-                                                    :class="{ 'text-white': index === focusedOptionIndex, 'text-indigo-600': index !== focusedOptionIndex }"
-                                                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600">
-                                                    <svg class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
-                                                        <path fill-rule="evenodd"
-                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                            clip-rule="evenodd" />
-                                                    </svg>
-                                                </span>
-                                            </li>
-                                        </template>
 
-                                        <div x-show="! Object.keys(options).length" x-text="emptyOptionsMessage"
-                                            class="px-3 py-2 text-gray-900 cursor-default select-none"></div>
-                                    </ul>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="numero">Numero:</label>
                             <div class="relative">
-                                <input id="numero" name="numero" placeholder="947147524" class="form-input w-full pl-9"
-                                    type="text" />
+                                {!! Form::text('numero', null, ['placeholder' =>
+                                '947147524', 'class'=> 'form-input w-full
+                                pl-9
+                                valid:border-emerald-300
+                                required:border-rose-300 invalid:border-rose-300 peer numero', 'id' => 'numero',
+                                'required']) !!}
+
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -392,13 +300,24 @@
                                     </svg>
                                 </div>
                             </div>
+                            @error('numero')
+
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{$message}}
+                            </p>
+
+                            @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="operador">Operador:</label>
                             <div class="relative">
-                                <input id="operador" name="operador" placeholder="Claro" class="form-input w-full pl-9"
-                                    type="text" />
+                                {{old('operador')}}
+                                {!! Form::text('operador', old('operador'), ['placeholder' => 'Claro',
+                                'class' => 'form-input w-full pl-9 operador', 'readonly']) !!}
+
+                                {{-- <input type="text" class="form-input w-full pl-9 operador" name="operador"
+                                    value="{{old('operador')}}"> --}}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -422,8 +341,11 @@
 
                             <label class="block text-sm font-medium mb-1" for="sim_card">Sim Card:</label>
                             <div class="relative">
-                                <input id="sim_card" name="sim_card" placeholder="3189219220212"
-                                    class="form-input w-full pl-9" type="text" />
+                                {!! Form::text('sim_card', null, ['placeholder' =>
+                                '3189219220212', 'class' =>
+                                'form-input w-full pl-9 sim_card', 'readonly']) !!}
+
+                                {!! Form::hidden('sim_card_id', null, ['class' => 'sim_card_id']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -447,8 +369,13 @@
 
                             <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS:</label>
                             <div class="relative">
-                                <input id="imei" name="imei" placeholder="357073292893290"
-                                    class="form-input w-full pl-9" type="text" />
+                                {!! Form::text('dispositivo', null, ['placeholder' => '357073292893290', 'class' =>
+                                'form-input w-full
+                                pl-9
+                                valid:border-emerald-300
+                                required:border-rose-300 invalid:border-rose-300 peer dispositivo', 'required']) !!}
+
+                                {!! Form::hidden('dispositivos_id', null, ['class' => 'dispositivos_id']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -468,13 +395,20 @@
                                     </svg>
                                 </div>
                             </div>
+                            @error('dispositivos_id')
+
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{$message}}
+                            </p>
+
+                            @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="modelo_id">MODELO GPS:</label>
                             <div class="relative">
                                 <input id="modelo_id" name="modelo_id" placeholder="FMB920"
-                                    class="form-input w-full pl-9" type="text" />
+                                    class="form-input w-full pl-9 modelo" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -531,13 +465,82 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click="closeModal">Cerrar</button>
-                        <button @click="modalOpen = false" wire:click='save'
+                        <button type="submit"
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>
             </div>
+            {!! Form::close() !!}
         </div>
     </div>
     <!-- End -->
 
 </div>
+
+@once
+@push('scripts')
+
+<script>
+    $('#form').submit(function(event) {
+        @if ($errors->any())
+        event.preventDefault();
+        @endif
+
+       // console.log('hay errores');
+    });
+    
+    
+
+
+    $('.flotas_id').select2({
+       placeholder: 'Buscar una flota',
+        language: "es",
+        tags: true,
+        width: '100%',
+        ajax: {
+            url: '{{route("search.flotas")}}',
+            dataType: 'json',
+            delay: 250,
+            cache: true,
+            data: function (params) {
+
+                var query = {
+                    term: params.term,
+                    //type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data, params) {
+
+               // console.log(data.suggestions);
+                var suggestions = $.map(data.suggestions, function (obj) {
+
+                    obj.id = obj.id || obj.value; // replace pk with your identifier
+                    obj.text = obj.data; // replace pk with your identifier
+
+                    return obj;
+
+                });
+                //console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+
+                    results: suggestions,
+    
+                };
+                
+            },
+
+
+        }
+    });
+
+
+
+
+
+</script>
+@endpush
+@endonce

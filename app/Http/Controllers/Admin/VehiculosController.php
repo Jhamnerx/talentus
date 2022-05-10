@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\VehiculosRequest;
 use App\Models\Vehiculos;
 use Illuminate\Http\Request;
 
@@ -34,9 +35,9 @@ class VehiculosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(VehiculosRequest $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -56,9 +57,9 @@ class VehiculosController extends Controller
      * @param  \App\Models\Vehiculos  $vehiculos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Vehiculos $vehiculos)
+    public function edit(Vehiculos $vehiculo)
     {
-        return view('admin.vehiculos.edit', compact('vehiculos'));
+        return view('admin.vehiculos.edit', compact('vehiculo'));
     }
 
     /**
@@ -70,7 +71,7 @@ class VehiculosController extends Controller
      */
     public function update(Request $request, Vehiculos $vehiculos)
     {
-        //
+        dd($request->all());
     }
 
     /**

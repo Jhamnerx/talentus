@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Vehiculos extends Model
 {
     use HasFactory;
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'vehiculos';
     /**
      * Scope para traer activos y no
@@ -28,14 +29,9 @@ class Vehiculos extends Model
         return $this->belongsTo(Flotas::class, 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
     }
     //relacion uno a muchos a modelos
-    public function lineas()
+    public function sim_card()
     {
-        return $this->belongsTo(SimCard::class, 'numero')->withoutGlobalScope(EliminadoScope::class);
-    }
-    //relacion uno a muchos a modelos dispositivos
-    public function modelos_dispositivos()
-    {
-        return $this->belongsTo(ModelosDispositivo::class, 'modelos_dispositivos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(SimCard::class, 'sim_card_id')->withoutGlobalScope(EliminadoScope::class);
     }
     //relacion uno a muchos a dispositivos
     public function dispositivos()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Clientes;
+use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Lineas;
 use App\Models\SimCard;
@@ -52,6 +53,17 @@ class SearchController extends Controller
 
         // return array("suggestions" => $data);
         return array("suggestions" => $data);
+    }
+    public function flota(Request $request)
+    {
+
+        $term = $request->get('term');
+        $query = Flotas::where('id', $term)->first();
+
+
+
+        // return array("suggestions" => $data);
+        return $query;
     }
 
     public function busqueda(Request $request)
@@ -115,8 +127,10 @@ class SearchController extends Controller
 
             if ($linea->sim) {
                 $sim_card = $linea->sim->sim_card;
+                $sim_card_id = $linea->sim->id;
             } else {
                 $sim_card = null;
+                $sim_card_id = null;
             }
 
             if ($linea->sim) {
@@ -129,7 +143,32 @@ class SearchController extends Controller
                 'value' => $linea->numero,
                 'data' => $linea->id,
                 'sim_card' => $sim_card,
+                'sim_card_id' => $sim_card_id,
                 'operador' => $operador,
+            ];
+        }
+
+
+        return array("suggestions" => $data);
+    }
+
+    public function dispositivos(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $dipositivos = Dispositivos::where('imei', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        //$lineas = Lineas::all();
+
+        $data = [];
+
+        foreach ($dipositivos as $dipositivo) {
+
+            $data[] = [
+                'value' => $dipositivo->imei,
+                'data' => $dipositivo->id,
+                'modelo' => $dipositivo->modelo->modelo,
+                'marca' => $dipositivo->modelo->marca,
             ];
         }
 

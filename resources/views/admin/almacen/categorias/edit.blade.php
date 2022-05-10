@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('ruta', 'almacen-categorias')
 @section('contenido')
 <!-- Code block starts -->
 <div
