@@ -2,22 +2,40 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos;
 
+use App\Http\Requests\VehiculosRequest;
 use App\Models\Flotas;
+use App\Models\Vehiculos;
 use Livewire\Component;
 
 class SaveVehiculo extends Component
 {
     public $data;
-    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $flotas_id, $numero, $dispositivos_id, $descripcion;
+    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $flotas_id, $numero, $operador, $sim_card, $sim_card_id, $modelo_gps, $imei, $dispositivos_id, $descripcion;
+    public $empresa_id;
     public $modalOpen = false;
 
 
-    protected $rules = [
-
+    protected  $rules = [
         'placa' => 'required|unique:vehiculos',
+        "marca" => 'nullable',
+        "modelo" => 'nullable',
+        "tipo" => 'nullable',
+        "year" => 'nullable',
+        "color" => 'nullable',
+        "motor" => 'nullable',
+        "serie" => 'nullable',
+        "sim_card_id" => 'nullable',
+        "numero" => "required",
         "flotas_id"  => "required",
-        "numero" => "required|unique:vehiculos",
-        "dispositivos_id" => "required|unique:vehiculos",
+        "dispositivos_id" => 'nullable|unique:vehiculos',
+        "empresa_id" => 'exists:empresas,id',
+        "modelo_gps" => 'nullable',
+        "operador" => 'nullable',
+        "sim_card" => 'nullable',
+        "imei" => 'nullable',
+        "descripcion" => 'nullable',
+
+        // "dispositivos_id" => "required|unique:vehiculos",
 
     ];
 
@@ -30,11 +48,17 @@ class SaveVehiculo extends Component
         'dispositivos_id.required' => 'El imei es requerido',
         'dispositivos_id.unique' => 'Este imei ya esta registrado',
 
-
     ];
+
+
+
+
+
 
     public function mount()
     {
+        $this->empresa_id = session('empresa');
+
         $querys = Flotas::all();
 
         $flotas = [];
@@ -52,6 +76,7 @@ class SaveVehiculo extends Component
 
         $this->data = $flotas;
     }
+
     public function render()
     {
 
@@ -68,22 +93,29 @@ class SaveVehiculo extends Component
     {
 
         $this->modalOpen = false;
+        $this->resetErrorBag();
+        $this->resetValidation();
+        $this->reset();
     }
 
-    public function save()
+    public function GuardarVehiculo()
     {
-        //dd($this->sim_card_n);
-        $validatedDate = $this->validate();
 
+        $requestVehiculo = new VehiculosRequest();
 
+        $validatedDate = $this->validate($requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
 
+        Vehiculos::create($validatedDate);
 
-        // SimCard::create([
-        //     'sim_card' => $this->sim_card_n[$key],
-        //     'operador' => $this->operador[$key],
-        //     'empresa_id' => $this->empresa_id,
-        // ]);
-
+        $this->emit('updateTable');
+        $this->modalOpen = false;
         // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
+    }
+
+    public function updated($label)
+    {
+        $requestVehiculo = new VehiculosRequest();
+        $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
+        //dd($label);
     }
 }

@@ -11,6 +11,10 @@ class VehiculosIndex extends Component
     public $from = '';
     public $to = '';
 
+    protected $listeners = [
+        'updateTable' => 'render',
+    ];
+
     public function render()
     {
         $desde = $this->from;
@@ -30,7 +34,7 @@ class VehiculosIndex extends Component
             ->orWhere('motor', 'like', '%' . $this->search . '%')
             ->orWhere('serie', 'like', '%' . $this->search . '%')
             ->orWhere('year', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
 

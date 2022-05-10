@@ -69,9 +69,15 @@ class VehiculosController extends Controller
      * @param  \App\Models\Vehiculos  $vehiculos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Vehiculos $vehiculos)
+    public function update(Request $request, Vehiculos $vehiculo)
     {
-        dd($request->all());
+        //dd($vehiculo->id);
+        $requestVehiculo = new VehiculosRequest();
+        $request->validate($requestVehiculo->rules($request->dispositivos_id, $request->numero, $vehiculo), $requestVehiculo->messages());
+
+
+        $vehiculo->update($request->all());
+        return redirect()->route('admin.vehiculos.index')->with('update', 'El vehiculo se actualizo con exito');
     }
 
     /**

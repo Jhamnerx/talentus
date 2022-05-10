@@ -48,7 +48,8 @@
                         </button>
                     </div>
                 </div>
-                {!! Form::open(['route' => 'admin.vehiculos.store', 'id' => 'form']) !!}
+
+
                 <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
 
@@ -60,9 +61,9 @@
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
 
-                                {!! Form::text('placa', null, ['placeholder' => 'ABC-780', 'class' =>'form-input w-full
-                                pl-9 valid:border-emerald-300
-                                required:border-rose-300 invalid:border-rose-300 peer', 'required']) !!}
+                                <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa" class="form-input w-full pl-9 valid:border-emerald-300
+                                                            required:border-rose-300 invalid:border-rose-300 peer"
+                                    type="text" required />
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
@@ -98,8 +99,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="marca">Marca:</label>
                             <div class="relative">
-                                {!! Form::text('marca', null, ['placeholder' => 'TOYOTA','class' => 'form-input w-full
-                                pl-9']) !!}
+                                <input wire:model="marca" placeholder="TOYOTA" name="marca" id="marca"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -117,8 +118,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo:</label>
                             <div class="relative">
-                                {!! Form::text('modelo', null, ['placeholder' => 'HILUX','class' => 'form-input w-full
-                                pl-9']) !!}
+                                <input wire:model="modelo" placeholder="HILUX" name="modelo" id="modelo"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -136,8 +137,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="tipo">Tipo:</label>
                             <div class="relative">
-                                {!! Form::text('tipo', null, ['placeholder' => 'PICK UP', 'class' => 'form-input w-full
-                                pl-9']) !!}
+                                <input wire:model="tipo" id="tipo" name="tipo" placeholder="PICK UP"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -155,14 +156,15 @@
 
                             <label class="block text-sm font-medium mb-1" for="year">Año:</label>
                             <div class="relative">
-                                {!! Form::text('year', null, ['placeholder' => '2019', 'class' => 'form-input w-full
-                                pl-9']) !!}
+                                <input wire:model="year" id="year" name="year" placeholder="2019"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
-                                            <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3"></path>
+                                            <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
+                                            </path>
                                             <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
                                             </path>
                                             <path
@@ -186,8 +188,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="color">Color:</label>
                             <div class="relative">
-                                {!! Form::text('color', null, ['placeholder' => 'BLANCO ROJO AZUL', 'class' =>
-                                'form-input w-full pl-9']) !!}
+                                <input wire:model="color" id="color" name="color" placeholder="BLANCO ROJO AZUL"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
@@ -208,8 +210,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                {!! Form::text('motor', null, ['placeholder' => '1GDG066086', 'class' => 'form-input
-                                w-full pl-9']) !!}
+                                <input wire:model="motor" id="motor" name="motor" placeholder="1GDG066086"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2" xmlns="
@@ -236,8 +238,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="serie">Serie:</label>
                             <div class="relative">
-                                {!! Form::text('serie', null, ['placeholder' => '8AJHA8CD9K2629775', 'class' =>
-                                'form-input w-full pl-9']) !!}
+                                <input wire:model="serie" id="serie" name="serie" placeholder="8AJHA8CD9K2629775"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -254,10 +256,15 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-span-12 sm:col-span-12 selectFlota" wire:ignore>
-                            <label class="block text-sm font-medium mb-1" for="flotas_id">Flota:</label>
 
-                            {!! Form::select('flotas_id', [], null, ['class' => 'flotas_id w-full', 'required']) !!}
+                        <div class="col-span-12 sm:col-span-12 selectFlota" wire:ignore>
+
+                            <label class="block text-sm font-medium mb-1" for="flotas_id">Flota: <span
+                                    class="text-rose-500">*</span></label>
+
+
+                            <select wire:model="flotas_id" name="flotas_id" id="flotas_id" class="flotas_id w-full"
+                                required></select>
 
                             @error('flotas_id')
 
@@ -272,15 +279,14 @@
 
                         </div>
                         <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="numero">Numero:</label>
+                            <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
+                                    class="text-rose-500">*</span></label>
                             <div class="relative">
-                                {!! Form::text('numero', null, ['placeholder' =>
-                                '947147524', 'class'=> 'form-input w-full
-                                pl-9
-                                valid:border-emerald-300
-                                required:border-rose-300 invalid:border-rose-300 peer numero', 'id' => 'numero',
-                                'required']) !!}
+
+                                <input id="numero" name="numero" placeholder="947147524"
+                                    class="form-input w-full pl-9 valid:border-emerald-300
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer numero" type="text"
+                                    required />
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -312,9 +318,9 @@
 
                             <label class="block text-sm font-medium mb-1" for="operador">Operador:</label>
                             <div class="relative">
-                                {{old('operador')}}
-                                {!! Form::text('operador', old('operador'), ['placeholder' => 'Claro',
-                                'class' => 'form-input w-full pl-9 operador', 'readonly']) !!}
+
+                                <input wire:model="operador" id="operador" name="operador" placeholder="Claro"
+                                    class="form-input w-full pl-9" type="text" disabled />
 
                                 {{-- <input type="text" class="form-input w-full pl-9 operador" name="operador"
                                     value="{{old('operador')}}"> --}}
@@ -341,11 +347,11 @@
 
                             <label class="block text-sm font-medium mb-1" for="sim_card">Sim Card:</label>
                             <div class="relative">
-                                {!! Form::text('sim_card', null, ['placeholder' =>
-                                '3189219220212', 'class' =>
-                                'form-input w-full pl-9 sim_card', 'readonly']) !!}
+                                <input wire:model="sim_card" id="sim_card" name="sim_card" placeholder="3189219220212"
+                                    class="form-input w-full pl-9" type="text" disabled />
 
-                                {!! Form::hidden('sim_card_id', null, ['class' => 'sim_card_id']) !!}
+
+                                <input type="hidden" name="sim_card_id" class="sim_card_id">
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -364,18 +370,28 @@
                                     </svg>
                                 </div>
                             </div>
+                            @error('sim_card_id')
+
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{$message}}
+                            </p>
+
+                            @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
-                            <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS:</label>
-                            <div class="relative">
-                                {!! Form::text('dispositivo', null, ['placeholder' => '357073292893290', 'class' =>
-                                'form-input w-full
-                                pl-9
-                                valid:border-emerald-300
-                                required:border-rose-300 invalid:border-rose-300 peer dispositivo', 'required']) !!}
 
-                                {!! Form::hidden('dispositivos_id', null, ['class' => 'dispositivos_id']) !!}
+                            <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS: <span
+                                    class="text-rose-500">*</span></label>
+                            <div class="relative">
+                                <input id="imei" name="imei" placeholder="357073292893290"
+                                    class="form-input w-full pl-9 valid:border-emerald-300
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer dispositivo" type="text"
+                                    required />
+
+
+                                <input wire:model="dispositivos_id" type="hidden" name="dispositivos_id"
+                                    class="dispositivos_id">
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -407,8 +423,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo_id">MODELO GPS:</label>
                             <div class="relative">
-                                <input id="modelo_id" name="modelo_id" placeholder="FMB920"
-                                    class="form-input w-full pl-9 modelo" type="text" />
+                                <input wire:model="modelo_gps" id="modelo_id" name="modelo_id" placeholder="FMB920"
+                                    class="form-input w-full pl-9" type="text" disabled />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -428,8 +444,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
-                                    placeholder="Ingresar Breve Descripcíon"></textarea>
+                                <textarea wire:model="descripcion" class="form-input w-full pl-9" name="descripcion"
+                                    id="descripcion" rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -443,12 +459,14 @@
                                             <path
                                                 d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
                                                 fill="#4c4c4c"></path>
-                                            <path d="M34.3,13.7,12.01,35.99l5.7,5.7L40,19.4Z" fill="#f74b3b"></path>
+                                            <path d="M34.3,13.7,12.01,35.99l5.7,5.7L40,19.4Z" fill="#f74b3b">
+                                            </path>
                                             <path
                                                 d="M44.828,8.91,39.07,3.153a4.093,4.093,0,0,0-5.656,0l-4.63,4.631L40.2,19.2l4.63-4.631a4,4,0,0,0,0-5.657Z"
                                                 fill="#3d6c7b"></path>
                                             <rect x="33.294" y="5.618" width="2" height="16.142"
-                                                transform="translate(0.365 28.258) rotate(-45)" fill="#2a4b55"></rect>
+                                                transform="translate(0.365 28.258) rotate(-45)" fill="#2a4b55">
+                                            </rect>
                                         </g>
                                     </svg>
                                 </div>
@@ -464,13 +482,14 @@
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                            wire:click="closeModal">Cerrar</button>
-                        <button type="submit"
+                            wire:click.prevent="closeModal">Cerrar</button>
+                        <button wire:click.prevent="GuardarVehiculo()"
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>
+
             </div>
-            {!! Form::close() !!}
+
         </div>
     </div>
     <!-- End -->
@@ -481,17 +500,6 @@
 @push('scripts')
 
 <script>
-    $('#form').submit(function(event) {
-        @if ($errors->any())
-        event.preventDefault();
-        @endif
-
-       // console.log('hay errores');
-    });
-    
-    
-
-
     $('.flotas_id').select2({
        placeholder: 'Buscar una flota',
         language: "es",
@@ -538,9 +546,113 @@
     });
 
 
+    $('.flotas_id').on('change', function(){
+
+        @this.set('flotas_id', this.value)
+    })
 
 
 
+
+</script>
+
+
+<script>
+    $('.numero').devbridgeAutocomplete({
+        lookup: function (query, done) {
+            $.ajax({
+                url: "{{route('search.lineas')}}",
+                dataType: 'json',
+                data: {
+                    term: query
+                },
+                success: function(data){
+
+                    done(data);
+
+                }
+            })
+
+        },
+        minChars: 2,
+        autoSelectFirst: false,
+        deferRequestBy: 5,
+        onSelect: function(suggestion) {
+
+            //console.log(suggestion.operador);
+
+            $('.operador').val(suggestion.operador);
+            @this.set('operador',suggestion.operador)
+            @this.set('numero',suggestion.value)
+            $('.sim_card').val(suggestion.sim_card);
+            @this.set('sim_card',suggestion.sim_card)
+            $('.sim_card_id').val(suggestion.sim_card_id);
+            @this.set('sim_card_id',suggestion.sim_card_id)
+
+        },
+        onHint: function (hint) {
+            //$('#numero').val(hint);
+            //console.log(hint);
+
+
+        },
+        onSearchComplete: function (query, suggestions) {
+
+        },
+        onInvalidateSelection: function() {
+            $('#selction-ajax').html('You selected: none');
+        },
+
+    });
+</script>
+
+
+<script>
+    $('.dispositivo').devbridgeAutocomplete({
+        lookup: function (query, done) {
+            $.ajax({
+                url: "{{route('search.dispositivos')}}",
+                dataType: 'json',
+                data: {
+                    term: query
+                },
+                success: function(data){
+
+                    done(data);
+
+                }
+            })
+
+        },
+        minChars: 2,
+        autoSelectFirst: false,
+        deferRequestBy: 5,
+        onSelect: function(suggestion) {
+
+            //console.log(suggestion.operador);
+
+            $('.modelo').val(suggestion.modelo);
+            @this.set('modelo_gps',suggestion.modelo)
+            $('.dispositivos_id').val(suggestion.data);
+            @this.set('dispositivos_id',suggestion.data)
+            @this.set('imei',suggestion.value)
+            // $('.sim_card').val(suggestion.sim_card);
+
+        },
+        onHint: function (hint) {
+            //$('#numero').val(hint);
+            //console.log(hint);
+
+
+        },
+        onSearchComplete: function (query, suggestions) {
+
+        },
+        onInvalidateSelection: function() {
+            $('#selction-ajax').html('You selected: none');
+        },
+
+    });
 </script>
 @endpush
 @endonce
