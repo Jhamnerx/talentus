@@ -58,7 +58,7 @@
                     <div class="grid grid-cols-12 gap-6">
                         <div class="col-span-12 sm:col-span-4">
                             {!! Form::hidden('empresa_id', session('empresa')) !!}
-
+                            {!! Form::hidden('codigo', Str::random(10)) !!}
                             {!! Html::decode(Form::label('tipo','Tipo: <span class="text-rose-500">*</span>',
                             ['class'
                             => 'block text-sm font-medium mb-1'])) !!}

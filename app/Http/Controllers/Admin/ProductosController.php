@@ -8,6 +8,7 @@ use App\Models\Categoria;
 use App\Models\Productos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductosController extends Controller
 {
@@ -41,9 +42,12 @@ class ProductosController extends Controller
     public function store(ProductosRequest $request)
     {
 
+
+
         // dd($request->file('file'));
 
         $producto = Productos::create($request->all());
+
 
         if ($request->file('file')) {
 
@@ -54,7 +58,7 @@ class ProductosController extends Controller
             ]);
         };
 
-        return redirect()->route('admin.almacen.productos.index');
+        return redirect()->route('admin.almacen.productos.index')->with('store', 'El producto se guardo con exito');;
     }
 
     /**

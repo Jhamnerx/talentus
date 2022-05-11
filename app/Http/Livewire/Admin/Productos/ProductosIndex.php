@@ -28,6 +28,7 @@ class ProductosIndex extends Component
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })->orWhere('nombre', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         // $productos = Productos::paginate(10);
