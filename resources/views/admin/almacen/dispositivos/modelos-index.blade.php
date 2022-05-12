@@ -6,6 +6,10 @@
 
 @stop
 
+@push('modals')
+@livewire('admin.dispositivos.edit-modelo-dispositivo')
+@endpush
+
 @section('js')
 <script>
     console.log('Hi!'); 

@@ -7,7 +7,13 @@ use Livewire\Component;
 
 class ModelosDispositivosIndex extends Component
 {
+    public $modalEditOpen = false;
     public $search;
+
+    protected $listeners = [
+        'ActualizarTabla' => 'render'
+    ];
+
     public function render()
     {
         $modelos = ModelosDispositivo::where('modelo', 'like', '%' . $this->search . '%')
@@ -21,5 +27,12 @@ class ModelosDispositivosIndex extends Component
             ->paginate(10);
 
         return view('livewire.admin.dispositivos.modelos-dispositivos-index', compact('modelos'));
+    }
+
+    public function showModal(ModelosDispositivo $modelo)
+    {
+        //dd($modelo);
+        $this->modalEditOpen = true;
+        $this->emit('abrirModal', $modelo);
     }
 }

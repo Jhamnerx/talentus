@@ -22,9 +22,12 @@ class DispositivosIndex extends Component
         $dispositivos = Dispositivos::whereHas('modelo', function ($query) {
             $query->where('marca', 'like', '%' . $this->search . '%')
                 ->orWhere('modelo', 'like', '%' . $this->search . '%');
+        })->orwhereHas('vehiculos', function ($query) {
+            $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('imei', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
+
 
 
         $total = Dispositivos::all()->count();

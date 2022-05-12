@@ -16,7 +16,7 @@ class CreateModelosDispositivosTable extends Migration
         Schema::create('modelos_dispositivos', function (Blueprint $table) {
             $table->id();
             $table->string('modelo');
-            $table->string('marca');
+            $table->string('marca')->nullable();
             $table->string('certificado')->nullable();
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Dispositivos;
 
 use App\Imports\DispositivosImport;
 use App\Models\ModelosDispositivo;
+use Exception;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,9 +15,10 @@ class Import extends Component
     public $file;
     public $modelo;
     public $modalOpen = false;
+    public $errorInfo = null;
 
     protected $rules = [
-        'file' => 'required|file|max:10024|mimes:xlsx,csv,csv',
+        'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
         'modelo' => 'required',
     ];
     protected $messages = [
@@ -43,9 +45,16 @@ class Import extends Component
     public function importExcel()
     {
         $this->validate();
+        $this->errorInfo = null;
 
-        Excel::import(new DispositivosImport($this->modelo), $this->file);
-        $this->modalOpen = false;
-        $this->emit('render');
+
+        try {
+            Excel::import(new DispositivosImport($this->modelo), $this->file);
+            $this->modalOpen = false;
+            $this->emit('render');
+        } catch (Exception $e) {
+
+            $this->errorInfo = $e->errorInfo["2"];
+        }
     }
 }
