@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Admin\Lineas;
 
-use App\Models\Lineas;
 use App\Models\SimCard;
 use Livewire\Component;
 
@@ -12,7 +11,7 @@ class LineasIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
-
+    // public $openUnAsign = false;
     protected $listeners = ['render' => 'render'];
 
 

@@ -1,9 +1,6 @@
 <div>
-
-    <!-- Basic Modal -->
-
     <!-- Start -->
-    <div x-data="{ modalOpen: false }">
+    <div x-data="{ modalOpen: @entangle('openModalImport') }" x-data="{ modalOpen: false }">
 
         <div class="relative inline-flex">
             <button @click="modalOpen = true" aria-controls="basic-modal"
@@ -82,6 +79,12 @@
                     </p>
 
                     @enderror
+                    @if ($errorInfo)
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$errorInfo}}
+                    </p>
+                    @endif
+
                 </div>
 
                 <!-- Modal footer -->
@@ -89,7 +92,7 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             @click="modalOpen = false">Cerrar</button>
-                        <button @click="modalOpen = false" wire:click='importExcel'
+                        <button wire:click='importExcel'
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>

@@ -12,8 +12,8 @@
                 {!! Form::label('sim_card_n', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1'])
                 !!}
 
-                <input type="text" class="form-input w-full" placeholder="Escribe el sim card"
-                    wire:model="sim_card_n.0">
+                <input type="text" class="form-input w-full" placeholder="Escribe el sim card" wire:model="sim_card_n.0"
+                    maxlength="19">
 
 
                 @error('sim_card_n.0')
@@ -70,7 +70,7 @@
                 {!! Form::label('sim_card', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1'])
                 !!}
                 <input type="phone" class="form-input w-full" placeholder="Escribe el sim card"
-                    wire:model="sim_card_n.{{$value}}">
+                    wire:model="sim_card_n.{{$value}}" maxlength="19">
 
 
                 @error('sim_card_n.'.$value)

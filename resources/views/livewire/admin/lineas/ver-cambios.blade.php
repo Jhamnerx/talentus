@@ -4,10 +4,10 @@
 
     <!-- Start -->
     <div x-data="{ modalOpen: false }">
+
         <button @click="modalOpen = true" aria-controls="basic-modal"
-            class="text-slate-400 hover:text-slate-600 rounded-full">
-            <span class="sr-only">Ver</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye-check w-8 h-8 "
+            class="btn border-slate-200 hover:border-slate-300 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye-check w-6 h-6 shrink-0"
                 viewBox="0 0 32 32" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round"
                 stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -16,7 +16,6 @@
                     d="M12 19c-4 0 -7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7c-.42 .736 -.858 1.414 -1.311 2.033" />
                 <path d="M15 19l2 2l4 -4" />
             </svg>
-
         </button>
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
@@ -121,8 +120,14 @@
 
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="text-left font-medium text-emerald-500">+51
-                                                    {{$cambio->linea_new->numero}}
+                                                <div class="text-left font-medium text-emerald-500">
+                                                    @if ($cambio->linea_new)
+                                                    +51 {{$cambio->linea_new->numero}}
+                                                    @else
+                                                    -
+                                                    @endif
+
+
                                                 </div>
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

@@ -42,7 +42,7 @@ class LineasController extends Controller
     public function store(LineasRequest $request)
 
     {
-
+        //dd($request);
         // SimCard::create($request->all());
         // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
     }
@@ -153,12 +153,15 @@ class LineasController extends Controller
                     'user_id' => auth()->user()->id,
                 ]);
 
+                $exists = SimCard::where('lineas_id', $request->numero)->update(['lineas_id' => null]);
+
+
                 $updated = SimCard::where('id', $request->sim_card)
                     ->update(['lineas_id' => $request->numero]);
 
 
 
-                //return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
+                return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea, Con el numero existente');
             } else {
 
 
@@ -176,7 +179,7 @@ class LineasController extends Controller
 
 
 
-                // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
+                return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea');
             }
         } else {
 
@@ -210,7 +213,7 @@ class LineasController extends Controller
 
 
 
-            //return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
+            return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se Asigno y se guardo el numero');
         }
 
 

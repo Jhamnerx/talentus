@@ -13,8 +13,7 @@
                     placeholder="Escribe el sim card"> --}}
                 {!! Form::text('sim', $value, ['placeholder' => 'Escribe el sim card','id' =>
                 'autocomplete-ajax-sim',
-                'class' => 'form-input w-full sm:w-1/2']) !!}
-
+                'class' => 'form-input w-full sm:w-1/2', 'maxlength' => '19']) !!}
 
 
 
@@ -36,7 +35,7 @@
                 !!}
 
                 <input name="linea" id="autocomplete-ajax-linea" type="text" class="form-input w-full sm:w-1/2"
-                    placeholder="Ingresar Linea">
+                    placeholder="Ingresar Linea" maxlength="9">
 
 
 

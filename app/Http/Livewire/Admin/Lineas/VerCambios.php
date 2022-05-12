@@ -9,6 +9,7 @@ class VerCambios extends Component
 {
     public $sim_card;
 
+    protected $listeners = ['render' => 'render'];
 
     public function render()
     {

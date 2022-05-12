@@ -209,9 +209,7 @@
                                     </label>
                                 </div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <span class="sr-only">Favorito</span>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">SIM CARD</div>
                             </th>
@@ -223,6 +221,9 @@
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">VEHICULO</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">ASIGNACION</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
@@ -245,22 +246,20 @@
                                     </label>
                                 </div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center relative">
-                                    <button>
-                                        <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
+
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center">
                                     <div
-                                        class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
-                                        <img class="ml-1" src="../images/icon-01.svg" width="20" height="20"
-                                            alt="Icon 01" />
+                                        class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+
+                                        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                            width="20" height="20">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
+                                                    fill="white"></path>
+                                            </g>
+                                        </svg>
                                     </div>
                                     @if (!empty($sim_card->sim_card))
                                     <div class="font-medium text-slate-800">{{$sim_card->sim_card}}</div>
@@ -274,7 +273,7 @@
                                 @if (!empty($sim_card->linea))
                                 <div class="text-left">{{$sim_card->linea->numero}}</div>
                                 @else
-                                <div class="text-left">#</div>
+                                <div class="text-left"># -</div>
                                 @endif
 
                             </td>
@@ -290,11 +289,23 @@
                                 </div>
                                 @else
                                 <div class="font-medium text-emerald-500">
-                                    Sin Asinar
+                                    Sin Vehiculo
                                 </div>
 
                                 @endif
 
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+                                    @if (!empty($sim_card->linea))
+
+                                    @livewire('admin.lineas.un-asign', ['sim_card' => $sim_card],
+                                    key('unasign'.$sim_card->id))
+                                    @else
+                                    <div class="text-left">-</div>
+                                    @endif
+
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
