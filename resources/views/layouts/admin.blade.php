@@ -33,7 +33,6 @@
     x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
-    <x-jet-banner />
     <script>
         if (localStorage.getItem('sidebar-expanded') == 'true') {
             document.querySelector('body').classList.add('sidebar-expanded');
@@ -53,6 +52,7 @@
 
             <!-- Site header -->
             @livewire('admin.header')
+            <x-jet-banner />
             <main>
 
 

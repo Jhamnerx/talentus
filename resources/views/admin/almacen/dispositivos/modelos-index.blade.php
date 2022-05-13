@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+@section('ruta', 'almacen-dispositivos')
 @section('contenido')
 
 <!-- Table -->

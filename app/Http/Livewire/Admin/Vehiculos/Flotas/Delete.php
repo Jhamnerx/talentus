@@ -28,7 +28,7 @@ class Delete extends Component
             'user_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('admin.vehiculos.flotas.index');
+        return redirect()->route('admin.vehiculos.flotas.index')->with('delete', 'La flota fue eliminada con exito');
     }
     public function render()
     {

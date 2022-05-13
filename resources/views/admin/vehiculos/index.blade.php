@@ -8,10 +8,79 @@
 @stop
 
 @section('js')
+
+
 <script>
-    console.log('Hi!'); 
+    window.addEventListener('change-status', event => {
+        $( document ).ready(function() {
+            Swal.fire({
+            icon: 'success',
+            title: 'Actualizado',
+            text: event.detail.status,
+            showConfirmButton: true,
+            confirmButtonText: "Cerrar"
+
+            })
+        });
+    })
+</script>
+
+<script>
+    window.addEventListener('vehiculo-delete', event => {
+        $( document ).ready(function() {
+            Swal.fire({
+            icon: 'error',
+            title: 'Eliminado',
+            text: 'Vehiculo Eliminado',
+            showConfirmButton: true,
+            confirmButtonText: "Cerrar"
+
+            })
+        });
+    })
+</script>
+
+
+@if (session('store'))
+
+
+<script>
+    $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: '{{session("store")}}',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+
 
 </script>
+
+@endif
+
+@if (session('update'))
+
+
+<script>
+    $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Actualizado',
+        text: '{{session("update")}}',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+
+
+</script>
+
+@endif
+
 
 <script>
     // A basic demo function to handle "select all" functionality

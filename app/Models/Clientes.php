@@ -20,7 +20,14 @@ class Clientes extends Model
     {
         static::addGlobalScope(new EmpresaScope);
         static::addGlobalScope(new EliminadoScope);
-        static::addGlobalScope(new ActiveScope);
+        //static::addGlobalScope(new ActiveScope);
+    }
+
+
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
     }
     //relacion uno a muchos
 
@@ -58,7 +65,7 @@ class Clientes extends Model
 
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class, 'empresa_id')->withoutGlobalScope(EliminadoScope::class);;
+        return $this->belongsTo(Empresa::class, 'empresa_id')->withoutGlobalScope(EliminadoScope::class);
     }
 
 

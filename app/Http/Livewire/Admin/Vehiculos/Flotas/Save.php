@@ -95,8 +95,7 @@ class Save extends Component
         $this->resetInputFields();
         $this->modalOpen = false;
         $this->emit('render');
-        //  return redirect()->route('admin.vehiculos.flotas.index')->with('store', 'Se guardo con exito');
-
+        return redirect()->route('admin.vehiculos.flotas.index')->with('store', 'Se guardo con exito');
     }
 
     public function updated($propertyName)

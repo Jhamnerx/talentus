@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-
+@section('ruta', 'vehiculos-flotas')
 @section('contenido')
 <!-- Code block starts -->
 <div
     class="my-6 lg:my-12 container px-6 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
     <!-- Add customer button -->
-    <a href="{{route('admin.almacen.categorias.index')}}">
+    <a href="{{route('admin.vehiculos.flotas.index')}}">
         <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
                 viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"

@@ -96,6 +96,6 @@ class ClientesController extends Controller
     {
         return Excel::download(new ClientesExport, 'clientes.xls');
 
-        redirect()->route('admin.clientes.index');
+        //redirect()->route('admin.clientes.index');
     }
 }

@@ -214,6 +214,9 @@
                                 <div class="font-semibold text-left">Dispositivo#</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Estado</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
                             </th>
                         </tr>
@@ -260,6 +263,18 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-slate-800">
                                     {{$vehiculo->dispositivos->modelo->modelo." | ".$vehiculo->dispositivos->imei}}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div>
+                                    <div class="m-3 ">
+
+
+                                        @livewire('admin.vehiculos.change-status', ['model' => $vehiculo, 'field'
+                                        =>
+                                        'is_active'], key('active'.$vehiculo->id))
+                                        <!-- End -->
+                                    </div>
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

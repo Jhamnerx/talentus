@@ -17,7 +17,10 @@ class Delete extends Component
     public function delete()
     {
         $this->model->setAttribute($this->field, '1')->save();
-        return redirect()->route('admin.vehiculos.index');
+        // return redirect()->route('admin.vehiculos.index');
+        $this->dispatchBrowserEvent('vehiculo-delete', ['delete' => $this->model]);
+
+        $this->emit('updateTable');
     }
     public function render()
     {

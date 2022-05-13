@@ -22,6 +22,6 @@ class FlotasIndex extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
         // ->get();
-        return view('livewire.admin..vehiculos.flotas.flotas-index', compact('flotas'));
+        return view('livewire.admin.vehiculos.flotas.flotas-index', compact('flotas'));
     }
 }

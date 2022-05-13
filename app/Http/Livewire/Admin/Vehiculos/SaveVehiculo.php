@@ -109,6 +109,9 @@ class SaveVehiculo extends Component
 
         $this->emit('updateTable');
         $this->modalOpen = false;
+
+        return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
+        return redirect()->route('admin.vehiculos.index')->with('flash.abnnerStyle', 'success');
         // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
     }
 
