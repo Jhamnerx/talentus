@@ -1,7 +1,10 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Vehiculos;
+namespace App\Http\Livewire\Admin\Vehiculos\Reportes;
 
+use App\Models\Contactos;
+use App\Models\DetalleReportes;
+use App\Models\Flotas;
 use App\Models\Reportes;
 use Livewire\Component;
 
@@ -10,6 +13,9 @@ class ReportesIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $openModalContactos = false;
+    public $openModalSave = false;
+    public $openModalEdit = false;
 
     public function render()
     {
@@ -27,7 +33,7 @@ class ReportesIndex extends Component
             ->orWhere('hora_t', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orWhere('detalle', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
 
@@ -54,10 +60,10 @@ class ReportesIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
         }
-        return view('livewire.admin.vehiculos.reportes-index', compact('reportes', 'total'));
+        return view('livewire.admin.vehiculos.reportes.reportes-index', compact('reportes', 'total'));
     }
     public function filter($dias)
     {
@@ -83,5 +89,31 @@ class ReportesIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+
+    public function openModalContactos(Flotas $flota)
+    {
+        //dd($flota);
+
+        $this->emit('showContactos', $flota);
+        $this->openModalContactos = true;
+    }
+
+    public function openModalEdit(Reportes $reporte)
+    {
+        $this->emit('editarReporte');
+        $this->openModalEdit = true;
+    }
+
+    public function openModalShow(DetalleReportes $reporte)
+    {
+        dd($reporte);
+    }
+
+    public function openModalSave()
+    {
+        $this->emit('guardarReporte');
+        $this->openModalSave = true;
     }
 }

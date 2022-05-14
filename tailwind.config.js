@@ -83,6 +83,7 @@ module.exports = {
     // eslint-disable-next-line global-require
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
+
     
     // add custom variant for expanding sidebar
     plugin(({ addVariant, e }) => {

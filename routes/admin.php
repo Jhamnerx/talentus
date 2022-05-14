@@ -106,6 +106,7 @@ Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('bu
 Route::get('search/sim_card', [SearchController::class, 'sim_card'])->name('search.sim_card');
 Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.lineas');
 Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
+Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('search.vehiculos');
 
 // VERIFICAR
 

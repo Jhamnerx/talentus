@@ -65,4 +65,10 @@ class User extends Authenticatable
 
         return $this->hasMany(CambiosLineas::class);
     }
+
+    public function reportes()
+    {
+
+        return $this->hasMany(Reportes::class);
+    }
 }

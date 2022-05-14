@@ -29,6 +29,7 @@ mix.js('resources/js/app.js', 'public/js')
     ]);
 
 mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/plugins/jquery/jquery.min.js');
+mix.copy('node_modules/tw-elements/dist/js/index.min.js', 'public/plugins/tw-elements/index.min.js');
 
 
 

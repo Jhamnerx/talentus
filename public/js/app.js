@@ -7421,7 +7421,7 @@ __webpack_require__(/*! ./slider */ "./resources/js/slider.js");
 window.Alpine = alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"];
 alpinejs__WEBPACK_IMPORTED_MODULE_0__["default"].start();
 
-window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_1___default());
+window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_1___default()); // import 'tw-elements';
 
 /***/ }),
 
@@ -11304,6 +11304,15 @@ document.addEventListener('DOMContentLoaded', function () {
     dateFormat: "Y-m-d",
     prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>'
+  });
+  var hoy = new Date();
+  var hora = hoy.getHours() + ':' + hoy.getMinutes();
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])('.inputTime', {
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i",
+    time_24hr: true,
+    defaultDate: hora
   });
   (0,_components_dashboard_card_01__WEBPACK_IMPORTED_MODULE_4__["default"])();
   (0,_components_dashboard_card_02__WEBPACK_IMPORTED_MODULE_5__["default"])();

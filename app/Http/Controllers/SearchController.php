@@ -8,6 +8,7 @@ use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Lineas;
 use App\Models\SimCard;
+use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
 
 class SearchController extends Controller
@@ -169,6 +170,28 @@ class SearchController extends Controller
                 'data' => $dipositivo->id,
                 'modelo' => $dipositivo->modelo->modelo,
                 'marca' => $dipositivo->modelo->marca,
+            ];
+        }
+
+
+        return array("suggestions" => $data);
+    }
+    public function vehiculos(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $vehiculos = Vehiculos::where('placa', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        //$lineas = Lineas::all();
+
+        $data = [];
+
+        foreach ($vehiculos as $vehiculo) {
+
+            $data[] = [
+                'value' => $vehiculo->id,
+                'data' => $vehiculo->placa,
+                'flota' => $vehiculo->flotas,
             ];
         }
 

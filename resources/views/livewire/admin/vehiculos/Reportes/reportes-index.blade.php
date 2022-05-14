@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Reportes ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Reportes✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -28,15 +28,15 @@
             </form>
 
             <!-- Create button -->
-            <a href="{{route('admin.vehiculos.reportes.create')}}">
-                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Añadir Reporte</span>
-                </button>
-            </a>
+
+            <button wire:click.prevent="openModalSave()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                    <path
+                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
+                <span class="hidden xs:block ml-2">Añadir Reporte</span>
+            </button>
+
 
         </div>
 
@@ -212,7 +212,7 @@
                                 <div class="font-semibold text-left">Fecha Reporte</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Modificaciones</div>
+                                <div class="font-semibold text-left">Descripcion</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Usuario</div>
@@ -239,13 +239,41 @@
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-blue-500">{{$reporte->vehiculos->placa}}</div>
+                                <div class="font-medium text-blue-800">
+                                    {{$reporte->vehiculos->placa}}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$reporte->vehiculos->flotas->nombre}}</div>
+
+                                @if (count($reporte->vehiculos->flotas->contactos) > 0)
+
+                                <div wire:click="openModalContactos({{$reporte->vehiculos->flotas->id}})"
+                                    class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
+                                    {{$reporte->vehiculos->flotas->nombre}}</div>
+                                @else
+                                <div class="font-medium text-slate-800">
+                                    {{$reporte->vehiculos->flotas->nombre}}</div>
+                                @endif
+
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$reporte->estado}}</div>
+
+                                @if ($reporte->estado == 2)
+                                <div
+                                    class="text-xs inline-flex font-medium bg-sky-100 text-sky-600 rounded-full text-center px-2.5 py-1">
+                                    En Espera
+                                </div>
+                                @elseif($reporte->estado == 1)
+                                <div
+                                    class="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
+                                    Solucionado</div>
+                                @else
+                                <div
+                                    class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
+                                    Por Consultar
+                                </div>
+                                @endif
+
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-slate-800">{{$reporte->fecha_t}}</div>
@@ -260,18 +288,24 @@
                                 <div class="font-medium text-slate-800">{{$reporte->detalle}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">Jhamner</div>
+                                <div class="font-medium text-slate-800">
+                                    @if ($reporte->user)
+                                    {{$reporte->user}}
+                                    @endif
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                    <button wire:click.prevent="openModalEdit({{$reporte->id}})"
+                                        class="text-slate-400 hover:text-slate-500 rounded-full">
                                         <span class="sr-only">Editar</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path
                                                 d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                                         </svg>
                                     </button>
-                                    <button class="text-slate-400 hover:text-slate-600 rounded-full">
+                                    <button wire:click="openModalShow({{$reporte->detalle}})"
+                                        class="text-slate-400 hover:text-slate-600 rounded-full">
                                         <span class="sr-only">Ver</span>
                                         <svg xmlns="http://www.w3.org/2000/svg"
                                             class="icon icon-tabler icon-tabler-eye-check w-8 h-8 " viewBox="0 0 32 32"

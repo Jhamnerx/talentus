@@ -8,21 +8,29 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
+
+
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
     {{--
     <link rel="stylesheet" href="{{ asset('plugins/jquery-ui/jquery-ui.min.css') }}"> --}}
     <!-- Scripts -->
+
+    {{--
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+    <script src="{{asset('plugins/tw-elements/index.min.js')}}"></script> --}}
     <script src="{{ mix('js/app.js') }}" defer></script>
     {{-- plugins --}}
     <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('plugins/jquery.mockjax.js')}}"></script>
     {{-- <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script> --}}
     <script src="{{asset('plugins/jquery.autocomplete.js')}}"></script>
+
     {{-- Select2 --}}
-    {{--
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
+    <script src="{{asset('plugins/select2/select2.min.js')}}"></script>
 
     @livewireStyles
 

@@ -36,6 +36,13 @@ class Flotas extends Model
         return $this->hasMany(Vehiculos::class, 'flotas_id');
     }
 
+    //relacion uno a muchos
+
+    public function contactos()
+    {
+        return $this->hasMany(Contactos::class, 'flotas_id');
+    }
+
 
     //Relacion uno A UNO POLIMORFICA
 
