@@ -17,7 +17,10 @@ class CreateDetalleReportesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('reportes_id');
             $table->string('detalle');
+            $table->unsignedBigInteger('user_id')->nullable();
+
             $table->foreign('reportes_id')->references('id')->on('reportes')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

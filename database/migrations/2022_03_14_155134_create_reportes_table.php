@@ -18,7 +18,7 @@ class CreateReportesTable extends Migration
             $table->unsignedBigInteger('vehiculos_id');
             $table->time('hora_t');
             $table->date('fecha_t');
-            $table->date('fecha')->default(today());
+            $table->date('fecha');
             $table->string('detalle')->nullable();
             $table->boolean('estado')->default(true);
             $table->unsignedBigInteger('empresa_id');

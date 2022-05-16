@@ -22,4 +22,9 @@ class DetalleReportes extends Model
     {
         return $this->belongsTo(Reportes::class, 'reportes_id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

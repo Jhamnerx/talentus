@@ -94,7 +94,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="marca">Fecha Transmision:</label>
                                 <div class="relative">
-                                    <input maxlength="10" wire:model="fecha_t" required name="fecha" type="text"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_t" required
+                                        name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">

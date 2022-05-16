@@ -3,7 +3,7 @@
     <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-2 mb-1 relative">
 
-            <div class="col-span- sm:col-span-1">
+            <div class="col-span-1 sm:col-span-1">
                 <span>1</span>
             </div>
             <div class="col-span-4 sm:col-span-3">
@@ -63,7 +63,7 @@
     <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-2 relative">
 
-            <div class="col-span-4 sm:col-span-1">
+            <div class="col-span-1 sm:col-span-1">
                 <span>{{$key+2}}</span>
             </div>
             <div class="col-span-4 sm:col-span-3">

@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         User::create([
-            'name' => 'Jhamner Rolando',
+            'name' => 'Jhamner',
             'apellido' => 'Sifuentes Vasquez',
             'email' => 'jhamnerx1x@gmail.com',
             'tipo_documento' => 'DNI',
@@ -26,6 +26,18 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
-        User::factory(9)->create();
+        User::create([
+            'name' => 'Sandra',
+            'apellido' => 'Centurion',
+            'email' => 'administracion@talentustechnology.com',
+            'tipo_documento' => 'DNI',
+            'numero_documento' => '000000',
+            'direccion' => 'Cajamarca',
+            'telefonos' => '944299794',
+            'birthday' => '',
+            'is_client' => 'no',
+            'password' => bcrypt('12345678'),
+        ]);
+        User::factory(8)->create();
     }
 }

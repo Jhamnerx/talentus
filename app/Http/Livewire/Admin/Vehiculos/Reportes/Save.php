@@ -29,6 +29,8 @@ class Save extends Component
     public function closeModal()
     {
         $this->openModalSave = false;
+        $this->reset();
+        $this->resetErrorBag();
     }
 
     public function openModal()
@@ -47,11 +49,15 @@ class Save extends Component
         $reporte->vehiculos_id = $this->vehiculos_id;
         $reporte->hora_t = $this->hora_t;
         $reporte->fecha_t = $this->fecha_t;
+        $reporte->fecha = today();
         $reporte->detalle = $this->detalle;
         $reporte->user_id = auth()->user()->id;
         $reporte->empresa_id = session('empresa');
-
         $reporte->save();
+        $this->openModalSave = false;
+        $this->dispatchBrowserEvent('reporte-save', ['vehiculo' => $reporte->vehiculos->placa]);
+        $this->emit('updateTable');
+        $this->reset();
     }
 
     public function updated($label)

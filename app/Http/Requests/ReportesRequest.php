@@ -21,15 +21,28 @@ class ReportesRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($reporte = null)
     {
-        $rules = [
-            'vehiculos_id' => 'required',
-            "fecha_t" => 'required|date',
-            "hora_t" => 'required',
-            "detalle" => 'nullable',
-            // "dispositivos_id" => "required|unique:vehiculos",
-        ];
+
+
+        if ($reporte) {
+
+            $rules = [
+                "fecha_t" => 'required|date',
+                "hora_t" => 'required',
+                "detalle" => 'nullable',
+                // "dispositivos_id" => "required|unique:vehiculos",
+            ];
+        } else {
+
+            $rules = [
+                'vehiculos_id' => 'required',
+                "fecha_t" => 'required|date',
+                "hora_t" => 'required',
+                "detalle" => 'nullable',
+                // "dispositivos_id" => "required|unique:vehiculos",
+            ];
+        }
 
 
         return $rules;

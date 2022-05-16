@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Certificados;
+namespace App\Http\Livewire\Admin\Certificados\Actas;
 
 use App\Models\Actas;
 use Livewire\Component;
@@ -51,7 +51,7 @@ class ActasIndex extends Component
                 ->paginate(10);
         }
 
-        return view('livewire.admin.certificados.actas-index', compact('actas', 'total'));
+        return view('livewire.admin.certificados.actas.actas-index', compact('actas', 'total'));
     }
     public function filter($dias)
     {

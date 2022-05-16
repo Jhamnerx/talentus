@@ -2,7 +2,7 @@
 @section('contenido')
 
 <!-- Table -->
-@livewire('admin.certificados.actas-index')
+@livewire('admin.certificados.actas.actas-index')
 
 @stop
 

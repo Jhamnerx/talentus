@@ -16,6 +16,12 @@ class ReportesIndex extends Component
     public $openModalContactos = false;
     public $openModalSave = false;
     public $openModalEdit = false;
+    public $openModalDelete = false;
+    public $openModalDetalle = false;
+
+    protected $listeners = [
+        'updateTable' => 'render'
+    ];
 
     public function render()
     {
@@ -52,15 +58,14 @@ class ReportesIndex extends Component
                     $hasta . " 23:59:59"
                 ]
             )->whereRaw(
-                "(placa like ? OR fecha_t like  ? OR hora_t like ? OR detalle like ?)",
+                "(fecha_t like  ? OR hora_t like ? OR detalle like ?)",
                 [
-                    '%' . $this->search . '%',
                     '%' . $this->search . '%',
                     '%' . $this->search . '%',
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id', 'desc')
+                ->orderBy('id')
                 ->paginate(10);
         }
         return view('livewire.admin.vehiculos.reportes.reportes-index', compact('reportes', 'total'));
@@ -102,18 +107,25 @@ class ReportesIndex extends Component
 
     public function openModalEdit(Reportes $reporte)
     {
-        $this->emit('editarReporte');
+        $this->emit('editarReporte', $reporte);
         $this->openModalEdit = true;
     }
-
-    public function openModalShow(DetalleReportes $reporte)
+    public function openModalDelete(Reportes $reporte)
     {
-        dd($reporte);
+        $this->emit('EliminarReporte', $reporte);
+        $this->openModalDelete = true;
     }
+
 
     public function openModalSave()
     {
         $this->emit('guardarReporte');
         $this->openModalSave = true;
+    }
+
+    public function openModalShow(Reportes $reporte)
+    {
+        $this->emit('verDetalleReporte', $reporte);
+        $this->openModalDetalle = true;
     }
 }

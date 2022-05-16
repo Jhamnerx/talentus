@@ -13,6 +13,8 @@
 @livewire('admin.vehiculos.reportes.show-contactos')
 @livewire('admin.vehiculos.reportes.save')
 @livewire('admin.vehiculos.reportes.edit')
+@livewire('admin.vehiculos.reportes.delete')
+@livewire('admin.vehiculos.reportes.show-detalle')
 
 
 @endpush
@@ -21,9 +23,58 @@
 
 @section('js')
 <script>
-    console.log('Hi!'); 
+    window.addEventListener('reporte-edit', event => {
+        iziToast.success({
+            position: 'topRight',
+            title: 'ACTUALIZADO',
+            message: 'El Reporte de '+event.detail.vehiculo+' Fue Actualizado',
+        });
 
+    })
+    
 </script>
+
+
+<script>
+    window.addEventListener('detalle-reporte', event => {
+        iziToast.success({
+            position: 'topRight',
+            title: 'DETALLE AGREGADO',
+            message: 'Se añadio un detalle al reporte',
+        });
+
+    })
+    
+</script>
+
+<script>
+    window.addEventListener('reporte-delete', event => {
+        iziToast.error({
+            position: 'topRight',
+            title: 'ELIMINADO',
+            message: 'El Reporte de '+event.detail.vehiculo+' Fue Eliminado',
+        });
+
+    })
+    
+</script>
+<script>
+    window.addEventListener('reporte-save', event => {
+        $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: 'El Reporte de '+event.detail.vehiculo+' Fue Creado',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+    })
+    
+</script>
+
+
 
 <script>
     // A basic demo function to handle "select all" functionality

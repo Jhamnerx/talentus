@@ -258,20 +258,22 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                @if ($reporte->estado == 2)
-                                <div
-                                    class="text-xs inline-flex font-medium bg-sky-100 text-sky-600 rounded-full text-center px-2.5 py-1">
-                                    En Espera
-                                </div>
-                                @elseif($reporte->estado == 1)
-                                <div
-                                    class="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
-                                    Solucionado</div>
-                                @else
+                                @if ($reporte->estado == 1)
                                 <div
                                     class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
                                     Por Consultar
                                 </div>
+
+                                @elseif($reporte->estado == 2)
+                                <div
+                                    class="text-xs inline-flex font-medium bg-sky-100 text-sky-600 rounded-full text-center px-2.5 py-1">
+                                    En Espera
+                                </div>
+
+                                @else
+                                <div
+                                    class="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
+                                    Solucionado</div>
                                 @endif
 
                             </td>
@@ -290,7 +292,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-slate-800">
                                     @if ($reporte->user)
-                                    {{$reporte->user}}
+                                    {{$reporte->user->name}}
                                     @endif
                                 </div>
                             </td>
@@ -304,7 +306,7 @@
                                                 d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                                         </svg>
                                     </button>
-                                    <button wire:click="openModalShow({{$reporte->detalle}})"
+                                    <button wire:click="openModalShow({{$reporte->id}})"
                                         class="text-slate-400 hover:text-slate-600 rounded-full">
                                         <span class="sr-only">Ver</span>
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -319,7 +321,8 @@
                                         </svg>
 
                                     </button>
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
+                                    <button wire:click="openModalDelete({{$reporte->id}})"
+                                        class="text-rose-500 hover:text-rose-600 rounded-full">
                                         <span class="sr-only">Eliminar</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />

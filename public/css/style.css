@@ -969,6 +969,9 @@ select{
 .col-span-12{
   grid-column: span 12 / span 12;
 }
+.col-span-1{
+  grid-column: span 1 / span 1;
+}
 .col-span-4{
   grid-column: span 4 / span 4;
 }
@@ -2639,13 +2642,13 @@ select{
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity));
 }
-.text-sky-600{
-  --tw-text-opacity: 1;
-  color: rgb(2 132 199 / var(--tw-text-opacity));
-}
 .text-rose-600{
   --tw-text-opacity: 1;
   color: rgb(225 29 72 / var(--tw-text-opacity));
+}
+.text-sky-600{
+  --tw-text-opacity: 1;
+  color: rgb(2 132 199 / var(--tw-text-opacity));
 }
 .text-slate-300{
   --tw-text-opacity: 1;
@@ -5352,6 +5355,9 @@ span.flatpickr-day.selected {
   .sm\:auto-cols-max{
     grid-auto-columns: -webkit-max-content;
     grid-auto-columns: max-content;
+  }
+  .sm\:grid-cols-3{
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
   .sm\:flex-row{
     flex-direction: row;
