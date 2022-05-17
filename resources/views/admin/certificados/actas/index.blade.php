@@ -6,6 +6,12 @@
 
 @stop
 
+@push('modals')
+
+@livewire('admin.certificados.actas.save', ['ciudades' => $ciudades])
+
+@endpush
+
 @section('js')
 <script>
     console.log('Hi!'); 

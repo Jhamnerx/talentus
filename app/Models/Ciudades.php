@@ -15,6 +15,13 @@ class Ciudades extends Model
 
     //relacion uno a muchos
 
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
+
+
     public function actas()
     {
         return $this->hasMany(Actas::class, 'ciudades_id');

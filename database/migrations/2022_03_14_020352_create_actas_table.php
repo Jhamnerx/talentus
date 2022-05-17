@@ -29,8 +29,9 @@ class CreateActasTable extends Migration
             $table->boolean('estado')->default(true);
             $table->boolean('eliminado')->default(false);
             $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('user_id')->nullable();
 
-
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
             $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('cascade');
 

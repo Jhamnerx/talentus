@@ -92,7 +92,7 @@
                             </div>
                             <div class="col-span-6 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="marca">Fecha Transmision:</label>
+                                <label class="block text-sm font-medium mb-1" for="fecha_t">Fecha Transmision:</label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_t" required
                                         name="fecha" type="text"

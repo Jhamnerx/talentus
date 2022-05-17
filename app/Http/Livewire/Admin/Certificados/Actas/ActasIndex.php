@@ -11,6 +11,10 @@ class ActasIndex extends Component
     public $from = '';
     public $to = '';
 
+    public $openModalSave = false;
+    public $openModalEdit = false;
+    public $openModalDelete = false;
+
     public function render()
     {
         $desde = $this->from;
@@ -21,12 +25,12 @@ class ActasIndex extends Component
             $query->where('nombre', 'like', '%' . $this->search . '%')
                 ->orwhere('prefijo', 'like', '%' . $this->search . '%');
         })->orwhereHas('vehiculos', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
+            $query->orwhere('placa', 'like', '%' . $this->search . '%');
         })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('numero', 'desc')
             ->paginate(10);
 
         $total = Actas::all()->count();
@@ -47,7 +51,7 @@ class ActasIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('numero')
                 ->paginate(10);
         }
 
@@ -55,6 +59,7 @@ class ActasIndex extends Component
     }
     public function filter($dias)
     {
+        $this->search = null;
         switch ($dias) {
             case '1':
                 $this->from = date('Y-m-d');
@@ -77,5 +82,30 @@ class ActasIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+    public function openModalSave()
+    {
+        $this->emit('guardarActa');
+        $this->openModalSave = true;
+    }
+
+    public function openModalEdit(Actas $acta)
+    {
+        $this->emit('editarActa', $acta);
+        $this->openModalEdit = true;
+    }
+    public function openModalDelete(Actas $acta)
+    {
+        $this->emit('EliminarActa', $acta);
+        $this->openModalDelete = true;
+    }
+
+
+
+
+    public function openModalShow(Actas $acta)
+    {
+        $this->emit('verDetalleActa', $acta);
+        $this->openModalDetalle = true;
     }
 }

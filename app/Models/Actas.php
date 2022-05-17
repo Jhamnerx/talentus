@@ -9,10 +9,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Actas extends Model
 {
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+
     use HasFactory;
 
     protected $table = 'actas';
-
 
 
 
@@ -28,19 +30,11 @@ class Actas extends Model
         'eliminado' => 'boolean',
     ];
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
 
     //Relacion uno a muchos inversa
 

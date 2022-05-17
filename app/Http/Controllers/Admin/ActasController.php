@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Actas;
+use App\Models\Ciudades;
 use Illuminate\Http\Request;
 
 class ActasController extends Controller
@@ -15,7 +16,8 @@ class ActasController extends Controller
      */
     public function index()
     {
-        return view('admin.certificados.actas.index');
+        $ciudades = Ciudades::active(true)->get();
+        return view('admin.certificados.actas.index', compact('ciudades'));
     }
 
     /**
@@ -25,7 +27,7 @@ class ActasController extends Controller
      */
     public function create()
     {
-        return view('admin.certificados.actas.create');
+        // return view('admin.certificados.actas.create');
     }
 
     /**
