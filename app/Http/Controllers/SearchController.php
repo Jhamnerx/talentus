@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Ciudades;
 use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Models\Dispositivos;
@@ -10,6 +11,7 @@ use App\Models\Lineas;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
+use Illuminate\Support\Arr;
 
 class SearchController extends Controller
 {
@@ -197,5 +199,24 @@ class SearchController extends Controller
 
 
         return array("suggestions" => $data);
+    }
+
+
+    public function ciudades(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $ciudades = Ciudades::where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
+        $data = [];
+        foreach ($ciudades as $ciudad) {
+
+            $data[] = [
+                'value' => $ciudad->id,
+                'data' => $ciudad->nombre,
+            ];
+        }
+
+        return array('suggestions' => $data);
     }
 }

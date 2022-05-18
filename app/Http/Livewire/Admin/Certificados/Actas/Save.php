@@ -14,7 +14,7 @@ class Save extends Component
     public $openModalSave = false;
     public $ciudades;
 
-    public $numero, $vehiculos_id, $fecha_inicio, $fecha_fin, $ciudades_id, $fondo, $sello;
+    public $numero, $vehiculos_id, $fecha_inicio, $fecha_fin, $ciudades_id, $fondo = 1, $sello = 1;
 
 
     protected $listeners = [
@@ -31,13 +31,19 @@ class Save extends Component
     {
         $this->openModalSave = true;
     }
+    public function closeModal()
+    {
+        $this->openModalSave = false;
+        $this->reset();
+        $this->resetErrorBag();
+    }
 
     public function guardarActa()
     {
         $actaRequest = new ActasRequest();
         $values = $this->validate($actaRequest->rules(), $actaRequest->messages());
 
-
+        //  dd($values);
         $acta = new Actas;
 
 
@@ -52,6 +58,8 @@ class Save extends Component
         $acta->fin_cobertura = $values["fecha_fin"];
         $acta->ciudades_id = $values["ciudades_id"];
         $acta->fecha = $fecha;
+        $acta->sello = $values["sello"];
+        $acta->fondo = $values["fondo"];
         $acta->year = today()->year;
         $acta->user_id = auth()->user()->id;
         $acta->empresa_id = session('empresa');

@@ -138,7 +138,8 @@
                             </div>
                             <div class="col-span-12 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="marca">Inicio Cobertura:</label>
+                                <label class="block text-sm font-medium mb-1" for="fecha_inicio">Inicio de Cobertura:
+                                    <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_inicio" required
                                         name="fecha" type="text"
@@ -180,7 +181,8 @@
                             </div>
                             <div class="col-span-12 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin Cobertura:</label>
+                                <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
+                                    <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_fin" required
                                         name="fecha_fin" type="text"
@@ -223,15 +225,14 @@
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="numero">Ciudad: <span
                                         class="text-rose-500">*</span></label>
-                                <div class="relative">
+                                <div class="relative" wire:ignore>
 
-                                    <select wire:model="ciudades_id" class="form-input w-full pl-9 " name="ciudades_id"
-                                        id="">
-                                        <option value="">Selecciona una Ciudad:</option>
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
+                                        {{-- <option value="">Selecciona una Ciudad:</option>
                                         @foreach ($ciudades as $ciudad)
-                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option>
-
-                                        @endforeach
+                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
+                                        {{--
+                                        @endforeach --}}
                                     </select>
 
                                     @error('ciudades_id')
@@ -392,14 +393,62 @@
 
         }
     });
+    $('.ciudades').select2({
+       placeholder: '    Selecciona una ciudad',
+        language: "es",
+        width: '100%',
+        ajax: {
+            url: '{{route("search.ciudades")}}',
+            dataType: 'json',
+
+            cache: true,
+            data: function (params) {
+
+                var query = {
+                    term: params.term,
+                    //type: 'public'
+                }
+
+                // Query parameters will be ?search=[term]&type=public
+                return query;
+            },
+            processResults: function (data, params) {
+
+               // console.log(data.suggestions);
+                var suggestions = $.map(data.suggestions, function (obj) {
+
+                    obj.id = obj.id || obj.value; // replace pk with your identifier
+                    obj.text = obj.data; // replace pk with your identifier
+
+                    return obj;
+
+                });
+                //console.log(data);
+                // Transforms the top-level key of the response object from 'items' to 'results'
+                return {
+
+                    results: suggestions,
+    
+                };
+                
+            },
+
+
+        }
+    });
+
 $('.vehiculos_id').on('select2:select', function (e) {
     var data = e.params.data;
-    console.log(data.id);
+   // console.log(data.id);
     @this.set('vehiculos_id',data.id)
 });
 
 
-
+$('.ciudades').on('select2:select', function (e) {
+    var data = e.params.data;
+    //console.log(data.id);
+    @this.set('ciudades_id',data.id)
+});
 
 </script>
 

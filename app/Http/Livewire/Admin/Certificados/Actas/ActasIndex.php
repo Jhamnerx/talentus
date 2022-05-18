@@ -15,6 +15,11 @@ class ActasIndex extends Component
     public $openModalEdit = false;
     public $openModalDelete = false;
 
+
+    protected $listeners = [
+        'updateTable' => 'render',
+    ];
+
     public function render()
     {
         $desde = $this->from;
@@ -25,7 +30,7 @@ class ActasIndex extends Component
             $query->where('nombre', 'like', '%' . $this->search . '%')
                 ->orwhere('prefijo', 'like', '%' . $this->search . '%');
         })->orwhereHas('vehiculos', function ($query) {
-            $query->orwhere('placa', 'like', '%' . $this->search . '%');
+            $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
@@ -89,11 +94,14 @@ class ActasIndex extends Component
         $this->openModalSave = true;
     }
 
+    //Enviar datos para editar acta
     public function openModalEdit(Actas $acta)
     {
-        $this->emit('editarActa', $acta);
+        $this->emit('actualizarActa', $acta);
         $this->openModalEdit = true;
     }
+
+
     public function openModalDelete(Actas $acta)
     {
         $this->emit('EliminarActa', $acta);

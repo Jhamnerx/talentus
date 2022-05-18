@@ -329,7 +329,8 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                    <button wire:click.prevent="openModalEdit({{$acta->id}})"
+                                        class="text-slate-400 hover:text-slate-500 rounded-full">
                                         <span class="sr-only">Editar</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path

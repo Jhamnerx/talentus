@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\GpsController;
 use App\Http\Controllers\Admin\GuiasController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LineasController;
+use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
@@ -107,6 +108,7 @@ Route::get('search/sim_card', [SearchController::class, 'sim_card'])->name('sear
 Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.lineas');
 Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
 Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('search.vehiculos');
+Route::get('search/ciudades', [SearchController::class, 'ciudades'])->name('search.ciudades');
 
 // VERIFICAR
 
@@ -116,3 +118,15 @@ Route::get('export/lineas', [LineasController::class, 'exportExcel'])->name('adm
 Route::get('export/dispositivos', [GpsController::class, 'exportExcel'])->name('admin.export.dispositivos');
 Route::get('export/clientes', [ClientesController::class, 'exportExcel'])->name('admin.export.clientes');
 Route::get('export/proveedores', [ProveedoresController::class, 'exportExcel'])->name('admin.export.proveedores');
+
+
+
+// PDF
+// ----------------------------------------------
+
+Route::middleware('pdf-auth')->group(function () {
+
+    //  invoice pdf
+    // -------------------------------------------------
+    Route::get('/actas/pdf/{acta:unique_hash}', ActaPdfController::class);
+});

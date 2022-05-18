@@ -8,14 +8,50 @@
 
 @push('modals')
 
-@livewire('admin.certificados.actas.save', ['ciudades' => $ciudades])
+@livewire('admin.certificados.actas.save')
+@livewire('admin.certificados.actas.edit')
 
 @endpush
 
 @section('js')
-<script>
-    console.log('Hi!'); 
 
+<script>
+    window.addEventListener('acta-delete', event => {
+        iziToast.error({
+            position: 'topRight',
+            title: 'ELIMINADO',
+            message: 'El Reporte de '+event.detail.vehiculo+' Fue Eliminado',
+        });
+
+    })
+    
+</script>
+<script>
+    window.addEventListener('acta-save', event => {
+        $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: 'El Acta de '+event.detail.vehiculo+' Fue Creado',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+    })
+    
+</script>
+
+<script>
+    window.addEventListener('set-vehiculo', event => {
+        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
+        var newOption = new Option(event.detail.vehiculo.placa, event.detail.vehiculo.id, false, false);
+        $('.vehiculos_id').append(newOption).trigger('change');
+        // ESTABLECER LA CIUDAD EN EDITAR
+        var newOption = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, false, false);
+        $('.ciudades').append(newOption).trigger('change');
+    })
+    
 </script>
 
 <script>
