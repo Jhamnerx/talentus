@@ -9,4 +9,10 @@ class plantilla extends Model
 {
     use HasFactory;
     protected $table = 'plantilla';
+
+
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'empresas_id');
+    }
 }

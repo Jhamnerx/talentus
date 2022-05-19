@@ -246,14 +246,15 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
 
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Descargar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                        </svg>
-                                    </button>
-
+                                    <a target="_blank" href="pdf/actas/{{$acta->unique_hash}}">
+                                        <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            <span class="sr-only">Descargar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path
+                                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                            </svg>
+                                        </button>
+                                    </a>
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -288,20 +289,22 @@
                                             <div class="text-sm text-slate-400 italic ml-2"
                                                 x-text="checked ? 'ON' : 'OFF'"></div>
                                         </div>
+
                                         <div class="flex items-center mt-2"
-                                            x-data="{ checked: {{$acta->fondo ? 'true' : 'false'}} }">
+                                            x-data="{ checked_f{{$acta->id}}: {{$acta->fondo ? 'true' : 'false'}} }">
                                             <span class="text-sm mr-3">Fondo: </span>
                                             <div class="form-switch">
                                                 <input type="checkbox" id="switch-f{{$acta->id}}" class="sr-only"
-                                                    x-model="checked" />
+                                                    x-model="checked_f{{$acta->id}}" />
                                                 <label class="bg-slate-400" for="switch-f{{$acta->id}}">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">Fondo</span>
                                                 </label>
                                             </div>
                                             <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'ON' : 'OFF'"></div>
+                                                x-text="checked_f{{$acta->id}} ? 'ON' : 'OFF'"></div>
                                         </div>
+
                                         <!-- End -->
                                     </div>
                                 </div>

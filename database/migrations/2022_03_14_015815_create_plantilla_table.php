@@ -19,12 +19,9 @@ class CreatePlantillaTable extends Migration
             $table->string('razon_social');
             $table->string('ruc');
             $table->integer('impuesto');
-            $table->string('img_logo');
+            $table->string('img_documentos');
             $table->string('img_icono');
             $table->string('img_login');
-            $table->string('img_contrato');
-            $table->string('img_acta');
-            $table->string('img_certificado');
             $table->string('img_firma');
 
             $table->foreign('empresas_id')->references('id')->on('empresas')->onUpdate('cascade');

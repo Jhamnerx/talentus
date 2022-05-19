@@ -78,14 +78,15 @@
                                 @enderror
 
                             </div>
+
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select wire:model="vehiculos_id" name="vehiculos_id" id="vehiculos_id"
-                                        class="vehiculos_id w-full form-input pl-9 " required></select>
+                                    <select name="vehiculos_id" class="vehiculos_id w-full form-input pl-9 "
+                                        required></select>
 
                                     @error('vehiculos_id')
 
@@ -141,8 +142,8 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_inicio">Inicio de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_inicio" required
-                                        name="fecha" type="text"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="inicio_cobertura"
+                                        required name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -184,7 +185,7 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_fin" required
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura" required
                                         name="fecha_fin" type="text"
                                         class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -235,13 +236,7 @@
                                         @endforeach --}}
                                     </select>
 
-                                    @error('ciudades_id')
 
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{$message}}
-                                    </p>
-
-                                    @enderror
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -267,7 +262,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('hora_t')
+                                @error('ciudades_id')
 
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{$message}}
@@ -351,7 +346,6 @@
     $('.vehiculos_id').select2({
        placeholder: '    Buscar un Vehiculo',
         language: "es",
-
         minimumInputLength: 2,
         width: '100%',
         ajax: {
@@ -365,7 +359,7 @@
                     term: params.term,
                     //type: 'public'
                 }
-
+                console.log(query);
                 // Query parameters will be ?search=[term]&type=public
                 return query;
             },

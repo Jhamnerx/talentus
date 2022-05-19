@@ -124,9 +124,6 @@ Route::get('export/proveedores', [ProveedoresController::class, 'exportExcel'])-
 // PDF
 // ----------------------------------------------
 
-Route::middleware('pdf-auth')->group(function () {
-
-    //  invoice pdf
-    // -------------------------------------------------
-    Route::get('/actas/pdf/{acta:unique_hash}', ActaPdfController::class);
-});
+//  acta pdf
+// -------------------------------------------------
+Route::get('pdf/actas/{acta:unique_hash}', ActaPdfController::class)->name('admin.pdf.actas');

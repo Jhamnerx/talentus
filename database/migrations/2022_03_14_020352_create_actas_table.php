@@ -19,17 +19,18 @@ class CreateActasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('vehiculos_id');
             $table->string('numero');
-            $table->date('inicio_cobertura');
-            $table->date('fin_cobertura');
-            $table->string('fecha');
+            $table->date('inicio_cobertura')->nullable();
+            $table->date('fin_cobertura')->nullable();
+            $table->string('fecha')->nullable();
             $table->unsignedBigInteger('ciudades_id');
-            $table->year('year');
+            $table->year('year')->nullable();
             $table->boolean('sello')->default(1);
             $table->boolean('fondo')->default(1);
             $table->boolean('estado')->default(true);
             $table->boolean('eliminado')->default(false);
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('unique_hash')->nullable();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');

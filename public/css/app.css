@@ -2351,6 +2351,9 @@ select {
 .pb-6 {
   padding-bottom: 1.5rem;
 }
+.pl-8 {
+  padding-left: 2rem;
+}
 .pr-3 {
   padding-right: 0.75rem;
 }
@@ -2371,9 +2374,6 @@ select {
 }
 .pl-1 {
   padding-left: 0.25rem;
-}
-.pl-8 {
-  padding-left: 2rem;
 }
 .pr-8 {
   padding-right: 2rem;
@@ -2672,6 +2672,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(240 249 255 / var(--tw-text-opacity));
 }
+.text-black {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity));
+}
 .text-pink-600 {
   --tw-text-opacity: 1;
   color: rgb(219 39 119 / var(--tw-text-opacity));
@@ -2716,10 +2720,6 @@ select {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
-.text-black {
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
-}
 .text-purple {
   --tw-text-opacity: 1;
   color: rgb(63 60 187 / var(--tw-text-opacity));
@@ -2727,6 +2727,10 @@ select {
 .text-orange-600 {
   --tw-text-opacity: 1;
   color: rgb(234 88 12 / var(--tw-text-opacity));
+}
+.text-red-700 {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 .text-gray-200 {
   --tw-text-opacity: 1;
@@ -4887,6 +4891,16 @@ select {
     margin-bottom: -1px;
   }
 
+  .sm\:-mx-4 {
+    margin-left: -1rem;
+    margin-right: -1rem;
+  }
+
+  .sm\:my-4 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
   .sm\:ml-3 {
     margin-left: 0.75rem;
   }
@@ -5125,6 +5139,11 @@ select {
   .sm\:px-12 {
     padding-left: 3rem;
     padding-right: 3rem;
+  }
+
+  .sm\:px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   .sm\:pt-0 {
@@ -5477,12 +5496,12 @@ select {
     height: 100%;
   }
 
-  .lg\:w-20 {
-    width: 5rem;
-  }
-
   .lg\:w-6\/12 {
     width: 50%;
+  }
+
+  .lg\:w-20 {
+    width: 5rem;
   }
 
   .lg\:w-1\/4 {
@@ -5654,16 +5673,16 @@ select {
     display: none;
   }
 
+  .\32xl\:w-6\/12 {
+    width: 50%;
+  }
+
   .\32xl\:\!w-64 {
     width: 16rem !important;
   }
 
   .\32xl\:w-1\/3 {
     width: 33.333333%;
-  }
-
-  .\32xl\:w-6\/12 {
-    width: 50%;
   }
 
   .\32xl\:opacity-100 {

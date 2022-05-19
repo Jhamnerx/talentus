@@ -26,7 +26,12 @@ class Empresa extends Model
     {
         return $this->hasMany(Clientes::class, 'empresa_id');
     }
+    //relacion uno a muchos
 
+    public function plantilla()
+    {
+        return $this->hasOne(plantilla::class, 'empresas_id');
+    }
     //Relacion polimorfica
 
 

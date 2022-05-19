@@ -15,18 +15,25 @@ class PlantillaSeeder extends Seeder
     public function run()
     {
         plantilla::create([
-            'razon_social' => 'Talentus Technology',
+            'razon_social' => 'TALENTUS TECHNOLOGY E.I.R.L',
             'ruc' => '20496172168',
             'impuesto' => '18',
-            'img_logo' => 'plantilla/img_logo.png',
-            'img_icono' => 'plantilla/img_icono.png',
-            'img_login' => 'plantilla/img_login.png',
-            'img_contrato' => 'plantilla/img_contrato.png',
-            'img_acta' => 'plantilla/img_acta.png',
-            'img_certificado' => 'plantilla/img_certificado.png',
-            'img_firma' => 'plantilla/img_firma.png',
+            'img_documentos' => 'plantilla/talentus/img_documentos.png',
+            'img_firma' => 'plantilla/talentus/img_firma.png',
+            'img_icono' => 'plantilla/talentus/icono.png',
+            'img_login' => 'plantilla/talentus/img_login.png',
             'empresas_id' => '1',
 
+        ]);
+        plantilla::create([
+            'razon_social' => 'KATARY SERVICIOS GENERALES S.A.C',
+            'ruc' => '20496172168',
+            'impuesto' => '18',
+            'img_documentos' => 'plantilla/katary/img_documentos.png',
+            'img_firma' => 'plantilla/katary/img_firma.png',
+            'img_icono' => 'plantilla/katary/icono.png',
+            'img_login' => 'plantilla/katary/img_login.png',
+            'empresas_id' => '2',
         ]);
     }
 }

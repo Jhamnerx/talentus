@@ -12,7 +12,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $acta;
-    public $numero, $vehiculos_id, $fecha_inicio, $fecha_fin, $ciudades_id, $fondo, $sello;
+    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo, $sello;
 
 
     protected $listeners = [
@@ -42,8 +42,8 @@ class Edit extends Component
         $this->numero = $acta->numero;
         $this->vehiculos_id = $acta->vehiculos_id;
         $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $this->acta->vehiculos, 'ciudad' => $this->acta->ciudades]);
-        $this->fecha_inicio = $acta->inicio_cobertura;
-        $this->fecha_fin = $acta->fin_cobertura;
+        $this->inicio_cobertura = $acta->inicio_cobertura;
+        $this->fin_cobertura = $acta->fin_cobertura;
     }
 
 

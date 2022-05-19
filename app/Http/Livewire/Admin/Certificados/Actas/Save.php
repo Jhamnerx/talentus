@@ -7,6 +7,7 @@ use App\Models\Actas;
 use App\Models\Ciudades;
 use Illuminate\Support\Str;
 use Livewire\Component;
+use Vinkla\Hashids\Facades\Hashids;
 
 class Save extends Component
 {
@@ -14,7 +15,7 @@ class Save extends Component
     public $openModalSave = false;
     public $ciudades;
 
-    public $numero, $vehiculos_id, $fecha_inicio, $fecha_fin, $ciudades_id, $fondo = 1, $sello = 1;
+    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1;
 
 
     protected $listeners = [
@@ -44,27 +45,21 @@ class Save extends Component
         $values = $this->validate($actaRequest->rules(), $actaRequest->messages());
 
         //  dd($values);
-        $acta = new Actas;
-
 
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
+        $acta = Actas::create($values);
 
-        $acta->numero = $values["numero"];
-        $acta->vehiculos_id = $values["vehiculos_id"];
-        $acta->inicio_cobertura = $values["fecha_inicio"];
-        $acta->fin_cobertura = $values["fecha_fin"];
-        $acta->ciudades_id = $values["ciudades_id"];
-        $acta->fecha = $fecha;
-        $acta->sello = $values["sello"];
-        $acta->fondo = $values["fondo"];
+
         $acta->year = today()->year;
         $acta->user_id = auth()->user()->id;
-        $acta->empresa_id = session('empresa');
-        $acta->save();
 
+        $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
+        $acta->empresa_id = session('empresa');
+        $acta->fecha = $fecha;
+        $acta->save();
 
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('acta-save', ['vehiculo' => $acta->vehiculos->placa]);

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Actas extends Model
 {
@@ -56,5 +59,26 @@ class Actas extends Model
     {
         static::addGlobalScope(new EliminadoScope);
         static::addGlobalScope(new EmpresaScope);
+    }
+
+
+    public function getPDFData()
+    {
+
+
+
+        // dd($this);
+
+        $plantilla = plantilla::find(session('empresa'));
+        view()->share([
+            'acta' => $this,
+            'plantilla' => $plantilla,
+
+        ]);
+
+        $pdf = PDF::loadView('pdf.acta');
+        return $pdf->stream();
+        //return $pdf;
+        //  return view('pdf.acta');
     }
 }

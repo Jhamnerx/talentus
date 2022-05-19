@@ -35,15 +35,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         Storage::deleteDirectory("productos");
+        $this->call(EmpresasSeeder::class);
+        $this->call(PlantillaSeeder::class);
         Storage::makeDirectory("productos");
         $this->call(UserSeeder::class);
-        Empresa::factory(1)->create();
         Categoria::factory(100)->create();
         Lineas::factory(600)->create();
         SimCard::factory(500)->create();
         $this->call(ProductoSeeder::class);
         $this->call(ModelosDispositivoSeeder::class);
-        $this->call(PlantillaSeeder::class);
         Clientes::factory(500)->create();
         Proveedores::factory(100)->create();
         Dispositivos::factory(50)->create();

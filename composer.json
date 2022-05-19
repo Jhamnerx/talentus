@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "barryvdh/laravel-dompdf": "^1.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel-lang/lang": "9.0",
@@ -16,7 +17,8 @@
         "laravelcollective/html": "^6.3",
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
-        "milon/barcode": "^9.0"
+        "milon/barcode": "^9.0",
+        "vinkla/hashids": "^9.1"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
