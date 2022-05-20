@@ -18,6 +18,7 @@
         "livewire/livewire": "^2.5",
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^9.0",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "vinkla/hashids": "^9.1"
     },
     "require-dev": {

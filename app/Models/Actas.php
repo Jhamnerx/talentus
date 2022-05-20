@@ -8,7 +8,8 @@ use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 class Actas extends Model
 {
@@ -80,5 +81,6 @@ class Actas extends Model
         return $pdf->stream();
         //return $pdf;
         //  return view('pdf.acta');
+
     }
 }

@@ -52,14 +52,14 @@
                                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                     </svg>
                                 </div>
-                                <input type="search" id="default-search"
+                                <input type="search" id="default-search" wire:model.defer="codigo"
                                     class="p-4 inline-block pl-10 w-1/4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Ingresar Codigo Acta..." required>
 
-                                <input id="default-search"
+                                <input id="default-search" wire:model.defer="unique_hash"
                                     class="p-4 inline-block pl-2 w-2/4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     type="text" placeholder="Ingresar Codigo unico">
-                                <button type="button"
+                                <button type="button" wire:click="SearchActa()"
                                     class="text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
                                     Buscar
                                 </button>
@@ -74,7 +74,7 @@
 
                 <div class="bg-white rounded-2xl shadow-xl px-8 py-12 sm:px-12 lg:px-8">
                     <div class="mb-12 space-y-4">
-
+                        {{$acta}}
                     </div>
 
                 </div>
