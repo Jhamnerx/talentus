@@ -56,7 +56,7 @@ class ActasIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('numero')
+                ->orderBy('numero', 'desc')
                 ->paginate(10);
         }
 

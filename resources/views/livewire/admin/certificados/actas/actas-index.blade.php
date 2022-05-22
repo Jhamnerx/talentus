@@ -240,7 +240,12 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-sky-500">
+                                    @if (!$acta->codigo == null)
+                                    {{$acta->codigo}}
+                                    @else
                                     {{$acta->ciudades->prefijo."-".$acta->year."-".$acta->numero}}
+                                    @endif
+
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

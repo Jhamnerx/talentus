@@ -52,12 +52,13 @@ class Save extends Component
 
         $acta = Actas::create($values);
 
-
+        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $acta->numero;
         $acta->year = today()->year;
         $acta->user_id = auth()->user()->id;
 
         $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
         $acta->empresa_id = session('empresa');
+        $acta->codigo = $codigo;
         $acta->fecha = $fecha;
         $acta->save();
 

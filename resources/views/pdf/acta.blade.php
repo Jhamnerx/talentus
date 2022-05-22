@@ -35,19 +35,19 @@
 
 
         .certifica {
-            margin-top: 2.5rem;
+            margin-top: -1rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
             font-size: 16px;
             color: #000;
             line-height: 1.7;
-            position: relative;
-            top: -80px;
+            // position: relative;
+
         }
 
         .descripcion {
-            margin-top: -4rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -69,14 +69,14 @@
         }
 
         .footer .sello {
-            margin-top: 2rem;
+            margin-top: 3rem;
             width: 50%;
             text-align: center;
         }
 
         .fecha {
             text-align: right;
-            margin-top: -3rem;
+            margin-top: -2rem;
             padding-right: 4rem;
         }
 
@@ -104,7 +104,7 @@
             font-size: 26px;
             font-family: "DejaVu Sans";
             margin-left: 31rem;
-            margi-top: -2rem;
+            margin-top: -1.4rem;
 
         }
 
@@ -117,15 +117,15 @@
             grid-template-columns: 30% 70% 1fr;
             grid-template-rows: 1fr;
             gap: 0px 7em;
-            height: 150px;
+            height: 160px;
 
         }
 
 
         .qr {
-            padding-left: 4.5rem;
+            padding-left: 37rem;
             position: relative;
-            top: -30px;
+            top: -42px;
         }
 
 
@@ -135,19 +135,21 @@
             font-weight: bold;
             font-size: 22px;
             text-align: center;
-            padding-left: 6.5rem;
-
+            justify-content: center;
+            width: 50%;
+            padding-left: 12.5rem;
+            position: relative;
 
         }
 
         .title span {
             position: relative;
-            top: -110px;
+            top: 50px;
         }
 
         .hash {
-            padding-left: 28rem;
-            padding-top: 8rem;
+            padding-left: 30rem;
+            padding-top: 4rem;
         }
     </style>
 
@@ -167,20 +169,21 @@
 
         </div>
         <div class="titulo">
+            <div class=" title">
+                <span>ACTA DE INSTALACIÓN DE EQUIPO GPS</span>
+            </div>
             <div class="qr">
                 <img src="data:image/png;base64, {{ base64_encode(QrCode::format('png')->size(120)
                 ->gradient(22,125,127,73,125,173,'vertical')
                 ->merge(asset('images/'.$plantilla->img_icono),
                                                         .3, true)
                                                         ->style('square')->eye('circle')->encoding('UTF-8')
-                                                        ->generate(" VEHICULO: ".$acta->vehiculos->placa." \n ACTA
-                    VALIDA HASTA: ".$acta->fin_cobertura." CONSULTAR VALIDEZ EN:" )) }}">
+                                                        ->generate(" VEHICULO: " .$acta->vehiculos->placa." \n ACTA
+                    VALIDA HASTA: ".$acta->fin_cobertura." CONSULTAR VALIDEZ EN: ".route('consulta.actas',
+                    $acta->unique_hash))) }}">
 
             </div>
 
-            <div class=" title">
-                <span>ACTA DE INSTALACIÓN DE EQUIPO GPS</span>
-            </div>
         </div>
 
 

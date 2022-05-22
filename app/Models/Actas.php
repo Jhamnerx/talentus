@@ -78,7 +78,7 @@ class Actas extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.acta');
-        return $pdf->stream();
+        return $pdf->stream('ACTA-' . $this->vehiculos->placa . ' ' . $this->codigo);
         //return $pdf;
         //  return view('pdf.acta');
 

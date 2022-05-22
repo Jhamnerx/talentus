@@ -2,12 +2,12 @@
     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 md:gap-8 gap-4">
         <div class="flex flex-col flex-shrink-0">
             <div class="dark:text-white">
-                <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/footer-I-svg1.svg"
-                    alt="icon">
-                <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/footer-I-svg1dark.svg"
-                    alt="icon">
+                {{-- <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/footer-I-svg1.svg"
+                    alt="icon"> --}}
             </div>
-            <p class="text-sm leading-none text-gray-800 mt-4 dark:text-white">Copyright © 2021 Luxe</p>
+            <p class="text-sm leading-none text-gray-800 mt-4 dark:text-white">Copyright © {{date('Y')}}
+                Talentus
+            </p>
             <p class="text-sm leading-none text-gray-800 mt-4 dark:text-white">All rights reserved</p>
             <div class="flex items-center gap-x-4 mt-12">
                 <button aria-label="instagram"
@@ -45,7 +45,7 @@
             </div>
         </div>
         <div class="sm:ml-0 ml-8 flex flex-col">
-            <h2 class="text-base font-semibold leading-4 text-gray-800 dark:text-white">Company</h2>
+            <h2 class="text-base font-semibold leading-4 text-gray-800 dark:text-white">Web</h2>
             <a href="javascript:void(0)"
                 class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Blog</a>
             <a href="javascript:void(0)"
@@ -60,26 +60,23 @@
                 class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Testimonials</a>
         </div>
         <div class="flex flex-col">
-            <h2 class="text-base font-semibold leading-4 text-gray-800 dark:text-white">Support</h2>
+            <h2 class="text-base font-semibold leading-4 text-gray-800 dark:text-white">Soporte</h2>
             <a href="javascript:void(0)"
-                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Legal
-                policy</a>
+                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Politicas
+                Legales</a>
             <a href="javascript:void(0)"
-                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Status
-                policy</a>
+                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Politicas
+                de Privacidad</a>
             <a href="javascript:void(0)"
-                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Privacy
-                policy</a>
-            <a href="javascript:void(0)"
-                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Terms
-                of service</a>
+                class="focus:outline-none focus:underline hover:text-gray-500 text-base leading-4 mt-6 text-gray-800 dark:text-white cursor-pointer">Terminos
+                de servicios</a>
         </div>
         <div class="mt-10 lg:block hidden">
-            <label class="text-xl font-medium leading-5 text-gray-800 dark:text-white">Get updates</label>
+            <label class="text-xl font-medium leading-5 text-gray-800 dark:text-white">Obtener Novedades</label>
             <div class="cursor-pointer flex items-center justify-between border border-gray-800 dark:border-white mt-4">
                 <input type="text"
                     class="text-base leading-4 p-4 w-full focus:outline-none text-gray-800 dark:text-white dark:placeholder-white dark:bg-gray-900 dark:border-white placeholder-gray-800"
-                    placeholder="Enter your email" />
+                    placeholder="Ingresa tu correo" />
                 <button aria-label="send"
                     class="mr-4 fill-current text-gray-800 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800">
                     <svg class="dark:text-white dark:hover:text-gray-200" width="16" height="17" viewBox="0 0 16 17"
@@ -93,7 +90,7 @@
         </div>
     </div>
     <div class="mt-10 lg:hidden">
-        <label class="text-xl font-medium leading-5 text-gray-800 dark:text-white">Get updates</label>
+        <label class="text-xl font-medium leading-5 text-gray-800 dark:text-white">Obtener Novedades</label>
         <div class="flex items-center justify-between border border-gray-800 dark:border-white mt-4">
             <input type="text"
                 class="text-base leading-4 p-4 relative z-0 w-full focus:outline-none text-gray-800 placeholder-gray-800 dark:text-white dark:placeholder-white dark:border-white dark:bg-gray-900"

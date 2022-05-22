@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class ConsultasController extends Controller
 {
-    public function consultaActas(Actas $acta)
+    public function consultaActas($unique_hash = null)
     {
-        return view('app.consulta.actas.index', compact('acta'));
+        return view('app.consulta.actas.index', compact('unique_hash'));
     }
     public function consultaVehiculos()
     {
