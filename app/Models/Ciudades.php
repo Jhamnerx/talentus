@@ -30,6 +30,10 @@ class Ciudades extends Model
     {
         return $this->hasMany(Certificados::class, 'ciudades_id');
     }
+    public function velocimetros()
+    {
+        return $this->hasMany(CertificadosVelocimetros::class, 'ciudades_id');
+    }
     /**
      * Scope para traer activos y no
      *

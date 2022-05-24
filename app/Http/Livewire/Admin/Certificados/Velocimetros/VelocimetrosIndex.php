@@ -10,6 +10,15 @@ class VelocimetrosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+
+    public $openModalSave = false;
+    public $openModalEdit = false;
+    public $openModalDelete = false;
+
+    protected $listeners = [
+        'updateTable' => 'render',
+    ];
+
     public function render()
     {
         $desde = $this->from;
@@ -18,9 +27,12 @@ class VelocimetrosIndex extends Component
         $certificados = CertificadosVelocimetros::whereHas('vehiculos', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%')
                 ->orwhere('motor', 'like', '%' . $this->search . '%');
-        })->orWhere('numero', 'like', '%' . $this->search . '%')
+        })->orwhereHas('ciudades', function ($query) {
+            $query->where('nombre', 'like', '%' . $this->search . '%');
+        })
+            ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('numero', 'desc')
             ->paginate(10);
 
         $total = CertificadosVelocimetros::all()->count();
@@ -40,7 +52,7 @@ class VelocimetrosIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
         }
         return view('livewire.admin.certificados.velocimetros.velocimetros-index', compact('certificados', 'total'));
@@ -70,5 +82,38 @@ class VelocimetrosIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+    public function openModalSave()
+    {
+        $this->emit('guardarCertificado');
+        $this->openModalSave = true;
+    }
+
+    //Enviar datos para editar Certificado
+    public function openModalEdit(CertificadosVelocimetros $certificado)
+    {
+        $this->emit('actualizarCertificado', $certificado);
+        $this->openModalEdit = true;
+    }
+
+
+    public function openModalDelete(CertificadosVelocimetros $certificado)
+    {
+        $this->emit('EliminarCertificado', $certificado);
+        $this->openModalDelete = true;
+    }
+
+
+
+
+    public function openModalShow(CertificadosVelocimetros $certificado)
+    {
+        $this->emit('verDetalleCertificado', $certificado);
+        $this->openModalDetalle = true;
+    }
+
+    public function cambiarEstado(CertificadosVelocimetros $certificado, $field, $value)
+    {
+        $certificado->setAttribute($field, $value)->save();
     }
 }

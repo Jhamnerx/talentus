@@ -8,10 +8,41 @@
 
 @stop
 
+@push('modals')
+
+@livewire('admin.certificados.velocimetros.save')
+@livewire('admin.certificados.velocimetros.edit')
+
+@endpush
+
+
 @section('js')
 <script>
-    console.log('Hi!'); 
+    window.addEventListener('certificado-velocimetro-edit', event => {
+        iziToast.success({
+            position: 'topRight',
+            title: 'ACTUALIZADO',
+            message: 'El Certificado N° '+event.detail.certificado+' Fue Actualizado',
+        });
 
+    })
+    
+</script>
+
+<script>
+    window.addEventListener('certificado-velocimetro-save', event => {
+        $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: 'El certificado de '+event.detail.vehiculo+' Fue Creado',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+    })
+    
 </script>
 
 <script>

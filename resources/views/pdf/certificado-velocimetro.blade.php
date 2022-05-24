@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>CERTIFICADO GPS {{$certificado->vehiculos->placa}}
+    <title>CERTIFICADO VELOCIMETRO {{$certificado->vehiculos->placa}}
         {{$certificado->ciudades->prefijo."-".$certificado->year."-".$certificado->numero}}</title>
 
 
@@ -41,7 +41,7 @@
 
 
         .certifica {
-            margin-top: -1rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -52,12 +52,18 @@
 
         }
 
-        .certifica .acredita {
+        .subtitulo {
             margin-top: 2rem;
+            margin-bottom: 1rem;
+            text-justify: auto;
+            margin-left: 5rem;
+            font-size: 17px;
+            color: #000;
+            line-height: 1.7;
         }
 
         .descripcion {
-            margin-top: 5rem;
+            margin-top: 3.2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -70,6 +76,8 @@
         .descripcion span {
             font-size: 18px;
         }
+
+        .descripcion table {}
 
         .tabla {
             padding: 0rem 7.2rem;
@@ -84,21 +92,11 @@
         }
 
         .footer .sello {
-            margin-top: 3rem;
+            margin-top: 6rem;
             width: 50%;
             text-align: center;
         }
 
-        .data {
-            margin-top: 9rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 16px;
-            color: #000;
-            line-height: 2.2;
-            text-align: left;
-        }
 
         .fecha {
             text-align: right;
@@ -124,13 +122,13 @@
         .numero {
             width: 100%;
             overflow: hidden;
-            color: rgb(238, 34, 34);
+            color: #052c52;
             font-style:  !important;
             font-weight: bold;
             font-size: 26px;
             font-family: "DejaVu Sans";
             margin-left: 32rem;
-            margin-top: -1.4rem;
+            margin-top: -1rem;
 
         }
 
@@ -151,7 +149,7 @@
         .qr {
             padding-left: 37rem;
             position: relative;
-            top: -22px;
+            top: -42px;
         }
 
 
@@ -170,7 +168,7 @@
 
         .title span {
             position: relative;
-            top: 50px;
+            top: 60px;
         }
 
         .hash {
@@ -204,13 +202,14 @@
             </div>
             <div class="titulo">
                 <div class=" title">
-                    <span>CERTIFICA</span>
+                    <span>CERTIFICADO DE INSTALACIÓN DE
+                        LIMITADOR DE VELOCIDAD</span>
                 </div>
                 <div class="qr">
                     <img src="data:image/jpeg;base64, {{ base64_encode(QrCode::format('png')->size(120)
 ->gradient(22,125,127,73,125,173,'vertical')
 ->style('square')->eye('circle')->encoding('UTF-8')
-->generate(" VEHICULO: " .$certificado->vehiculos->placa." \n CERTIFICADO VALIDO HASTA: ".$certificado->fin_cobertura."
+->generate(" VEHICULO: " .$certificado->vehiculos->placa." \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD
                         \nEXPEDIDO A: ".$certificado->vehiculos->flotas->clientes->razon_social)) }}">
 
                 </div>
@@ -221,50 +220,60 @@
             <div class="certifica">
                 <div>
                     <span>
-                        <b>Que, el sistema localizador vía GPS/GPRS/GSM – TRACKER Modelo
-                            {{$certificado->vehiculos->dispositivos->modelo->modelo}}</b>
+                        <b>{{$plantilla->razon_social}}</b>, Certifica que la EMPRESA
+                        {{$certificado->vehiculos->flotas->clientes->razon_social}}, con DNI/RUC:
+                        {{$certificado->vehiculos->flotas->clientes->numero_documento}}
                     </span>
-                    <span class="acredita">
-                        <b>
-                            Acreditamos satisfactoriamente la evaluación técnica del sistema, del equipo y del
 
-                            funcionamiento.
-                        </b>
-                    </span>
                 </div>
+
+            </div>
+            <div class="subtitulo">
+                <span>
+                    <b>
+                        Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo VEL4D-G, implementado con
+                        alerta de Exceso de Velocidad Mayor A 90KM/H
+                    </b>
+                </span>
             </div>
 
             <div class="descripcion">
-                <span>Con las siguientes características:</span>
-                <ul>
-                    <li>
-                        Localización : Mediante tecnología satelital GPS
-                    </li>
-                    <li>
-                        Transmisión de datos: Utilizando tecnología celular (SIM CARD) para determinar posición minuto
-                        al minuto del vehículo en tiempo real.
-                    </li>
+                <span>El mismo que se encuentra instalado en el vehículo con placa::</span>
 
-                    <li>
-                        Accesorios del equipo: botón de pánico y bloqueo del motor.
-                    </li>
-                </ul>
+                <table>
+                    <tr>
+                        <td>Placa: </td>
+                        <td> {{$certificado->vehiculos->placa}}</td>
+                    </tr>
 
-            </div>
+                </table>
+                <table class="tabla">
+                    <tr>
+                        <td height="20">Color de Led</td>
+                        <td height="20">:Rojo Intenso</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Velocidad</td>
+                        <td height="20">:KM/H</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Potencia</td>
+                        <td height="20">:3 Watts.</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Tipo de Visualizacion</td>
+                        <td height="20">:Digital</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Rango del Factor de Velocidad</td>
+                        <td height="20">:2000-4000 Pulson/Km, adicional reloj satelital</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Peso</td>
+                        <td height="20">:370gr</td>
+                    </tr>
 
-            <div class="data">
-
-                <div class="valido">
-
-                </div>
-                El presente certificado es válido hasta el {{$certificado->fin_cobertura}}, a partir de la fecha de
-                expedición.
-                <div class="cliente">
-                    Se expide el siguiente certificado a: {{$certificado->vehiculos->flotas->clientes->razon_social}}
-                </div>
-                <div class="vehiculo">
-                    <b>Placa de la Unidad: {{$certificado->vehiculos->placa}}</b>
-                </div>
+                </table>
 
             </div>
 

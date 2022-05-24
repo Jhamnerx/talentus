@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CertificadosVelocimentros;
+use App\Models\CertificadosVelocimetros;
 use Illuminate\Http\Request;
 
 class CertificadosVelocimetrosController extends Controller
@@ -25,7 +26,7 @@ class CertificadosVelocimetrosController extends Controller
      */
     public function create()
     {
-        return view('admin.certificados.velocimetros.create');
+        //return view('admin.certificados.velocimetros.create');
     }
 
     /**
@@ -42,33 +43,33 @@ class CertificadosVelocimetrosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CertificadosVelocimentros  $certificadosVelocimentros
+     * @param  \App\Models\CertificadosVelocimentros  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function show(CertificadosVelocimentros $certificadosVelocimentros)
+    public function show(CertificadosVelocimetros $certificado)
     {
-        return view('admin.certificados.velocimetros.show');
+        //return view('admin.certificados.velocimetros.show');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CertificadosVelocimentros  $certificadosVelocimentros
+     * @param  \App\Models\CertificadosVelocimentros  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function edit(CertificadosVelocimentros $certificadosVelocimentros)
+    public function edit(CertificadosVelocimetros $certificado)
     {
-        return view('admin.certificados.velocimetros.edit');
+        //return view('admin.certificados.velocimetros.edit');
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CertificadosVelocimentros  $certificadosVelocimentros
+     * @param  \App\Models\CertificadosVelocimentros  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CertificadosVelocimentros $certificadosVelocimentros)
+    public function update(Request $request, CertificadosVelocimetros $certificado)
     {
         //
     }
@@ -76,11 +77,12 @@ class CertificadosVelocimetrosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CertificadosVelocimentros  $certificadosVelocimentros
+     * @param  \App\Models\CertificadosVelocimentros  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CertificadosVelocimentros $certificadosVelocimentros)
+    public function destroy(CertificadosVelocimetros $certificado)
     {
-        //
+        $certificado->delete();
+        return redirect()->route('admin.certificados.velocimetros.index')->with('eliminar', 'El Certificado se elimino con exito');
     }
 }

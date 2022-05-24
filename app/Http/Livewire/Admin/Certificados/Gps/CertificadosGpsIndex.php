@@ -34,7 +34,7 @@ class CertificadosGpsIndex extends Component
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('id', 'desc')
+            ->orderBy('numero', 'desc')
             ->paginate(10);
 
         $total = Certificados::all()->count();

@@ -8,7 +8,7 @@ use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
 
 
 class Actas extends Model
