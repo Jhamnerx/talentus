@@ -81,8 +81,9 @@ class ActasController extends Controller
      * @param  \App\Models\Actas  $actas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Actas $actas)
+    public function destroy(Actas $acta)
     {
-        //
+        $acta->delete();
+        return redirect()->route('admin.certificados.actas.index')->with('eliminar', 'El Acta se elimino con exito');
     }
 }

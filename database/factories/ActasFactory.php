@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Actas;
 use App\Models\Ciudades;
 use App\Models\Empresa;
 use App\Models\Vehiculos;
+use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
 
 class ActasFactory extends Factory
 {
@@ -25,7 +28,7 @@ class ActasFactory extends Factory
             'ciudades_id' => Ciudades::all()->random()->id,
             'year' => '22',
             'empresa_id' => Empresa::all()->random()->id,
-
+            'unique_hash' => Hashids::connection(Actas::class)->encode(),
 
         ];
     }

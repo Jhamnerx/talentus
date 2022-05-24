@@ -22,23 +22,29 @@ class ActasRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($acta = null)
     {
 
+        if ($acta) {
+            $rules = [
+                'numero' => 'required|unique:actas,numero,' . $acta->id,
+                'vehiculos_id' => 'required',
+                "inicio_cobertura" => 'required',
+                "fin_cobertura" => 'required',
+                "ciudades_id" => 'required',
 
-
-
-        $rules = [
-            'numero' => 'required|unique:actas',
-            'vehiculos_id' => 'required',
-            "inicio_cobertura" => 'required',
-            "fin_cobertura" => 'required',
-            "ciudades_id" => 'required',
-            "fondo" => 'nullable',
-            "sello" => 'nullable',
-        ];
-
-
+            ];
+        } else {
+            $rules = [
+                'numero' => 'required|unique:actas',
+                'vehiculos_id' => 'required',
+                "inicio_cobertura" => 'required',
+                "fin_cobertura" => 'required',
+                "ciudades_id" => 'required',
+                "fondo" => 'nullable',
+                "sello" => 'nullable',
+            ];
+        }
         return $rules;
     }
 

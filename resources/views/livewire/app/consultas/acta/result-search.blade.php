@@ -1,80 +1,98 @@
-<div>
-    <h6>INGRESA LOS DATOS Y HAZ CLICK EN BUSCAR</h6>
-    <div tabindex="0" class="focus:outline-none">
-        <!-- Remove py-8 -->
-        <div class="mx-auto container">
+<div class="md:flex  items-start justify-center py-12 2xl:px-12 md:px-6 px-4">
 
-            @if ($acta)
-            <div class="flex flex-wrap items-center justify-center">
-                <!-- Card 1 -->
-                <div tabindex="0" class="focus:outline-none mx-2 w-3/4 xl:mb-0 mb-8">
-                    <div>
-                        <img alt="person capturing an image"
-                            src="https://cdn.tuk.dev/assets/templates/classified/Bitmap (1).png" tabindex="0"
-                            class="focus:outline-none w-full h-44" />
-                    </div>
-                    <div class="bg-white dark:bg-gray-800">
-                        <div class="flex items-center justify-between px-4 pt-4">
-                            <div>
-                                <img class="dark:bg-white focus:outline-none"
-                                    src="https://tuk-cdn.s3.amazonaws.com/can-uploader/4-by-2-col-grid-svg1.svg"
-                                    alt="bookmark" />
-                            </div>
-                            <div
-                                class="vtext-white w-full md:w-1/4 bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                                <p tabindex="0" class="focus:outline-none text-xs text-white">VENCIDO</p>
-                            </div>
-                        </div>
-                        <div class="p-4">
-                            <div class="flex items-center">
-                                <h2 tabindex="0" class="focus:outline-none text-lg dark:text-white font-semibold">ACTA
-                                    REGISTRADA
-                                </h2>
-                                <p tabindex="0"
-                                    class="focus:outline-none text-xs text-gray-600 dark:text-gray-200 pl-5">Hace 3 dias
-                                </p>
-                            </div>
-                            <p tabindex="0" class="focus:outline-none text-xs text-gray-600 dark:text-gray-200 mt-2">
-                                Esta Acta fue emitida para el vehiculo detallado</p>
-                            <div class="flex mt-4">
-                                <div>
-                                    <p tabindex="0"
-                                        class="focus:outline-none text-xs text-gray-600 dark:text-gray-200 px-2 bg-gray-200 dark:bg-gray-700 py-1">
-                                        {{$acta->vehiculos->placa}}
-                                    </p>
-                                </div>
-                                <div class="pl-2">
-                                    <p tabindex="0"
-                                        class="focus:outline-none text-xs text-gray-600 dark:text-gray-200 px-2 bg-gray-200 dark:bg-gray-700 py-1">
-                                        {{$acta->vehiculos->flotas->clientes->razon_social}}
-                                    </p>
-                                </div>
-                            </div>
+    @if ($acta)
+    <div class="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
+        {{-- <img class="w-full" alt="VEHICULO" src="https://i.ibb.co/QMdWfzX/component-image-one.png" />
+        <img class="mt-6 w-full" alt="VEHICULO" src="https://i.ibb.co/qxkRXSq/component-image-two.png" /> --}}
+    </div>
 
-                        </div>
-                    </div>
-                </div>
-                <!-- Card 1 Ends -->
+    <div class="xl:w-2/3 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
+        <div class="border-b border-gray-200 pb-6">
 
+            <h1 class="lg:text-2xl text-xl font-semibold lg:leading-6 leading-7 text-gray-800 dark:text-white mt-2">
+                DATOS DE LA ACTA CONSULTADA</h1>
+        </div>
+        <div class="py-4 border-b border-gray-200 flex items-center justify-between">
+            <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Codigo:</p>
+            <div class="flex items-center justify-center">
+                <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3">{{$acta->codigo}}</p>
 
-
+                <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2.svg"
+                    alt="next">
+                <img class="hidden dark:block"
+                    src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
             </div>
-            @endif
-
-            @if($is_search && !$acta)
-            <div class="relative px-4 py-3 leading-normal text-red-700 bg-red-100 rounded-lg" role="alert">
-                <span class="absolute inset-y-0 left-0 flex items-center ml-4">
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                        <path
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                    </svg>
-                </span>
-                <p class="ml-6">ESTA ACTA NO ESTA EMITIDA!</p>
+        </div>
+        <div class="py-4 border-b border-gray-200 flex items-center justify-between">
+            <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Placa:</p>
+            <div class="flex items-center justify-center">
+                <p class="text-sm leading-none text-gray-600 dark:text-gray-300">{{$acta->vehiculos->placa}}</p>
+                <div class="w-6 h-6 bg-gradient-to-b from-gray-900 to-indigo-500 ml-3 mr-4 cursor-pointer"></div>
+                <img class="dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2.svg"
+                    alt="next">
+                <img class="hidden dark:block"
+                    src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
             </div>
+        </div>
 
-            @endif
+        <button
+            class="dark:bg-white dark:text-gray-900 dark:hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 text-base flex items-center justify-center leading-none text-white bg-gray-800 w-full py-4 hover:bg-gray-700 focus:outline-none">
+            <img class="mr-3 dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1.svg" alt="location">
+            <img class="mr-3 hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1dark.svg"
+                alt="location">
+            {{$acta->vehiculos->flotas->clientes->razon_social}}
+        </button>
+        <div>
+            <p class="text-base leading-4 mt-7 text-gray-600 dark:text-gray-300">Fecha Inicio:
+                {{$acta->inicio_cobertura}}</p>
+            <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Valida Hasta: {{$acta->fin_cobertura}}
+            </p>
+            <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Codigo Único: {{$acta->unique_hash}}
+            </p>
+            <p class="text-base leading-4 mt-4 text-gray-600 dark:text-gray-300">Emitido: {{$acta->fecha}}</p>
+
 
         </div>
+        <div>
+            <p class="text-base leading-4 mt-4 text-red-600 dark:text-gray-300">El codigo único debe coincidir con el
+                acta impresa</p>
+        </div>
+
+
+        @endif
+        @if($is_search == true && $acta == null)
+
+        <div class="relative px-4 py-3 leading-normal text-red-700 bg-red-100 rounded-lg" role="alert">
+            <span class="absolute inset-y-0 left-0 flex items-center ml-4">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                    <path
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                        clip-rule="evenodd" fill-rule="evenodd"></path>
+                </svg>
+            </span>
+            <p class="ml-6">ESTA ACTA NO ESTA EMITIDA!</p>
+        </div>
+
+        @endif
     </div>
+
+
+
 </div>
+
+@push('scripts')
+<script>
+    let elements = document.querySelectorAll("[data-menu]");
+    for (let i = 0; i < elements.length; i++) {
+        let main = elements[i];
+        main.addEventListener("click", function () {
+            let element = main.parentElement.parentElement;
+            let andicators = main.querySelectorAll("img");
+            let child = element.querySelector("#sect");
+            child.classList.toggle("hidden");
+            andicators[0].classList.toggle("rotate-180");
+        });
+    }
+    
+</script>
+@endpush

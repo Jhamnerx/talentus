@@ -83,16 +83,10 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select wire:model="vehiculos_id" name="vehiculos_id"
-                                        class="vehiculos_id w-full form-input pl-9 " required></select>
+                                    <select wire:model="vehiculos_id"
+                                        class="vehiculos_id vehiculosEdit w-full form-input pl-9 " required></select>
 
-                                    @error('vehiculos_id')
 
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{$message}}
-                                    </p>
-
-                                    @enderror
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -170,7 +164,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('fecha_inicio')
+                                @error('inicio_cobertura')
 
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{$message}}
@@ -211,7 +205,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('fecha_fin')
+                                @error('fin_cobertura')
 
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{$message}}
@@ -234,13 +228,7 @@
                                         @endforeach --}}
                                     </select>
 
-                                    @error('ciudades_id')
 
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{$message}}
-                                    </p>
-
-                                    @enderror
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -266,7 +254,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('hora_t')
+                                @error('ciudades_id')
 
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{$message}}
@@ -298,6 +286,8 @@
 
 @once
 @push('scripts')
+
+
 
 <script>
     $('.vehiculos_id').select2({
@@ -402,6 +392,25 @@ $('.ciudades').on('select2:select', function (e) {
     @this.set('ciudades_id',data.id)
 });
 
+</script>
+
+
+<script>
+    window.addEventListener('set-vehiculo', event => {
+        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
+        var placa = event.detail.vehiculo.placa;
+        var id = event.detail.vehiculo.id
+        var vehiculo = new Option(placa, id, true, true);
+        $('.vehiculosEdit').append(vehiculo).trigger('change');
+
+
+        // ESTABLECER LA CIUDAD EN EDITAR
+        var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
+
+        $('.ciudades').append(ciudad).trigger('change');
+       // $('.ciudades').append(ciudad).trigger('change');
+    })
+    
 </script>
 
 @endpush

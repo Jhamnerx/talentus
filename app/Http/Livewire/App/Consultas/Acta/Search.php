@@ -8,21 +8,21 @@ use Livewire\Component;
 class Search extends Component
 {
 
-    public $codigo = null, $unique_hash = null, $acta;
+    public $codigo = null, $acta;
 
     protected $rules = [
         'codigo' => 'required',
-        'unique_hash' => 'required',
+
     ];
     protected $messages = [
-        'codigo.required' => 'Ingresa el codigo',
-        'unique_hash.required' => 'Ingresa el hash',
+        'codigo.required' => 'Ingresa el codigo del Acta',
+
     ];
 
 
-    public function mount($acta_hash)
+    public function mount($codigo_acta)
     {
-        $this->unique_hash = $acta_hash;
+        $this->codigo = $codigo_acta;
     }
 
     public function render()
@@ -33,6 +33,6 @@ class Search extends Component
     public function SearchActa()
     {
         $this->validate();
-        $this->emit('showResult', $this->unique_hash, $this->codigo);
+        $this->emit('showResult', $this->codigo);
     }
 }

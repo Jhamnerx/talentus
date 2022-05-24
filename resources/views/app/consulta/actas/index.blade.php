@@ -49,11 +49,11 @@
 
 
     <div class="py-6 w-full">
-        <div class="m-auto px-8 text-gray-800 md:px48 xl:px-16">
-            <div class="mx-auto grid gap-6 md:w-3/4 lg:w-full lg:grid-cols-2">
+        <div class="m-auto px-4 text-gray-800 md:px-4 xl:px-8">
+            <div class="mx-auto grid gap-6 lg:w-full lg:grid-cols-2">
 
-                <div class="bg-white rounded-2xl shadow-xl px-8 py-12 sm:px-6 lg:px-8">
-                    @livewire('app.consultas.acta.search', ['acta_hash' => $unique_hash])
+                <div class="bg-white w-full rounded-2xl shadow-xl px-8 py-12 sm:px-6 lg:px-8">
+                    @livewire('app.consultas.acta.search', ['codigo_acta' => $codigo])
 
 
 
@@ -61,12 +61,12 @@
 
                     <div class="flex flex-wrap -mx-px overflow-hidden">
 
-                        <div class="my-px px-px w-2/4 overflow-hidden">
+                        <div class="my-px px-px overflow-hidden">
                             <img class="" src="{{asset('images/plantilla/talentus/acta_numero.png')}}" alt="">
 
                         </div>
 
-                        <div class="my-px px-px w-2/4 overflow-hidden">
+                        <div class="my-px px-px  overflow-hidden">
                             <img src="{{asset('images/plantilla/talentus/acta_codigo.png')}}" alt="">
 
                         </div>
@@ -76,8 +76,10 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-2xl shadow-xl px-12 py-12 sm:px-12">
+                <div class="bg-white w-full rounded-2xl shadow-xl px-6 py-12 sm:px-4">
                     <div class="mb-12 space-y-4">
+                        <h6 class="py-2 w-full  leading-4 mt-4 text-gray-600 dark:text-gray-300">INGRESA LOS
+                            DATOS Y HAZ CLICK EN BUSCAR</h6>
                         @livewire('app.consultas.acta.result-search')
                     </div>
 
@@ -95,7 +97,7 @@
 
         <section class="mb-32 text-gray-800 text-center">
 
-            <h2 class="text-3xl font-bold mb-12">Testimonials</h2>
+            <h2 class="text-3xl font-bold mb-12">Testimonios</h2>
 
             <div class="grid md:grid-cols-3 gap-x-6 lg:gap-x-12">
                 <div class="mb-12 md:mb-0">

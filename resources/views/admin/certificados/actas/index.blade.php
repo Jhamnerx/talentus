@@ -14,18 +14,18 @@
 @endpush
 
 @section('js')
-
 <script>
-    window.addEventListener('acta-delete', event => {
-        iziToast.error({
+    window.addEventListener('acta-edit', event => {
+        iziToast.success({
             position: 'topRight',
-            title: 'ELIMINADO',
-            message: 'El Reporte de '+event.detail.vehiculo+' Fue Eliminado',
+            title: 'ACTUALIZADO',
+            message: 'El Acta N° '+event.detail.acta+' Fue Actualizado',
         });
 
     })
     
 </script>
+
 <script>
     window.addEventListener('acta-save', event => {
         $( document ).ready(function() {
@@ -42,17 +42,7 @@
     
 </script>
 
-<script>
-    window.addEventListener('set-vehiculo', event => {
-        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
-        var newOption = new Option(event.detail.vehiculo.placa, event.detail.vehiculo.id, false, false);
-        $('.vehiculos_id').append(newOption).trigger('change');
-        // ESTABLECER LA CIUDAD EN EDITAR
-        var newOption = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, false, false);
-        $('.ciudades').append(newOption).trigger('change');
-    })
-    
-</script>
+
 
 <script>
     // A basic demo function to handle "select all" functionality

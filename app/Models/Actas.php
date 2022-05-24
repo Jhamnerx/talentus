@@ -66,21 +66,23 @@ class Actas extends Model
     public function getPDFData()
     {
 
-
-
-        // dd($this);
-
         $plantilla = plantilla::find(session('empresa'));
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
         view()->share([
             'acta' => $this,
             'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
 
         ]);
 
         $pdf = PDF::loadView('pdf.acta');
-        return $pdf->stream('ACTA-' . $this->vehiculos->placa . ' ' . $this->codigo);
-        //return $pdf;
-        //  return view('pdf.acta');
 
+        return $pdf->stream('ACTA-' . $this->vehiculos->placa . ' ' . $this->codigo . '.pdf');
+
+
+        //return $pdf;
+        //return view('pdf.acta');
     }
 }

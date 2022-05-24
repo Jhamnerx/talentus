@@ -41,7 +41,8 @@ class Edit extends Component
 
         $this->numero = $acta->numero;
         $this->vehiculos_id = $acta->vehiculos_id;
-        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $this->acta->vehiculos, 'ciudad' => $this->acta->ciudades]);
+        $this->ciudades_id = $acta->ciudades_id;
+        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculos, 'ciudad' => $acta->ciudades]);
         $this->inicio_cobertura = $acta->inicio_cobertura;
         $this->fin_cobertura = $acta->fin_cobertura;
     }
@@ -53,13 +54,15 @@ class Edit extends Component
         $values = $this->validate($actaRequest->rules($this->acta), $actaRequest->messages());
 
         $update = Actas::find($this->acta->id);
-        $update->inicio_cobertura = $values["hora_t"];
-        $update->fecha_t = $values["fecha_t"];
-        $update->detalle = $values["detalle"];
-
+        $update->numero = $values["numero"];
+        $update->vehiculos_id = $values["vehiculos_id"];
+        $update->inicio_cobertura = $values["inicio_cobertura"];
+        $update->fin_cobertura = $values["fin_cobertura"];
+        $update->ciudades_id = $values["ciudades_id"];
         $update->save();
+
         $this->openModalEdit = false;
-        $this->dispatchBrowserEvent('reporte-edit', ['vehiculo' => $this->reporte->vehiculos->placa]);
+        $this->dispatchBrowserEvent('acta-edit', ['acta' => $values["numero"]]);
         $this->emit('updateTable');
         $this->reset();
     }
@@ -67,6 +70,6 @@ class Edit extends Component
     public function updated($label)
     {
         $actaRequest = new ActasRequest();
-        $this->validateOnly($label, $actaRequest->rules(), $actaRequest->messages());
+        $this->validateOnly($label, $actaRequest->rules($this->acta), $actaRequest->messages());
     }
 }

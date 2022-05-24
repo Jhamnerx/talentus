@@ -13,7 +13,7 @@ Route::get('plataforma-premium', [PlatPremiumController::class, 'index'])->name(
 
 
 
-Route::get('consulta/actas/{acta:unique_hash?}', [ConsultasController::class, 'consultaActas'])->name('consulta.actas');
+Route::get('consulta/actas/{acta:codigo?}', [ConsultasController::class, 'consultaActas'])->name('consulta.actas');
 
 
 Route::get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');

@@ -35,6 +35,7 @@ class ActasIndex extends Component
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
+            ->orWhere('codigo', 'like', '%' . $this->search . '%')
             ->orderBy('numero', 'desc')
             ->paginate(10);
 
@@ -115,5 +116,10 @@ class ActasIndex extends Component
     {
         $this->emit('verDetalleActa', $acta);
         $this->openModalDetalle = true;
+    }
+
+    public function cambiarEstado(Actas $acta, $field, $value)
+    {
+        $acta->setAttribute($field, $value)->save();
     }
 }

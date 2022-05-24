@@ -207,7 +207,7 @@ class SearchController extends Controller
 
         $term = $request->get('term');
 
-        $ciudades = Ciudades::where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
+        $ciudades = Ciudades::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id')->get();
         $data = [];
         foreach ($ciudades as $ciudad) {
 

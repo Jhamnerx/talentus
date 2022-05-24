@@ -7,8 +7,7 @@ use Livewire\Component;
 
 class ResultSearch extends Component
 {
-    public $unique_hash_search = '';
-    public $codigo_search = '';
+    public $search = '';
     public $is_search = false;
     protected $listeners = [
         'showResult' => 'showResult',
@@ -16,14 +15,14 @@ class ResultSearch extends Component
 
     public function render()
     {
-        $acta = Actas::where('unique_hash', $this->unique_hash_search)->where('codigo', $this->codigo_search)->first();
+        $acta = null;
+        $acta = Actas::where('codigo', $this->search)->first();
 
         return view('livewire.app.consultas.acta.result-search', compact('acta'));
     }
-    public function showResult($unique_hash, $codigo)
+    public function showResult($codigo)
     {
-        $this->unique_hash_search = $unique_hash;
-        $this->codigo_search = $codigo;
+        $this->search = $codigo;
         $this->is_search = true;
         // dd($unique_hash);
     }

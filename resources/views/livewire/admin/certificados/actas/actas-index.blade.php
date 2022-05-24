@@ -251,7 +251,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
 
-                                    <a target="_blank" href="pdf/actas/{{$acta->unique_hash}}">
+                                    <a target="_blank" href="{{route('admin.pdf.actas', $acta)}}">
                                         <button class="text-slate-400 hover:text-slate-500 rounded-full">
                                             <span class="sr-only">Descargar</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -280,36 +280,13 @@
                                     <div class="m-3 w-48">
                                         <!-- Start -->
 
-                                        <div class="flex items-center"
-                                            x-data="{ checked: {{$acta->sello ? 'true' : 'false'}} }">
-                                            <span class="text-sm mr-5">Sello: </span>
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-s{{$acta->id}}" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="switch-s{{$acta->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Sello</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'ON' : 'OFF'"></div>
-                                        </div>
+                                        @livewire('admin.certificados.actas.status-sello', ['model' => $acta, 'field'
+                                        =>
+                                        'sello'], key('sello'.$acta->id))
 
-                                        <div class="flex items-center mt-2"
-                                            x-data="{ checked_f{{$acta->id}}: {{$acta->fondo ? 'true' : 'false'}} }">
-                                            <span class="text-sm mr-3">Fondo: </span>
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-f{{$acta->id}}" class="sr-only"
-                                                    x-model="checked_f{{$acta->id}}" />
-                                                <label class="bg-slate-400" for="switch-f{{$acta->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Fondo</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked_f{{$acta->id}} ? 'ON' : 'OFF'"></div>
-                                        </div>
-
+                                        @livewire('admin.certificados.actas.status-fondo', ['model' => $acta, 'field'
+                                        =>
+                                        'fondo'], key('fondo'.$acta->id))
                                         <!-- End -->
                                     </div>
                                 </div>
@@ -317,20 +294,10 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>
                                     <div class="m-3 ">
+                                        @livewire('admin.certificados.actas.change-status', ['model' => $acta, 'field'
+                                        =>
+                                        'estado'], key('estado'.$acta->id))
 
-                                        <div class="flex items-center mt-2"
-                                            x-data="{ checked: {{$acta->estado ? 'true' : 'false'}} }">
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-e{{$acta->id}}" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="switch-e{{$acta->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Estado</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'Aceptado' : 'Anulado'"></div>
-                                        </div>
                                         <!-- End -->
                                     </div>
                                 </div>
@@ -345,15 +312,20 @@
                                                 d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                                         </svg>
                                     </button>
+                                    <form class="inline-flex formularioEliminar"
+                                        action="{{route('admin.certificados.actas.destroy', $acta)}}" method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            <span class="sr-only">Eliminar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                <path
+                                                    d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                            </svg>
+                                        </button>
+                                    </form>
 
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -381,3 +353,39 @@
 
 
 </div>
+
+@push('scripts')
+@if (session('eliminar'))
+<script>
+    $( document ).ready(function() {
+        Swal.fire(
+            'Eliminada!',
+            'Acta fue eliminada correctamente.',
+            'success'
+        )
+    });
+</script>
+@endif
+
+<script>
+    $('.formularioEliminar').submit(function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: 'Estas Seguro?',
+            text: "Se eliminara el acta seleccionada!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar!',
+            cancelButtonText: 'Cancelar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        })
+    })
+
+</script>
+
+@endpush

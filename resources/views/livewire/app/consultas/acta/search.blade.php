@@ -1,42 +1,25 @@
 <div class="mb-12 space-y-4 py-10 xl:py-2">
-    <form autocomplete="off">
-        <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">Buscar
-            Acta</label>
-        <div class="relative">
-            <div class="xl:flex hidden absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+
+    <form autocomplete="off" autocapitalize="on" autocapitalize="characters">
+        <div class="pt-2 relative mx-auto text-gray-600">
+            <input wire:model="codigo"
+                class="border-2 w-full border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                type="search" name="search" placeholder="C-22-02...">
+            <button type="submit" wire:click.prevent="SearchActa()" class="absolute right-0 top-0 mt-5 mr-4">
+                <svg class="text-gray-600 h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg"
+                    xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                    viewBox="0 0 56.966 56.966" style="enable-background:new 0 0 56.966 56.966;" xml:space="preserve"
+                    width="512px" height="512px">
+                    <path
+                        d="M55.146,51.887L41.588,37.786c3.486-4.144,5.396-9.358,5.396-14.786c0-12.682-10.318-23-23-23s-23,10.318-23,23  s10.318,23,23,23c4.761,0,9.298-1.436,13.177-4.162l13.661,14.208c0.571,0.593,1.339,0.92,2.162,0.92  c0.779,0,1.518-0.297,2.079-0.837C56.255,54.982,56.293,53.08,55.146,51.887z M23.984,6c9.374,0,17,7.626,17,17s-7.626,17-17,17  s-17-7.626-17-17S14.61,6,23.984,6z" />
                 </svg>
-            </div>
-            <input type="search" id="default-search" wire:model.defer="codigo"
-                class="p-4 inline-block pl-10 w-full md:w-1/4 md:my-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Ingresar Numero Acta..." required>
-
-            <input wire:model.defer="unique_hash"
-                class="p-4 inline-block pl-10 my-6 w-full md:w-1/3 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                type="search" placeholder="Ingresar Codigo unico">
-
-            <button type="button" wire:click.prevent="SearchActa()"
-                class="text-white w-full md:w-1/4 bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 shadow-lg shadow-red-500/50 dark:shadow-lg dark:shadow-red-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2">
-                Buscar
             </button>
-
         </div>
+
+
         <div class="flex w-full">
             <div class="flex w-2/4">
                 @error('codigo')
-
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{$message}}
-                </p>
-
-                @enderror
-            </div>
-
-            <div class="flex w-2/4">
-                @error('unique_hash')
 
                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                     {{$message}}
