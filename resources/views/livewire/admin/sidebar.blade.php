@@ -436,10 +436,10 @@
                     </li>
                     <!-- Certificados -->
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
-                        :class="{ 'bg-slate-900': page.startsWith('certificado-') }" x-data="{ open: false }"
-                        x-init="$nextTick(() => open = page.startsWith('certificado-'))">
+                        :class="{ 'bg-slate-900': page.startsWith('certificados-') }" x-data="{ open: false }"
+                        x-init="$nextTick(() => open = page.startsWith('certificados-'))">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
-                            :class="page.startsWith('certificado-') && 'hover:text-slate-200'" href="#0"
+                            :class="page.startsWith('certificados-') && 'hover:text-slate-200'" href="#0"
                             @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">

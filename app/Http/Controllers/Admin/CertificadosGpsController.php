@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\CertificadosGps;
+use App\Models\Certificados;
 use Illuminate\Http\Request;
 
 class CertificadosGpsController extends Controller
@@ -25,7 +25,7 @@ class CertificadosGpsController extends Controller
      */
     public function create()
     {
-        return view('admin.certificados.gps.create');
+        // return view('admin.certificados.gps.create');
     }
 
     /**
@@ -45,9 +45,9 @@ class CertificadosGpsController extends Controller
      * @param  \App\Models\CertificadosGps  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function show(CertificadosGps $certificado)
+    public function show(Certificados $certificado)
     {
-        return view('admin.certificados.gps.show');
+        //return view('admin.certificados.gps.show');
     }
 
     /**
@@ -56,9 +56,9 @@ class CertificadosGpsController extends Controller
      * @param  \App\Models\CertificadosGps  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function edit(CertificadosGps $certificado)
+    public function edit(Certificados $certificado)
     {
-        return view('admin.certificados.gps.edit');
+        //return view('admin.certificados.gps.edit');
     }
 
     /**
@@ -68,7 +68,7 @@ class CertificadosGpsController extends Controller
      * @param  \App\Models\CertificadosGps  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, CertificadosGps $certificado)
+    public function update(Request $request, Certificados $certificado)
     {
         //
     }
@@ -79,8 +79,9 @@ class CertificadosGpsController extends Controller
      * @param  \App\Models\CertificadosGps  $certificado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CertificadosGps $certificado)
+    public function destroy(Certificados $certificado)
     {
-        //
+        $certificado->delete();
+        return redirect()->route('admin.certificados.gps.index')->with('eliminar', 'El Certificado se elimino con exito');
     }
 }

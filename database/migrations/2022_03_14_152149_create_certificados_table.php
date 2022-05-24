@@ -17,20 +17,22 @@ class CreateCertificadosTable extends Migration
             $table->id();
             $table->string('numero');
             $table->date('fin_cobertura');
-            $table->string('fecha');
-            $table->string('year');
+            $table->string('fecha')->nullable();
+            $table->year('year')->nullable();
             $table->boolean('sello')->default(1);
             $table->boolean('fondo')->default(1);
             $table->boolean('estado')->default(true);
             $table->boolean('eliminado')->default(false);
-            $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('vehiculos_id');
             $table->unsignedBigInteger('ciudades_id');
-            $table->unsignedBigInteger('dispositivos_id');
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('codigo')->nullable();
+            $table->string('unique_hash')->nullable();
 
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
             $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('cascade');
-            $table->foreign('dispositivos_id')->references('id')->on('dispositivos')->onDelete('cascade');
 
             $table->timestamps();
         });

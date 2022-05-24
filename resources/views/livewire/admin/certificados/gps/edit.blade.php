@@ -2,11 +2,10 @@
 
     <!-- Basic Modal -->
     <!-- Start -->
-    <div x-data="{ modalSave: @entangle('openModalSave') }">
-
+    <div x-data="{ modalEdit: @entangle('openModalEdit') }">
 
         <!-- Modal backdrop -->
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSave"
+        <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
@@ -14,19 +13,19 @@
         <!-- Modal dialog -->
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
-            role="dialog" aria-modal="true" x-show="modalSave" x-transition:enter="transition ease-in-out duration-200"
+            role="dialog" aria-modal="true" x-show="modalEdit" x-transition:enter="transition ease-in-out duration-200"
             x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
             x-transition:leave="transition ease-in-out duration-200"
             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
             x-cloak>
 
             <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-6/12 max-h-full"
-                @keydown.escape.window="modalSave = false">
+                @keydown.escape.window="modalEdit = false">
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
-                        <div class="font-semibold text-slate-800">CREAR ACTA GPS</div>
-                        <button class="text-slate-400 hover:text-slate-500" @click="modalSave = false">
+                        <div class="font-semibold text-slate-800">EDITAR CERTIFICADO GPS</div>
+                        <button class="text-slate-400 hover:text-slate-500" @click="modalEdit = false">
                             <div class="sr-only">Close</div>
                             <svg class="w-4 h-4 fill-current">
                                 <path
@@ -78,15 +77,14 @@
                                 @enderror
 
                             </div>
-
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select name="vehiculos_id" class="vehiculos_id w-full form-input pl-9 "
-                                        required></select>
+                                    <select wire:model="vehiculos_id"
+                                        class="vehiculos_id vehiculosEdit w-full form-input pl-9 " required></select>
 
 
 
@@ -131,49 +129,7 @@
 
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="fecha_inicio">Inicio de Cobertura:
-                                    <span class="text-rose-500">*</span></label>
-                                <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="inicio_cobertura"
-                                        required name="fecha" type="text"
-                                        class="form-input valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                        placeholder="Selecciona la fecha">
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
-                                                </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
-                                                </path>
-                                                <path
-                                                    d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
-                                                    fill="#aeaeae"></path>
-                                                <path
-                                                    d="M24.7,32.155q0-4.62,1.954-6.877A7.319,7.319,0,0,1,32.5,23.021a10.653,10.653,0,0,1,2.087.16V25.81a8.524,8.524,0,0,0-1.874-.213c-1.8,0-3.517.431-4.364,2.023a6.926,6.926,0,0,0-.628,2.842,4.211,4.211,0,0,1,3.513-1.809c2.937,0,4.449,2.015,4.449,4.929,0,3.271-1.916,5.4-5.3,5.4C26.6,38.979,24.7,36.12,24.7,32.155Zm5.621,4.194c1.545,0,2.182-1.16,2.182-2.725,0-1.461-.651-2.448-2.118-2.448a2.318,2.318,0,0,0-2.417,2.161C27.965,34.856,28.82,36.349,30.318,36.349Z"
-                                                    fill="#aeaeae"></path>
-                                                <path
-                                                    d="M11.5,12A1.5,1.5,0,0,1,10,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,11.5,12Z"
-                                                    fill="#363636"></path>
-                                                <path
-                                                    d="M36.5,12A1.5,1.5,0,0,1,35,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,36.5,12Z"
-                                                    fill="#363636"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @error('inicio_cobertura')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
-                                @enderror
-                            </div>
                             <div class="col-span-12 sm:col-span-6">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
@@ -218,7 +174,7 @@
 
 
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="ciudades_id">Ciudad: <span
+                                <label class="block text-sm font-medium mb-1" for="numero">Ciudad: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
@@ -264,53 +220,6 @@
 
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-12 mt-4">
-                                <span class="text-bold text-center mb-2">Caracteristicas:</span>
-                                <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
-
-
-                                    <div class="m-2 w-full mt-2">
-                                        <label for="fondo">Fondo:</label>
-                                        <!-- Start -->
-                                        <div class="flex items-center" x-data="{ checked: true }">
-                                            <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="fondo-1">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">fondo switch</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'Activado' : 'Desactivado'"></div>
-                                        </div>
-                                        <!-- End -->
-                                    </div>
-                                    <div class="m-2 w-full">
-                                        <label for="sello">Sello:</label>
-                                        <!-- Start -->
-                                        <div class="flex items-center" x-data="{ checked: true }">
-                                            <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="sello-1">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">sello switch</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'Activado' : 'Desactivado'"></div>
-                                        </div>
-                                        <!-- End -->
-                                    </div>
-
-
-
-
-                                </div>
-                            </div>
-
-
                         </div>
 
                     </div>
@@ -320,7 +229,7 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click.prevent="closeModal">Cerrar</button>
-                        <button wire:click.prevent="guardarActa()"
+                        <button wire:click.prevent="actualizarCertificado()"
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>
@@ -336,10 +245,13 @@
 @once
 @push('scripts')
 
+
+
 <script>
     $('.vehiculos_id').select2({
        placeholder: '    Buscar un Vehiculo',
         language: "es",
+
         minimumInputLength: 2,
         width: '100%',
         ajax: {
@@ -353,7 +265,7 @@
                     term: params.term,
                     //type: 'public'
                 }
-                console.log(query);
+
                 // Query parameters will be ?search=[term]&type=public
                 return query;
             },
@@ -427,7 +339,7 @@
 
 $('.vehiculos_id').on('select2:select', function (e) {
     var data = e.params.data;
-   // console.log(data.id);
+    //console.log(data.id);
     @this.set('vehiculos_id',data.id)
 });
 
@@ -438,6 +350,25 @@ $('.ciudades').on('select2:select', function (e) {
     @this.set('ciudades_id',data.id)
 });
 
+</script>
+
+
+<script>
+    window.addEventListener('set-vehiculo', event => {
+        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
+        var placa = event.detail.vehiculo.placa;
+        var id = event.detail.vehiculo.id
+        var vehiculo = new Option(placa, id, true, true);
+        $('.vehiculosEdit').append(vehiculo).trigger('change');
+
+
+        // ESTABLECER LA CIUDAD EN EDITAR
+        var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
+
+        $('.ciudades').append(ciudad).trigger('change');
+       // $('.ciudades').append(ciudad).trigger('change');
+    })
+    
 </script>
 
 @endpush

@@ -28,15 +28,15 @@
             </form>
 
             <!-- Create invoice button -->
-            <a href="{{route('admin.certificados.gps.create')}}">
-                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Crear Certificado</span>
-                </button>
-            </a>
+
+            <button wire:click="openModalSave()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                    <path
+                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
+                <span class="hidden xs:block ml-2">Crear Certificado</span>
+            </button>
+
 
         </div>
 
@@ -246,22 +246,25 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Descargar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                        </svg>
-                                    </button>
+                                    <a target="_blank" href="{{route('admin.pdf.certificados', $certificado)}}">
+                                        <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            <span class="sr-only">Descargar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path
+                                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                            </svg>
+                                        </button>
+                                    </a>
 
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$certificado->clientes->razon_social}}</div>
+                                <div class="font-medium text-slate-800">
+                                    {{$certificado->vehiculos->flotas->clientes->razon_social}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$certificado->dispositivos->modelo->modelo}}
+                                <div class="font-medium text-slate-800">
+                                    {{$certificado->vehiculos->dispositivos->modelo->modelo}}
                                 </div>
                             </td>
 
@@ -276,34 +279,15 @@
                                     <div class="m-3 w-48">
                                         <!-- Start -->
 
-                                        <div class="flex items-center"
-                                            x-data="{ checked: {{$certificado->sello ? 'true' : 'false'}} }">
-                                            <span class="text-sm mr-5">Sello: </span>
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-s{{$certificado->id}}" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="switch-s{{$certificado->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Sello</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'ON' : 'OFF'"></div>
-                                        </div>
-                                        <div class="flex items-center mt-2"
-                                            x-data="{ checked: {{$certificado->fondo ? 'true' : 'false'}} }">
-                                            <span class="text-sm mr-3">Fondo: </span>
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-f{{$certificado->id}}" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="switch-f{{$certificado->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Fondo</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'ON' : 'OFF'"></div>
-                                        </div>
+                                        @livewire('admin.certificados.gps.status-sello', ['model' => $certificado,
+                                        'field'
+                                        =>
+                                        'sello'], key('sello'.$certificado->id))
+
+                                        @livewire('admin.certificados.gps.status-fondo', ['model' => $certificado,
+                                        'field'
+                                        =>
+                                        'fondo'], key('fondo'.$certificado->id))
                                         <!-- End -->
                                     </div>
                                 </div>
@@ -312,26 +296,18 @@
                                 <div>
                                     <div class="m-3 ">
 
-                                        <div class="flex items-center mt-2"
-                                            x-data="{ checked: {{$certificado->estado ? 'true' : 'false'}} }">
-                                            <div class="form-switch">
-                                                <input type="checkbox" id="switch-e{{$certificado->id}}" class="sr-only"
-                                                    x-model="checked" />
-                                                <label class="bg-slate-400" for="switch-e{{$certificado->id}}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                    <span class="sr-only">Estado</span>
-                                                </label>
-                                            </div>
-                                            <div class="text-sm text-slate-400 italic ml-2"
-                                                x-text="checked ? 'Aceptado' : 'Anulado'"></div>
-                                        </div>
+                                        @livewire('admin.certificados.gps.change-status', ['model' => $certificado,
+                                        'field'
+                                        =>
+                                        'estado'], key('estado'.$certificado->id))
                                         <!-- End -->
                                     </div>
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                    <button wire:click.prevent="openModalEdit({{$certificado->id}})"
+                                        class="text-slate-400 hover:text-slate-500 rounded-full">
                                         <span class="sr-only">Editar</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path
@@ -339,14 +315,20 @@
                                         </svg>
                                     </button>
 
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
+                                    <form class="inline-flex formularioEliminar"
+                                        action="{{route('admin.certificados.gps.destroy', $certificado)}}"
+                                        method="POST">
+                                        @csrf
+                                        @method('delete')
+                                        <button class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            <span class="sr-only">Eliminar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                <path
+                                                    d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>
@@ -374,3 +356,39 @@
 
 
 </div>
+
+@push('scripts')
+@if (session('eliminar'))
+<script>
+    $( document ).ready(function() {
+        Swal.fire(
+            'Eliminada!',
+            'Certificado eliminado correctamente.',
+            'success'
+        )
+    });
+</script>
+@endif
+
+<script>
+    $('.formularioEliminar').submit(function(e){
+        e.preventDefault();
+        Swal.fire({
+            title: 'Estas Seguro?',
+            text: "Se eliminara el certificado seleccionada!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, Eliminar!',
+            cancelButtonText: 'Cancelar!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.submit();
+            }
+        })
+    })
+
+</script>
+
+@endpush

@@ -49,6 +49,11 @@ class Vehiculos extends Model
         return $this->hasMany(Actas::class, 'vehiculos_id');
     }
     //relacion uno a muchos a actas
+    public function certificados()
+    {
+        return $this->hasMany(Certificados::class, 'vehiculos_id');
+    }
+    //relacion uno a muchos a actas
     public function cert_velocimetros()
     {
         return $this->hasMany(CertificadosVelocimetros::class, 'vehiculos_id');

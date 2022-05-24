@@ -1,15 +1,46 @@
 @extends('layouts.admin')
+@section('ruta', 'certificados-gps')
 @section('contenido')
 
 <!-- Table -->
-@livewire('admin.certificados.certificados-gps-index')
+@livewire('admin.certificados.gps.certificados-gps-index')
 
 @stop
 
+@push('modals')
+
+@livewire('admin.certificados.gps.save')
+@livewire('admin.certificados.gps.edit')
+
+@endpush
+
 @section('js')
 <script>
-    console.log('Hi!'); 
+    window.addEventListener('certificado-edit', event => {
+        iziToast.success({
+            position: 'topRight',
+            title: 'ACTUALIZADO',
+            message: 'El Certificado N° '+event.detail.certificado+' Fue Actualizado',
+        });
 
+    })
+    
+</script>
+
+<script>
+    window.addEventListener('certificado-save', event => {
+        $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: 'El certificado de '+event.detail.vehiculo+' Fue Creado',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+    })
+    
 </script>
 
 <script>

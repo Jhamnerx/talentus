@@ -38,6 +38,18 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
+        User::create([
+            'name' => 'Admin',
+            'apellido' => 'System',
+            'email' => 'admin@talentus.com',
+            'tipo_documento' => 'DNI',
+            'numero_documento' => '000000',
+            'direccion' => 'Cajamarca',
+            'telefonos' => '987654654321',
+            'birthday' => '',
+            'is_client' => 'no',
+            'password' => bcrypt('12345678'),
+        ]);
         User::factory(8)->create();
     }
 }

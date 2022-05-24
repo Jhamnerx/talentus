@@ -1,47 +1,41 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Certificados;
+namespace App\Http\Livewire\Admin\Certificados\Velocimetros;
 
-use App\Models\Certificados;
+use App\Models\CertificadosVelocimetros;
 use Livewire\Component;
 
-class CertificadosGpsIndex extends Component
+class VelocimetrosIndex extends Component
 {
     public $search;
     public $from = '';
     public $to = '';
-
     public function render()
     {
         $desde = $this->from;
         $hasta = $this->to;
 
-
-        $certificados = Certificados::whereHas('ciudades', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%')
-                ->orwhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('clientes', function ($query) {
-            $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
-            ->orWhere('numero', 'like', '%' . $this->search . '%')
+        $certificados = CertificadosVelocimetros::whereHas('vehiculos', function ($query) {
+            $query->where('placa', 'like', '%' . $this->search . '%')
+                ->orwhere('motor', 'like', '%' . $this->search . '%');
+        })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orderBy('id')
             ->paginate(10);
 
-        $total = Certificados::all()->count();
+        $total = CertificadosVelocimetros::all()->count();
         if (!empty($desde)) {
 
 
-            $certificados = Certificados::whereRaw(
+            $certificados = CertificadosVelocimetros::whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $desde . " 00:00:00",
                     $hasta . " 23:59:59"
                 ]
             )->whereRaw(
-                "(fecha like ? OR fin_cobertura like ?)",
+                "(fecha like ? OR numero like ?)",
                 [
-                    '%' . $this->search . '%',
                     '%' . $this->search . '%',
                     '%' . $this->search . '%',
                 ]
@@ -49,8 +43,9 @@ class CertificadosGpsIndex extends Component
                 ->orderBy('id')
                 ->paginate(10);
         }
-        return view('livewire.admin.certificados.certificados-gps-index', compact('certificados', 'total'));
+        return view('livewire.admin.certificados.velocimetros.velocimetros-index', compact('certificados', 'total'));
     }
+
     public function filter($dias)
     {
         switch ($dias) {

@@ -4,12 +4,14 @@ namespace App\Models;
 
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Certificados extends Model
 {
     use HasFactory;
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados';
 
 
@@ -26,6 +28,15 @@ class Certificados extends Model
         'estado' => 'boolean',
         'eliminado' => 'boolean',
     ];
+
+
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
+
+
     //Relacion uno a muchos inversa
 
     public function ciudades()
@@ -33,15 +44,9 @@ class Certificados extends Model
         return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
     }
 
-    public function clientes()
+    public function vehiculos()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
-    }
-
-    public function dispositivos()
-    {
-
-        return $this->belongsTo(Dispositivos::class, 'dispositivos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
     }
 
     /**
@@ -53,5 +58,29 @@ class Certificados extends Model
     {
         static::addGlobalScope(new EliminadoScope);
         static::addGlobalScope(new EmpresaScope);
+    }
+
+
+    public function getPDFData()
+    {
+
+        $plantilla = plantilla::find(session('empresa'));
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'certificado' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+
+        ]);
+
+        $pdf = PDF::loadView('pdf.certificado');
+
+        return $pdf->stream('CERTIFICADO-' . $this->vehiculos->placa . ' ' . $this->codigo . '.pdf');
+
+
+        //return $pdf;
+        //return view('pdf.acta');
     }
 }

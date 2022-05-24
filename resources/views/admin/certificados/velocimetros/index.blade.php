@@ -1,9 +1,10 @@
 @extends('layouts.admin')
+@section('ruta', 'certificados-velocimetro')
 @section('contenido')
 
 <!-- Table -->
 
-@livewire('admin.certificados.certificados-velocimetros-index')
+@livewire('admin.certificados.velocimetros.velocimetros-index')
 
 @stop
 
