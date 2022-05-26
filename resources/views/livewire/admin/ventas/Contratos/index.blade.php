@@ -195,6 +195,9 @@
                                 </div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Descargar</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -205,6 +208,9 @@
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Caracteristicas</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Estado</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Emitido el</div>
@@ -230,45 +236,147 @@
                                     </label>
                                 </div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$contrato->clientes->razon_social}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-blue-500">AHF-960</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">Trujillo</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">Caracteristicas</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{$contrato->fecha}}</div>
-                            </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Editar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                        </svg>
-                                    </button>
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
+
+                                    <button class="text-talentus-200 hover:text-talentus-100 rounded-full">
                                         <span class="sr-only">Descargar</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path
                                                 d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
                                         </svg>
                                     </button>
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-medium text-slate-800">{{$contrato->clientes->razon_social}}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <!-- Start -->
+                                <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                    @mouseleave="open = false">
+                                    <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                        aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                        @focusout="open = false" @click.prevent>
+                                        <span class="mr-2">Ver vehiculos</span>
+                                        <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
                                             <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
                                         </svg>
                                     </button>
+                                    <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
+                                        <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full"
+                                            x-show="open"
+                                            x-transition:enter="transition ease-out duration-200 transform"
+                                            x-transition:enter-start="opacity-0 translate-y-2"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            x-transition:leave="transition ease-out duration-200"
+                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                            x-cloak>
+                                            <div class="">
+                                                <div class="font-medium text-slate-800 mb-0.5 pb-2  text-base">
+                                                    <b>VEHICULOS</b>
+                                                </div>
+                                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                                    <table
+                                                        class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                        <thead
+                                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Placa
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Plan
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @if ($contrato->detalle->isEmpty())
+
+                                                            <tr
+                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+                                                                <td colspan="2">NO SE REGISTRARON VEHICULOS</td>
+
+                                                            </tr>
+                                                            @else
+                                                            @foreach ($contrato->detalle as $detalle)
+                                                            <tr
+                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                <th scope="row"
+                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+
+                                                                    @if ($detalle->vehiculos)
+                                                                    {{$detalle->vehiculos->placa}}
+                                                                    @else
+                                                                    -
+                                                                    @endif
+
+                                                                </th>
+                                                                <td class="px-6 py-4">
+                                                                    S/. {{$detalle->plan}}
+                                                                </td>
+
+                                                            </tr>
+                                                            @endforeach
+
+
+                                                            @endif
+
+
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-medium text-slate-800">Trujillo</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
+                                <div>
+                                    <div class="m-3 w-48">
+                                        <!-- Start -->
+
+                                        @livewire('admin.ventas.contratos.status-sello', ['model' => $contrato, 'field'
+                                        =>
+                                        'sello'], key('sello'.$contrato->id))
+
+                                        @livewire('admin.ventas.contratos.status-fondo', ['model' => $contrato, 'field'
+                                        =>
+                                        'fondo'], key('fondo'.$contrato->id))
+                                        <!-- End -->
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div>
+                                    <div class="m-3 ">
+                                        @livewire('admin.ventas.contratos.change-status', ['model' => $contrato, 'field'
+                                        =>
+                                        'estado'], key('estado'.$contrato->id))
+
+                                        <!-- End -->
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div>{{$contrato->fecha}}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+
+                                    @livewire('admin.ventas.contratos.delete', ['model' => $contrato],
+                                    key('delete'.$contrato->id))
                                 </div>
                             </td>
                         </tr>

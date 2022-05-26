@@ -339,6 +339,7 @@
        placeholder: '    Selecciona una ciudad',
         language: "es",
         width: '100%',
+        selectionCssClass: 'pl-9',
         ajax: {
             url: '{{route("search.ciudades")}}',
             dataType: 'json',

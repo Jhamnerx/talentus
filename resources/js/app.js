@@ -15,3 +15,10 @@ import Swal from 'sweetalert2';
 window.Swal = Swal;
 import iziToast from 'izitoast';
 window.iziToast = iziToast;
+
+
+
+
+
+import DataTable from 'datatables.net-dt';
+window.DataTable = DataTable;

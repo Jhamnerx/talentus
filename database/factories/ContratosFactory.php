@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Ciudades;
 use App\Models\Clientes;
 use App\Models\Empresa;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,7 +20,7 @@ class ContratosFactory extends Factory
             'clientes_id' => Clientes::all()->random()->id,
             'fecha' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
             'empresa_id' => Empresa::all()->random()->id,
-
+            'ciudades_id' => Ciudades::all()->random()->id,
         ];
     }
 }

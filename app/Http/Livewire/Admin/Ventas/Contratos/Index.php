@@ -5,11 +5,15 @@ namespace App\Http\Livewire\Admin\Ventas\Contratos;
 use App\Models\Contratos;
 use Livewire\Component;
 
-class ContratosIndex extends Component
+class Index extends Component
 {
     public $search;
     public $from = '';
     public $to = '';
+
+    protected $listeners = [
+        'updateTable' => 'render',
+    ];
 
     public function render()
     {
@@ -20,12 +24,12 @@ class ContratosIndex extends Component
             $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
         })
             ->orWhere('fecha', 'LIKE', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
 
         $total = Contratos::all()->count();
-        return view('livewire.admin.ventas.contratos.contratos-index', compact('contratos', 'total'));
+        return view('livewire.admin.ventas.contratos.index', compact('contratos', 'total'));
 
         if (!empty($desde)) {
 
@@ -42,7 +46,7 @@ class ContratosIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
         }
     }

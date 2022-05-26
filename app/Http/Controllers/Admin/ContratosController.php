@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContratosRequest;
 use App\Models\Contratos;
+use App\Models\Vehiculos;
 use Illuminate\Http\Request;
 
 class ContratosController extends Controller
@@ -25,7 +27,8 @@ class ContratosController extends Controller
      */
     public function create()
     {
-        return view('admin.ventas.contratos.create');
+        $vehiculos = Vehiculos::all();
+        return view('admin.ventas.contratos.create', compact('vehiculos'));
     }
 
     /**
@@ -34,9 +37,14 @@ class ContratosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ContratosRequest $request)
     {
-        //
+        //dd($request->all());
+        $contrato = Contratos::create($request->all());
+
+        Contratos::createItems($contrato, $request->items);
+
+        return redirect()->route('admin.ventas.contratos.index')->with('store', 'El Contrato se creo con exito');
     }
 
     /**
@@ -56,9 +64,9 @@ class ContratosController extends Controller
      * @param  \App\Models\Contratos  $contratos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Contratos $contratos)
+    public function edit(Contratos $contrato)
     {
-        return view('admin.ventas.contratos.edit');
+        return view('admin.ventas.contratos.edit', compact('contrato'));
     }
 
     /**
@@ -68,9 +76,10 @@ class ContratosController extends Controller
      * @param  \App\Models\Contratos  $contratos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contratos $contratos)
+    public function update(Request $request, Contratos $contrato)
     {
-        //
+        dd($request->all());
+        $contrato->update($request->all());
     }
 
     /**

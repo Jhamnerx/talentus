@@ -58,4 +58,13 @@ class Vehiculos extends Model
     {
         return $this->hasMany(CertificadosVelocimetros::class, 'vehiculos_id');
     }
+
+    //Relacion muchos a ,muchos
+
+    public function detalle_contrato()
+    {
+
+
+        return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);;
+    }
 }

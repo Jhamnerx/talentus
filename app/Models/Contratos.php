@@ -10,7 +10,16 @@ use Illuminate\Database\Eloquent\Model;
 class Contratos extends Model
 {
     use HasFactory;
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'contratos';
+
+    protected $casts = [
+        'sello' => 'boolean',
+        'fondo' => 'boolean',
+        'estado' => 'boolean',
+        'eliminado' => 'boolean',
+    ];
+
     /**
      * Scope para traer activos y no
      *
@@ -26,5 +35,30 @@ class Contratos extends Model
     public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+    }
+
+
+    public function ciudades()
+    {
+        return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
+    }
+
+    //relacion uno a muchos
+
+    public function detalle()
+    {
+        return $this->hasMany(DetalleContratos::class, 'contratos_id');
+    }
+
+
+
+    public static function createItems($contrato, $contratoItems)
+    {
+        foreach ($contratoItems as $contratoItem) {
+
+            $contratoItem['contratos_id'] = $contrato->id;
+
+            $item = $contrato->detalle()->create($contratoItem);
+        }
     }
 }

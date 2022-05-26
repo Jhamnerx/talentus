@@ -51,7 +51,8 @@ class DatabaseSeeder extends Seeder
         Presupuestos::factory(40)->create();
         VentasFacturas::factory(50)->create();
         Recibos::factory(60)->create();
-        Contratos::factory(70)->create();
+        // Contratos::factory(70)->create();
+
         Flotas::factory(100)->create();
         Contactos::factory(30)->create();
         Vehiculos::factory(50)->create();
@@ -60,5 +61,6 @@ class DatabaseSeeder extends Seeder
         Actas::factory(60)->create();
         Certificados::factory(50)->create();
         CertificadosVelocimetros::factory(60)->create();
+        $this->call(ContratoSeeder::class);
     }
 }

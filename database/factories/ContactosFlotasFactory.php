@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Ciudades;
 use App\Models\Contactos;
 use App\Models\Empresa;
 use App\Models\Flotas;
@@ -29,6 +30,7 @@ class ContactosFlotasFactory extends Factory
             'telefono' => $this->faker->e164PhoneNumber(),
             'email' => $this->faker->companyEmail(),
             'empresa_id' => Empresa::all()->random()->id,
+
         ];
     }
 }

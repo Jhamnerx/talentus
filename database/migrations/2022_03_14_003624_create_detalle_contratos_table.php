@@ -20,6 +20,7 @@ class CreateDetalleContratosTable extends Migration
             $table->string('plan');
 
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('contratos_id')->references('id')->on('contratos')->onDelete('cascade');
 
             $table->timestamps();
         });
