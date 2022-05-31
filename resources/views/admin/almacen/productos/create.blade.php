@@ -98,7 +98,8 @@
 
                             <div class="relative">
 
-                                {!! Form::text('precio', null, ['class' =>'form-input w-full pl-12']) !!}
+                                {!! Form::number('precio', null, ['class' =>'form-input w-full pl-12', 'placeholder' =>
+                                '$199.00']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <span class="text-sm text-slate-400 font-medium px-3">S/</span>
                                 </div>
@@ -115,8 +116,8 @@
                         <div class="col-span-12 sm:col-span-6">
                             {!! Form::label('stock', 'Stock:', ['class' => 'block text-sm font-medium mb-1']) !!}
 
-                            {!! Form::number('stock', null, ['class' => 'form-input w-full','placeholder' => '10
-                            Unidades']) !!}
+                            {!! Form::number('stock', null, ['placeholder' => '10 Unidades','class' => 'form-input
+                            w-full']) !!}
 
                             @error('stock')
 

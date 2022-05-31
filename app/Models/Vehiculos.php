@@ -12,6 +12,14 @@ class Vehiculos extends Model
     use HasFactory;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'vehiculos';
+
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
+
+
     /**
      * Scope para traer activos y no
      *
@@ -66,5 +74,13 @@ class Vehiculos extends Model
 
 
         return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);;
+    }
+
+    //Relacion muchos a ,muchos
+
+    public function contratos()
+    {
+
+        return $this->belongsToMany(Contratos::class);
     }
 }

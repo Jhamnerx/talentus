@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
@@ -111,6 +112,7 @@ Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.l
 Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
 Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('search.vehiculos');
 Route::get('search/ciudades', [SearchController::class, 'ciudades'])->name('search.ciudades');
+Route::get('search/productos', [SearchController::class, 'productos'])->name('search.productos');
 
 // VERIFICAR
 
@@ -133,4 +135,5 @@ Route::get('pdf/actas/{acta:unique_hash}', ActaPdfController::class)->name('admi
 //  certificado pdf
 // -------------------------------------------------
 Route::get('pdf/certificados/{certificado:unique_hash}', CertificadoPdfController::class)->name('admin.pdf.certificados');
+Route::get('pdf/contratos/{contrato:unique_hash}', ContratoPdfController::class)->name('admin.pdf.contratos');
 Route::get('pdf/certificados/velocimetros/{certificado:unique_hash}', CertificadoVelocimetroPdfController::class)->name('admin.pdf.velocimetros');

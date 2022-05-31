@@ -12,6 +12,8 @@
 use App\Models\Actas;
 use App\Models\Certificados;
 use App\Models\CertificadosVelocimetros;
+use App\Models\Contratos;
+use App\Models\Recibos;
 
 return [
 
@@ -54,6 +56,16 @@ return [
             'salt' => CertificadosVelocimetros::class . config('app.key'),
             'length' => '20',
             'alphabet' => 'asqtW3eDRIxB65GYl7UVLS1dybn9XrKTZ4zO',
+        ],
+        Contratos::class => [
+            'salt' => Contratos::class . config('app.key'),
+            'length' => '20',
+            'alphabet' => 'ADyQWE8mgt7jF2vbnPrKLJenHVpiUIq4M12T',
+        ],
+        Recibos::class => [
+            'salt' => Recibos::class . config('app.key'),
+            'length' => '20',
+            'alphabet' => 's0DxOFtEYEnuKPmP08Ch6A1iHlLmBTBVWms5',
         ],
         'main' => [
             'salt' => 'your-salt-string',

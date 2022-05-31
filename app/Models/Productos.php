@@ -19,6 +19,12 @@ class Productos extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
 
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
+
     /**
      * The "booted" method of the model.
      *

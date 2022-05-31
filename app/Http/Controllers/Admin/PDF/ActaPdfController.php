@@ -11,8 +11,6 @@ class ActaPdfController extends Controller
 {
     public function __invoke(Actas $acta)
     {
-
-
         return $acta->getPDFData();
     }
 }

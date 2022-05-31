@@ -8,6 +8,7 @@ use App\Models\Clientes;
 use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Lineas;
+use App\Models\Productos;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
@@ -214,6 +215,25 @@ class SearchController extends Controller
             $data[] = [
                 'value' => $ciudad->id,
                 'data' => $ciudad->nombre,
+            ];
+        }
+
+        return array('suggestions' => $data);
+    }
+
+    public function productos(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id')->get();
+        $data = [];
+        foreach ($productos as $producto) {
+
+            $data[] = [
+                'data' => $producto->id,
+                'value' => $producto->nombre,
+                'precio' => $producto->precio,
             ];
         }
 

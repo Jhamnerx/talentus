@@ -483,6 +483,7 @@
     $('.flotas_id').select2({
        placeholder: 'Buscar una flota',
         language: "es",
+        selectionCssClass: 'pl-9',
         tags: true,
         width: '100%',
         ajax: {

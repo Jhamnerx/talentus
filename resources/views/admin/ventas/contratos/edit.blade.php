@@ -157,58 +157,6 @@
                             @enderror
                         </div>
 
-                        <div class="col-span-12 sm:col-span-12 mt-4">
-                            <span class="text-bold text-center mb-2">Caracteristicas:</span>
-                            <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
-
-
-                                <div class="m-2 w-full mt-2">
-                                    <label for="fondo">Fondo:</label>
-                                    <!-- Start -->
-                                    <div class="flex items-center"
-                                        x-data="{ checked: {{$contrato->fondo ? 'true' : 'false'}} }">
-                                        <div class="form-switch">
-
-
-                                            {!! Form::checkbox('fondo', null, null, ['class' => 'sr-only', 'x-model' =>
-                                            'checked']) !!}
-                                            <label class="bg-slate-400" for="fondo-1">
-                                                <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                <span class="sr-only">fondo switch</span>
-                                            </label>
-                                        </div>
-                                        <div class="text-sm text-slate-400 italic ml-2"
-                                            x-text="checked ? 'Activado' : 'Desactivado'"></div>
-                                    </div>
-                                    <!-- End -->
-                                </div>
-                                <div class="m-2 w-full">
-                                    <label for="sello">Sello:</label>
-                                    <!-- Start -->
-                                    <div class="flex items-center"
-                                        x-data="{ checked: {{$contrato->sello ? 'true' : 'false'}} }">
-                                        <div class="form-switch">
-
-
-                                            {!! Form::checkbox('sello', null, null, ['class' => 'sr-only', 'x-model' =>
-                                            'checked']) !!}
-
-                                            <label class="bg-slate-400" for="sello-1">
-                                                <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                <span class="sr-only">sello switch</span>
-                                            </label>
-                                        </div>
-                                        <div class="text-sm text-slate-400 italic ml-2"
-                                            x-text="checked ? 'Activado' : 'Desactivado'"></div>
-                                    </div>
-                                    <!-- End -->
-                                </div>
-
-
-
-
-                            </div>
-                        </div>
 
 
                         <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between">
@@ -306,21 +254,23 @@
     })
 </script>
 
+
 <script>
     function agregarVehiculo(vehiculo){
 
+        //console.log(vehiculo);
+
         var plan = 30;
-        if(localStorage.getItem("listaVehiculosContrato") == null){
-
-            listado = [];
-
-        }else{
+        if(localStorage.getItem("listaVehiculosContrato") !== null){
 
             var listaVehiculosContrato = JSON.parse(localStorage.getItem("listaVehiculosContrato"));
 
+                
             for(var i = 0; i < listaVehiculosContrato.length; i++){
+                ;
+               // console.log(listaVehiculosContrato[i], i, listaVehiculosContrato)     
 
-                if(listaVehiculosContrato[i]["idvehiculo"] == vehiculo.id){
+                if(listaVehiculosContrato[i]["idvehiculo"] === vehiculo.id){
                     Swal.fire({
                     icon: 'warning',
                     title: 'Ya existe',
@@ -333,14 +283,19 @@
 
                     return;
 
+                }else{
+
+             
+                    
+
                 }
             }
+            //id_vehiculo =  vehiculo.id;
 
-            //listado.concat(localStorage.getItem("listaVehiculosContrato"));
         }
 
-        listado.push({"idvehiculo":vehiculo.id});
-        localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
+            listado.push({"idvehiculo":vehiculo.id});
+            localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
 
 
         /**
@@ -383,8 +338,7 @@
         }
         else
         {
-            $(".btnGuardarContrato").hide();
-            cont=0;
+            $(".btnGuardarContrato").show();
         }
     }
 
@@ -406,7 +360,7 @@
                 var idVehiculoArray = $(idVehiculo[i]).attr("idvehiculo");
                 //console.log(idVehiculoArray);
 
-                listado.push({"idVehiculo":idVehiculoArray});
+                listado.push({"idvehiculo":idVehiculoArray});
             }
 
             localStorage.setItem("listaVehiculosContrato",JSON.stringify(listado));
@@ -415,16 +369,30 @@
         }
     }
 </script>
-
-
-
-
 <script>
     $( document ).ready(function() {
         detalles=0;
-        cont=0;
-        localStorage.removeItem("listaVehiculosContrato");
+        cont={{count($contrato->vehiculos)}};
+        //localStorage.removeItem("listaVehiculosContrato");
+
+        idVehiculo = <?php echo $contrato->vehiculos ?>;
+        //var idVehiculo = JSON.stringify(vehiculos);
+
+        //console.log(vehiculos);
         
+        
+        
+        listado = [];
+        for(var i = 0; i < {{count($contrato->vehiculos)}}; i++){
+
+            //console.log(idVehiculo[i]["id"])
+
+            var idVehiculoArray = idVehiculo[i]["id"];
+           
+            listado.push({"idvehiculo":idVehiculoArray});
+        }
+        localStorage.setItem("listaVehiculosContrato",JSON.stringify(listado));
+
         $('#example').DataTable({
             "deferRender": true,
 	        "retrieve": true,
@@ -459,6 +427,7 @@
         });
     });
 </script>
+
 <script>
     $('.clientes_id').select2({
        placeholder: 'Buscar Cliente',

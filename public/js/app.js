@@ -11502,7 +11502,7 @@ var plugin = __webpack_require__(/*! tailwindcss/plugin */ "./node_modules/tailw
 var colors = __webpack_require__(/*! tailwindcss/colors */ "./node_modules/tailwindcss/colors.js");
 
 module.exports = {
-  content: ['./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php', './vendor/laravel/jetstream/**/*.blade.php', './storage/framework/views/*.php', './resources/views/**/*.blade.php', './resources/views/**/**/*.blade.php'],
+  content: ['./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php', './vendor/laravel/jetstream/**/*.blade.php', './storage/framework/views/*.php', './resources/views/**/*.blade.php', './resources/views/**/**/*.blade.php', './resources/views/**/**/**/*.blade.php'],
   theme: {
     extend: {
       boxShadow: {

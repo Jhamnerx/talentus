@@ -7,6 +7,9 @@ use App\Http\Requests\ContratosRequest;
 use App\Models\Contratos;
 use App\Models\Vehiculos;
 use Illuminate\Http\Request;
+use Vinkla\Hashids\Facades\Hashids;
+
+use function GuzzleHttp\Promise\all;
 
 class ContratosController extends Controller
 {
@@ -39,8 +42,18 @@ class ContratosController extends Controller
      */
     public function store(ContratosRequest $request)
     {
-        //dd($request->all());
-        $contrato = Contratos::create($request->all());
+        // dd($request->all());
+        $contrato = Contratos::create([
+            'empresa_id' => $request->empresa_id,
+            'clientes_id' => $request->clientes_id,
+            'fecha' => $request->fecha,
+            'ciudades_id' => $request->ciudades_id,
+            'fondo' => $request->fondo ? $request->fondo : '0',
+            'sello' => $request->sello ? $request->sello : '0',
+        ]);
+
+        $contrato->unique_hash = Hashids::connection(Contratos::class)->encode($contrato->id);
+        $contrato->save();
 
         Contratos::createItems($contrato, $request->items);
 
@@ -78,8 +91,12 @@ class ContratosController extends Controller
      */
     public function update(Request $request, Contratos $contrato)
     {
-        dd($request->all());
+
         $contrato->update($request->all());
+        $contrato->vehiculos()->detach();
+        $resul = $contrato->vehiculos()->attach($request->items);
+        //dd($request->items);
+        return redirect()->route('admin.ventas.contratos.index')->with('update', 'El Contrato se actualizo con exito');
     }
 
     /**

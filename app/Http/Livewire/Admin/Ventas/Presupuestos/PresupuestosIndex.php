@@ -23,7 +23,7 @@ class PresupuestosIndex extends Component
         })->orWhere('estado', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('numero', 'desc')
             ->paginate(10);
 
         $total = Presupuestos::all()->count();
@@ -45,7 +45,7 @@ class PresupuestosIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('numero', 'desc')
                 ->paginate(10);
         }
 

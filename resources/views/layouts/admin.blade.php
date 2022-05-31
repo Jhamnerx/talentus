@@ -16,7 +16,7 @@
     {{--
     <link rel="stylesheet" href="{{ asset('plugins/jquery-ui/jquery-ui.min.css') }}"> --}}
     <!-- Scripts -->
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
     {{--
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     <script src="{{asset('plugins/tw-elements/index.min.js')}}"></script> --}}

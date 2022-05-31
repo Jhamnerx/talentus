@@ -2,7 +2,7 @@
 @section('contenido')
 
 <!-- Table -->
-@livewire('admin.recibos-index')
+@livewire('admin.ventas.recibos.recibos-index')
 
 @stop
 

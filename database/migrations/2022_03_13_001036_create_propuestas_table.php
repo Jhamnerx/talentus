@@ -20,6 +20,9 @@ class CreatePropuestasTable extends Migration
             $table->date('fecha');
             $table->date('fecha_caducidad');
             $table->string('divisa')->default('PEN');
+            $table->decimal('subtotal', 10, 2)->nullable();
+            $table->decimal('impuesto', 10, 2)->nullable();
+            $table->decimal('total', 10, 2)->nullable();
             $table->enum('estado', [0, 1, 2])->default(0);
             $table->string('nota')->nullable();
             $table->unsignedBigInteger('empresa_id');

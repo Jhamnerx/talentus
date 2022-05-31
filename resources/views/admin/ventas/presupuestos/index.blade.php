@@ -8,11 +8,61 @@
 @stop
 
 @section('js')
+@if (session('store'))
+
+
 <script>
-    console.log('Hi!'); 
+    $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Guardado',
+        text: '{{session("store")}}',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+
 
 </script>
 
+@endif
+
+@if (session('update'))
+
+
+<script>
+    $( document ).ready(function() {
+        Swal.fire({
+        icon: 'success',
+        title: 'Actualizado',
+        text: '{{session("update")}}',
+        showConfirmButton: true,
+        confirmButtonText: "Cerrar"
+
+        })
+    });
+
+
+</script>
+
+@endif
+
+
+<script>
+    window.addEventListener('presupuesto-delete', event => {
+        $( document ).ready(function() {
+            Swal.fire({
+            icon: 'error',
+            title: 'Eliminado',
+            text: 'Presupuesto Eliminado',
+            showConfirmButton: true,
+            confirmButtonText: "Cerrar"
+
+            })
+        });
+    })
+</script>
 <script>
     // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
@@ -46,48 +96,4 @@
         })
 </script>
 
-
-<script>
-    function config(){
-
-        var array ={
-		
-            emptyOptionsMessage: 'No countries match your search.', 
-            name: 'country', 
-            placeholder: 'Select a country',
-            data: 
-                { 
-                    au: 'Australia', 
-                    be: 'Belgium', 
-                    cn: 'China', 
-                    fr: 'France', 
-                    de: 'Germany', 
-                    it: 'Italy', 
-                    mx: 'Mexico', 
-                    es: 'Spain',
-                    tr: 'Turkey', 
-                    gb: 'United Kingdom', 
-                    us: 'United States' 
-                }, 
-
-            
-        };
-
-
-        
-        $.ajax({
-            url: "{{route('busqueda.clientes')}}",
-
-            success: function(data){
-
-                //done(data);
-
-               // return data;
-                console.log(data);
-            }
-        })
-    }
-
-    config();
-</script>
 @stop

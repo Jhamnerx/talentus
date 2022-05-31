@@ -4,7 +4,8 @@
 
 <!-- Table -->
 
-@livewire('admin.vehiculos.reportes.reportes-index')
+
+@livewire('admin.vehiculos.reportes.index')
 
 @stop
 

@@ -257,6 +257,7 @@
        placeholder: '    Buscar un Vehiculo',
         language: "es",
         minimumInputLength: 2,
+        selectionCssClass: 'pl-9',
         width: '100%',
         ajax: {
             url: '{{route("search.vehiculos")}}',
@@ -300,6 +301,7 @@
     $('.ciudades').select2({
        placeholder: '    Selecciona una ciudad',
         language: "es",
+        selectionCssClass: 'pl-9',
         width: '100%',
         ajax: {
             url: '{{route("search.ciudades")}}',

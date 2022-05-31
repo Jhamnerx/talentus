@@ -6,6 +6,7 @@ use App\Exports\ClientesExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ClientesRequest;
 use App\Models\Clientes;
+use App\Models\Flotas;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -39,8 +40,16 @@ class ClientesController extends Controller
      */
     public function store(ClientesRequest $request)
     {
-        //dd($request);
-        Clientes::create($request->all());
+        //dd($request->all());
+        $cliente = Clientes::create($request->all());
+
+        if ($request->flota) {
+            Flotas::create([
+                'nombre' => $cliente->razon_social,
+                'clientes_id' => $cliente->id,
+                'empresa_id' => session('empresa'),
+            ]);
+        }
         return redirect()->route('admin.clientes.index')->with('store', 'El cliente se guardo con exito');
     }
 

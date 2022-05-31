@@ -148,6 +148,34 @@
                             'form-input w-full']) !!}
 
                         </div>
+                        <div class="col-span-12 sm:col-span-12 mt-4">
+                            <span class="text-bold text-center mb-2">Opciones:</span>
+                            <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
+
+
+                                <div class="m-2 w-full mt-2">
+                                    <label for="flota">Crear Flota:</label>
+                                    <!-- Start -->
+                                    <div class="flex items-center" x-data="{ checked: false }">
+                                        <div class="form-switch">
+                                            <input value="1" name="flota" type="checkbox" id="flota"
+                                                class="sr-only flota" x-model="checked" />
+                                            <label class="bg-slate-400" for="flota">
+                                                <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                <span class="sr-only">flota switch</span>
+                                            </label>
+                                        </div>
+                                        <div class="text-sm text-slate-400 italic ml-2"
+                                            x-text="checked ? 'Se Creara la Flota' : 'Solo crear cliente'"></div>
+                                    </div>
+                                    <!-- End -->
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
 
 
 

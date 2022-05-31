@@ -341,6 +341,7 @@
        placeholder: '    Buscar un Vehiculo',
         language: "es",
         minimumInputLength: 2,
+        selectionCssClass: 'pl-9',
         width: '100%',
         ajax: {
             url: '{{route("search.vehiculos")}}',

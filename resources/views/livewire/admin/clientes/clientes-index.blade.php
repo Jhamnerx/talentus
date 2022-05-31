@@ -269,7 +269,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left font-medium text-sky-500">{{$cliente->web_site}}</div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                                 <div class="text-left font-medium text-emerald-500">{{$cliente->direccion}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

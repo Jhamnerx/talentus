@@ -28,9 +28,7 @@ class CertificadosVelocimetrosFactory extends Factory
             'year' => '22',
             'ciudades_id' => Ciudades::all()->random()->id,
             'empresa_id' => Empresa::all()->random()->id,
-            'unique_hash' => Hashids::connection(CertificadosVelocimetros::class)->encode($this->faker->ean13()),
-
-
+            'unique_hash' => Hashids::connection(CertificadosVelocimetros::class)->encode(Ciudades::all()->random()->id),
 
         ];
     }

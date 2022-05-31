@@ -238,12 +238,12 @@
             </div>
 
             <div class="descripcion">
-                <span>El mismo que se encuentra instalado en el vehículo con placa::</span>
+                <span>El mismo que se encuentra instalado en el vehículo con:</span>
 
                 <table>
                     <tr>
                         <td>Placa: </td>
-                        <td> {{$certificado->vehiculos->placa}}</td>
+                        <td> <b>{{$certificado->vehiculos->placa}}</b></td>
                     </tr>
 
                 </table>

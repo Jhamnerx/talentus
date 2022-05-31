@@ -303,6 +303,7 @@
     $('.vehiculos_id').select2({
        placeholder: '    Buscar un Vehiculo',
         language: "es",
+        
         minimumInputLength: 2,
         width: '100%',
         ajax: {

@@ -6,6 +6,7 @@ use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Contratos extends Model
 {
@@ -51,6 +52,12 @@ class Contratos extends Model
     }
 
 
+    //relacion uno a muchos
+
+    public function vehiculos()
+    {
+        return $this->belongsToMany(Vehiculos::class, 'detalle_contratos');
+    }
 
     public static function createItems($contrato, $contratoItems)
     {
@@ -60,5 +67,29 @@ class Contratos extends Model
 
             $item = $contrato->detalle()->create($contratoItem);
         }
+    }
+
+
+    public function getPDFData()
+    {
+
+        $plantilla = plantilla::find(session('empresa'));
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'contrato' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+
+        ]);
+
+        $pdf = PDF::loadView('pdf.contrato');
+
+        return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
+
+
+        //return $pdf;
+        //return view('pdf.acta');
     }
 }

@@ -72,12 +72,12 @@
 
 
                 <!-- Modal content -->
-                <div class="px-1 md:px-6 py-5 bg-white sm:p-6">
-                    <div class="px-2 md:px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+                <div class="px-1 md:px-4 py-2 bg-white sm:p-2">
+                    <div class="px-2 md:px-4 sm:px-6 lg:px-4 py-2 w-full max-w-9xl mx-auto">
 
                         <!-- Table -->
                         <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
-                            <header class="px-5 py-4">
+                            <header class="px-5 py-3">
                                 <h2 class="font-semibold text-slate-800">vehiculos <span
                                         class="text-slate-400 font-medium"></span>
                                 </h2>
@@ -86,12 +86,14 @@
 
                                 <!-- Table -->
                                 <div class="overflow-x-auto" wire:ignore>
-                                    <table class="table-auto w-full" id="example">
+                                    <table class="table-auto w-full pb-8" id="example">
                                         <!-- Table header -->
                                         <thead
                                             class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                                             <tr>
-
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">#</div>
+                                                </th>
                                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                     <div class="font-semibold text-left">Placa</div>
                                                 </th>
@@ -100,11 +102,11 @@
                                                     <div class="font-semibold text-left">Flota</div>
                                                 </th>
                                                 <th
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-semibold text-left">SIM#</div>
                                                 </th>
                                                 <th
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-semibold text-left">Dispositivo#</div>
                                                 </th>
                                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -119,7 +121,14 @@
                                             @foreach ($vehiculos as $vehiculo)
 
                                             <tr>
+                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-medium text-blue-500">
+                                                        {{$vehiculo->id}}
+                                                    </div>
 
+
+
+                                                </td>
                                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                     <div class="font-medium text-blue-500">
                                                         {{$vehiculo->placa}}
@@ -136,12 +145,12 @@
                                                     </div>
                                                 </td>
                                                 <td
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-medium text-slate-800">
                                                         {{$vehiculo->sim_card->linea->numero}}</div>
                                                 </td>
                                                 <td
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-medium text-slate-800">
                                                         {{$vehiculo->dispositivos->modelo->modelo." |
                                                         ".$vehiculo->dispositivos->imei}}

@@ -25,6 +25,7 @@ class CreateContratosTable extends Migration
             $table->unsignedBigInteger('ciudades_id');
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
+            $table->string('unique_hash')->nullable();
 
             $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('cascade');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');

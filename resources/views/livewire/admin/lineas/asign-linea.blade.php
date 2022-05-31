@@ -11,7 +11,7 @@
                 !!}
                 {{-- <input name="sim" id="autocomplete-ajax-sim" type="text" class="form-input w-full sm:w-1/2"
                     placeholder="Escribe el sim card"> --}}
-                {!! Form::text('sim', $value, ['placeholder' => 'Escribe el sim card','id' =>
+                {!! Form::number('sim', $value, ['placeholder' => 'Escribe el sim card','id' =>
                 'autocomplete-ajax-sim',
                 'class' => 'form-input w-full sm:w-1/2', 'maxlength' => '19']) !!}
 
@@ -34,7 +34,7 @@
                 mb-1'])
                 !!}
 
-                <input name="linea" id="autocomplete-ajax-linea" type="text" class="form-input w-full sm:w-1/2"
+                <input name="linea" id="autocomplete-ajax-linea" type="number" class="form-input w-full sm:w-1/2"
                     placeholder="Ingresar Linea" maxlength="9">
 
 
