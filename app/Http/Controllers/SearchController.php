@@ -208,7 +208,7 @@ class SearchController extends Controller
 
         $term = $request->get('term');
 
-        $ciudades = Ciudades::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id')->get();
+        $ciudades = Ciudades::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
         $data = [];
         foreach ($ciudades as $ciudad) {
 
@@ -226,7 +226,7 @@ class SearchController extends Controller
 
         $term = $request->get('term');
 
-        $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id')->get();
+        $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
         $data = [];
         foreach ($productos as $producto) {
 
@@ -234,6 +234,7 @@ class SearchController extends Controller
                 'data' => $producto->id,
                 'value' => $producto->nombre,
                 'precio' => $producto->precio,
+                'divisa' => $producto->divisa,
             ];
         }
 

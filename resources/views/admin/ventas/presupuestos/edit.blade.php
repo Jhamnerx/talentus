@@ -67,7 +67,13 @@
                     pl-3', 'required']) !!}
 
 
+                    @error('clientes_id')
 
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$message}}
+                    </p>
+
+                    @enderror
                 </div>
                 {{-- NUMERO --}}
                 <div class="col-span-12 mb-5">
@@ -84,7 +90,15 @@
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                             <span class="text-sm text-slate-400 font-medium px-3">PRE-</span>
                         </div>
+
                     </div>
+                    @error('numero')
+
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$message}}
+                    </p>
+
+                    @enderror
                 </div>
                 {{-- FECHA PRESUPUESTO--}}
                 <div class="col-span-6 gap-2">
@@ -110,7 +124,13 @@
                         focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm
                         border-gray-200 rounded-md
                         text-black input w-full']) !!}
+                        @error('fecha')
 
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{$message}}
+                        </p>
+
+                        @enderror
                     </div>
                 </div>
                 <!-- ... -->
@@ -141,6 +161,13 @@
                         focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm
                         border-gray-200 rounded-md
                         text-black input w-full']) !!}
+                        @error('fecha_caducidad')
+
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{$message}}
+                        </p>
+
+                        @enderror
                     </div>
                 </div>
 
@@ -164,7 +191,13 @@
                     w-full divisa', '@change' => 'cambiarDivisa($event.target.value)', 'id' => 'moneda']) !!}
 
 
+                    @error('divisa')
 
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$message}}
+                    </p>
+
+                    @enderror
 
                 </div>
 
@@ -180,6 +213,13 @@
 
                     {!! Form::textarea('nota', null, ['placeholder' => 'Ingresar nota (opcional)', 'class' =>
                     'form-input w-full px-4 py-3', 'cols' => '30', 'rows' => '5']) !!}
+                    @error('nota')
+
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$message}}
+                    </p>
+
+                    @enderror
                 </div>
                 <!-- ... -->
 

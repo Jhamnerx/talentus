@@ -23,19 +23,24 @@ class PresupuestosRequest extends FormRequest
      */
     public function rules()
     {
-        $contrato = $this->route()->parameter('contrato');
 
+        $presupuesto = $this->route()->parameter('presupuesto');
         $rules = [
             'clientes_id' => 'required',
             'numero' => 'required|unique:presupuestos,numero',
             'fecha' => 'required',
             'fecha_caducidad' => 'required',
             'divisa' => 'required',
-            'items[]' => 'required',
+            'items.*.producto' => 'required',
+            'items.*.cantidad' => 'required',
+            'items.*.precio' => 'required',
+            'items.*.importe' => 'required',
         ];
-        if ($contrato) {
+        if ($presupuesto) {
 
-            $rules['numero'] = 'required|unique:presupuestos,numero,' . $contrato->id;
+
+            $rules['numero'] = 'required|unique:vehiculos,numero,' . $presupuesto->id;
+
         }
 
         return $rules;
@@ -52,7 +57,9 @@ class PresupuestosRequest extends FormRequest
             'fecha.required' => 'Selecciona una fecha',
             'fecha_caducidad.required' => 'Selecciona una fecha de Caducidad',
             'divisa.required' => 'Debe seleccionar una divisa',
-            'items[].required' => 'Debes Ingresar al menos un item',
+            'items.*.producto.required' => 'Ingresa el producto',
+            'items.*.cantidad.required' => 'Ingresa la cantidad',
+            'items.*.precio.required' => 'Ingresa un precio',
         ];
 
         return $messages;

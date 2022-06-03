@@ -84,6 +84,12 @@
             text-align: left;
         }
 
+        .table {
+            padding: 0rem 7.2rem;
+            text-align: left;
+            padding-top: 1rem;
+        }
+
         .footer {
             font-size: 16px;
             color: #000;
@@ -240,10 +246,10 @@
             <div class="descripcion">
                 <span>El mismo que se encuentra instalado en el vehículo con:</span>
 
-                <table>
+                <table class="table">
                     <tr>
-                        <td>Placa: </td>
-                        <td> <b>{{$certificado->vehiculos->placa}}</b></td>
+                        <td height="20">Placa: </td>
+                        <td height="20"> <b>{{$certificado->vehiculos->placa}}</b></td>
                     </tr>
 
                 </table>

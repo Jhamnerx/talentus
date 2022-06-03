@@ -78,4 +78,19 @@ class PresupuestosIndex extends Component
                 break;
         }
     }
+
+    public function markAccept(Presupuestos $presupuesto){
+
+        $presupuesto->update([
+            'estado' => '1',
+        ]);
+        $this->render();
+    }
+    public function markReject(Presupuestos $presupuesto){
+
+        $presupuesto->update([
+            'estado' => '2',
+        ]);
+        $this->render();
+    }
 }

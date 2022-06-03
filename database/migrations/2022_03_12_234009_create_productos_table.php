@@ -20,6 +20,7 @@ class CreateProductosTable extends Migration
             $table->string('descripcion')->nullable();
             $table->string('stock')->nullable();
             $table->decimal('precio', 10, 2);
+            $table->string('divisa')->nullable();
             $table->enum('tipo', ['producto', 'servicio'])->default('producto');
             $table->unsignedBigInteger('categoria_id');
             $table->unsignedBigInteger('empresa_id');

@@ -7,12 +7,18 @@ use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Presupuestos extends Model
 {
     use HasFactory;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'presupuestos';
+
+    protected $casts = [
+        'fecha' => 'date:Y/m/d',
+        'fecha_caducidad' => 'date:Y/m/d',
+    ];
     /**
      * Scope para traer activos y no
      *
@@ -48,5 +54,24 @@ class Presupuestos extends Model
 
             $item = $presupuesto->detalles()->create($presupuestoItem);
         }
+    }
+
+        public function getPDFData()
+    {
+
+        $plantilla = plantilla::find(session('empresa'));
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'presupuesto' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.presupuesto.pdf');
+
+       return $pdf->stream('PRE-' . $this->numero.'.pdf');
+
+
+       // return view('pdf.presupuesto.pdf');
     }
 }
