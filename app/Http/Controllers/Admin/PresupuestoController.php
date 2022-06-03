@@ -8,6 +8,7 @@ use App\Models\plantilla;
 use App\Models\Presupuestos;
 use Illuminate\Http\Request;
 use Vinkla\Hashids\Facades\Hashids;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class PresupuestoController extends Controller
 {
@@ -29,22 +30,25 @@ class PresupuestoController extends Controller
     public function create()
     {
         $tipoCambio = UtilesController::tipoCambio();
-         $serial = $this->setNextSequenceNumber();
-        dd($serial);
-        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'last'));
+        $serial = $this->setNextSequenceNumber();
+       
+        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'serial'));
     }
 
     public function setNextSequenceNumber()
     {
         
+        // $last = Presupuestos::orderBy('numero', 'desc')
+        //     ->take(1)
+        //     ->first();
 
-        $last = Presupuestos::orderBy('numero', 'desc')
-            ->take(1)
-            ->first();
+     //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-']);
+       $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 8, 'prefix' => 'PRE-']);
+        //output: P00001
+        //output: INV-000001
+       // $nextSequenceNumber = ($last) ? $last + 1 : 1;
 
-        $nextSequenceNumber = ($last) ? $last->numero + 1 : 1;
-
-        return $nextSequenceNumber;
+        return $id;
     }
 
     /**

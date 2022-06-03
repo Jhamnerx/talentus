@@ -70,8 +70,8 @@
                     @enderror
                 </div>
                 {{-- NUMERO --}}
-                {{$last}}
-                @livewire('admin.ventas.presupuestos.save',['last' => $last])
+
+                @livewire('admin.ventas.presupuestos.save',['serial' => $serial])
 
                 {{-- <div class="col-span-12 mb-5">
                     <label

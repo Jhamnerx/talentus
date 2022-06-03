@@ -5,7 +5,8 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Presupuestos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">COTIZACIONES ✨</h1>
+
         </div>
 
         <!-- Right: Actions -->
@@ -46,27 +47,39 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Left side -->
-        <div class="mb-4 sm:mb-0">
+        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{clickeado: 0}">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">67</span></button>
+                    <button wire:click="status()"
+                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 0"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        Todas
+                        <span class="ml-1 text-indigo-200">{{$totales["total"]}}</span></button>
                 </li>
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Pendientes
-                        <span class="ml-1 text-slate-400">14</span></button>
+                    <button wire:click="status(1)"
+                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 1"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        Pendientes
+                        <span class="ml-1 text-slate-400">{{$totales["pendientes"]}}</span></button>
                 </li>
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Aceptadas
-                        <span class="ml-1 text-slate-400">34</span></button>
+                    <button wire:click="status(2)"
+                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 2"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        Aceptadas
+                        <span class="ml-1 text-slate-400">{{$totales["aceptadas"]}}</span></button>
                 </li>
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Vencidas
-                        <span class="ml-1 text-slate-400">19</span></button>
+                    <button wire:click="status(3)"
+                        :class="clickeado === 3 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 3"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        Rechazadas
+                        <span class="ml-1 text-slate-400">{{$totales["rechazadas"]}}</span></button>
                 </li>
             </ul>
         </div>
@@ -184,10 +197,12 @@
 
     </div>
 
+
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Presupuestos <span class="text-slate-400 font-medium">67</span>
+            <h2 class="font-semibold text-slate-800">Presupuestos <span
+                    class="text-slate-400 font-medium">{{$totales["total"]}}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -247,8 +262,8 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
+                                        <input class="table-item form-checkbox" idPresupuesto="{{$presupuesto->id}}"
+                                            type="checkbox" @click="uncheckParent" />
                                     </label>
                                 </div>
                             </td>
@@ -297,7 +312,6 @@
                                     class="inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-0.5">
                                     Rechazada</div>
                                 @break
-                                @default
 
                                 @endswitch
 
@@ -314,7 +328,6 @@
                                 <div>{{$presupuesto->fecha_caducidad->format('Y-m-d')}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-
                                 <div class="relative inline-flex" x-data="{ open: false }">
                                     <div class="relative inline-block h-full text-left">
                                         <button class="text-slate-400 hover:text-slate-500 rounded-full"
@@ -356,7 +369,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a href="#"
+                                                    <a href="javascript: void(0)"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-28" role="menuitem"
                                                         tabindex="-1">
@@ -388,8 +401,10 @@
                                                         </svg> Ver
                                                     </a>
                                                 </li>
-                                                <li>
-                                                    <a href="#"
+                                                @if (!$presupuesto->factura)
+                                                <li @click="open = false">
+                                                    <a href="javascript: void(0)"
+                                                        wire:click.prevent="convertInvoice({{$presupuesto->id}})"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-30" role="menuitem"
                                                         tabindex="-1">
@@ -403,8 +418,27 @@
                                                         </svg> Convertir a Factura
                                                     </a>
                                                 </li>
+                                                @else
                                                 <li>
-                                                    <a href="#"
+                                                    <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        disabled="false" id="headlessui-menu-item-30" role="menuitem"
+                                                        tabindex="-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            class="h-5  w-5 mr-3 text-gray-400">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                                            </path>
+                                                        </svg> Convertir a Factura
+                                                    </a>
+                                                </li>
+
+                                                @endif
+                                                @if (!$presupuesto->recibo)
+                                                <li @click="open = false">
+                                                    <a href="javascript: void(0)"
+                                                        wire:click.prevent="convertRecibo({{$presupuesto->id}})"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-30" role="menuitem"
                                                         tabindex="-1">
@@ -418,8 +452,26 @@
                                                         </svg> Convertir a Recibo
                                                     </a>
                                                 </li>
+                                                @else
                                                 <li>
-                                                    <a href="#"
+                                                    <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        disabled="false" id="headlessui-menu-item-30" role="menuitem"
+                                                        tabindex="-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            class="h-5  w-5  mr-3 text-gray-400 ">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                                            </path>
+                                                        </svg> Convertir a Recibo
+                                                    </a>
+                                                </li>
+
+                                                @endif
+
+                                                <li>
+                                                    <a href="javascript: void(0)"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-32" role="menuitem"
                                                         tabindex="-1">
@@ -432,9 +484,9 @@
                                                         </svg> Enviar
                                                     </a>
                                                 </li>
-                                                @if ($presupuesto->estado == 0)
                                                 <li>
-                                                    <a href="#" wire:click.prevent="markAccept({{$presupuesto}})"
+                                                    <a href="javascript: void(0)"
+                                                        wire:click.prevent="markAccept({{$presupuesto->id}})"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-33" role="menuitem"
                                                         tabindex="-1">
@@ -451,7 +503,8 @@
                                                 </li>
 
                                                 <li>
-                                                    <a href="#" wire:click.prevent="markReject({{$presupuesto}})"
+                                                    <a href="javascript: void(0)"
+                                                        wire:click.prevent="markReject({{$presupuesto->id}})"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                         disabled="false" id="headlessui-menu-item-34" role="menuitem"
                                                         tabindex="-1">
@@ -465,41 +518,8 @@
                                                         </svg> Marcar como Rechazada
                                                     </a>
                                                 </li>
-                                                @elseif($presupuesto->estado == 1)
 
-                                                <li>
-                                                    <a href="#" wire:click.prevent="markReject({{$presupuesto}})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-34" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg> Marcar como Rechazada
-                                                    </a>
-                                                </li>
-                                                @elseif($presupuesto->estado == 2)
-                                                <li>
-                                                    <a href="#" wire:click.prevent="markAccept({{$presupuesto}})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-33" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        Marcar como Aceptada
-                                                    </a>
-                                                </li>
-                                                @endif
+
 
                                             </ul>
 

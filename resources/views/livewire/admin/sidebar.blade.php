@@ -328,7 +328,7 @@
                                         :class="page === 'ventas-presupuestos' && '!text-indigo-500'"
                                         href="{{route('admin.ventas.presupuestos.index')}}">
                                         <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Presupuestos
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cotizaciones
                                         </span>
                                     </a>
                                 </li>

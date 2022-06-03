@@ -21,6 +21,7 @@ class VentasFacturas extends Model
 
     use HasFactory;
     protected $table = 'ventas';
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     //relacion uno a muchos
 
@@ -30,4 +31,10 @@ class VentasFacturas extends Model
     {
         return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
     }
+
+    public function presupuesto()
+    {
+        return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
+    }
+
 }

@@ -213,7 +213,7 @@
                 </div>
                 <div class="qr">
                     <img src="data:image/jpeg;base64, {{ base64_encode(QrCode::format('png')->size(120)
-->gradient(22,125,127,73,125,173,'vertical')
+->gradient(10,88,147,5, 44, 82,'vertical')
 ->style('square')->eye('circle')->encoding('UTF-8')
 ->generate(" VEHICULO: " .$certificado->vehiculos->placa." \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD
                         \nEXPEDIDO A: ".$certificado->vehiculos->flotas->clientes->razon_social)) }}">

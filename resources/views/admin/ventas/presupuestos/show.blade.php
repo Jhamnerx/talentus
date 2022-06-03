@@ -46,11 +46,13 @@
                 </div>
                 <div
                     class=" hidden sm:flex xl:pl-4 lg:pl-3 justify-end flex-row sm:space-x-4 md:space-x-6 lg:space-x-3 xl:space-x-4">
-                    <button
-                        class="rounded-md flex space-x-2 w-24 h-10 font-normal text-sm leading-3 text-gray-800 bg-white focus:outline-none focus:bg-gray-200 hover:bg-gray-200 duration-150 justify-center items-center">
-                        <p>Ver</p>
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-2-svg4.svg" alt="preview" />
-                    </button>
+                    <a target="_blank" href="{{route('admin.pdf.presupuesto', $presupuesto)}}">
+                        <button
+                            class="rounded-md flex space-x-2 w-24 h-10 font-normal text-sm leading-3 text-gray-800 bg-white focus:outline-none focus:bg-gray-200 hover:bg-gray-200 duration-150 justify-center items-center">
+                            <p>Ver</p>
+                            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-2-svg4.svg" alt="preview" />
+                        </button>
+                    </a>
 
                     <!-- Save button -->
                     <button
@@ -105,11 +107,13 @@
                         <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-2-svg3.svg" alt="share" />
                     </button>
                     <hr class=" w-full bg-gray-300">
-                    <button
-                        class="rounded-md flex space-x-2 w-full h-10 font-normal text-sm leading-3 text-gray-800 bg-white focus:outline-none focus:bg-gray-200 hover:bg-gray-200 duration-150 justify-center items-center">
-                        <p>Ver</p>
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-2-svg4.svg" alt="preview" />
-                    </button>
+                    <a target="_blank" href="{{route('admin.pdf.presupuesto', $presupuesto)}}">
+                        <button
+                            class="rounded-md flex space-x-2 w-full h-10 font-normal text-sm leading-3 text-gray-800 bg-white focus:outline-none focus:bg-gray-200 hover:bg-gray-200 duration-150 justify-center items-center">
+                            <p>Ver</p>
+                            <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/header-2-svg4.svg" alt="preview" />
+                        </button>
+                    </a>
 
 
                     <!-- Save button -->
@@ -142,7 +146,7 @@
                             <div class="space-y-2">
                                 <div>
                                     <p class="font-medium text-sm text-gray-400"> Número de Presupuesto </p>
-                                    <p> PRE-{{$presupuesto->numero}} </p>
+                                    <p>{{$presupuesto->numero}} </p>
                                 </div>
                                 <div>
                                     <p class="font-medium text-sm text-gray-400"> Fecha presupuesto </p>

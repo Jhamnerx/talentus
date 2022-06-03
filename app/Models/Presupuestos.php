@@ -74,4 +74,13 @@ class Presupuestos extends Model
 
        // return view('pdf.presupuesto.pdf');
     }
+
+    public function factura()
+    {
+        return $this->hasOne(VentasFacturas::class, 'presupuestos_id');
+    }
+    public function recibo()
+    {
+        return $this->hasOne(Recibos::class, 'presupuestos_id');
+    }
 }

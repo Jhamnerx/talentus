@@ -11,6 +11,7 @@ class Recibos extends Model
 {
     use HasFactory;
     protected $table = 'recibos';
+        protected $guarded = ['id', 'created_at', 'updated_at'];
     // SCOPE DE EMPRESA
 
     protected static function booted()
@@ -23,5 +24,10 @@ class Recibos extends Model
     public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+    }
+
+    public function presupuesto()
+    {
+        return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
     }
 }

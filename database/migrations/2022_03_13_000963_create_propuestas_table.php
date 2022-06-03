@@ -16,8 +16,7 @@ class CreatePropuestasTable extends Migration
         Schema::create('presupuestos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('clientes_id');
-            $table->mediumInteger('sequence_number');
-            $table->text('estimate_number');
+            $table->string('numero');
             $table->date('fecha');
             $table->date('fecha_caducidad');
             $table->string('divisa')->default('PEN');
@@ -29,8 +28,7 @@ class CreatePropuestasTable extends Migration
             $table->decimal('subtotalSoles', 10, 2)->nullable();
             $table->decimal('impuestoSoles', 10, 2)->nullable();
             $table->decimal('totalSoles', 10, 2)->nullable();
-
-             $table->decimal('tipoCambio', 10, 3)->nullable();
+            $table->decimal('tipoCambio', 10, 3)->nullable();
 
 
             $table->enum('estado', [0, 1, 2])->default(0);

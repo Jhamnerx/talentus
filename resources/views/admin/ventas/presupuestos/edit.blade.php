@@ -85,11 +85,7 @@
 
                         {!! Form::text('numero', null, ['placeholder' => '0012','class' => 'form-input w-2/4
                         valid:border-emerald-300
-                        required:border-rose-300 invalid:border-rose-300 peer pl-12', 'id' => 'numero']) !!}
-
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <span class="text-sm text-slate-400 font-medium px-3">PRE-</span>
-                        </div>
+                        required:border-rose-300 invalid:border-rose-300 peer', 'id' => 'numero']) !!}
 
                     </div>
                     @error('numero')

@@ -1,5 +1,7 @@
 @extends('layouts.admin')
+@section('ruta', 'ventas-facturas')
 @section('contenido')
+
 
 <!-- Table -->
 @livewire('admin.ventas-index')

@@ -2,8 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
+
 use App\Models\Presupuestos;
+use App\Models\VentasFacturas;
+use Carbon\Carbon;
 use Livewire\Component;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
+use Illuminate\Support\Facades\Date;
 
 class PresupuestosIndex extends Component
 {
@@ -11,6 +16,7 @@ class PresupuestosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $status = null;
 
     public function render()
     {
@@ -23,16 +29,37 @@ class PresupuestosIndex extends Component
         })->orWhere('estado', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
+            ->Where('estado', $this->status)
             ->orderBy('numero', 'desc')
             ->paginate(10);
 
+        
+
+
+        $pendientes = Presupuestos::where('estado', '0')->count();
+        $aceptadas = Presupuestos::where('estado', '1')->count();
+        $rechazadas = Presupuestos::where('estado', '2')->count();
         $total = Presupuestos::all()->count();
+
+        $totales = [
+            'pendientes' => $pendientes,
+            'aceptadas' => $aceptadas,
+            'rechazadas' => $rechazadas,
+            'total' => $total,
+        ];
+
+        $estado = $this->status;
+
+        if($estado != null){
+
+            $presupuestos = Presupuestos::Where('estado', $estado)->paginate(10);
+        }
 
 
         if (!empty($desde)) {
 
 
-            $clientes = Presupuestos::whereRaw(
+            $presupuestos = Presupuestos::whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $desde . " 00:00:00",
@@ -49,7 +76,7 @@ class PresupuestosIndex extends Component
                 ->paginate(10);
         }
 
-        return view('livewire.admin.ventas.presupuestos.presupuestos-index', compact('presupuestos', 'total'));
+        return view('livewire.admin.ventas.presupuestos.presupuestos-index', compact('presupuestos', 'total', 'totales'));
     }
 
 
@@ -79,6 +106,13 @@ class PresupuestosIndex extends Component
         }
     }
 
+    public function status($status = null)
+    {
+        $this->status = $status;
+        // $this->render();
+        
+    }
+
     public function markAccept(Presupuestos $presupuesto){
 
         $presupuesto->update([
@@ -92,5 +126,71 @@ class PresupuestosIndex extends Component
             'estado' => '2',
         ]);
         $this->render();
+    }
+
+
+
+    public function convertInvoice(Presupuestos $presupuesto)
+    {
+        if(!$presupuesto->factura)
+        {
+
+            $venta = $presupuesto->factura()->create([
+                'clientes_id' => $presupuesto->clientes_id,
+                'numero' => IdGenerator::generate(['table' => 'ventas','field'=>'numero', 'length' => 9, 'prefix' => 'FACT-']),
+                'fecha' => $date = Carbon::now(),
+                'fecha_vencimiento' => $date = Carbon::now()->addDay(15),
+                'sub_total' => $presupuesto->subtotal,
+                'impuesto' => $presupuesto->impuesto,
+                'total' => $presupuesto->total,
+                'divisa' => $presupuesto->divisa,
+                'tipo_pago' => '',
+                'estado' => 'COMPLETADO',
+                'pago_estado' => 'UNPAID',
+                'empresa_id' => session('empresa'),
+                'enviado' => false,
+                'user_id' => auth()->user()->id,
+                'nota' => $presupuesto->nota,
+            ]);
+
+            $this->dispatchBrowserEvent('save-invoice', ['numero' => $venta->numero]);
+            $this->render();
+
+        }else{
+
+            $this->dispatchBrowserEvent('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
+        }
+
+
+        
+    }
+
+    public function convertRecibo(Presupuestos $presupuesto)
+    {
+        if(!$presupuesto->recibo)
+        {
+
+            $recibo = $presupuesto->recibo()->create([
+                'clientes_id' => $presupuesto->clientes_id,
+                'numero' => IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 9, 'prefix' => 'REC-']),
+                'tipo_pago' => '',
+                'fecha' => $date = Carbon::now(),
+                'divisa' => $presupuesto->divisa,
+                'total' => $presupuesto->subtotal,
+                'fecha_pago' => $date = Carbon::now(),
+                'estado' => '1',
+                'empresa_id' => session('empresa'),
+                'nota' => $presupuesto->nota,
+                'user_id' => auth()->user()->id,
+                
+            ]);
+
+            $this->dispatchBrowserEvent('save-recibo', ['numero' => $recibo->numero]);
+            $this->render();
+
+        }else{
+
+            $this->dispatchBrowserEvent('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
+        }
     }
 }

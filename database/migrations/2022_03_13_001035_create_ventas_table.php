@@ -36,7 +36,10 @@ class CreateVentasTable extends Migration
             $table->string('nota')->nullable();
             $table->string('discount_type')->nullable();
             $table->string('descuento')->nullable();
+            $table->unsignedBigInteger('presupuestos_id');
+
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
 

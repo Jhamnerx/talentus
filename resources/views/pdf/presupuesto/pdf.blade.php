@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>PRESUPUESTO #{{$presupuesto->numero}}</title>
+    <title>COTIZACION #{{$presupuesto->numero}}</title>
 
 
     {{--
@@ -89,7 +89,7 @@
 
                 <h3><img class="icon-invoice"
                         src="data:image/jpeg;base64, {{base64_encode(file_get_contents('presupuesto/images/invoice.png'))}}"></i>
-                    PRESUPUESTO A:</h3>
+                    COTIZACION A:</h3>
                 <h2>{{$presupuesto->clientes->razon_social}}</h2>
                 <p style="margin-bottom:10px;line-height:22px;">{{$presupuesto->clientes->direccion}}<br>
                 </p>
@@ -105,7 +105,7 @@
 
             <div class="large-7 medium-7 columns invoice-header">
 
-                <h2>PRESUPUESTO</h2>
+                <h2>COTIZACION: #{{$presupuesto->numero}}</h2>
 
                 <table>
                     <thead>
@@ -298,7 +298,7 @@
 
         <div class="row terms">
             <div class="large-12 columns">
-                <p><strong>Terminos:</strong> Este presupuesto es valido hasta su fecha de caducidad.</p>
+                <p><strong>Terminos:</strong> Esta cotizacion es valida hasta su fecha de caducidad.</p>
             </div>
         </div>
         @if (count($presupuesto->detalles) > 6)

@@ -25,11 +25,16 @@ class CreateRecibosTable extends Migration
             $table->date('fecha_pago');
 
             $table->enum('estado', [0, 1])->default(0);
-            $table->string('nota');
+            $table->string('nota')->nullable();
             $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('user_id')->default(1);
+            $table->unsignedBigInteger('presupuestos_id');
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
+
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
         });

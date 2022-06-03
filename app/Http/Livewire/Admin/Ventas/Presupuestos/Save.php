@@ -8,6 +8,7 @@ class Save extends Component
 {
 
     public $numero;
+    public $serial;
 
     protected $rules = [
         'numero' => 'required|unique:presupuestos,numero',
@@ -22,6 +23,10 @@ class Save extends Component
     public function render()
     {
         return view('livewire.admin.ventas.presupuestos.save');
+    }
+
+    public function mount(){
+        $this->numero = $this->serial;
     }
 
     public function updated($label)
