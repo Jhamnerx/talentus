@@ -193,7 +193,9 @@
                 </div>
 
                 <!-- Notifications button -->
-                <div class="relative inline-flex" x-data="{ open: false }">
+                @livewire('admin.header.notificaciones')
+
+                {{-- <div class="relative inline-flex" x-data="{ open: false }">
                     <button
                         class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 transition duration-150 rounded-full"
                         :class="{ 'bg-slate-200': open }" aria-haspopup="true" @click.prevent="open = !open"
@@ -246,7 +248,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Info button -->
                 <div class="relative inline-flex" x-data="{ open: false }">

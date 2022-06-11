@@ -40,7 +40,7 @@ class ClientesController extends Controller
      */
     public function store(ClientesRequest $request)
     {
-        //dd($request->all());
+      //  dd($request->all());
         $cliente = Clientes::create($request->all());
 
         if ($request->flota) {

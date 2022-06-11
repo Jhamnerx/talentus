@@ -52,9 +52,9 @@
         </div>
         <div class="mt-5 md:mt-0 md:col-span-2">
 
-            {!! Form::open(['route' => 'admin.clientes.store']) !!}
+            {!! Form::open(['route' => 'admin.clientes.store', 'autocomplete' => 'off']) !!}
             <div class="shadow overflow-hidden sm:rounded-md">
-                <div class="px-4 py-5 bg-white sm:p-6">
+                <div class="px-4 py-5 bg-white sm:p-6 mr-4">
                     <div class="grid grid-cols-12 gap-4">
                         <div class="col-span-12 sm:col-span-6">
                             {!! Form::hidden('empresa_id', session('empresa')) !!}
@@ -66,7 +66,8 @@
 
                             {!! Form::text('razon_social', null, ['placeholder' => 'Escribe la razon social','class' =>
                             'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                            peer', 'required']) !!}
+                            peer', 'required', 'autocapitalize' => 'on']) !!}
+
 
                             @error('razon_social')
 
@@ -180,16 +181,73 @@
 
 
                     </div>
-                </div>
-                <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-                    {!! Form::submit('GUARDAR', ['class' =>'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                    focus:ring-2 focus:ring-offset-2
-                    focus:ring-emerald-600 text-white']) !!}
+                    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                        {!! Form::submit('GUARDAR', ['class' =>'btn bg-emerald-500 hover:bg-emerald-600
+                        focus:outline-none
+                        focus:ring-2 focus:ring-offset-2
+                        focus:ring-emerald-600 text-white']) !!}
 
+                    </div>
                 </div>
+
             </div>
             {!! Form::close() !!}
         </div>
     </div>
 </div>
 @endsection
+
+@push('scripts')
+
+<script>
+    $('#razon_social').caseEnforcer('uppercase');
+
+    $('#numero_documento').on('blur', function(){
+
+      //  console.log($(this).val().length);
+        if(parseInt($(this).val().length) === 8){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'DNI',
+            }
+        }
+
+        if(parseInt($(this).val().length) === 11){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'RUC',
+            }
+
+
+        }
+        $.ajax({
+            
+            url:"{{route('consulta.sunat')}}",
+            method: "GET",
+            data: datos,
+            success: function(respuesta){
+            
+               
+                if(!respuesta.error){
+
+                    $('#razon_social').val(respuesta.nombre)
+                    $('#direccion').val(respuesta.direccion+''+respuesta.provincia +'-'+respuesta.departamento)
+                }
+            
+            
+            }
+            
+        });
+
+    })
+
+
+
+
+</script>
+
+@endpush

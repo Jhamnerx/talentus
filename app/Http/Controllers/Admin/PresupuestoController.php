@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PresupuestosRequest;
 use App\Models\plantilla;
 use App\Models\Presupuestos;
-use Illuminate\Http\Request;
-use Vinkla\Hashids\Facades\Hashids;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class PresupuestoController extends Controller

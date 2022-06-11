@@ -52,7 +52,8 @@
         <div class="mt-5 md:mt-0 md:col-span-2">
 
 
-            {!! Form::model($cliente, ['route' => ['admin.clientes.update', $cliente], 'method' => 'put'])
+            {!! Form::model($cliente, ['route' => ['admin.clientes.update', $cliente], 'method' => 'put', 'autocomplete'
+            => 'off'])
             !!}
             <div class="shadow overflow-hidden sm:rounded-md">
                 <div class="px-4 py-5 bg-white sm:p-6">
@@ -166,3 +167,57 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+
+<script>
+    $('#razon_social').caseEnforcer('uppercase');
+
+    $('#numero_documento').on('blur', function(){
+
+      //  console.log($(this).val().length);
+        if(parseInt($(this).val().length) === 8){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'DNI',
+            }
+        }
+
+        if(parseInt($(this).val().length) === 11){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'RUC',
+            }
+
+
+        }
+        $.ajax({
+            
+            url:"{{route('consulta.sunat')}}",
+            method: "GET",
+            data: datos,
+            success: function(respuesta){
+               
+                if(!respuesta.error){
+
+                    $('#razon_social').val(respuesta.nombre)
+                    $('#direccion').val(respuesta.direccion+''+respuesta.provincia +'-'+respuesta.departamento)
+                }
+
+            
+            
+            }
+            
+        });
+
+    })
+
+
+
+
+</script>
+
+@endpush

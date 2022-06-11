@@ -116,6 +116,9 @@ Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('se
 Route::get('search/ciudades', [SearchController::class, 'ciudades'])->name('search.ciudades');
 Route::get('search/productos', [SearchController::class, 'productos'])->name('search.productos');
 
+//consulta sunat
+Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
+
 // VERIFICAR
 
 
@@ -145,5 +148,5 @@ Route::get('pdf/presupuestos/{presupuesto}', PresupuestoPdfController::class)->n
 
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
-route::post('mensajes', [MensajeController::class, 'store'])->name('mensajes.store');
+
 

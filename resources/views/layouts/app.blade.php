@@ -45,7 +45,9 @@
     @stack('modals')
 
     @livewireScripts
+
     @yield('js')
+
     @stack('scripts')
 
 </body>

@@ -22,6 +22,9 @@ class PlantillaSeeder extends Seeder
             'img_firma' => 'plantilla/talentus/img_firma.png',
             'img_icono' => 'plantilla/talentus/icono.png',
             'img_login' => 'plantilla/talentus/img_login.png',
+            'serie_factura' => 'F001',
+            'serie_boleta' => 'B001',
+            'serie_recibo' => 'R001',
             'empresas_id' => '1',
 
         ]);
@@ -33,6 +36,9 @@ class PlantillaSeeder extends Seeder
             'img_firma' => 'plantilla/katary/img_firma.png',
             'img_icono' => 'plantilla/katary/icono.png',
             'img_login' => 'plantilla/katary/img_login.png',
+            'serie_factura' => 'F001',
+            'serie_boleta' => 'B001',
+            'serie_recibo' => 'R001',
             'empresas_id' => '2',
         ]);
     }

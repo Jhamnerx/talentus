@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Admin;
+namespace App\Http\Livewire\Admin\Ventas\Facturas;
 
-use App\Models\VentasFacturas;
+use App\Models\Facturas;
+
 use Livewire\Component;
 
-class VentasIndex extends Component
+class Index extends Component
 {
 
     public $search;
@@ -18,7 +19,7 @@ class VentasIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $facturas = VentasFacturas::whereHas('clientes', function ($query) {
+        $facturas = Facturas::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
         })->orWhere('serie', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
@@ -27,13 +28,13 @@ class VentasIndex extends Component
             ->orderBy('id')
             ->paginate(10);
 
-        $total = VentasFacturas::all()->count();
+        $total = Facturas::all()->count();
 
 
         if (!empty($desde)) {
 
 
-            $facturas = VentasFacturas::whereRaw(
+            $facturas = Facturas::whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
                 [
                     $desde . " 00:00:00",
@@ -52,7 +53,7 @@ class VentasIndex extends Component
                 ->paginate(10);
         }
 
-        return view('livewire.admin.ventas-index', compact('facturas', 'total'));
+        return view('livewire.admin.ventas.facturas.index', compact('facturas', 'total'));
     }
 
 

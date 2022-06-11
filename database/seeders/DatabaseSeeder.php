@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         Clientes::factory(500)->create();
         Proveedores::factory(100)->create();
         Dispositivos::factory(50)->create();
-        ComprasFacturas::factory(50)->create();
+       // ComprasFacturas::factory(50)->create();
         //Presupuestos::factory(40)->create();
        // VentasFacturas::factory(50)->create();
         //Recibos::factory(60)->create();

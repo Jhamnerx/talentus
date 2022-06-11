@@ -3,27 +3,23 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use Database\Factories\VentasFactory;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class VentasFacturas extends Model
+class Facturas extends Model
 {
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
-    protected static function newFactory()
-    {
-        return VentasFactory::new();
-    }
+
 
     use HasFactory;
-    protected $table = 'ventas';
+    protected $table = 'facturas';
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    //relacion uno a muchos
+    protected $casts = [
+        'numero' => 'integer',
+        'sequence_number' => 'integer',
+
+    ];
 
     //Relacion uno a muchos inversa
 

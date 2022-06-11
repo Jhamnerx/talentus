@@ -165,3 +165,58 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+
+<script>
+    $('#razon_social').caseEnforcer('uppercase');
+
+    $('#numero_documento').on('blur', function(){
+
+      //  console.log($(this).val().length);
+        if(parseInt($(this).val().length) === 8){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'DNI',
+            }
+        }
+
+        if(parseInt($(this).val().length) === 11){
+
+
+            var datos = {
+                'numero': $(this).val(),
+                'tipo' : 'RUC',
+            }
+
+
+        }
+        $.ajax({
+            
+            url:"{{route('consulta.sunat')}}",
+            method: "GET",
+            data: datos,
+            success: function(respuesta){
+            
+               
+                if(!respuesta.error){
+
+                    $('#razon_social').val(respuesta.nombre)
+                    $('#direccion').val(respuesta.direccion+''+respuesta.provincia +'-'+respuesta.departamento)
+                }
+            
+            
+            }
+            
+        });
+
+    })
+
+
+
+
+</script>
+
+@endpush

@@ -2,8 +2,10 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Actas;
 
+
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
+use App\Models\Admin\Mensaje;
 use App\Models\Ciudades;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -60,12 +62,24 @@ class Save extends Component
         $acta->empresa_id = session('empresa');
         $acta->codigo = $codigo;
         $acta->fecha = $fecha;
-        $acta->save();
+        if($acta->save()){
+
+            $data = array(
+                'body' => 'Probando mensaje',
+                'asunto' => 'prueba',
+                'accion' => 'se creo un acta',
+                'to' => 3,
+            );
+
+            $mensaje = new Mensaje();
+            $mensaje->sendMessage($data, 'to_user');
+        }
 
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('acta-save', ['vehiculo' => $acta->vehiculos->placa]);
         $this->emit('updateTable');
         $this->reset();
+        $this->resetErrorBag();
     }
 
     public function updated($label)

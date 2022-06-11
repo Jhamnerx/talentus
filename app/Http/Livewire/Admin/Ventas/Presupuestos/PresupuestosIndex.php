@@ -137,7 +137,7 @@ class PresupuestosIndex extends Component
 
             $venta = $presupuesto->factura()->create([
                 'clientes_id' => $presupuesto->clientes_id,
-                'numero' => IdGenerator::generate(['table' => 'ventas','field'=>'numero', 'length' => 9, 'prefix' => 'FACT-']),
+                'numero' => IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 9, 'prefix' => 'FACT-']),
                 'fecha' => $date = Carbon::now(),
                 'fecha_vencimiento' => $date = Carbon::now()->addDay(15),
                 'sub_total' => $presupuesto->subtotal,

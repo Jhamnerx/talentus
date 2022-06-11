@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\VentasFacturas;
+use App\Models\Facturas;
+use App\Models\plantilla;
 use Illuminate\Http\Request;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class VentasFacturasController extends Controller
 {
@@ -25,7 +27,10 @@ class VentasFacturasController extends Controller
      */
     public function create()
     {
-        return view('admin.ventas.facturas.create');
+        $numero = $this->setNextSequenceNumber();
+
+        $plantilla = plantilla::find(session('empresa'));
+        return view('admin.ventas.facturas.create', compact('numero', 'plantilla'));
     }
 
     /**
@@ -34,6 +39,21 @@ class VentasFacturasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function setNextSequenceNumber()
+    {
+        
+      // $last = Facturas::orderBy('sequence_number', 'desc')
+     //        ->take(1)
+     //        ->first();
+
+        //var_dump($last->sequence_number);
+        //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-']);
+        $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        //$nextSequenceNumber = ($last) ? $last->sequence_number + 1 : 1;
+        return trim($id);
+    }
     public function store(Request $request)
     {
         //
@@ -45,7 +65,7 @@ class VentasFacturasController extends Controller
      * @param  \App\Models\VentasFacturas  $ventasFacturas
      * @return \Illuminate\Http\Response
      */
-    public function show(VentasFacturas $ventasFacturas)
+    public function show(Facturas $ventasFacturas)
     {
         return view('admin.ventas.facturas.show');
     }
@@ -56,7 +76,7 @@ class VentasFacturasController extends Controller
      * @param  \App\Models\VentasFacturas  $ventasFacturas
      * @return \Illuminate\Http\Response
      */
-    public function edit(VentasFacturas $ventasFacturas)
+    public function edit(Facturas $ventasFacturas)
     {
         return view('admin.ventas.facturas.edit');
     }
@@ -68,7 +88,7 @@ class VentasFacturasController extends Controller
      * @param  \App\Models\VentasFacturas  $ventasFacturas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, VentasFacturas $ventasFacturas)
+    public function update(Request $request, Facturas $ventasFacturas)
     {
         //
     }
@@ -79,7 +99,7 @@ class VentasFacturasController extends Controller
      * @param  \App\Models\VentasFacturas  $ventasFacturas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(VentasFacturas $ventasFacturas)
+    public function destroy(Facturas $ventasFacturas)
     {
         //
     }

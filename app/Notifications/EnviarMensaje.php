@@ -2,23 +2,26 @@
 
 namespace App\Notifications;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class EnviarMensaje extends Notification
+class EnviarMensaje extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    public $mensaje;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($mensaje)
     {
-        //
+        $this->mensaje = $mensaje;
     }
 
     /**
@@ -29,7 +32,7 @@ class EnviarMensaje extends Notification
      */
     public function via($notifiable)
     {
-        return ['mail'];
+        return ['mail', 'database', 'broadcast'];
     }
 
     /**
@@ -40,10 +43,16 @@ class EnviarMensaje extends Notification
      */
     public function toMail($notifiable)
     {
+        // return (new MailMessage)
+        //             ->subject('Tienes un nuevo Mensaje')
+        //             ->greeting('Hola Sr.')
+        //             ->line('Se ha creado una nueva acta.')
+        //             ->action('Notification Action', route('mensajes.show', $this->mensaje->id))
+        //             ->line('Has luego');
+
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                ->subject('Tienes un nuevo Mensaje')
+                ->view('mail.notificacion', ['mensaje' => $this->mensaje]);
     }
 
     /**
@@ -52,10 +61,18 @@ class EnviarMensaje extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toDatabase($notifiable)
     {
         return [
-            //
+            'url' => route('admin.certificados.actas.index'),
+            'accion' => $this->mensaje->accion,
+            'mensaje' => 'El usuario '.User::find($this->mensaje->from_user_id)->name.' ha creado una nueva acta',
         ];
+    }
+
+    public function toBroadcast($notifiable){
+
+        return new BroadcastMessage([]);
+
     }
 }

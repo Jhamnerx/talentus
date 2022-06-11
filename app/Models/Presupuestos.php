@@ -77,7 +77,7 @@ class Presupuestos extends Model
 
     public function factura()
     {
-        return $this->hasOne(VentasFacturas::class, 'presupuestos_id');
+        return $this->hasOne(Facturas::class, 'presupuestos_id');
     }
     public function recibo()
     {

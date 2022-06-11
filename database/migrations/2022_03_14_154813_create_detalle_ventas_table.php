@@ -13,14 +13,15 @@ class CreateDetalleVentasTable extends Migration
      */
     public function up()
     {
-        Schema::create('detalle_ventas', function (Blueprint $table) {
+        Schema::create('detalle_facturas', function (Blueprint $table) {
             $table->id();
-            $table->string('articulo');
+            $table->string('producto');
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
+            $table->decimal('importe', 10, 2);
             $table->decimal('descuento', 10, 2);
-            $table->unsignedBigInteger('ventas_id');
-            $table->foreign('ventas_id')->references('id')->on('ventas')->onDelete('cascade');
+            $table->unsignedBigInteger('facturas_id');
+            $table->foreign('facturas_id')->references('id')->on('facturas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ class CreateDetalleVentasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detalle_ventas');
+        Schema::dropIfExists('detalle_facturas');
     }
 }

@@ -23,6 +23,9 @@ class CreatePlantillaTable extends Migration
             $table->string('img_icono');
             $table->string('img_login');
             $table->string('img_firma');
+            $table->string('serie_factura');
+            $table->string('serie_boleta');
+            $table->string('serie_recibo');
 
             $table->foreign('empresas_id')->references('id')->on('empresas')->onUpdate('cascade');
 

@@ -27,6 +27,7 @@
     <script src="{{asset('plugins/jquery.mockjax.js')}}"></script>
     {{-- <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script> --}}
     <script src="{{asset('plugins/jquery.autocomplete.js')}}"></script>
+    <script src="{{asset('plugins/input-case-enforcer/input-case-enforcer.min.js')}}"></script>
 
     {{-- Select2 --}}
 
@@ -75,11 +76,25 @@
         </div>
 
     </div>
+
     @stack('modals')
 
     @livewireScripts
+
     @yield('js')
     @stack('scripts')
+
+
 </body>
+<script>
+    $( document ).ready(function() {
+        Echo.private('App.Models.User.' + {{Auth::user()->id}})
+            .notification((notification) => {
+            Livewire.emit('notificaciones-update');
+        });
+
+    });
+
+</script>
 
 </html>

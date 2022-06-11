@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Ciudades;
 use Illuminate\Http\Request;
 use App\Models\Clientes;
@@ -239,5 +240,23 @@ class SearchController extends Controller
         }
 
         return array('suggestions' => $data);
+    }
+
+
+    public function sunat(Request $request){
+        
+        $term = $request->get('numero');
+        $tipo = $request->get('tipo');
+       // return $term;
+       $util = new UtilesController;
+       if ($tipo == 'DNI') {
+            $resultado = $util->consultaPersona($term);
+       } else {
+            $resultado = $util->consultaEmpresa($term);
+       }
+       
+      
+
+       return $resultado;
     }
 }

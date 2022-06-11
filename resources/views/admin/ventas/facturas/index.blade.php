@@ -4,7 +4,7 @@
 
 
 <!-- Table -->
-@livewire('admin.ventas-index')
+@livewire('admin.ventas.facturas.index')
 
 @stop
 

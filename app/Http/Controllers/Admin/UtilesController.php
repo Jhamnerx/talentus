@@ -78,7 +78,7 @@ class UtilesController extends Controller
             'query' => ['numero' => $numero]
         ];
         // Datos de persona según padron reducido
-        $res = $client->request('GET', '/v1/ruc', $parameters);
+        $res = $client->request('GET', '/v1/dni', $parameters);
         $response = json_decode($res->getBody()->getContents(), true);
 
         return $response;
