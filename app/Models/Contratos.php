@@ -73,7 +73,7 @@ class Contratos extends Model
     public function getPDFData()
     {
 
-        $plantilla = plantilla::find(session('empresa'));
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([

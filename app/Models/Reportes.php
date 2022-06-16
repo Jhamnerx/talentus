@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Admin\Recordatorios;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +28,12 @@ class Reportes extends Model
     {
         return $this->hasMany(DetalleReportes::class, 'reportes_id');
     }
+
+    public function recordatorios()
+    {
+        return $this->hasMany(Recordatorios::class, 'reportes_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

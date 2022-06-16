@@ -8,6 +8,7 @@
             class="form-input w-2/4 valid:border-emerald-300
                                                                 required:border-rose-300 invalid:border-rose-300 peer pl-14" type="text" />
         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+            <input type="hidden" name="serie" value="{{$serie}}">
             <span class="text-sm text-slate-400 font-medium px-3">{{$serie}}</span>
         </div>
     </div>

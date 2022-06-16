@@ -16,6 +16,7 @@
 @livewire('admin.vehiculos.reportes.edit')
 @livewire('admin.vehiculos.reportes.delete')
 @livewire('admin.vehiculos.reportes.show-detalle')
+@livewire('admin.vehiculos.reportes.recordatorio')
 
 
 @endpush
@@ -62,20 +63,31 @@
 <script>
     window.addEventListener('reporte-save', event => {
         $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: 'El Reporte de '+event.detail.vehiculo+' Fue Creado',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+            Swal.fire({
+            icon: 'success',
+            title: 'Guardado',
+            text: 'El Reporte de '+event.detail.vehiculo+' Fue Creado',
+            showConfirmButton: true,
+            confirmButtonText: "Cerrar"
 
-        })
-    });
+            })
+        });
     })
     
 </script>
 
-
+<script>
+    window.addEventListener('recordatorio-save', event => {
+        $( document ).ready(function() {
+            iziToast.success({
+                position: 'topRight',
+                title: 'RECORDATORIO CREADO',
+                message: 'Se creo un recordatorio para el Vehiculo'+event.detail.vehiculo,
+            });
+        });
+    })
+    
+</script>
 
 <script>
     // A basic demo function to handle "select all" functionality

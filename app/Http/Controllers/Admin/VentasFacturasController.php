@@ -28,35 +28,24 @@ class VentasFacturasController extends Controller
     public function create()
     {
         $numero = $this->setNextSequenceNumber();
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
 
-        $plantilla = plantilla::find(session('empresa'));
         return view('admin.ventas.facturas.create', compact('numero', 'plantilla'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
     public function setNextSequenceNumber()
     {
-        
-      // $last = Facturas::orderBy('sequence_number', 'desc')
-     //        ->take(1)
-     //        ->first();
 
-        //var_dump($last->sequence_number);
-        //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-']);
-        $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        $id = IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
 
-        //$nextSequenceNumber = ($last) ? $last->sequence_number + 1 : 1;
         return trim($id);
     }
+
+
     public function store(Request $request)
     {
-        //
+       // dd($request->all());
+        $factura = Facturas::create($request->all());
     }
 
     /**

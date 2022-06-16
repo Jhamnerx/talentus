@@ -69,6 +69,7 @@
 
                     @enderror
                 </div>
+
                 {{-- NUMERO --}}
 
                 @livewire('admin.ventas.facturas.input-numero',['numero' => $numero, 'serie' =>
@@ -162,7 +163,45 @@
                     @enderror
 
                 </div>
+                <div class="col-span-12 mt-2">
+                    <label
+                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                        <div>
+                            Tipo de Pago:
+                        </div>
 
+                    </label>
+                    <div class="flex flex-wrap items-center -m-3">
+
+                        <div class="m-3">
+                            <!-- Start -->
+                            <label class="flex items-center">
+                                <input checked type="radio" name="tipo_pago" value="CONTADO" class="form-radio" />
+                                <span class="text-sm ml-2">CONTADO</span>
+                            </label>
+                            <!-- End -->
+                        </div>
+                        <div class="m-3">
+                            <!-- Start -->
+                            <label class="flex items-center">
+                                <input type="radio" name="tipo_pago" value="CREDITO" class="form-radio" />
+                                <span class="text-sm ml-2">CREDITO</span>
+                            </label>
+                            <!-- End -->
+                        </div>
+
+                    </div>
+
+
+                    @error('tipo_pago')
+
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{$message}}
+                    </p>
+
+                    @enderror
+
+                </div>
                 <div class="col-span-12">
                     <label
                         class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">

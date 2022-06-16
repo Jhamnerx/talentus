@@ -42,7 +42,7 @@
 
                         <div class="grid grid-cols-12 gap-6">
 
-                            <div class="col-span-6 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
@@ -90,7 +90,7 @@
 
                                 @enderror
                             </div>
-                            <div class="col-span-6 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-6">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_t">Fecha Transmision:</label>
                                 <div class="relative">
@@ -122,7 +122,7 @@
 
 
 
-                            <div class="col-span-6 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="numero">Hora Transmision: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">

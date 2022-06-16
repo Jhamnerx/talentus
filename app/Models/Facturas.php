@@ -12,15 +12,17 @@ class Facturas extends Model
 
 
     use HasFactory;
+
     protected $table = 'facturas';
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
-        'numero' => 'integer',
+        'numero' => 'string',
         'sequence_number' => 'integer',
 
     ];
 
+    
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -31,6 +33,12 @@ class Facturas extends Model
     public function presupuesto()
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
+    }
+
+    public function getSerie(){
+
+        return plantilla::get('serie')->where('empresas_id', session('empresa'));
+
     }
 
 }

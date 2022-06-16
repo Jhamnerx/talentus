@@ -19,7 +19,7 @@ class CreateDetalleVentasTable extends Migration
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
-            $table->decimal('descuento', 10, 2);
+            $table->decimal('descuento', 10, 2)->nullable();
             $table->unsignedBigInteger('facturas_id');
             $table->foreign('facturas_id')->references('id')->on('facturas')->onDelete('cascade');
             $table->timestamps();

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,5 +76,11 @@ class User extends Authenticatable
     {
 
         return $this->hasMany(DetalleReportes::class);
+    }
+
+    public function recordatorio()
+    {
+
+        return $this->hasMany(Recordatorio::class, 'user_id');
     }
 }

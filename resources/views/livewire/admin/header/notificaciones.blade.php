@@ -21,6 +21,24 @@
         <div class="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Notifications {{$count}}</div>
         <ul class="overflow-y-auto max-h-48 h-auto">
             @foreach ($notificaciones as $notificacion)
+
+            @if ($notificacion->type == "App\Notifications\CrearRecordatorio")
+            <li class="border-b border-slate-200 last:border-0" @click="open = false" @focus="open = true"
+                @focusout="open = false">
+                <div class="block py-2 px-4 hover:bg-slate-50">
+                    <span class="block text-sm mb-2"><img
+                            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/notification_1-svg7.svg" alt="icon" />
+                        <span class="font-medium text-slate-800">
+                            Accion</span>
+                        {{$notificacion->data["mensaje"]}}.</span>
+                    <span
+                        class="block text-xs font-medium text-slate-400">{{$notificacion->created_at->diffForHumans()}}</span>
+                </div>
+
+
+
+            </li>
+            @else
             <li class="border-b border-slate-200 last:border-0">
                 <a class="block py-2 px-4 hover:bg-slate-50" href="{{$notificacion->data['url']}}" @click="open = false"
                     @focus="open = true" @focusout="open = false">
@@ -32,6 +50,10 @@
                         class="block text-xs font-medium text-slate-400">{{$notificacion->created_at->diffForHumans()}}</span>
                 </a>
             </li>
+            @endif
+
+
+
             @endforeach
 
             {{-- <li class="border-b border-slate-200 last:border-0">

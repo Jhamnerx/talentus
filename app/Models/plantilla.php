@@ -15,4 +15,9 @@ class plantilla extends Model
     {
         return $this->belongsTo(Empresa::class, 'empresas_id');
     }
+
+    public function getSerieFacturaAttribute($value)
+    {
+        return $value;
+    }
 }

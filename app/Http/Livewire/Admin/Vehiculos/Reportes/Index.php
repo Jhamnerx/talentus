@@ -125,5 +125,10 @@ class Index extends Component
     {
         $this->emit('verDetalleReporte', $reporte);
         $this->openModalDetalle = true;
+    } 
+    public function openModalRecordatorio(Reportes $reporte)
+    {
+        $this->emit('crearRecordatorio', $reporte);
+        $this->openModalRecordatorio = true;
     }
 }

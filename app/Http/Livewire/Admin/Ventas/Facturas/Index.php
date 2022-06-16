@@ -23,9 +23,9 @@ class Index extends Component
             $query->where('razon_social', 'like', '%' . $this->search . '%');
         })->orWhere('serie', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
+            ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('numero', 'DESC')
             ->paginate(10);
 
         $total = Facturas::all()->count();
@@ -41,7 +41,7 @@ class Index extends Component
                     $hasta . " 23:59:59"
                 ]
             )->whereRaw(
-                "(serie like ? OR numero like  ? OR fecha like ? OR total like ?)",
+                "(serie like ? OR numero like  ? OR fecha_emision like ? OR total like ?)",
                 [
                     '%' . $this->search . '%',
                     '%' . $this->search . '%',
@@ -49,7 +49,7 @@ class Index extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('numero', 'DESC')
                 ->paginate(10);
         }
 

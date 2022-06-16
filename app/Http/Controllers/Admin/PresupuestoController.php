@@ -97,7 +97,7 @@ class PresupuestoController extends Controller
     {
 
 
-        $plantilla = plantilla::find(session('empresa'));
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
         return view('admin.ventas.presupuestos.show', compact('presupuesto', 'plantilla'));
     }
 

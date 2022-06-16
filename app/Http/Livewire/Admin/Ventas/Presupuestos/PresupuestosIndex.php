@@ -2,13 +2,15 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
+use App\Http\Controllers\Admin\VentasFacturasController;
 
+use App\Models\plantilla;
 use App\Models\Presupuestos;
-use App\Models\VentasFacturas;
+
 use Carbon\Carbon;
 use Livewire\Component;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-use Illuminate\Support\Facades\Date;
+
 
 class PresupuestosIndex extends Component
 {
@@ -30,7 +32,7 @@ class PresupuestosIndex extends Component
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->Where('estado', $this->status)
-            ->orderBy('numero', 'desc')
+            ->orderBy('numero', 'DESC')
             ->paginate(10);
 
         
@@ -72,7 +74,7 @@ class PresupuestosIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('numero', 'desc')
+                ->orderBy('numero', 'DESC')
                 ->paginate(10);
         }
 
@@ -132,21 +134,25 @@ class PresupuestosIndex extends Component
 
     public function convertInvoice(Presupuestos $presupuesto)
     {
+
+        $facturasController = new VentasFacturasController();
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
         if(!$presupuesto->factura)
         {
-
             $venta = $presupuesto->factura()->create([
                 'clientes_id' => $presupuesto->clientes_id,
-                'numero' => IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 9, 'prefix' => 'FACT-']),
-                'fecha' => $date = Carbon::now(),
-                'fecha_vencimiento' => $date = Carbon::now()->addDay(15),
-                'sub_total' => $presupuesto->subtotal,
+                'serie' => $plantilla->serie_factura,
+                'numero' => $facturasController->setNextSequenceNumber(),
+                'fecha_emision' => $date = Carbon::now(),
+                'fecha_vencimiento' => $date = Carbon::now(),
+                'subtotal' => $presupuesto->subtotal,
                 'impuesto' => $presupuesto->impuesto,
                 'total' => $presupuesto->total,
                 'divisa' => $presupuesto->divisa,
                 'tipo_pago' => '',
                 'estado' => 'COMPLETADO',
-                'pago_estado' => 'UNPAID',
+                'pago_estado' => 'PAID',
                 'empresa_id' => session('empresa'),
                 'enviado' => false,
                 'user_id' => auth()->user()->id,

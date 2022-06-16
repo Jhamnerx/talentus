@@ -5,23 +5,24 @@ namespace App\Notifications;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class EnviarMensaje extends Notification implements ShouldQueue
+class CrearRecordatorio extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $mensaje;
+    public $recordatorio;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($mensaje)
+    public function __construct($recordatorio)
     {
-        $this->mensaje = $mensaje;
+        $this->recordatorio = $recordatorio;
     }
 
     /**
@@ -43,16 +44,9 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-        // return (new MailMessage)
-        //             ->subject('Tienes un nuevo Mensaje')
-        //             ->greeting('Hola Sr.')
-        //             ->line('Se ha creado una nueva acta.')
-        //             ->action('Notification Action', route('mensajes.show', $this->mensaje->id))
-        //             ->line('Has luego');
-
         return (new MailMessage)
                 ->subject('Tienes un nuevo Mensaje')
-                ->view('mail.notificacion', ['mensaje' => $this->mensaje]);
+                ->view('mail.recordatorio', ['mensaje' => $this->recordatorio]);
    
     }
 
@@ -65,9 +59,9 @@ class EnviarMensaje extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'url' => route('admin.certificados.actas.index'),
-            'accion' => $this->mensaje->accion,
-            'mensaje' => 'El usuario '.User::find($this->mensaje->from_user_id)->name.' ha creado una nueva acta',
+            'placa' => 'AHF-976',
+            'accion' => '',
+            'mensaje' => '',
         ];
     }
 

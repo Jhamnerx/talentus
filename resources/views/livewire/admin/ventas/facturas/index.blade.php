@@ -244,24 +244,28 @@
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-sky-500">{{$factura->serie.$factura->numero}}</div>
+                                <div class="font-medium text-sky-500">
+                                    <a href="{{route('admin.ventas.facturas.show', $factura)}}">
+                                        {{$factura->serie}}-{{$factura->numero}}
+                                    </a>
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-emerald-500">${{$factura->total}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                @switch($factura->estado)
-                                @case(1)
+                                @switch($factura->pago_estado)
+                                @case("PAID")
                                 <div
                                     class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
-                                    Pagada</div>
+                                    PAGADA</div>
                                 @break
-                                @case(2)
+                                @case("UNPAID")
 
                                 <div
                                     class="inline-flex font-medium bg-rose-100 text-rose-500 rounded-full text-center px-2.5 py-0.5">
-                                    Vencida</div>
+                                    POR PAGAR</div>
                                 @break
 
 
@@ -272,7 +276,7 @@
                                 <div class="font-medium text-slate-800">{{$factura->clientes->razon_social}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{$factura->fecha}}</div>
+                                <div>{{$factura->fecha_emision}}</div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>{{$factura->fecha_vencimiento}}</div>

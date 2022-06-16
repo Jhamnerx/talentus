@@ -1008,6 +1008,9 @@ select{
 .m-auto{
   margin: auto;
 }
+.-m-3{
+  margin: -0.75rem;
+}
 .mx-auto{
   margin-left: auto;
   margin-right: auto;
@@ -1027,6 +1030,10 @@ select{
 .my-6{
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
+}
+.mx-4{
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 .-mx-px{
   margin-left: -1px;
@@ -1055,10 +1062,6 @@ select{
 .my-10{
   margin-top: 2.5rem;
   margin-bottom: 2.5rem;
-}
-.mx-4{
-  margin-left: 1rem;
-  margin-right: 1rem;
 }
 .mx-3{
   margin-left: 0.75rem;
@@ -1169,11 +1172,11 @@ select{
 .mr-4{
   margin-right: 1rem;
 }
-.mt-7{
-  margin-top: 1.75rem;
-}
 .mr-1{
   margin-right: 0.25rem;
+}
+.mt-7{
+  margin-top: 1.75rem;
 }
 .ml-auto{
   margin-left: auto;
@@ -1304,6 +1307,9 @@ select{
 .h-full{
   height: 100%;
 }
+.h-14{
+  height: 3.5rem;
+}
 .h-2\.5{
   height: 0.625rem;
 }
@@ -1321,9 +1327,6 @@ select{
 }
 .h-28{
   height: 7rem;
-}
-.h-14{
-  height: 3.5rem;
 }
 .h-96{
   height: 24rem;
@@ -2943,6 +2946,10 @@ select{
 }
 .ring-opacity-5{
   --tw-ring-opacity: 0.05;
+}
+.blur{
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 .filter{
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -5012,13 +5019,13 @@ div.dataTables_wrapper div.dataTables_paginate {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
-.hover\:bg-gray-200:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
-}
 .hover\:bg-emerald-600:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(5 150 105 / var(--tw-bg-opacity));
+}
+.hover\:bg-gray-200:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 .hover\:bg-slate-50:hover{
   --tw-bg-opacity: 1;
@@ -5303,6 +5310,10 @@ div.dataTables_wrapper div.dataTables_paginate {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(191 219 254 / var(--tw-ring-opacity));
 }
+.focus\:ring-emerald-600:focus{
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(5 150 105 / var(--tw-ring-opacity));
+}
 .focus\:ring-gray-800:focus{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(31 41 55 / var(--tw-ring-opacity));
@@ -5314,10 +5325,6 @@ div.dataTables_wrapper div.dataTables_paginate {
 .focus\:ring-blue-500:focus{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(59 130 246 / var(--tw-ring-opacity));
-}
-.focus\:ring-emerald-600:focus{
-  --tw-ring-opacity: 1;
-  --tw-ring-color: rgb(5 150 105 / var(--tw-ring-opacity));
 }
 .focus\:ring-red-300:focus{
   --tw-ring-opacity: 1;
@@ -5459,6 +5466,14 @@ div.dataTables_wrapper div.dataTables_paginate {
     --tw-bg-opacity: 1;
     background-color: rgb(17 24 39 / var(--tw-bg-opacity));
   }
+  .dark\:text-gray-100{
+    --tw-text-opacity: 1;
+    color: rgb(243 244 246 / var(--tw-text-opacity));
+  }
+  .dark\:text-gray-400{
+    --tw-text-opacity: 1;
+    color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
   .dark\:text-white{
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -5470,14 +5485,6 @@ div.dataTables_wrapper div.dataTables_paginate {
   .dark\:text-gray-900{
     --tw-text-opacity: 1;
     color: rgb(17 24 39 / var(--tw-text-opacity));
-  }
-  .dark\:text-gray-100{
-    --tw-text-opacity: 1;
-    color: rgb(243 244 246 / var(--tw-text-opacity));
-  }
-  .dark\:text-gray-400{
-    --tw-text-opacity: 1;
-    color: rgb(156 163 175 / var(--tw-text-opacity));
   }
   .dark\:text-indigo-600{
     --tw-text-opacity: 1;

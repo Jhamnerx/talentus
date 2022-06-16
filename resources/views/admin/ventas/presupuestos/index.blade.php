@@ -63,6 +63,19 @@
         });
     })
 </script>
+
+<script>
+    window.addEventListener('save-invoice', event => {
+        $( document ).ready(function() {
+            iziToast.success({
+                position: 'topRight',
+                title: 'FACTURA REGISTRADA',
+                message: 'Se registro una factura con el numero #'+event.detail.numero,
+            });
+        });
+    })
+    
+</script>
 <script>
     // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
