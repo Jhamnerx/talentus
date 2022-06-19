@@ -1,4 +1,4 @@
-const mix = require('laravel-mix');
+const mix = require("laravel-mix");
 
 /*
  |--------------------------------------------------------------------------
@@ -11,48 +11,47 @@ const mix = require('laravel-mix');
  |
  */
 
-
 module.exports = {
+    plugins: {
+        "postcss-import": {},
+        "tailwindcss/nesting": "postcss-nesting",
+        tailwindcss: {},
+        autoprefixer: {},
+    },
+};
 
-  plugins: {
-    'postcss-import': {},
-    'tailwindcss/nesting': 'postcss-nesting',
-    tailwindcss: {},
-    autoprefixer: {},
-  }
-}
+mix.js("resources/js/app.js", "public/js").postCss(
+    "resources/css/app.css",
+    "public/css",
+    [require("postcss-import"), require("tailwindcss")]
+);
 
+// cliente
+mix.postCss("resources/css/cliente.css", "public/css/cliente", [
+    require("postcss-import"),
+    require("tailwindcss"),
+]);
 
-mix.js('resources/js/app.js', 'public/js')
-    .postCss('resources/css/app.css', 'public/css', [
-        require('postcss-import'),
-        require('tailwindcss'),
-    ]);
+mix.copy(
+    "node_modules/jquery/dist/jquery.min.js",
+    "public/plugins/jquery/jquery.min.js"
+);
+mix.copy(
+    "node_modules/tw-elements/dist/js/index.min.js",
+    "public/plugins/tw-elements/index.min.js"
+);
 
-mix.copy('node_modules/jquery/dist/jquery.min.js', 'public/plugins/jquery/jquery.min.js');
-mix.copy('node_modules/tw-elements/dist/js/index.min.js', 'public/plugins/tw-elements/index.min.js');
-
-
-
-
-mix.sass('resources/css/style.scss', 'public/css')
-    .options({
-        postCss: [
-            require('postcss-import'),
-            require('tailwindcss/nesting','postcss-nesting'),
-            require('tailwindcss')
-
-        ],
-        
-    });
-
+mix.sass("resources/css/style.scss", "public/css").options({
+    postCss: [
+        require("postcss-import"),
+        require("tailwindcss/nesting", "postcss-nesting"),
+        require("tailwindcss"),
+    ],
+});
 
 if (mix.inProduction()) {
     mix.version();
 }
-
-
-
 
 // mix.webpackConfig({
 //     stats: {

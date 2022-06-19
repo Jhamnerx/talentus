@@ -1,24 +1,19 @@
-require('./bootstrap');
-require('./main');
-require('./utils');
-require('./slider');
+require("./bootstrap");
+require("./main");
+require("./utils");
+require("./slider");
 
-import Alpine from 'alpinejs';
+import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
 Alpine.start();
 
-
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 window.Swal = Swal;
-import iziToast from 'izitoast';
+import iziToast from "izitoast";
 window.iziToast = iziToast;
 
-
-
-
-
-import DataTable from 'datatables.net-dt';
+import DataTable from "datatables.net-dt";
 window.DataTable = DataTable;

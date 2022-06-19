@@ -1,0 +1,253 @@
+<x-app-layout>
+
+    @section('contenido')
+
+    {{-- componente de bienvenida --}}
+    {{--
+    <x-welcome />
+
+    <x-cards />
+    --}}
+
+    <div class="page-wrapper">
+
+        @livewire('navigation')
+
+        <section class="banner-two">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="banner-two__content">
+                            <h3>
+                                BIENVENIDO A TALENTUS APP
+                            </h3>
+                            <p>Podras encontrar diversar soluciones, desde consulta de duración y validez de actas, tus
+                                vehiculos
+                                y actualizar tus datos.</p>
+                            <div class="banner-two__btn-block">
+                                <a href="" class="thm-btn banner-two__btn-1">Plataforma</a>
+                                <!-- /.thm-btn banner-two__btn-1 -->
+                                <a href="" class="thm-btn banner-two__btn-2">Servicios</a>
+                                <!-- /.thm-btn banner-two__btn-2 -->
+                            </div><!-- /.banner-two__btn-block -->
+                        </div><!-- /.banner-two__content -->
+                    </div><!-- /.col-lg-8 -->
+                </div><!-- /.row -->
+            </div><!-- /.container -->
+        </section><!-- /.banner-two -->
+
+        <section class="service-five">
+            <div class="container">
+                <img src="images/banner-2-moc-1.png" class="service-five__moc-1 float-bob-y-2" alt="">
+                <div class="row">
+                    <div class="col-lg-4 wow fadeInUp" data-wow-duration="1500ms">
+                        <div class="service-five__box">
+                            <div class="service-five__icon">
+                                <div class="service-five__icon-bubble"></div><!-- /.service-five__icon-bubble -->
+
+                                <i class="far fa-file"></i>
+                            </div><!-- /.service-five__icon -->
+                            <h3><a href="{{route('consulta.actas')}}">CONSULTA DE ACTAS</a></h3>
+                            <p>Consulta la validez y los detalles de nuestras actas emitidas. </p>
+                            <a href="{{route('consulta.actas')}}" class="service-five__link"><span>+</span></a>
+                            <!-- /.service-five__link -->
+                        </div><!-- /.service-five__box -->
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-4 wow fadeInUp" data-wow-duration="1500ms">
+                        <div class="service-five__box active">
+                            <div class="service-five__icon">
+                                <div class="service-five__icon-bubble"></div><!-- /.service-five__icon-bubble -->
+                                <i class="fas fa-car-crash"></i>
+                            </div><!-- /.service-five__icon -->
+                            <h3><a href="{{route('solicitudes.create')}}">SOLICITAR REPORTE</a></h3>
+                            <p>Crea una solicitud de reporte, de tus unidades en nuestro sistema. </p>
+                            <a href="{{route('solicitudes.create')}}" class="service-five__link"><span>+</span></a>
+                            <!-- /.service-five__link -->
+                        </div><!-- /.service-five__box -->
+                    </div><!-- /.col-lg-4 -->
+                </div><!-- /.row -->
+            </div><!-- /.container -->
+        </section><!-- /.service-five -->
+
+        <section class="service-four">
+
+            <div class="service-four__images wow fadeInLeft" data-wow-duration="1500ms">
+                <img src="{{asset('images/service-4-shape-1.png')}}" class="service-four__image-1" alt="">
+                <img src="images/service-moc-4-1.png" class="service-four__image-2 float-bob-y-2" alt="">
+            </div><!-- /.service-four__images -->
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-lg-8">
+                        <div class="service-four__content">
+                            <div class="block-title text-left">
+                                <div class="block-title__line"></div><!-- /.block-title__line -->
+                                <h3>PREGUNTAS <span>frecuentes</span></h3>
+                                <p>Aqui responderemos algunas preguntas más frecuentes que nos hacen nuestros clientes.
+                                </p>
+                            </div><!-- /.block-title text-center -->
+                            <div class="service-four__box">
+                                <i class="seolight-icon-bank-building"></i>
+                                <h3><a href="service-details.html">Citation Building</a></h3>
+                                <p>Experience is the knowledge or mastery of an event. Identify the error of the
+                                    website. website coding, page speed.</p>
+                            </div><!-- /.service-four__box -->
+                            <div class="service-four__box">
+                                <i class="seolight-icon-tracking"></i>
+                                <h3><a href="service-details.html">Tracking for company</a></h3>
+                                <p>Experience is the knowledge or mastery of an event. Identify the error of the
+                                    website. website coding, page speed.</p>
+                            </div><!-- /.service-four__box -->
+                        </div><!-- /.service-four__content -->
+                    </div><!-- /.col-lg-8 -->
+                </div><!-- /.row -->
+            </div><!-- /.container -->
+        </section><!-- /.service-four -->
+
+        <section class="service-one">
+            <img src="images/service-2-shape.png" class="service-one__shape-1" alt="">
+            <div class="container">
+                <div class="block-title text-center">
+                    <div class="block-title__line"></div><!-- /.block-title__line -->
+                    <h3>Full Service Digital Marketing <span>agency</span></h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do <br> eiusmod tempor incididunt ut
+                        labore et dolore.</p>
+                </div><!-- /.block-title text-center -->
+
+                <div class="row">
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="000ms">
+                        <div class="service-one__single">
+                            <div class="service-one__icon color-1">
+                                <i class="seolight-icon-pie-chart"></i>
+                            </div><!-- /.service-one__icon -->
+                            <h3><a href="service-details.html">Online Analysis</a></h3>
+                            <p>Lorem ipsum dolor sit amet, contop ctetur adipisicing elit, sed do eius</p>
+                            <a href="service-details.html" class="service-one__link">View more <i
+                                    class="fal fa-long-arrow-right"></i></a><!-- /.service-one__link -->
+
+                        </div><!-- /.service-one__single -->
+                    </div><!-- /.col-lg-3 -->
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="100ms">
+                        <div class="service-one__single">
+                            <div class="service-one__icon color-2">
+                                <i class="seolight-icon-layers"></i>
+                            </div><!-- /.service-one__icon -->
+                            <h3><a href="service-details.html">Web Design</a></h3>
+                            <p>Lorem ipsum dolor sit amet, contop ctetur adipisicing elit, sed do eius</p>
+                            <a href="service-details.html" class="service-one__link">View more <i
+                                    class="fal fa-long-arrow-right"></i></a><!-- /.service-one__link -->
+
+                        </div><!-- /.service-one__single -->
+                    </div><!-- /.col-lg-3 -->
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="200ms">
+                        <div class="service-one__single">
+                            <div class="service-one__icon color-3">
+                                <i class="seolight-icon-browser"></i>
+                            </div><!-- /.service-one__icon -->
+                            <h3><a href="service-details.html">Web Development</a></h3>
+                            <p>Lorem ipsum dolor sit amet, contop ctetur adipisicing elit, sed do eius</p>
+                            <a href="service-details.html" class="service-one__link">View more <i
+                                    class="fal fa-long-arrow-right"></i></a><!-- /.service-one__link -->
+
+                        </div><!-- /.service-one__single -->
+                    </div><!-- /.col-lg-3 -->
+                    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 wow fadeInUp" data-wow-duration="1500ms"
+                        data-wow-delay="300ms">
+                        <div class="service-one__single">
+                            <div class="service-one__icon color-4">
+                                <i class="seolight-icon-target"></i>
+                            </div><!-- /.service-one__icon -->
+                            <h3><a href="service-details.html">SEO Marketing</a></h3>
+                            <p>Lorem ipsum dolor sit amet, contop ctetur adipisicing elit, sed do eius</p>
+                            <a href="service-details.html" class="service-one__link">View more <i
+                                    class="fal fa-long-arrow-right"></i></a><!-- /.service-one__link -->
+
+                        </div><!-- /.service-one__single -->
+                    </div><!-- /.col-lg-3 -->
+                </div><!-- /.row -->
+            </div><!-- /.container -->
+        </section><!-- /.service-one -->
+
+        <section class="pricing-one pricing-one__home-two">
+            <div class="container">
+                <div class="block-title text-center">
+                    <div class="block-title__line line-two"></div><!-- /.block-title__line -->
+                    <h3>We will offer the best <span>pricing</span></h3>
+                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do <br> eiusmod tempor incididunt ut
+                        labore et dolore.</p>
+                </div><!-- /.block-title text-center -->
+
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="pricing-one__single">
+                            <div class="pricing-one__inner">
+                                <h3>Personal</h3>
+                                <p><b>$</b><span>00</span>/ Per Month</p>
+                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
+                                <ul class="list-unstyled pricing-one__list">
+                                    <li class="disabled">Citation building</li>
+                                    <li>Listings review</li>
+                                    <li>Report of Customer reviews</li>
+                                    <li>NAP check</li>
+                                </ul><!-- /.list-unstyled pricing-one__list -->
+                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
+                            </div><!-- /.pricing-one__inner -->
+                        </div><!-- /.pricing-one__single -->
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-4">
+                        <div class="pricing-one__single">
+                            <span class="pricing-one__label">Recommended</span><!-- /.pricing-one__label -->
+                            <div class="pricing-one__inner">
+                                <h3>Popular</h3>
+                                <p><b>$</b><span>49</span>/ Per Month</p>
+                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
+                                <ul class="list-unstyled pricing-one__list">
+                                    <li>Citation building</li>
+                                    <li>Listings review</li>
+                                    <li>Report of Customer reviews</li>
+                                    <li class="disabled">NAP check</li>
+                                </ul><!-- /.list-unstyled pricing-one__list -->
+                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
+                            </div><!-- /.pricing-one__inner -->
+                        </div><!-- /.pricing-one__single -->
+                    </div><!-- /.col-lg-4 -->
+                    <div class="col-lg-4">
+                        <div class="pricing-one__single">
+                            <div class="pricing-one__inner">
+                                <h3>Big Team</h3>
+                                <p><b>$</b><span>99</span>/ Per Month</p>
+                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
+                                <ul class="list-unstyled pricing-one__list">
+                                    <li>Citation building</li>
+                                    <li>Listings review</li>
+                                    <li>Report of Customer reviews</li>
+                                    <li>NAP check</li>
+                                </ul><!-- /.list-unstyled pricing-one__list -->
+                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
+                            </div><!-- /.pricing-one__inner -->
+                        </div><!-- /.pricing-one__single -->
+                    </div><!-- /.col-lg-4 -->
+                </div><!-- /.row -->
+
+            </div><!-- /.container -->
+        </section><!-- /.pricing-one -->
+
+
+
+
+        <x-footer></x-footer>
+
+
+    </div><!-- /.page-wrapper -->
+    <a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fa fa-angle-up"></i></a>
+
+
+    <x-slide-menu></x-slide-menu>
+
+    @endsection
+
+
+
+</x-app-layout>

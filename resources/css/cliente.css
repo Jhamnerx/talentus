@@ -1,0 +1,73 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* @import "contact.css"; */
+
+@import "cliente/bootstrap.min.css";
+@import "cliente/animate.min.css";
+@import "cliente/bootstrap-datepicker.min.css";
+@import "cliente/bootstrap-select.min.css";
+@import "cliente/fontawesome-all.min.css";
+@import "cliente/magnific-popup.css";
+/* @import "cliente/owl.carousel.min.css";
+@import "cliente/owl.theme.default.min.css"; */
+@import "cliente/seolight-icons.css";
+
+@import "cliente/style.css";
+@import "cliente/responsive.css";
+.search {
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 70px;
+
+    border-radius: 40px;
+    padding: 10px;
+}
+
+.search_input {
+    color: white;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0;
+    margin-top: 5px;
+    caret-color: transparent;
+    line-height: 40px;
+    transition: width 0.4s linear;
+    --tw-border-opacity: 1;
+    border-color: rgb(226 232 240 / var(--tw-border-opacity));
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+        var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    border-radius: 0.25rem;
+}
+
+.search .search_input {
+    padding: 0 10px;
+
+    caret-color: red;
+    transition: width 0.4s linear;
+}
+
+.search:focus > .search_icon {
+    background: red;
+    color: #fff;
+}
+
+.search_icon {
+    height: 50px;
+    width: 50px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+    background-color: black;
+}
+
+a:link {
+    text-decoration: none;
+}

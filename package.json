@@ -60,6 +60,7 @@
         "focus-visible": "^5.2.0",
         "izitoast": "^1.4.0",
         "moment": "^2.29.1",
+        "owl.carousel": "^2.3.4",
         "sweetalert2": "^11.4.13",
         "swiper": "^8.0.6",
         "tw-elements": "^1.0.0-alpha12"

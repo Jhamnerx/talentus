@@ -8,6 +8,14 @@ class WebController extends Controller
 {
     public function index()
     {
-        return view('index');
+        return view('cliente.index');
+    }
+    public function faq()
+    {
+        return view('cliente.index');
+    }
+    public function contacto()
+    {
+        return view('cliente.index');
     }
 }

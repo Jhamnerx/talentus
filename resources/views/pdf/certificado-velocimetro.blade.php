@@ -63,7 +63,7 @@
         }
 
         .descripcion {
-            margin-top: 3.2rem;
+            margin-top: 3rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -133,7 +133,7 @@
             font-weight: bold;
             font-size: 26px;
             font-family: "DejaVu Sans";
-            margin-left: 32rem;
+            margin-left: 31rem;
             margin-top: -1rem;
 
         }
@@ -179,7 +179,7 @@
 
         .hash {
             padding-left: 31rem;
-            padding-top: 6rem;
+            padding-top: 5rem;
             font-size: 12px;
         }
     </style>

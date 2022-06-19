@@ -1,12 +1,8 @@
-<div class="md:flex  items-start justify-center py-12 2xl:px-12 md:px-6 px-4">
+<div class="md:flex w-full items-start justify-center py-12 2xl:px-12 md:px-6 px-4">
 
     @if ($acta)
-    <div class="xl:w-2/6 lg:w-2/5 w-80 md:block hidden">
-        {{-- <img class="w-full" alt="VEHICULO" src="https://i.ibb.co/QMdWfzX/component-image-one.png" />
-        <img class="mt-6 w-full" alt="VEHICULO" src="https://i.ibb.co/qxkRXSq/component-image-two.png" /> --}}
-    </div>
 
-    <div class="xl:w-2/3 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
+    <div class="xl:w-2/3 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6 w-full">
         <div class="border-b border-gray-200 pb-6">
 
             <h1 class="lg:text-2xl text-xl font-semibold lg:leading-6 leading-7 text-gray-800 dark:text-white mt-2">

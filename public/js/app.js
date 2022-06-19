@@ -11272,7 +11272,7 @@ flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"].localize(Spanish); // default 
 
 var fullConfig = tailwindcss_resolveConfig__WEBPACK_IMPORTED_MODULE_2___default()((_tailwind_config__WEBPACK_IMPORTED_MODULE_3___default()));
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.font.family = '"Inter", sans-serif';
-chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.font.weight = '500';
+chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.font.weight = "500";
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.color = fullConfig.theme.colors.slate[400];
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.scale.grid.color = fullConfig.theme.colors.slate[100];
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.titleColor = fullConfig.theme.colors.slate[800];
@@ -11281,18 +11281,18 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.backgroundC
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.borderWidth = 1;
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.borderColor = fullConfig.theme.colors.slate[200];
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.displayColors = false;
-chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.mode = 'nearest';
+chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.mode = "nearest";
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.intersect = false;
-chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.position = 'nearest';
+chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.position = "nearest";
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.caretSize = 0;
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.caretPadding = 20;
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.cornerRadius = 4;
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.defaults.plugins.tooltip.padding = 8;
 chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register({
-  id: 'chartAreaPlugin',
+  id: "chartAreaPlugin",
   beforeDraw: function beforeDraw(chart) {
     if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-      var ctx = chart.canvas.getContext('2d');
+      var ctx = chart.canvas.getContext("2d");
       var chartArea = chart.chartArea;
       ctx.save();
       ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
@@ -11301,34 +11301,34 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register({
     }
   }
 });
-document.addEventListener('DOMContentLoaded', function () {
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])('.datepicker', {
-    mode: 'range',
+document.addEventListener("DOMContentLoaded", function () {
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])(".datepicker", {
+    mode: "range",
     "static": true,
-    monthSelectorType: 'static',
-    dateFormat: 'M j, Y',
+    monthSelectorType: "static",
+    dateFormat: "M j, Y",
     defaultDate: [new Date().setDate(new Date().getDate() - 6), new Date()],
     prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
     onReady: function onReady(selectedDates, dateStr, instance) {
-      instance.element.value = dateStr.replace('to', '-');
-      var customClass = instance.element.getAttribute('data-class');
+      instance.element.value = dateStr.replace("to", "-");
+      var customClass = instance.element.getAttribute("data-class");
       instance.calendarContainer.classList.add(customClass);
     },
     onChange: function onChange(selectedDates, dateStr, instance) {
-      instance.element.value = dateStr.replace('to', '-');
+      instance.element.value = dateStr.replace("to", "-");
     }
   });
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])('.inputDate', {
-    mode: 'single',
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])(".inputDate", {
+    mode: "single",
     disableMobile: "true",
     dateFormat: "Y-m-d",
     prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>'
   });
   var hoy = new Date();
-  var hora = hoy.getHours() + ':' + hoy.getMinutes();
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])('.inputTime', {
+  var hora = hoy.getHours() + ":" + hoy.getMinutes();
+  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])(".inputTime", {
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i",
@@ -76575,6 +76575,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/css/cliente.css":
+/*!***********************************!*\
+  !*** ./resources/css/cliente.css ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
 /***/ "./node_modules/mini-svg-data-uri/index.js":
 /*!*************************************************!*\
   !*** ./node_modules/mini-svg-data-uri/index.js ***!
@@ -124031,6 +124044,7 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 		var installedChunks = {
 /******/ 			"/js/app": 0,
 /******/ 			"css/style": 0,
+/******/ 			"css/cliente/cliente": 0,
 /******/ 			"css/app": 0
 /******/ 		};
 /******/ 		
@@ -124081,9 +124095,10 @@ module.exports = JSON.parse('{"name":"axios","version":"0.21.4","description":"P
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	__webpack_require__.O(undefined, ["css/style","css/app"], () => (__webpack_require__("./resources/js/app.js")))
-/******/ 	__webpack_require__.O(undefined, ["css/style","css/app"], () => (__webpack_require__("./resources/css/style.scss")))
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/style","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	__webpack_require__.O(undefined, ["css/style","css/cliente/cliente","css/app"], () => (__webpack_require__("./resources/js/app.js")))
+/******/ 	__webpack_require__.O(undefined, ["css/style","css/cliente/cliente","css/app"], () => (__webpack_require__("./resources/css/style.scss")))
+/******/ 	__webpack_require__.O(undefined, ["css/style","css/cliente/cliente","css/app"], () => (__webpack_require__("./resources/css/app.css")))
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["css/style","css/cliente/cliente","css/app"], () => (__webpack_require__("./resources/css/cliente.css")))
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

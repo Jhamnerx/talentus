@@ -12,35 +12,43 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
+
+    <link rel="stylesheet" href="{{ mix('css/cliente/cliente.css') }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+
+
+    <link rel="stylesheet" href="{{asset('css/fontawesome-all.min.css')}}">
+
 
 
     @livewireStyles
 
     <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}" defer></script>
+
+
 
 </head>
 
 <body class="font-sans antialiased">
     <x-jet-banner />
 
-    <div class="min-h-screen bg-white">
-        @livewire('navigation')
+
+    {{-- @livewire('navigation') --}}
 
 
 
-        <!-- Page Content -->
-        <main class="min-h-full">
+    <!-- Page Content -->
+    <main class="min-h-full">
 
-            @yield('contenido')
+        @yield('contenido')
 
 
-        </main>
+    </main>
 
-    </div>
 
-    <x-footer />
+
+    {{--
+    <x-footer /> --}}
 
     @stack('modals')
 
@@ -48,8 +56,24 @@
 
     @yield('js')
 
-    @stack('scripts')
 
+
+    <script src="{{ mix('js/app.js') }}"></script>
+    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('plugins/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{asset('plugins/bootstrap-datepicker.min.js')}}"></script>
+    <script src="{{asset('plugins/bootstrap-select.min.js')}}"></script>
+
+    <script src="{{asset('plugins/isotope.js')}}"></script>
+    <script src="{{asset('plugins/jquery.waypoints.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery.counterup.min.js')}}"></script>
+    <script src="{{asset('plugins/jquery.magnific-popup.min.js')}}"></script>
+    <script src="{{asset('plugins/owl.carousel.min.js')}}"></script>
+    <script src="{{asset('plugins/TweenMax.min.js')}}"></script>
+    <script src="{{asset('plugins/input-case-enforcer/input-case-enforcer.min.js')}}"></script>
+    <script src="{{asset('plugins/wow.js')}}"></script>
+    <script src="{{ asset('js/theme.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>
