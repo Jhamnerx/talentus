@@ -57,8 +57,6 @@
                 <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-12 gap-6">
                         <div class="col-span-12 sm:col-span-4">
-                            {!! Form::hidden('empresa_id', session('empresa')) !!}
-                            {!! Form::hidden('codigo', Str::random(10)) !!}
                             {!! Html::decode(Form::label('tipo','Tipo: <span class="text-rose-500">*</span>',
                             ['class'
                             => 'block text-sm font-medium mb-1'])) !!}
@@ -98,7 +96,7 @@
 
                             <div class="relative">
 
-                                {!! Form::number('precio', null, ['class' =>'form-input w-full pl-12', 'placeholder' =>
+                                {!! Form::text('precio', null, ['class' =>'form-input w-full pl-12', 'placeholder' =>
                                 '$199.00']) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <span class="text-sm text-slate-400 font-medium px-3">S/</span>

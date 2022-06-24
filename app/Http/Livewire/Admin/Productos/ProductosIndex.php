@@ -12,19 +12,7 @@ class ProductosIndex extends Component
     public function render()
     {
 
-
-        $empresa_id = session('empresa');
-
-        // public function posts($isWithScope=true)
-        // {
-        //     if($isWithScope)
-        //         return $this->hasMany('App\Post');
-        //     else
-        //         return $this->hasMany('App\Post')->withoutGlobalScope(PostScopeClass::class);
-        // }
-        // entonces utilízalo Categories::posts->get();yCategories::posts(false)->get();
-
-        $productos = Productos::whereHas('categoria', function ($query) {
+       $productos = Productos::whereHas('categoria', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })->orWhere('nombre', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')

@@ -50,7 +50,7 @@
     </div><!-- /.site-footer__upper -->
     <div class="site-footer__bottom">
         <div class="container text-center">
-            <p>{{date('y-m-d')}} Todos los Derechos Reservador a <a href="https://talentustechnology.com/">Talentus
+            <p>{{date('y-m-d')}} Todos los Derechos Reservados a <a href="https://talentustechnology.com/">Talentus
                     Technology</a></p>
         </div><!-- /.container -->
     </div><!-- /.site-footer__bottom -->

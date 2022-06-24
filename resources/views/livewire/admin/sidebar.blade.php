@@ -168,6 +168,15 @@
                                         :class="page === 'almacen-lineas' && '!text-indigo-500'"
                                         href="{{route('admin.almacen.lineas.index')}}">
                                         <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Sim
+                                            Cards</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'almacen-disponibles-lineas' && '!text-indigo-500'"
+                                        href="{{route('admin.almacen.lineas.disponibles.index')}}">
+                                        <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Lineas</span>
                                     </a>
                                 </li>

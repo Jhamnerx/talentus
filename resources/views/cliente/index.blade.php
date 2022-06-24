@@ -103,7 +103,7 @@
             </div><!-- /.container -->
         </section><!-- /.service-four -->
 
-        <section class="service-one">
+        {{-- <section class="service-one">
             <img src="images/service-2-shape.png" class="service-one__shape-1" alt="">
             <div class="container">
                 <div class="block-title text-center">
@@ -168,71 +168,9 @@
                     </div><!-- /.col-lg-3 -->
                 </div><!-- /.row -->
             </div><!-- /.container -->
-        </section><!-- /.service-one -->
+        </section> --}}
 
-        <section class="pricing-one pricing-one__home-two">
-            <div class="container">
-                <div class="block-title text-center">
-                    <div class="block-title__line line-two"></div><!-- /.block-title__line -->
-                    <h3>We will offer the best <span>pricing</span></h3>
-                    <p>Lorem ipsum dolor sit amet consectetur adipiscing elit sed do <br> eiusmod tempor incididunt ut
-                        labore et dolore.</p>
-                </div><!-- /.block-title text-center -->
-
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="pricing-one__single">
-                            <div class="pricing-one__inner">
-                                <h3>Personal</h3>
-                                <p><b>$</b><span>00</span>/ Per Month</p>
-                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
-                                <ul class="list-unstyled pricing-one__list">
-                                    <li class="disabled">Citation building</li>
-                                    <li>Listings review</li>
-                                    <li>Report of Customer reviews</li>
-                                    <li>NAP check</li>
-                                </ul><!-- /.list-unstyled pricing-one__list -->
-                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
-                            </div><!-- /.pricing-one__inner -->
-                        </div><!-- /.pricing-one__single -->
-                    </div><!-- /.col-lg-4 -->
-                    <div class="col-lg-4">
-                        <div class="pricing-one__single">
-                            <span class="pricing-one__label">Recommended</span><!-- /.pricing-one__label -->
-                            <div class="pricing-one__inner">
-                                <h3>Popular</h3>
-                                <p><b>$</b><span>49</span>/ Per Month</p>
-                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
-                                <ul class="list-unstyled pricing-one__list">
-                                    <li>Citation building</li>
-                                    <li>Listings review</li>
-                                    <li>Report of Customer reviews</li>
-                                    <li class="disabled">NAP check</li>
-                                </ul><!-- /.list-unstyled pricing-one__list -->
-                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
-                            </div><!-- /.pricing-one__inner -->
-                        </div><!-- /.pricing-one__single -->
-                    </div><!-- /.col-lg-4 -->
-                    <div class="col-lg-4">
-                        <div class="pricing-one__single">
-                            <div class="pricing-one__inner">
-                                <h3>Big Team</h3>
-                                <p><b>$</b><span>99</span>/ Per Month</p>
-                                <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
-                                <ul class="list-unstyled pricing-one__list">
-                                    <li>Citation building</li>
-                                    <li>Listings review</li>
-                                    <li>Report of Customer reviews</li>
-                                    <li>NAP check</li>
-                                </ul><!-- /.list-unstyled pricing-one__list -->
-                                <a href="contact.html" class="thm-btn pricing-one__btn">Order Now</a><!-- /.thm-btn -->
-                            </div><!-- /.pricing-one__inner -->
-                        </div><!-- /.pricing-one__single -->
-                    </div><!-- /.col-lg-4 -->
-                </div><!-- /.row -->
-
-            </div><!-- /.container -->
-        </section><!-- /.pricing-one -->
+        <x-planes></x-planes>
 
 
 

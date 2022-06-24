@@ -167,7 +167,12 @@
                             </td>
 
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{$producto->categoria}}</div>
+                                <div class="text-left">
+                                    <a target="_blank"
+                                        href="{{route('admin.almacen.categorias.edit', $producto->categoria)}}">
+                                        {{$producto->categoria->nombre}}
+                                    </a>
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left font-medium text-emerald-500">${{$producto->precio}}</div>

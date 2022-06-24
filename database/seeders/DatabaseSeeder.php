@@ -39,8 +39,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PlantillaSeeder::class);
         Storage::makeDirectory("productos");
         $this->call(UserSeeder::class);
-        Categoria::factory(100)->create();
-        Lineas::factory(600)->create();
+        //Categoria::factory(100)->create();
+        Lineas::factory(60)->create();
         SimCard::factory(500)->create();
         $this->call(ProductoSeeder::class);
         $this->call(ModelosDispositivoSeeder::class);

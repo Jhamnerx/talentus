@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos\Flotas;
 
+use App\Models\ChangesModels;
 use App\Models\Eliminados;
 use App\Models\Flotas;
 use Illuminate\Database\Eloquent\Model;
@@ -22,7 +23,7 @@ class Delete extends Component
     {
         $this->model->setAttribute($this->field, '1')->save();
 
-        Eliminados::create([
+        ChangesModels::create([
             'delete_id' => $this->model->id,
             'delete_type' => Flotas::class,
             'user_id' => auth()->user()->id,

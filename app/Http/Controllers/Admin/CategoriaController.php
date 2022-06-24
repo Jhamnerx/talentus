@@ -39,7 +39,7 @@ class CategoriaController extends Controller
     public function store(CategoriaRequest $request)
     {
 
-        Categoria::create($request->all());
+        $categoria = Categoria::create($request->all());
         return redirect()->route('admin.almacen.categorias.index')->with('store', 'La categoria se guardo con exito');
     }
 

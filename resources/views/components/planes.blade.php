@@ -15,6 +15,7 @@
                         <div class="pricing-one__line"></div><!-- /.pricing-one__line -->
                         <ul class="list-unstyled pricing-one__list">
 
+                            <li class="">Solo costo del Equipo GPS</li>
                             <li class="disabled">Acceso a la plataforma de monitoreo</li>
                             <li class="disabled">Monitoreo 24/7</li>
                             <li class="disabled">Acceso a reportes(Max 15 dias)</li>

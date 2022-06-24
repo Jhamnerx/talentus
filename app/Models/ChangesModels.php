@@ -5,20 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Eliminados extends Model
+class ChangesModels extends Model
 {
     use HasFactory;
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    use HasFactory;
+
+    protected $table = 'changes_models';
 
 
 
 
     //Relacion polimorfica
 
-    public function delete()
+    public function changes()
     {
-
         return $this->morphTo();
     }
 }
