@@ -49,6 +49,7 @@ class LineasIndex extends Component
                 ->paginate(10);
         }
         $total = SimCard::all()->count();
+        
         return view('livewire.admin.lineas.lineas-index', compact('sim_cards', 'total'));
     }
 

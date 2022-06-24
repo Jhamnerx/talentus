@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEliminadosTable extends Migration
+class CreateChangesModelsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateEliminadosTable extends Migration
      */
     public function up()
     {
-        Schema::create('eliminados', function (Blueprint $table) {
+        Schema::create('changes_models', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('delete_id');
-            $table->string('delete_type');
+            $table->unsignedBigInteger('change_id');
+            $table->string('change_type');
+            $table->string('type');
+            $table->text('original')->nullable();
+            $table->text('changes')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 

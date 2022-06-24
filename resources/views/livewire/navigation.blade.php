@@ -1,7 +1,7 @@
 <header class="site-header-one site-header-three stricky ">
     <div class="container">
         <div class="site-header-one__logo">
-            <a href="">
+            <a href="{{route('web.home')}}">
                 <img src="images/logo-2-1.png" alt="">
             </a>
             <a href="javascript:void(0);" class="side-menu__toggler"><i class="fa fa-bars"></i></a>

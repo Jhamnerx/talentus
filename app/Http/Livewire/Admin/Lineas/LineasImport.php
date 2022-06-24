@@ -2,14 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Lineas;
 
-use App\Imports\LineasImport;
-use Exception;
+use App\Imports\Lineas;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
+use Exception;
 
-class Import extends Component
-
+class LineasImport extends Component
 {
     public $openModalImport = false;
     use WithFileUploads;
@@ -20,6 +19,7 @@ class Import extends Component
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
     ];
+
     protected $messages = [
         'file.required' => 'Debes seleccionar un archivo',
         'file.file' => 'Debes seleccionar un archivo',
@@ -42,10 +42,12 @@ class Import extends Component
         $this->validate();
         $this->errorInfo = null;
         try {
-            $exit = Excel::import(new LineasImport, $this->file);
-            session()->flash('import', 'Sim cards importadas correctamente.');
-            $this->emit('render');
             $this->openModalImport = false;
+            $exit = Excel::import(new Lineas, $this->file);
+            session()->flash('import', 'Lineas importadas correctamente.');
+            $this->emit('render');
+            //$this->openModalImport = false;
+            $this->reset();
         } catch (Exception $e) {
             // dd($e);
             $this->errorInfo = $e->errorInfo["2"];

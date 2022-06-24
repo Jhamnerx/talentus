@@ -22,6 +22,10 @@ class LineasController extends Controller
     {
         return view('admin.almacen.lineas.index');
     }
+    public function disponibles()
+    {
+        return view('admin.almacen.lineas.disponibles');
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -109,7 +113,7 @@ class LineasController extends Controller
     public function asignLineaStore(Request $request)
     {
 
-        //dd($request->all());
+  
         if ($request->linea == null) {
             $request->validate([
                 'sim_card' => 'required|exists:sim_card,id',
@@ -135,7 +139,7 @@ class LineasController extends Controller
             // si existe numero consulto para obtener sim card
             $sim_card = SimCard::where('id', $request->sim_card)->first();
 
-
+           
 
             // $linea = Lineas::whereHas('sim_card', function ($query)  use ($request) {
             //     $query->where('numero', $request->numero)->first();
@@ -143,7 +147,7 @@ class LineasController extends Controller
 
             if ($sim_card) {
 
-
+                //dd($sim_card);
 
                 CambiosLineas::create([
                     'tipo_cambio' => 'Asinacion de numero, existe numero',
@@ -153,6 +157,10 @@ class LineasController extends Controller
                     'user_id' => auth()->user()->id,
                 ]);
 
+                $linea = Lineas::find($sim_card->lineas_id);
+                $linea->old_sim_card = $sim_card->sim_card;
+                $linea->save();
+             
                 $exists = SimCard::where('lineas_id', $request->numero)->update(['lineas_id' => null]);
 
 
@@ -188,6 +196,9 @@ class LineasController extends Controller
             //dd($sim_card);
 
             //dd($request->sim_card);
+            $linea_old = Lineas::find($sim_card->lineas_id);
+            $linea_old->old_sim_card = $sim_card->sim_card;
+            $linea_old->save();
 
 
             //si no existe la linea la creamos
@@ -208,17 +219,15 @@ class LineasController extends Controller
             //dd($linea);
             //luego la asignamos la linea al sim card
             SimCard::where('id', $request->sim_card)
-                ->update(['lineas_id' => $linea->id]);
+                ->update([
+                    'lineas_id' => $linea->id
+                ]);
 
 
 
 
             return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se Asigno y se guardo el numero');
         }
-
-
-
-
 
 
 

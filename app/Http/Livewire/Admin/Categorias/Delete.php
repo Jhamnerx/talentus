@@ -16,7 +16,8 @@ class Delete extends Component
 
     public function delete()
     {
-        $this->model->setAttribute($this->field, '1')->save();
+       // $this->model->setAttribute($this->field, '1')->save();
+         $this->model->delete();
         return redirect()->route('admin.almacen.categorias.index')->with('delete', 'La categoria se elimino con exito');
     }
 

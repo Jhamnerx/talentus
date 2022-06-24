@@ -10,11 +10,11 @@ use App\Models\Presupuestos;
 use Carbon\Carbon;
 use Livewire\Component;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
-
+use Livewire\WithPagination;
 
 class PresupuestosIndex extends Component
 {
-
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';
@@ -114,7 +114,10 @@ class PresupuestosIndex extends Component
         // $this->render();
         
     }
-
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
     public function markAccept(Presupuestos $presupuesto){
 
         $presupuesto->update([

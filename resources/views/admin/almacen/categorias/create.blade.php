@@ -58,7 +58,7 @@
                     <div class="grid grid-cols-6 gap-6">
 
                         <div class="col-span-6 sm:col-span-4">
-                            {!! Form::hidden('empresa_id', session('empresa')) !!}
+
                             {{-- Nombre Categoria --}}
 
                             {!! Html::decode(Form::label('nombre','Nombre <span class="text-rose-500">*</span>',

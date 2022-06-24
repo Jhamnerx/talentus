@@ -45,6 +45,9 @@ Route::resource('categorias', CategoriaController::class)->names('admin.almacen.
 Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
 
 Route::resource('lineas', LineasController::class)->names('admin.almacen.lineas');
+
+Route::get('disponibles/lineas', [LineasController::class, 'disponibles'])->name('admin.almacen.lineas.disponibles.index');
+
 Route::get('asign/lineas', [LineasController::class, 'asignLinea'])->name('admin.asign.lineas');
 Route::post('asign/lineas/store', [LineasController::class, 'asignLineaStore'])->name('admin.asign.lineas.store');
 

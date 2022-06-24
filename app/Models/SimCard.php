@@ -23,7 +23,7 @@ class SimCard extends Model
 
     public function vehiculos()
     {
-        return $this->hasOne(Vehiculos::class, 'numero');
+        return $this->hasOne(Vehiculos::class, 'sim_card_id');
     }
 
     public function linea()

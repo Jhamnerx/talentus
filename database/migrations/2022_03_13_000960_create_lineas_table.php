@@ -20,6 +20,10 @@ class CreateLineasTable extends Migration
             $table->string('old_sim_card')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->enum('estado', [1, 2])->default(1);
+
+            $table->timestamp('fecha_suspencion')->nullable();
+            $table->timestamp('date_to_suspend')->nullable();
+
             $table->timestamps();
         });
     }
