@@ -11,16 +11,16 @@
                 !!}
                 {{-- <input name="sim" id="autocomplete-ajax-sim" type="text" class="form-input w-full sm:w-1/2"
                     placeholder="Escribe el sim card"> --}}
-                {!! Form::number('sim', $value, ['placeholder' => 'Escribe el sim card','id' =>
+                {!! Form::text('sim_card', $value, ['placeholder' => 'Escribe el sim card','id' =>
                 'autocomplete-ajax-sim',
                 'class' => 'form-input w-full sm:w-1/2', 'maxlength' => '19']) !!}
 
 
 
                 {{-- <input type="text" name="sim_card" id="sim_card"> --}}
-                {!! Form::hidden('sim_card', null) !!}
+                {!! Form::hidden('sim_card_id', null, ['id' => 'sim_card_id']) !!}
 
-                @error('sim_card')
+                @error('sim_card_id')
 
                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                     {{$message}}
@@ -34,14 +34,14 @@
                 mb-1'])
                 !!}
 
-                <input name="linea" id="autocomplete-ajax-linea" type="number" class="form-input w-full sm:w-1/2"
+                <input name="numero" id="autocomplete-ajax-linea" type="text" class="form-input w-full sm:w-1/2"
                     placeholder="Ingresar Linea" maxlength="9">
 
 
 
 
-                {!! Form::hidden('numero', null) !!}
-                @error('numero')
+                {!! Form::hidden('lineas_id', null, ['id' => 'linea_id']) !!}
+                @error('lineas_id')
 
                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                     {{$message}}
@@ -52,7 +52,7 @@
             <div class="col-span-12 sm:col-span-12 mb-4 mx-3">
                 {!! Form::label('motivo', '3. Motivo de cambio', ['class' => 'block text-sm font-medium mb-1'])
                 !!}
-                <input type="text" class="form-input w-full sm:w-1/2 " placeholder="Escribe el motivo">
+                <input name="motivo" type="text" class="form-input w-full sm:w-1/2 " placeholder="Escribe el motivo">
 
 
 
@@ -117,11 +117,11 @@
             deferRequestBy: 5,
             onSelect: function(suggestion) {
 
-                $('#sim_card').val(suggestion.data);
+                $('#sim_card_id').val(suggestion.data);
 
             },
             onHint: function (hint) {
-               $('#sim_card').val(hint);
+               $('#sim_card_id').val(hint);
                 //console.log(hint);
 
 
@@ -163,12 +163,12 @@
             deferRequestBy: 5,
             onSelect: function(suggestion) {
 
-                $('#numero').val(suggestion.data);
-                console.log(suggestion);
+                $('#linea_id').val(suggestion.data);
+               // console.log(suggestion);
 
             },
             onHint: function (hint) {
-               $('#numero').val(hint);
+               $('#linea_id').val(hint);
                 //console.log(hint);
 
 
