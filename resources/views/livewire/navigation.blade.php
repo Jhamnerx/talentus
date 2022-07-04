@@ -9,7 +9,7 @@
         <div class="main-nav__main-navigation">
             <ul class="main-nav__navigation-box">
                 <li class="current">
-                    <a href="">Inicio</a>
+                    <a href="{{route('web.home')}}">Inicio</a>
 
                 </li>
                 <li class="dropdown">
