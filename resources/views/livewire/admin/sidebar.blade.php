@@ -558,6 +558,7 @@
                                         </span>
                                     </a>
                                 </li>
+
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-pagos' && '!text-indigo-500'"
@@ -569,28 +570,10 @@
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-ciudades' && '!text-indigo-500'"
-                                        href="{{route('admin.ciudades.index')}}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ciudades
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-ajustes' && '!text-indigo-500'"
-                                        href="{{route('admin.ajustes.index')}}">
+                                        href="{{route('admin.ajustes.cuenta')}}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ajustes</span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-slide' && '!text-indigo-500'"
-                                        href="billing.html">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Gestor
-                                            Slide</span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">

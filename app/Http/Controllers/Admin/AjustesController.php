@@ -13,11 +13,14 @@ class AjustesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function cuenta()
     {
-        return view('admin.ajustes.index');
+        return view('admin.ajustes.cuenta');
     }
-
+    public function notificaciones()
+    {
+        return view('admin.ajustes.notificaciones');
+    }
     /**
      * Show the form for creating a new resource.
      *

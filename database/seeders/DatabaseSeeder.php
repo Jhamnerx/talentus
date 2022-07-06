@@ -3,13 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\Actas;
-use App\Models\Categoria;
+
 use App\Models\Certificados;
 use App\Models\CertificadosVelocimetros;
 use App\Models\Clientes;
-use App\Models\ComprasFacturas;
+
 use App\Models\Contactos;
-use App\Models\Contratos;
+
 use App\Models\Dispositivos;
 use App\Models\Empresa;
 use App\Models\Flotas;
@@ -23,6 +23,7 @@ use App\Models\Vehiculos;
 use App\Models\VentasFacturas;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -53,7 +54,7 @@ class DatabaseSeeder extends Seeder
         //Recibos::factory(60)->create();
         // Contratos::factory(70)->create();
 
-        Flotas::factory(100)->create();
+        Flotas::factory(10)->create();
         Contactos::factory(30)->create();
         Vehiculos::factory(50)->create();
         Reportes::factory(60)->create();
@@ -62,5 +63,6 @@ class DatabaseSeeder extends Seeder
         Certificados::factory(50)->create();
         CertificadosVelocimetros::factory(60)->create();
         $this->call(ContratoSeeder::class);
+        $this->call(PermisosSeeder::class);
     }
 }

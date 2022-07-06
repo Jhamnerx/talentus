@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\VehiculosController;
@@ -95,10 +96,18 @@ Route::resource('certificados-velocimetros', CertificadosVelocimetrosController:
 
 //ADMINISTRACION
 
-Route::resource('usuarios', UsersController::class)->names('admin.users');
+Route::resource('usuarios', UsersController::class)->names('admin.users')->parameters([
+    'usuarios' => 'user'
+]);
+
 Route::resource('cobros', CobrosController::class)->names('admin.cobros');
-Route::resource('ciudades', CiudadesController::class)->names('admin.ciudades');
-Route::resource('ajustes', AjustesController::class)->names('admin.ajustes');
+
+
+Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
+Route::resource('ajustes/ciudades', CiudadesController::class)->names('admin.ajustes.ciudades');
+Route::get('ajustes/notificaciones',[ AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
+Route::resource('ajustes/roles', RolController::class)->names('admin.ajustes.roles');
+Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
 
 
 Route::get('tecnico/tareas-pendientes', [ServicioTecnicoController::class, 'pendientes'])->name('admin.tecnico.tareas.pendientes');
