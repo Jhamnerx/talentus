@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('is_client', ['si', 'no'])->default('no');
-            $table->boolean('is_active')->default('false');
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('clientes_id')->nullable();
             $table->timestamps();
 
-             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
         });
     }
 

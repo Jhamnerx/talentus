@@ -16,7 +16,7 @@ class CreateVentasTable extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->string('serie')->nullable();
             $table->string('numero')->nullable();
             $table->date('fecha_emision');
@@ -38,16 +38,17 @@ class CreateVentasTable extends Migration
             $table->string('descuento')->nullable();
 
             $table->unsignedBigInteger('presupuestos_id')->nullable();
-            $table->unsignedBigInteger('user_id')->default(1);
+            $table->unsignedBigInteger('user_id')->nullable();
 
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
-            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
 
 
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -104,10 +104,12 @@ Route::resource('cobros', CobrosController::class)->names('admin.cobros');
 
 
 Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
-Route::resource('ajustes/ciudades', CiudadesController::class)->names('admin.ajustes.ciudades');
+Route::get('ajustes/ciudades',[ AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
 Route::get('ajustes/notificaciones',[ AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
-Route::resource('ajustes/roles', RolController::class)->names('admin.ajustes.roles');
-Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
+Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
+
+//Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
+Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
 
 
 Route::get('tecnico/tareas-pendientes', [ServicioTecnicoController::class, 'pendientes'])->name('admin.tecnico.tareas.pendientes');
@@ -162,3 +164,6 @@ Route::get('pdf/presupuestos/{presupuesto}', PresupuestoPdfController::class)->n
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
 
 
+Route::group(['middleware' => ['role:super-admin']], function () {
+    //
+});

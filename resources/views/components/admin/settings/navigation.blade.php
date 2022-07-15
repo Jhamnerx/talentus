@@ -46,7 +46,7 @@
             </li> --}}
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'ciudades' && 'bg-indigo-50'" href="ciudades.html">
+                    :class="settingsPanel === 'ciudades' && 'bg-indigo-50'" href="{{route('admin.ajustes.ciudades')}}">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
                         :class="settingsPanel === 'ciudades' && 'text-indigo-400'" viewBox="0 0 16 16">
                         <path
@@ -58,7 +58,7 @@
             </li>
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="roles.html">
+                    :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="{{route('admin.ajustes.roles')}}">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
                         :class="settingsPanel === 'roles' && 'text-indigo-400'" viewBox="0 0 16 16">
                         <path

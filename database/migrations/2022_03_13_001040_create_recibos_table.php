@@ -15,7 +15,7 @@ class CreateRecibosTable extends Migration
     {
         Schema::create('recibos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->string('numero');
             $table->string('tipo_pago');
 
@@ -27,16 +27,17 @@ class CreateRecibosTable extends Migration
             $table->enum('estado', [0, 1])->default(0);
             $table->string('nota')->nullable();
             $table->unsignedBigInteger('empresa_id');
-            $table->unsignedBigInteger('user_id')->default(1);
-            $table->unsignedBigInteger('presupuestos_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('presupuestos_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
 
-            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

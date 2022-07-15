@@ -15,12 +15,12 @@ class CreateRegistroCobrosTable extends Migration
     {
         Schema::create('registro_cobros', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('cobros_id');
+            $table->unsignedBigInteger('cobros_id')->nullable();
             $table->string('tipo_pago');
             $table->decimal('monto', 10, 2);
             $table->string('descripcion')->nullable();
 
-            $table->foreign('cobros_id')->references('id')->on('cobros')->onDelete('cascade');
+            $table->foreign('cobros_id')->references('id')->on('cobros')->onDelete('set null');
 
             $table->timestamps();
         });

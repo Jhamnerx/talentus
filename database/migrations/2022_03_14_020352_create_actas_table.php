@@ -17,12 +17,12 @@ class CreateActasTable extends Migration
     {
         Schema::create('actas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('vehiculos_id')->nullable();
             $table->string('numero');
             $table->date('inicio_cobertura')->nullable();
             $table->date('fin_cobertura')->nullable();
             $table->string('fecha')->nullable();
-            $table->unsignedBigInteger('ciudades_id');
+            $table->unsignedBigInteger('ciudades_id')->nullable();
             $table->year('year')->nullable();
             $table->boolean('sello')->default(1);
             $table->boolean('fondo')->default(1);
@@ -33,11 +33,12 @@ class CreateActasTable extends Migration
             $table->string('codigo')->nullable();
             $table->string('unique_hash')->nullable();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
-            $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('cascade');
+            $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

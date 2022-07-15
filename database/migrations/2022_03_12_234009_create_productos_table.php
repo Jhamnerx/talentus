@@ -22,10 +22,11 @@ class CreateProductosTable extends Migration
             $table->decimal('precio', 10, 2);
             $table->string('divisa')->nullable();
             $table->enum('tipo', ['producto', 'servicio'])->default('producto');
-            $table->unsignedBigInteger('categoria_id');
+            $table->unsignedBigInteger('categoria_id')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->enum('is_favorite', ['yes', 'no'])->default('no');
             $table->boolean('is_active')->default(true);
+
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

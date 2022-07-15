@@ -56,7 +56,7 @@ class Presupuestos extends Model
         }
     }
 
-        public function getPDFData()
+    public function getPDFData()
     {
 
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();

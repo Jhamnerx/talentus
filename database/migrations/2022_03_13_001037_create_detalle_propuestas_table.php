@@ -15,13 +15,13 @@ class CreateDetallePropuestasTable extends Migration
     {
         Schema::create('detalle_propuestas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('presupuestos_id');
+            $table->unsignedBigInteger('presupuestos_id')->nullable();
             $table->string('producto');
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
 
-            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
 
             $table->timestamps();
         });

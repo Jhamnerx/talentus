@@ -45,8 +45,7 @@
             <!-- Business Profile -->
             <section>
                 <h3 class="text-xl leading-snug text-slate-800 font-bold mb-1">Perfil</h3>
-                <div class="text-sm">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit.</div>
+                <div class="text-sm">Actualice la información de su cuenta y la dirección de correo electrónico.</div>
                 <div class="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                     <div class="sm:w-1/3">
                         <label class="block text-sm font-medium mb-1" for="name">Nombre:</label>
@@ -69,8 +68,7 @@
             <!-- Email -->
             <section>
                 <h3 class="text-xl leading-snug text-slate-800 font-bold mb-1">Email</h3>
-                <div class="text-sm">Asegúrese que su cuenta esté usando una contraseña larga y aleatoria para
-                    mantenerse seguro.</div>
+                <div class="text-sm">Asegúrese que su cuenta esté usando un email unico.</div>
                 <div class="flex flex-wrap mt-5">
                     <div class="mr-2">
                         <label class="sr-only" for="email">Business email</label>
@@ -86,9 +84,8 @@
             <!-- Password -->
             <section>
                 <h3 class="text-xl leading-snug text-slate-800 font-bold mb-1">Contraseña</h3>
-                <div class="text-sm">Puede establecer una contraseña permanente si no desea utilizar una contraseña
-                    temporal.
-                    códigos de inicio de sesión.</div>
+                <div class="text-sm">Asegúrese que su cuenta esté usando una contraseña larga y aleatoria para
+                    mantenerse seguro.</div>
                 <div class="mt-5">
                     <button wire:click.prevent="openModalPassword"
                         class="btn border-slate-200 shadow-sm text-indigo-500">Establecer nueva Contraseña</button>

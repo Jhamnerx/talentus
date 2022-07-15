@@ -27,6 +27,7 @@ class CreateCobrosTable extends Migration
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

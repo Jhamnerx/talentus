@@ -14,9 +14,8 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        User::create([
-            'name' => 'Jhamner',
-            'apellido' => 'Sifuentes Vasquez',
+        $admin = User::create([
+            'name' => 'Jhamner Sifuentes Vasquez',
             'email' => 'jhamnerx1x@gmail.com',
             'tipo_documento' => 'DNI',
             'numero_documento' => '75103149',
@@ -26,9 +25,11 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
+
+
+
         User::create([
-            'name' => 'Sandra',
-            'apellido' => 'Centurion',
+            'name' => 'Sandra Centurion',
             'email' => 'administracion@talentustechnology.com',
             'tipo_documento' => 'DNI',
             'numero_documento' => '000000',
@@ -40,7 +41,6 @@ class UserSeeder extends Seeder
         ]);
         User::create([
             'name' => 'Admin',
-            'apellido' => 'System',
             'email' => 'admin@talentus.com',
             'tipo_documento' => 'DNI',
             'numero_documento' => '000000',

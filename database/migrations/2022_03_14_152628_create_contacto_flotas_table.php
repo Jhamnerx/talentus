@@ -15,7 +15,7 @@ class CreateContactoFlotasTable extends Migration
     {
         Schema::create('contacto_flotas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('flotas_id');
+            $table->unsignedBigInteger('flotas_id')->nullable();
             $table->string('cargo')->nullable();
             $table->string('nombre');
             $table->string('telefono')->nullable();
@@ -25,9 +25,10 @@ class CreateContactoFlotasTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->string('descripcion')->nullable();
 
-            $table->foreign('flotas_id')->references('id')->on('flotas')->onDelete('cascade');
+            $table->foreign('flotas_id')->references('id')->on('flotas')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

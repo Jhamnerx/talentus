@@ -15,7 +15,7 @@ class CertificadosVelocimetros extends Migration
     {
         Schema::create('certificados_velocimetros', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('vehiculos_id')->nullable();
             $table->string('numero');
             $table->string('fecha')->nullable();
             $table->year('year')->nullable();
@@ -24,14 +24,14 @@ class CertificadosVelocimetros extends Migration
             $table->boolean('estado')->default(true);
             $table->boolean('eliminado')->default(false);
             $table->unsignedBigInteger('empresa_id')->nullable();
-            $table->unsignedBigInteger('ciudades_id');
+            $table->unsignedBigInteger('ciudades_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('codigo')->nullable();
             $table->string('unique_hash')->nullable();
 
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('cascade');
+            $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('set null');
 
             $table->timestamps();
         });

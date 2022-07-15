@@ -15,7 +15,7 @@ class RolController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:ver-rol | crear-rol | editar-rol | eliminar-rol', ['only' => ['index']]);
+        $this->middleware('permission:ver-rol|crear-rol|editar-rol|eliminar-rol', ['only' => ['index']]);
         $this->middleware('permission:crear-rol', ['only' => ['create', 'store']]);
         $this->middleware('permission:editar-rol', ['only' => ['edit', 'update']]);
         $this->middleware('permission:eliminar-rol', ['only' => ['destroy']]);
@@ -51,14 +51,15 @@ class RolController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
-            'name' => 'required',
+            'name' => 'required|unique:roles',
             'permission' => 'required',
         ]);
 
         $rol = Role::create(['name' => $request->input('name')]);
         $rol->syncPermissions($request->input('permission'));
-        return redirect()->route('roles.index');
+        return redirect()->route('admin.ajustes.roles');
     }
 
 
@@ -76,7 +77,7 @@ class RolController extends Controller
         ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
         ->all();
 
-        return view('admin.permisos.roles.edit', compact('role', 'permisos', 'rolPermisos'));
+        return view('admin.permisos.roles.edit', compact('rol', 'permisos', 'rolPermisos'));
     }
 
     /**

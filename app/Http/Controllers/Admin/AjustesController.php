@@ -21,6 +21,14 @@ class AjustesController extends Controller
     {
         return view('admin.ajustes.notificaciones');
     }
+    public function ciudades()
+    {
+        return view('admin.ajustes.ciudades');
+    }
+    public function roles()
+    {
+        return view('admin.ajustes.roles');
+    }
     /**
      * Show the form for creating a new resource.
      *

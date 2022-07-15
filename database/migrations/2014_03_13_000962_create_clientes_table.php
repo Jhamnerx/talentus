@@ -24,7 +24,10 @@ class CreateClientesTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
+            
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

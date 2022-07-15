@@ -16,9 +16,9 @@ class CreateDispositivosTable extends Migration
         Schema::create('dispositivos', function (Blueprint $table) {
             $table->id();
             $table->string('imei');
-            $table->unsignedBigInteger('modelo_id');
+            $table->unsignedBigInteger('modelo_id')->nullable();
             $table->unsignedBigInteger('empresa_id');
-            $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('cascade');
+            $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
 
             $table->timestamps();
         });
