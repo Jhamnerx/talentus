@@ -73,4 +73,12 @@ class Clientes extends Model
     {
         return $this->hasMany(Certificados::class, 'certificados_id');
     }
+
+
+    //relacion uno a muchos contactos
+
+    public function contactos()
+    {
+        return $this->hasMany(Contactos::class, 'clientes_id');
+    }
 }

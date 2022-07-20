@@ -60,6 +60,8 @@ Route::resource('dispositivos', GpsController::class)->names('admin.almacen.disp
 Route::resource('guias', GuiasController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
+
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
 
@@ -79,7 +81,6 @@ Route::resource('contratos', ContratosController::class)->names('admin.ventas.co
 
 // VEHICULOS
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
-Route::resource('contactos', ContactosController::class)->names('admin.vehiculos.contactos');
 Route::resource('vehiculos', VehiculosController::class)->names('admin.vehiculos');
 
 Route::resource('reportes', ReportesController::class)->names('admin.vehiculos.reportes');

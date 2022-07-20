@@ -16,7 +16,6 @@ class Index extends Component
     public function render()
     {
         $usuarios = User::Where('name', 'like', '%' . $this->search . '%')
-            ->orWhere('apellido', 'like', '%' .$this->search.'%')
             ->orderBy('id', 'desc')
             ->paginate(10);
             

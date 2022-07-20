@@ -24,7 +24,7 @@ class Contactos extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $table = 'contacto_flotas';
+    protected $table = 'contactos';
     /**
      * Scope para traer activos y no
      *
@@ -32,13 +32,13 @@ class Contactos extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
-        static::addGlobalScope(new EliminadoScope);
+        //
+        //static::addGlobalScope(new EliminadoScope);
     }
     //Relacion uno a muchos inversa
 
-    public function flotas()
+    public function clientes()
     {
-        return $this->belongsTo(Flotas::class, 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id');
     }
 }

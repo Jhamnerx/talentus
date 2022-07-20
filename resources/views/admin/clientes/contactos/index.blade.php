@@ -1,9 +1,11 @@
 @extends('layouts.admin')
-@section('ruta', 'clientes-clientes')
+@section('ruta', 'clientes-contactos')
 @section('contenido')
 
     <!-- Table -->
-    @livewire('admin.clientes.clientes-index')
+    @livewire('admin.clientes.contactos.contactos-index')
+
+
 
 @stop
 
@@ -22,20 +24,7 @@
             });
         </script>
     @endif
-    @if (session('export'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Exportar',
-                    text: '{{ session('export') }}',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
 
-                })
-            });
-        </script>
-    @endif
     @if (session('update'))
         <script>
             $(document).ready(function() {

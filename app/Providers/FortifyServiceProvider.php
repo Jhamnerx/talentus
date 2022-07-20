@@ -40,9 +40,9 @@ class FortifyServiceProvider extends ServiceProvider
 
 
         Fortify::authenticateUsing(function (Request $request) {
+            $request->session()->put('empresa', 1);
+            //  Session::set('variableName', $value);
             $user = User::where('email', $request->email)->first();
-
-            session()->put('empresa', 1);
     
             if ($user && Hash::check($request->password, $user->password)) {
                 return $user;

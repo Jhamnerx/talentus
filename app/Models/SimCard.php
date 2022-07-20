@@ -16,7 +16,7 @@ class SimCard extends Model
     protected static function booted()
     {
 
-        static::addGlobalScope(new EmpresaScope);
+        //
     }
 
     //relacion uno a muchos

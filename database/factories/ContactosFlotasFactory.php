@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Models\Ciudades;
+use App\Models\Clientes;
 use App\Models\Contactos;
 use App\Models\Empresa;
-use App\Models\Flotas;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ContactosFlotasFactory extends Factory
@@ -25,12 +24,10 @@ class ContactosFlotasFactory extends Factory
     {
         return [
             'nombre'  => $this->faker->unique()->name(),
-            'flotas_id' => Flotas::all()->random()->id,
+            'clientes_id' => Clientes::all()->random()->id,
             'cargo' => 'Supervisor',
             'telefono' => $this->faker->e164PhoneNumber(),
             'email' => $this->faker->companyEmail(),
-            'empresa_id' => Empresa::all()->random()->id,
-
         ];
     }
 }

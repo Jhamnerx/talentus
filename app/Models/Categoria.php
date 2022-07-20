@@ -51,7 +51,7 @@ class Categoria extends Model
     protected static function booted()
     {
        // static::addGlobalScope(new EliminadoScope);
-        static::addGlobalScope(new EmpresaScope);
+        //
     }
     public function getKey() {
         return $this->id;

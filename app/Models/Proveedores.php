@@ -19,7 +19,7 @@ class Proveedores extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+        //
         static::addGlobalScope(new EliminadoScope);
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Contracts\Permission;
+use Spatie\Permission\Models\Permission;
 
 
 class RolController extends Controller

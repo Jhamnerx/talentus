@@ -13,19 +13,19 @@ class CreateContactoFlotasTable extends Migration
      */
     public function up()
     {
-        Schema::create('contacto_flotas', function (Blueprint $table) {
+        Schema::create('contactos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('flotas_id')->nullable();
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->string('cargo')->nullable();
             $table->string('nombre');
             $table->string('telefono')->nullable();
+            $table->string('birthday')->nullable();
             $table->string('email')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
-            $table->unsignedBigInteger('empresa_id');
             $table->string('descripcion')->nullable();
+            $table->text('nota')->nullable();
 
-            $table->foreign('flotas_id')->references('id')->on('flotas')->onDelete('set null');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
 
             $table->timestamps();
             $table->softDeletes();

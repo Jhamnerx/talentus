@@ -46,6 +46,6 @@ class Reportes extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EliminadoScope);
-        static::addGlobalScope(new EmpresaScope);
+        //
     }
 }
