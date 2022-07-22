@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Clientes\Contactos;
 
 use App\Models\Contactos;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class ContactosIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $sort = "id";
     public $direction = "desc";

@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Productos;
 
 use App\Models\Productos;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class ProductosIndex extends Component
 {
+    use WithPagination;
     public $search;
 
     public function render()

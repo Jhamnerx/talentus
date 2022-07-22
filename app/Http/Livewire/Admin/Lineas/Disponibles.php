@@ -4,8 +4,6 @@ namespace App\Http\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 

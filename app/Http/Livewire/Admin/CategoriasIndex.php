@@ -5,10 +5,11 @@ namespace App\Http\Livewire\Admin;
 use App\Models\Categoria;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class CategoriasIndex extends Component
 {
-
+    use WithPagination;
 
     public $search;
     public $sort = "id";

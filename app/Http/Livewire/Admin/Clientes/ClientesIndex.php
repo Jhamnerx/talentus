@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Clientes;
 
 use App\Models\Clientes;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class ClientesIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

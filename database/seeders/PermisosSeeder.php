@@ -113,10 +113,10 @@ class PermisosSeeder extends Seeder
             'eliminar-vehiculos-flotas',
 
 
-            'ver-vehiculos',
-            'crear-vehiculos',
-            'editar-vehiculos',
-            'eliminar-vehiculos',
+            'ver-vehiculos-vehiculos',
+            'crear-vehiculos-vehiculos',
+            'editar-vehiculos-vehiculos',
+            'eliminar-vehiculos-vehiculos',
 
             'ver-vehiculos-reportes',
             'crear-vehiculos-reportes',

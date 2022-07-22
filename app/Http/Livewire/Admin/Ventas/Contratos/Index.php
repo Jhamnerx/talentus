@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Ventas\Contratos;
 
 use App\Models\Contratos;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class Index extends Component
-{
+{   
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

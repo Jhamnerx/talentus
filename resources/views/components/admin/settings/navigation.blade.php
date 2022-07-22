@@ -6,7 +6,7 @@
         <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'account' && 'bg-indigo-50'" href="{{route('admin.ajustes.cuenta')}}">
+                    :class="settingsPanel === 'account' && 'bg-indigo-50'" href="{{ route('admin.ajustes.cuenta') }}">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
                         :class="settingsPanel === 'account' && 'text-indigo-400'" viewBox="0 0 16 16">
                         <path
@@ -20,7 +20,7 @@
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
                     :class="settingsPanel === 'notifications' && 'bg-indigo-50'"
-                    href="{{route('admin.ajustes.notificaciones')}}">
+                    href="{{ route('admin.ajustes.notificaciones') }}">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
                         :class="settingsPanel === 'notifications' && 'text-indigo-400'" viewBox="0 0 16 16">
                         <path
@@ -46,11 +46,15 @@
             </li> --}}
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'ciudades' && 'bg-indigo-50'" href="{{route('admin.ajustes.ciudades')}}">
+                    :class="settingsPanel === 'ciudades' && 'bg-indigo-50'"
+                    href="{{ route('admin.ajustes.ciudades') }}">
+
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'ciudades' && 'text-indigo-400'" viewBox="0 0 16 16">
-                        <path
-                            d="M5 9h11v2H5V9zM0 9h3v2H0V9zm5 4h6v2H5v-2zm-5 0h3v2H0v-2zm5-8h7v2H5V5zM0 5h3v2H0V5zm5-4h11v2H5V1zM0 1h3v2H0V1z" />
+                        :class="settingsPanel === 'ciudades' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                        </path>
                     </svg>
                     <span class="text-sm font-medium text-slate-600"
                         :class="settingsPanel === 'ciudades' ? 'text-indigo-500' : 'hover:text-slate-700'">Ciudades</span>
@@ -58,11 +62,14 @@
             </li>
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
                 <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="{{route('admin.ajustes.roles')}}">
+                    :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="{{ route('admin.ajustes.roles') }}">
+
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'roles' && 'text-indigo-400'" viewBox="0 0 16 16">
-                        <path
-                            d="M5 9h11v2H5V9zM0 9h3v2H0V9zm5 4h6v2H5v-2zm-5 0h3v2H0v-2zm5-8h7v2H5V5zM0 5h3v2H0V5zm5-4h11v2H5V1zM0 1h3v2H0V1z" />
+                        :class="settingsPanel === 'roles' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                        </path>
                     </svg>
                     <span class="text-sm font-medium text-slate-600"
                         :class="settingsPanel === 'roles' ? 'text-indigo-500' : 'hover:text-slate-700'">Roles</span>

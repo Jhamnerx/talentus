@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Certificados\Actas;
 
 use App\Models\Actas;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class ActasIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

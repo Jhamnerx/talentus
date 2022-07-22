@@ -3,9 +3,9 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ openModalSave: @entangle('openModalSave') }">
+    <div x-data="{ openModalEdit: @entangle('openModalEdit') }">
         <!-- Modal backdrop -->
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalSave"
+        <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalEdit"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
@@ -13,14 +13,14 @@
         <!-- Modal dialog -->
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-10"
-            role="dialog" aria-modal="true" x-show="openModalSave"
+            role="dialog" aria-modal="true" x-show="openModalEdit"
             x-transition:enter="transition ease-in-out duration-200" x-transition:enter-start="opacity-0 translate-y-4"
             x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in-out duration-200"
             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
             x-cloak>
 
             <div class="bg-white rounded shadow-lg text-center overflow-auto w-full md:w-3/4 lg:w-3/4 xl:w-3/4 2xl:w-3/4 max-h-full"
-                @keydown.escape.window="openModalSave = false">
+                @keydown.escape.window="openModalEdit = false">
                 <div
                     class="inline-block align-middle w-full bg-white rounded-lg text-left overflow-hidden relative shadow-xl transition-all my-4">
                     <div
@@ -70,7 +70,7 @@
                             @enderror
                         </div>
                     </div>
-
+                    {{ json_encode($permission) }}
                     <div class="flex justify-between">
                         <h6 class="text-sm not-italic font-medium text-gray-800 px-4 md:px-8 py-1.5">
                             Permisos

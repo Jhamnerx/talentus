@@ -54,7 +54,7 @@ class Edit extends Component
         $update->save();
 
         $this->openModalEdit = false;
-        $this->dispatchBrowserEvent('ciudades-edit', ['ciudad' => $this->ciudad->nombre]);
+        $this->dispatchBrowserEvent('ciudad-edit', ['ciudad' => $this->ciudad->nombre]);
         $this->emit('render');
         $this->reset();
     }

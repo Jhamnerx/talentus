@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Dispositivos;
 
 use App\Models\ModelosDispositivo;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class ModelosDispositivosIndex extends Component
 {
+    use WithPagination;
     public $modalEditOpen = false;
     public $search;
 

@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Certificados\Gps;
 
 use App\Models\Certificados;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class CertificadosGpsIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

@@ -54,7 +54,7 @@ class Save extends Component
 
         $rol = Role::create(['name' => $this->name]);
         $rol->syncPermissions($this->permission);
-        //return redirect()->route('admin.ajustes.roles');
+        return redirect()->route('admin.ajustes.roles')->with('store', 'rol creado satisfactoriamente');
     }
 
     public function checkAll(){
@@ -64,7 +64,12 @@ class Save extends Component
         foreach ($permisos as $permiso) {
 
 
-            array_push($this->permission, $permiso->name);
+            if(array_search($permiso->name, $this->permission) === false){
+                
+                array_push($this->permission, $permiso->name);
+                //dd($permiso->name);
+
+            }
 
         }
        
@@ -72,6 +77,35 @@ class Save extends Component
     }
     public function uncheckAll(){
         $this->reset('permission');
+    }
+
+    public function checkCategory($categoria){
+
+        $permisos = Permission::get();
+        //dd($permisos);
+        foreach ($permisos as $permiso) {
+
+            if(strpos($permiso->name, $categoria)){
+
+
+                //array_push($this->permission, $permiso->name);
+
+                $valor = array_search($permiso->name, $this->permission);
+
+                //var_dump($valor);
+                //dd($valor);
+                if(array_search($permiso->name, $this->permission) === false){
+                    
+                    array_push($this->permission, $permiso->name);
+                    //dd($permiso->name);
+
+                }
+            }
+            
+
+        }
+
+
     }
 
 

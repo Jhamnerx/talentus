@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Lineas;
 
 use App\Models\SimCard;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class LineasIndex extends Component
 {
+    use WithPagination;
 
     public $search;
     public $from = '';

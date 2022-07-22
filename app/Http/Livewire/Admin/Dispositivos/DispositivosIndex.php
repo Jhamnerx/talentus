@@ -5,10 +5,10 @@ namespace App\Http\Livewire\Admin\Dispositivos;
 use App\Models\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class DispositivosIndex extends Component
 {
-
+    use WithPagination;
     public $search;
     protected $listeners = ['render' => 'render'];
     public function render()

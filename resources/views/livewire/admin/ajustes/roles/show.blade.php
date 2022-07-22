@@ -14,8 +14,8 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Search</label>
-                <input id="action-search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar Rol por Nombre…" />
+                <input wire:model="search" id="action-search" class="form-input pl-9 focus:border-slate-300"
+                    type="search" placeholder="Buscar Rol por Nombre…" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
@@ -69,7 +69,8 @@
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                             <div class="space-x-1">
-                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                <button wire:click.prevent="openModalEdit({{ $rol->id }})"
+                                    class="text-slate-400 hover:text-slate-500 rounded-full">
                                     <span class="sr-only">Editar</span>
                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                         <path
