@@ -20,7 +20,7 @@ class Flotas extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+        //
         static::addGlobalScope(new EliminadoScope);
     }
     //Relacion uno a muchos inversa
@@ -34,13 +34,6 @@ class Flotas extends Model
     public function vehiculos()
     {
         return $this->hasMany(Vehiculos::class, 'flotas_id');
-    }
-
-    //relacion uno a muchos
-
-    public function contactos()
-    {
-        return $this->hasMany(Contactos::class, 'flotas_id');
     }
 
 

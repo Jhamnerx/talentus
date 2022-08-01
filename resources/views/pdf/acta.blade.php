@@ -2,8 +2,12 @@
 <html>
 
 <head>
-
+    @if ($acta->vehiculos && $acta->ciudades)
     <title>ACTA {{$acta->vehiculos->placa}} {{$acta->ciudades->prefijo."-".$acta->year."-".$acta->numero}}</title>
+    @else
+    <title>Faltan datos en esta acta, por favor corrigelas</title>
+    @endif
+
 
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -106,9 +110,9 @@
             color: rgb(238, 34, 34);
             font-style:  !important;
             font-weight: bold;
-            font-size: 26px;
+            font-size: 24px;
             font-family: "DejaVu Sans";
-            margin-left: 32rem;
+            margin-left: 30rem;
             margin-top: -1.4rem;
 
         }

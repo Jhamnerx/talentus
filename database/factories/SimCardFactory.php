@@ -19,7 +19,7 @@ class SimCardFactory extends Factory
         $claves = array_rand($operadores);
         return [
             'sim_card' => $this->faker->unique()->ean13(),
-            'lineas_id' => Lineas::all()->random()->id,
+            'lineas_id' => NULL,
             'operador' => $operadores[$claves],
             'empresa_id' => Empresa::all()->random()->id,
         ];

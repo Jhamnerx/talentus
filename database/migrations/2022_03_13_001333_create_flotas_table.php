@@ -16,14 +16,15 @@ class CreateFlotasTable extends Migration
         Schema::create('flotas', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->string('descripcion')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

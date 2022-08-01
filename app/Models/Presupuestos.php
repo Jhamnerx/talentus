@@ -26,7 +26,7 @@ class Presupuestos extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+        //
         static::addGlobalScope(new EliminadoScope);
     }
 
@@ -56,7 +56,7 @@ class Presupuestos extends Model
         }
     }
 
-        public function getPDFData()
+    public function getPDFData()
     {
 
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();

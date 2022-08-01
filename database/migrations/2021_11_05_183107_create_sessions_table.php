@@ -17,7 +17,6 @@ class CreateSessionsTable extends Migration
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
-            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->text('user_agent')->nullable();
             $table->text('payload');
             $table->integer('last_activity')->index();

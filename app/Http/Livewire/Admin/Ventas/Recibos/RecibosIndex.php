@@ -4,10 +4,10 @@ namespace App\Http\Livewire\Admin\Ventas\Recibos;
 
 use App\Models\Recibos;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class RecibosIndex extends Component
 {
-
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

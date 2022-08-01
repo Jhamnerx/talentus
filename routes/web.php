@@ -29,6 +29,7 @@ Route::resource('solicitudes', SolicitudesController::class)->names('solicitudes
 
 Route::get('faq', [WebController::class, 'faq'])->name('web.faq');
 Route::get('contacto', [WebController::class, 'contacto'])->name('web.contacto');
+Route::post('send/form', [WebController::class, 'submitContacto'])->name('contact.form');
 
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

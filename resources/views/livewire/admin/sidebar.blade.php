@@ -20,7 +20,7 @@
                 </svg>
             </button>
             <!-- Logo -->
-            <a class="block" href="{{route('admin.home')}}">
+            <a class="block" href="{{ route('admin.home') }}">
                 <svg width="32" height="32" viewBox="0 0 32 32">
                     <defs>
                         <linearGradient x1="28.538%" y1="20.229%" x2="100%" y2="108.156%" id="logo-a">
@@ -95,7 +95,7 @@
                                     <a x-on:click="page = dashboard-inicio"
                                         class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'dashboard-inicio' && '!text-indigo-500'"
-                                        href="{{route('admin.home')}}">
+                                        href="{{ route('admin.home') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Inicio</span>
                                     </a>
@@ -103,7 +103,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'dashboard-estadisticas' && '!text-indigo-500'"
-                                        href="{{route('admin.home')}}">
+                                        href="{{ route('admin.home') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Estadisticas</span>
                                     </a>
@@ -114,7 +114,7 @@
 
                     <!-- Almacen -->
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
-                        :class="{ 'bg-slate-900': page.startsWith('almacen-')}" x-data="{ open: false }"
+                        :class="{ 'bg-slate-900': page.startsWith('almacen-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('almacen-'))">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
                             :class="page.startsWith('almacen-') && 'hover:text-slate-200'" href="#0"
@@ -150,7 +150,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-categorias' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.categorias.index')}}">
+                                        href="{{ route('admin.almacen.categorias.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Categorias</span>
                                     </a>
@@ -158,7 +158,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-productos' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.productos.index')}}">
+                                        href="{{ route('admin.almacen.productos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Productos/Servicios</span>
                                     </a>
@@ -166,7 +166,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-lineas' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.lineas.index')}}">
+                                        href="{{ route('admin.almacen.lineas.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Sim
                                             Cards</span>
@@ -175,7 +175,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-disponibles-lineas' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.lineas.disponibles.index')}}">
+                                        href="{{ route('admin.almacen.lineas.disponibles.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Lineas</span>
                                     </a>
@@ -183,7 +183,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-dispositivos' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.dispositivos.index')}}">
+                                        href="{{ route('admin.almacen.dispositivos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dispositivos</span>
                                     </a>
@@ -191,7 +191,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-guias' && '!text-indigo-500'"
-                                        href="{{route('admin.almacen.guias.index')}}">
+                                        href="{{ route('admin.almacen.guias.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guias
                                         </span>
@@ -201,29 +201,68 @@
                         </div>
                     </li>
                     <!-- Clientes -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" :class="page === 'clientes' && 'bg-slate-900'">
+                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
+                        :class="{ 'bg-slate-900': page.startsWith('clientes-') }" x-data="{ open: false }"
+                        x-init="$nextTick(() => open = page.startsWith('clientes-'))">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
-                            :class="page === 'clientes' && 'hover:text-slate-200'"
-                            href="{{route('admin.clientes.index')}}">
-                            <div class="flex items-center">
-                                <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
-                                    <path class="fill-current text-slate-600"
-                                        :class="page.startsWith('clientes') && 'text-indigo-500'"
-                                        d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z" />
-                                    <path class="fill-current text-slate-400"
-                                        :class="page.startsWith('clientes') && 'text-indigo-300'"
-                                        d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z" />
-                                </svg>
-                                <span
-                                    class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Clientes</span>
+                            :class="page.startsWith('clientes-') && 'hover:text-slate-200'" href="#0"
+                            @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
+                                        <path class="fill-current text-slate-600"
+                                            :class="page.startsWith('clientes') && 'text-indigo-500'"
+                                            d="M18.974 8H22a2 2 0 012 2v6h-2v5a1 1 0 01-1 1h-2a1 1 0 01-1-1v-5h-2v-6a2 2 0 012-2h.974zM20 7a2 2 0 11-.001-3.999A2 2 0 0120 7zM2.974 8H6a2 2 0 012 2v6H6v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5H0v-6a2 2 0 012-2h.974zM4 7a2 2 0 11-.001-3.999A2 2 0 014 7z" />
+                                        <path class="fill-current text-slate-400"
+                                            :class="page.startsWith('clientes') && 'text-indigo-300'"
+                                            d="M12 6a3 3 0 110-6 3 3 0 010 6zm2 18h-4a1 1 0 01-1-1v-6H6v-6a3 3 0 013-3h6a3 3 0 013 3v6h-3v6a1 1 0 01-1 1z" />
+                                    </svg>
+                                    <span
+                                        class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Clientes</span>
+                                </div>
+                                <!-- Icon -->
+                                <div
+                                    class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                        :class="open && 'transform rotate-180'" viewBox="0 0 12 12">
+                                        <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                    </svg>
+                                </div>
                             </div>
                         </a>
+                        <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                            <ul href="{{ route('admin.clientes.index') }}" class="pl-9 mt-1"
+                                :class="!open && 'hidden'" x-cloak>
+
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'clientes-clientes' && '!text-indigo-500'"
+                                        href="{{ route('admin.clientes.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Clientes
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'clientes-contactos' && '!text-indigo-500'"
+                                        href="{{ route('admin.clientes.contactos.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </div>
                     </li>
+
                     <!-- Proveedores -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" :class="page === 'proveedores' && 'bg-slate-900'">
+                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
+                        :class="page === 'proveedores' && 'bg-slate-900'">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
                             :class="page === 'proveedores' && 'hover:text-slate-200'"
-                            href="{{route('admin.proveedores.index')}}">
+                            href="{{ route('admin.proveedores.index') }}">
                             <div class="flex items-center">
                                 <svg class="shrink-0 h-6 w-6" viewBox="0 0 24 24">
                                     <path class="fill-current text-slate-600"
@@ -282,7 +321,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'compras-facturas' && '!text-indigo-500'"
-                                        href="{{route('admin.compras.facturas.index')}}">
+                                        href="{{ route('admin.compras.facturas.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Facturas
                                         </span>
@@ -335,7 +374,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-presupuestos' && '!text-indigo-500'"
-                                        href="{{route('admin.ventas.presupuestos.index')}}">
+                                        href="{{ route('admin.ventas.presupuestos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cotizaciones
                                         </span>
@@ -344,7 +383,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-facturas' && '!text-indigo-500'"
-                                        href="{{route('admin.ventas.facturas.index')}}">
+                                        href="{{ route('admin.ventas.facturas.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Facturas
                                         </span>
@@ -353,7 +392,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-recibos' && '!text-indigo-500'"
-                                        href="{{route('admin.ventas.recibos.index')}}">
+                                        href="{{ route('admin.ventas.recibos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Recibos</span>
                                     </a>
@@ -361,7 +400,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-contratos' && '!text-indigo-500'"
-                                        href="{{route('admin.ventas.contratos.index')}}">
+                                        href="{{ route('admin.ventas.contratos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contratos</span>
                                     </a>
@@ -380,8 +419,8 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <svg class="shrink-0 h-6 w-6 icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                        stroke-width="1.5" stroke="currentColor" fill="none"
+                                        stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <circle cx="7" cy="17" r="2" />
                                         <circle cx="17" cy="17" r="2" />
@@ -406,7 +445,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-flotas' && '!text-indigo-500'"
-                                        href="{{route('admin.vehiculos.flotas.index')}}">
+                                        href="{{ route('admin.vehiculos.flotas.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Flotas
                                         </span>
@@ -414,8 +453,8 @@
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'vehiculos-contactos' && '!text-indigo-500'"
-                                        href="{{route('admin.vehiculos.contactos.index')}}">
+                                        :class="page === 'clientes-contactos' && '!text-indigo-500'"
+                                        href="{{ route('admin.clientes.contactos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
                                         </span>
@@ -424,7 +463,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-vehiculos' && '!text-indigo-500'"
-                                        href="{{route('admin.vehiculos.index')}}">
+                                        href="{{ route('admin.vehiculos.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehiculos</span>
                                     </a>
@@ -433,7 +472,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-reportes' && '!text-indigo-500'"
-                                        href="{{route('admin.vehiculos.reportes.index')}}">
+                                        href="{{ route('admin.vehiculos.reportes.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Reportes
                                         </span>
@@ -484,7 +523,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-actas' && '!text-indigo-500'"
-                                        href="{{route('admin.certificados.actas.index')}}">
+                                        href="{{ route('admin.certificados.actas.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Actas</span>
                                     </a>
@@ -492,7 +531,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-gps' && '!text-indigo-500'"
-                                        href="{{route('admin.certificados.gps.index')}}">
+                                        href="{{ route('admin.certificados.gps.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Certificados
                                             Gps</span>
@@ -501,7 +540,7 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-velocimetro' && '!text-indigo-500'"
-                                        href="{{route('admin.certificados.velocimetros.index')}}">
+                                        href="{{ route('admin.certificados.velocimetros.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Certificados
                                             Velocimetros</span>
@@ -552,16 +591,17 @@
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-usuarios' && '!text-indigo-500'"
-                                        href="{{route('admin.users.index')}}">
+                                        href="{{ route('admin.users.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Usuarios
                                         </span>
                                     </a>
                                 </li>
+
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-pagos' && '!text-indigo-500'"
-                                        href="{{route('admin.cobros.index')}}">
+                                        href="{{ route('admin.cobros.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos/
                                             Cobros</span>
@@ -569,28 +609,10 @@
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-ciudades' && '!text-indigo-500'"
-                                        href="{{route('admin.ciudades.index')}}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ciudades
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-ajustes' && '!text-indigo-500'"
-                                        href="{{route('admin.ajustes.index')}}">
+                                        href="{{ route('admin.ajustes.cuenta') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ajustes</span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-slide' && '!text-indigo-500'"
-                                        href="billing.html">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Gestor
-                                            Slide</span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">
@@ -630,12 +652,13 @@
                                         stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <line x1="6" y1="9" x2="12" y2="9" />
-                                        <line class="fill-current text-slate-600" x1="4" y1="5" x2="8" y2="5" />
+                                        <line class="fill-current text-slate-600" x1="4" y1="5"
+                                            x2="8" y2="5" />
                                         <path d="M6 5v11a1 1 0 0 0 1 1h5" />
-                                        <rect class="fill-current text-slate-400" x="12" y="7" width="8" height="4"
-                                            rx="1" />
-                                        <rect class="fill-current text-slate-400" x="12" y="15" width="8" height="4"
-                                            rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="7"
+                                            width="8" height="4" rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="15"
+                                            width="8" height="4" rx="1" />
                                     </svg>
                                     <span
                                         class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas</span>
@@ -654,7 +677,7 @@
                             <ul class="pl-9 mt-1" :class="{ 'hidden': !open }" x-cloak>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{route('admin.tecnico.tareas.pendientes')}}">
+                                        href="{{ route('admin.tecnico.tareas.pendientes') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas
                                             Pendientes</span>
@@ -662,7 +685,7 @@
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{route('admin.tecnico.tareas.completadas')}}">
+                                        href="{{ route('admin.tecnico.tareas.completadas') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas
                                             Completadas
@@ -671,7 +694,7 @@
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{route('admin.servicio.tecnico.index')}}">
+                                        href="{{ route('admin.servicio.tecnico.index') }}">
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Registrar
                                             Tareas

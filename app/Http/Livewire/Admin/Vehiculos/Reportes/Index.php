@@ -5,9 +5,10 @@ namespace App\Http\Livewire\Admin\Vehiculos\Reportes;
 use App\Models\Flotas;
 use App\Models\Reportes;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class Index extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

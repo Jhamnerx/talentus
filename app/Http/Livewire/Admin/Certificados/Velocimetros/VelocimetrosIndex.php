@@ -4,9 +4,11 @@ namespace App\Http\Livewire\Admin\Certificados\Velocimetros;
 
 use App\Models\CertificadosVelocimetros;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class VelocimetrosIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

@@ -15,7 +15,7 @@ class CreateFacturasTable extends Migration
     {
         Schema::create('compras_factura', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('proveedores_id');
+            $table->unsignedBigInteger('proveedores_id')->nullable();
             $table->string('serie');
             $table->string('numero');
             $table->date('fecha');
@@ -25,13 +25,14 @@ class CreateFacturasTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->string('nota');
 
-            $table->foreign('proveedores_id')->references('id')->on('proveedores')->onDelete('cascade');
+            $table->foreign('proveedores_id')->references('id')->on('proveedores')->onDelete('set null');
 
 
 
 
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

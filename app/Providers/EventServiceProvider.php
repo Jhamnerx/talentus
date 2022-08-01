@@ -5,8 +5,10 @@ namespace App\Providers;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Models\Categoria;
+use App\Models\Presupuestos;
 use App\Models\Productos;
 use App\Observers\CategoriasObserver;
+use App\Observers\PresupuestosObserver;
 use App\Observers\ProductoObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -37,5 +39,6 @@ class EventServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Categoria::observe(CategoriasObserver::class);
         Productos::observe(ProductoObserver::class);
+        Presupuestos::observe(PresupuestosObserver::class);
     }
 }

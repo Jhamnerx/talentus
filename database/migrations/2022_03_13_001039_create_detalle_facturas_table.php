@@ -15,7 +15,7 @@ class CreateDetalleFacturasTable extends Migration
     {
         Schema::create('detalle_compras', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('facturas_id');
+            $table->unsignedBigInteger('facturas_id')->nullable();
 
             $table->string('descripcion');
             $table->integer('cantidad');
@@ -24,7 +24,7 @@ class CreateDetalleFacturasTable extends Migration
             $table->decimal('importe', 10, 2);
 
 
-            $table->foreign('facturas_id')->references('id')->on('compras_factura')->onDelete('cascade');
+            $table->foreign('facturas_id')->references('id')->on('compras_factura')->onDelete('set null');
 
 
 

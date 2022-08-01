@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Vehiculos\Flotas;
 
 use App\Models\Flotas;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class FlotasIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $sort = "id";
     public $direction = "desc";

@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\VehiculosController;
@@ -59,6 +60,8 @@ Route::resource('dispositivos', GpsController::class)->names('admin.almacen.disp
 Route::resource('guias', GuiasController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
+
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
 
@@ -78,7 +81,6 @@ Route::resource('contratos', ContratosController::class)->names('admin.ventas.co
 
 // VEHICULOS
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
-Route::resource('contactos', ContactosController::class)->names('admin.vehiculos.contactos');
 Route::resource('vehiculos', VehiculosController::class)->names('admin.vehiculos');
 
 Route::resource('reportes', ReportesController::class)->names('admin.vehiculos.reportes');
@@ -95,10 +97,20 @@ Route::resource('certificados-velocimetros', CertificadosVelocimetrosController:
 
 //ADMINISTRACION
 
-Route::resource('usuarios', UsersController::class)->names('admin.users');
+Route::resource('usuarios', UsersController::class)->names('admin.users')->parameters([
+    'usuarios' => 'user'
+]);
+
 Route::resource('cobros', CobrosController::class)->names('admin.cobros');
-Route::resource('ciudades', CiudadesController::class)->names('admin.ciudades');
-Route::resource('ajustes', AjustesController::class)->names('admin.ajustes');
+
+
+Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
+Route::get('ajustes/ciudades',[ AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
+Route::get('ajustes/notificaciones',[ AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
+Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
+
+//Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
+Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
 
 
 Route::get('tecnico/tareas-pendientes', [ServicioTecnicoController::class, 'pendientes'])->name('admin.tecnico.tareas.pendientes');
@@ -153,3 +165,6 @@ Route::get('pdf/presupuestos/{presupuesto}', PresupuestoPdfController::class)->n
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
 
 
+Route::group(['middleware' => ['role:super-admin']], function () {
+    //
+});

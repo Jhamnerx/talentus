@@ -21,7 +21,7 @@ class Lineas extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+        //
     }
 
 

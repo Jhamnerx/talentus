@@ -15,7 +15,7 @@ class CreatePropuestasTable extends Migration
     {
         Schema::create('presupuestos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->string('numero');
             $table->date('fecha');
             $table->date('fecha_caducidad');
@@ -38,7 +38,8 @@ class CreatePropuestasTable extends Migration
             $table->boolean('eliminado')->default(false);
 
 
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

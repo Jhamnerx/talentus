@@ -15,7 +15,7 @@ class CreateReportesTable extends Migration
     {
         Schema::create('reportes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('vehiculos_id')->nullable();
             $table->time('hora_t');
             $table->date('fecha_t');
             $table->date('fecha');
@@ -25,7 +25,7 @@ class CreateReportesTable extends Migration
             $table->boolean('eliminado')->default(false);
             $table->unsignedBigInteger('user_id')->nullable();
 
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();

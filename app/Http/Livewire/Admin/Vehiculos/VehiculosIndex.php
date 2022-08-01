@@ -4,9 +4,10 @@ namespace App\Http\Livewire\Admin\Vehiculos;
 
 use App\Models\Vehiculos;
 use Livewire\Component;
-
+use Livewire\WithPagination;
 class VehiculosIndex extends Component
 {
+    use WithPagination;
     public $search;
     public $from = '';
     public $to = '';

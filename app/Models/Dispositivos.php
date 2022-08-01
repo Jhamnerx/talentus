@@ -20,7 +20,7 @@ class Dispositivos extends Model
      */
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+        //
     }
     //Relacion uno a muchos inversa
 

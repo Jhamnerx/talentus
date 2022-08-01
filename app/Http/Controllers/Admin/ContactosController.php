@@ -16,7 +16,7 @@ class ContactosController extends Controller
      */
     public function index()
     {
-        return view('admin.vehiculos.contactos.index');
+        return view('admin.clientes.contactos.index');
     }
 
     /**
@@ -26,7 +26,7 @@ class ContactosController extends Controller
      */
     public function create()
     {
-        return view('admin.vehiculos.contactos.create');
+        return view('admin.clientes.contactos.create');
     }
 
     /**
@@ -39,7 +39,7 @@ class ContactosController extends Controller
     {
 
         Contactos::create($request->all());
-        return redirect()->route('admin.vehiculos.contactos.index')->with('store', 'El contacto se guardo con exito');
+        return redirect()->route('admin.clientes.contactos.index')->with('store', 'El contacto se guardo con exito');
     }
 
     /**
@@ -50,7 +50,7 @@ class ContactosController extends Controller
      */
     public function show(Contactos $contactos)
     {
-        return view('admin.vehiculos.contactos.show');
+        return view('admin.clientes.contactos.show');
     }
 
     /**
@@ -61,7 +61,7 @@ class ContactosController extends Controller
      */
     public function edit(Contactos $contacto)
     {
-        return view('admin.vehiculos.contactos.edit', compact('contacto'));
+        return view('admin.clientes.contactos.edit', compact('contacto'));
     }
 
     /**
@@ -74,7 +74,7 @@ class ContactosController extends Controller
     public function update(ContactosRequest $request, Contactos $contacto)
     {
         $contacto->update($request->all());
-        return redirect()->route('admin.vehiculos.contactos.index')->with('update', 'El contacto se actualizo con exito');
+        return redirect()->route('admin.clientes.contactos.index')->with('update', 'El contacto se actualizo con exito');
     }
 
     /**

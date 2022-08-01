@@ -15,7 +15,7 @@ class CreateTareasTable extends Migration
     {
         Schema::create('tareas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('vehiculos_id')->nullable();
             $table->string('numero');
             $table->string('sim_card');
             $table->string('nuevo_numero');
@@ -24,10 +24,10 @@ class CreateTareasTable extends Migration
             $table->boolean('leido');
             $table->dateTime('fecha_hora');
             $table->boolean('respuesta');
-            $table->unsignedBigInteger('tipo_tarea');
+            $table->unsignedBigInteger('tipo_tarea')->nullable();
 
-            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
-            $table->foreign('tipo_tarea')->references('id')->on('tipo_tareas')->onDelete('cascade');
+            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('set null');
+            $table->foreign('tipo_tarea')->references('id')->on('tipo_tareas')->onDelete('set null');
 
             $table->timestamps();
         });

@@ -18,7 +18,7 @@ class Clientes extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new EmpresaScope);
+       
         static::addGlobalScope(new EliminadoScope);
         //static::addGlobalScope(new ActiveScope);
     }
@@ -72,5 +72,13 @@ class Clientes extends Model
     public function certificados()
     {
         return $this->hasMany(Certificados::class, 'certificados_id');
+    }
+
+
+    //relacion uno a muchos contactos
+
+    public function contactos()
+    {
+        return $this->hasMany(Contactos::class, 'clientes_id');
     }
 }

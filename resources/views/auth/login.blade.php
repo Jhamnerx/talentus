@@ -12,7 +12,7 @@
                     <div class="flex-1">
                         <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                             <!-- Logo -->
-                            <a class="block" href="index.html">
+                            <a class="block" href="{{route('web.home')}}">
                                 <svg width="32" height="32" viewBox="0 0 32 32">
                                     <defs>
                                         <linearGradient x1="28.538%" y1="20.229%" x2="100%" y2="108.156%" id="logo-a">
@@ -39,30 +39,72 @@
                         </div>
                     </div>
 
+                    @if (session('status'))
+                    <div class="mb-4 font-medium text-sm text-green-600">
+                        {{ session('status') }}
+                    </div>
+                    @endif
                     <div class="max-w-sm mx-auto px-4 py-8">
 
-                        <h1 class="text-3xl text-slate-800 font-bold mb-6">BIENVENIDO A TALENTUS! ✨</h1>
+                        <h1 class="text-3xl text-slate-800 font-bold mb-6">BIENVENIDO A TALENTUS APP! ✨</h1>
                         <!-- Form -->
+                        <x-jet-validation-errors class="mb-4" />
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
+                            <p tabindex="0" class="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
+                                Ingresa en tu cuenta</p>
+
+
+                            <button aria-label="Continue with google" role="button"
+                                class="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
+                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google">
+                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Google</p>
+                            </button>
+
+                            <button aria-label="Continue with github" role="button"
+                                class="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
+                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg3.svg" alt="github">
+                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Github</p>
+                            </button>
+
+                            <button aria-label="Continue with twitter" role="button"
+                                class="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
+                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg4.svg" alt="twitter">
+                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Twitter</p>
+                            </button>
+
+                            <div class="w-full flex items-center justify-between py-5">
+                                <hr class="w-full bg-gray-400">
+                                <p class="text-base font-medium leading-4 px-2.5 text-gray-400">O</p>
+                                <hr class="w-full bg-gray-400  ">
+                            </div>
+
+
                             <div class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium mb-1" for="email">Correo Electronico</label>
-                                    <input id="email" class="form-input w-full" name="email" value="{{old('email')}}"
-                                        type="email" required autofocus />
+                                    <input id="email"
+                                        class="w-full bg-gray-100 border rounded  text-xs font-medium leading-none text-gray-800 py-3 pl-3 mt-2"
+                                        name="email" value="{{old('email')}}" type="email" required autofocus />
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium mb-1" for="password">Contraseña</label>
-                                    <input name="password" required autocomplete="current-password" id="password"
-                                        class="form-input w-full" type="password" autocomplete="on" />
+                                <label class="block text-sm font-medium mb-1" for="password">Contraseña</label>
+                                <div class="relative flex items-center justify-center">
+
+                                    <input autocomplete="on" required autocomplete="current-password" id="password"
+                                        type="password" name="password"
+                                        class="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                                    <div class="absolute right-0 mt-2 mr-3 cursor-pointer">
+                                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg5.svg"
+                                            alt="viewport">
+                                    </div>
                                 </div>
-                                <div>
+                                {{-- <div>
                                     <label class="block text-sm font-medium mb-1" for="empresa">Empresa:</label>
                                     <select class="form-select block mt-1 w-full" name="empresa" id="empresa" required>
                                         <option value="1">Talentus</option>
                                         <option value="2">Katary</option>
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="block mt-4">
                                 <label for="remember_me" class="flex items-center">
@@ -83,12 +125,16 @@
                                     INGRESAR
                                 </x-jet-button>
                             </div>
+
                         </form>
+
+
+
                         <!-- Footer -->
                         <div class="pt-5 mt-6 border-t border-slate-200">
                             <div class="text-sm">
                                 No tienes una cuenta? <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                    href="#">Registrate</a>
+                                    href="{{route('register')}}">Registrate</a>
                             </div>
                             <!-- Warning -->
                             <div class="mt-5">

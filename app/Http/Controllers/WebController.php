@@ -12,10 +12,14 @@ class WebController extends Controller
     }
     public function faq()
     {
-        return view('cliente.index');
+        return view('cliente.faq');
     }
     public function contacto()
     {
-        return view('cliente.index');
+        return view('cliente.contacto');
+    }
+
+    public function submitContacto(Request $request){
+
     }
 }
