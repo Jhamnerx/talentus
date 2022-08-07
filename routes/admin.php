@@ -21,7 +21,9 @@ use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Http\Controllers\Admin\PDF\ContratoPdfController;
+use App\Http\Controllers\Admin\PDF\FacturaPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
+use App\Http\Controllers\Admin\PDF\ReciboPdfController;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
@@ -158,6 +160,8 @@ Route::get('pdf/certificados/{certificado:unique_hash}', CertificadoPdfControlle
 Route::get('pdf/contratos/{contrato:unique_hash}', ContratoPdfController::class)->name('admin.pdf.contratos');
 Route::get('pdf/certificados/velocimetros/{certificado:unique_hash}', CertificadoVelocimetroPdfController::class)->name('admin.pdf.velocimetros');
 Route::get('pdf/presupuestos/{presupuesto}', PresupuestoPdfController::class)->name('admin.pdf.presupuesto');
+Route::get('pdf/recibo/{recibo}', ReciboPdfController::class)->name('admin.pdf.recibo');
+Route::get('pdf/factura/{factura}', FacturaPdfController::class)->name('admin.pdf.factura');
 
 
 

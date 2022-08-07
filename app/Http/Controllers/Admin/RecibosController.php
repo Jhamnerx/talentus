@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Recibos;
+use App\Models\plantilla;
 use Illuminate\Http\Request;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class RecibosController extends Controller
 {
@@ -24,10 +26,19 @@ class RecibosController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        return view('admin.ventas.recibos.create');
+    {   
+        $numero = $this->setNextSequenceNumber();
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        return view('admin.ventas.recibos.create', compact('numero', 'plantilla'));
     }
 
+    public function setNextSequenceNumber()
+    {
+
+        $id = IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        return trim($id);
+    }
     /**
      * Store a newly created resource in storage.
      *

@@ -386,14 +386,14 @@
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">Total neto Soles</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm totalSoles"> S/. 0.00</div>
-                                    <input type="hidden" class="subTotalPropuestoSoles" name="subtotalSoles">
+                                    <input type="hidden" class="subTotalPresupuestoSoles" name="subtotalSoles">
                                 </div>
                             </div>
                             <div class="flex justify-between mb-4">
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%) Soles</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm igvSoles"></div>
-                                    <input type="hidden" class="impuestoPropuestoSoles" name="impuestoSoles">
+                                    <input type="hidden" class="impuestoPresupuestoSoles" name="impuestoSoles">
                                 </div>
                             </div>
 
@@ -403,7 +403,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold totalPresupuestoSoles"></div>
-                                        <input type="hidden" class="totalPropuestoSoles" name="totalSoles">
+                                        <input type="hidden" class="totalPresupuestoSoles" name="totalSoles">
                                     </div>
                                 </div>
                             </div>
@@ -415,14 +415,14 @@
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">Total neto</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm total"> S/. 0.00</div>
-                                    <input type="hidden" class="subTotalPropuesto" name="subtotal">
+                                    <input type="hidden" class="subTotalPresupuesto" name="subtotal">
                                 </div>
                             </div>
                             <div class="flex justify-between mb-4">
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm igv"></div>
-                                    <input type="hidden" class="impuestoPropuesto" name="impuesto">
+                                    <input type="hidden" class="impuestoPresupuesto" name="impuesto">
                                 </div>
                             </div>
 
@@ -431,7 +431,7 @@
                                     <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total</div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold totalPresupuesto"></div>
-                                        <input type="hidden" class="totalPropuesto" name="total">
+                                        <input type="hidden" class="totalPresupuesto" name="total">
                                     </div>
                                 </div>
                             </div>
@@ -447,8 +447,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                            focus:ring-2 focus:ring-offset-2
-                            focus:ring-emerald-600 text-white',
+                                                            focus:ring-2 focus:ring-offset-2
+                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -777,9 +777,9 @@
 
 
                 // ENVIAR DATOS DE TOTAL A INPUTS
-                $(".subTotalPropuesto").val(numeral(total).format('0.00'));
-                $(".impuestoPropuesto").val(numeral(igvTotal).format('0.00'));
-                $(".totalPropuesto").val(numeral(totalPresupuesto).format('0.00'));
+                $(".subTotalPresupuesto").val(numeral(total).format('0.00'));
+                $(".impuestoPresupuesto").val(numeral(igvTotal).format('0.00'));
+                $(".totalPresupuesto").val(numeral(totalPresupuesto).format('0.00'));
 
             } else if (divisa == "USD") {
 
@@ -792,9 +792,9 @@
                 $('.totalPresupuesto').html(simbolo + " " + numeral(totalPresupuesto).format('0,0.00'));
 
                 // ENVIAR DATOS DE TOTAL A INPUTS
-                $(".subTotalPropuesto").val(numeral(total).format('0.00'));
-                $(".impuestoPropuesto").val(numeral(igvTotal).format('0.00'));
-                $(".totalPropuesto").val(numeral(totalPresupuesto).format('0.00'));
+                $(".subTotalPresupuesto").val(numeral(total).format('0.00'));
+                $(".impuestoPresupuesto").val(numeral(igvTotal).format('0.00'));
+                $(".totalPresupuesto").val(numeral(totalPresupuesto).format('0.00'));
 
 
 
@@ -805,9 +805,9 @@
                 $('.igvSoles').html("S/. " + numeral(igvTotal * valorUSD).format('0,0.00'))
                 $('.totalPresupuestoSoles').html("S/. " + numeral(totalPresupuesto * valorUSD).format('0,0.00'));
 
-                $(".subTotalPropuestoSoles").val(numeral(total * valorUSD).format('0.00'));
-                $(".impuestoPropuestoSoles").val(numeral(igvTotal * valorUSD).format('0.00'));
-                $(".totalPropuestoSoles").val(numeral(totalPresupuesto * valorUSD).format('0.00'));
+                $(".subTotalPresupuestoSoles").val(numeral(total * valorUSD).format('0.00'));
+                $(".impuestoPresupuestoSoles").val(numeral(igvTotal * valorUSD).format('0.00'));
+                $(".totalPresupuestoSoles").val(numeral(totalPresupuesto * valorUSD).format('0.00'));
             }
 
 

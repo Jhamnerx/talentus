@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
+use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 
 use App\Models\plantilla;
@@ -137,7 +138,6 @@ class PresupuestosIndex extends Component
 
     public function convertInvoice(Presupuestos $presupuesto)
     {
-
         $facturasController = new VentasFacturasController();
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
 
@@ -154,13 +154,18 @@ class PresupuestosIndex extends Component
                 'total' => $presupuesto->total,
                 'divisa' => $presupuesto->divisa,
                 'tipo_pago' => '',
-                'estado' => 'COMPLETADO',
-                'pago_estado' => 'PAID',
-                'empresa_id' => session('empresa'),
+                'estado' => 'BORRADOR',
+                'pago_estado' => 'UNPAID',
                 'enviado' => false,
                 'user_id' => auth()->user()->id,
                 'nota' => $presupuesto->nota,
             ]);
+
+            foreach($presupuesto->detalles->toArray() as $item){
+
+                $item['facturas_id'] = $venta->id;
+                $venta->detalles()->create($item);
+            }
 
             $this->dispatchBrowserEvent('save-invoice', ['numero' => $venta->numero]);
             $this->render();
@@ -178,28 +183,36 @@ class PresupuestosIndex extends Component
     {
         if(!$presupuesto->recibo)
         {
+            $recibosController = new RecibosController();
+            $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
 
             $recibo = $presupuesto->recibo()->create([
                 'clientes_id' => $presupuesto->clientes_id,
-                'numero' => IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 9, 'prefix' => 'REC-']),
+                'serie' => $plantilla->serie_recibo,
+                'numero' => $recibosController->setNextSequenceNumber(),
                 'tipo_pago' => '',
                 'fecha' => $date = Carbon::now(),
                 'divisa' => $presupuesto->divisa,
                 'total' => $presupuesto->subtotal,
-                'fecha_pago' => $date = Carbon::now(),
-                'estado' => '1',
-                'empresa_id' => session('empresa'),
+                'estado' => 'COMPLETADO',
+                'pago_estado' => 'UNPAID',
                 'nota' => $presupuesto->nota,
                 'user_id' => auth()->user()->id,
                 
             ]);
+
+            foreach($presupuesto->detalles->toArray() as $item){
+
+                $item['recibos_id'] = $recibo->id;
+                $recibo->detalles()->create($item);
+            }
 
             $this->dispatchBrowserEvent('save-recibo', ['numero' => $recibo->numero]);
             $this->render();
 
         }else{
 
-            $this->dispatchBrowserEvent('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
+            $this->dispatchBrowserEvent('save-error', ['mensaje' => 'El recibo de este presupuesto ya fue creado']);
         }
     }
 }

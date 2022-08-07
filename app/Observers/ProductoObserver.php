@@ -21,7 +21,17 @@ class ProductoObserver
             $producto->codigo = IdGenerator::generate(['table' => 'productos','field'=>'codigo', 'length' => 9, 'prefix' => 'PROD-']);;
 
         }
+    }    
+    public function updating(Productos $producto)
+    {
+        if(! \App::runningInConsole()){
+
+            $producto->empresa_id = session('empresa');
+            //$producto->codigo = IdGenerator::generate(['table' => 'productos','field'=>'codigo', 'length' => 9, 'prefix' => 'PROD-']);;
+
+        }
     }
+
     public function created(Productos $producto)
     {
         if(! \App::runningInConsole()){

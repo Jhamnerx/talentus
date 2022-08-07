@@ -28,7 +28,7 @@
             </form>
 
             <!-- Create recibo button -->
-            <a href="{{route('admin.ventas.recibos.create')}}">
+            <a href="{{ route('admin.ventas.recibos.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
@@ -46,27 +46,28 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Left side -->
-        <div class="mb-4 sm:mb-0">
+        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">67</span></button>
+                    <button wire:click="status()"
+                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 0"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Todas
+                        <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
                 </li>
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Pendientes
-                        <span class="ml-1 text-slate-400">14</span></button>
+                    <button wire:click="status('PAID')"
+                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 1"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Pagadas
+                        <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
                 </li>
                 <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Aceptadas
-                        <span class="ml-1 text-slate-400">34</span></button>
-                </li>
-                <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white text-slate-500 duration-150 ease-in-out">Vencidas
-                        <span class="ml-1 text-slate-400">19</span></button>
+                    <button wire:click="status('UNPAID')"
+                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 2"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Vencidas
+                        <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
                 </li>
             </ul>
         </div>
@@ -97,7 +98,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -125,7 +127,8 @@
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 1 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -136,7 +139,8 @@
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -147,7 +151,8 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -158,7 +163,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -187,12 +193,13 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Recibos <span class="text-slate-400 font-medium">67</span>
+            <h2 class="font-semibold text-slate-800">Recibos <span
+                    class="text-slate-400 font-medium">{{ $totales['total'] }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
@@ -211,16 +218,23 @@
                                 <div class="font-semibold text-left">#Recibo</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Total</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Estado</div>
+                                <div class="font-semibold text-left">Descargar</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Total</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Estado</div>
+                            </th>
+
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Emitido el</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Fecha de pago</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Tipo de Pago</div>
@@ -236,82 +250,276 @@
 
                         <!-- Row -->
                         @if ($recibos->count())
-                        @foreach ($recibos as $recibo)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-sky-500">#{{$recibo->numero}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-emerald-500">$59.00</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @switch($recibo->estado)
-                                @case(0)
-                                <div
-                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
-                                    Por Pagar</div>
-                                @break
-                                @case(1)
-                                <div
-                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
-                                    Pagado</div>
-                                @break
-
-                                @endswitch
+                            @foreach ($recibos as $recibo)
+                                <tr>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($recibo->estado == 'BORRADOR')
+                                            <div class="font-medium text-red-500">
+                                                <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
+                                                    B-#{{ $recibo->serie }}-{{ $recibo->numero }}
+                                                </a>
+                                            </div>
+                                        @else
+                                            <div class="font-medium text-sky-600">
+                                                <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
+                                                    #{{ $recibo->serie }}-{{ $recibo->numero }}
+                                                </a>
+                                            </div>
+                                        @endif
 
 
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$recibo->clientes->razon_social}}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{$recibo->fecha}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{$recibo->tipo_pago}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Editar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                        </svg>
-                                    </button>
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Descargar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                        </svg>
-                                    </button>
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        @endforeach
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="space-x-1">
+                                            <a target="_blank" href="{{ route('admin.pdf.recibo', $recibo) }}">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    <span class="sr-only">Descargar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $recibo->clientes->razon_social }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-emerald-500">
+                                            @if ($recibo->divisa == 'PEN')
+                                                S/. {{ $recibo->total }}
+                                            @else
+                                                ${{ $recibo->total }}
+                                            @endif
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @switch($recibo->pago_estado)
+                                            @case('UNPAID')
+                                                <div
+                                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
+                                                    Por Pagar</div>
+                                            @break
+
+                                            @case('PAID')
+                                                <div
+                                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                                    Pagado</div>
+                                            @break
+                                        @endswitch
+
+
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $recibo->fecha }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $recibo->fecha_pago }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $recibo->tipo_pago }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
+                                                    </svg>
+                                                </button>
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+
+                                                    <ul>
+                                                        <li>
+
+                                                            <a href="{{ route('admin.ventas.recibos.edit', $recibo) }}"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                    </path>
+                                                                </svg> Editar
+
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-28"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Eliminar
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('admin.ventas.recibos.show', $recibo) }}"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-29"
+                                                                role="menuitem" tabindex="-1"><svg
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                                                    </path>
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                                    </path>
+                                                                </svg> Ver
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-32"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+                                                                    </path>
+                                                                </svg> Enviar
+                                                            </a>
+                                                        </li>
+
+                                                        @if ($recibo->pago_estado == 'PAID')
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
+                                                                    disabled="true" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Marcar como Pagada
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    @click.prevent="open = !open"
+                                                                    wire:click.prevent="markUnPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-34"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg> Marcar como No Pagada
+                                                                </a>
+                                                            </li>
+                                                        @else
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    @click.prevent="open = !open"
+                                                                    wire:click.prevent="markPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Marcar como Pagada
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markUnPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
+                                                                    disabled="true" id="headlessui-menu-item-34"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg> Marcar como No Pagada
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
+
+
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

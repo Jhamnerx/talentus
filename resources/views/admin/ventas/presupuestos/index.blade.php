@@ -2,82 +2,71 @@
 @section('ruta', 'ventas-presupuestos')
 @section('contenido')
 
-<!-- Table -->
-@livewire('admin.ventas.presupuestos.presupuestos-index')
+    <!-- Table -->
+    @livewire('admin.ventas.presupuestos.presupuestos-index')
 
 @stop
 
 @section('js')
-@if (session('store'))
+    @if (session('store'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: '{{ session('store') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: '{{session("store")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
-
-@if (session('update'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Actualizado',
-        text: '{{session("update")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
-
-
-<script>
-    window.addEventListener('presupuesto-delete', event => {
-        $( document ).ready(function() {
-            Swal.fire({
-            icon: 'error',
-            title: 'Eliminado',
-            text: 'Presupuesto Eliminado',
-            showConfirmButton: true,
-            confirmButtonText: "Cerrar"
-
-            })
-        });
-    })
-</script>
-
-<script>
-    window.addEventListener('save-invoice', event => {
-        $( document ).ready(function() {
-            iziToast.success({
-                position: 'topRight',
-                title: 'FACTURA REGISTRADA',
-                message: 'Se registro una factura con el numero #'+event.detail.numero,
+                })
             });
-        });
-    })
-    
-</script>
-<script>
-    // A basic demo function to handle "select all" functionality
+        </script>
+    @endif
+
+    @if (session('update'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: '{{ session('update') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        </script>
+    @endif
+
+
+    <script>
+        window.addEventListener('presupuesto-delete', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: 'Presupuesto Eliminado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        })
+    </script>
+
+    <script>
+        window.addEventListener('save-invoice', event => {
+            $(document).ready(function() {
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'FACTURA REGISTRADA',
+                    message: 'Se registro una factura con el numero #' + event.detail.numero,
+                });
+            });
+        })
+    </script>
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -92,12 +81,12 @@
                     for (let index = 0; index < checkboxes.length; index++) {
                         const element = checkboxes[index];
 
-                       // seleccionado = [element.getAttribute('idPresupuesto')];
+                        // seleccionado = [element.getAttribute('idPresupuesto')];
                         seleccionado.push(element.getAttribute('idPresupuesto'));
 
 
                         //console.log(element.getAttribute('idPresupuesto'));
-                        
+
                     }
                     console.log(seleccionado);
 
@@ -123,6 +112,6 @@
                 }
             }))
         })
-</script>
+    </script>
 
 @stop

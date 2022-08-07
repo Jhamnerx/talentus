@@ -16,9 +16,10 @@ class CreateDetalleRecibosTable extends Migration
         Schema::create('detalle_recibos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('recibos_id')->nullable();
-            $table->string('descripcion');
+            $table->string('producto');
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
+            $table->decimal('importe', 10, 2);
 
             $table->foreign('recibos_id')->references('id')->on('recibos')->onDelete('set null');
 

@@ -41,4 +41,22 @@ class Facturas extends Model
 
     }
 
+    //relacion uno a muchos
+
+    public function detalles()
+    {
+        return $this->hasMany(DetalleFacturas::class, 'facturas_id');
+    }
+
+
+    public static function createItems($factura, $facturaItems)
+    {
+        foreach ($facturaItems as $facturaItem) {
+
+            $facturaItem['facturas_id'] = $factura->id;
+
+            $item = $factura->detalles()->create($facturaItem);
+        }
+    }
+
 }

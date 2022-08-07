@@ -58,11 +58,11 @@ class PresupuestoController extends Controller
     public function store(PresupuestosRequest $request)
     {
 
-      //dd($request->divisa);
+        //dd($request->items);
 
 
         $presupuesto = Presupuestos::create([
-            'empresa_id' => $request->empresa_id,
+            //'empresa_id' => $request->empresa_id,
             'clientes_id' => $request->clientes_id,
             'numero' => $request->numero,
             'fecha' => $request->fecha,
@@ -82,7 +82,7 @@ class PresupuestoController extends Controller
 
         $presupuesto->save();
 
-        presupuestos::createItems($presupuesto, $request->items);
+        Presupuestos::createItems($presupuesto, $request->items);
 
         return redirect()->route('admin.ventas.presupuestos.index')->with('store', 'El Presupuesto se creo con exito');
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Ventas\Recibos;
 
 use App\Models\Recibos;
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 class RecibosIndex extends Component
@@ -11,6 +12,7 @@ class RecibosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $status = null;
 
     public function render()
     {
@@ -28,8 +30,24 @@ class RecibosIndex extends Component
             ->orderBy('id')
             ->paginate(10);
 
+
+        $pagadas = Recibos::where('pago_estado', 'PAID')->count();
+        $vencidas = Recibos::where('pago_estado', 'UNPAID')->count();
+    
         $total = Recibos::all()->count();
 
+        $totales = [
+            'pagadas' => $pagadas,
+            'vencidas' => $vencidas,
+            'total' => $total,
+        ];
+
+        $estado = $this->status;
+
+        if($estado != null){
+
+            $recibos = Recibos::Where('pago_estado', $estado)->paginate(10);
+        }
 
         if (!empty($desde)) {
 
@@ -54,7 +72,7 @@ class RecibosIndex extends Component
         }
 
 
-        return view('livewire.admin.ventas.recibos.recibos-index', compact('recibos', 'total'));
+        return view('livewire.admin.ventas.recibos.recibos-index', compact('recibos', 'totales'));
     }
 
 
@@ -83,4 +101,33 @@ class RecibosIndex extends Component
                 break;
         }
     }
+    public function status($status = null)
+    {
+        $this->status = $status;
+        // $this->render();
+        
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+    public function markPaid(Recibos $recibo){
+
+        $recibo->update([
+            'estado' => 'COMPLETADO',
+            'pago_estado' => 'PAID',
+            'fecha_pago' => Carbon::now(),
+        ]);
+
+        $this->render();
+    }
+    public function markUnPaid(Recibos $recibo){
+
+        $recibo->update([
+            'pago_estado' => 'UNPAID',
+            'fecha_pago' => NULL,
+        ]);
+        $this->render();
+    }
+
 }

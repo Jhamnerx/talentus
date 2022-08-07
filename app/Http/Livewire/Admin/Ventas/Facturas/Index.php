@@ -3,7 +3,7 @@
 namespace App\Http\Livewire\Admin\Ventas\Facturas;
 
 use App\Models\Facturas;
-
+use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 class Index extends Component
@@ -12,6 +12,7 @@ class Index extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $status = null;
 
     public function render()
     {
@@ -25,11 +26,28 @@ class Index extends Component
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
+            ->Where('estado', $this->status)
             ->orderBy('numero', 'DESC')
             ->paginate(10);
 
+
+        $pagadas = Facturas::where('pago_estado', 'PAID')->count();
+        $vencidas = Facturas::where('pago_estado', 'UNPAID')->count();
+    
         $total = Facturas::all()->count();
 
+        $totales = [
+            'pagadas' => $pagadas,
+            'vencidas' => $vencidas,
+            'total' => $total,
+        ];
+
+        $estado = $this->status;
+
+        if($estado != null){
+
+            $facturas = Facturas::Where('pago_estado', $estado)->paginate(10);
+        }
 
         if (!empty($desde)) {
 
@@ -53,7 +71,7 @@ class Index extends Component
                 ->paginate(10);
         }
 
-        return view('livewire.admin.ventas.facturas.index', compact('facturas', 'total'));
+        return view('livewire.admin.ventas.facturas.index', compact('facturas', 'totales'));
     }
 
 
@@ -82,4 +100,33 @@ class Index extends Component
                 break;
         }
     }
+
+    public function status($status = null)
+    {
+        $this->status = $status;
+        //$this->render();
+        
+    }
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }    
+
+    public function markPaid(Facturas $factura){
+
+        $factura->update([
+            'pago_estado' => 'PAID',
+            'fecha_pago' => $date = Carbon::now(),
+            'estado' => 'COMPLETADO',
+        ]);
+        $this->render();
+    }
+    public function markUnPaid(Facturas $factura){
+
+        $factura->update([
+            'pago_estado' => 'UNPAID',
+            'fecha_pago' => NULL,
+        ]);
+        $this->render();
+    }    
 }

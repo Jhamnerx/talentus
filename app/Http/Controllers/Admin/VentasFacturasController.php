@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FacturasRequest;
 use App\Models\Facturas;
 use App\Models\plantilla;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class VentasFacturasController extends Controller
     public function create()
     {
         $numero = $this->setNextSequenceNumber();
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
 
         return view('admin.ventas.facturas.create', compact('numero', 'plantilla'));
     }
@@ -42,19 +43,24 @@ class VentasFacturasController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(FacturasRequest $request)
     {
-       // dd($request->all());
+       //dd($request->all());
+
         $factura = Facturas::create($request->all());
+
+        Facturas::createItems($factura, $request->items);
+
+        return redirect()->route('admin.ventas.facturas.index')->with('store', 'La Factura se guardo con exito');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\VentasFacturas  $ventasFacturas
+     * @param  \App\Models\VentasFacturas  $factura
      * @return \Illuminate\Http\Response
      */
-    public function show(Facturas $ventasFacturas)
+    public function show(Facturas $factura)
     {
         return view('admin.ventas.facturas.show');
     }
@@ -62,33 +68,39 @@ class VentasFacturasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\VentasFacturas  $ventasFacturas
+     * @param  \App\Models\VentasFacturas  $factura
      * @return \Illuminate\Http\Response
      */
-    public function edit(Facturas $ventasFacturas)
+    public function edit(Facturas $factura)
     {
-        return view('admin.ventas.facturas.edit');
+        return view('admin.ventas.facturas.edit', compact('factura'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\VentasFacturas  $ventasFacturas
+     * @param  \App\Models\VentasFacturas  $factura
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Facturas $ventasFacturas)
+    public function update(FacturasRequest $request, Facturas $factura)
     {
-        //
+        //dd($request->all());
+        $factura->update($request->all());
+        $factura->detalles()->delete();
+
+        Facturas::createItems($factura, $request->items);
+
+        return redirect()->route('admin.ventas.facturas.index')->with('update', 'La Factura se actualizo con exito');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\VentasFacturas  $ventasFacturas
+     * @param  \App\Models\VentasFacturas  $factura
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Facturas $ventasFacturas)
+    public function destroy(Facturas $factura)
     {
         //
     }

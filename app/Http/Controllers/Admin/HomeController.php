@@ -16,7 +16,7 @@ class HomeController extends Controller
             
             //$request->session('empresa', '1');
             $request->session()->put('empresa', 1);
-            return $request->session()->all();
+            //return $request->session()->all();
         }
         //$request->session()->pull('empresa', '1');
         

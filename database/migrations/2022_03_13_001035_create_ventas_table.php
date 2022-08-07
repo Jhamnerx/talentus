@@ -28,6 +28,7 @@ class CreateVentasTable extends Migration
             $table->string('tipo_pago');
             $table->enum('estado', ['BORRADOR', 'COMPLETADO'])->default('BORRADOR');
             $table->enum('pago_estado', ['UNPAID', 'PAID'])->default('UNPAID');
+            $table->date('fecha_pago')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->boolean('enviado')->default(false);
             $table->boolean('is_active')->default(true);

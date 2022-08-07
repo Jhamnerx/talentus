@@ -4,16 +4,15 @@
     </label>
     <div class="relative">
 
-        <input required wire:model="numero" name="numero" id="numero" class="form-input w-2/4 valid:border-emerald-300
+        <input required wire:model="numero" name="numero" id="numero"
+            class="form-input w-2/4 valid:border-emerald-300
                                                                 required:border-rose-300 invalid:border-rose-300 peer "
             type="text" />
 
     </div>
     @error('numero')
-
-    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-        {{$message}}
-    </p>
-
+        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+            {{ $message }}
+        </p>
     @enderror
 </div>

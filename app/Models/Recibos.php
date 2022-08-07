@@ -17,7 +17,7 @@ class Recibos extends Model
     protected static function booted()
     {
         //
-        static::addGlobalScope(new EliminadoScope);
+       // static::addGlobalScope(new EliminadoScope);
     }
     //Relacion uno a muchos inversa
 
@@ -30,4 +30,24 @@ class Recibos extends Model
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
     }
+
+    //relacion uno a muchos
+
+    public function detalles()
+    {
+        return $this->hasMany(DetalleRecibos::class, 'recibos_id');
+    }
+
+
+    public static function createItems($recibo, $reciboItems)
+    {
+        foreach ($reciboItems as $reciboItem) {
+
+            $reciboItem['recibos_id'] = $recibo->id;
+
+            $item = $recibo->detalles()->create($reciboItem);
+        }
+    }
+
+
 }

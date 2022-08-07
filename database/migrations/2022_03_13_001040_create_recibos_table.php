@@ -16,21 +16,20 @@ class CreateRecibosTable extends Migration
         Schema::create('recibos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('clientes_id')->nullable();
+            $table->string('serie');
             $table->string('numero');
             $table->string('tipo_pago');
 
             $table->date('fecha');
             $table->string('divisa')->default('PEN');
             $table->decimal('total', 10, 2);
-            $table->date('fecha_pago');
-
-            $table->enum('estado', [0, 1])->default(0);
+            $table->date('fecha_pago')->nullable();
+            $table->enum('estado', ['BORRADOR', 'COMPLETADO'])->default('BORRADOR');
+            $table->enum('pago_estado', ['UNPAID', 'PAID'])->default('UNPAID');
             $table->string('nota')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('presupuestos_id')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
 
             $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');

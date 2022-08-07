@@ -5,11 +5,15 @@ namespace App\Providers;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Models\Categoria;
+use App\Models\Facturas;
 use App\Models\Presupuestos;
 use App\Models\Productos;
+use App\Models\Recibos;
 use App\Observers\CategoriasObserver;
+use App\Observers\FacturaObserver;
 use App\Observers\PresupuestosObserver;
 use App\Observers\ProductoObserver;
+use App\Observers\ReciboObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -40,5 +44,7 @@ class EventServiceProvider extends ServiceProvider
         Categoria::observe(CategoriasObserver::class);
         Productos::observe(ProductoObserver::class);
         Presupuestos::observe(PresupuestosObserver::class);
+        Facturas::observe(FacturaObserver::class);
+        Recibos::observe(ReciboObserver::class);
     }
 }

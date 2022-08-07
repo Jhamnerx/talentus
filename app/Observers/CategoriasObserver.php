@@ -22,6 +22,16 @@ class CategoriasObserver
 
         }
        
+    }   
+     public function updating(Categoria $categoria)
+    {
+
+        if(! \App::runningInConsole()){
+
+            $categoria->empresa_id = session('empresa');
+
+        }
+       
     }
     public function created(Categoria $categoria)
     {

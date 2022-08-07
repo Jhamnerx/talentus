@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class PresupuestosRequest extends FormRequest
+class RecibosRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,22 +24,21 @@ class PresupuestosRequest extends FormRequest
     public function rules()
     {
 
-        $presupuesto = $this->route()->parameter('presupuesto');
+        $recibo = $this->route()->parameter('recibo');
         $rules = [
             'clientes_id' => 'required',
-            'numero' => 'required|unique:presupuestos,numero',
+            'numero' => 'required|unique:recibos,numero',
             'fecha' => 'required',
-            'fecha_caducidad' => 'required',
             'divisa' => 'required',
             'items.*.producto' => 'required',
             'items.*.cantidad' => 'required',
             'items.*.precio' => 'required',
             'items.*.importe' => 'required',
         ];
-        if ($presupuesto) {
+        if ($recibo) {
 
 
-            $rules['numero'] = 'required|unique:presupuestos,numero,' . $presupuesto->id;
+            $rules['numero'] = 'required|unique:recibos,numero,' . $recibo->id;
 
         }
 
@@ -55,7 +54,6 @@ class PresupuestosRequest extends FormRequest
             'numero.required' => 'Debes Ingresar un numero',
             'numero.unique' => 'Este número ya esta registrado',
             'fecha.required' => 'Selecciona una fecha',
-            'fecha_caducidad.required' => 'Selecciona una fecha de Caducidad',
             'divisa.required' => 'Debe seleccionar una divisa',
             'items.*.producto.required' => 'Ingresa el producto',
             'items.*.cantidad.required' => 'Ingresa la cantidad',
