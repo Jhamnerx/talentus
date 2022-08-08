@@ -21,7 +21,7 @@ class CreateDetalleRecibosTable extends Migration
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
 
-            $table->foreign('recibos_id')->references('id')->on('recibos')->onDelete('set null');
+            $table->foreign('recibos_id')->references('id')->on('recibos')->onDelete('cascade');
 
 
             $table->timestamps();

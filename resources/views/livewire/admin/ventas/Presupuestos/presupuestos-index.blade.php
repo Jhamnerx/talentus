@@ -368,7 +368,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -379,12 +379,13 @@
                                                         </li>
                                                         <li>
                                                             <a href="javascript: void(0)"
+                                                                wire:click.prevent='openModalDelete({{ $presupuesto->id }})'
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -400,7 +401,7 @@
                                                                 role="menuitem" tabindex="-1"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -422,7 +423,7 @@
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-green-500">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -457,7 +458,7 @@
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor"
-                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        class="h-5  w-5  mr-3 text-gray-400 group-hover:text-emerald-500">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
@@ -490,7 +491,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
@@ -506,7 +507,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -524,7 +525,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -542,32 +543,7 @@
                                             </div>
 
                                         </div>
-                                        {{-- <div class="space-x-1">
-                                    <a href="{{route('admin.ventas.presupuestos.edit', $presupuesto)}}">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                            <span class="sr-only">Editar</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path
-                                                    d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                            </svg>
-                                        </button>
-                                    </a>
-                                    <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Descargar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                        </svg>
-                                    </button>
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
-                                </div> --}}
+
                                     </td>
                                 </tr>
                             @endforeach

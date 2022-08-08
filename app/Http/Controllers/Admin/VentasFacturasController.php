@@ -62,7 +62,8 @@ class VentasFacturasController extends Controller
      */
     public function show(Facturas $factura)
     {
-        return view('admin.ventas.facturas.show');
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        return view('admin.ventas.facturas.show', compact('factura', 'plantilla'));
     }
 
     /**
@@ -73,6 +74,7 @@ class VentasFacturasController extends Controller
      */
     public function edit(Facturas $factura)
     {
+        
         return view('admin.ventas.facturas.edit', compact('factura'));
     }
 

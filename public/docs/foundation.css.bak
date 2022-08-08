@@ -114,7 +114,7 @@ select {
 }
 .row {
     width: 100%;
-    margin-left: auto;
+    margin-left: 100px;
     margin-right: auto;
     margin-top: 0;
     margin-bottom: 0;

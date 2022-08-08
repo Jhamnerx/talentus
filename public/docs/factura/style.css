@@ -1,5 +1,5 @@
 .row {
-  max-width: 100%;
+  max-width: 1200px;
 }
 
 .clearfix:after {
@@ -129,7 +129,6 @@ h6 {
 }
 .header-bottom .invoice-header table {
   width: 100%;
-  margin-right: 10px;
   border: none;
 }
 .header-bottom .invoice-header table i {
@@ -138,7 +137,7 @@ h6 {
   padding: 10px;
   font-size: 32px;
   text-align: center;
-  
+  border: 1px solid #afafb0;
   border-radius: 36px 36px 36px 36px;
   -moz-border-radius: 36px 36px 36px 36px;
   -webkit-border-radius: 36px 36px 36px 36px;
@@ -148,7 +147,19 @@ h6 {
   padding: 0 0 10px 8px;
   vertical-align: bottom;
 }
-
+.header-bottom .invoice-header table tbody td {
+  padding: 20px;
+  background: url(images/arrow.png) no-repeat 20px top #052c52;
+  font-size: 16px;
+  color: #fff;
+}
+.header-bottom .invoice-header table .circle {
+  background: url("images/circle.png") no-repeat scroll 0 0/100% auto rgba(0, 0, 0, 0);
+  height: 60px;
+  padding: 16px 3px;
+  text-align: center;
+  width: 60px;
+}
 .header-bottom .invoice-header table .icon-dollar {
   width: 16px;
 }
@@ -167,8 +178,8 @@ h6 {
   color: #fff;
 }
 .header-bottom .icon-invoice {
-  width: 3%;
-  min-width: 18px;
+  width: 5%;
+  min-width: 22px;
 }
 .header-bottom .icon-mail {
   margin-right: 10px;
@@ -184,7 +195,7 @@ h6 {
 
 .products-table {
   width: 100%;
-  margin-top: 18px;
+  margin-top: 20px;
   margin-bottom: 0;
   border: none;
 }
@@ -196,8 +207,8 @@ h6 {
 .products-table th {
   padding: 20px;
   background: #fff;
-  font-size: 20px;
-  color: #ed832f;
+  font-size: 22px;
+  color: #052c52;
   text-align: center;
 }
 .products-table th:first-child {
@@ -207,7 +218,7 @@ h6 {
   background: #e8e8e9;
 }
 .products-table tbody td {
-  padding: 12px;
+  padding: 20px;
   vertical-align: middle;
   color: #616262;
   text-align: center;
@@ -225,17 +236,17 @@ h6 {
 }
 .totals table tr td {
   background: #fff;
-  font-size: 14px;
+  font-size: 18px;
   text-align: right;
 }
 .totals table tr td:last-child {
   padding-right: 20px;
 }
 .totals table tfoot td {
-  padding: 12px 5px;
-  background: #ed832f;
+  padding: 16px 10px;
+  background: #052c52;
   color: #fff;
-  font-size: 18px;
+  font-size: 24px;
 }
 .totals table .discount td {
   font-weight: bold;
@@ -253,7 +264,7 @@ h6 {
 }
 
 .bottom-left {
-  font-size: 10px;
+  font-size: 12px;
 }
 .bottom-left table {
   border: none;
@@ -270,7 +281,7 @@ h6 {
   padding-top: 30px;
   padding-bottom: 0;
   background: #fff;
-  font-size: 16px;
+  font-size: 18px;
   color: #8f8f8f;
 }
 .bottom-left p {
@@ -292,9 +303,10 @@ h6 {
 }
 
 .terms {
-  margin-top: 5px;
-  font-size: 10px;
+  margin-top: 100px;
+  font-size: 12px;
 }
+
 
 .footer p {
   height: 50px;
@@ -302,11 +314,21 @@ h6 {
   line-height: 14px;
   border-right: 1px solid #d4d2d2;
 }
-.footer img {
-  width: 60px;
-  padding-bottom: 100px;
+.sub-footer p {
+  height: 40px;
+  font-size: 10px;
+  line-height: 12px;
+ 
 }
-
+.sub-footer img {
+  margin-top: -5px;
+  width: 60px;
+}
+.sub-footer div {
+	
+  margin-top: 5px;
+  margin-left: -15px;
+}
 .print .header {
   width: 100%;
   border: none;
@@ -527,5 +549,14 @@ h6 {
 
 
 }
+@media only screen and (max-width: 40em) {
+  .header .large-2 {
+    padding-left: 20px;
+  }
+  .header .large-2 .header-contact {
+    min-height: 100px;
+    border-right: none;
+  }
 
 
+}

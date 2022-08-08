@@ -20,9 +20,7 @@ class CreateDetallePropuestasTable extends Migration
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
             $table->decimal('importe', 10, 2);
-
-            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
-
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -54,11 +54,11 @@
                         </a>
 
                         <!-- Save button -->
-                        <button
+                        <a href="{{ route('admin.pdf.presupuesto', [$presupuesto, 'action' => true]) }}"
                             class="rounded-md flex space-x-2 w-24 h-10 font-normal text-sm leading-3 text-white bg-indigo-700 focus:outline-none focus:bg-indigo-600 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 hover:bg-indigo-600 duration-150 justify-center items-center">
                             <p>Guardar</p>
                             <img src="{{ asset('images/plantilla/admin/header-2-svg6.svg') }}" alt="save" />
-                        </button>
+                        </a>
                     </div>
 
                     <!-- Burger Icon -->
@@ -115,11 +115,11 @@
 
 
                         <!-- Save button -->
-                        <button
+                        <a href="{{ route('admin.pdf.presupuesto', [$presupuesto, 'action' => true]) }}"
                             class="rounded-md flex space-x-2 w-full h-10 font-normal text-sm leading-3 text-white bg-indigo-700 focus:outline-none focus:bg-indigo-600 hover:bg-indigo-600 duration-150 justify-center items-center">
                             <p>Guardar</p>
-                            <img src="{{ asset('images/plantilla/admin/header-2-svg6.sv') }}" alt="save" />
-                        </button>
+                            <img src="{{ asset('images/plantilla/admin/header-2-svg6.svg') }}" alt="save" />
+                        </a>
                     </div>
                 </div>
             </nav>
@@ -136,10 +136,10 @@
                             <div class="flex justify-between items-top">
                                 <div class="space-y-4">
                                     <div>
-                                        <img class="h-6 object-cover mb-4"
-                                            src="{{ asset('images/' . $plantilla->img_icono) }}">
+                                        <img class="h-20 object-cover mb-4"
+                                            src="{{ asset('images/plantilla/admin/logo.png') }}">
                                         <p class="font-bold text-lg uppercase"> Presupuesto </p>
-                                        <p> {{ $plantilla->razon_social }} </p>
+                                        <p> {{ $presupuesto->clientes->razon_social }} </p>
                                     </div>
                                 </div>
                                 <div class="space-y-2">
@@ -176,7 +176,7 @@
                     </div>
                     <div class="p-9 border-b border-gray-200">
                         <p class="font-medium text-sm text-gray-400"> Nota: </p>
-                        <p class="text-sm"> {{ $presupuesto->nota }}. </p>
+                        <p class="text-sm"> {{ $presupuesto->nota }} </p>
                     </div>
                     <table class="w-full divide-y divide-gray-200 text-sm">
                         <thead>

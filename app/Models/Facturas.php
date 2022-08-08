@@ -6,12 +6,14 @@ use App\Scopes\ActiveScope;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Barryvdh\DomPDF\Facade\Pdf;
 class Facturas extends Model
 {
 
 
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'facturas';
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -19,7 +21,8 @@ class Facturas extends Model
     protected $casts = [
         'numero' => 'string',
         'sequence_number' => 'integer',
-
+        'fecha_emision' => 'date:Y/m/d',
+        'fecha_vencimiento' => 'date:Y/m/d',
     ];
 
     
@@ -57,6 +60,32 @@ class Facturas extends Model
 
             $item = $factura->detalles()->create($facturaItem);
         }
+    }
+    public function getPDFData($action)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'factura' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.factura.pdf');
+        
+        if($action == 1){
+
+            return $pdf->download('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
+        }else{
+           // return view('pdf.factura.pdf');
+           
+            return $pdf->stream('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
+
+        };
+
+
+       // return view('pdf.presupuesto.pdf');
     }
 
 }

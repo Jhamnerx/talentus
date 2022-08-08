@@ -159,9 +159,9 @@ Route::get('pdf/actas/{acta:unique_hash}', ActaPdfController::class)->name('admi
 Route::get('pdf/certificados/{certificado:unique_hash}', CertificadoPdfController::class)->name('admin.pdf.certificados');
 Route::get('pdf/contratos/{contrato:unique_hash}', ContratoPdfController::class)->name('admin.pdf.contratos');
 Route::get('pdf/certificados/velocimetros/{certificado:unique_hash}', CertificadoVelocimetroPdfController::class)->name('admin.pdf.velocimetros');
-Route::get('pdf/presupuestos/{presupuesto}', PresupuestoPdfController::class)->name('admin.pdf.presupuesto');
+Route::get('pdf/presupuestos/{presupuesto}/{action?}', PresupuestoPdfController::class)->name('admin.pdf.presupuesto');
 Route::get('pdf/recibo/{recibo}', ReciboPdfController::class)->name('admin.pdf.recibo');
-Route::get('pdf/factura/{factura}', FacturaPdfController::class)->name('admin.pdf.factura');
+Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name('admin.pdf.factura');
 
 
 
