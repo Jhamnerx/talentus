@@ -13,6 +13,7 @@ class RecibosIndex extends Component
     public $from = '';
     public $to = '';
     public $status = null;
+    public $openModalReporte = false;
 
     public function render()
     {
@@ -27,7 +28,7 @@ class RecibosIndex extends Component
             ->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
             ->orWhere('divisa', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
-            ->orderBy('id')
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
 
@@ -67,7 +68,7 @@ class RecibosIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('id')
+                ->orderBy('id', 'desc')
                 ->paginate(10);
         }
 
@@ -129,5 +130,13 @@ class RecibosIndex extends Component
         ]);
         $this->render();
     }
+
+    public function OpenModalReporte(){
+
+        $this->openModalReporte = true;
+        $this->emit('openModalReporte');
+
+    }
+
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Actas;
 use App\Models\User;
 use App\Observers\UserObserver;
 use App\Models\Categoria;
@@ -9,6 +10,7 @@ use App\Models\Facturas;
 use App\Models\Presupuestos;
 use App\Models\Productos;
 use App\Models\Recibos;
+use App\Observers\ActaObserver;
 use App\Observers\CategoriasObserver;
 use App\Observers\FacturaObserver;
 use App\Observers\PresupuestosObserver;
@@ -46,5 +48,6 @@ class EventServiceProvider extends ServiceProvider
         Presupuestos::observe(PresupuestosObserver::class);
         Facturas::observe(FacturaObserver::class);
         Recibos::observe(ReciboObserver::class);
+        Actas::observe(ActaObserver::class);
     }
 }

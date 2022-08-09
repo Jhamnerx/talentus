@@ -21,6 +21,7 @@ class ChangeStatus extends Component
     public function updating($field, $value)
     {
         $this->model->setAttribute($this->field, $value)->save();
+        $this->model->setAttribute('numero', NULL)->save();
         $this->dispatchBrowserEvent('change-status', ['status' => $value]);
     }
     public function render()

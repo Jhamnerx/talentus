@@ -44,34 +44,6 @@
 
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
-
-        <!-- Left side -->
-        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button wire:click="status()"
-                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
-                </li>
-                <li class="m-1">
-                    <button wire:click="status('PAID')"
-                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Pagadas
-                        <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
-                </li>
-                <li class="m-1">
-                    <button wire:click="status('UNPAID')"
-                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Vencidas
-                        <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
-                </li>
-            </ul>
-        </div>
-
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
@@ -127,8 +99,7 @@
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -139,8 +110,7 @@
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -174,19 +144,48 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Filter button -->
+            <!-- Export button -->
             <div class="relative inline-flex">
-                <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                    <span class="sr-only">Filtro</span><wbr>
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
+                <button wire:click="OpenModalReporte"
+                    class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                    <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
                         <path
-                            d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
+                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
                     </svg>
+                    <span class="hidden xs:block ml-2">Reportes</span>
                 </button>
+
             </div>
+
         </div>
+        <!-- Left side -->
+        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
+            <ul class="flex flex-wrap -m-1">
+                <li class="m-1">
+                    <button wire:click="status()"
+                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 0"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Todas
+                        <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
+                </li>
+                <li class="m-1">
+                    <button wire:click="status('PAID')"
+                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 1"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Pagadas
+                        <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
+                </li>
+                <li class="m-1">
+                    <button wire:click="status('UNPAID')"
+                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 2"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Vencidas
+                        <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
+                </li>
+            </ul>
+        </div>
+
+
 
     </div>
 
@@ -323,10 +322,15 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $recibo->fecha }}</div>
+                                        <div>{{ $recibo->fecha->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $recibo->fecha_pago }}</div>
+                                        <div>
+                                            @if ($recibo->fecha_pago)
+                                                {{ $recibo->fecha_pago->format('d-m-Y') }}
+                                            @endif
+
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $recibo->tipo_pago }}</div>

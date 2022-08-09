@@ -2,95 +2,87 @@
 @section('ruta', 'vehiculos-reportes')
 @section('contenido')
 
-<!-- Table -->
+    <!-- Table -->
 
 
-@livewire('admin.vehiculos.reportes.index')
+    @livewire('admin.vehiculos.reportes.index')
 
 @stop
 
 @push('modals')
-
-@livewire('admin.vehiculos.reportes.show-contactos')
-@livewire('admin.vehiculos.reportes.save')
-@livewire('admin.vehiculos.reportes.edit')
-@livewire('admin.vehiculos.reportes.delete')
-@livewire('admin.vehiculos.reportes.show-detalle')
-@livewire('admin.vehiculos.reportes.recordatorio')
-
-
+    @livewire('admin.vehiculos.reportes.show-contactos')
+    @livewire('admin.vehiculos.reportes.save')
+    @livewire('admin.vehiculos.reportes.edit')
+    @livewire('admin.vehiculos.reportes.delete')
+    @livewire('admin.vehiculos.reportes.show-detalle')
+    @livewire('admin.vehiculos.reportes.recordatorio')
 @endpush
 
 
 
 @section('js')
-<script>
-    window.addEventListener('reporte-edit', event => {
-        iziToast.success({
-            position: 'topRight',
-            title: 'ACTUALIZADO',
-            message: 'El Reporte de '+event.detail.vehiculo+' Fue Actualizado',
-        });
-
-    })
-    
-</script>
-
-
-<script>
-    window.addEventListener('detalle-reporte', event => {
-        iziToast.success({
-            position: 'topRight',
-            title: 'DETALLE AGREGADO',
-            message: 'Se añadio un detalle al reporte',
-        });
-
-    })
-    
-</script>
-
-<script>
-    window.addEventListener('reporte-delete', event => {
-        iziToast.error({
-            position: 'topRight',
-            title: 'ELIMINADO',
-            message: 'El Reporte de '+event.detail.vehiculo+' Fue Eliminado',
-        });
-
-    })
-    
-</script>
-<script>
-    window.addEventListener('reporte-save', event => {
-        $( document ).ready(function() {
-            Swal.fire({
-            icon: 'success',
-            title: 'Guardado',
-            text: 'El Reporte de '+event.detail.vehiculo+' Fue Creado',
-            showConfirmButton: true,
-            confirmButtonText: "Cerrar"
-
-            })
-        });
-    })
-    
-</script>
-
-<script>
-    window.addEventListener('recordatorio-save', event => {
-        $( document ).ready(function() {
+    <script>
+        window.addEventListener('reporte-edit', event => {
             iziToast.success({
                 position: 'topRight',
-                title: 'RECORDATORIO CREADO',
-                message: 'Se creo un recordatorio para el Vehiculo'+event.detail.vehiculo,
+                title: 'ACTUALIZADO',
+                message: 'El Reporte de ' + event.detail.vehiculo + ' Fue Actualizado',
             });
-        });
-    })
-    
-</script>
 
-<script>
-    // A basic demo function to handle "select all" functionality
+        })
+    </script>
+
+
+    <script>
+        window.addEventListener('detalle-reporte', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'DETALLE AGREGADO',
+                message: 'Se añadio un detalle al reporte',
+            });
+
+        })
+    </script>
+
+    <script>
+        window.addEventListener('reporte-delete', event => {
+            iziToast.error({
+                position: 'topRight',
+                title: 'ELIMINADO',
+                message: 'El Reporte de ' + event.detail.vehiculo + ' Fue Eliminado',
+            });
+
+        })
+    </script>
+    <script>
+        window.addEventListener('reporte-save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: 'El Reporte de ' + event.detail.vehiculo + ' Fue Creado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        })
+    </script>
+
+    <script>
+        window.addEventListener('recordatorio-save', event => {
+            $(document).ready(function() {
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'RECORDATORIO CREADO',
+                    message: 'Se creo un recordatorio para el Vehiculo ' + event.detail.vehiculo,
+                });
+            });
+        })
+    </script>
+
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -120,5 +112,5 @@
                 }
             }))
         })
-</script>
+    </script>
 @stop

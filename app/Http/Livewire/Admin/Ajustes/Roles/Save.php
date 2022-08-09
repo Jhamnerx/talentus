@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Ajustes\Roles;
 
+use App\Http\Requests\RolesRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Livewire\Component;
@@ -43,14 +44,17 @@ class Save extends Component
         $this->reset();
         $this->resetErrorBag();
     }
-    public function updated($propertyName)
+
+    public function updated($label)
     {
-        $this->validateOnly($propertyName);
+        $rolRequest = new RolesRequest();
+        $this->validateOnly($label, $rolRequest->rules(), $rolRequest->messages());
     }
 
     public function save(){
 
-        $this->validate();
+        $rolRequest = new RolesRequest();
+        $values = $this->validate($rolRequest->rules(), $rolRequest->messages());
 
         $rol = Role::create(['name' => $this->name]);
         $rol->syncPermissions($this->permission);

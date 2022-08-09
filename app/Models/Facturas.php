@@ -23,6 +23,7 @@ class Facturas extends Model
         'sequence_number' => 'integer',
         'fecha_emision' => 'date:Y/m/d',
         'fecha_vencimiento' => 'date:Y/m/d',
+        'fecha_pago' => 'date:Y/m/d',
     ];
 
     

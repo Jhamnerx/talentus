@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
         $this->call(EmpresasSeeder::class);
         $this->call(PlantillaSeeder::class);
         Storage::makeDirectory("productos");
-        $this->call(UserSeeder::class);
+
         //Categoria::factory(100)->create();
         Lineas::factory(60)->create();
         SimCard::factory(500)->create();
@@ -64,5 +64,6 @@ class DatabaseSeeder extends Seeder
         CertificadosVelocimetros::factory(60)->create();
         $this->call(ContratoSeeder::class);
         $this->call(PermisosSeeder::class);
+        $this->call(UserSeeder::class);
     }
 }

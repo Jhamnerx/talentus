@@ -24,8 +24,11 @@ class CreateVehiculosTable extends Migration
             $table->string('color')->nullable();
             $table->string('motor')->nullable();
             $table->string('serie')->nullable();
+            $table->string('dispositivo_imei')->nullable();
             $table->unsignedBigInteger('sim_card_id')->nullable();
             $table->string('numero')->unique()->nullable();
+            $table->string('old_numero')->nullable(); 
+            $table->string('old_sim_card')->nullable();
             $table->unsignedBigInteger('flotas_id')->nullable();
             $table->unsignedBigInteger('dispositivos_id')->nullable();
             $table->unsignedBigInteger('empresa_id');

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CiudadesRequest extends FormRequest
+class RolesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,27 +13,26 @@ class CiudadesRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public function rules($ciudad = null)
+    public function rules($rol = null)
     {
         
         $rules = [
-            'nombre' => 'required|unique:ciudades',
-            'prefijo' => 'required|unique:ciudades'
+            'name' => 'required|unique:roles',
+            'permission' => 'required',
         ];
 
 
-        if ($ciudad) {
+        if ($rol) {
 
-            $rules['nombre'] = 'required|unique:ciudades,nombre,' . $ciudad->id;
-            $rules['prefijo'] = 'required|unique:ciudades,prefijo,' . $ciudad->id;
+            $rules['name'] = 'required|unique:roles,name,' . $rol->id;
         }
         // if ($this->status == 2) {
 
@@ -52,10 +51,9 @@ class CiudadesRequest extends FormRequest
     public function messages()
     {
         return [
-            'nombre.required' => 'No dejes vacio este campo',
-            'prefijo.required' => 'Ingresa un prefijo',
-            'nombre.unique' => 'Ya existe esta ciudad',
-            'prefijo.unique' => 'Ingresa un prefijo distinto',
+            'name.required' => 'Escribe el nombre de rol.',
+            'name.unique' => 'El rol ya existe.',
+            'permission.required' => 'Selecciona al menos 1 permiso.',
         ];
     }
 }

@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Ventas\Facturas;
+namespace App\Http\Livewire\Admin\Ventas\Recibos;
 
 use Livewire\Component;
 
-class InputNumero extends Component
+class ImputNumero extends Component
 {
     public $numero;
     public $serie;
 
     protected $rules = [
-        'numero' => 'required|unique:facturas,numero',
+        'numero' => 'required|unique:recibos,numero',
     ];
 
     protected $messages = [
@@ -18,10 +18,9 @@ class InputNumero extends Component
         'numero.unique' => 'El número ya esta registrado',
 
     ];
-
     public function render()
     {
-        return view('livewire.admin.ventas.facturas.input-numero');
+        return view('livewire.admin.ventas.recibos.imput-numero');
     }
     public function mount(){
         $this->numero = $this->numero;
@@ -30,9 +29,7 @@ class InputNumero extends Component
 
     public function updated($label)
     {
-
         $error = $this->validateOnly($label);
         
-   
     }
 }

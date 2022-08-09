@@ -303,7 +303,9 @@
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $factura->fecha_emision }}</div>
+
+                                        <div>{{ $factura->fecha_emision->format('d-m-Y') }}</div>
+
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -323,7 +325,7 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $factura->fecha_pago }}</div>
+                                        <div>{{ $factura->fecha_pago->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">

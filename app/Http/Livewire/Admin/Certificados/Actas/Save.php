@@ -17,7 +17,7 @@ class Save extends Component
     public $openModalSave = false;
     public $ciudades;
 
-    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1;
+    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id = 1, $fondo = 1, $sello = 1;
 
 
     protected $listeners = [
@@ -62,18 +62,8 @@ class Save extends Component
         $acta->empresa_id = session('empresa');
         $acta->codigo = $codigo;
         $acta->fecha = $fecha;
-        if($acta->save()){
 
-            $data = array(
-                'body' => 'Probando mensaje',
-                'asunto' => 'prueba',
-                'accion' => 'se creo un acta',
-                'to' => 3,
-            );
-
-            $mensaje = new Mensaje();
-            $mensaje->sendMessage($data, 'to_user');
-        }
+        $acta->save();
 
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('acta-save', ['vehiculo' => $acta->vehiculos->placa]);

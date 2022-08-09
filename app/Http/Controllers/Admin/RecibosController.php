@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RecibosRequest;
 use App\Models\Recibos;
 use App\Models\plantilla;
 use Illuminate\Http\Request;
@@ -45,9 +46,13 @@ class RecibosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RecibosRequest $request)
     {
-        //
+        $factura = Recibos::create($request->all());
+
+        Recibos::createItems($factura, $request->items);
+
+        return redirect()->route('admin.ventas.recibos.index')->with('store', 'El Recibo se guardo con exito');
     }
 
     /**
@@ -67,9 +72,9 @@ class RecibosController extends Controller
      * @param  \App\Models\Recibos  $recibos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Recibos $recibos)
+    public function edit(Recibos $recibo)
     {
-        return view('admin.ventas.recibos.edit');
+        return view('admin.ventas.recibos.edit', compact('recibo'));
     }
 
     /**
@@ -79,9 +84,14 @@ class RecibosController extends Controller
      * @param  \App\Models\Recibos  $recibos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recibos $recibos)
+    public function update(RecibosRequest $request, Recibos $recibo)
     {
-        //
+        $recibo->update($request->all());
+        $recibo->detalles()->delete();
+
+        Recibos::createItems($recibo, $request->items);
+
+        return redirect()->route('admin.ventas.recibos.index')->with('update', 'El recibo se actualizo con exito');
     }
 
     /**

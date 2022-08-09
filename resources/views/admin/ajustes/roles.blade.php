@@ -56,4 +56,18 @@
             });
         </script>
     @endif
+    @if (session('update'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: "{{ session('store') }}",
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        </script>
+    @endif
 @endsection
