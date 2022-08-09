@@ -43,6 +43,7 @@ class Recordatorio extends Component
     public function closeModal()
     {
         $this->openModalRecordatorio = false;
+        $this->reset('fecha_recordatorio');
         $this->reset();
     }
     public function GuardarRecordatorio()
@@ -57,11 +58,14 @@ class Recordatorio extends Component
             'user_id' => auth()->user()->id,
         
         ]);
+        $this->reporte->estado = 2;
+        $this->reporte->save();
         //dd($this->reporte->vehiculos->placa);
 
         $this->dispatchBrowserEvent('recordatorio-save', ['vehiculo' => $this->reporte->vehiculos->placa]);
         $this->resetErrorBag();
         $this->closeModal();
+        $this->emit('updateTable');
     }
 
     public function updated($label)

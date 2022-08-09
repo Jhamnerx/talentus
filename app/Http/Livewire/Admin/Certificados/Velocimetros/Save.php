@@ -8,6 +8,7 @@ use App\Models\Ciudades;
 use Livewire\Component;
 use Vinkla\Hashids\Facades\Hashids;
 use Illuminate\Support\Str;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -29,8 +30,17 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
-    }
+        $this->numero = $this->setNextSequenceNumber();
 
+    }
+    
+    public function setNextSequenceNumber()
+    {
+
+        $id = IdGenerator::generate(['table' => 'certificados_velocimetros','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        return trim($id);
+    }
     public function closeModal()
     {
         $this->openModalSave = false;

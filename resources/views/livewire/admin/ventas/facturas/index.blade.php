@@ -325,7 +325,13 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $factura->fecha_pago->format('d-m-Y') }}</div>
+                                        <div>
+                                            @if ($factura->fecha_pago)
+                                                {{ $factura->fecha_pago->format('d-m-Y') }}
+                                            @else
+                                            @endif
+
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">

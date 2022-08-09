@@ -11,7 +11,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class Facturas extends Model
 {
 
-
     use HasFactory;
     use SoftDeletes;
 

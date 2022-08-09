@@ -86,4 +86,6 @@ class Actas extends Model
         //return $pdf;
         //return view('pdf.acta');
     }
+
+    
 }

@@ -8,6 +8,7 @@ use App\Models\Ciudades;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Vinkla\Hashids\Facades\Hashids;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -28,6 +29,16 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
+        $this->numero = $this->setNextSequenceNumber();
+
+    }
+
+    public function setNextSequenceNumber()
+    {
+
+        $id = IdGenerator::generate(['table' => 'certificados','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        return trim($id);
     }
     public function closeModal()
     {

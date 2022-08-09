@@ -1,7 +1,7 @@
 <div class="grow">
     <form wire:submit.prevent="updateProfileInformation">
         <!-- Panel body -->
-        <div class="p-6 space-y-6" x-data="{photoName: null, photoPreview: null}">
+        <div class="p-6 space-y-6" x-data="{ photoName: null, photoPreview: null }">
             <h2 class="text-2xl text-slate-800 font-bold mb-5">Mi Cuenta</h2>
 
             <!-- Picture -->
@@ -12,8 +12,8 @@
                     <div class="mr-4" x-show="! photoPreview">
                         <!-- Current Profile Photo -->
 
-                        <img class="w-20 h-20 rounded-full" src="{{ $this->user->profile_photo_url }}" alt="{{ $this->user->name
-                    }}" width="80" height="80" />
+                        <img class="w-20 h-20 rounded-full" src="{{ $this->user->profile_photo_url }}"
+                            alt="{{ $this->user->name }}" width="80" height="80" />
                     </div>
                     <!-- New Profile Photo Preview -->
                     <div class="mr-4" x-show="photoPreview" style="display: none;">
@@ -21,7 +21,8 @@
                             x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                         </span>
                     </div>
-                    <input type="file" class="hidden" wire:model="photo" x-ref="photo" x-on:change="
+                    <input type="file" class="hidden" wire:model="photo" x-ref="photo"
+                        x-on:change="
                                                                             photoName = $refs.photo.files[0].name;
                                                                             const reader = new FileReader();
                                                                             reader.onload = (e) => {
@@ -34,9 +35,10 @@
                     <button x-on:click.prevent="$refs.photo.click()"
                         class="btn-sm mr-2 bg-indigo-500 hover:bg-indigo-600 text-white">Cambiar</button>
                     @if ($this->user->profile_photo_path)
-
-                    <button wire:click="deleteProfilePhoto" type="button" class="mr-2 btn-sm bg-red-500 hover:bg-red-600
-                    text-white">Eliminar Foto</button>
+                        <button wire:click="deleteProfilePhoto" type="button"
+                            class="mr-2 btn-sm bg-red-500 hover:bg-red-600
+                    text-white">Eliminar
+                            Foto</button>
                     @endif
                     <x-jet-input-error for="photo" class="mt-2" />
                 </div>
@@ -76,8 +78,7 @@
                         <x-jet-input-error for="email" class="mt-2" />
                     </div>
                     {{-- <button
-                        class="btn border-slate-200 hover:border-slate-300 shadow-sm text-indigo-500">Change</button>
-                    --}}
+                        class="btn border-slate-200 hover:border-slate-300 shadow-sm text-indigo-500">Change</button> --}}
                 </div>
             </section>
 

@@ -2,49 +2,47 @@
 @section('ruta', 'certificados-gps')
 @section('contenido')
 
-<!-- Table -->
-@livewire('admin.certificados.gps.certificados-gps-index')
+    <!-- Table -->
+    @livewire('admin.certificados.gps.certificados-gps-index')
 
 @stop
 
 @push('modals')
-
-@livewire('admin.certificados.gps.save')
-@livewire('admin.certificados.gps.edit')
-
+    @livewire('admin.certificados.gps.save')
+    @livewire('admin.certificados.gps.edit')
 @endpush
 
 @section('js')
-<script>
-    window.addEventListener('certificado-edit', event => {
-        iziToast.success({
-            position: 'topRight',
-            title: 'ACTUALIZADO',
-            message: 'El Certificado N° '+event.detail.certificado+' Fue Actualizado',
-        });
-
-    })
-    
-</script>
-
-<script>
-    window.addEventListener('certificado-save', event => {
-        $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: 'El certificado de '+event.detail.vehiculo+' Fue Creado',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+    <script>
+        window.addEventListener('certificado-edit', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'ACTUALIZADO',
+                message: 'El Certificado N° ' + event.detail.certificado + ' Fue Actualizado',
+            });
 
         })
-    });
-    })
-    
-</script>
+    </script>
 
-<script>
-    // A basic demo function to handle "select all" functionality
+    <script>
+        window.addEventListener('certificado-save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: 'El certificado de ' + event.detail.vehiculo + ' Fue Creado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+                $('.formCertificadoSave .vehiculos_id').val(null).trigger('change');
+                $('.formCertificadoSave .ciudades').val(null).trigger('change');
+            });
+        })
+    </script>
+
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -74,5 +72,5 @@
                 }
             }))
         })
-</script>
+    </script>
 @stop

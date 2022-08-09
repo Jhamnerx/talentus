@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Actas;
 
-
+use App\Http\Controllers\Admin\ActasController;
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
-use App\Models\Admin\Mensaje;
 use App\Models\Ciudades;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Vinkla\Hashids\Facades\Hashids;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -17,7 +17,7 @@ class Save extends Component
     public $openModalSave = false;
     public $ciudades;
 
-    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id = 1, $fondo = 1, $sello = 1;
+    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1;
 
 
     protected $listeners = [
@@ -33,7 +33,15 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
+        //dd($this->setNextSequenceNumber());
+        $newActa = new ActasController();
+      //  dd($newActa->setNextSequenceNumber());
+        $this->numero = $newActa->setNextSequenceNumber();
+
     }
+
+
+
     public function closeModal()
     {
         $this->openModalSave = false;
@@ -62,9 +70,7 @@ class Save extends Component
         $acta->empresa_id = session('empresa');
         $acta->codigo = $codigo;
         $acta->fecha = $fecha;
-
         $acta->save();
-
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('acta-save', ['vehiculo' => $acta->vehiculos->placa]);
         $this->emit('updateTable');
@@ -77,4 +83,6 @@ class Save extends Component
         $actaRequest = new ActasRequest();
         $this->validateOnly($label, $actaRequest->rules(), $actaRequest->messages());
     }
+
+
 }
