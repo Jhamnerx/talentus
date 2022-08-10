@@ -61,6 +61,7 @@ class Recordatorio extends Component
         $this->reporte->estado = 2;
         $this->reporte->save();
         //dd($this->reporte->vehiculos->placa);
+        
 
         $this->dispatchBrowserEvent('recordatorio-save', ['vehiculo' => $this->reporte->vehiculos->placa]);
         $this->resetErrorBag();

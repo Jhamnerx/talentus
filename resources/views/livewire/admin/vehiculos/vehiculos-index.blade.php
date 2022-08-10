@@ -207,7 +207,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Año</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Flota</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -254,7 +254,7 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">{{ $vehiculo->year }}</div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-sky-500">
                                             <a href="">{{ $vehiculo->flotas->nombre }}</a>
                                         </div>
@@ -264,7 +264,7 @@
 
                                         @if ($vehiculo->sim_card)
                                             @if ($vehiculo->sim_card->linea)
-                                                <div class="font-medium text-slate-800">
+                                                <div class="font-medium text-emerald-600">
                                                     {{ $vehiculo->sim_card->linea->numero }}
                                                 </div>
                                             @else
@@ -273,7 +273,9 @@
                                                 </div>
                                             @endif
                                         @else
-                                            #
+                                            <div class="font-medium text-red-300">
+                                                {{ $vehiculo->old_sim_card }}
+                                            </div>
                                         @endif
 
                                     </td>

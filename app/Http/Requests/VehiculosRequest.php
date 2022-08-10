@@ -50,7 +50,7 @@ class VehiculosRequest extends FormRequest
             "modelo_gps" => 'nullable',
             "operador" => 'nullable',
             "sim_card" => 'nullable',
-            "imei" => 'nullable',
+            "dispositivo_imei" => 'nullable',
             "descripcion" => 'nullable',
 
             // "dispositivos_id" => "required|unique:vehiculos",
