@@ -59,14 +59,15 @@ class Save extends Component
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
-        $certificado = CertificadosVelocimetros::create($values);
+        $certificado = new CertificadosVelocimetros();
+        $certificado->vehiculos_id = $values["vehiculos_id"];
+        $certificado->numero = $values["numero"];
+        $certificado->ciudades_id = $values["ciudades_id"];
+        $certificado->fondo = $values["fondo"];
+        $certificado->sello = $values["sello"];
 
         $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $certificado->numero;
         $certificado->year = today()->year;
-        $certificado->user_id = auth()->user()->id;
-
-        $certificado->unique_hash = Hashids::connection(CertificadosVelocimetros::class)->encode($certificado->id);
-        $certificado->empresa_id = session('empresa');
         $certificado->codigo = $codigo;
         $certificado->fecha = $fecha;
         $certificado->save();

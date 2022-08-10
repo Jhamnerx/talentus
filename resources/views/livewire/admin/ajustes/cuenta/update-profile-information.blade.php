@@ -116,7 +116,8 @@
         <footer>
             <div class="flex flex-col px-6 py-5 border-t border-slate-200">
                 <div class="flex self-end">
-                    <button class="btn border-slate-200 hover:border-slate-300 text-slate-600">Cancelar</button>
+                    {{-- <button type="button"
+                        class="btn border-slate-200 hover:border-slate-300 text-slate-600">Cancelar</button> --}}
                     <x-jet-action-message class="mr-3" on="saved">
                         {{ __('Saved.') }}
                     </x-jet-action-message>

@@ -31,7 +31,7 @@ class Mensaje extends Model
             ]);
         }
 
-        Notification::sendNow($users, new EnviarMensaje($mensaje));
+        Notification::send($users, new EnviarMensaje($mensaje));
         
         return redirect()->back();
 

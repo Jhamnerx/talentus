@@ -59,16 +59,20 @@ class Save extends Component
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
-
-        $acta = Actas::create($values);
+       // $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
+        $acta =  new Actas();
 
         $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $acta->numero;
+        $acta->vehiculos_id = $values["vehiculos_id"];
+        $acta->numero = $values["numero"];
+        $acta->inicio_cobertura = $values["inicio_cobertura"];
+        $acta->fin_cobertura = $values["fin_cobertura"];
+        $acta->ciudades_id = $values["ciudades_id"];
+        $acta->fondo = $values["fondo"];
+        $acta->sello = $values["sello"];
+        $acta->codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
         $acta->year = today()->year;
-        $acta->user_id = auth()->user()->id;
-
-        $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
         $acta->empresa_id = session('empresa');
-        $acta->codigo = $codigo;
         $acta->fecha = $fecha;
         $acta->save();
         //$this->openModalSave = false;

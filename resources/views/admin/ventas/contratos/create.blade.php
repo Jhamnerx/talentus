@@ -73,11 +73,11 @@
                                     {!! Form::text('fecha', null, [
                                         'placeholder' => 'yyyy-mm-dd',
                                         'class' => 'form-input
-                                                                    valid:border-emerald-300
-                                                                    required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2
-                                                                    outline-none focus:ring-primary-400
-                                                                    focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
-                                                                    text-black input w-full',
+                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer fechaContrato font-base pl-8 py-2
+                                                                                                                                                                                                                                                                                                                                outline-none focus:ring-primary-400
+                                                                                                                                                                                                                                                                                                                                focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
+                                                                                                                                                                                                                                                                                                                                text-black input w-full',
                                         'maxlength' => '10',
                                         'required',
                                     ]) !!}
@@ -266,10 +266,10 @@
                         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                             {!! Form::submit('GUARDAR', [
                                 'class' => 'btnGuardarContrato btn bg-emerald-500
-                                                    hover:bg-emerald-600
-                                                    focus:outline-none
-                                                    focus:ring-2 focus:ring-offset-2
-                                                    focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                        hover:bg-emerald-600
+                                                                                                                                                                                                                                                        focus:outline-none
+                                                                                                                                                                                                                                                        focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                        focus:ring-emerald-600 text-white',
                             ]) !!}
 
                         </div>
@@ -334,6 +334,7 @@
                 "idvehiculo": vehiculo.id
             });
             localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
+            addAlert();
 
 
             /**
@@ -382,6 +383,13 @@
             }
         }
 
+        function addAlert() {
+            iziToast.success({
+                position: 'topRight',
+                title: 'AGREGADO',
+                message: 'Añadiste el vehiculo',
+            });
+        }
 
         function eliminarDetalleVehiculos(indice) {
             $("#fila" + indice).remove();
@@ -419,6 +427,15 @@
         $(document).ready(function() {
             detalles = 0;
             cont = 0;
+            flatpickr('.fechaContrato', {
+                mode: 'single',
+                defaultDate: "today",
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+
             localStorage.removeItem("listaVehiculosContrato");
             $(".btnGuardarContrato").hide();;
             $('#example').DataTable({

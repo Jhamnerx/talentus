@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin\Certificados\Velocimetros;
 
 use App\Http\Requests\CertificadosVelocimetrosRequest;
 use App\Models\CertificadosVelocimetros;
+use App\Models\Ciudades;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class Edit extends Component
 {
@@ -49,9 +51,15 @@ class Edit extends Component
         $values = $this->validate($certificadoRequest->rules($this->certificado), $certificadoRequest->messages());
 
         $update = CertificadosVelocimetros::find($this->certificado->id);
+        $ciudad = Ciudades::find($values["ciudades_id"]);
+        $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+
         $update->numero = $values["numero"];
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->ciudades_id = $values["ciudades_id"];
+        $update->fecha = $fecha;
+        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
+        $update->codigo = $codigo;
         $update->save();
 
         $this->openModalEdit = false;

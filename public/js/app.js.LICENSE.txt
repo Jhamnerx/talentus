@@ -13,6 +13,14 @@
  */
 
 /*!
+ * Pusher JavaScript Library v7.1.1-beta
+ * https://pusher.com/
+ *
+ * Copyright 2020, Pusher
+ * Released under the MIT licence.
+ */
+
+/*!
  * Sizzle CSS Selector Engine v2.3.6
  * https://sizzlejs.com/
  *
@@ -35,6 +43,14 @@
  * https://jquery.org/license
  *
  * Date: 2021-03-02T17:08Z
+ */
+
+/*! DataTables 1.12.1
+ * ©2008-2022 SpryMedia Ltd - datatables.net/license
+ */
+
+/*! DataTables styling integration
+ * ©2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**

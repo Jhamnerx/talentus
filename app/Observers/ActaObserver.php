@@ -4,8 +4,9 @@ namespace App\Observers;
 
 use App\Models\Actas;
 use App\Models\Admin\Mensaje;
+use App\Models\ChangesModels;
 use App\Notifications\ActaCreada;
-
+use Vinkla\Hashids\Facades\Hashids;
 
 class ActaObserver
 {
@@ -19,8 +20,11 @@ class ActaObserver
     {
 
         if(! \App::runningInConsole()){
-
+           // dd($acta);
             $acta->empresa_id = session('empresa');
+            $acta->user_id = auth()->user()->id;
+            
+
 
         }
        
@@ -46,6 +50,8 @@ class ActaObserver
                 'from_user_id' => auth()->id(),
             );
 
+            $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
+            $acta->save();
 
         //     $mensaje = new Mensaje();
         // //$mensaje->sendMessage($data, 'to_user');
@@ -56,7 +62,13 @@ class ActaObserver
             $mensaje = new Mensaje();
             $mensaje->sendMessage($data);
 
-           
+
+            ChangesModels::create([
+                'change_id' => $acta->getKey(),
+                'change_type' => Actas::class,
+                'type' => 'create',
+                'user_id' => auth()->user()->id,
+            ]);
 
         }
 
@@ -70,7 +82,14 @@ class ActaObserver
      */
     public function updated(Actas $actas)
     {
-        //
+        ChangesModels::create([
+            'change_id' => $actas->getKey(),
+            'change_type' => Actas::class,
+            'original' => json_encode($actas->getOriginal()),
+            'changes' => json_encode($actas->getChanges()),
+            'type' => 'update',
+            'user_id' => auth()->user()->id,
+        ]);
     }
 
     /**
@@ -81,7 +100,12 @@ class ActaObserver
      */
     public function deleted(Actas $actas)
     {
-        //
+        ChangesModels::create([
+            'change_id' => $actas->getKey(),
+            'change_type' => Actas::class,
+            'type' => 'delete',
+            'user_id' => auth()->user()->id,
+        ]);
     }
 
     /**
@@ -92,7 +116,13 @@ class ActaObserver
      */
     public function restored(Actas $actas)
     {
-        //
+        ChangesModels::create([
+            'change_id' => $actas->getKey(),
+            'change_type' => Actas::class,
+            'type' => 'restored',
+            'user_id' => auth()->user()->id,
+        ]);
+
     }
 
     /**
@@ -103,6 +133,11 @@ class ActaObserver
      */
     public function forceDeleted(Actas $actas)
     {
-        //
+        ChangesModels::create([
+            'change_id' => $actas->getKey(),
+            'change_type' => Actas::class,
+            'type' => 'forceDeleted',
+            'user_id' => auth()->user()->id,
+        ]);
     }
 }
