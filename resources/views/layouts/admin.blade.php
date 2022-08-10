@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
     @yield('css')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/datatables.min.css">
+    {{-- dataTables --}}
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/css/jquery.dataTables.min.css') }}">
+
     {{-- <link rel="stylesheet" href="{{ asset('plugins/jquery-ui/jquery-ui.min.css') }}"> --}}
     <!-- Scripts -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
@@ -22,7 +24,8 @@
     <script src="{{ mix('js/app.js') }}" defer></script>
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
-
+    {{-- dataTables --}}
+    <script src="{{ asset('plugins/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery.mockjax.js') }}"></script>
     {{-- <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script> --}}
     <script src="{{ asset('plugins/jquery.autocomplete.js') }}"></script>

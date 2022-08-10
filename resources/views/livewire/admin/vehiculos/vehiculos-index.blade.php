@@ -265,7 +265,7 @@
                                         @if ($vehiculo->sim_card)
                                             @if ($vehiculo->sim_card->linea)
                                                 <div class="font-medium text-emerald-600">
-                                                    {{ $vehiculo->sim_card->linea->numero }}
+                                                    #{{ $vehiculo->sim_card->linea->numero }}
                                                 </div>
                                             @else
                                                 <div class="font-medium text-red-200">

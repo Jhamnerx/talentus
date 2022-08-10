@@ -1,31 +1,29 @@
 <div wire:ignore>
     <div class="detallesvehiculos">
 
-        @if (!empty($detalles) )
-        @foreach ($detalles as $detalle)
+        @if (!empty($detalles))
+            @foreach ($detalles as $detalle)
+                <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila{{ $loop->index }}"
+                    idvehiculo="{{ $detalle->vehiculos->id }}">
 
-        <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila{{$loop->index}}"
-            idvehiculo="{{$detalle->vehiculos->id}}">
+                    <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-left">
+                        <p class="text-gray-800 xs:text-base">{{ $detalle->vehiculos->placa }}</p>
+                        <input type="hidden" class="idvehiculo" idvehiculo="{{ $detalle->vehiculos->id }}"
+                            name="items[{{ $loop->index }}][vehiculos_id]" value="{{ $detalle->vehiculos->id }}">
 
-            <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-left">
-                <p class="text-gray-800 xs:text-base">{{$detalle->vehiculos->placa}}</p>
-                <input type="hidden" class="idvehiculo" idvehiculo="{{$detalle->vehiculos->id}}"
-                    name="items[{{$loop->index}}][vehiculos_id]" value="{{$detalle->vehiculos->id}}">
+                    </div>
 
-            </div>
-
-            <div class="flex-auto xl:w-28 text-left">
-                <input class="form-input w-16 md:w-28 lg:w-28" type="text" name="items[{{$loop->index}}][plan]"
-                    value="{{$detalle->plan}}">
-            </div>
-            <div class="flex-auto xl:w-20 text-center">
-                <button type="button" class="text-red-500 hover:text-red-600 text-sm font-semibold"
-                    onclick="eliminarDetalleVehiculos({{$loop->index}})">Eliminar</button>
-            </div>
-        </div>
-        @endforeach
+                    <div class="flex-auto xl:w-28 text-left">
+                        <input class="form-input w-16 md:w-28 lg:w-28" type="text"
+                            name="items[{{ $loop->index }}][plan]" value="{{ $detalle->plan }}">
+                    </div>
+                    <div class="flex-auto xl:w-20 text-center">
+                        <button type="button" class="text-red-500 hover:text-red-600 text-sm font-semibold"
+                            onclick="eliminarDetalleVehiculos({{ $loop->index }})">Eliminar</button>
+                    </div>
+                </div>
+            @endforeach
         @else
-
         @endif
 
 
@@ -118,64 +116,79 @@
                                         <tbody class="text-sm divide-y divide-slate-200">
                                             <!-- Row -->
                                             @if ($vehiculos->count())
-                                            @foreach ($vehiculos as $vehiculo)
-
-                                            <tr>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                    <div class="font-medium text-blue-500">
-                                                        {{$vehiculo->id}}
-                                                    </div>
-
-
-
-                                                </td>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                    <div class="font-medium text-blue-500">
-                                                        {{$vehiculo->placa}}
-                                                    </div>
+                                                @foreach ($vehiculos as $vehiculo)
+                                                    <tr>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div class="font-medium text-blue-500">
+                                                                {{ $vehiculo->id }}
+                                                            </div>
 
 
 
-                                                </td>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div class="font-medium text-blue-500">
+                                                                {{ $vehiculo->placa }}
+                                                            </div>
 
-                                                <td
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
-                                                    <div class="font-medium text-sky-500">
-                                                        {{$vehiculo->flotas->nombre}}
-                                                    </div>
-                                                </td>
-                                                <td
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
-                                                    <div class="font-medium text-slate-800">
-                                                        {{$vehiculo->sim_card->linea->numero}}</div>
-                                                </td>
-                                                <td
-                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
-                                                    <div class="font-medium text-slate-800">
-                                                        {{$vehiculo->dispositivos->modelo->modelo." |
-                                                        ".$vehiculo->dispositivos->imei}}
-                                                    </div>
-                                                </td>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                                    <div class="m-3 ">
-                                                        <!-- Start -->
-                                                        <button type="button"
-                                                            class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm"
-                                                            onclick="agregarVehiculo({{$vehiculo}})">
-                                                            Añadir
-                                                        </button>
-                                                        <!-- End -->
-                                                    </div>
 
-                                                </td>
-                                            </tr>
-                                            @endforeach
+                                                        </td>
+
+                                                        <td
+                                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
+                                                            <div class="font-medium text-sky-500">
+                                                                {{ $vehiculo->flotas->nombre }}
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
+                                                            @if ($vehiculo->sim_card)
+                                                                @if ($vehiculo->sim_card->linea)
+                                                                    <div class="font-medium text-emerald-600">
+                                                                        #{{ $vehiculo->sim_card->linea->numero }}
+                                                                    </div>
+                                                                @else
+                                                                    <div class="font-medium text-red-200">
+                                                                        {{ $vehiculo->sim_card->sim_card }}
+                                                                    </div>
+                                                                @endif
+                                                            @else
+                                                                <div class="font-medium text-red-300">
+                                                                    {{ $vehiculo->old_sim_card }}
+                                                                </div>
+                                                            @endif
+                                                        </td>
+                                                        <td
+                                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
+                                                            <div class="font-medium text-slate-800">
+                                                                @if ($vehiculo->dispositivos)
+                                                                    {{ $vehiculo->dispositivos->modelo->modelo . ' | ' . $vehiculo->dispositivos->imei }}
+                                                                @else
+                                                                    {{ $vehiculo->dispositivo_imei }}
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                                            <div class="m-3 ">
+                                                                <!-- Start -->
+                                                                <button type="button"
+                                                                    class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm"
+                                                                    onclick="agregarVehiculo({{ $vehiculo }})">
+                                                                    Añadir
+                                                                </button>
+                                                                <!-- End -->
+                                                            </div>
+
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                             @else
-                                            <td colspan="10"
-                                                class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                                <div class="text-center">No hay Registros</div>
-                                            </td>
+                                                <td colspan="10"
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                                    <div class="text-center">No hay Registros</div>
+                                                </td>
                                             @endif
 
 
@@ -208,8 +221,4 @@
 </div>
 
 @push('scripts')
-
-
-
-
 @endpush

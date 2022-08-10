@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
         Proveedores::factory(20)->create();
         Dispositivos::factory(100)->create();
        // ComprasFacturas::factory(50)->create();
-        Presupuestos::factory(1)->create();
+        //Presupuestos::factory(1)->create();
        // VentasFacturas::factory(50)->create();
         //Recibos::factory(60)->create();
        // Contratos::factory(1)->create();
@@ -59,9 +59,9 @@ class DatabaseSeeder extends Seeder
         Vehiculos::factory(10)->create();
         Reportes::factory(2)->create();
         $this->call(CiudadesSeeder::class);
-        Actas::factory(1)->create();
-        Certificados::factory(1)->create();
-        CertificadosVelocimetros::factory(1)->create();
+        //Actas::factory(1)->create();
+        //Certificados::factory(1)->create();
+       // CertificadosVelocimetros::factory(1)->create();
         $this->call(ContratoSeeder::class);
         $this->call(PermisosSeeder::class);
         $this->call(UserSeeder::class);

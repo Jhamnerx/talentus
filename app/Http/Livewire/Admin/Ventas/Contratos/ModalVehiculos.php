@@ -14,7 +14,7 @@ class ModalVehiculos extends Component
 
     public function mount()
     {
-        $this->vehiculos = Vehiculos::all();
+        $this->vehiculos = Vehiculos::orderBy('id', 'desc')->get();
     }
 
     public function render()
