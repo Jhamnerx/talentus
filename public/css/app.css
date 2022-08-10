@@ -1277,6 +1277,9 @@ select {
 .mr-6 {
   margin-right: 1.5rem;
 }
+.mt-\[3px\] {
+  margin-top: 3px;
+}
 .mb-12 {
   margin-bottom: 3rem;
 }
@@ -1330,9 +1333,6 @@ select {
 }
 .-mt-1 {
   margin-top: -0.25rem;
-}
-.mt-\[3px\] {
-  margin-top: 3px;
 }
 .box-border {
   box-sizing: border-box;

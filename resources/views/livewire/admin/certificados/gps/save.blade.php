@@ -267,6 +267,62 @@
 
                                 </div>
                             </div>
+                            <div class="col-span-12 mt-2">
+                                <label
+                                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                                    <div>
+                                        Accesorios:
+                                    </div>
+
+                                </label>
+                                <div class="flex flex-wrap items-center -m-3">
+
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="CORTE DE MOTOR"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">CORTE DE MOTOR</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="BOTON DE PANICO"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">BOTON DE PANICO</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="BUZZER"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">BUZZER</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="CIERRE DE PUERTA"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">CIERRE DE PUERTAS</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                </div>
+
+
+                                @error('accesorios')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+
+                            </div>
 
 
                         </div>
