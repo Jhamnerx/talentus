@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class ReciboPdfController extends Controller
 {
-    public function __invoke(Recibos $recibo)
+    public function __invoke(Recibos $recibo, $action = null)
     {
 
-        return $recibo->getPDFData();
+        return $recibo->getPDFData($action);
         
     }
 }

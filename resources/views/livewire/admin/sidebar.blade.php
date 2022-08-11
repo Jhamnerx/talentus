@@ -600,11 +600,20 @@
 
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-pagos' && '!text-indigo-500'"
+                                        :class="page === 'administracion-cobros' && '!text-indigo-500'"
                                         href="{{ route('admin.cobros.index') }}">
                                         <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos/
-                                            Cobros</span>
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Registro de Cobros</span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'administracion-paymentes' && '!text-indigo-500'"
+                                        href="{{ route('admin.payments.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Pagos</span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">

@@ -34,6 +34,7 @@ use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\VehiculosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\SearchController;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\Route;
@@ -104,6 +105,7 @@ Route::resource('usuarios', UsersController::class)->names('admin.users')->param
 ]);
 
 Route::resource('cobros', CobrosController::class)->names('admin.cobros');
+Route::resource('payments', PaymentsController::class)->names('admin.payments');
 
 
 Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
@@ -160,7 +162,7 @@ Route::get('pdf/certificados/{certificado:unique_hash}', CertificadoPdfControlle
 Route::get('pdf/contratos/{contrato:unique_hash}', ContratoPdfController::class)->name('admin.pdf.contratos');
 Route::get('pdf/certificados/velocimetros/{certificado:unique_hash}', CertificadoVelocimetroPdfController::class)->name('admin.pdf.velocimetros');
 Route::get('pdf/presupuestos/{presupuesto}/{action?}', PresupuestoPdfController::class)->name('admin.pdf.presupuesto');
-Route::get('pdf/recibo/{recibo}', ReciboPdfController::class)->name('admin.pdf.recibo');
+Route::get('pdf/recibo/{recibo}/{action?}', ReciboPdfController::class)->name('admin.pdf.recibo');
 Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name('admin.pdf.factura');
 
 
