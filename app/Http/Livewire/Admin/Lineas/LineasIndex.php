@@ -25,7 +25,7 @@ class LineasIndex extends Component
             $query->where('numero', 'like', '%' . $this->search . '%')
                 ->orwhere('operador', 'like', '%' . $this->search . '%');
         })->orWhere('sim_card', 'like', '%' . $this->search . '%')
-            ->orWhere('operador', 'like', '%' . $this->search . '%')
+            ->orWhere('operador', 'like', '%' . $this->search . '%')->with('linea', 'vehiculos')
             ->orderBy('id', 'desc')
             ->paginate(10);
 

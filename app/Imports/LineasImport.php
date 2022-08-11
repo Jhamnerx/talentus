@@ -15,7 +15,7 @@ class LineasImport implements ToModel
      */
     public function model(array $row)
     {
-        // dd($row);
+        //dd($row);
         return new SimCard([
             'sim_card'    => $row[0],
             'operador'    => $row[1],

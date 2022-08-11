@@ -6,6 +6,7 @@ use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Recibos extends Model
 {
@@ -56,5 +57,31 @@ class Recibos extends Model
         }
     }
 
+    public function getPDFData($action)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'recibo' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.recibo.pdf');
+        
+        if($action == 1){
+
+            return $pdf->download('RECIBO ' . $this->serie."-".$this->numero.'.pdf');
+        }else{
+           // return view('pdf.factura.pdf');
+           
+            return $pdf->stream('RECIBO ' . $this->serie."-".$this->numero.'.pdf');
+
+        };
+
+
+       // return view('pdf.presupuesto.pdf');
+    }
 
 }

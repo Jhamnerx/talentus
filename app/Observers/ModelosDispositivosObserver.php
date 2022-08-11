@@ -2,7 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\ModelosDispositivos;
+use App\Models\ModelosDispositivo;
+
 
 class ModelosDispositivosObserver
 {
@@ -12,7 +13,7 @@ class ModelosDispositivosObserver
      * @param  \App\Models\ModelosDispositivos  $modelosDispositivos
      * @return void
      */
-    public function created(ModelosDispositivos $modelosDispositivos)
+    public function created(ModelosDispositivo $modelosDispositivos)
     {
         //
     }
@@ -23,7 +24,7 @@ class ModelosDispositivosObserver
      * @param  \App\Models\ModelosDispositivos  $modelosDispositivos
      * @return void
      */
-    public function updated(ModelosDispositivos $modelosDispositivos)
+    public function updated(ModelosDispositivo $modelosDispositivos)
     {
         //
     }
@@ -34,7 +35,7 @@ class ModelosDispositivosObserver
      * @param  \App\Models\ModelosDispositivos  $modelosDispositivos
      * @return void
      */
-    public function deleted(ModelosDispositivos $modelosDispositivos)
+    public function deleted(ModelosDispositivo $modelosDispositivos)
     {
         //
     }
@@ -45,7 +46,7 @@ class ModelosDispositivosObserver
      * @param  \App\Models\ModelosDispositivos  $modelosDispositivos
      * @return void
      */
-    public function restored(ModelosDispositivos $modelosDispositivos)
+    public function restored(ModelosDispositivo $modelosDispositivos)
     {
         //
     }
@@ -56,7 +57,7 @@ class ModelosDispositivosObserver
      * @param  \App\Models\ModelosDispositivos  $modelosDispositivos
      * @return void
      */
-    public function forceDeleted(ModelosDispositivos $modelosDispositivos)
+    public function forceDeleted(ModelosDispositivo $modelosDispositivos)
     {
         //
     }

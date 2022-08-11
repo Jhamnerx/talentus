@@ -200,7 +200,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Descargar</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -252,7 +252,7 @@
 
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-slate-800">{{ $contrato->clientes->razon_social }}
                                         </div>
                                     </td>

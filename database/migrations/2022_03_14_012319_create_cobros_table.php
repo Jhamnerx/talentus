@@ -16,15 +16,18 @@ class CreateCobrosTable extends Migration
         Schema::create('cobros', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('clientes_id');
+            $table->unsignedBigInteger('vehiculos_id');
+            $table->text('comentario')->nullable();
             $table->string('periodo');
             $table->decimal('monto_unidad', 10, 2);
             $table->integer('cantidad_unidades');
             $table->string('tipo_pago');
             $table->string('observacion')->nullable();
-            $table->date('fecha');
+            $table->date('fecha_vencimiento');
             $table->enum('estado', [0, 1, 2])->default(0);
 
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
+            $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

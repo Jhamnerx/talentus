@@ -7,12 +7,14 @@ use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Clientes extends Model
 {
     use HasFactory;
     use Notifiable;
+    use SoftDeletes;
     
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'clientes';
@@ -22,7 +24,7 @@ class Clientes extends Model
     protected static function booted()
     {
        
-        static::addGlobalScope(new EliminadoScope);
+        //static::addGlobalScope(new EliminadoScope);
         //static::addGlobalScope(new ActiveScope);
     }
 
@@ -83,5 +85,12 @@ class Clientes extends Model
     public function contactos()
     {
         return $this->hasMany(Contactos::class, 'clientes_id');
+    }
+
+    //relacion uno a muchos
+
+    public function cobros()
+    {
+        return $this->hasMany(Cobros::class, 'clientes_id');
     }
 }
