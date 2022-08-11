@@ -10,7 +10,7 @@ use Livewire\Component;
 class SaveVehiculo extends Component
 {
     public $data;
-    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $flotas_id, $numero, $operador, $sim_card, $sim_card_id, $modelo_gps, $imei, $dispositivos_id, $descripcion;
+    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $flotas_id, $numero, $operador, $sim_card, $sim_card_id, $modelo_gps, $dispositivo_imei, $dispositivos_id, $descripcion;
     public $empresa_id;
     public $modalOpen = false;
 
@@ -32,7 +32,7 @@ class SaveVehiculo extends Component
         "modelo_gps" => 'nullable',
         "operador" => 'nullable',
         "sim_card" => 'nullable',
-        "imei" => 'nullable',
+        "dispositivo_imei" => 'nullable',
         "descripcion" => 'nullable',
 
         // "dispositivos_id" => "required|unique:vehiculos",
@@ -100,7 +100,7 @@ class SaveVehiculo extends Component
 
     public function GuardarVehiculo()
     {
-
+       // dd($this->imei);
         $requestVehiculo = new VehiculosRequest();
 
         $validatedDate = $this->validate($requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
@@ -111,7 +111,7 @@ class SaveVehiculo extends Component
         $this->modalOpen = false;
 
         return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
-        return redirect()->route('admin.vehiculos.index')->with('flash.abnnerStyle', 'success');
+        return redirect()->route('admin.vehiculos.index')->with('flash.bannerStyle', 'success');
         // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
     }
 

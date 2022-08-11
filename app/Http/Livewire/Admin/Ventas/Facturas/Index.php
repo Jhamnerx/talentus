@@ -13,6 +13,11 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $status = null;
+    public $openModalDelete = false;
+
+    protected $listeners = [
+        'render'
+    ];
 
     public function render()
     {
@@ -129,4 +134,10 @@ class Index extends Component
         ]);
         $this->render();
     }    
+    public function openModalDelete(Facturas $factura){
+        //dd($factura);
+        $this->emit('openModalDelete', $factura);
+        $this->openModalDelete = true;
+
+    }
 }

@@ -33,6 +33,7 @@ class CiudadesRequest extends FormRequest
         if ($ciudad) {
 
             $rules['nombre'] = 'required|unique:ciudades,nombre,' . $ciudad->id;
+            $rules['prefijo'] = 'required|unique:ciudades,prefijo,' . $ciudad->id;
         }
         // if ($this->status == 2) {
 
@@ -46,5 +47,15 @@ class CiudadesRequest extends FormRequest
         // }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'nombre.required' => 'No dejes vacio este campo',
+            'prefijo.required' => 'Ingresa un prefijo',
+            'nombre.unique' => 'Ya existe esta ciudad',
+            'prefijo.unique' => 'Ingresa un prefijo distinto',
+        ];
     }
 }

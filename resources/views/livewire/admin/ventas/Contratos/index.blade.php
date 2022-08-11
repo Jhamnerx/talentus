@@ -28,7 +28,7 @@
             </form>
 
             <!-- Create invoice button -->
-            <a href="{{route('admin.ventas.contratos.create')}}">
+            <a href="{{ route('admin.ventas.contratos.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
@@ -51,7 +51,7 @@
                 <li class="m-1">
                     <button
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{$total}}</span></button>
+                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
                 </li>
             </ul>
         </div>
@@ -82,7 +82,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -132,7 +133,8 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -143,7 +145,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -173,7 +176,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Contratos <span
-                    class="text-slate-400 font-medium">{{$total}}</span>
+                    class="text-slate-400 font-medium">{{ $total }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -224,169 +227,159 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($contratos->count())
-                        @foreach ($contratos as $contrato)
+                            @foreach ($contratos as $contrato)
+                                <tr>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+                                            <a target="_blank" href="{{ route('admin.pdf.contratos', $contrato) }}">
+                                                <button class="text-talentus-200 hover:text-talentus-100 rounded-full">
+                                                    <span class="sr-only">Descargar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                                    </svg>
+                                                </button>
+                                            </a>
 
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-                                    <a target="_blank" href="{{route('admin.pdf.contratos', $contrato)}}">
-                                        <button class="text-talentus-200 hover:text-talentus-100 rounded-full">
-                                            <span class="sr-only">Descargar</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path
-                                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                            </svg>
-                                        </button>
-                                    </a>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $contrato->clientes->razon_social }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$contrato->clientes->razon_social}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <!-- Start -->
+                                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                            @mouseleave="open = false">
+                                            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                                aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                                @focusout="open = false" @click.prevent>
+                                                <span class="mr-2">Ver vehiculos</span>
+                                                <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                                                </svg>
+                                            </button>
+                                            <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
+                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full"
+                                                    x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+                                                    <div class="">
+                                                        <div class="font-medium text-slate-800 mb-0.5 pb-2  text-base">
+                                                            <b>VEHICULOS</b>
+                                                        </div>
+                                                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                                            <table
+                                                                class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                                <thead
+                                                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                                    <tr>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            Placa
+                                                                        </th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            Plan
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
 
-                                <!-- Start -->
-                                <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
-                                    @mouseleave="open = false">
-                                    <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
-                                        aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                                        @focusout="open = false" @click.prevent>
-                                        <span class="mr-2">Ver vehiculos</span>
-                                        <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                                        </svg>
-                                    </button>
-                                    <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
-                                        <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full"
-                                            x-show="open"
-                                            x-transition:enter="transition ease-out duration-200 transform"
-                                            x-transition:enter-start="opacity-0 translate-y-2"
-                                            x-transition:enter-end="opacity-100 translate-y-0"
-                                            x-transition:leave="transition ease-out duration-200"
-                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                            x-cloak>
-                                            <div class="">
-                                                <div class="font-medium text-slate-800 mb-0.5 pb-2  text-base">
-                                                    <b>VEHICULOS</b>
-                                                </div>
-                                                <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                                    <table
-                                                        class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                                        <thead
-                                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                                            <tr>
-                                                                <th scope="col" class="px-6 py-3">
-                                                                    Placa
-                                                                </th>
-                                                                <th scope="col" class="px-6 py-3">
-                                                                    Plan
-                                                                </th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
+                                                                    @if ($contrato->detalle->isEmpty())
+                                                                        <tr
+                                                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
 
-                                                            @if ($contrato->detalle->isEmpty())
+                                                                            <td colspan="2">NO SE REGISTRARON
+                                                                                VEHICULOS</td>
 
-                                                            <tr
-                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-
-                                                                <td colspan="2">NO SE REGISTRARON VEHICULOS</td>
-
-                                                            </tr>
-                                                            @else
-                                                            @foreach ($contrato->detalle as $detalle)
-                                                            <tr
-                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                                <th scope="row"
-                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-
-                                                                    @if ($detalle->vehiculos)
-                                                                    {{$detalle->vehiculos->placa}}
+                                                                        </tr>
                                                                     @else
-                                                                    -
+                                                                        @foreach ($contrato->detalle as $detalle)
+                                                                            <tr
+                                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                                <th scope="row"
+                                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+
+                                                                                    @if ($detalle->vehiculos)
+                                                                                        {{ $detalle->vehiculos->placa }}
+                                                                                    @else
+                                                                                        -
+                                                                                    @endif
+
+                                                                                </th>
+                                                                                <td class="px-6 py-4">
+                                                                                    S/. {{ $detalle->plan }}
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        @endforeach
                                                                     @endif
 
-                                                                </th>
-                                                                <td class="px-6 py-4">
-                                                                    S/. {{$detalle->plan}}
-                                                                </td>
-
-                                                            </tr>
-                                                            @endforeach
 
 
-                                                            @endif
-
-
-
-                                                        </tbody>
-                                                    </table>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
 
-                                {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">Trujillo</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
-                                <div>
-                                    <div class="m-3 w-48">
-                                        <!-- Start -->
+                                        {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">Trujillo</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
+                                        <div>
+                                            <div class="m-3 w-48">
+                                                <!-- Start -->
 
-                                        @livewire('admin.ventas.contratos.status-sello', ['model' => $contrato, 'field'
-                                        =>
-                                        'sello'], key('sello'.$contrato->id))
+                                                @livewire('admin.ventas.contratos.status-sello', ['model' => $contrato, 'field' => 'sello'], key('sello' . $contrato->id))
 
-                                        @livewire('admin.ventas.contratos.status-fondo', ['model' => $contrato, 'field'
-                                        =>
-                                        'fondo'], key('fondo'.$contrato->id))
-                                        <!-- End -->
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>
-                                    <div class="m-3 ">
-                                        @livewire('admin.ventas.contratos.change-status', ['model' => $contrato, 'field'
-                                        =>
-                                        'estado'], key('estado'.$contrato->id))
+                                                @livewire('admin.ventas.contratos.status-fondo', ['model' => $contrato, 'field' => 'fondo'], key('fondo' . $contrato->id))
+                                                <!-- End -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>
+                                            <div class="m-3 ">
+                                                @livewire('admin.ventas.contratos.change-status', ['model' => $contrato, 'field' => 'estado'], key('estado' . $contrato->id))
 
-                                        <!-- End -->
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{$contrato->fecha}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
+                                                <!-- End -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $contrato->fecha }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
 
-                                    @livewire('admin.ventas.contratos.delete', ['model' => $contrato],
-                                    key('delete'.$contrato->id))
-                                </div>
-                            </td>
-                        </tr>
-
-                        @endforeach
+                                            @livewire('admin.ventas.contratos.delete', ['model' => $contrato], key('delete' . $contrato->id))
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

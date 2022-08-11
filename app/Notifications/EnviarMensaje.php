@@ -64,9 +64,9 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function toDatabase($notifiable)
     {
+        
         return [
             'url' => route('admin.certificados.actas.index'),
-            'accion' => $this->mensaje->accion,
             'mensaje' => 'El usuario '.User::find($this->mensaje->from_user_id)->name.' ha creado una nueva acta',
         ];
     }

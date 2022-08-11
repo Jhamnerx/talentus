@@ -20,7 +20,11 @@ class PresupuestosIndex extends Component
     public $from = '';
     public $to = '';
     public $status = null;
-
+    public $openModalDelete = false;
+    
+    protected $listeners = [
+        'render'
+    ];
     public function render()
     {
 
@@ -214,5 +218,12 @@ class PresupuestosIndex extends Component
 
             $this->dispatchBrowserEvent('save-error', ['mensaje' => 'El recibo de este presupuesto ya fue creado']);
         }
+    }
+
+    public function openModalDelete(Presupuestos $presupuesto){
+        //dd($presupuesto);
+        $this->emit('openModalDelete', $presupuesto);
+        $this->openModalDelete = true;
+
     }
 }

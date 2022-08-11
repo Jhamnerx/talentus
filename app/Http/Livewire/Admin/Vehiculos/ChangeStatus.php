@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Vehiculos;
 
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Monolog\Handler\IFTTTHandler;
 
 class ChangeStatus extends Component
 {
@@ -20,7 +21,28 @@ class ChangeStatus extends Component
 
     public function updating($field, $value)
     {
-        $this->model->setAttribute($this->field, $value)->save();
+        if(!$value){
+
+            $this->model->setAttribute($this->field, $value);
+
+            if($this->model->numero){
+
+                $this->model->setAttribute('old_numero', $this->model->numero);
+                $this->model->setAttribute('old_sim_card', $this->model->sim_card->sim_card);
+            }
+
+
+
+            $this->model->setAttribute('numero', NULL);
+            $this->model->setAttribute('sim_card_id', NULL);
+            $this->model->save();
+
+        }else{
+
+            $this->model->setAttribute($this->field, $value);
+            $this->model->save();
+        }
+        $this->emit('updateTable');
         $this->dispatchBrowserEvent('change-status', ['status' => $value]);
     }
     public function render()

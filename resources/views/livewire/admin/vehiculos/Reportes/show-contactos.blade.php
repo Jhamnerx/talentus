@@ -40,26 +40,26 @@
 
 
                             @foreach ($contactos as $contacto)
-                            <li>
-                                <div
-                                    class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
-                                    <div class="flex items-center">
-                                        {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
-                                        --}}
-                                        <div class="grow">
-                                            <div class="flex flex-wrap items-center justify-between mb-0.5">
-                                                <span class="font-medium text-slate-800">{{$contacto->nombre}} |<span
-                                                        class="text-xs italic text-slate-500 align-top">{{$contacto->cargo}}</span></span>
-                                                <span><span
-                                                        class="font-medium text-emerald-600">{{$contacto->telefono}}</span></span>
+                                <li>
+                                    <div
+                                        class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
+                                        <div class="flex items-center">
+                                            {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div> --}}
+                                            <div class="grow">
+                                                <div class="flex flex-wrap items-center justify-between mb-0.5">
+                                                    <span class="font-medium text-slate-800">{{ $contacto->nombre }}
+                                                        |<span
+                                                            class="text-xs italic text-slate-500 align-top">{{ $contacto->cargo }}</span></span>
+                                                    <span><span
+                                                            class="font-medium text-emerald-600">{{ $contacto->telefono }}</span></span>
+                                                </div>
+                                                <div class="text-sm">Correo: <span
+                                                        class="text-xs italic text-indigo-500 align-top">{{ $contacto->email }}
+                                                        ✨</span></div>
                                             </div>
-                                            <div class="text-sm">Correo: <span
-                                                    class="text-xs italic text-indigo-500 align-top">{{$contacto->email}}
-                                                    ✨</span></div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             @endforeach
 
                             <div class="text-xs text-slate-500">Aqui solo estan los contactos registrados en el sistema,

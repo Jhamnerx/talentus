@@ -7,10 +7,13 @@ use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Clientes extends Model
 {
     use HasFactory;
+    use Notifiable;
+    
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'clientes';
     // SCOPE DE EMPRESA

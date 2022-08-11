@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin = User::create([
+        User::create([
             'name' => 'Jhamner Sifuentes Vasquez',
             'email' => 'jhamnerx1x@gmail.com',
             'tipo_documento' => 'DNI',
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
 
 
 
-        User::create([
+        $sandra = User::create([
             'name' => 'Sandra Centurion',
             'email' => 'administracion@talentustechnology.com',
             'tipo_documento' => 'DNI',
@@ -39,7 +39,8 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
-        User::create([
+        
+        $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@talentus.com',
             'tipo_documento' => 'DNI',
@@ -50,6 +51,10 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
+
+        $sandra->assignRole('admin');
+        $admin->assignRole('admin');
+
         User::factory(8)->create();
     }
 }

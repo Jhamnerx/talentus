@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos\Reportes;
 
+use App\Models\Clientes;
 use App\Models\Flotas;
 use App\Models\Reportes;
 use Livewire\Component;
@@ -96,11 +97,11 @@ class Index extends Component
     }
 
 
-    public function openModalContactos(Flotas $flota)
+    public function openModalContactos(Clientes $cliente)
     {
-        //dd($flota);
+        // dd($cliente);
 
-        $this->emit('showContactos', $flota);
+        $this->emit('showContactos', $cliente);
         $this->openModalContactos = true;
     }
 

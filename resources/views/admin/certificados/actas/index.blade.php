@@ -2,51 +2,54 @@
 @section('ruta', 'certificados-actas')
 @section('contenido')
 
-<!-- Table -->
-@livewire('admin.certificados.actas.actas-index')
+    <!-- Table -->
+    @livewire('admin.certificados.actas.actas-index')
 
 @stop
 
 @push('modals')
-
-@livewire('admin.certificados.actas.save')
-@livewire('admin.certificados.actas.edit')
-
+    @livewire('admin.certificados.actas.save')
+    @livewire('admin.certificados.actas.edit')
 @endpush
 
 @section('js')
-<script>
-    window.addEventListener('acta-edit', event => {
-        iziToast.success({
-            position: 'topRight',
-            title: 'ACTUALIZADO',
-            message: 'El Acta N° '+event.detail.acta+' Fue Actualizado',
-        });
-
-    })
-    
-</script>
-
-<script>
-    window.addEventListener('acta-save', event => {
-        $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: 'El Acta de '+event.detail.vehiculo+' Fue Creado',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+    <script>
+        window.addEventListener('acta-edit', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'ACTUALIZADO',
+                message: 'El Acta N° ' + event.detail.acta + ' Fue Actualizado',
+            });
 
         })
-    });
-    })
-    
-</script>
+    </script>
+
+    <script>
+        window.addEventListener('acta-save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: 'El Acta de ' + event.detail.vehiculo + ' Fue Creado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+
+
+                $('.formSaveActa .vehiculos_id').val(null).trigger('change');
+                $('.formSaveActa .ciudades').val(null).trigger('change');
+            });
 
 
 
-<script>
-    // A basic demo function to handle "select all" functionality
+        })
+    </script>
+
+
+
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -76,5 +79,5 @@
                 }
             }))
         })
-</script>
+    </script>
 @stop

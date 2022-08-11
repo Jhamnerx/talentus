@@ -94,7 +94,7 @@ class CategoriasObserver
         ChangesModels::create([
             'change_id' => $categoria->getKey(),
             'change_type' => Categoria::class,
-            'type' => 'restore',
+            'type' => 'restored',
             'user_id' => auth()->user()->id,
         ]);
     }
@@ -107,6 +107,11 @@ class CategoriasObserver
      */
     public function forceDeleted(Categoria $categoria)
     {
-        //
+        ChangesModels::create([
+            'change_id' => $categoria->getKey(),
+            'change_type' => Categoria::class,
+            'type' => 'forceDeleted',
+            'user_id' => auth()->user()->id,
+        ]);
     }
 }

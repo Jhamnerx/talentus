@@ -8,8 +8,7 @@ use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Actas extends Model
 {
@@ -17,6 +16,7 @@ class Actas extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'actas';
 
@@ -86,4 +86,6 @@ class Actas extends Model
         //return $pdf;
         //return view('pdf.acta');
     }
+
+    
 }

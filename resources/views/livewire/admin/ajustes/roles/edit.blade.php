@@ -70,7 +70,7 @@
                             @enderror
                         </div>
                     </div>
-                    {{ json_encode($permission) }}
+
                     <div class="flex justify-between">
                         <h6 class="text-sm not-italic font-medium text-gray-800 px-4 md:px-8 py-1.5">
                             Permisos
@@ -1777,7 +1777,7 @@
                         type="button">
                         Cancelar
                     </button>
-                    <button wire:click.prevent="save"
+                    <button wire:click.prevent="update"
                         class="inline-flex whitespace-nowrap items-center border font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 px-4 py-2 text-sm leading-5 rounded-md border-transparent shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500"
                         type="submit"><svg xmlns="http://www.w3.org/2000/svg" fill="none" verBox="0 0 24 24"
                             stroke="currentColor" class="-ml-1 mr-2 h-5 w-5">

@@ -8,6 +8,7 @@ use App\Models\Ciudades;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Vinkla\Hashids\Facades\Hashids;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -28,6 +29,16 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
+        $this->numero = $this->setNextSequenceNumber();
+
+    }
+
+    public function setNextSequenceNumber()
+    {
+
+        $id = IdGenerator::generate(['table' => 'certificados','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        return trim($id);
     }
     public function closeModal()
     {
@@ -39,30 +50,34 @@ class Save extends Component
     public function guardarCertificado()
     {
         $certificadoRequest = new CertificadosGpsRequest();
-        $values = $this->validate($certificadoRequest->rules(), $certificadoRequest->messages());
 
+        $values = $this->validate($certificadoRequest->rules(), $certificadoRequest->messages());
         //  dd($values);
 
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
-        $certificado = Certificados::create($values);
 
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $certificado->numero;
+        $certificado = new Certificados();
+
+        $certificado->vehiculos_id = $values["vehiculos_id"];
+        $certificado->numero = $values["numero"];
+        $certificado->fin_cobertura = $values["fin_cobertura"];
+        $certificado->ciudades_id = $values["ciudades_id"];
+        $certificado->fondo = $values["fondo"];
+        $certificado->sello = $values["sello"];
         $certificado->year = today()->year;
-        $certificado->user_id = auth()->user()->id;
-
-        $certificado->unique_hash = Hashids::connection(certificados::class)->encode($certificado->id);
-        $certificado->empresa_id = session('empresa');
+        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $certificado->numero;
         $certificado->codigo = $codigo;
         $certificado->fecha = $fecha;
         $certificado->save();
 
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculos->placa]);
+        $this->closeModal();
         $this->emit('updateTable');
-        $this->reset();
+
     }
 
     public function updated($label)

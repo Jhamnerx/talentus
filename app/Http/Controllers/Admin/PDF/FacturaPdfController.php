@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class FacturaPdfController extends Controller
 {
-    public function __invoke(Facturas $factura)
+    public function __invoke(Facturas $factura, $action = null)
     {
 
-        return $factura->getPDFData();
+        return $factura->getPDFData($action);
         
     }
 }

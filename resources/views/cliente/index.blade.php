@@ -22,9 +22,9 @@
                                     vehiculos
                                     y actualizar tus datos.</p>
                                 <div class="banner-two__btn-block">
-                                    <a href="" class="thm-btn banner-two__btn-1">Plataforma</a>
+                                    <a href="" class="thm-btn banner-two__btn-1">Plataforma Premium</a>
                                     <!-- /.thm-btn banner-two__btn-1 -->
-                                    <a href="" class="thm-btn banner-two__btn-2">Servicios</a>
+                                    <a href="" class="thm-btn banner-two__btn-2">Plataforma Basica</a>
                                     <!-- /.thm-btn banner-two__btn-2 -->
                                 </div><!-- /.banner-two__btn-block -->
                             </div><!-- /.banner-two__content -->
@@ -86,15 +86,14 @@
                                 </div><!-- /.block-title text-center -->
                                 <div class="service-four__box">
                                     <i class="seolight-icon-bank-building"></i>
-                                    <h3><a href="service-details.html">Citation Building</a></h3>
-                                    <p>Experience is the knowledge or mastery of an event. Identify the error of the
-                                        website. website coding, page speed.</p>
+                                    <h3><a href="#">Cobertura</a></h3>
+                                    <p>Nuestra cobertura a es Nivel Nacional.</p>
                                 </div><!-- /.service-four__box -->
                                 <div class="service-four__box">
                                     <i class="seolight-icon-tracking"></i>
-                                    <h3><a href="service-details.html">Tracking for company</a></h3>
-                                    <p>Experience is the knowledge or mastery of an event. Identify the error of the
-                                        website. website coding, page speed.</p>
+                                    <h3><a href="#">Cúales son los planes?</a></h3>
+                                    <p>Contamos con diversos planes que se ajustan a la necesidades de nuestros clientes.
+                                    </p>
                                 </div><!-- /.service-four__box -->
                             </div><!-- /.service-four__content -->
                         </div><!-- /.col-lg-8 -->

@@ -2,51 +2,49 @@
 @section('ruta', 'certificados-velocimetro')
 @section('contenido')
 
-<!-- Table -->
+    <!-- Table -->
 
-@livewire('admin.certificados.velocimetros.velocimetros-index')
+    @livewire('admin.certificados.velocimetros.velocimetros-index')
 
 @stop
 
 @push('modals')
-
-@livewire('admin.certificados.velocimetros.save')
-@livewire('admin.certificados.velocimetros.edit')
-
+    @livewire('admin.certificados.velocimetros.save')
+    @livewire('admin.certificados.velocimetros.edit')
 @endpush
 
 
 @section('js')
-<script>
-    window.addEventListener('certificado-velocimetro-edit', event => {
-        iziToast.success({
-            position: 'topRight',
-            title: 'ACTUALIZADO',
-            message: 'El Certificado N° '+event.detail.certificado+' Fue Actualizado',
-        });
-
-    })
-    
-</script>
-
-<script>
-    window.addEventListener('certificado-velocimetro-save', event => {
-        $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: 'El certificado de '+event.detail.vehiculo+' Fue Creado',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+    <script>
+        window.addEventListener('certificado-velocimetro-edit', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'ACTUALIZADO',
+                message: 'El Certificado N° ' + event.detail.certificado + ' Fue Actualizado',
+            });
 
         })
-    });
-    })
-    
-</script>
+    </script>
 
-<script>
-    // A basic demo function to handle "select all" functionality
+    <script>
+        window.addEventListener('certificado-velocimetro-save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: 'El certificado de ' + event.detail.vehiculo + ' Fue Creado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+            $('.formVelocimetroSave .vehiculos_id').val(null).trigger('change');
+            $('.formVelocimetroSave .ciudades').val(null).trigger('change');
+        })
+    </script>
+
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -76,5 +74,5 @@
                 }
             }))
         })
-</script>
+    </script>
 @stop

@@ -23,7 +23,7 @@ class InputNumero extends Component
     {
         return view('livewire.admin.ventas.facturas.input-numero');
     }
-        public function mount(){
+    public function mount(){
         $this->numero = $this->numero;
         $this->serie = $this->serie;
     }

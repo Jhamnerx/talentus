@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin\Certificados\Actas;
 
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
+use App\Models\Ciudades;
 use Livewire\Component;
+use Illuminate\Support\Str;
 
 class Edit extends Component
 {
@@ -53,9 +55,14 @@ class Edit extends Component
         $actaRequest = new ActasRequest();
         $values = $this->validate($actaRequest->rules($this->acta), $actaRequest->messages());
 
+        $ciudad = Ciudades::find($values["ciudades_id"]);
+        $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
         $update = Actas::find($this->acta->id);
         $update->numero = $values["numero"];
+        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $update->numero;
+        $update->codigo = $codigo;
         $update->vehiculos_id = $values["vehiculos_id"];
+        $update->fecha = $fecha;
         $update->inicio_cobertura = $values["inicio_cobertura"];
         $update->fin_cobertura = $values["fin_cobertura"];
         $update->ciudades_id = $values["ciudades_id"];

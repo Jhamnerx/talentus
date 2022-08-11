@@ -51,7 +51,7 @@
                 <li class="m-1">
                     <button
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{$total}}</span></button>
+                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
                 </li>
             </ul>
         </div>
@@ -82,7 +82,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -132,7 +133,8 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -143,7 +145,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -172,7 +175,8 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Reportes <span class="text-slate-400 font-medium">{{$total}}</span>
+            <h2 class="font-semibold text-slate-800">Reportes <span
+                    class="text-slate-400 font-medium">{{ $total }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -226,150 +230,151 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($reportes->count())
-                        @foreach ($reportes as $reporte)
+                            @foreach ($reportes as $reporte)
+                                <tr>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-blue-800">
+                                            {{ $reporte->vehiculos->placa }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-blue-800">
-                                    {{$reporte->vehiculos->placa}}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if (count($reporte->vehiculos->flotas->clientes->contactos) > 0)
+                                            <div wire:click="openModalContactos({{ $reporte->vehiculos->flotas->clientes->id }})"
+                                                class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
+                                                {{ $reporte->vehiculos->flotas->nombre }}</div>
+                                        @else
+                                            <div class="font-medium text-slate-800">
+                                                {{ $reporte->vehiculos->flotas->nombre }}</div>
+                                        @endif
 
-                                @if (count($reporte->vehiculos->flotas->contactos) > 0)
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                <div wire:click="openModalContactos({{$reporte->vehiculos->flotas->id}})"
-                                    class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
-                                    {{$reporte->vehiculos->flotas->nombre}}</div>
-                                @else
-                                <div class="font-medium text-slate-800">
-                                    {{$reporte->vehiculos->flotas->nombre}}</div>
-                                @endif
+                                        @if ($reporte->estado == 1)
+                                            <div
+                                                class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
+                                                Por Consultar
+                                            </div>
+                                        @elseif($reporte->estado == 2)
+                                            <div
+                                                class="text-xs inline-flex font-medium bg-sky-100 text-sky-600 rounded-full text-center px-2.5 py-1">
+                                                En Espera
+                                            </div>
+                                        @else
+                                            <div
+                                                class="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
+                                                Solucionado</div>
+                                        @endif
 
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                @if ($reporte->estado == 1)
-                                <div
-                                    class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
-                                    Por Consultar
-                                </div>
-
-                                @elseif($reporte->estado == 2)
-                                <div
-                                    class="text-xs inline-flex font-medium bg-sky-100 text-sky-600 rounded-full text-center px-2.5 py-1">
-                                    En Espera
-                                </div>
-
-                                @else
-                                <div
-                                    class="text-xs inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-1">
-                                    Solucionado</div>
-                                @endif
-
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$reporte->fecha_t}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$reporte->hora_t}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-sky-500">{{$reporte->fecha}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{$reporte->detalle}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">
-                                    @if ($reporte->user)
-                                    {{$reporte->user->name}}
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-                                    <button wire:click.prevent="openModalRecordatorio({{$reporte->id}})"
-                                        class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Recordatorio</span>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $reporte->fecha_t }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $reporte->hora_t }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-sky-500">{{ $reporte->fecha }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $reporte->detalle }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">
+                                            @if ($reporte->user)
+                                                {{ $reporte->user->name }}
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+                                            <button wire:click.prevent="openModalRecordatorio({{ $reporte->id }})"
+                                                class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                <span class="sr-only">Recordatorio</span>
 
 
-                                        <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <circle cx="24" cy="24" r="21" fill="#e3e3e3"></circle>
-                                                <path
-                                                    d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47ZM24,5A19,19,0,1,0,43,24,19.021,19.021,0,0,0,24,5Z"
-                                                    fill="#2a4b55"></path>
-                                                <path
-                                                    d="M15,36a1,1,0,0,1-.773-1.633l9-11a1,1,0,0,1,1.548,1.266l-9,11A1,1,0,0,1,15,36Z"
-                                                    fill="#ff7163"></path>
-                                                <circle cx="24" cy="24" r="3" fill="#2a4b55"></circle>
-                                                <path
-                                                    d="M33,25H24a1,1,0,0,1-.832-.445l-8-12a1,1,0,1,1,1.664-1.11L24.535,23H33a1,1,0,0,1,0,2Z"
-                                                    fill="#2a4b55">
-                                                </path>
-                                                <path d="M24,11a1,1,0,0,1-1-1V8a1,1,0,0,1,2,0v2A1,1,0,0,1,24,11Z"
-                                                    fill="#aeaeae"></path>
-                                                <path d="M37,24a1,1,0,0,1,1-1h2a1,1,0,0,1,0,2H38A1,1,0,0,1,37,24Z"
-                                                    fill="#aeaeae"></path>
-                                                <path d="M24,37a1,1,0,0,1,1,1v2a1,1,0,0,1-2,0V38A1,1,0,0,1,24,37Z"
-                                                    fill="#aeaeae"></path>
-                                                <path d="M11,24a1,1,0,0,1-1,1H8a1,1,0,0,1,0-2h2A1,1,0,0,1,11,24Z"
-                                                    fill="#aeaeae"></path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    <button wire:click.prevent="openModalEdit({{$reporte->id}})"
-                                        class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Editar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                        </svg>
-                                    </button>
-                                    <button wire:click="openModalShow({{$reporte->id}})"
-                                        class="text-slate-400 hover:text-slate-600 rounded-full">
-                                        <span class="sr-only">Ver</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-eye-check w-8 h-8 " viewBox="0 0 32 32"
-                                            stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round"
-                                            stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                            <circle cx="12" cy="12" r="2" />
-                                            <path
-                                                d="M12 19c-4 0 -7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7c-.42 .736 -.858 1.414 -1.311 2.033" />
-                                            <path d="M15 19l2 2l4 -4" />
-                                        </svg>
+                                                <svg class="w-8 h-8 fill-current" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 48 48">
+                                                    <g class="nc-icon-wrapper">
+                                                        <circle cx="24" cy="24" r="21"
+                                                            fill="#e3e3e3"></circle>
+                                                        <path
+                                                            d="M24,47A23,23,0,1,1,47,24,23.026,23.026,0,0,1,24,47ZM24,5A19,19,0,1,0,43,24,19.021,19.021,0,0,0,24,5Z"
+                                                            fill="#2a4b55"></path>
+                                                        <path
+                                                            d="M15,36a1,1,0,0,1-.773-1.633l9-11a1,1,0,0,1,1.548,1.266l-9,11A1,1,0,0,1,15,36Z"
+                                                            fill="#ff7163"></path>
+                                                        <circle cx="24" cy="24" r="3"
+                                                            fill="#2a4b55"></circle>
+                                                        <path
+                                                            d="M33,25H24a1,1,0,0,1-.832-.445l-8-12a1,1,0,1,1,1.664-1.11L24.535,23H33a1,1,0,0,1,0,2Z"
+                                                            fill="#2a4b55">
+                                                        </path>
+                                                        <path
+                                                            d="M24,11a1,1,0,0,1-1-1V8a1,1,0,0,1,2,0v2A1,1,0,0,1,24,11Z"
+                                                            fill="#aeaeae"></path>
+                                                        <path
+                                                            d="M37,24a1,1,0,0,1,1-1h2a1,1,0,0,1,0,2H38A1,1,0,0,1,37,24Z"
+                                                            fill="#aeaeae"></path>
+                                                        <path
+                                                            d="M24,37a1,1,0,0,1,1,1v2a1,1,0,0,1-2,0V38A1,1,0,0,1,24,37Z"
+                                                            fill="#aeaeae"></path>
+                                                        <path
+                                                            d="M11,24a1,1,0,0,1-1,1H8a1,1,0,0,1,0-2h2A1,1,0,0,1,11,24Z"
+                                                            fill="#aeaeae"></path>
+                                                    </g>
+                                                </svg>
+                                            </button>
+                                            <button wire:click.prevent="openModalEdit({{ $reporte->id }})"
+                                                class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                <span class="sr-only">Editar</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <path
+                                                        d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                </svg>
+                                            </button>
+                                            <button wire:click="openModalShow({{ $reporte->id }})"
+                                                class="text-slate-400 hover:text-slate-600 rounded-full">
+                                                <span class="sr-only">Ver</span>
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="icon icon-tabler icon-tabler-eye-check w-8 h-8 "
+                                                    viewBox="0 0 32 32" stroke-width="1.5" stroke="#9e9e9e"
+                                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                                    <circle cx="12" cy="12" r="2" />
+                                                    <path
+                                                        d="M12 19c-4 0 -7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7c-.42 .736 -.858 1.414 -1.311 2.033" />
+                                                    <path d="M15 19l2 2l4 -4" />
+                                                </svg>
 
-                                    </button>
-                                    <button wire:click="openModalDelete({{$reporte->id}})"
-                                        class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-
-                        @endforeach
+                                            </button>
+                                            <button wire:click="openModalDelete({{ $reporte->id }})"
+                                                class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                <span class="sr-only">Eliminar</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                    <path
+                                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

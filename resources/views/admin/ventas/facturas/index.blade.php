@@ -5,6 +5,7 @@
 
     <!-- Table -->
     @livewire('admin.ventas.facturas.index')
+    @livewire('admin.ventas.facturas.delete')
 
 @stop
 

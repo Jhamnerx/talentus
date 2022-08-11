@@ -9,7 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
-        "barryvdh/laravel-dompdf": "^1.0",
+        "barryvdh/laravel-dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4",
         "haruncpi/laravel-id-generator": "^1.1",
@@ -23,9 +23,9 @@
         "maatwebsite/excel": "^3.1",
         "milon/barcode": "^9.0",
         "pusher/pusher-php-server": "^7.0",
-        "simplesoftwareio/simple-qrcode": "^4.2",
+        "simplesoftwareio/simple-qrcode": "4.2.0",
         "spatie/laravel-permission": "^5.5",
-        "vinkla/hashids": "^9.1"
+        "vinkla/hashids": "^10.0"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",

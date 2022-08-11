@@ -38,7 +38,7 @@
 
                 <form autocomplete="off">
                     <!-- Modal content -->
-                    <div class="px-8 py-5 bg-white sm:p-6">
+                    <div class="px-8 py-5 bg-white sm:p-6 formCertificadoSave">
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-12 sm:col-span-6">
@@ -70,11 +70,9 @@
                                     </div>
                                 </div>
                                 @error('numero')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
 
                             </div>
@@ -89,11 +87,9 @@
                                         required></select>
 
                                     @error('vehiculos_id')
-
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{$message}}
-                                    </p>
-
+                                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                            {{ $message }}
+                                        </p>
                                     @enderror
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -116,25 +112,27 @@
                                                 <path
                                                     d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
                                                     fill="#78d478"></path>
-                                                <circle cx="40" cy="27" r="3" fill="#fff"></circle>
-                                                <circle cx="8" cy="27" r="3" fill="#fff"></circle>
+                                                <circle cx="40" cy="27" r="3" fill="#fff">
+                                                </circle>
+                                                <circle cx="8" cy="27" r="3" fill="#fff">
+                                                </circle>
                                                 <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
                                                 </path>
                                                 <path
                                                     d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
                                                     fill="#49c549"></path>
-                                                <circle cx="8" cy="34" r="2" fill="#f7bf26"></circle>
-                                                <circle cx="40" cy="34" r="2" fill="#f7bf26"></circle>
+                                                <circle cx="8" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
+                                                <circle cx="40" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
                                             </g>
                                         </svg>
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -142,8 +140,8 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura" required
-                                        name="fecha_fin" type="text"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
+                                        required name="fecha_fin" type="text"
                                         class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -152,7 +150,8 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
+                                                    fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -171,11 +170,9 @@
                                     </div>
                                 </div>
                                 @error('fin_cobertura')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -185,12 +182,12 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
+                                        id="">
                                         {{-- <option value="">Selecciona una Ciudad:</option>
                                         @foreach ($ciudades as $ciudad)
                                         <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{--
-                                        @endforeach --}}
+                                        {{-- @endforeach --}}
                                     </select>
 
 
@@ -220,11 +217,9 @@
                                     </div>
                                 </div>
                                 @error('ciudades_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-12 mt-4">
@@ -237,8 +232,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only"
-                                                    x-model="checked" />
+                                                <input wire:model="fondo" type="checkbox" id="fondo-1"
+                                                    class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="fondo-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">fondo switch</span>
@@ -254,8 +249,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1" class="sr-only"
-                                                    x-model="checked" />
+                                                <input wire:model="sello" type="checkbox" id="sello-1"
+                                                    class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="sello-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">sello switch</span>
@@ -272,6 +267,62 @@
 
                                 </div>
                             </div>
+                            <div class="col-span-12 mt-2">
+                                <label
+                                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                                    <div>
+                                        Accesorios:
+                                    </div>
+
+                                </label>
+                                <div class="flex flex-wrap items-center -m-3">
+
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="CORTE DE MOTOR"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">CORTE DE MOTOR</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="BOTON DE PANICO"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">BOTON DE PANICO</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="BUZZER"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">BUZZER</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                    <div class="m-3">
+                                        <!-- Start -->
+                                        <label class="flex items-center">
+                                            <input type="checkbox" name="accesorios" value="CIERRE DE PUERTA"
+                                                class="form-checkbox" />
+                                            <span class="text-sm ml-2">CIERRE DE PUERTAS</span>
+                                        </label>
+                                        <!-- End -->
+                                    </div>
+                                </div>
+
+
+                                @error('accesorios')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+
+                            </div>
 
 
                         </div>
@@ -283,8 +334,8 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click.prevent="closeModal">Cerrar</button>
-                        <button wire:click.prevent="guardarCertificado()"
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+                        <button wire:click.prevent="guardarCertificado()" wire:loading.attr="disabled"
+                            class="btn-sm bg-indigo-500 disabled:bg-indigo-300 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>
 
@@ -297,112 +348,109 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            $('.vehiculos_id').select2({
+                placeholder: '    Buscar un Vehiculo',
+                language: "es",
 
-<script>
-    $('.vehiculos_id').select2({
-       placeholder: '    Buscar un Vehiculo',
-        language: "es",
-        
-        minimumInputLength: 2,
-        width: '100%',
-        ajax: {
-            url: '{{route("search.vehiculos")}}',
-            dataType: 'json',
-            delay: 250,
-            cache: true,
-            data: function (params) {
+                minimumInputLength: 2,
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.vehiculos') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
 
-                var query = {
-                    term: params.term,
-                    //type: 'public'
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
+                        //console.log(query);
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
+
+
                 }
-                //console.log(query);
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
+            });
+            $('.ciudades').select2({
+                placeholder: '    Selecciona una ciudad',
+                language: "es",
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.ciudades') }}',
+                    dataType: 'json',
 
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
+                    cache: true,
+                    data: function(params) {
 
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
 
-                    return obj;
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
 
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
 
-                    results: suggestions,
-    
-                };
-                
-            },
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-        }
-    });
-    $('.ciudades').select2({
-       placeholder: '    Selecciona una ciudad',
-        language: "es",
-        width: '100%',
-        ajax: {
-            url: '{{route("search.ciudades")}}',
-            dataType: 'json',
-
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
                 }
+            });
 
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
-
-                    results: suggestions,
-    
-                };
-                
-            },
+            $('.vehiculos_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                // console.log(data.id);
+                @this.set('vehiculos_id', data.id)
+            });
 
 
-        }
-    });
-
-$('.vehiculos_id').on('select2:select', function (e) {
-    var data = e.params.data;
-   // console.log(data.id);
-    @this.set('vehiculos_id',data.id)
-});
-
-
-$('.ciudades').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('ciudades_id',data.id)
-});
-
-</script>
-
-@endpush
+            $('.ciudades').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('ciudades_id', data.id)
+            });
+        </script>
+    @endpush
 @endonce

@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 
 //Spatie
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermisosSeeder extends Seeder
 {
@@ -16,8 +17,12 @@ class PermisosSeeder extends Seeder
      */
     public function run()
     {
-        $permisos = [
+        $role = Role::create(['name' => 'cliente']);
+        $admin = Role::create(['name' => 'admin']);
 
+        $permisos = [
+            'admin.home',
+            'cliente.home',
             'ver-rol',
             'crear-rol',
             'editar-rol',
@@ -145,9 +150,12 @@ class PermisosSeeder extends Seeder
             
         ];
 
+
         foreach($permisos as $permiso){
             Permission::create(['name' => $permiso]);
         }
+        $role->givePermissionTo('cliente.home');
+        $admin->givePermissionTo('admin.home');
 
     }
 }

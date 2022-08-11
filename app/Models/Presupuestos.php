@@ -7,10 +7,13 @@ use App\Scopes\EliminadoScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Presupuestos extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'presupuestos';
 
@@ -55,7 +58,7 @@ class Presupuestos extends Model
         }
     }
 
-    public function getPDFData()
+    public function getPDFData($action)
     {
 
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
@@ -67,12 +70,20 @@ class Presupuestos extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.presupuesto.pdf');
+        
+        if($action == 1){
 
-       return $pdf->stream('PRE-' . $this->numero.'.pdf');
+            return $pdf->download('PRE-' . $this->numero.'.pdf');
+        }else{
+            return $pdf->stream('PRE-' . $this->numero.'.pdf');
+        }
+       ;
 
 
        // return view('pdf.presupuesto.pdf');
     }
+
+
 
     public function factura()
     {

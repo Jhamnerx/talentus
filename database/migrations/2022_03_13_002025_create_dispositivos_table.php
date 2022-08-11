@@ -14,13 +14,15 @@ class CreateDispositivosTable extends Migration
     public function up()
     {
         Schema::create('dispositivos', function (Blueprint $table) {
+
             $table->id();
             $table->string('imei');
             $table->unsignedBigInteger('modelo_id')->nullable();
             $table->unsignedBigInteger('empresa_id');
+            $table->boolean('of_client')->default(false);
             $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
-
             $table->timestamps();
+
         });
     }
 

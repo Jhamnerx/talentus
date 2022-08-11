@@ -38,7 +38,7 @@
 
                 <form autocomplete="off">
                     <!-- Modal content -->
-                    <div class="px-8 py-5 bg-white sm:p-6">
+                    <div class="px-8 py-5 bg-white sm:p-6 formVelocimetroSave">
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-12 sm:col-span-6">
@@ -70,11 +70,9 @@
                                     </div>
                                 </div>
                                 @error('numero')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
 
                             </div>
@@ -109,25 +107,27 @@
                                                 <path
                                                     d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
                                                     fill="#78d478"></path>
-                                                <circle cx="40" cy="27" r="3" fill="#fff"></circle>
-                                                <circle cx="8" cy="27" r="3" fill="#fff"></circle>
+                                                <circle cx="40" cy="27" r="3" fill="#fff">
+                                                </circle>
+                                                <circle cx="8" cy="27" r="3" fill="#fff">
+                                                </circle>
                                                 <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
                                                 </path>
                                                 <path
                                                     d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
                                                     fill="#49c549"></path>
-                                                <circle cx="8" cy="34" r="2" fill="#f7bf26"></circle>
-                                                <circle cx="40" cy="34" r="2" fill="#f7bf26"></circle>
+                                                <circle cx="8" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
+                                                <circle cx="40" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
                                             </g>
                                         </svg>
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -138,12 +138,12 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
+                                        id="">
                                         {{-- <option value="">Selecciona una Ciudad:</option>
                                         @foreach ($ciudades as $ciudad)
                                         <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{--
-                                        @endforeach --}}
+                                        {{-- @endforeach --}}
                                     </select>
 
 
@@ -173,11 +173,9 @@
                                     </div>
                                 </div>
                                 @error('ciudades_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-12 mt-4">
@@ -190,8 +188,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only"
-                                                    x-model="checked" />
+                                                <input wire:model="fondo" type="checkbox" id="fondo-1"
+                                                    class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="fondo-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">fondo switch</span>
@@ -207,8 +205,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1" class="sr-only"
-                                                    x-model="checked" />
+                                                <input wire:model="sello" type="checkbox" id="sello-1"
+                                                    class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="sello-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">sello switch</span>
@@ -236,8 +234,8 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click.prevent="closeModal">Cerrar</button>
-                        <button wire:click.prevent="guardarCertificado()"
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+                        <button wire:click.prevent="guardarCertificado()" wire:loading.attr="disabled"
+                            class="btn-sm bg-indigo-500 disabled:bg-indigo-300 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
                 </div>
 
@@ -250,113 +248,110 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            $('.vehiculos_id').select2({
+                placeholder: '    Buscar un Vehiculo',
+                language: "es",
+                minimumInputLength: 2,
+                selectionCssClass: 'pl-9',
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.vehiculos') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
 
-<script>
-    $('.vehiculos_id').select2({
-       placeholder: '    Buscar un Vehiculo',
-        language: "es",
-        minimumInputLength: 2,
-        selectionCssClass: 'pl-9',
-        width: '100%',
-        ajax: {
-            url: '{{route("search.vehiculos")}}',
-            dataType: 'json',
-            delay: 250,
-            cache: true,
-            data: function (params) {
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
+                        //console.log(query);
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
 
-                var query = {
-                    term: params.term,
-                    //type: 'public'
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
+
+
                 }
-                //console.log(query);
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
+            });
+            $('.ciudades').select2({
+                placeholder: '    Selecciona una ciudad',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.ciudades') }}',
+                    dataType: 'json',
 
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
+                    cache: true,
+                    data: function(params) {
 
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
 
-                    return obj;
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
 
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
 
-                    results: suggestions,
-    
-                };
-                
-            },
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-        }
-    });
-    $('.ciudades').select2({
-       placeholder: '    Selecciona una ciudad',
-        language: "es",
-        selectionCssClass: 'pl-9',
-        width: '100%',
-        ajax: {
-            url: '{{route("search.ciudades")}}',
-            dataType: 'json',
-
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
                 }
+            });
 
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
-
-                    results: suggestions,
-    
-                };
-                
-            },
+            $('.vehiculos_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                // console.log(data.id);
+                @this.set('vehiculos_id', data.id)
+            });
 
 
-        }
-    });
-
-$('.vehiculos_id').on('select2:select', function (e) {
-    var data = e.params.data;
-   // console.log(data.id);
-    @this.set('vehiculos_id',data.id)
-});
-
-
-$('.ciudades').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('ciudades_id',data.id)
-});
-
-</script>
-
-@endpush
+            $('.ciudades').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('ciudades_id', data.id)
+            });
+        </script>
+    @endpush
 @endonce

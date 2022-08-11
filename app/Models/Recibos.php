@@ -11,13 +11,20 @@ class Recibos extends Model
 {
     use HasFactory;
     protected $table = 'recibos';
-        protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'numero' => 'string',
+        'sequence_number' => 'integer',
+        'fecha' => 'date:Y/m/d',
+        'fecha_pago' => 'date:Y/m/d',
+    ];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     // SCOPE DE EMPRESA
 
     protected static function booted()
     {
         //
-       // static::addGlobalScope(new EliminadoScope);
+       static::addGlobalScope(new EmpresaScope);
     }
     //Relacion uno a muchos inversa
 
@@ -25,7 +32,7 @@ class Recibos extends Model
     {
         return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
     }
-
+    
     public function presupuesto()
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id');

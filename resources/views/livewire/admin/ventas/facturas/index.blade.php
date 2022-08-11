@@ -303,7 +303,9 @@
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $factura->fecha_emision }}</div>
+
+                                        <div>{{ $factura->fecha_emision->format('d-m-Y') }}</div>
+
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -323,7 +325,13 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $factura->fecha_pago }}</div>
+                                        <div>
+                                            @if ($factura->fecha_pago)
+                                                {{ $factura->fecha_pago->format('d-m-Y') }}
+                                            @else
+                                            @endif
+
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">
@@ -358,7 +366,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -369,12 +377,13 @@
                                                         </li>
                                                         <li>
                                                             <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalDelete({{ $factura->id }})"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -390,7 +399,7 @@
                                                                 role="menuitem" tabindex="-1"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -409,7 +418,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
@@ -448,7 +457,7 @@
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
@@ -467,7 +476,7 @@
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
                                                                         fill="none" viewBox="0 0 24 24"
                                                                         stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
                                                                         <path stroke-linecap="round"
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">

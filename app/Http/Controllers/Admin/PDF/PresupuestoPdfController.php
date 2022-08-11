@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class PresupuestoPdfController extends Controller
 {
-    public function __invoke(Presupuestos $presupuesto)
+    public function __invoke(Presupuestos $presupuesto, $action = null)
     {
 
-        return $presupuesto->getPDFData();
+        return $presupuesto->getPDFData($action);
         
     }
 }

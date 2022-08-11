@@ -24,7 +24,7 @@ class CreateDetalleFacturasTable extends Migration
             $table->decimal('importe', 10, 2);
 
 
-            $table->foreign('facturas_id')->references('id')->on('compras_factura')->onDelete('set null');
+            $table->foreign('facturas_id')->references('id')->on('compras_factura')->onDelete('cascade');
 
 
 

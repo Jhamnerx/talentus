@@ -2,14 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Actas;
 
-
+use App\Http\Controllers\Admin\ActasController;
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
-use App\Models\Admin\Mensaje;
 use App\Models\Ciudades;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Vinkla\Hashids\Facades\Hashids;
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -33,7 +33,15 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
+        //dd($this->setNextSequenceNumber());
+        $newActa = new ActasController();
+      //  dd($newActa->setNextSequenceNumber());
+        $this->numero = $newActa->setNextSequenceNumber();
+
     }
+
+
+
     public function closeModal()
     {
         $this->openModalSave = false;
@@ -51,30 +59,22 @@ class Save extends Component
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
-
-        $acta = Actas::create($values);
+       // $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
+        $acta =  new Actas();
 
         $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $acta->numero;
+        $acta->vehiculos_id = $values["vehiculos_id"];
+        $acta->numero = $values["numero"];
+        $acta->inicio_cobertura = $values["inicio_cobertura"];
+        $acta->fin_cobertura = $values["fin_cobertura"];
+        $acta->ciudades_id = $values["ciudades_id"];
+        $acta->fondo = $values["fondo"];
+        $acta->sello = $values["sello"];
+        $acta->codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
         $acta->year = today()->year;
-        $acta->user_id = auth()->user()->id;
-
-        $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
         $acta->empresa_id = session('empresa');
-        $acta->codigo = $codigo;
         $acta->fecha = $fecha;
-        if($acta->save()){
-
-            $data = array(
-                'body' => 'Probando mensaje',
-                'asunto' => 'prueba',
-                'accion' => 'se creo un acta',
-                'to' => 3,
-            );
-
-            $mensaje = new Mensaje();
-            $mensaje->sendMessage($data, 'to_user');
-        }
-
+        $acta->save();
         //$this->openModalSave = false;
         $this->dispatchBrowserEvent('acta-save', ['vehiculo' => $acta->vehiculos->placa]);
         $this->emit('updateTable');
@@ -87,4 +87,6 @@ class Save extends Component
         $actaRequest = new ActasRequest();
         $this->validateOnly($label, $actaRequest->rules(), $actaRequest->messages());
     }
+
+
 }

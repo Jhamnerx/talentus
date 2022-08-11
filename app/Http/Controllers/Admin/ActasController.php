@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Actas;
 use App\Models\Ciudades;
 use Illuminate\Http\Request;
-
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 class ActasController extends Controller
 {
     /**
@@ -29,7 +29,13 @@ class ActasController extends Controller
     {
         // return view('admin.certificados.actas.create');
     }
+    public function setNextSequenceNumber()
+    {
 
+        $id = IdGenerator::generate(['table' => 'actas','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+
+        return trim($id);
+    }
     /**
      * Store a newly created resource in storage.
      *

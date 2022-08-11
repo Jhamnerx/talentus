@@ -4,6 +4,7 @@
 
     <!-- Table -->
     @livewire('admin.ventas.presupuestos.presupuestos-index')
+    @livewire('admin.ventas.presupuestos.delete')
 
 @stop
 
@@ -65,6 +66,18 @@
             });
         })
     </script>
+    <script>
+        window.addEventListener('save-recibo', event => {
+            $(document).ready(function() {
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'RECIBO REGISTRADO',
+                    message: 'Se registro un recibo con el numero #' + event.detail.numero,
+                });
+            });
+        })
+    </script>
+
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
