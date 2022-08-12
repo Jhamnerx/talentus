@@ -22,19 +22,22 @@ class Save extends Component
         
 
         $data = [];
-
-        if($cliente->flota){
-
-            foreach ($cliente->flota->vehiculos as $vehiculo) {
+        foreach($cliente->flotas as $flota){
+            foreach ($flota->vehiculos as $vehiculo) {
 
                 $data[] = [
                     'id' => $vehiculo->id,
                     'text' => $vehiculo->placa,
                 ];
             }
+
+        }
+
             $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
             $this->dataVehiculos = $data;
-        }
+
+
+
 
 
 

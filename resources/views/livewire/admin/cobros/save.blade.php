@@ -126,8 +126,8 @@
     <div class="px-4 py-3 text-right sm:px-6">
         {!! Form::submit('GUARDAR', [
             'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
         ]) !!}
 
     </div>
@@ -197,21 +197,31 @@
 
             }
         });
+        $('.vehiculos_id').select2({
+            placeholder: '    Buscar un Vehiculo',
+            language: "es",
+            selectionCssClass: 'pl-9',
+            width: '100%',
+
+        });
 
         window.addEventListener('dataVehiculos', event => {
+            // $('.vehiculos_id').select2('destroy');
+            data = []
+            data = event.detail.data;
+            //  $('.vehiculos_id').innerHTML = "";
 
-            data = [event.detail.data];
-
-            console.log(event.detail.data);
-
+            $(".vehiculos_id option").remove();
 
             $('.vehiculos_id').select2({
                 placeholder: '    Buscar un Vehiculo',
                 language: "es",
                 selectionCssClass: 'pl-9',
                 width: '100%',
-                data: event.detail.data
+                data: data
             });
+
+
         })
 
 
