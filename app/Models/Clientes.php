@@ -66,6 +66,10 @@ class Clientes extends Model
     {
         return $this->hasMany(Flotas::class, 'clientes_id');
     }
+    public function flota()
+    {
+        return $this->hasOne(Flotas::class, 'clientes_id');
+    }
     //Relacion uno a muchos inversa
 
     public function empresa()
