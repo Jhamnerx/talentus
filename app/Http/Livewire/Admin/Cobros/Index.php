@@ -35,6 +35,26 @@ class Index extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
 
+        if (!empty($desde)) {
+
+
+            $cobros = Cobros::whereRaw(
+                "(created_at >= ? AND created_at <= ?)",
+                [
+                    $desde . " 00:00:00",
+                    $hasta . " 23:59:59"
+                ]
+            )->whereRaw(
+                "(tipo_pago like ? OR periodo like  ? OR monto_unidad like ?)",
+                [
+                    '%' . $this->search . '%',
+                    '%' . $this->search . '%',
+                    '%' . $this->search . '%',
+                ]
+            )
+                ->orderBy('id')
+                ->paginate(10);
+        }
         return view('livewire.admin.cobros.index', compact('cobros'));
     }
 

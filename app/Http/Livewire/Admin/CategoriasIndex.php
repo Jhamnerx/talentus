@@ -3,7 +3,6 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Categoria;
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -17,8 +16,6 @@ class CategoriasIndex extends Component
 
     public function render()
     {
-        $empresa_id = session('empresa');
-
         $categorias = Categoria::where(function ($query) {
             $query->where('descripcion', 'like', '%' . $this->search . '%')
                 ->orwhere('nombre', 'like', '%' . $this->search . '%');
