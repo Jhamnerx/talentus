@@ -37,7 +37,13 @@
                 <span class="hidden xs:block ml-2">Crear Certificado</span>
             </button>
 
-
+            <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                    <path
+                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
+                <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
+            </button>
         </div>
 
     </div>
@@ -122,7 +128,8 @@
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>

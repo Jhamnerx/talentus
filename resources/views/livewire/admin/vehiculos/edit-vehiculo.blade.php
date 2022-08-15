@@ -58,9 +58,9 @@
                                 {!! Form::text('placa', null, [
                                     'placeholder' => 'ABC-780',
                                     'class' => '"form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9
-                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9
+                                                                                                                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
                                 ]) !!}
 
 
@@ -96,7 +96,7 @@
                                 {!! Form::text('marca', null, [
                                     'placeholder' => 'TOYOTA',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -118,7 +118,7 @@
                                 {!! Form::text('modelo', null, [
                                     'placeholder' => 'HILUX',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -141,7 +141,7 @@
                                 {!! Form::text('tipo', null, [
                                     'placeholder' => 'PICK UP',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -164,7 +164,7 @@
                                 {!! Form::text('year', null, [
                                     'placeholder' => '2019',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -225,7 +225,7 @@
                                 {!! Form::text('motor', null, [
                                     'placeholder' => '1GDG066086',
                                     'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                w-full pl-9',
+                                                                                                                                                                                                                                                                                                                                                                                                                                w-full pl-9',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -305,9 +305,9 @@
                                 {!! Form::text('numero', null, [
                                     'placeholder' => '947147524',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9
-                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9
+                                                                                                                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
                                     'required',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -402,9 +402,9 @@
                                 {!! Form::text('dispositivos_id', null, [
                                     'placeholder' => '357073292893290',
                                     'class' => 'form-input w-full
-                                                                                                                                                                                                                                                                                                                                pl-9
-                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9
+                                                                                                                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
                                     'required',
                                 ]) !!}
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -503,58 +503,3 @@
     <!-- End -->
 
 </div>
-@once
-    @push('scripts')
-        <script>
-            document.addEventListener('livewire:load', () => {
-
-
-            })
-
-            $('.flotas_id').select2({
-                placeholder: 'Buscar una flota',
-                language: "es",
-                tags: true,
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.flotas') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                            //type: 'public'
-                        }
-
-                        // Query parameters will be ?search=[term]&type=public
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        // console.log(data.suggestions);
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
-                            return obj;
-
-                        });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
-                        return {
-
-                            results: suggestions,
-
-                        };
-
-                    },
-
-
-                }
-            });
-        </script>
-    @endpush
-@endonce

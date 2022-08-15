@@ -103,10 +103,10 @@
                                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-semibold text-left">SIM#</div>
                                                 </th>
-                                                <th
+                                                {{-- <th
                                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                     <div class="font-semibold text-left">Dispositivo#</div>
-                                                </th>
+                                                </th> --}}
                                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                     <div class="font-semibold text-left">Acciones</div>
                                                 </th>
@@ -140,6 +140,12 @@
                                                             <div class="font-medium text-sky-500">
                                                                 {{ $vehiculo->flotas->nombre }}
                                                             </div>
+                                                            <div class="font-sm text-slate-900">
+                                                                <p class="text-xs">
+                                                                    {{ $vehiculo->flotas->clientes->razon_social }}
+                                                                </p>
+
+                                                            </div>
                                                         </td>
                                                         <td
                                                             class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
@@ -159,7 +165,7 @@
                                                                 </div>
                                                             @endif
                                                         </td>
-                                                        <td
+                                                        {{-- <td
                                                             class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">
                                                             <div class="font-medium text-slate-800">
                                                                 @if ($vehiculo->dispositivos)
@@ -168,7 +174,7 @@
                                                                     {{ $vehiculo->dispositivo_imei }}
                                                                 @endif
                                                             </div>
-                                                        </td>
+                                                        </td> --}}
                                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                                             <div class="m-3 ">

@@ -25,7 +25,13 @@ class Disponibles extends Component
         $hasta = $this->to;
        
         $lineas = Lineas::whereHas('sim_card', function ($query) {
+
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%');
+
+            $query->orWhereHas('vehiculos', function($vehiculo){
+                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+            });
+
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')
             ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')

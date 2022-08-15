@@ -13,11 +13,8 @@ class FlotasRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->empresa_id == session('empresa')) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return true;
     }
 
     /**

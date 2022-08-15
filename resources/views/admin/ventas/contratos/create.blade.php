@@ -73,11 +73,11 @@
                                     {!! Form::text('fecha', null, [
                                         'placeholder' => 'yyyy-mm-dd',
                                         'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer fechaContrato font-base pl-8 py-2
-                                                                                                                                                                                                                                                                                                                                outline-none focus:ring-primary-400
-                                                                                                                                                                                                                                                                                                                                focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
-                                                                                                                                                                                                                                                                                                                                text-black input w-full',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    required:border-rose-300 invalid:border-rose-300 peer fechaContrato font-base pl-8 py-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    outline-none focus:ring-primary-400
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    text-black input w-full',
                                         'maxlength' => '10',
                                         'required',
                                     ]) !!}
@@ -118,7 +118,8 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-select w-full pl-9 ciudades" name="ciudades_id" id="">
+                                    <select required class="form-select w-full pl-9 ciudades" name="ciudades_id"
+                                        id="">
 
                                     </select>
 
@@ -266,10 +267,10 @@
                         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                             {!! Form::submit('GUARDAR', [
                                 'class' => 'btnGuardarContrato btn bg-emerald-500
-                                                                                                                                                                                                                                                        hover:bg-emerald-600
-                                                                                                                                                                                                                                                        focus:outline-none
-                                                                                                                                                                                                                                                        focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                        focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                    hover:bg-emerald-600
+                                                                                                                                                                                                                                                                                                                                                                                                    focus:outline-none
+                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-emerald-600 text-white',
                             ]) !!}
 
                         </div>
@@ -440,6 +441,9 @@
             $(".btnGuardarContrato").hide();;
             $('#example').DataTable({
                 "deferRender": true,
+                "order": [
+                    [1, 'desc']
+                ],
                 "retrieve": true,
                 "processing": true,
                 "responsive": true,

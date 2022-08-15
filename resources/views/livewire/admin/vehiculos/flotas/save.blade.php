@@ -64,7 +64,8 @@
 
                                 <input wire:model="nombre" placeholder="NOMBRE DE FLOTA" name="nombre" id="nombre"
                                     class="form-input w-full pl-9 valid:border-emerald-300
-                            required:border-rose-300 invalid:border-rose-300 peer" type="text" />
+                            required:border-rose-300 invalid:border-rose-300 peer"
+                                    type="text" />
 
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -72,7 +73,8 @@
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                         <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
                                             stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper">
-                                            <line data-cap="butt" x1="32" y1="29" x2="41" y2="19" stroke-linecap="butt">
+                                            <line data-cap="butt" x1="32" y1="29" x2="41"
+                                                y2="19" stroke-linecap="butt">
                                             </line>
                                             <path data-cap="butt"
                                                 d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29"
@@ -91,11 +93,9 @@
                                 </div>
                             </div>
                             @error('nombre')
-
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{$message}}
-                            </p>
-
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
                         <div class="col-span-12 sm:col-span-12">
@@ -123,11 +123,9 @@
                                 </div>
                             </div>
                             @error('clientes_id')
-
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{$message}}
-                            </p>
-
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                             @enderror
                         </div>
 
@@ -135,8 +133,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea class="form-input w-full pl-9" wire:model="descripcion" name="descripcion"
-                                    id="descripcion" rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
+                                <textarea class="form-input w-full pl-9" wire:model="descripcion" name="descripcion" id="descripcion"
+                                    rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -145,7 +143,8 @@
                                             <path
                                                 d="M15,33,6.293,30.274a1,1,0,0,0-.255.433l-4,14a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l14-4a.994.994,0,0,0,.433-.255Z"
                                                 fill="#fbe5d5"></path>
-                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z" fill="#ff7163">
+                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z"
+                                                fill="#ff7163">
                                             </path>
                                             <path
                                                 d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
@@ -183,3 +182,9 @@
     <!-- End -->
 
 </div>
+
+@push('scripts')
+    <script>
+        $('#nombre').caseEnforcer('uppercase');
+    </script>
+@endpush

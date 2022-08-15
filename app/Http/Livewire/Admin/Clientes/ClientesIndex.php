@@ -23,6 +23,7 @@ class ClientesIndex extends Component
                     return $query
                         ->where('email', 'like', '%' . $this->search . '%')
                         ->orwhere('web_site', 'like', '%' . $this->search . '%')
+                        ->orwhere('direccion', 'like', '%' . $this->search . '%')
                         ->orwhere('telefono', 'like', '%' . $this->search . '%');
                 }
             )->orderBy('id', 'desc')

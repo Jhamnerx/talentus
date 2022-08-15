@@ -256,7 +256,18 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-sky-500">
-                                            <a href="">{{ $vehiculo->flotas->nombre }}</a>
+                                            <a href="{{ route('admin.vehiculos.flotas.edit', $vehiculo->flotas) }}">
+                                                {{ $vehiculo->flotas->nombre }}
+
+                                            </a>
+
+
+                                        </div>
+                                        <div class="font-sm text-slate-900">
+                                            <p class="text-xs">
+                                                {{ $vehiculo->flotas->clientes->razon_social }}
+                                            </p>
+
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

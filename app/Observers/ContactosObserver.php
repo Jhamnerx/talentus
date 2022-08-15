@@ -6,6 +6,16 @@ use App\Models\Contactos;
 
 class ContactosObserver
 {
+
+    public function creating(Contactos $contactos)
+    {
+
+
+       
+
+    } 
+
+
     /**
      * Handle the Contactos "created" event.
      *
@@ -16,7 +26,12 @@ class ContactosObserver
     {
         //
     }
+    public function updating(Contactos $contactos)
+    {
 
+    
+       
+    }
     /**
      * Handle the Contactos "updated" event.
      *

@@ -8,6 +8,7 @@ use Database\Factories\CertificadosVelocimetrosFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CertificadosVelocimetros extends Model
 {
@@ -19,6 +20,7 @@ class CertificadosVelocimetros extends Model
     }
 
     use HasFactory;
+    use SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados_velocimetros';
 

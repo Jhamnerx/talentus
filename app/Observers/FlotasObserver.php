@@ -6,6 +6,30 @@ use App\Models\Flotas;
 
 class FlotasObserver
 {
+
+    public function creating(Flotas $flotas)
+    {
+
+    
+        if(! \App::runningInConsole()){
+
+            $flotas->empresa_id = session('empresa');
+
+        }
+       
+
+    }    
+    public function updating(Flotas $flotas)
+    {
+
+    
+        if(! \App::runningInConsole()){
+
+            $flotas->empresa_id = session('empresa');
+
+        }
+       
+    }
     /**
      * Handle the Flotas "created" event.
      *

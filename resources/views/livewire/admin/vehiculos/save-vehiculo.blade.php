@@ -278,7 +278,7 @@
 
                         </div>
                         <div class="col-span-12">
-                            {{ $flotas_id }}
+
                             @error('flotas_id')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
@@ -385,8 +385,6 @@
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
-
-                            {{ $dispositivo_imei }}
                             <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
@@ -510,10 +508,14 @@
 @once
     @push('scripts')
         <script>
+            $('#placa').caseEnforcer('uppercase');
+        </script>
+
+        <script>
             $('.flotas_id').select2({
                 placeholder: 'Buscar una flota',
                 language: "es",
-                tags: true,
+                //tags: true,
                 width: '100%',
                 ajax: {
                     url: '{{ route('search.flotas') }}',
@@ -552,7 +554,10 @@
                     },
 
 
-                }
+                },
+                minimumInputLength: 1,
+                templateResult: formatFlota,
+                // templateSelection: formatSelectionFlota,
             });
 
 
@@ -560,6 +565,44 @@
 
                 @this.set('flotas_id', this.value)
             })
+
+            function formatFlota(flota) {
+                if (flota.loading) {
+                    return flota.text;
+                }
+
+                var $container = $(
+
+                    "<div class='select2-result-flotas clearfix'>" +
+                    "<div class='select2-result-flotas__meta'>" +
+                    "<div class='select2-result-flotas__title'></div>" +
+                    "<div class='select2-result-flotas__description'></div>" +
+                    "</div>" +
+                    "</div>"
+                );
+
+                $container.find(".select2-result-flotas__title").text(flota.text);
+                $container.find(".select2-result-flotas__description").text(flota.cliente.razon_social);
+                // $container.find(".select2-result-flotas__stargazers").append(repo.stargazers_count + " Stars");
+
+                return $container;
+            }
+
+
+            // function formatSelectionFlota(flota) {
+            //     if (!flota.id) {
+            //         return flota.text;
+            //     }
+
+            //     var $flota = $(
+            //         '<span class="select2-flotas_result"></span>'
+            //     );
+
+            //     // Use .text() instead of HTML string concatenation to avoid script injection issues
+            //     $flota.find(".select2-flotas_result").text(flota.text);
+
+            //     return $flota;
+            // };
         </script>
 
 
