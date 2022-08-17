@@ -17,10 +17,11 @@ class Index extends Component
     public function render()
     {
         $usuarios = User::Where('name', 'like', '%' . $this->search . '%')
+            ->where('email', '<>', 'jhamnerx1x@gmail.com')
             ->orderBy('id', 'desc')
             ->paginate(10);
             
-        $total = User::all()->count();
+        $total = User::all()->count()-1;
         return view('livewire.admin.usuarios.index', compact('usuarios', 'total'));
     }
 }

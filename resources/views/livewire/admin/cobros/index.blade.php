@@ -86,6 +86,7 @@
             </div>
 
             <!-- Dropdown -->
+
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
                 <button
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
@@ -111,7 +112,7 @@
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
                     <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
+                        <button wire:click="estado(0)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -120,9 +121,9 @@
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
-                            <span>Hoy</span>
+                            <span>Por Vencer</span>
                         </button>
-                        <button wire:click="filter(7)" tabindex="0"
+                        <button wire:click="estado(1)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -131,38 +132,15 @@
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
-                            <span>Ultimos 7 días</span>
+                            <span>Vencidos</span>
                         </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
+
+                        <button wire:click="estado()" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -273,8 +251,14 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <div class="font-medium text-slate-800">
-                                            @if (count($cobro->clientes->contactos) > 1)
-                                                {{ $cobro->clientes->contactos->nombre }}
+                                            @if (count($cobro->clientes->contactos) >= 1)
+                                                @foreach ($cobro->clientes->contactos as $contacto)
+                                                    <ul>
+                                                        <li>
+                                                            {{ $contacto->nombre }}
+                                                        </li>
+                                                    </ul>
+                                                @endforeach
                                             @else
                                                 #añadir
                                             @endif

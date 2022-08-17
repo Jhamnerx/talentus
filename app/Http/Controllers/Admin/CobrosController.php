@@ -47,7 +47,7 @@ class CobrosController extends Controller
      */
     public function show(Cobros $cobros)
     {
-        //
+         return view('admin.cobros.show');
     }
 
     /**

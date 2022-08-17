@@ -20,12 +20,12 @@ class CreateCobrosTable extends Migration
             $table->text('comentario')->nullable();
             $table->string('periodo');
             $table->decimal('monto_unidad', 10, 2);
-            $table->integer('cantidad_unidades');
+            $table->integer('cantidad_unidades')->nullable();
             $table->string('tipo_pago');
             $table->string('observacion')->nullable();
             $table->date('fecha_vencimiento');
             $table->enum('estado', [0, 1, 2])->default(0);
-
+            $table->boolean('vencido')->nullable();
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
 
