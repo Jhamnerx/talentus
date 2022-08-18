@@ -36,18 +36,20 @@ class checkCobros implements ShouldQueue
     public function handle()
     {
 
-        $cobros = Cobros::all();
+        //$cobros = Cobros::all();
 
+        $cobros = Cobros::whereBetween('fecha_vencimiento', [Carbon::now()->format('Y-m-d'), Carbon::now()->addDays(3)->format('Y-m-d')])->get();
+     //   dd($cobros);
 
         foreach ($cobros as $cobro) {
 
-            if (Carbon::now()->diffInDays($cobro->fecha_vencimiento) <= 3 && Carbon::now()->diffInDays($cobro->fecha_vencimiento) > 1) {
+            //Log::alert(Carbon::now()->diffInDays($cobro->fecha_vencimiento)." por vencer");
+
+            if (Carbon::now()->diffInDays($cobro->fecha_vencimiento) <= 3 && Carbon::now()->diffInDays($cobro->fecha_vencimiento) >= 1) {
 
                 $cobro->vencido = 0;
                 $cobro->verificado = 1;
                 $cobro->save();
-              //  Log::alert($cobro->id." por vencer");
-
 
                 $data = array(
                     'body' => 'Cobro por vencer',
@@ -59,14 +61,14 @@ class checkCobros implements ShouldQueue
                 $mensaje->sendCobroMessage($data, $cobro);
             }
 
-            if (Carbon::now()->diffInDays($cobro->fecha_vencimiento) <= 0) {
+            // if (Carbon::now()->diffInDays($cobro->fecha_vencimiento) <= 0) {
 
-                $cobro->vencido = 1;
-                $cobro->verificado = 1;
-                $cobro->save();
-                Log::alert($cobro->id." vencido");
+            //     $cobro->vencido = 1;
+            //     $cobro->verificado = 1;
+            //     $cobro->save();
+            //     Log::alert($cobro->id." vencido");
 
-            }
+            // }
             
         }
         //dd($cobros);

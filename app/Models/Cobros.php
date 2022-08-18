@@ -16,7 +16,7 @@ class Cobros extends Model
     protected $table = 'cobros';
     protected $casts = [
 
-        'fecha_vencimiento' => 'date:Y/m/d',
+        'fecha_vencimiento' => 'date:Y-m-d',
         'vencido' => 'boolean',
 
     ];

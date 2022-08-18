@@ -2,27 +2,27 @@
 
 namespace App\Notifications;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EnviarMensajeCobro extends Notification implements ShouldQueue
+class EnviarPresupuestoCliente extends Notification
 {
     use Queueable;
-    public $mensaje;
-    public $cobro;
+
+    public $presupuesto;
+    public $pdf;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($mensaje, $cobro)
+    public function __construct($presupuesto, $pdf)
     {
-        $this->mensaje = $mensaje;
-        $this->cobro = $cobro;
+        $this->presupuesto = $presupuesto;
+        $this->pdf = $pdf;
+        //
     }
 
     /**
@@ -33,7 +33,7 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast'];
+        return ['mail'];
     }
 
     /**
@@ -44,11 +44,12 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
-                ->subject('TALENTUS - NOTIFICACION DE COBRO')
-                ->view('mail.cobros', ['mensaje' => $this->mensaje, 'cobros' => $this->cobro]);
-   
+                    ->attachData($this->pdf->output(), 'PRESUPUESTO-'.$this->presupuesto->numero.'.pdf', [
+                        'mime' => 'application/pdf',
+                    ])
+                    ->subject('TALENTUS - COTIZACIÓN #'.$this->presupuesto->numero)
+                    ->view('mail.presupuesto', ['presupuesto' => $this->presupuesto]);
     }
 
     /**
@@ -57,17 +58,10 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toArray($notifiable)
     {
         return [
-            'url' => route('admin.cobros.show', $this->cobro),
-            'mensaje' => 'Cobro por Vencer',
+            //
         ];
-    }
-
-    public function toBroadcast($notifiable){
-
-        return new BroadcastMessage([]);
-
     }
 }

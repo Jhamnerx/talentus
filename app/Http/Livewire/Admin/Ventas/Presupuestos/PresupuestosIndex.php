@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
+use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 
@@ -224,6 +225,17 @@ class PresupuestosIndex extends Component
         //dd($presupuesto);
         $this->emit('openModalDelete', $presupuesto);
         $this->openModalDelete = true;
+
+    }
+
+
+    public function sendPresupuesto(Presupuestos $presupuesto){
+
+        $pdfPresupuesto = new PresupuestoPdfController();
+
+        $pdfPresupuesto->sendToMail($presupuesto);
+
+       // dd($pdfPresupuesto);
 
     }
 }

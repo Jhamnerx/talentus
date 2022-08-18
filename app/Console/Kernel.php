@@ -25,6 +25,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new JobsCheckRecordatorios)->everyFiveMinutes();
        // $schedule->job(new checkCobros)->daily();
         $schedule->job(new checkCobros)->everyMinute(1);
+        //$schedule->job(new checkCobros)->dailyAt('13:50');
 
     }
 

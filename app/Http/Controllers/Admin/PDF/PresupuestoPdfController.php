@@ -14,4 +14,10 @@ class PresupuestoPdfController extends Controller
         return $presupuesto->getPDFData($action);
         
     }
+    public function sendToMail(Presupuestos $presupuesto)
+    {
+
+        return $presupuesto->getPDFDataToMail();
+        
+    }
 }
