@@ -18,7 +18,6 @@ class Mensaje extends Model
     public function sendMessage($message)
     {
 
-
         $users = User::role('admin')->get();
 
         foreach ($users as $user){

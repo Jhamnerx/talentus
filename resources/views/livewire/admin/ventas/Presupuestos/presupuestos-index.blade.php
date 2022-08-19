@@ -486,7 +486,7 @@
 
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click="sendPresupuesto({{ $presupuesto->id }})"
+                                                                wire:click="modalOpenSend({{ $presupuesto->id }})"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-32"
                                                                 role="menuitem" tabindex="-1">

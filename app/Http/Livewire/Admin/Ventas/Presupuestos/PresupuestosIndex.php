@@ -22,6 +22,7 @@ class PresupuestosIndex extends Component
     public $to = '';
     public $status = null;
     public $openModalDelete = false;
+    public $modalOpenSend = false;
     
     protected $listeners = [
         'render'
@@ -133,6 +134,7 @@ class PresupuestosIndex extends Component
     }
     public function markReject(Presupuestos $presupuesto){
 
+
         $presupuesto->update([
             'estado' => '2',
         ]);
@@ -229,11 +231,10 @@ class PresupuestosIndex extends Component
     }
 
 
-    public function sendPresupuesto(Presupuestos $presupuesto){
+    public function modalOpenSend(Presupuestos $presupuesto){
 
-        $pdfPresupuesto = new PresupuestoPdfController();
 
-        $pdfPresupuesto->sendToMail($presupuesto);
+        $this->emit('modalOpenSend', $presupuesto);
 
        // dd($pdfPresupuesto);
 

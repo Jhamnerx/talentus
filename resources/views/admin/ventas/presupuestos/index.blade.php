@@ -4,6 +4,7 @@
 
     <!-- Table -->
     @livewire('admin.ventas.presupuestos.presupuestos-index')
+    @livewire('admin.ventas.presupuestos.send')
     @livewire('admin.ventas.presupuestos.delete')
 
 @stop

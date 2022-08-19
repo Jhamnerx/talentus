@@ -1,27 +1,26 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Certificados;
 
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class EnviarMensaje extends Notification implements ShouldQueue
+class NotifyClienteCertificadoCreada extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public $mensaje;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($mensaje)
+    public $certificado;
+
+    public function __construct($certificado)
     {
-        $this->mensaje = $mensaje;
+        $this->certificado = $certificado;
     }
 
     /**
@@ -32,7 +31,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast'];
+        return ['mail'];
     }
 
     /**
@@ -43,11 +42,9 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function toMail($notifiable)
     {
-
         return (new MailMessage)
-                ->subject('TALENTUS NOTIFICACION')
-                ->view('mail.notificacion', ['mensaje' => $this->mensaje]);
-   
+                ->subject('SE HA CREADO UN CERTIFICADO')
+                ->view('mail.certificados.certificado', ['certificado' => $this->certificado]);
     }
 
     /**
@@ -56,18 +53,10 @@ class EnviarMensaje extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return array
      */
-    public function toDatabase($notifiable)
+    public function toArray($notifiable)
     {
-        
         return [
-            'url' => route('admin.certificados.actas.index'),
-            'mensaje' => 'El usuario '.User::find($this->mensaje->from_user_id)->name.' ha creado una nueva acta',
+            //
         ];
-    }
-
-    public function toBroadcast($notifiable){
-
-        return new BroadcastMessage([]);
-
     }
 }

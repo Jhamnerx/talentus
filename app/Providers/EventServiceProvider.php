@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\nuevaActaCreada;
+use App\Listeners\nuevaActaCreadaAdminsListener;
+use App\Listeners\nuevaActaCreadaEmailListener;
 use App\Models\Actas;
 use App\Models\User;
 use App\Observers\UserObserver;
@@ -55,6 +58,8 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        nuevaActaCreada::class => [nuevaActaCreadaEmailListener::class, nuevaActaCreadaAdminsListener::class],
+
     ];
 
     /**

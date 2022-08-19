@@ -1,26 +1,27 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Certificados;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ActaCreada extends Notification implements ShouldQueue
+class NotifyClienteActaCreada extends Notification implements ShouldQueue
 {
     use Queueable;
 
-
-     public $acta;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
+    public $acta;
+
     public function __construct($acta)
     {
-        $this->$acta = $acta;
+        $this->acta = $acta;
+
     }
 
     /**
@@ -44,7 +45,7 @@ class ActaCreada extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                 ->subject('SE HA CREADO UN ACTA')
-                ->view('mail.acta', ['acta' => $this->acta]);
+                ->view('mail.certificados.acta', ['acta' => $this->acta]);
     }
 
     /**

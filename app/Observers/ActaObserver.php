@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\nuevaActaCreada;
 use App\Models\Actas;
 use App\Models\Admin\Mensaje;
 use App\Models\ChangesModels;
@@ -43,25 +44,15 @@ class ActaObserver
     {
         if(! \App::runningInConsole()){
 
-            $data = array(
-                'body' => 'Se ha creado un acta',
-                'asunto' => 'ACTA CREADA',
-                'accion' => 'acta_created',
-                'from_user_id' => auth()->id(),
-            );
 
             $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
             $acta->save();
+            
+            //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
+            nuevaActaCreada::dispatch($acta);
 
-        //     $mensaje = new Mensaje();
-        // //$mensaje->sendMessage($data, 'to_user');
-        //     $mensaje->sendMessage($data, 'to_client');
 
-            $acta->vehiculos->flotas->clientes->notify(new ActaCreada($acta));
-
-            $mensaje = new Mensaje();
-            $mensaje->sendMessage($data);
-
+            //REGISTRAMOS EL CAMBIO REALIZADO EN DB
 
             ChangesModels::create([
                 'change_id' => $acta->getKey(),
