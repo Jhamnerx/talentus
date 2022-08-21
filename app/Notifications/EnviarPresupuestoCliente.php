@@ -6,23 +6,26 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Queue\SerializesModels;
 
-class EnviarPresupuestoCliente extends Notification
+class EnviarPresupuestoCliente extends Notification implements ShouldQueue
 {
-    use Queueable;
+    use Queueable, SerializesModels;
 
     public $presupuesto;
     public $pdf;
+    public $data;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($presupuesto, $pdf)
+    public function __construct($presupuesto, $pdf, $data)
     {
         $this->presupuesto = $presupuesto;
         $this->pdf = $pdf;
-        //
+        $this->data = $data;
+       
     }
 
     /**
@@ -33,23 +36,19 @@ class EnviarPresupuestoCliente extends Notification
      */
     public function via($notifiable)
     {
+        //dd($this->pdf->output());
         return ['mail'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
+
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->attachData($this->pdf->output(), 'PRESUPUESTO-'.$this->presupuesto->numero.'.pdf', [
+                    ->attachData($this->pdf->output(), 'COTIZACIÓN-'.$this->presupuesto->numero.'.pdf', [
                         'mime' => 'application/pdf',
                     ])
-                    ->subject('TALENTUS - COTIZACIÓN #'.$this->presupuesto->numero)
-                    ->view('mail.presupuesto', ['presupuesto' => $this->presupuesto]);
+                    ->subject($this->data["asunto"])
+                    ->view('mail.presupuesto', ['presupuesto' => $this->presupuesto, 'data' => $this->data]);
     }
 
     /**

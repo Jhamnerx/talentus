@@ -78,13 +78,10 @@ class Presupuestos extends Model
 
         }else{
             return $pdf->stream('PRE-' . $this->numero.'.pdf');
-        }
-       ;
+        };
 
-
-       // return view('pdf.presupuesto.pdf');
     }
-    public function getPDFDataToMail()
+    public function getPDFDataToMail($data)
     {
 
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
@@ -97,9 +94,8 @@ class Presupuestos extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.presupuesto.pdf');
-        
 
-        $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf));
+        $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
 
     }
 

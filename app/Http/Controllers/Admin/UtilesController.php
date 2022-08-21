@@ -14,7 +14,7 @@ class UtilesController extends Controller
         // $data = json_decode(file_get_contents('https://api.apis.net.pe/v1/tipo-cambio-sunat'), true);
 
         // return $data["venta"];
-        $token = config('TOKEN_API_SUNAT');
+        $token = env('TOKEN_API_SUNAT');
 
         $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -38,7 +38,7 @@ class UtilesController extends Controller
     public function consultaEmpresa($numero)
     {
         // Datos
-        $token = config('TOKEN_API_SUNAT');
+        $token = env('TOKEN_API_SUNAT');
 
         $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -63,7 +63,7 @@ class UtilesController extends Controller
     public function consultaPersona($numero)
     {
         //datos
-        $token = config('TOKEN_API_SUNAT');
+        $token = env('TOKEN_API_SUNAT');
         $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
         // Iniciar llamada a API
         $parameters = [

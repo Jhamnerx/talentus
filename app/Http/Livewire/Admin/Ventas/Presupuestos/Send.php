@@ -4,8 +4,8 @@ namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Models\Presupuestos;
+use Exception;
 use Livewire\Component;
-use Psy\VarDumper\Presenter;
 
 class Send extends Component
 {
@@ -20,6 +20,14 @@ class Send extends Component
         'modalOpenSend' => 'openModal'
     ];
 
+    public function resetPropiedades(){
+        $this->reset('from');
+        $this->reset('to');
+        $this->reset('asunto');
+        $this->reset('body');
+        $this->reset('presupuesto');
+    }
+
     public function render()
     {
         return view('livewire.admin.ventas.presupuestos.send');
@@ -29,7 +37,7 @@ class Send extends Component
 
         $this->modalOpenSend = true;
         $this->presupuesto = $presupuesto;
-        $this->to = $presupuesto->clientes->email;
+        $this->to = $presupuesto->clientes->email." | ".$presupuesto->clientes->razon_social;
         $this->asunto = "TALENTUS - COTIZACIÓN #".$presupuesto->numero;
 
        // dd($presupuesto);
@@ -38,7 +46,7 @@ class Send extends Component
     public function closeModal()
     {
         $this->modalOpenSend = false;
-        $this->reset();
+        $this->resetPropiedades();
 
     }
 
@@ -46,8 +54,30 @@ class Send extends Component
     public function sendPresupuesto(){
 
         //dd($this->presupuesto);
-        $pdfPresupuesto = new PresupuestoPdfController();
-        $pdfPresupuesto->sendToMail($this->presupuesto);
+        $data = array(
+            'asunto' => $this->asunto,
+            'body' => $this->body,
+        );
+        //dd($this->presupuesto);
+
+        try {
+
+            $pdfPresupuesto = new PresupuestoPdfController();
+            $pdfPresupuesto->sendToMail($this->presupuesto, $data);
+
+
+        } catch (Exception $e) {
+            dd($e);
+            $e->getMessage();
+
+        }finally{
+
+           // $this->modalOpenSend = false;
+            $this->dispatchBrowserEvent('presupuesto-send', ['presupuesto' => $this->presupuesto]);
+            
+            $this->resetPropiedades();
+
+        }
 
     }
 

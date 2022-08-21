@@ -375,7 +375,31 @@
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
                                             <!--<![endif]-->
 
+
                                             <table style="font-family:arial,helvetica,sans-serif;" role="presentation"
+                                                cellpadding="0" cellspacing="0" width="100%" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 0px;font-family:arial,helvetica,sans-serif;"
+                                                            align="left">
+
+                                                            <div align="center">
+                                                                <span
+                                                                    style="font-size: 14px; line-height: 16.8px; font-family: 'comic sans ms', sans-serif;">
+                                                                    {{ $data['body'] }}</span>
+                                                                </a>
+                                                                <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
+                                                            </div>
+
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+
+
+
+
+                                            {{-- <table style="font-family:arial,helvetica,sans-serif;" role="presentation"
                                                 cellpadding="0" cellspacing="0" width="100%" border="0">
                                                 <tbody>
                                                     <tr>
@@ -399,7 +423,7 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                            </table>
+                                            </table> --}}
 
                                             <!--[if (!mso)&(!IE)]><!-->
                                         </div>

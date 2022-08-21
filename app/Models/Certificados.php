@@ -29,6 +29,7 @@ class Certificados extends Model
         'fondo' => 'boolean',
         'estado' => 'boolean',
         'eliminado' => 'boolean',
+        'fin_cobertura' => 'date:Y/m/d',
     ];
 
 

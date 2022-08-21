@@ -16,7 +16,7 @@
             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
             x-cloak>
             <div class="bg-white rounded shadow-lg overflow-auto max-w-lg w-full max-h-full"
-                @click.outside="modalOpenSend = false" @keydown.escape.window="modalOpenSend = false">
+                @click.outside="modalOpenSend = false">
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
@@ -42,14 +42,14 @@
                         <div>
                             <label class="block text-sm font-medium mb-1" for="from">De: <span
                                     class="text-rose-500">*</span></label>
-                            <input id="name" class="form-input w-full px-2 py-1" readonly wire:model="from"
-                                type="email" required disabled />
+                            <input id="name" class="form-input w-full px-2 py-1 disabled:bg-slate-100" readonly
+                                wire:model="from" type="email" required disabled />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1" for="to">Para: <span
                                     class="text-rose-500">*</span></label>
-                            <input id="to" class="form-input w-full px-2 py-1" wire:model="to" type="email"
-                                required />
+                            <input id="to" class="form-input w-full px-2 py-1 disabled:bg-slate-100"
+                                wire:model="to" type="email" required disabled />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1" for="asunto">Asunto: <span
@@ -68,8 +68,9 @@
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                            @click="modalOpenSend = false" wire:click="closeModal">Cancel</button>
-                        <button class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
+                            @click="modalOpenSend = false" wire:click="closeModal">Cancelar</button>
+                        <button wire:loading.attr="disabled" wire:target="sendPresupuesto"
+                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white"
                             wire:click="sendPresupuesto">Enviar</button>
                     </div>
                 </div>

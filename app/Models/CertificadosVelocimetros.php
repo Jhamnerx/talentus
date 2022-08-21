@@ -19,10 +19,17 @@ class CertificadosVelocimetros extends Model
         return CertificadosVelocimetrosFactory::new();
     }
 
+
     use HasFactory;
     use SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados_velocimetros';
+
+    protected $casts = [
+        'sello' => 'boolean',
+        'fondo' => 'boolean',
+        'estado' => 'boolean',
+    ];
 
     //Relacion uno a muchos inversa
 
