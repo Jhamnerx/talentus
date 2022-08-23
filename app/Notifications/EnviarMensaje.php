@@ -21,6 +21,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function __construct($mensaje)
     {
+  
         $this->mensaje = $mensaje;
     }
 
@@ -33,6 +34,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         return ['mail', 'database', 'broadcast'];
+      // return ['mail', 'broadcast'];
     }
 
     /**
@@ -58,13 +60,27 @@ class EnviarMensaje extends Notification implements ShouldQueue
      */
     public function toDatabase($notifiable)
     {
-        
+     
         return [
-            'url' => route('admin.certificados.actas.index'),
-            'mensaje' => 'El usuario '.User::find($this->mensaje->from_user_id)->name.' ha creado una nueva acta',
+            'url' => route($this->mensaje->url, $this->mensaje->id_certificado),
+            'asunto' => $this->mensaje->asunto,
+            'body' => $this->mensaje->body,
+            'mensaje' => $this->mensaje->body,
+            'accion' => $this->mensaje->action,
         ];
     }
 
+    public function toArray($notifiable)
+    {
+
+        return [
+            'url' => route($this->mensaje->url, $this->mensaje->id_certificado),
+            'asunto' => $this->mensaje->asunto,
+            'body' => $this->mensaje->body,
+            'mensaje' => $this->mensaje->body,
+            'accion' => $this->mensaje->action,
+        ];
+    }
     public function toBroadcast($notifiable){
 
         return new BroadcastMessage([]);

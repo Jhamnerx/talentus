@@ -234,7 +234,6 @@ class PresupuestosIndex extends Component
 
         $this->emit('modalOpenSend', $presupuesto);
 
-       // dd($pdfPresupuesto);
-
     }
+    
 }

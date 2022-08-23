@@ -6,6 +6,7 @@ use App\Models\Cobros;
 use App\Models\User;
 use App\Notifications\EnviarMensaje;
 use App\Notifications\EnviarMensajeCobro;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Notification;
@@ -15,27 +16,44 @@ class Mensaje extends Model
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function sendMessage($message)
+    public function sendMessage($data)
     {
-
+       
         $users = User::role('admin')->get();
+
 
         foreach ($users as $user){
 
             $mensaje = Mensaje::create([
-                'asunto' => $message["asunto"],
-                'body' => $message["body"],
+
+                'asunto' => $data["asunto"],
+                'body' => $data["body"],
+                'url' => $data["url"],
+                'id_certificado' => $data["id_certificado"],
                 'messageable_type' => User::class,
                 'messageable_id' => $user->id,
-                'action' => $message["accion"],
+                'action' => $data["accion"],
                 'to_user_id ' => $user->id,
                 'from_user_id' => auth()->id(),
+
             ]);
+            
         }
 
-        Notification::send($users, new EnviarMensaje($mensaje));
+        try {
+
+            Notification::send($users, new EnviarMensaje($mensaje));
+
+        } catch (Exception $e) {
+            
+            //dd($e);
+
+        }finally{
         
-        return redirect()->back();
+            return redirect()->back();
+        }
+       
+
 
 
     }
@@ -44,6 +62,7 @@ class Mensaje extends Model
     public function sendCobroMessage($message, Cobros $cobro)
     {
 
+
         $users = User::role('admin')->get();
 
         foreach ($users as $user){
@@ -59,9 +78,9 @@ class Mensaje extends Model
             ]);
         }
 
-        Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
+        // Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
         
-        return redirect()->back();
+        // return redirect()->back();
 
 
     }

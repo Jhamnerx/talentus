@@ -20,8 +20,10 @@ class CreateMensajesTable extends Migration
             $table->foreign('from_user_id')->references('id')->on('users');
             $table->unsignedBigInteger('to_user_id')->nullable();
             $table->foreign('to_user_id')->references('id')->on('users');
-             $table->morphs('messageable');
-             $table->string('action');
+            $table->morphs('messageable');
+            $table->string('action');
+            $table->string('url');
+            $table->integer('id_certificado');
             $table->string('asunto', 30);
             $table->text('body');
             $table->timestamps();

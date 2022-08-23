@@ -21,7 +21,7 @@
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold text-slate-800">
-                            ENVIAR COTIZACIÓN
+                            ENVIAR CONTRATO
                         </div>
                         <button class="text-slate-400 hover:text-slate-500" @click="modalOpenSend = false">
                             <div class="sr-only">Close</div>
@@ -36,7 +36,7 @@
                 <div class="px-5 py-4">
                     <div class="text-sm">
                         <div class="font-medium text-slate-800 mb-3">
-                            Enviar cotización a cliente 🙌</div>
+                            Enviar contrato a cliente 🙌</div>
                     </div>
                     <div class="space-y-3">
                         <div>
@@ -63,8 +63,8 @@
                             <textarea id="body" class="form-textarea w-full px-2 py-1" wire:model="body" rows="5" required></textarea>
                         </div>
 
-                        {{-- <div class="mb-1 text-center" wire:loading wire:target="sendPresupuesto"> --}}
-                        <div class="mb-1 text-center w-full" wire:loading wire:target="sendPresupuesto">
+
+                        <div class="mb-1 text-center w-full" wire:loading wire:target="sendContrato">
 
                             <div class='loader'>
                                 <div class='loader--dot'></div>
@@ -84,9 +84,9 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             @click="modalOpenSend = false" wire:click="closeModal">Cancelar</button>
-                        <button wire:loading.attr="disabled" wire:target="sendPresupuesto"
+                        <button wire:loading.attr="disabled" wire:target="sendContrato"
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white"
-                            wire:click="sendPresupuesto">Enviar</button>
+                            wire:click="sendContrato">Enviar</button>
                     </div>
                 </div>
             </div>

@@ -268,12 +268,24 @@
                                                                 <p
                                                                     style="font-size: 14px; line-height: 140%; text-align: center;">
                                                                     <span
-                                                                        style="color: #ffffff; font-size: 14px; line-height: 19.6px;"><em><span
-                                                                                style="font-size: 16px; line-height: 22.4px;"><strong><span
-                                                                                        style="line-height: 22.4px; font-size: 16px;"><span
-                                                                                            style="font-size: 16px; line-height: 22.4px;">September
-                                                                                            06,
-                                                                                            2000</span></span></strong></span></em></span>
+                                                                        style="color: #ffffff; font-size: 14px; line-height: 19.6px;">
+                                                                        <em>
+                                                                            <span
+                                                                                style="font-size: 16px; line-height: 22.4px;">
+                                                                                <strong>
+                                                                                    <span
+                                                                                        style="line-height: 22.4px; font-size: 16px;">
+                                                                                        <span
+                                                                                            style="font-size: 16px; line-height: 22.4px;">
+
+                                                                                            {{ date('d F, Y') }}
+
+                                                                                        </span>
+                                                                                    </span>
+                                                                                </strong>
+                                                                            </span>
+                                                                        </em>
+                                                                    </span>
                                                                 </p>
                                                             </div>
 
@@ -324,15 +336,22 @@
                                                                     style="font-size: 14px; line-height: 140%; text-align: center;">
                                                                     <span
                                                                         style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;"><strong><span
-                                                                                style="font-size: 22px; line-height: 30.8px; color: #000000;">NOTIFICACION
-                                                                                - RECORDATORIO</span></strong></span>
+                                                                                style="font-size: 22px; line-height: 30.8px; color: #000000;">
+                                                                                {{-- {{ $mensaje['asunto'] }} --}}
+                                                                            </span>
+                                                                        </strong>
+                                                                    </span>
                                                                 </p>
                                                                 <p
                                                                     style="font-size: 14px; line-height: 140%; text-align: center;">
                                                                     <span
-                                                                        style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;"><span
-                                                                            style="font-size: 22px; line-height: 30.8px; color: #000000;">contenido
-                                                                            del recordatorio</span></span><span
+                                                                        style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;">
+                                                                        <span
+                                                                            style="font-size: 22px; line-height: 30.8px; color: #000000;">
+                                                                            {{-- {{ $mensaje['body'] }} --}}
+                                                                        </span>
+                                                                    </span>
+                                                                    <span
                                                                         style="font-size: 22px; font-family: Cabin, sans-serif; line-height: 30.8px;">.</span>
                                                                 </p>
                                                             </div>
@@ -454,13 +473,20 @@
 
                                                             <div class="v-text-align" align="center">
                                                                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Open Sans',sans-serif;"><tr><td class="v-text-align" style="font-family:'Open Sans',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:47px; v-text-anchor:middle; width:218px;" arcsize="40.5%" stroke="f" fillcolor="#052c52"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Open Sans',sans-serif;"><![endif]-->
-                                                                <a href="" target="_blank"
+                                                                <a href="{{ route($mensaje->url) }}" target="_blank"
                                                                     style="box-sizing: border-box;display: inline-block;font-family:'Open Sans',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #052c52; border-radius: 19px;-webkit-border-radius: 19px; -moz-border-radius: 19px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                                                     <span
-                                                                        style="display:block;padding:13px 24px 12px;line-height:120%;"><span
-                                                                            style="font-size: 18px; line-height: 21.6px; font-family: 'Open Sans', sans-serif;"><strong><span
-                                                                                    style="line-height: 21.6px; font-size: 18px;">VER
-                                                                                    NOTIFICACION</span></strong></span></span>
+                                                                        style="display:block;padding:13px 24px 12px;line-height:120%;">
+                                                                        <span
+                                                                            style="font-size: 18px; line-height: 21.6px; font-family: 'Open Sans', sans-serif;">
+                                                                            <strong>
+                                                                                <span
+                                                                                    style="line-height: 21.6px; font-size: 18px;">
+                                                                                    VER NOTIFICACION
+                                                                                </span>
+                                                                            </strong>
+                                                                        </span>
+                                                                    </span>
                                                                 </a>
                                                                 <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
                                                             </div>

@@ -12,6 +12,9 @@ class Index extends Component
     public $from = '';
     public $to = '';
 
+    public $openModalDelete = false;
+    public $modalOpenSend = false;
+
     protected $listeners = [
         'updateTable' => 'render',
     ];
@@ -75,5 +78,17 @@ class Index extends Component
                 $this->to = '';
                 break;
         }
+    }
+    public function openModalDelete(Contratos $contrato){
+
+        $this->emit('openModalDelete', $contrato);
+        $this->openModalDelete = true;
+
+    }
+    public function modalOpenSend(Contratos $contrato){
+
+
+        $this->emit('modalOpenSend', $contrato);
+
     }
 }

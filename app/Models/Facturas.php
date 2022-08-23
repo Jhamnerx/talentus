@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarFacturaCliente;
 use App\Scopes\ActiveScope;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -63,7 +64,6 @@ class Facturas extends Model
     }
     public function getPDFData($action)
     {
-
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
@@ -78,14 +78,27 @@ class Facturas extends Model
 
             return $pdf->download('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
         }else{
-           // return view('pdf.factura.pdf');
            
             return $pdf->stream('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
-
         };
 
-
-       // return view('pdf.presupuesto.pdf');
     }
+
+    public function getPDFDataToMail($data)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
+        view()->share([
+            'factura' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.factura.pdf');
+
+        $this->clientes->notify(new EnviarFacturaCliente($this, $pdf, $data));
+
+    }
+
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Ventas;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -8,9 +8,9 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class EnviarPresupuestoCliente extends Notification implements ShouldQueue
+class EnviarPresupuestoCliente extends Notification
 {
-    use Queueable, SerializesModels;
+    use Queueable;
 
     public $presupuesto;
     public $pdf;
@@ -48,7 +48,7 @@ class EnviarPresupuestoCliente extends Notification implements ShouldQueue
                         'mime' => 'application/pdf',
                     ])
                     ->subject($this->data["asunto"])
-                    ->view('mail.presupuesto', ['presupuesto' => $this->presupuesto, 'data' => $this->data]);
+                    ->view('mail.ventas.presupuesto', ['presupuesto' => $this->presupuesto, 'data' => $this->data]);
     }
 
     /**

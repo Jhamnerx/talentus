@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarReciboCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -83,5 +84,22 @@ class Recibos extends Model
 
        // return view('pdf.presupuesto.pdf');
     }
+
+    public function getPDFDataToMail($data)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
+        view()->share([
+            'recibo' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.recibo.pdf');
+
+        $this->clientes->notify(new EnviarReciboCliente($this, $pdf, $data));
+
+    }
+
 
 }

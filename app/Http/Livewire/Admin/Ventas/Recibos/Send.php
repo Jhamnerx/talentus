@@ -1,17 +1,18 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
+namespace App\Http\Livewire\Admin\Ventas\Recibos;
 
-use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
-use App\Models\Presupuestos;
+use App\Http\Controllers\Admin\PDF\ReciboPdfController;
+use App\Models\Recibos;
 use Exception;
 use Livewire\Component;
 
 class Send extends Component
 {
+
     public $modalOpenSend = false;
 
-    public $presupuesto;
+    public $recibo;
 
     public $from = "talentus@talentustechnology.com", $to, $asunto = "", $body;
 
@@ -25,22 +26,22 @@ class Send extends Component
         $this->reset('to');
         $this->reset('asunto');
         $this->reset('body');
-        $this->reset('presupuesto');
+        $this->reset('recibo');
     }
 
     public function render()
     {
-        return view('livewire.admin.ventas.presupuestos.send');
+        return view('livewire.admin.ventas.recibos.send');
     }
 
-    public function openModal(Presupuestos $presupuesto){
+    public function openModal(Recibos $recibo){
 
         $this->modalOpenSend = true;
-        $this->presupuesto = $presupuesto;
-        $this->to = $presupuesto->clientes->email." | ".$presupuesto->clientes->razon_social;
-        $this->asunto = "TALENTUS - COTIZACIÓN #".$presupuesto->numero;
+        $this->recibo = $recibo;
+        $this->to = $recibo->clientes->email." | ".$recibo->clientes->razon_social;
+        $this->asunto = "TALENTUS RECIBO #".$recibo->serie."-".$recibo->numero;
 
-       // dd($presupuesto);
+       // dd($recibo);
 
     }
     public function closeModal()
@@ -51,19 +52,18 @@ class Send extends Component
     }
 
 
-    public function sendPresupuesto(){
+    public function sendRecibo(){
 
-        //dd($this->presupuesto);
+
         $data = array(
             'asunto' => $this->asunto,
             'body' => $this->body,
         );
-        //dd($this->presupuesto);
 
         try {
 
-            $pdfPresupuesto = new PresupuestoPdfController();
-            $pdfPresupuesto->sendToMail($this->presupuesto, $data);
+            $pdfRecibo = new ReciboPdfController();
+            $pdfRecibo->sendToMail($this->recibo, $data);
 
 
         } catch (Exception $e) {
@@ -73,12 +73,11 @@ class Send extends Component
         }finally{
 
             $this->modalOpenSend = false;
-            $this->dispatchBrowserEvent('presupuesto-send', ['presupuesto' => $this->presupuesto]);
+            $this->dispatchBrowserEvent('recibo-send', ['recibo' => $this->recibo]);
             
             $this->resetPropiedades();
 
         }
 
     }
-
 }

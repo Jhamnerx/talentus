@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarContratoCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -84,12 +85,31 @@ class Contratos extends Model
 
         ]);
 
-        $pdf = PDF::loadView('pdf.contrato');
+        $pdf = PDF::loadView('pdf.contrato.pdf');
 
         return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
 
-
-        //return $pdf;
-        //return view('pdf.acta');
     }
+
+    public function getPDFDataToMail($data)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'contrato' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+
+        ]);
+
+        $pdf = PDF::loadView('pdf.contrato.pdf');
+
+        $this->clientes->notify(new EnviarContratoCliente($this, $pdf, $data));
+
+    }
+
 }

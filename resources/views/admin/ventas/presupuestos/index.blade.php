@@ -85,7 +85,7 @@
                 theme: 'dark',
                 icon: 'far fa-envelope-open',
                 title: 'CORREO ENVIADO<br>',
-                timeout: 400,
+                timeout: 1500,
                 message: 'Se ha enviado la cotización ' + event.detail.presupuesto.numero + '!',
                 position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
                 progressBarColor: 'rgb(5, 44, 82)'

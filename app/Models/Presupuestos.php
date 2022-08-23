@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Notifications\EnviarPresupuestoCliente;
+use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EliminadoScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -95,6 +95,7 @@ class Presupuestos extends Model
 
         $pdf = PDF::loadView('pdf.presupuesto.pdf');
 
+        //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
 
     }
