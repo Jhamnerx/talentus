@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Certificados\Gps;
 use App\Http\Requests\CertificadosGpsRequest;
 use App\Models\Certificados;
 use App\Models\Ciudades;
+use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Vinkla\Hashids\Facades\Hashids;
@@ -15,7 +16,8 @@ class Save extends Component
 
 
     public $openModalSave = false;
-    public $numero, $vehiculos_id, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1;
+    public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1;
+    public $fin_cobertura;
 
     protected $listeners = [
         'guardarCertificado' => 'openModal'
@@ -30,6 +32,7 @@ class Save extends Component
     {
         $this->openModalSave = true;
         $this->numero = $this->setNextSequenceNumber();
+        $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
 
     }
 

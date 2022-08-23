@@ -215,10 +215,13 @@
                                                             style="overflow-wrap:break-word;word-break:break-word;padding:10px 10px 0px;font-family:arial,helvetica,sans-serif;"
                                                             align="left">
 
-                                                            <h1 class="v-text-align"
+                                                            <h3 class="v-text-align"
                                                                 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Lato',sans-serif; font-size: 53px;">
-                                                                <strong>ACTA - #{{ $acta->codigo }}</strong>
-                                                            </h1>
+                                                                <strong>
+                                                                    CERTIFICADO <br>
+                                                                    #{{ $certificado->codigo }}
+                                                                </strong>
+                                                            </h3>
 
                                                         </td>
                                                     </tr>
@@ -235,7 +238,7 @@
 
                                                             <h1 class="v-text-align"
                                                                 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: arial,helvetica,sans-serif; font-size: 15px;">
-                                                                registro de acta
+                                                                registro de certificado
                                                             </h1>
 
                                                         </td>
@@ -284,26 +287,26 @@
 
                                                             <div class="v-text-align"
                                                                 style="line-height: 170%; text-align: center; word-wrap: break-word;">
-                                                                <p style="font-size: 14px; line-height: 170%;">
+                                                                {{-- <p style="font-size: 14px; line-height: 170%;">
                                                                     <span
                                                                         style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 23.8px;">
                                                                         Fecha Inicio Cobertura:
-                                                                        <strong>{{ $acta->inicio_cobertura->formatLocalized('%d de %B %Y') }}</strong>
+                                                                        <strong>{{ $certificado->inicio_cobertura->formatLocalized('%d de %B %Y') }}</strong>
                                                                     </span>
-                                                                </p>
+                                                                </p> --}}
                                                                 <p style="font-size: 14px; line-height: 170%;">
                                                                     <span
                                                                         style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 23.8px;">
                                                                         Fecha Fin
                                                                         Cobertura:
-                                                                        <strong>{{ $acta->fin_cobertura->formatLocalized('%d de %B %Y') }}</strong></span>
+                                                                        <strong>{{ $certificado->fin_cobertura->formatLocalized('%d de %B %Y') }}</strong></span>
                                                                 </p>
                                                                 <p style="font-size: 14px; line-height: 170%;"> </p>
                                                                 <p style="font-size: 14px; line-height: 170%;">
                                                                     <span
                                                                         style="font-family: Montserrat, sans-serif; font-size: 14px; line-height: 23.8px;">
-                                                                        ACTA ID :<strong>
-                                                                            {{ $acta->unique_hash }}</strong>
+                                                                        certificado ID :<strong>
+                                                                            {{ $certificado->unique_hash }}</strong>
                                                                     </span>
                                                                 </p>
                                                             </div>
@@ -358,7 +361,7 @@
                                                                         <span
                                                                             style="font-family: Montserrat, sans-serif; font-size: 18px; line-height: 25.2px;">
                                                                             Hola
-                                                                            {{ $acta->vehiculos->flotas->clientes->razon_social }}!</span>
+                                                                            {{ $certificado->vehiculos->flotas->clientes->razon_social }}!</span>
                                                                     </strong>
                                                                 </p>
                                                                 <p style="font-size: 14px; line-height: 140%;">

@@ -2,12 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Events\nuevoCertificadoCreado;
-use App\Notifications\Certificados\NotifyClienteCertificadoCreada;
+use App\Events\nuevoCertificadoGpsCreado;
+use App\Notifications\Certificados\NotifyClienteCertificadoVelocimetroCreada;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class nuevoCertificadoEmailListener
+class nuevoCertificadoGpsEmailListener
 {
     /**
      * Create the event listener.
@@ -25,8 +25,8 @@ class nuevoCertificadoEmailListener
      * @param  object  $event
      * @return void
      */
-    public function handle(nuevoCertificadoCreado $event)
+    public function handle(nuevoCertificadoGpsCreado $event)
     {
-        $event->certificado->vehiculos->flotas->clientes->notify(new NotifyClienteCertificadoCreada($event->certificado));
+        $event->certificado->vehiculos->flotas->clientes->notify(new NotifyClienteCertificadoVelocimetroCreada($event->certificado));
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\nuevoCertificadoGpsCreado;
 use App\Models\CertificadosVelocimetros;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Models\ChangesModels;
@@ -40,15 +41,11 @@ class CertificadosVelocimetrosObserver
     {
         if(! \App::runningInConsole()){
 
-            $data = array(
-                'body' => 'Se ha creado un certificado',
-                'asunto' => 'CERTIFICADO CREADO',
-                'accion' => 'certificado_created',
-                'from_user_id' => auth()->id(),
-            );
 
             $certificados->unique_hash = Hashids::connection(CertificadosVelocimetros::class)->encode($certificados->id);
             $certificados->save();
+
+            nuevoCertificadoGpsCreado::dispatch($certificados);
 
             ChangesModels::create([
                 'change_id' => $certificados->getKey(),

@@ -45,8 +45,8 @@ class Edit extends Component
         $this->vehiculos_id = $acta->vehiculos_id;
         $this->ciudades_id = $acta->ciudades_id;
         $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculos, 'ciudad' => $acta->ciudades]);
-        $this->inicio_cobertura = $acta->inicio_cobertura;
-        $this->fin_cobertura = $acta->fin_cobertura;
+        $this->inicio_cobertura = $acta->inicio_cobertura->format('Y-m-d');
+        $this->fin_cobertura = $acta->fin_cobertura->format('Y-m-d');
     }
 
 

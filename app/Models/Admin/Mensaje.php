@@ -22,27 +22,27 @@ class Mensaje extends Model
         $users = User::role('admin')->get();
 
 
-        foreach ($users as $user){
+        // foreach ($users as $user){
 
-            $mensaje = Mensaje::create([
+        //     $mensaje = Mensaje::create([
 
-                'asunto' => $data["asunto"],
-                'body' => $data["body"],
-                'url' => $data["url"],
-                'id_certificado' => $data["id_certificado"],
-                'messageable_type' => User::class,
-                'messageable_id' => $user->id,
-                'action' => $data["accion"],
-                'to_user_id ' => $user->id,
-                'from_user_id' => auth()->id(),
+        //         'asunto' => $data["asunto"],
+        //         'body' => $data["body"],
+        //         'url' => $data["url"],
+        //         'id_certificado' => $data["id_certificado"],
+        //         'messageable_type' => User::class,
+        //         'messageable_id' => $user->id,
+        //         'action' => $data["accion"],
+        //         'to_user_id ' => $user->id,
+        //         'from_user_id' => auth()->id(),
 
-            ]);
+        //     ]);
             
-        }
+        // }
 
         try {
 
-            Notification::send($users, new EnviarMensaje($mensaje));
+            Notification::send($users, new EnviarMensaje($data));
 
         } catch (Exception $e) {
             

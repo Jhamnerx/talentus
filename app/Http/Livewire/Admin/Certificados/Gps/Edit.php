@@ -44,7 +44,7 @@ class Edit extends Component
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
         $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $certificado->vehiculos, 'ciudad' => $certificado->ciudades]);
-        $this->fin_cobertura = $certificado->fin_cobertura;
+        $this->fin_cobertura = $certificado->fin_cobertura->format('Y-m-d');
     }
 
     public function actualizarCertificado()

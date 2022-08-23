@@ -39,14 +39,14 @@ class CertificadosObserver
        
     }
 
+
     public function created(Certificados $certificado)
     {
         if(! \App::runningInConsole()){
 
-
-
             $certificado->unique_hash = Hashids::connection(Certificados::class)->encode($certificado->id);
             $certificado->save();
+            
             //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
             nuevoCertificadoCreado::dispatch($certificado);
 

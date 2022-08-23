@@ -278,7 +278,7 @@
                                                                                         <span
                                                                                             style="font-size: 16px; line-height: 22.4px;">
 
-                                                                                            {{ date('d F, Y') }}
+                                                                                            {{ date('d-m-Y') }}
 
                                                                                         </span>
                                                                                     </span>
@@ -337,7 +337,7 @@
                                                                     <span
                                                                         style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;"><strong><span
                                                                                 style="font-size: 22px; line-height: 30.8px; color: #000000;">
-                                                                                {{-- {{ $mensaje['asunto'] }} --}}
+                                                                                NOTIFICACION - {{ $mensaje['asunto'] }}
                                                                             </span>
                                                                         </strong>
                                                                     </span>
@@ -348,7 +348,7 @@
                                                                         style="font-family: Cabin, sans-serif; font-size: 14px; line-height: 19.6px;">
                                                                         <span
                                                                             style="font-size: 22px; line-height: 30.8px; color: #000000;">
-                                                                            {{-- {{ $mensaje['body'] }} --}}
+                                                                            {{ $mensaje['body'] }}
                                                                         </span>
                                                                     </span>
                                                                     <span
@@ -389,8 +389,7 @@
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;">
                                             <!--<![endif]-->
-
-                                            <table style="font-family:'Open Sans',sans-serif;" role="presentation"
+                                            {{-- <table style="font-family:'Open Sans',sans-serif;" role="presentation"
                                                 cellpadding="0" cellspacing="0" width="100%" border="0">
                                                 <tbody>
                                                     <tr>
@@ -411,9 +410,9 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                            </table>
+                                            </table> --}}
 
-                                            <table style="font-family:'Open Sans',sans-serif;" role="presentation"
+                                            {{-- <table style="font-family:'Open Sans',sans-serif;" role="presentation"
                                                 cellpadding="0" cellspacing="0" width="100%" border="0">
                                                 <tbody>
                                                     <tr>
@@ -433,7 +432,7 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                            </table>
+                                            </table> --}}
 
                                             <!--[if (!mso)&(!IE)]><!-->
                                         </div>
@@ -473,7 +472,8 @@
 
                                                             <div class="v-text-align" align="center">
                                                                 <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Open Sans',sans-serif;"><tr><td class="v-text-align" style="font-family:'Open Sans',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:47px; v-text-anchor:middle; width:218px;" arcsize="40.5%" stroke="f" fillcolor="#052c52"><w:anchorlock/><center style="color:#FFFFFF;font-family:'Open Sans',sans-serif;"><![endif]-->
-                                                                <a href="{{ route($mensaje->url) }}" target="_blank"
+                                                                <a href="{{ route($mensaje['url'], $mensaje['id_certificado']) }}"
+                                                                    target="_blank"
                                                                     style="box-sizing: border-box;display: inline-block;font-family:'Open Sans',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #052c52; border-radius: 19px;-webkit-border-radius: 19px; -moz-border-radius: 19px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                                                     <span
                                                                         style="display:block;padding:13px 24px 12px;line-height:120%;">
@@ -482,7 +482,7 @@
                                                                             <strong>
                                                                                 <span
                                                                                     style="line-height: 21.6px; font-size: 18px;">
-                                                                                    VER NOTIFICACION
+                                                                                    VER
                                                                                 </span>
                                                                             </strong>
                                                                         </span>
@@ -535,13 +535,23 @@
 
                                                             <div class="v-text-align"
                                                                 style="line-height: 160%; text-align: left; word-wrap: break-word;">
-                                                                <p style="font-size: 14px; line-height: 160%;"><span
-                                                                        style="font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 22.4px;"><strong><span
-                                                                                style="line-height: 22.4px; color: #ffffff; font-size: 14px;">Enviado
-                                                                                por:,</span></strong></span></p>
-                                                                <p style="font-size: 14px; line-height: 160%;"><span
-                                                                        style="font-size: 14px; line-height: 22.4px; font-family: 'Open Sans', sans-serif; color: #ffffff;">Nombre
-                                                                        Usuario</span></p>
+                                                                <p style="font-size: 14px; line-height: 160%;">
+                                                                    <span
+                                                                        style="font-family: 'Open Sans', sans-serif; font-size: 14px; line-height: 22.4px;">
+                                                                        <strong>
+                                                                            <span
+                                                                                style="line-height: 22.4px; color: #ffffff; font-size: 14px;">
+                                                                                Enviado por:
+                                                                            </span>
+                                                                        </strong>
+                                                                    </span>
+                                                                </p>
+                                                                <p style="font-size: 14px; line-height: 160%;">
+                                                                    <span
+                                                                        style="font-size: 14px; line-height: 22.4px; font-family: 'Open Sans', sans-serif; color: #ffffff;">
+                                                                        Talentus
+                                                                    </span>
+                                                                </p>
                                                             </div>
 
                                                         </td>

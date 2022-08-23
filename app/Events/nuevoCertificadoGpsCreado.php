@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class nuevaActaCreada
+class nuevoCertificadoGpsCreado
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -19,11 +19,11 @@ class nuevaActaCreada
      *
      * @return void
      */
-    public $acta;
+    public $certificado;
 
-    public function __construct($acta)
+    public function __construct($certificado)
     {
-        $this->acta = $acta;
+        $this->certificado = $certificado;
     }
 
     /**

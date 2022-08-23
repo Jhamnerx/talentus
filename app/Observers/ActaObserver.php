@@ -44,13 +44,11 @@ class ActaObserver
     {
         if(! \App::runningInConsole()){
 
-
             $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
             $acta->save();
             
             //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
             nuevaActaCreada::dispatch($acta);
-
 
             //REGISTRAMOS EL CAMBIO REALIZADO EN DB
 
