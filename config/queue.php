@@ -89,5 +89,10 @@ return [
         'database' => env('DB_CONNECTION', 'mysql'),
         'table' => 'failed_jobs',
     ],
-
+    'rateLimit' => [
+        'emails' => [
+            'allows' => 2,
+            'every' => 1
+        ]
+    ]
 ];

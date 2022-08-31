@@ -35,22 +35,6 @@ class Index extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-        if ($status === 0) {
-
-            $cobros = Cobros::whereHas('clientes', function ($query) {
-                $query->where('razon_social', 'like', '%' . $this->search . '%');
-                $query->orWhereHas('contactos', function ($contacto){
-                    $contacto->Where('nombre', 'like', '%' . $this->search . '%');
-                });
-            })->orwhereHas('vehiculos', function ($query) {
-                $query->where('placa', 'like', '%' . $this->search . '%');
-            })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
-                ->orWhere('periodo', 'like', '%' . $this->search . '%')
-                ->orWhere('monto_unidad', 'like', '%' . $this->search . '%')
-                ->vencido(false)
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-        }
         if ($status === 1) {
 
             $cobros = Cobros::whereHas('clientes', function ($query) {
@@ -63,7 +47,23 @@ class Index extends Component
             })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
                 ->orWhere('periodo', 'like', '%' . $this->search . '%')
                 ->orWhere('monto_unidad', 'like', '%' . $this->search . '%')
-                ->vencido(true)
+                ->estado('1')
+                ->orderBy('id', 'desc')
+                ->paginate(10);
+        }
+        if ($status === 2) {
+
+            $cobros = Cobros::whereHas('clientes', function ($query) {
+                $query->where('razon_social', 'like', '%' . $this->search . '%');
+                $query->orWhereHas('contactos', function ($contacto){
+                    $contacto->Where('nombre', 'like', '%' . $this->search . '%');
+                });
+            })->orwhereHas('vehiculos', function ($query) {
+                $query->where('placa', 'like', '%' . $this->search . '%');
+            })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
+                ->orWhere('periodo', 'like', '%' . $this->search . '%')
+                ->orWhere('monto_unidad', 'like', '%' . $this->search . '%')
+                ->estado('2')
                 ->orderBy('id', 'desc')
                 ->paginate(10);
         }

@@ -59,28 +59,26 @@ class Mensaje extends Model
     }
 
 
-    public function sendCobroMessage($message, Cobros $cobro)
+    public function sendCobroMessage($mensaje, Cobros $cobro)
     {
-
 
         $users = User::role('admin')->get();
 
-        foreach ($users as $user){
+        // foreach ($users as $user){
+        //     $mensaje = Mensaje::create([
+        //         'asunto' => $message["asunto"],
+        //         'body' => $message["body"],
+        //         'messageable_type' => User::class,
+        //         'messageable_id' => $user->id,
+        //         'action' => $message["accion"],
+        //         'to_user_id ' => $user->id,
+        //         'from_user_id' => auth()->id(),
+        //     ]);
+        // }
 
-            $mensaje = Mensaje::create([
-                'asunto' => $message["asunto"],
-                'body' => $message["body"],
-                'messageable_type' => User::class,
-                'messageable_id' => $user->id,
-                'action' => $message["accion"],
-                'to_user_id ' => $user->id,
-                'from_user_id' => auth()->id(),
-            ]);
-        }
-
-        // Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
+        Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
         
-        // return redirect()->back();
+        //return redirect()->back();
 
 
     }

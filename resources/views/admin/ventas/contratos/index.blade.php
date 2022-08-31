@@ -56,6 +56,35 @@
         })
     </script>
 
+
+    <script>
+        window.addEventListener('create-cobro', event => {
+
+            $(document).ready(function() {
+
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'REGISTRADO!',
+                    message: 'se creo el cobro de este contrato',
+                });
+
+            })
+        })
+
+        window.addEventListener('error-cobro', event => {
+
+            $(document).ready(function() {
+
+                iziToast.error({
+                    position: 'topRight',
+                    title: 'REGISTRADO!',
+                    message: 'se creo el cobro de este contrato',
+                });
+
+            })
+        })
+    </script>
+
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {

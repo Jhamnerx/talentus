@@ -46,7 +46,7 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
     {
 
         return (new MailMessage)
-                ->subject('TALENTUS - NOTIFICACION DE COBRO')
+                ->subject($this->mensaje["asunto"])
                 ->view('mail.cobros', ['mensaje' => $this->mensaje, 'cobros' => $this->cobro]);
    
     }
@@ -60,8 +60,11 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'url' => route('admin.cobros.show', $this->cobro),
-            'mensaje' => 'Cobro por Vencer',
+            'url' => route($this->mensaje["url"], $this->mensaje["id_cobro"]),
+            'asunto' => $this->mensaje["asunto"],
+            'mensaje' => $this->mensaje["body"],
+            'accion' => $this->mensaje["accion"],
+            'tipo' => 'cobro',
         ];
     }
 
@@ -70,4 +73,25 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
         return new BroadcastMessage([]);
 
     }
+
+    public function withDelay($notifiable)
+    {
+        return [
+
+            'mail' => now()->addMinute(),
+            'database' => now()->addMinute(),
+            'broadcast' => now()->addMinute(),
+
+        ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+            'database' => 'database',
+            'broadcast' => 'broadcast',
+        ];
+    }
+
 }

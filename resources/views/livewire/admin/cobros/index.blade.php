@@ -87,7 +87,7 @@
 
             <!-- Dropdown -->
 
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
+            <div class="relative float-right" x-data="{ open: false, selected: 2 }">
                 <button
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
@@ -112,7 +112,7 @@
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
                     <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="estado(0)" tabindex="0"
+                        <button wire:click="estado(1)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -123,7 +123,7 @@
                             </svg>
                             <span>Por Vencer</span>
                         </button>
-                        <button wire:click="estado(1)" tabindex="0"
+                        <button wire:click="estado(2)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -135,12 +135,12 @@
                             <span>Vencidos</span>
                         </button>
 
-                        <button wire:click="estado()" tabindex="0"
+                        <button wire:click="estado(null)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
+                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -165,7 +165,7 @@
         </div>
 
     </div>
-
+    Estado: {{ $estado }}
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
@@ -273,17 +273,32 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if ($cobro->estado == 0)
-                                            <div class="font-medium text-emerald-500">
-                                                ACTIVO
 
-                                            </div>
-                                        @else
-                                            <div class="font-medium text-red-500">
-                                                SUSPENDIDO
+                                        @switch($cobro->estado)
+                                            @case(0)
+                                                <div class="font-medium text-emerald-500">
+                                                    ACTIVO
 
-                                            </div>
-                                        @endif
+                                                </div>
+                                            @break
+
+                                            @case(1)
+                                                <div class="font-medium text-orange-400">
+                                                    POR VENCER
+
+                                                </div>
+                                            @break
+
+                                            @case(2)
+                                                <div class="font-medium text-red-500">
+                                                    VENCIDO
+
+                                                </div>
+                                            @break
+
+                                            @default
+                                        @endswitch
+
 
                                     </td>
 

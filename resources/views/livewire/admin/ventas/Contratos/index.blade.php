@@ -172,6 +172,7 @@
 
     </div>
 
+
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
@@ -179,10 +180,11 @@
                     class="text-slate-400 font-medium">{{ $total }}</span>
             </h2>
         </header>
+
         <div x-data="handleSelect">
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
@@ -401,7 +403,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -417,7 +419,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -433,7 +435,7 @@
                                                                 role="menuitem" tabindex="-1"><svg
                                                                     xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -453,7 +455,7 @@
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-gray-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
                                                                     <path stroke-linecap="round"
                                                                         stroke-linejoin="round" stroke-width="2"
                                                                         d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
@@ -461,7 +463,25 @@
                                                                 </svg> Enviar
                                                             </a>
                                                         </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click="createCobro({{ $contrato->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-32"
+                                                                role="menuitem" tabindex="-1">
 
+                                                                <svg class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 24 24">
+                                                                    <g fill="none" class="nc-icon-wrapper">
+                                                                        <path
+                                                                            d="M11.5 17.1c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79z"
+                                                                            fill="currentColor"></path>
+                                                                    </g>
+                                                                </svg>
+                                                                Crear Registro de Cobro
+                                                            </a>
+                                                        </li>
                                                     </ul>
 
 

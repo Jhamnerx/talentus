@@ -63,4 +63,20 @@ class EnviarPresupuestoCliente extends Notification
             //
         ];
     }
+
+    public function withDelay($notifiable)
+    {
+        return [
+
+            'mail' => now()->addSeconds(30),
+
+        ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+        ];
+    }
 }

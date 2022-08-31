@@ -17,6 +17,7 @@ class CreateCobrosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('clientes_id');
             $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('contratos_id');
             $table->text('comentario')->nullable();
             $table->string('periodo');
             $table->decimal('monto_unidad', 10, 2);
@@ -28,6 +29,7 @@ class CreateCobrosTable extends Migration
             $table->boolean('vencido')->nullable();
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('contratos_id')->references('id')->on('contratos')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

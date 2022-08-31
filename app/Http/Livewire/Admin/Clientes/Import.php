@@ -3,6 +3,8 @@
 namespace App\Http\Livewire\Admin\Clientes;
 
 use App\Imports\ClientesImport;
+use App\Jobs\RedirectCompletedImportClientes;
+use Exception;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -12,7 +14,12 @@ class Import extends Component
     use WithFileUploads;
     public $file;
 
-    public $modalOpen = false;
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+
+        'openModalImport' => 'openModal',
+    ];
 
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,csv,csv,xls',
@@ -41,8 +48,35 @@ class Import extends Component
     {
         $this->validate();
 
-        Excel::import(new ClientesImport, $this->file);
+        try {
 
-        $this->emit('render');
+            $import = Excel::queueImport(new ClientesImport, $this->file)->chain([
+                new RedirectCompletedImportClientes(),
+            ]);
+            $this->reset();
+
+
+        } catch (Exception	 $e) {
+            //dd($e);
+            $e->getMessage();
+
+        }finally{
+
+            $this->modalOpenImport = false;
+
+        }
+    }
+
+    public function openModal(){
+
+        $this->modalOpenImport = true;
+
+
+    }
+
+    public function closeModal(){
+
+        $this->modalOpenImport = false;
+        $this->reset();
     }
 }

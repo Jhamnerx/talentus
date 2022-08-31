@@ -25,6 +25,11 @@ class Cobros extends Model
     {
         return $query->where('vencido', $estado);
     }
+
+    public function scopeEstado($query,$estado = NULL)
+    {
+        return $query->where('estado', $estado);
+    }
     
     public function scopeVerificado($query,$estado = 0)
     {
@@ -39,5 +44,12 @@ class Cobros extends Model
 
     public function vehiculos(){
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
+    }
+
+
+
+    public function contrato()
+    {
+        return $this->belongsTo(Contratos::class, 'contratos_id');
     }
 }

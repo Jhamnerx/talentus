@@ -3,13 +3,16 @@
 namespace App\Http\Livewire\Admin\Vehiculos\Reportes;
 
 use App\Models\Reportes;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Recordatorio extends Component
 {
     public $openModalRecordatorio = false;
 
-    public $fecha_recordatorio, $reporte = null;
+    public $fecha_recordatorio;
+    public $nota;
+    public $reporte = null;
 
     protected $listeners = [
         'crearRecordatorio' => 'openModal'
@@ -35,6 +38,7 @@ class Recordatorio extends Component
     public function openModal(Reportes $reporte)
     {
         $this->openModalRecordatorio = true;
+        $this->fecha_recordatorio = Carbon::now()->addDays(14)->format('Y-m-d');
         $this->reporte = $reporte;
               
         //dd($flota->contactos);
@@ -48,25 +52,24 @@ class Recordatorio extends Component
     }
     public function GuardarRecordatorio()
     {
-
         $this->validate();
 
         $this->reporte->recordatorios()->create([
             'tipo' => 'reporte',
-            'data' => '',
+            'data' => $this->nota,
             'fecha' => $this->fecha_recordatorio,
             'user_id' => auth()->user()->id,
         
         ]);
-        $this->reporte->estado = 2;
+
+        $this->reporte->estado = '2';
         $this->reporte->save();
         //dd($this->reporte->vehiculos->placa);
-        
-
         $this->dispatchBrowserEvent('recordatorio-save', ['vehiculo' => $this->reporte->vehiculos->placa]);
         $this->resetErrorBag();
         $this->closeModal();
         $this->emit('updateTable');
+
     }
 
     public function updated($label)

@@ -11,7 +11,15 @@ class ClientesIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
-    protected $listeners = ['render' => 'render'];
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+        'render' => 'render',
+        'updateTable' => 'render',
+        'echo:clientes,ClientesImportUpdated' => 'render'
+    ];
+
+
     public function render()
     {
         $desde = $this->from;
@@ -82,5 +90,11 @@ class ClientesIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
     }
 }

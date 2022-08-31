@@ -45,6 +45,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
             'asunto' => $this->mensaje["asunto"],
             'mensaje' => $this->mensaje["body"],
             'accion' => $this->mensaje["accion"],
+            'tipo' => 'notificacion',
         ];
     }
 
@@ -53,5 +54,25 @@ class EnviarMensaje extends Notification implements ShouldQueue
 
         return new BroadcastMessage([]);
 
+    }
+
+    public function withDelay($notifiable)
+    {
+        return [
+
+            'mail' => now()->addSeconds(30),
+            'database' => now()->addSeconds(30),
+            'broadcast' => now()->addSeconds(30),
+
+        ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+            'database' => 'database',
+            'broadcast' => 'broadcast',
+        ];
     }
 }

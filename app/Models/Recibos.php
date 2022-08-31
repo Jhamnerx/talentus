@@ -32,9 +32,9 @@ class Recibos extends Model
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id');
     }
-    
+
     public function presupuesto()
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id');

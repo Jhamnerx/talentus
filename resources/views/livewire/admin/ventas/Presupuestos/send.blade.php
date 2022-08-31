@@ -80,11 +80,11 @@
                     </div>
                 </div>
                 <!-- Modal footer -->
-                <div class="px-5 py-4 border-t border-slate-200">
+                <div class="px-5 py-4 border-t border-slate-200" x-data="{ estado: @entangle('disabled') }">
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             @click="modalOpenSend = false" wire:click="closeModal">Cancelar</button>
-                        <button wire:loading.attr="disabled" wire:target="sendPresupuesto"
+                        <button wire:loading.attr="disabled" wire:target="sendPresupuesto" x-bind:disabled="estado"
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white"
                             wire:click="sendPresupuesto">Enviar</button>
                     </div>

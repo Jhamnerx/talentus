@@ -97,5 +97,11 @@
 
     });
 </script>
+<script>
+    Livewire.onPageExpired((response, message) => {
+        console.log('pagina expirada')
+
+    })
+</script>
 
 </html>

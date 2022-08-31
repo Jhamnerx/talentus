@@ -115,7 +115,7 @@
             }
 
             #u_row_2 .v-row-background-image--outer {
-                background-image: url({{ Storage::url('mail/cobros/images/image-3.png') }}) !important;
+                background-image: url({{ Storage::url($mensaje['accion'] == 'notification_cobro_vencido' ? 'mail/cobros/images/image-3-vencido.png' : 'mail/cobros/images/image-3.png') }}) !important;
                 background-position: center top !important;
                 background-repeat: no-repeat !important;
             }
@@ -248,7 +248,7 @@
 
 
                     <div id="u_row_2" class="u-row-container v-row-background-image--outer"
-                        style="padding: 0px;background-image: url({{ Storage::url('mail/cobros/images/image-4.png') }});background-repeat: no-repeat;background-position: center top;background-color: transparent">
+                        style="padding: 0px;background-image: url({{ Storage::url($mensaje['accion'] == 'notification_cobro_vencido' ? 'mail/cobros/images/image-4-vencido.png' : 'mail/cobros/images/image-4.png') }});background-repeat: no-repeat;background-position: center top;background-color: transparent">
                         <div class="u-row"
                             style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
                             <div class="v-row-background-image--inner"
@@ -324,7 +324,8 @@
 
                                                             <h1 class="v-text-align v-line-height v-font-size"
                                                                 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: left; word-wrap: break-word; font-weight: normal; font-family: 'Montserrat',sans-serif; font-size: 26px;">
-                                                                Notificacion de<strong> Cobro</strong>
+                                                                <strong>
+                                                                    {{ $mensaje['asunto'] }}</strong>
                                                             </h1>
 
                                                         </td>
@@ -471,10 +472,25 @@
                                                                     <span
                                                                         style="font-family: Montserrat, sans-serif; font-size: 18px; line-height: 25.2px;">
                                                                         Vence en:<strong>
-                                                                            {{ date_diff(date_create(date('Y-m-d')), date_create($cobros->fecha_vencimiento))->format('%R%a') }}
+                                                                            {{ date_diff(date_create(date('Y-m-d')), date_create($cobros->fecha_vencimiento))->format('%a') }}
                                                                             Dias</strong>
                                                                     </span>
                                                                 </p>
+                                                            </div>
+
+
+                                                            <div align="center">
+                                                                <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:arial,helvetica,sans-serif;"><tr><td style="font-family:arial,helvetica,sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="" style="height:37px; v-text-anchor:middle; width:135px;" arcsize="0%" stroke="f" fillcolor="#052c52"><w:anchorlock/><center style="color:#FFFFFF;font-family:arial,helvetica,sans-serif;"><![endif]-->
+                                                                <a href="{{ route($mensaje['url'], $mensaje['id_cobro']) }}"
+                                                                    target="_blank"
+                                                                    style="font-size: 0.875rem;border-radius: 0.25rem;border-width: 1px;border-color: transparent;box-sizing: border-box;display: inline-block;font-family:arial,helvetica,sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #FFFFFF; background-color: #052c52; border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px; width:auto; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+                                                                    <span
+                                                                        style="display:block;padding:10px 25px;line-height:120%;">
+                                                                        <strong><span
+                                                                                style="font-size: 14px; line-height: 16.8px; font-family: 'comic sans ms', sans-serif;">
+                                                                                VER COBRO</span></strong></span>
+                                                                </a>
+                                                                <!--[if mso]></center></v:roundrect></td></tr></table><![endif]-->
                                                             </div>
 
                                                         </td>

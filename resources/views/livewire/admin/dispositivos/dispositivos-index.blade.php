@@ -170,9 +170,16 @@
                                     <div class="flex items-center">
                                         <div
                                             class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
-                                            <img class="ml-1"
-                                                src="{{ Storage::url($dispositivo->modelo->image->url) }}.webp"
-                                                width="20" height="20" alt="Icon 01" />
+                                            @if ($dispositivo->modelo->image)
+                                                <img class="ml-1"
+                                                    src="{{ Storage::url($dispositivo->modelo->image->url) }}.webp"
+                                                    width="20" height="20" alt="Icon 01" />
+                                            @else
+                                                {{-- <img class="ml-1"
+                                                    src="{{ Storage::url($dispositivo->modelo->image->url) }}.webp"
+                                                    width="20" height="20" alt="Icon 01" /> --}}
+                                            @endif
+
                                         </div>
                                         @if ($dispositivo->of_client)
                                             <div class="font-medium text-blue-500">{{ $dispositivo->imei }}</div>

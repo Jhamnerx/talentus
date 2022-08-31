@@ -26,7 +26,17 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
 
-
+        User::create([
+            'name' => 'Laury',
+            'email' => 'monitoreo@talentustechnology.com',
+            'tipo_documento' => 'DNI',
+            'numero_documento' => '',
+            'direccion' => '',
+            'telefonos' => '',
+            'birthday' => '',
+            'is_client' => 'no',
+            'password' => bcrypt('12345678'),
+        ]);
 
         $sandra = User::create([
             'name' => 'Sandra Centurion',
@@ -39,7 +49,21 @@ class UserSeeder extends Seeder
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);
-        
+
+
+        $jhovana = User::create([
+            'name' => 'Jhovana Centurion',
+            'email' => 'gerencia@talentustechnology.com',
+            'tipo_documento' => 'DNI',
+            'numero_documento' => '000000',
+            'direccion' => 'Cajamarca',
+            'telefonos' => '',
+            'birthday' => '',
+            'is_client' => 'no',
+            'password' => bcrypt('12345678'),
+        ]);
+
+
         $admin = User::create([
             'name' => 'Admin',
             'email' => 'admin@talentus.com',
@@ -53,6 +77,7 @@ class UserSeeder extends Seeder
         ]);
 
         $sandra->assignRole('admin');
+        $jhovana->assignRole('admin');
         $admin->assignRole('admin');
 
         User::factory(8)->create();

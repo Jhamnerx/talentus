@@ -60,4 +60,20 @@ class NotifyClienteActaCreada extends Notification implements ShouldQueue
             //
         ];
     }
+
+    public function withDelay($notifiable)
+    {
+        return [
+
+            'mail' => now()->addSeconds(30),
+
+        ];
+    }
+
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+        ];
+    }
 }

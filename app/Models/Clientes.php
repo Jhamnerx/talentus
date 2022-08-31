@@ -53,6 +53,8 @@ class Clientes extends Model
     {
         return $this->hasMany(Recibos::class, 'clientes_id');
     }
+
+    
     //relacion uno a muchos
 
     public function contratos()

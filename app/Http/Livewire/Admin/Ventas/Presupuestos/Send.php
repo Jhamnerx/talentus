@@ -12,6 +12,8 @@ class Send extends Component
     public $modalOpenSend = false;
 
     public $presupuesto;
+    public $correo;
+    public $disabled =  false;
 
     public $from = "talentus@talentustechnology.com", $to, $asunto = "", $body;
 
@@ -39,7 +41,17 @@ class Send extends Component
         $this->presupuesto = $presupuesto;
         $this->to = $presupuesto->clientes->email." | ".$presupuesto->clientes->razon_social;
         $this->asunto = "TALENTUS - COTIZACIÓN #".$presupuesto->numero;
+        $this->correo =  $presupuesto->clientes->email;
 
+        if(empty($presupuesto->clientes->email)){
+            
+            $this->disabled = true;
+
+        }else{
+
+            $this->disabled = false;
+
+        }
        // dd($presupuesto);
 
     }
@@ -74,7 +86,6 @@ class Send extends Component
 
             $this->modalOpenSend = false;
             $this->dispatchBrowserEvent('presupuesto-send', ['presupuesto' => $this->presupuesto]);
-            
             $this->resetPropiedades();
 
         }

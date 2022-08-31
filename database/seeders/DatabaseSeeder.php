@@ -35,34 +35,34 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // \App\Models\User::factory(10)->create();
-        Storage::deleteDirectory("productos");
+        //Storage::deleteDirectory("productos");
         $this->call(EmpresasSeeder::class);
         $this->call(PlantillaSeeder::class);
-        Storage::makeDirectory("productos");
+        //Storage::makeDirectory("productos");
 
         //Categoria::factory(100)->create();
-        Lineas::factory(60)->create();
-        SimCard::factory(100)->create();
-        $this->call(ProductoSeeder::class);
-        $this->call(ModelosDispositivoSeeder::class);
-        Clientes::factory(500)->create();
-        Proveedores::factory(20)->create();
-        Dispositivos::factory(100)->create();
+       // Lineas::factory(60)->create();
+       // SimCard::factory(100)->create();
+       $this->call(ProductoSeeder::class);
+       $this->call(ModelosDispositivoSeeder::class);
+       // Clientes::factory(500)->create();
+      //  Proveedores::factory(20)->create();
+       // Dispositivos::factory(100)->create();
        // ComprasFacturas::factory(50)->create();
         //Presupuestos::factory(1)->create();
        // VentasFacturas::factory(50)->create();
         //Recibos::factory(60)->create();
        // Contratos::factory(1)->create();
 
-        Flotas::factory(10)->create();
-        Contactos::factory(2)->create();
-        Vehiculos::factory(10)->create();
-        Reportes::factory(2)->create();
+       // Flotas::factory(10)->create();
+       // Contactos::factory(2)->create();
+       // Vehiculos::factory(10)->create();
+       // Reportes::factory(2)->create();
         $this->call(CiudadesSeeder::class);
         //Actas::factory(1)->create();
         //Certificados::factory(1)->create();
        // CertificadosVelocimetros::factory(1)->create();
-        $this->call(ContratoSeeder::class);
+       // $this->call(ContratoSeeder::class);
         $this->call(PermisosSeeder::class);
         $this->call(UserSeeder::class);
     }
