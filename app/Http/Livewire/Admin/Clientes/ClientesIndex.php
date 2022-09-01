@@ -16,7 +16,7 @@ class ClientesIndex extends Component
     protected $listeners = [
         'render' => 'render',
         'updateTable' => 'render',
-        'echo:clientes,ClientesImportUpdated' => 'render'
+        'echo:clientes,ClientesImportUpdated' => 'updateClientes'
     ];
 
 
@@ -65,6 +65,11 @@ class ClientesIndex extends Component
         return view('livewire.admin.clientes.clientes-index', compact('clientes'));
     }
 
+    public function updateClientes(){
+        $this->render();
+        dd('probando');
+        $this->dispatchBrowserEvent('clientes-import');
+    }
 
     public function filter($dias)
     {

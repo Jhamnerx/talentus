@@ -93,6 +93,17 @@
         Echo.private('App.Models.User.' + {{ Auth::user()->id }})
             .notification((notification) => {
                 Livewire.emit('notificaciones-update');
+                //console.log("evento");
+            });
+
+        // Echo.channel('clientes')
+        //     .listen('ClientesImportUpdated', (e) => {
+        //         console.log("evento recibido");
+        //     });
+
+        Echo.channel('clientes')
+            .listen('.ClientesImportUpdated', (e) => {
+                console.log("evento recibido");
             });
 
     });
@@ -103,5 +114,6 @@
 
     })
 </script>
+
 
 </html>

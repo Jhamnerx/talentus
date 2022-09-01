@@ -50,19 +50,18 @@ class Import extends Component
 
         try {
 
-            $import = Excel::queueImport(new ClientesImport, $this->file)->chain([
-                new RedirectCompletedImportClientes(),
-            ]);
+            $import = Excel::import(new ClientesImport, $this->file);
+            
             $this->reset();
 
 
-        } catch (Exception	 $e) {
+        } catch (Exception $e) {
             //dd($e);
             $e->getMessage();
 
         }finally{
 
-            $this->modalOpenImport = false;
+           // $this->modalOpenImport = false;
 
         }
     }

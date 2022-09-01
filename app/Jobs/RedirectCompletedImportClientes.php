@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\ClientesImportUpdated;
 use App\Http\Controllers\Admin\ClientesController;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -31,7 +32,8 @@ class RedirectCompletedImportClientes implements ShouldQueue
      */
     public function handle()
     {
-        redirect()->action([ClientesController::class, 'index'])->with('flash.banner', 'Clientes importados correctamente');
+        ClientesImportUpdated::dispatch();
+        //redirect()->action([ClientesController::class, 'index'])->with('flash.banner', 'Clientes importados correctamente');
         //redirect()->route('admin.clientes.index')->with('flash.bannerStyle', 'success');
     }
 }

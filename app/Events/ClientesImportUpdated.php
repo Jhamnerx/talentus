@@ -9,6 +9,7 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class ClientesImportUpdated
 {
@@ -21,7 +22,7 @@ class ClientesImportUpdated
      */
     public function __construct()
     {
-        //
+        
     }
 
     /**
@@ -31,6 +32,7 @@ class ClientesImportUpdated
      */
     public function broadcastOn()
     {
-        return new Channel('clientes');
+        Log::info("mensaje desde evento");
+        return new PrivateChannel('clientes');
     }
 }

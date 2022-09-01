@@ -9,6 +9,7 @@ use App\Models\Clientes;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
@@ -22,7 +23,7 @@ use Maatwebsite\Excel\Jobs\AfterImportJob;
 
 class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQueue
 {
-    use Queueable,RegistersEventListeners;
+    use Queueable, RegistersEventListeners;
 
     public function model(array $row)
     {
@@ -53,15 +54,9 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     // public function registerEvents(): array
     // {
     //     return [
-    //         ImportFailed::class => function(ImportFailed $event) {
-
-    //            // $this->importedBy->notify(new ImportHasFailedNotification);
-                
-    //         },
     //         AfterImportJob::class => function(AfterImportJob $event){
     //             dd($event);
-    //             $tabla = new ClientesIndex();
-    //             $tabla->render();
+    //             ClientesImportUpdated::dispatch();
                 
     //         }
     //     ];
@@ -70,8 +65,12 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     public static function AfterImportJob(AfterImportJob $event)
     {
 
+
+        dd($event);
+        
         ClientesImportUpdated::dispatch();
 
+        //event(new ClientesImportUpdated);
 
     }
 
@@ -83,8 +82,9 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     public static function afterImport(AfterImport $event)
     {
         
-        $tabla = new ClientesIndex();
-        $tabla->render();
+        ClientesImportUpdated::dispatch();
+        // $tabla = new ClientesIndex();
+        // $tabla->render();
 
     }
 

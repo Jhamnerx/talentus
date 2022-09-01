@@ -7442,6 +7442,8 @@ window.DataTable = (datatables_net_dt__WEBPACK_IMPORTED_MODULE_3___default());
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+/* harmony import */ var pusher_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(pusher_js__WEBPACK_IMPORTED_MODULE_1__);
 window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js"); // window.$ = require("jquery");
 
 /**
@@ -7467,7 +7469,8 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 // });
 
 
-window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
+
+window.Pusher = (pusher_js__WEBPACK_IMPORTED_MODULE_1___default());
 window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
   broadcaster: "pusher",
   key: "8d6da29b3e5242f29a26",
@@ -56627,6 +56630,7 @@ var Connector = /*#__PURE__*/function () {
       },
       broadcaster: 'pusher',
       csrfToken: null,
+      bearerToken: null,
       host: null,
       key: null,
       namespace: 'App.Events'
@@ -56648,6 +56652,13 @@ var Connector = /*#__PURE__*/function () {
       if (token) {
         this.options.auth.headers['X-CSRF-TOKEN'] = token;
         this.options.userAuthentication.headers['X-CSRF-TOKEN'] = token;
+      }
+
+      token = this.options.bearerToken;
+
+      if (token) {
+        this.options.auth.headers['Authorization'] = 'Bearer ' + token;
+        this.options.userAuthentication.headers['Authorization'] = 'Bearer ' + token;
       }
 
       return options;
