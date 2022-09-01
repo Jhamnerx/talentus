@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class RedirectCompletedImportClientes implements ShouldQueue
 {
@@ -20,9 +21,12 @@ class RedirectCompletedImportClientes implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+
+    public $user;
+    public function __construct($user)
     {
         //
+        $this->user = $user;
     }
 
     /**
@@ -32,7 +36,9 @@ class RedirectCompletedImportClientes implements ShouldQueue
      */
     public function handle()
     {
-        ClientesImportUpdated::dispatch();
+       
+        ClientesImportUpdated::dispatch($this->user);
+       
         //redirect()->action([ClientesController::class, 'index'])->with('flash.banner', 'Clientes importados correctamente');
         //redirect()->route('admin.clientes.index')->with('flash.bannerStyle', 'success');
     }

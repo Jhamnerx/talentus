@@ -101,10 +101,10 @@
         //         console.log("evento recibido");
         //     });
 
-        Echo.channel('clientes')
-            .listen('.ClientesImportUpdated', (e) => {
-                console.log("evento recibido");
-            });
+        // Echo.channel('clientes')
+        //     .listen('ClientesImportUpdated', (e) => {
+        //         console.log("evento recibido");
+        //     });
 
     });
 </script>

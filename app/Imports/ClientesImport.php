@@ -66,7 +66,7 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     {
 
 
-        dd($event);
+        //dd($event);
         
         ClientesImportUpdated::dispatch();
 
@@ -82,7 +82,7 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     public static function afterImport(AfterImport $event)
     {
         
-        ClientesImportUpdated::dispatch();
+        //ClientesImportUpdated::dispatch();
         // $tabla = new ClientesIndex();
         // $tabla->render();
 

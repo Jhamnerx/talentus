@@ -11,7 +11,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class ClientesImportUpdated
+class ClientesImportUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,9 +20,11 @@ class ClientesImportUpdated
      *
      * @return void
      */
-    public function __construct()
+    public $user;
+    public function __construct($user)
     {
-        
+        $this->user = $user;
+        //dd($user);
     }
 
     /**
@@ -32,7 +34,7 @@ class ClientesImportUpdated
      */
     public function broadcastOn()
     {
-        Log::info("mensaje desde evento");
-        return new PrivateChannel('clientes');
+        //Log::alert("evento");
+        return new Channel('clientes');
     }
 }

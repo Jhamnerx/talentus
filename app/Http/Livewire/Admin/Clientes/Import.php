@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin\Clientes;
 
 use App\Imports\ClientesImport;
 use App\Jobs\RedirectCompletedImportClientes;
+use App\Models\User;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
@@ -50,7 +52,9 @@ class Import extends Component
 
         try {
 
-            $import = Excel::import(new ClientesImport, $this->file);
+            $import = Excel::queueImport(new ClientesImport, $this->file)->chain([
+                new RedirectCompletedImportClientes(Auth::id()),
+            ]);;
             
             $this->reset();
 

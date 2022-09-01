@@ -74,24 +74,24 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
 
     }
 
-    public function withDelay($notifiable)
-    {
-        return [
+    // public function withDelay($notifiable)
+    // {
+    //     return [
 
-            'mail' => now()->addMinute(),
-            'database' => now()->addMinute(),
-            'broadcast' => now()->addMinute(),
+    //         'mail' => now()->addMinute(),
+    //         'database' => now()->addMinute(),
+    //         'broadcast' => now()->addMinute(),
 
-        ];
-    }
+    //     ];
+    // }
 
-    public function viaQueues()
-    {
-        return [
-            'mail' => 'mail',
-            'database' => 'database',
-            'broadcast' => 'broadcast',
-        ];
-    }
+    // public function viaQueues()
+    // {
+    //     return [
+    //         'mail' => 'mail',
+    //         'database' => 'database',
+    //         'broadcast' => 'broadcast',
+    //     ];
+    // }
 
 }

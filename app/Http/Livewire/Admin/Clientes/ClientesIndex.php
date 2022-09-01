@@ -67,7 +67,7 @@ class ClientesIndex extends Component
 
     public function updateClientes(){
         $this->render();
-        dd('probando');
+       
         $this->dispatchBrowserEvent('clientes-import');
     }
 

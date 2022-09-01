@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Events\ClientesImportUpdated;
 use App\Events\nuevaActaCreada;
 use App\Events\nuevoCertificadoCreado;
 use App\Events\nuevoCertificadoGpsCreado;
@@ -67,6 +68,7 @@ class EventServiceProvider extends ServiceProvider
         nuevaActaCreada::class => [nuevaActaCreadaEmailListener::class, nuevaActaCreadaAdminsListener::class],
         nuevoCertificadoCreado::class => [nuevoCertificadoEmailListener::class, nuevoCertificadoAdminsListener::class],
         nuevoCertificadoGpsCreado::class => [nuevoCertificadoGpsEmailListener::class, nuevoCertificadoGpsAdminsListener::class],
+        ClientesImportUpdated::class => [],
 
     ];
 
