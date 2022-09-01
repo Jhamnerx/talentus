@@ -199,9 +199,9 @@ h6 {
   margin-bottom: 0;
   border: none;
 }
-.products-table h5 {
+.products-table h3 {
   margin: 0;
-  font-weight: bold;
+
   color: #616262;
 }
 .products-table th {
@@ -218,7 +218,7 @@ h6 {
   background: #e8e8e9;
 }
 .products-table tbody td {
-  padding: 20px;
+  padding: 10px;
   vertical-align: middle;
   color: #616262;
   text-align: center;

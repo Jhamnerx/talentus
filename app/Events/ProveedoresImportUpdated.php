@@ -9,9 +9,8 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class ClientesImportUpdated implements ShouldBroadcast
+class ProveedoresImportUpdated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -20,11 +19,9 @@ class ClientesImportUpdated implements ShouldBroadcast
      *
      * @return void
      */
-
     public function __construct()
     {
-
-        //dd($user);
+        //
     }
 
     /**
@@ -34,7 +31,6 @@ class ClientesImportUpdated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        //Log::alert("evento");
-        return new Channel('clientes');
+        return new Channel('proveedores');
     }
 }

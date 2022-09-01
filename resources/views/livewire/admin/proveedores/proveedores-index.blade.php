@@ -161,7 +161,21 @@
             </div>
 
             <!-- Import button -->
-            @livewire('admin.proveedores.import')
+
+            <div class="relative inline-flex">
+                <button wire:click="openModalImport()" aria-controls="basic-modal"
+                    class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                        <polyline points="7 9 12 4 17 9" />
+                        <line x1="12" y1="4" x2="12" y2="16" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Importar</span>
+                </button>
+            </div>
             <!-- contact button -->
             <div class="relative inline-flex">
                 <button
@@ -206,7 +220,7 @@
                                     </label>
                                 </div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Razon Social</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -221,7 +235,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Web Site</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Direccion</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -248,7 +262,7 @@
                                             </label>
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
                                                 <img class="rounded-full" src="../images/user-40-01.jpg"
@@ -271,7 +285,7 @@
                                         <div class="text-left font-medium text-sky-500">{{ $proveedor->web_site }}
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="text-left font-medium text-emerald-500">{{ $proveedor->direccion }}
                                         </div>
                                     </td>

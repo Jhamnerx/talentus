@@ -61,9 +61,9 @@ class RecibosController extends Controller
      * @param  \App\Models\Recibos  $recibos
      * @return \Illuminate\Http\Response
      */
-    public function show(Recibos $recibos)
+    public function show(Recibos $recibo)
     {
-        return view('admin.ventas.recibos.show');
+        return view('admin.ventas.recibos.show', compact('recibo'));
     }
 
     /**

@@ -62,17 +62,17 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     //     ];
     // }
 
-    public static function AfterImportJob(AfterImportJob $event)
-    {
+    // public static function AfterImportJob(AfterImportJob $event)
+    // {
 
 
-        //dd($event);
+    //     //dd($event);
         
-        ClientesImportUpdated::dispatch();
+    //     ClientesImportUpdated::dispatch();
 
-        //event(new ClientesImportUpdated);
+    //     //event(new ClientesImportUpdated);
 
-    }
+    // }
 
     public static function beforeImport(BeforeImport $event)
     {
@@ -82,6 +82,7 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     public static function afterImport(AfterImport $event)
     {
         
+        ClientesImportUpdated::dispatch();
         //ClientesImportUpdated::dispatch();
         // $tabla = new ClientesIndex();
         // $tabla->render();

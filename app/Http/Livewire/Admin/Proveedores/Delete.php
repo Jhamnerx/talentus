@@ -16,7 +16,7 @@ class Delete extends Component
 
     public function delete()
     {
-        $this->model->setAttribute($this->field, '1')->save();
+        $this->model->delete();
         return redirect()->route('admin.clientes.index')->with('delete', 'El El proveedor se elimino con exito');
     }
     public function render()

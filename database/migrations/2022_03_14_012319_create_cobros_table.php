@@ -17,7 +17,7 @@ class CreateCobrosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('clientes_id');
             $table->unsignedBigInteger('vehiculos_id');
-            $table->unsignedBigInteger('contratos_id');
+            $table->unsignedBigInteger('contratos_id')->nullable();
             $table->text('comentario')->nullable();
             $table->string('periodo');
             $table->decimal('monto_unidad', 10, 2);

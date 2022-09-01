@@ -52,9 +52,7 @@ class Import extends Component
 
         try {
 
-            $import = Excel::queueImport(new ClientesImport, $this->file)->chain([
-                new RedirectCompletedImportClientes(Auth::id()),
-            ]);;
+            $import = Excel::queueImport(new ClientesImport, $this->file);
             
             $this->reset();
 
