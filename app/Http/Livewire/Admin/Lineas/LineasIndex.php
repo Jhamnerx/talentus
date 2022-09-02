@@ -12,8 +12,19 @@ class LineasIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $modalOpenImport = false;
     // public $openUnAsign = false;
-    protected $listeners = ['render' => 'render'];
+    protected $listeners = [
+        'render' => 'render',
+        'echo:sim,SimCardImportUpdated' => 'updateSimCard'
+    ];
+
+
+    public function updateSimCard(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('sim-import');
+    }
 
 
     public function render()
@@ -86,4 +97,11 @@ class LineasIndex extends Component
                 break;
         }
     }
+
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
+    }
+
 }

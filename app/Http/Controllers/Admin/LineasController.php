@@ -132,7 +132,7 @@ class LineasController extends Controller
             ]);
         }
 
-      //dd($request->all());
+        //dd($request->all());
         //verificar si enviamos el id de la linea                                         
         if ($request->lineas_id) {
             
@@ -168,7 +168,7 @@ class LineasController extends Controller
                 $sim_card_new->save();
 
                 //consultamos la linea
-                $linea = Lineas::find($request->lineas_id);
+                $linea = Lineas::where('id',$request->lineas_id)->first();
 
                 #Colocar el old sim card a la linea
                 $linea->old_sim_card = $sim_card_linea->sim_card;
@@ -198,7 +198,7 @@ class LineasController extends Controller
                 $sim_card_new->save();
 
                 //consultamos la linea
-                $linea = Lineas::find($request->lineas_id);
+                $linea = Lineas::where('id',$request->lineas_id)->first();
 
                 #Colocar el old sim card a la linea
                 $linea->old_sim_card = null;

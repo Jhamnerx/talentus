@@ -66,7 +66,7 @@
                                     Form::label(
                                         'razon_social',
                                         'Razon Social: <span
-                                                                class="text-rose-500">*</span>',
+                                                                                                                                class="text-rose-500">*</span>',
                                         ['class' => 'block text-sm font-medium mb-1'],
                                     ),
                                 ) !!}
@@ -75,7 +75,7 @@
                                 {!! Form::text('razon_social', null, [
                                     'placeholder' => 'Escribe la razon social',
                                     'class' => 'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                            peer',
+                                                                                                                            peer',
                                     'required',
                                 ]) !!}
 
@@ -90,16 +90,16 @@
                                     Form::label(
                                         'numero_documento',
                                         'DNI/RUC: <span
-                                                                class="text-rose-500">*</span>',
+                                                                                                                                class="text-rose-500">*</span>',
                                         ['class' => 'block text-sm font-medium mb-1'],
                                     ),
                                 ) !!}
 
                                 {!! Form::text('numero_documento', null, [
                                     'placeholder' => 'Escribe el N° de documento
-                                                            ',
+                                                                                                                            ',
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'required',
                                     'maxlength' => '11',
                                 ]) !!}
@@ -117,7 +117,7 @@
                                     {!! Form::text('telefono', null, [
                                         'placeholder' => '987654321',
                                         'class' => 'form-input
-                                                                    w-full pl-12',
+                                                                                                                                            w-full pl-12',
                                         'maxlength' => '9',
                                     ]) !!}
 
@@ -165,8 +165,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                            focus:ring-2 focus:ring-offset-2
-                                            focus:ring-emerald-600 text-white',
+                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>

@@ -15,9 +15,25 @@ class Disponibles extends Component
     public $from = '';
     public $to = '';
     public $operador = null;
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+        'render' => 'render',
+        'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
+        'echo:lineas,LineasImportUpdated' => 'updateLineas'
+    ];
 
 
-    protected $listeners = ['render' => 'render'];
+    public function updateLineasToSimCard(){
+
+        $this->render();
+
+    }
+    public function updateLineas(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('lineas-import');
+    }
 
     public function render()
     {
@@ -106,4 +122,9 @@ class Disponibles extends Component
 
     }
 
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
+    }
 }

@@ -10,10 +10,18 @@ use Exception;
 
 class LineasImport extends Component
 {
-    public $openModalImport = false;
     use WithFileUploads;
+
+
     public $file;
     public $errorInfo = null;
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+
+        'openModalImport' => 'openModal',
+
+    ];
 
 
     protected $rules = [
@@ -34,7 +42,7 @@ class LineasImport extends Component
 
     public function render()
     {
-        return view('livewire.admin.lineas.import');
+        return view('livewire.admin.lineas.lineas-import');
     }
 
     public function importExcel()
@@ -42,15 +50,27 @@ class LineasImport extends Component
         $this->validate();
         $this->errorInfo = null;
         try {
-            $this->openModalImport = false;
-            $exit = Excel::import(new Lineas, $this->file);
-            session()->flash('import', 'Lineas importadas correctamente.');
-            $this->emit('render');
-            //$this->openModalImport = false;
+
+            $exit = Excel::queueImport(new Lineas, $this->file);
+
             $this->reset();
         } catch (Exception $e) {
             // dd($e);
             $this->errorInfo = $e->errorInfo["2"];
         }
+    }
+
+
+    public function openModal(){
+
+
+        $this->modalOpenImport = true;
+
+    }
+
+    public function closeModal(){
+
+        $this->modalOpenImport = false;
+        $this->reset();
     }
 }
