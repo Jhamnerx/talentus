@@ -11,10 +11,20 @@ class VehiculosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $openModalSave = false;
+    public $modalOpenImport = false;
+
 
     protected $listeners = [
         'updateTable' => 'render',
+        'echo:vehiculos,VehiculosImportUpdated' => 'updateVehiculos'
     ];
+
+    public function updateVehiculos(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('vehiculos-import');
+    }
 
     public function render()
     {
@@ -107,5 +117,16 @@ class VehiculosIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    public function openModalSave(){
+
+        $this->emit('openModalSave');
+    }
+    
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
     }
 }
