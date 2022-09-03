@@ -2,359 +2,298 @@
 @section('ruta', 'administracion-cobros')
 @section('contenido')
 
-    <div class="bg-gray-100 text-gray-900 antialiased font-sans">
-        <div class="px-8 py-16 flex justify-center bg-gray-100" style="min-height: 600px;">
-            <div class="w-full max-w-xs mx-auto">
-                <div class="space-y-1" x-data="Components.customSelect({ open: true, value: 4, selected: 4 })" x-init="init()">
-                    <label id="assigned-to-label" class="block text-sm leading-5 font-medium text-gray-700">Assigned
-                        to</label>
-                    <div class="relative">
-                        <span class="inline-block w-full rounded-md shadow-sm">
-                            <button x-ref="button" @click="onButtonClick()" type="button" aria-haspopup="listbox"
-                                :aria-expanded="open" aria-labelledby="assigned-to-label"
-                                class="cursor-default relative w-full rounded-md border border-gray-300 bg-white pl-3 pr-10 py-2 text-left focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                                <div class="flex items-center space-x-3">
-                                    <img :src="['https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.25&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80',
-                                        'https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80'
-                                    ][value - 1]"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                        alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                    <span
-                                        x-text="['Wade Cooper', 'Arlene Mccoy', 'Devon Webb', 'Tom Cook', 'Tanya Fox','Hellen Schmidt','Caroline Schultz','Mason Heaney','Claudie Smitham','Emil Schaefer'][value - 1]"
-                                        class="block truncate">Tom Cook</span>
+
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-white shadow-lg rounded-sm border border-slate-200 min-h-screen">
+
+        <!-- Page content -->
+        <div class="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
+
+            <!-- Cart items -->
+            <div class="mb-6 lg:mb-0 xl:mr-12">
+                <div class="mb-3">
+                    <div class="flex text-sm font-medium text-slate-400 space-x-2">
+                        <span class="text-indigo-500">Administración</span>
+                        <span>-&gt;</span>
+                        <span class="text-slate-500">Pagos</span>
+                        <span>-&gt;</span>
+                        <span class="text-slate-500">Resumen</span>
+                    </div>
+                </div>
+                <header class="mb-2">
+                    <!-- Title -->
+                    <h1 class="text-2xl md:text-3xl text-slate-800 font-semibold">Pagos realizados ✨</h1>
+                </header>
+
+                {{-- PAGOS REALIZADOS --}}
+                <ul>
+                    <!-- Cart item -->
+                    <li class="sm:flex items-center py-6 border-b border-slate-200">
+                        <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0" href="#0">
+
+                            <svg class="w-44 h-44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                <g class="nc-icon-wrapper">
+                                    <path
+                                        d="M42,47H6a1,1,0,0,1-.983-1.187L9,24.906V14a1,1,0,0,1,1-1H38a1,1,0,0,1,1,1V24.906l3.982,20.907A1,1,0,0,1,42,47Z"
+                                        fill="#ffd764"></path>
+                                    <path
+                                        d="M31,21a1,1,0,0,1-1-1V9A6,6,0,0,0,18,9V20a1,1,0,0,1-2,0V9A8,8,0,0,1,32,9V20A1,1,0,0,1,31,21Z"
+                                        fill="#a2703f"></path>
+                                </g>
+                            </svg>
+                        </a>
+                        <div class="grow">
+                            <a href="#0">
+                                <h3 class="text-lg font-semibold text-slate-800 mb-1">
+                                    Titulo
+                                </h3>
+                            </a>
+                            <div class="text-sm mb-2">
+                                Descripcion del pago................................................
+                            </div>
+                            <!-- Product meta -->
+                            <div class="flex flex-wrap justify-between items-center">
+                                <!-- Rating and price -->
+                                <div class="flex flex-wrap items-center space-x-2 mr-2">
+
+                                    <div class="text-slate-400">·</div>
+                                    <!-- Price -->
+                                    <div>
+                                        <div
+                                            class="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2 py-0.5">
+                                            $30.00
+                                        </div>
+                                    </div>
                                 </div>
-                                <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                                    <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M10 3a1 1 0 01.707.293l3 3a1 1 0 01-1.414 1.414L10 5.414 7.707 7.707a1 1 0 01-1.414-1.414l3-3A1 1 0 0110 3zm-3.707 9.293a1 1 0 011.414 0L10 14.586l2.293-2.293a1 1 0 011.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z"
-                                            clip-rule="evenodd" fill-rule="evenodd"></path>
-                                    </svg>
-                                </span>
-                            </button>
-                        </span>
-                        <div x-show="open" @focusout="onEscape()" @click.away="open = false"
-                            x-description="Select popover, show/hide based on select state."
-                            x-transition:leave="transition ease-in duration-100" x-transition:leave-start="opacity-100"
-                            x-transition:leave-end="opacity-0" class="absolute mt-1 w-full rounded-md bg-white shadow-lg"
-                            style="display: none;">
-                            <ul @keydown.enter.stop.prevent="onOptionSelect()"
-                                @keydown.space.stop.prevent="onOptionSelect()" @keydown.escape="onEscape()"
-                                @keydown.arrow-up.prevent="onArrowUp()" @keydown.arrow-down.prevent="onArrowDown()"
-                                x-ref="listbox" tabindex="-1" role="listbox" aria-labelledby="assigned-to-label"
-                                :aria-activedescendant="activeDescendant"
-                                class="max-h-56 rounded-md py-1 text-base leading-6 shadow-xs overflow-auto focus:outline-none sm:text-sm sm:leading-5">
-                                <li id="assigned-to-option-1" role="option" @click="choose(1)" @mouseenter="selected = 1"
-                                    @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 1, 'text-gray-900': !(selected === 1) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 1, 'font-normal': !(value === 1) }"
-                                            class="font-normal block truncate">
-                                            Wade Cooper
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 1"
-                                        :class="{ 'text-white': selected === 1, 'text-indigo-600': !(selected === 1) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-2" role="option" @click="choose(2)" @mouseenter="selected = 2"
-                                    @mouseleave="selected = null" aria-selected="true"
-                                    :class="{ 'text-white bg-indigo-600': selected === 2, 'text-gray-900': !(selected === 2) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 2, 'font-normal': !(value === 2) }"
-                                            class="font-normal block truncate">
-                                            Arlene Mccoy
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 2"
-                                        :class="{ 'text-white': selected === 2, 'text-indigo-600': !(selected === 2) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-3" role="option" @click="choose(3)" @mouseenter="selected = 3"
-                                    @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 3, 'text-gray-900': !(selected === 3) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2.25&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 3, 'font-normal': !(value === 3) }"
-                                            class="font-normal block truncate">
-                                            Devon Webb
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 3"
-                                        :class="{ 'text-white': selected === 3, 'text-indigo-600': !(selected === 3) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-4" role="option" @click="choose(4)"
-                                    @mouseenter="selected = 4" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 4, 'text-gray-900': !(selected === 4) }"
-                                    class="bg-indigo-600 text-white cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 4, 'font-normal': !(value === 4) }"
-                                            class="font-semibold block truncate">
-                                            Tom Cook
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 4"
-                                        :class="{ 'text-white': selected === 4, 'text-indigo-600': !(selected === 4) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-white">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-5" role="option" @click="choose(5)"
-                                    @mouseenter="selected = 5" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 5, 'text-gray-900': !(selected === 5) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 5, 'font-normal': !(value === 5) }"
-                                            class="font-normal block truncate">
-                                            Tanya Fox
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 5"
-                                        :class="{ 'text-white': selected === 5, 'text-indigo-600': !(selected === 5) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-6" role="option" @click="choose(6)"
-                                    @mouseenter="selected = 6" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 6, 'text-gray-900': !(selected === 6) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 6, 'font-normal': !(value === 6) }"
-                                            class="font-normal block truncate">
-                                            Hellen Schmidt
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 6"
-                                        :class="{ 'text-white': selected === 6, 'text-indigo-600': !(selected === 6) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-7" role="option" @click="choose(7)"
-                                    @mouseenter="selected = 7" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 7, 'text-gray-900': !(selected === 7) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1568409938619-12e139227838?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 7, 'font-normal': !(value === 7) }"
-                                            class="font-normal block truncate">
-                                            Caroline Schultz
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 7"
-                                        :class="{ 'text-white': selected === 7, 'text-indigo-600': !(selected === 7) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-8" role="option" @click="choose(8)"
-                                    @mouseenter="selected = 8" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 8, 'text-gray-900': !(selected === 8) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 8, 'font-normal': !(value === 8) }"
-                                            class="font-normal block truncate">
-                                            Mason Heaney
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 8"
-                                        :class="{ 'text-white': selected === 8, 'text-indigo-600': !(selected === 8) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-9" role="option" @click="choose(9)"
-                                    @mouseenter="selected = 9" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 9, 'text-gray-900': !(selected === 9) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1584486520270-19eca1efcce5?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 9, 'font-normal': !(value === 9) }"
-                                            class="font-normal block truncate">
-                                            Claudie Smitham
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 9"
-                                        :class="{ 'text-white': selected === 9, 'text-indigo-600': !(selected === 9) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                                <li id="assigned-to-option-10" role="option" @click="choose(10)"
-                                    @mouseenter="selected = 10" @mouseleave="selected = null"
-                                    :class="{ 'text-white bg-indigo-600': selected === 10, 'text-gray-900': !(selected === 10) }"
-                                    class="text-gray-900 cursor-default select-none relative py-2 pl-4 pr-9">
-                                    <div class="flex items-center space-x-3">
-                                        <img src="https://images.unsplash.com/photo-1561505457-3bcad021f8ee?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
-                                            alt="" class="flex-shrink-0 h-6 w-6 rounded-full">
-                                        <span :class="{ 'font-semibold': value === 10, 'font-normal': !(value === 10) }"
-                                            class="font-normal block truncate">
-                                            Emil Schaefer
-                                        </span>
-                                    </div>
-                                    <span x-show="value === 10"
-                                        :class="{ 'text-white': selected === 10, 'text-indigo-600': !(selected === 10) }"
-                                        class="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600"
-                                        style="display: none;">
-                                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd"
-                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </span>
-                                </li>
-                            </ul>
+                                <button class="text-sm underline hover:no-underline">12-09-2022</button>
+                            </div>
                         </div>
+                    </li>
+                    {{-- <!-- Cart item -->
+                    <li class="sm:flex items-center py-6 border-b border-slate-200">
+                        <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0" href="#0">
+                            <img class="rounded-sm" src="../images/related-product-02.jpg" width="200" height="142"
+                                alt="Product 02" />
+                        </a>
+                        <div class="grow">
+                            <a href="#0">
+                                <h3 class="text-lg font-semibold text-slate-800 mb-1">Web Development Ultimate Course 2021
+                                </h3>
+                            </a>
+                            <div class="text-sm mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                eiusmod tempor incididunt ut.</div>
+                            <!-- Product meta -->
+                            <div class="flex flex-wrap justify-between items-center">
+                                <!-- Rating and price -->
+                                <div class="flex flex-wrap items-center space-x-2 mr-2">
+                                    <!-- Rating -->
+                                    <div class="flex items-center space-x-2">
+                                        <!-- Stars -->
+                                        <div class="flex space-x-1">
+                                            <button>
+                                                <span class="sr-only">1 star</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">2 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">3 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">4 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">5 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-slate-300" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <!-- Rate -->
+                                        <div class="inline-flex text-sm font-medium text-amber-600">4.2</div>
+                                    </div>
+                                    <div class="text-slate-400">·</div>
+                                    <!-- Price -->
+                                    <div>
+                                        <div
+                                            class="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2 py-0.5">
+                                            $89.00</div>
+                                    </div>
+                                </div>
+                                <button class="text-sm underline hover:no-underline">Remove</button>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- Cart item -->
+                    <li class="sm:flex items-center py-6 border-b border-slate-200">
+                        <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0" href="#0">
+                            <img class="rounded-sm" src="../images/related-product-03.jpg" width="200" height="142"
+                                alt="Product 03" />
+                        </a>
+                        <div class="grow">
+                            <a href="#0">
+                                <h3 class="text-lg font-semibold text-slate-800 mb-1">Full-Stack JavaScript Course!</h3>
+                            </a>
+                            <div class="text-sm mb-2">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                eiusmod tempor incididunt ut.</div>
+                            <!-- Product meta -->
+                            <div class="flex flex-wrap justify-between items-center">
+                                <!-- Rating and price -->
+                                <div class="flex flex-wrap items-center space-x-2 mr-2">
+                                    <!-- Rating -->
+                                    <div class="flex items-center space-x-2">
+                                        <!-- Stars -->
+                                        <div class="flex space-x-1">
+                                            <button>
+                                                <span class="sr-only">1 star</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">2 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">3 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">4 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-amber-500" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                            <button>
+                                                <span class="sr-only">5 stars</span>
+                                                <svg class="w-4 h-4 fill-current text-slate-300" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M10 5.934L8 0 6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                        <!-- Rate -->
+                                        <div class="inline-flex text-sm font-medium text-amber-600">4.2</div>
+                                    </div>
+                                    <div class="text-slate-400">·</div>
+                                    <!-- Price -->
+                                    <div>
+                                        <div
+                                            class="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2 py-0.5">
+                                            $89.00</div>
+                                    </div>
+                                </div>
+                                <button class="text-sm underline hover:no-underline">Remove</button>
+                            </div>
+                        </div>
+                    </li> --}}
+                </ul>
+
+                <div class="mt-6 text-center lg:text-left">
+                    <a class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
+                        href="{{ route('admin.cobros.index') }}">&lt;- Volver a la
+                        lista</a>
+                </div>
+
+
+
+            </div>
+
+            <!-- Sidebar -->
+            <div class="max-w-sm mx-auto lg:max-w-none">
+                <div class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
+                    <div class="text-slate-800 font-semibold mb-2 uppercase">Detalle de Cobro</div>
+                    <!-- Order details -->
+                    <ul class="mb-4">
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Empresa: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->clientes->razon_social }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Placa: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->vehiculos->placa }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+
+                            <div>Estado: </div>
+                            @if ($cobro->suspendido)
+                                <div class="text-sm font-semibold text-white px-1.5 bg-red-500 rounded-full">Suspendido
+                                </div>
+                            @else
+                                <div class="text-sm font-semibold text-white px-1.5 bg-emerald-500 rounded-full">Activo
+                                </div>
+                            @endif
+
+
+
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Fecha Vencimiento: </div>
+                            <div class="font-medium text-emerald-600">{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
+                        </li>
+
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Periodo: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Tipo Pago: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
+                        </li>
+                    </ul>
+                    <!-- observacion -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-medium mb-1" for="observacion">Observacion: </label>
+                            <div class="text-sm text-slate-400 italic">opcional</div>
+                        </div>
+                        <textarea name="observacion" rows="5" id="observacion" class="form-input w-full mb-2" type="text">
+                        </textarea>
+                        <button class="btn w-full bg-red-500 hover:bg-red-600 text-white  shadow-none">
+                            Suspender
+                        </button>
+                    </div>
+                    <div class="mb-4">
+                        <button class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white" href="#0">
+                            Pagar - ${{ $cobro->monto_unidad }}
+                        </button>
+                    </div>
+                    <div class="text-xs text-slate-500 italic text-center">
+                        {{ $cobro->comentario }}
                     </div>
                 </div>
             </div>
+
         </div>
+
     </div>
 
 @stop
 
 @section('js')
-    <script>
-        window.Components = {
-            customSelect(options) {
-                return {
-                    init() {
-                        this.$refs.listbox.focus()
-                        this.optionCount = this.$refs.listbox.children.length
-                        this.$watch('selected', value => {
-                            if (!this.open) return
 
-                            if (this.selected === null) {
-                                this.activeDescendant = ''
-                                return
-                            }
-
-                            this.activeDescendant = this.$refs.listbox.children[this.selected - 1].id
-                        })
-                    },
-                    activeDescendant: null,
-                    optionCount: null,
-                    open: false,
-                    selected: null,
-                    value: 1,
-                    choose(option) {
-                        this.value = option
-                        this.open = false
-                    },
-                    onButtonClick() {
-                        if (this.open) return
-                        this.selected = this.value
-                        this.open = true
-                        this.$nextTick(() => {
-                            this.$refs.listbox.focus()
-                            this.$refs.listbox.children[this.selected - 1].scrollIntoView({
-                                block: 'nearest'
-                            })
-                        })
-                    },
-                    onOptionSelect() {
-                        if (this.selected !== null) {
-                            this.value = this.selected
-                        }
-                        this.open = false
-                        this.$refs.button.focus()
-                    },
-                    onEscape() {
-                        this.open = false
-                        this.$refs.button.focus()
-                    },
-                    onArrowUp() {
-                        this.selected = this.selected - 1 < 1 ? this.optionCount : this.selected - 1
-                        this.$refs.listbox.children[this.selected - 1].scrollIntoView({
-                            block: 'nearest'
-                        })
-                    },
-                    onArrowDown() {
-                        this.selected = this.selected + 1 > this.optionCount ? 1 : this.selected + 1
-                        this.$refs.listbox.children[this.selected - 1].scrollIntoView({
-                            block: 'nearest'
-                        })
-                    },
-                    ...options,
-                }
-            },
-        }
-    </script>
 @stop

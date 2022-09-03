@@ -156,7 +156,7 @@
             </div>
             <!-- Export button -->
             <div class="relative inline-flex">
-                <a href="">
+                <a href="{{ route('admin.export.vehiculos') }}">
                     <button
                         class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
                         <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">

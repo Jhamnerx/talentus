@@ -147,6 +147,7 @@ Route::get('export/lineas', [LineasController::class, 'exportExcel'])->name('adm
 Route::get('export/dispositivos', [GpsController::class, 'exportExcel'])->name('admin.export.dispositivos');
 Route::get('export/clientes', [ClientesController::class, 'exportExcel'])->name('admin.export.clientes');
 Route::get('export/proveedores', [ProveedoresController::class, 'exportExcel'])->name('admin.export.proveedores');
+Route::get('export/vehiculos', [VehiculosController::class, 'exportExcel'])->name('admin.export.vehiculos');
 
 
 
