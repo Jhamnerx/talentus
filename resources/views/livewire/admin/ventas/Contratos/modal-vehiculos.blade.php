@@ -137,15 +137,25 @@
 
                                                         <td
                                                             class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden md:table-cell">
-                                                            <div class="font-medium text-sky-500">
-                                                                {{ $vehiculo->flotas->nombre }}
-                                                            </div>
-                                                            <div class="font-sm text-slate-900">
-                                                                <p class="text-xs">
-                                                                    {{ $vehiculo->flotas->clientes->razon_social }}
-                                                                </p>
+                                                            @if ($vehiculo->flotas)
+                                                                <div class="font-medium text-sky-500">
+                                                                    {{ $vehiculo->flotas->nombre }}
+                                                                </div>
+                                                                <div class="font-sm text-slate-900">
+                                                                    <p class="text-xs">
+                                                                        {{ $vehiculo->flotas->clientes->razon_social }}
+                                                                    </p>
 
-                                                            </div>
+                                                                </div>
+                                                            @else
+                                                                <div class="font-sm text-slate-900">
+                                                                    <p class="text-xs">
+                                                                        Sin Flota
+                                                                    </p>
+
+                                                                </div>
+                                                            @endif
+
                                                         </td>
                                                         <td
                                                             class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap hidden lg:table-cell">

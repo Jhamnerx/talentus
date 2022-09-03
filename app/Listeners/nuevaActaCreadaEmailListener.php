@@ -29,8 +29,11 @@ class nuevaActaCreadaEmailListener
     public function handle(nuevaActaCreada $event)
     {
         //NOTIFICACION PARA CLIENTES ACTAS CREADA
+        if($event->acta->vehiculos->flotas){
 
-        $event->acta->vehiculos->flotas->clientes->notify(new NotifyClienteActaCreada($event->acta));
+            $event->acta->vehiculos->flotas->clientes->notify(new NotifyClienteActaCreada($event->acta));
+        }
+       
 
     }
 }

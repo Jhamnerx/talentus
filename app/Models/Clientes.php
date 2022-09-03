@@ -43,9 +43,9 @@ class Clientes extends Model
 
     //relacion uno a muchos
 
-    public function ventas()
+    public function facturas()
     {
-        return $this->hasMany(VentasFacturas::class, 'clientes_id');
+        return $this->hasMany(Facturas::class, 'clientes_id');
     }
     //relacion uno a muchos
 

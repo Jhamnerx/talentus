@@ -1,3 +1,35 @@
+option {
+    font-size: 16px;
+    background-color: #ffffff;
+    cursor: pointer;
+    padding: 6px;
+    user-select: none;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 2.25rem;
+    --tw-text-opacity: 1;
+    color: rgb(17 24 39 / var(--tw-text-opacity));
+}
+
+option:before {
+    content: ">";
+    font-size: 18px;
+    display: none;
+    padding-right: 10px;
+    padding-left: 5px;
+    color: #fff;
+    --tw-bg-opacity: 1;
+    background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+option:hover:before {
+    display: inline;
+    background-color: #3c30c5;
+}
+
 .select2-results__option--highlighted .select2-result-flotas__title {
     color: white;
 }
@@ -15,10 +47,13 @@
 }
 .select2-container {
     @apply text-sm text-slate-800 bg-white;
+    @apply leading-5 border-slate-200 hover:border-slate-300 focus:border-indigo-300;
     box-sizing: border-box;
     display: inline-block;
     position: relative;
     vertical-align: middle;
+    border-width: 1px;
+    border-radius: 0.25rem;
 }
 .select2-container .select2-selection--single {
     box-sizing: border-box;

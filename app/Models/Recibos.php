@@ -47,6 +47,13 @@ class Recibos extends Model
         return $this->hasMany(DetalleRecibos::class, 'recibos_id');
     }
 
+    public function payments()
+    {
+
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
+
 
     public static function createItems($recibo, $reciboItems)
     {

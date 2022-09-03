@@ -52,4 +52,12 @@ class Cobros extends Model
     {
         return $this->belongsTo(Contratos::class, 'contratos_id');
     }
+
+
+    public function payments()
+    {
+        return $this->hasMany(Payments::class, 'cobros_id');
+    }
+
+
 }

@@ -53,6 +53,14 @@ class Facturas extends Model
     }
 
 
+    public function payments()
+    {
+
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
+
+
     public static function createItems($factura, $facturaItems)
     {
         foreach ($facturaItems as $facturaItem) {

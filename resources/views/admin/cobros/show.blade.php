@@ -7,9 +7,71 @@
 
         <!-- Page content -->
         <div class="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
+            <!-- Sidebar -->
+            <div class="max-w-sm mx-auto lg:max-w-none">
+                <div class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-96">
+                    <div class="text-slate-800 font-semibold mb-2 uppercase">Detalle de Cobro</div>
+                    <!-- Order details -->
+                    <ul class="mb-4">
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold gap-1">
+                            <div>Empresa: </div>
+                            <div class="font-medium text-slate-800"> {{ $cobro->clientes->razon_social }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Placa: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->vehiculos->placa }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
 
-            <!-- Cart items -->
-            <div class="mb-6 lg:mb-0 xl:mr-12">
+                            <div>Estado: </div>
+                            @if ($cobro->suspendido)
+                                <div class="text-sm font-semibold text-white px-1.5 bg-red-500 rounded-full">Suspendido
+                                </div>
+                            @else
+                                <div class="text-sm font-semibold text-white px-1.5 bg-emerald-500 rounded-full">Activo
+                                </div>
+                            @endif
+
+
+
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Fecha Vencimiento: </div>
+                            <div class="font-medium text-emerald-600">{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
+                        </li>
+
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Periodo: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
+                        </li>
+                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
+                            <div>Tipo Pago: </div>
+                            <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
+                        </li>
+                    </ul>
+                    <!-- observacion -->
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between">
+                            <label class="block text-sm font-medium mb-1" for="observacion">Observacion: </label>
+                            <div class="text-sm text-slate-400 italic">opcional</div>
+                        </div>
+                        <textarea placeholder="Ingresa una observación" name="observacion" rows="5" id="observacion"
+                            class="form-input w-full mb-2" type="text">
+                        </textarea>
+                        <button class="btn w-full bg-red-500 hover:bg-red-600 text-white  shadow-none">
+                            Suspender
+                        </button>
+                    </div>
+
+                    @livewire('admin.cobros.payment', ['cobro' => $cobro->id], key('cobro' . $cobro->id))
+                    <div class="text-xs text-slate-500 italic text-center">
+                        {{ $cobro->comentario }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- pagos -->
+            <div class="mt-6 lg:mt-0 xl:ml-12">
                 <div class="mb-3">
                     <div class="flex text-sm font-medium text-slate-400 space-x-2">
                         <span class="text-indigo-500">Administración</span>
@@ -223,76 +285,15 @@
 
             </div>
 
-            <!-- Sidebar -->
-            <div class="max-w-sm mx-auto lg:max-w-none">
-                <div class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-80">
-                    <div class="text-slate-800 font-semibold mb-2 uppercase">Detalle de Cobro</div>
-                    <!-- Order details -->
-                    <ul class="mb-4">
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
-                            <div>Empresa: </div>
-                            <div class="font-medium text-slate-800">{{ $cobro->clientes->razon_social }}</div>
-                        </li>
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
-                            <div>Placa: </div>
-                            <div class="font-medium text-slate-800">{{ $cobro->vehiculos->placa }}</div>
-                        </li>
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
 
-                            <div>Estado: </div>
-                            @if ($cobro->suspendido)
-                                <div class="text-sm font-semibold text-white px-1.5 bg-red-500 rounded-full">Suspendido
-                                </div>
-                            @else
-                                <div class="text-sm font-semibold text-white px-1.5 bg-emerald-500 rounded-full">Activo
-                                </div>
-                            @endif
-
-
-
-                        </li>
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
-                            <div>Fecha Vencimiento: </div>
-                            <div class="font-medium text-emerald-600">{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
-                        </li>
-
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
-                            <div>Periodo: </div>
-                            <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
-                        </li>
-                        <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
-                            <div>Tipo Pago: </div>
-                            <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
-                        </li>
-                    </ul>
-                    <!-- observacion -->
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between">
-                            <label class="block text-sm font-medium mb-1" for="observacion">Observacion: </label>
-                            <div class="text-sm text-slate-400 italic">opcional</div>
-                        </div>
-                        <textarea name="observacion" rows="5" id="observacion" class="form-input w-full mb-2" type="text">
-                        </textarea>
-                        <button class="btn w-full bg-red-500 hover:bg-red-600 text-white  shadow-none">
-                            Suspender
-                        </button>
-                    </div>
-                    <div class="mb-4">
-                        <button class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white" href="#0">
-                            Pagar - ${{ $cobro->monto_unidad }}
-                        </button>
-                    </div>
-                    <div class="text-xs text-slate-500 italic text-center">
-                        {{ $cobro->comentario }}
-                    </div>
-                </div>
-            </div>
 
         </div>
 
     </div>
 
 @stop
+@push('modals')
+@endpush
 
 @section('js')
 

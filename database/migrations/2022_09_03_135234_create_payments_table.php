@@ -16,16 +16,19 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('numero');
-            $table->date('payment_date');
+            $table->date('fecha');
             $table->text('nota')->nullable();
-            $table->unsignedBigInteger('amount');
+            $table->unsignedBigInteger('monto');
+            $table->morphs('paymentable');
             $table->string('unique_hash')->nullable();
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('facturas_id')->unsigned()->nullable();
-            $table->foreign('facturas_id')->references('id')->on('facturas')->onDelete('cascade');
+           // $table->unsignedBigInteger('facturas_id')->unsigned()->nullable();
+            //$table->foreign('facturas_id')->references('id')->on('facturas')->onDelete('cascade');
             $table->unsignedBigInteger('empresas_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('cobros_id')->unsigned()->nullable();
             $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->foreign('cobros_id')->references('id')->on('cobros')->onDelete('cascade');
             $table->unsignedBigInteger('payment_method_id')->unsigned()->nullable();
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
             $table->timestamps();

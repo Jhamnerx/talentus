@@ -26,7 +26,11 @@ class nuevoCertificadoGpsEmailListener
      * @return void
      */
     public function handle(nuevoCertificadoGpsCreado $event)
-    {
-        $event->certificado->vehiculos->flotas->clientes->notify(new NotifyClienteCertificadoVelocimetroCreada($event->certificado));
+    {   
+        if($event->certificado->vehiculos->flotas){
+            
+            $event->certificado->vehiculos->flotas->clientes->notify(new NotifyClienteCertificadoVelocimetroCreada($event->certificado));
+        }
+       
     }
 }
