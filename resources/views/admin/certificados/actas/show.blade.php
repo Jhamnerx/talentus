@@ -3,7 +3,7 @@
 @section('contenido')
 
     <!-- Table -->
-    show
+    show acta
 
 @stop
 
