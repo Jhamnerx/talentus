@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('ruta', 'certificados-velocimetro')
+@section('ruta', 'certificados-actas')
 @section('contenido')
 
     <!-- Table -->

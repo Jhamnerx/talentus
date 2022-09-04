@@ -48,7 +48,7 @@ class CertificadosVelocimetrosController extends Controller
      */
     public function show(CertificadosVelocimetros $certificado)
     {
-        //return view('admin.certificados.velocimetros.show');
+        return view('admin.certificados.velocimetros.show');
     }
 
     /**

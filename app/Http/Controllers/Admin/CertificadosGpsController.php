@@ -47,7 +47,7 @@ class CertificadosGpsController extends Controller
      */
     public function show(Certificados $certificado)
     {
-        //return view('admin.certificados.gps.show');
+        return view('admin.certificados.gps.show');
     }
 
     /**
