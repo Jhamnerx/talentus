@@ -2,7 +2,6 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos\Flotas;
 
-use App\Models\Clientes;
 use App\Models\Flotas;
 use Livewire\Component;
 
@@ -88,7 +87,6 @@ class Save extends Component
         Flotas::create([
             'nombre' => $this->nombre,
             'clientes_id' => $this->clientes_id,
-            'empresa_id' => $this->empresa_id,
         ]);
 
 
@@ -101,5 +99,8 @@ class Save extends Component
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
+    }
+    public function updatingArray($value, $key){
+
     }
 }

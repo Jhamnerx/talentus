@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EliminadoScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -74,15 +75,30 @@ class Presupuestos extends Model
         if($action == 1){
 
             return $pdf->download('PRE-' . $this->numero.'.pdf');
+
         }else{
             return $pdf->stream('PRE-' . $this->numero.'.pdf');
-        }
-       ;
+        };
 
-
-       // return view('pdf.presupuesto.pdf');
     }
+    public function getPDFDataToMail($data)
+    {
 
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+
+        view()->share([
+            'presupuesto' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.presupuesto.pdf');
+
+        //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
+        $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
+
+    }
 
 
     public function factura()

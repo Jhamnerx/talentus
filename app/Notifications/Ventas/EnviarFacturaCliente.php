@@ -1,26 +1,30 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Ventas;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ActaCreada extends Notification implements ShouldQueue
+class EnviarFacturaCliente extends Notification
 {
     use Queueable;
 
-
-     public $acta;
+    public $factura;
+    public $pdf;
+    public $data;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($acta)
+    public function __construct($factura, $pdf, $data)
     {
-        $this->$acta = $acta;
+        $this->factura = $factura;
+        $this->pdf = $pdf;
+        $this->data = $data;
+       
     }
 
     /**
@@ -43,8 +47,11 @@ class ActaCreada extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->subject('SE HA CREADO UN ACTA')
-                ->view('mail.acta', ['acta' => $this->acta]);
+                    ->attachData($this->pdf->output(), 'FACTURA '.$this->factura->serie."-".$this->factura->numero.'.pdf', [
+                        'mime' => 'application/pdf',
+                    ])
+                    ->subject($this->data["asunto"])
+                    ->view('mail.ventas.factura', ['factura' => $this->factura, 'data' => $this->data]);
     }
 
     /**
@@ -59,4 +66,20 @@ class ActaCreada extends Notification implements ShouldQueue
             //
         ];
     }
+
+    // public function withDelay($notifiable)
+    // {
+    //     return [
+
+    //         'mail' => now()->addSeconds(30),
+
+    //     ];
+    // }
+
+    // public function viaQueues()
+    // {
+    //     return [
+    //         'mail' => 'mail',
+    //     ];
+    // }
 }

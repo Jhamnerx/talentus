@@ -9,17 +9,25 @@ use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 
 class Import extends Component
-
 {
-    public $openModalImport = false;
     use WithFileUploads;
+
     public $file;
     public $errorInfo = null;
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+
+        'openModalImport' => 'openModal',
+    ];
 
 
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
     ];
+
+
+
     protected $messages = [
         'file.required' => 'Debes seleccionar un archivo',
         'file.file' => 'Debes seleccionar un archivo',
@@ -40,15 +48,34 @@ class Import extends Component
     public function importExcel()
     {
         $this->validate();
+
         $this->errorInfo = null;
+
         try {
-            $exit = Excel::import(new LineasImport, $this->file);
-            session()->flash('import', 'Sim cards importadas correctamente.');
-            $this->emit('render');
-            $this->openModalImport = false;
+
+            $exit = Excel::queueImport(new LineasImport, $this->file);
+            $this->reset();
+            //$this->openModalImport = false;
+
         } catch (Exception $e) {
             // dd($e);
+            //dd($e->getMessage());
             $this->errorInfo = $e->errorInfo["2"];
         }
     }
+
+
+    public function openModal(){
+
+
+        $this->modalOpenImport = true;
+
+    }
+
+    public function closeModal(){
+
+        $this->modalOpenImport = false;
+        $this->reset();
+    }
+
 }

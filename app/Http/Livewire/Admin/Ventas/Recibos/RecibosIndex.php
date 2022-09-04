@@ -14,7 +14,8 @@ class RecibosIndex extends Component
     public $to = '';
     public $status = null;
     public $openModalReporte = false;
-
+    public $modalOpenSend = false;
+    
     public function render()
     {
 
@@ -138,5 +139,11 @@ class RecibosIndex extends Component
 
     }
 
+    public function modalOpenSend(Recibos $recibo){
+
+
+        $this->emit('modalOpenSend', $recibo);
+
+    }
 
 }

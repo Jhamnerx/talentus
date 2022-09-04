@@ -14,7 +14,7 @@ class Index extends Component
     public $to = '';
     public $status = null;
     public $openModalDelete = false;
-
+    public $modalOpenSend = false;
     protected $listeners = [
         'render'
     ];
@@ -140,4 +140,11 @@ class Index extends Component
         $this->openModalDelete = true;
 
     }
+
+    public function modalOpenSend(Facturas $factura){
+
+        $this->emit('modalOpenSend', $factura);
+
+    }
+
 }

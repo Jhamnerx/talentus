@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Admin\Recordatorios;
 use App\Models\User;
 use App\Notifications\CrearRecordatorio;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,22 +35,16 @@ class checkRecordatorios implements ShouldQueue
      */
     public function handle()
     {
-
-        
-        $recordatorios = Recordatorios::all();
+        $recordatorios = Recordatorios::whereDate('fecha', Carbon::now()->format('Y-m-d'))->get();
       
-
         foreach ($recordatorios as $recordatorio) {
        
-            if ($recordatorio->fecha == date('Y-m-d')) {
-              // Log::alert('enviar notificacion');
-               // dd($recordatorio);
-                $recordatorio->user->notify(new CrearRecordatorio($recordatorio));
-                $recordatorio->delete();
+            // Log::alert('enviar notificacion');
+           // dd($recordatorio);
+            $recordatorio->user->notify(new CrearRecordatorio($recordatorio));
+            // $recordatorio->delete();
                 //$recordatorio->user->notify(new CrearRecordatorio($recordatorio));
-            }else{
-                
-            }
+
         }
 
     }

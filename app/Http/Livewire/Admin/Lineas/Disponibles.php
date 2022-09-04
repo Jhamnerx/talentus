@@ -15,9 +15,25 @@ class Disponibles extends Component
     public $from = '';
     public $to = '';
     public $operador = null;
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+        'render' => 'render',
+        'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
+        'echo:lineas,LineasImportUpdated' => 'updateLineas'
+    ];
 
 
-    protected $listeners = ['render' => 'render'];
+    public function updateLineasToSimCard(){
+
+        $this->render();
+
+    }
+    public function updateLineas(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('lineas-import');
+    }
 
     public function render()
     {
@@ -25,7 +41,13 @@ class Disponibles extends Component
         $hasta = $this->to;
        
         $lineas = Lineas::whereHas('sim_card', function ($query) {
+
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%');
+
+            $query->orWhereHas('vehiculos', function($vehiculo){
+                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+            });
+
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')
             ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
@@ -100,4 +122,9 @@ class Disponibles extends Component
 
     }
 
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
+    }
 }

@@ -2,165 +2,133 @@
 @section('ruta', 'almacen-lineas')
 @section('contenido')
 
-<!-- Table -->
-@livewire('admin.lineas.lineas-index')
+    <!-- Table -->
+    @livewire('admin.lineas.lineas-index')
+    @livewire('admin.lineas.import')
 
 @stop
 
 @section('js')
-<script>
-    console.log('Hi!'); 
+    <script>
+        console.log('Hi!');
+    </script>
 
-</script>
-
-<script>
-    // A basic demo function to handle "select all" functionality
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('handleSelect', () => ({
-            selectall: false,
-            selectAction() {
-                countEl = document.querySelector('.table-items-action');
-                if (!countEl) return;
-                checkboxes = document.querySelectorAll('input.table-item:checked');
-                document.querySelector('.table-items-count').innerHTML = checkboxes.length;
-                if (checkboxes.length > 0) {
-                    countEl.classList.remove('hidden');
-                } else {
-                    countEl.classList.add('hidden');
+    <script>
+        // A basic demo function to handle "select all" functionality
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('handleSelect', () => ({
+                selectall: false,
+                selectAction() {
+                    countEl = document.querySelector('.table-items-action');
+                    if (!countEl) return;
+                    checkboxes = document.querySelectorAll('input.table-item:checked');
+                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
+                    if (checkboxes.length > 0) {
+                        countEl.classList.remove('hidden');
+                    } else {
+                        countEl.classList.add('hidden');
+                    }
+                },
+                toggleAll() {
+                    this.selectall = !this.selectall;
+                    checkboxes = document.querySelectorAll('input.table-item');
+                    [...checkboxes].map((el) => {
+                        el.checked = this.selectall;
+                    });
+                    this.selectAction();
+                },
+                uncheckParent() {
+                    this.selectall = false;
+                    document.getElementById('parent-checkbox').checked = false;
+                    this.selectAction();
                 }
-            },
-            toggleAll() {
-                this.selectall = !this.selectall;
-                checkboxes = document.querySelectorAll('input.table-item');
-                [...checkboxes].map((el) => {
-                    el.checked = this.selectall;
-                });
-                this.selectAction();
-            },
-            uncheckParent() {
-                this.selectall = false;
-                document.getElementById('parent-checkbox').checked = false;
-                this.selectAction();
-            }
-        }))
-    })
-    
-
-</script>
-@if (session('store'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: '{{session("store")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
+            }))
         })
-    });
+    </script>
+    @if (session('store'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: '{{ session('store') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        </script>
+    @endif
+    @if (session('asign'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Asignado',
+                    text: '{{ session('asign') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-</script>
+                })
+            });
+        </script>
+    @endif
+    @if (session('update'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: '{{ session('update') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-@endif
-@if (session('asign'))
+                })
+            });
+        </script>
+    @endif
 
+    @if (session('delete'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: '{{ session('delete') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Asignado',
-        text: '{{session("asign")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
+                })
+            });
+        </script>
+    @endif
 
-        })
-    });
+    @if (session('unasign'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: '{{ session('unasign') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        </script>
+    @endif
+    @if (session()->has('import'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Importar',
+                    text: '{{ session('import') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-</script>
-
-@endif
-@if (session('update'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Actualizado',
-        text: '{{session("update")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
-
-@if (session('delete'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'error',
-        title: 'Eliminado',
-        text: '{{session("delete")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
-
-@if (session('unasign'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'error',
-        title: 'Eliminado',
-        text: '{{session("unasign")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
-@if (session()->has('import'))
-
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Importar',
-        text: '{{session("import")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
+                })
+            });
+        </script>
+    @endif
 @stop

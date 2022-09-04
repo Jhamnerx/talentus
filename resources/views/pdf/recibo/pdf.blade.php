@@ -164,7 +164,7 @@
                         @foreach ($recibo->detalles as $detalle)
                             <tr>
                                 <td>
-                                    <h4> {{ $detalle->producto }}</h4>
+                                    <h3> {{ $detalle->producto }}</h3>
 
                                 </td>
                                 <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
@@ -182,7 +182,7 @@
 
 
         <div class="row" style="margin-top: 2rem">
-            <div class="large-5 medium-5 small-12 columns bottom-left ">
+            <div class="large-5 medium-5 small-12 columns bottom-left">
                 <table>
                     <thead>
                         <tr>

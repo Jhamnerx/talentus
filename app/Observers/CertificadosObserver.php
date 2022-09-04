@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Events\nuevoCertificadoCreado;
 use App\Models\Certificados;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Models\ChangesModels;
@@ -38,22 +39,21 @@ class CertificadosObserver
        
     }
 
-    public function created(Certificados $certificados)
+
+    public function created(Certificados $certificado)
     {
         if(! \App::runningInConsole()){
 
-            $data = array(
-                'body' => 'Se ha creado un certificado',
-                'asunto' => 'CERTIFICADO CREADO',
-                'accion' => 'certificado_created',
-                'from_user_id' => auth()->id(),
-            );
+            $certificado->unique_hash = Hashids::connection(Certificados::class)->encode($certificado->id);
+            $certificado->save();
+            
+            //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
+            nuevoCertificadoCreado::dispatch($certificado);
 
-            $certificados->unique_hash = Hashids::connection(Certificados::class)->encode($certificados->id);
-            $certificados->save();
+            //REGISTRAMOS EL CAMBIO REALIZADO EN DB
 
             ChangesModels::create([
-                'change_id' => $certificados->getKey(),
+                'change_id' => $certificado->getKey(),
                 'change_type' => Certificados::class,
                 'type' => 'create',
                 'user_id' => auth()->user()->id,

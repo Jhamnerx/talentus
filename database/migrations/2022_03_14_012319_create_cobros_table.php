@@ -17,17 +17,19 @@ class CreateCobrosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('clientes_id');
             $table->unsignedBigInteger('vehiculos_id');
+            $table->unsignedBigInteger('contratos_id')->nullable();
             $table->text('comentario')->nullable();
             $table->string('periodo');
             $table->decimal('monto_unidad', 10, 2);
-            $table->integer('cantidad_unidades');
+            $table->integer('cantidad_unidades')->nullable();
             $table->string('tipo_pago');
             $table->string('observacion')->nullable();
             $table->date('fecha_vencimiento');
             $table->enum('estado', [0, 1, 2])->default(0);
-
+            $table->boolean('suspendido')->default(false);
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('cascade');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
+            $table->foreign('contratos_id')->references('id')->on('contratos')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

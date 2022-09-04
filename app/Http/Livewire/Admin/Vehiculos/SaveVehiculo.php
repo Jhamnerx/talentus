@@ -15,6 +15,12 @@ class SaveVehiculo extends Component
     public $modalOpen = false;
 
 
+    protected $listeners = [
+
+        'openModalSave',
+
+    ];
+
     protected  $rules = [
         'placa' => 'required|unique:vehiculos',
         "marca" => 'nullable',
@@ -50,11 +56,6 @@ class SaveVehiculo extends Component
 
     ];
 
-
-
-
-
-
     public function mount()
     {
         $this->empresa_id = session('empresa');
@@ -64,15 +65,10 @@ class SaveVehiculo extends Component
         $flotas = [];
         //$data = [];
 
-
         foreach ($querys as $query) {
 
             $flotas[$query->id] = $query->nombre;
         }
-
-        //$data['data'] = $flotas;
-
-
 
         $this->data = $flotas;
     }
@@ -120,5 +116,10 @@ class SaveVehiculo extends Component
         $requestVehiculo = new VehiculosRequest();
         $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
         //dd($label);
+    }
+
+    public function openModalSave(){
+
+        $this->modalOpen = true;
     }
 }

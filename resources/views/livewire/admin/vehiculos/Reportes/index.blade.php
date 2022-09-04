@@ -251,10 +251,25 @@
                                         @if (count($reporte->vehiculos->flotas->clientes->contactos) > 0)
                                             <div wire:click="openModalContactos({{ $reporte->vehiculos->flotas->clientes->id }})"
                                                 class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
-                                                {{ $reporte->vehiculos->flotas->nombre }}</div>
+                                                {{ $reporte->vehiculos->flotas->clientes->razon_social }}
+                                            </div>
+                                            <div class="font-sm text-slate-900">
+                                                <p class="text-xs">
+                                                    {{ $reporte->vehiculos->flotas->nombre }}
+                                                </p>
+
+                                            </div>
                                         @else
                                             <div class="font-medium text-slate-800">
-                                                {{ $reporte->vehiculos->flotas->nombre }}</div>
+                                                {{ $reporte->vehiculos->flotas->clientes->razon_social }}
+                                            </div>
+                                            <div class="font-sm text-slate-900">
+                                                <p class="text-xs">
+
+                                                    {{ $reporte->vehiculos->flotas->nombre }}
+                                                </p>
+
+                                            </div>
                                         @endif
 
                                     </td>

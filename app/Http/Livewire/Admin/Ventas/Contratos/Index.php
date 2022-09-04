@@ -2,7 +2,10 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Contratos;
 
+use App\Models\Cobros;
 use App\Models\Contratos;
+use Carbon\Carbon;
+use Exception;
 use Livewire\Component;
 use Livewire\WithPagination;
 class Index extends Component
@@ -11,6 +14,9 @@ class Index extends Component
     public $search;
     public $from = '';
     public $to = '';
+
+    public $openModalDelete = false;
+    public $modalOpenSend = false;
 
     protected $listeners = [
         'updateTable' => 'render',
@@ -75,5 +81,52 @@ class Index extends Component
                 $this->to = '';
                 break;
         }
+    }
+    public function openModalDelete(Contratos $contrato){
+
+        $this->emit('openModalDelete', $contrato);
+        $this->openModalDelete = true;
+
+    }
+    public function modalOpenSend(Contratos $contrato){
+
+
+        $this->emit('modalOpenSend', $contrato);
+
+    }
+
+
+    public function createCobro(Contratos $contrato){
+
+        try {
+
+            foreach ($contrato->detalle as  $detalle) {
+
+                Cobros::create([
+                    'clientes_id' => $contrato["clientes_id"],
+                    'vehiculos_id' => $detalle["vehiculos_id"],
+                    'contratos_id' => $contrato["id"],
+                    'comentario' => "",
+                    'periodo' => "MENSUAL",
+                    'monto_unidad' => $detalle["plan"],
+                    'fecha_vencimiento' => Carbon::now()->addYear(1)->format('Y-m-d'),
+                    'tipo_pago' => 'FACTURA',
+                    'nota' => "",
+                    'observacion' => "",
+                ]);
+
+                
+
+            }
+            $this->dispatchBrowserEvent('create-cobro');
+            
+        } catch (Exception $e) {
+
+            $this->dispatchBrowserEvent('error-cobro');
+            
+            
+        }
+
+        
     }
 }

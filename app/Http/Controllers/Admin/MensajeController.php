@@ -10,7 +10,7 @@ class MensajeController extends Controller
 {
     public  function show(Mensaje $mensaje)
     {
-        return view('mensajes.show', compact('mensaje'));
+        return view('admin.notificaciones.show', compact('mensaje'));
     }
 
 

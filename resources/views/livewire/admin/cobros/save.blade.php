@@ -1,21 +1,25 @@
 <div class="px-4 py-2 bg-gray-50 sm:p-6">
-    {!! Form::open(['route' => 'admin.ventas.facturas.store', 'class' => 'formularioFactura']) !!}
+
     <div class="grid grid-cols-12 gap-2">
 
 
         <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
             {{-- CLIENTE --}}
-            <div class="col-span-12 mb-5" wire:ignore>
 
-                <label
-                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                    <div>Cliente <span class="text-sm text-red-500"> * </span></div>
-                </label>
+            <div class="col-span-12 mb-2">
+                <div wire:ignore>
+                    <label
+                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                        <div>Cliente <span class="text-sm text-red-500"> * </span></div>
+                    </label>
 
-                <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
+                    <select required name="clientes_id" id="" class="form-select w-full clientes_id pl-3">
 
-                </select>
-                @error('clientes_id')
+                    </select>
+                </div>
+
+
+                @error('cliente')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                         {{ $message }}
                     </p>
@@ -25,6 +29,7 @@
             <!-- ... -->
             {{-- FECHA CADUCIDAD --}}
             <div class="col-span-6 gap-2">
+
                 <label
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Fecha de vencimiento: <span class="text-sm text-red-500" style="display: none;"> *
@@ -42,9 +47,9 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <input name="fecha_vencimiento" type="text"
+                    <input required wire:model="fecha_vencimiento" name="fecha_vencimiento" type="text"
                         class="form-input fechaVencimiento valid:border-emerald-300
-                    required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500"
+                    required:border-rose-300 invalid:border-rose-300 peer font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500"
                         placeholder="Selecciona la fecha">
                 </div>
                 @error('fecha_vencimiento')
@@ -56,9 +61,9 @@
 
         </div>
 
-        <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6">
+        <div class="col-span-12 grid grid-cols-12 gap-3 md:col-span-6 border-red-600 lg:pl-6">
 
-            <div class="col-span-12 sm:col-span-6">
+            <div class="col-span-12 sm:col-span-6 mb-2">
                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                         class="text-rose-500">*</span></label>
 
@@ -108,33 +113,103 @@
                     </p>
                 @enderror
             </div>
-            <div class="col-span-12">
+
+
+            <div class="col-span-12 sm:col-span-6 mb-2">
+
                 <label
-                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                    <div>Nota
+                    class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
+                    <div>
+                        Periodo:
                     </div>
                     <!---->
                 </label>
-                <textarea class="form-input w-full px-4 py-3" name="nota" id="" cols="30" rows="5"
-                    placeholder="Ingresar nota (opcional)"></textarea>
+                <select wire:model="periodo" name="periodo" id="periodo" class="w-full form-input pl-2" required>
+
+                    <option value="MENSUAL" selected>MENSUAL</option>
+                    <option value="BIMENSUAL">BIMENSUAL</option>
+                    <option value="TRIMESTRAL">TRIMESTRAL</option>
+                    <option value="SEMESTRAL">SEMESTRAL</option>
+                    <option value="ANUAL">ANUAL</option>
+
+                </select>
+                @error('periodo')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
-            <!-- ... -->
+
+
+            <div class="col-span-12 sm:col-span-6 mb-2">
+
+                <label
+                    class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
+                    <div>
+                        Tipo Pago:
+                    </div>
+                    <!---->
+                </label>
+                <select wire:model="tipo_pago" name="tipo_pago" id="tipo_pago" class="w-full form-input pl-2" required>
+
+                    <option value="RECIBO">RECIBO</option>
+                    <option value="FACTURA">FACTURA</option>
+
+                </select>
+                @error('tipo_pago')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+
+            <div class="col-span-12 sm:col-span-6 mb-2">
+
+                <label
+                    class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
+                    <div>
+                        Monto S/.:
+                    </div>
+                    <!---->
+                </label>
+                <input required value="30" type="number" step="1" wire:model="monto_unidad"
+                    class="form-input valid:border-emerald-300
+                    required:border-rose-300 invalid:border-rose-300 peer font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500">
+                @error('monto_unidad')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
 
         </div>
+        <div class="col-span-12">
+
+            <label
+                class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                <div>Nota
+                </div>
+                <!---->
+            </label>
+            <textarea wire:model="nota" class="form-input w-full px-4 py-3" name="nota" id="" cols="30"
+                rows="5" placeholder="Ingresar nota (opcional)"></textarea>
+        </div>
+        <!-- ... -->
 
     </div>
     <div class="px-4 py-3 text-right sm:px-6">
-        {!! Form::submit('GUARDAR', [
-            'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
-        ]) !!}
+        <button type="button" wire:click="GuardarCobro"
+            class="btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-white">
+            GUARDAR
+        </button>
 
     </div>
-    {!! Form::close() !!}
-
-
 </div>
+
+
+
+
+
 @section('js')
     <script>
         // INICIALIZAR LOS INPUTS DE FECHA
@@ -143,7 +218,7 @@
             detalles = 0;
             flatpickr('.fechaVencimiento', {
                 mode: 'single',
-                defaultDate: new Date().fp_incr(1),
+                defaultDate: new Date().fp_incr(30),
                 minDate: "today",
                 disableMobile: "true",
                 dateFormat: "Y-m-d",
@@ -218,9 +293,10 @@
                 language: "es",
                 selectionCssClass: 'pl-9',
                 width: '100%',
+                // minimumInputLength: 2,
                 data: data
             });
-
+            $('.vehiculos_id').val(null).trigger('change');
 
         })
 
@@ -230,8 +306,15 @@
 
         $('.clientes_id').on('select2:select', function(e) {
             var data = e.params.data;
-            console.log(data.id);
+
             @this.set('cliente', data.id)
+        });
+
+
+        $('.vehiculos_id').on('select2:select', function(e) {
+            var data = e.params.data;
+
+            @this.set('vehiculos_id', data.id)
         });
     </script>
 @endsection

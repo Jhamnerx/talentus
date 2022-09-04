@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\GuiasController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
@@ -146,6 +147,7 @@ Route::get('export/lineas', [LineasController::class, 'exportExcel'])->name('adm
 Route::get('export/dispositivos', [GpsController::class, 'exportExcel'])->name('admin.export.dispositivos');
 Route::get('export/clientes', [ClientesController::class, 'exportExcel'])->name('admin.export.clientes');
 Route::get('export/proveedores', [ProveedoresController::class, 'exportExcel'])->name('admin.export.proveedores');
+Route::get('export/vehiculos', [VehiculosController::class, 'exportExcel'])->name('admin.export.vehiculos');
 
 
 
@@ -170,6 +172,7 @@ Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
 
+route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
 
 Route::group(['middleware' => ['role:super-admin']], function () {
     //

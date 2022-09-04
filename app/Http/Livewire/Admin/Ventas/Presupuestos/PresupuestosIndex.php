@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
-
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 
@@ -10,7 +9,7 @@ use App\Models\Presupuestos;
 
 use Carbon\Carbon;
 use Livewire\Component;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+
 use Livewire\WithPagination;
 
 class PresupuestosIndex extends Component
@@ -21,6 +20,7 @@ class PresupuestosIndex extends Component
     public $to = '';
     public $status = null;
     public $openModalDelete = false;
+    public $modalOpenSend = false;
     
     protected $listeners = [
         'render'
@@ -132,6 +132,7 @@ class PresupuestosIndex extends Component
     }
     public function markReject(Presupuestos $presupuesto){
 
+
         $presupuesto->update([
             'estado' => '2',
         ]);
@@ -226,4 +227,13 @@ class PresupuestosIndex extends Component
         $this->openModalDelete = true;
 
     }
+
+
+    public function modalOpenSend(Presupuestos $presupuesto){
+
+
+        $this->emit('modalOpenSend', $presupuesto);
+
+    }
+    
 }

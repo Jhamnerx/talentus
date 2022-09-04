@@ -1,0 +1,17 @@
+php artisan make:event nuevaActaCreada
+php artisan make:listener nuevaActaCreadaEmailListener --event=nuevaActaCreada
+php artisan make:listener nuevaActaCreadaAdminsListener --event=nuevaActaCreada
+
+
+sudo chown -R www:www public/
+chmod -R 777 public/
+
+sudo chmod -Rf 0777 bootstrap/cache/
+sudo chmod -Rf 0777 storage/
+
+
+php artisan queue:work
+php artisan queue:work --queue=mail
+php artisan queue:work --queue=database
+php artisan queue:work --queue=broadcast
+

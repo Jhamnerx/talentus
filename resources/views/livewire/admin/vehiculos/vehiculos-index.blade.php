@@ -29,8 +29,20 @@
 
 
             {{-- BOTON Y MODAL PARA CREAR VEHICULO --}}
-            @livewire('admin.vehiculos.save-vehiculo')
+            {{-- @livewire('admin.vehiculos.save-vehiculo') --}}
+            <div class="relative inline-flex">
 
+                <!-- Create button -->
+                <button wire:click="openModalSave" aria-controls="basic-modal"
+                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
+                </button>
+
+            </div>
 
 
         </div>
@@ -40,16 +52,7 @@
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
-        <!-- Left side -->
-        <div class="mb-4 sm:mb-0">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
-                </li>
-            </ul>
-        </div>
+
 
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
@@ -151,20 +154,47 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Filter button -->
+            <!-- Export button -->
             <div class="relative inline-flex">
-                <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                    <span class="sr-only">Filtro</span><wbr>
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                        <path
-                            d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
+                <a href="{{ route('admin.export.vehiculos') }}">
+                    <button
+                        class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                        <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
+                            <path
+                                d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                        </svg>
+                        <span class="hidden xs:block ml-2">Exportar</span>
+                    </button>
+                </a>
+            </div>
+
+            <!-- Import button -->
+            {{-- @livewire('admin.clientes.import') --}}
+            <div class="relative inline-flex">
+                <button wire:click="openModalImport()" aria-controls="basic-modal"
+                    class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                        <polyline points="7 9 12 4 17 9" />
+                        <line x1="12" y1="4" x2="12" y2="16" />
                     </svg>
+                    <span class="hidden xs:block ml-2">Importar</span>
                 </button>
             </div>
         </div>
-
+        <!-- Left side -->
+        <div class="mb-4 sm:mb-0">
+            <ul class="flex flex-wrap -m-1">
+                <li class="m-1">
+                    <button
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
+                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <!-- Table -->
@@ -256,8 +286,29 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-sky-500">
-                                            <a href="">{{ $vehiculo->flotas->nombre }}</a>
+                                            @if ($vehiculo->flotas)
+                                                <a
+                                                    href="{{ route('admin.vehiculos.flotas.edit', $vehiculo->flotas) }}">
+                                                    {{ $vehiculo->flotas->nombre }}
+
+                                                </a>
+                                            @else
+                                                Sin Flota Registrada
+                                            @endif
+
+
+
+
                                         </div>
+                                        @if ($vehiculo->flotas)
+                                            <div class="font-sm text-slate-900">
+                                                <p class="text-xs">
+                                                    {{ $vehiculo->flotas->clientes->razon_social }}
+                                                </p>
+
+                                            </div>
+                                        @endif
+
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 

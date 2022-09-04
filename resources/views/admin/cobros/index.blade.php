@@ -1,5 +1,6 @@
 @extends('layouts.admin')
 @section('ruta', 'administracion-cobros')
+
 @section('contenido')
 
     <!-- Table -->
@@ -67,7 +68,6 @@
     @endif
 
     <script>
-        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,

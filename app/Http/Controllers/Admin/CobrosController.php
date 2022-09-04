@@ -45,9 +45,9 @@ class CobrosController extends Controller
      * @param  \App\Models\Cobros  $cobros
      * @return \Illuminate\Http\Response
      */
-    public function show(Cobros $cobros)
+    public function show(Cobros $cobro)
     {
-        //
+         return view('admin.cobros.show', compact('cobro'));
     }
 
     /**
@@ -56,9 +56,9 @@ class CobrosController extends Controller
      * @param  \App\Models\Cobros  $cobros
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cobros $cobros)
+    public function edit(Cobros $cobro)
     {
-        //
+        return view('admin.cobros.edit', compact('cobro'));
     }
 
     /**

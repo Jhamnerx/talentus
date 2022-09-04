@@ -2,6 +2,16 @@
 
 namespace App\Providers;
 
+use App\Events\ClientesImportUpdated;
+use App\Events\nuevaActaCreada;
+use App\Events\nuevoCertificadoCreado;
+use App\Events\nuevoCertificadoGpsCreado;
+use App\Listeners\nuevaActaCreadaAdminsListener;
+use App\Listeners\nuevaActaCreadaEmailListener;
+use App\Listeners\nuevoCertificadoAdminsListener;
+use App\Listeners\nuevoCertificadoEmailListener;
+use App\Listeners\nuevoCertificadoGpsAdminsListener;
+use App\Listeners\nuevoCertificadoGpsEmailListener;
 use App\Models\Actas;
 use App\Models\User;
 use App\Observers\UserObserver;
@@ -55,6 +65,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        nuevaActaCreada::class => [nuevaActaCreadaEmailListener::class, nuevaActaCreadaAdminsListener::class],
+        nuevoCertificadoCreado::class => [nuevoCertificadoEmailListener::class, nuevoCertificadoAdminsListener::class],
+        nuevoCertificadoGpsCreado::class => [nuevoCertificadoGpsEmailListener::class, nuevoCertificadoGpsAdminsListener::class],
+        ClientesImportUpdated::class => [],
+
     ];
 
     /**

@@ -34,6 +34,10 @@ class Index extends Component
                 ->orWhere('tipo', 'like', '%' . $this->search . '%')
                 ->orwhereHas('flotas', function ($query) {
                     $query->where('nombre', 'like', '%' . $this->search . '%');
+                    $query->orwhereHas('clientes', function ($cliente){
+                        $cliente->where('razon_social', 'LIKE', '%'. $this->search. '%');
+
+                    });
                 });
         })->orWhere('fecha_t', 'like', '%' . $this->search . '%')
             ->orWhere('hora_t', 'like', '%' . $this->search . '%')

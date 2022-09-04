@@ -7,11 +7,25 @@ use Livewire\Component;
 use Livewire\WithPagination;
 class ProveedoresIndex extends Component
 {
-
     use WithPagination;
+    
     public $search;
     public $from = '';
     public $to = '';
+
+    protected $listeners = [
+        'render' => 'render',
+        'updateTable' => 'render',
+        'echo:proveedores,ProveedoresImportUpdated' => 'updateProveedores'
+    ];
+
+    public function updateProveedores(){
+        $this->render();
+       
+        $this->dispatchBrowserEvent('proveedores-import');
+    }
+
+
     public function render()
     {
         $desde = $this->from;
@@ -81,5 +95,11 @@ class ProveedoresIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
     }
 }

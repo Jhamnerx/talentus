@@ -69,11 +69,9 @@
                                     </div>
                                 </div>
                                 @error('numero')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
 
                             </div>
@@ -108,25 +106,27 @@
                                                 <path
                                                     d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
                                                     fill="#78d478"></path>
-                                                <circle cx="40" cy="27" r="3" fill="#fff"></circle>
-                                                <circle cx="8" cy="27" r="3" fill="#fff"></circle>
+                                                <circle cx="40" cy="27" r="3" fill="#fff">
+                                                </circle>
+                                                <circle cx="8" cy="27" r="3" fill="#fff">
+                                                </circle>
                                                 <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
                                                 </path>
                                                 <path
                                                     d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
                                                     fill="#49c549"></path>
-                                                <circle cx="8" cy="34" r="2" fill="#f7bf26"></circle>
-                                                <circle cx="40" cy="34" r="2" fill="#f7bf26"></circle>
+                                                <circle cx="8" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
+                                                <circle cx="40" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
                                             </g>
                                         </svg>
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -137,7 +137,7 @@
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="inicio_cobertura"
                                         required name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
+                                                            required:border-rose-300 invalid:border-rose-300 peer inputDateActaEditInicio font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -146,7 +146,8 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
+                                                    fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -165,11 +166,9 @@
                                     </div>
                                 </div>
                                 @error('inicio_cobertura')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -177,9 +176,9 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura" required
-                                        name="fecha_fin" type="text"
-                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
+                                        required name="fecha_fin" type="text"
+                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDateActaEditFinal font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
@@ -187,7 +186,8 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
+                                                    fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -206,11 +206,9 @@
                                     </div>
                                 </div>
                                 @error('fin_cobertura')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -220,12 +218,12 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
+                                        id="">
                                         {{-- <option value="">Selecciona una Ciudad:</option>
                                         @foreach ($ciudades as $ciudad)
                                         <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{--
-                                        @endforeach --}}
+                                        {{-- @endforeach --}}
                                     </select>
 
 
@@ -255,11 +253,9 @@
                                     </div>
                                 </div>
                                 @error('ciudades_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                         </div>
@@ -285,134 +281,151 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            // INICIALIZAR LOS INPUTS DE FECHA
+            $(document).ready(function() {
 
+                flatpickr('.inputDateActaEditInicio', {
+                    mode: 'single',
 
-
-<script>
-    $('.vehiculos_id').select2({
-       placeholder: '    Buscar un Vehiculo',
-        language: "es",
-        selectionCssClass: 'pl-9',
-        minimumInputLength: 2,
-        width: '100%',
-        ajax: {
-            url: '{{route("search.vehiculos")}}',
-            dataType: 'json',
-            delay: 250,
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
-                }
-
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
+                    disableMobile: "true",
+                    dateFormat: "Y-m-d",
+                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
                 });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
+                flatpickr('.inputDateActaEditFinal', {
+                    mode: 'single',
 
-                    results: suggestions,
-    
-                };
-                
-            },
-
-
-        }
-    });
-    $('.ciudades').select2({
-       placeholder: '    Selecciona una ciudad',
-        language: "es",
-        width: '100%',
-        selectionCssClass: 'pl-9',
-        ajax: {
-            url: '{{route("search.ciudades")}}',
-            dataType: 'json',
-
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
-                }
-
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
+                    disableMobile: "true",
+                    dateFormat: "Y-m-d",
+                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
                 });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
+            })
+        </script>
 
-                    results: suggestions,
-    
-                };
-                
-            },
+        <script>
+            $('.vehiculos_id').select2({
+                placeholder: '    Buscar un Vehiculo',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                minimumInputLength: 2,
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.vehiculos') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
+
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-        }
-    });
+                }
+            });
+            $('.ciudades').select2({
+                placeholder: '    Selecciona una ciudad',
+                language: "es",
+                width: '100%',
+                selectionCssClass: 'pl-9',
+                ajax: {
+                    url: '{{ route('search.ciudades') }}',
+                    dataType: 'json',
 
-$('.vehiculos_id').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('vehiculos_id',data.id)
-});
+                    cache: true,
+                    data: function(params) {
+
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-$('.ciudades').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('ciudades_id',data.id)
-});
+                }
+            });
 
-</script>
-
-
-<script>
-    window.addEventListener('set-vehiculo', event => {
-        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
-        var placa = event.detail.vehiculo.placa;
-        var id = event.detail.vehiculo.id
-        var vehiculo = new Option(placa, id, true, true);
-        $('.vehiculosEdit').append(vehiculo).trigger('change');
+            $('.vehiculos_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('vehiculos_id', data.id)
+            });
 
 
-        // ESTABLECER LA CIUDAD EN EDITAR
-        var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
+            $('.ciudades').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('ciudades_id', data.id)
+            });
+        </script>
 
-        $('.ciudades').append(ciudad).trigger('change');
-       // $('.ciudades').append(ciudad).trigger('change');
-    })
-    
-</script>
 
-@endpush
+        <script>
+            window.addEventListener('set-vehiculo', event => {
+                //ESTABLECER EL VEHICULO PARA EDITAR ACTA
+                var placa = event.detail.vehiculo.placa;
+                var id = event.detail.vehiculo.id
+                var vehiculo = new Option(placa, id, true, true);
+                $('.vehiculosEdit').append(vehiculo).trigger('change');
+
+
+                // ESTABLECER LA CIUDAD EN EDITAR
+                var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
+
+                $('.ciudades').append(ciudad).trigger('change');
+                // $('.ciudades').append(ciudad).trigger('change');
+            })
+        </script>
+    @endpush
 @endonce

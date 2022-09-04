@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\VehiculosExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\VehiculosRequest;
 use App\Models\Vehiculos;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehiculosController extends Controller
 {
@@ -89,5 +91,11 @@ class VehiculosController extends Controller
     public function destroy(Vehiculos $vehiculos)
     {
         //
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new VehiculosExport, 'vehiculos.xls');
+
     }
 }

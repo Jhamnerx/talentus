@@ -4,6 +4,7 @@
 
     <!-- Table -->
     @livewire('admin.ventas.presupuestos.presupuestos-index')
+    @livewire('admin.ventas.presupuestos.send')
     @livewire('admin.ventas.presupuestos.delete')
 
 @stop
@@ -66,6 +67,7 @@
             });
         })
     </script>
+
     <script>
         window.addEventListener('save-recibo', event => {
             $(document).ready(function() {
@@ -77,7 +79,19 @@
             });
         })
     </script>
-
+    <script>
+        window.addEventListener('presupuesto-send', event => {
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'CORREO ENVIADO<br>',
+                timeout: 1500,
+                message: 'Se ha enviado la cotización ' + event.detail.presupuesto.numero + '!',
+                position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(5, 44, 82)'
+            });
+        })
+    </script>
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {

@@ -11,7 +11,15 @@ class ClientesIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
-    protected $listeners = ['render' => 'render'];
+    public $modalOpenImport = false;
+
+    protected $listeners = [
+        'render' => 'render',
+        'updateTable' => 'render',
+        'echo:clientes,ClientesImportUpdated' => 'updateClientes'
+    ];
+
+
     public function render()
     {
         $desde = $this->from;
@@ -23,6 +31,7 @@ class ClientesIndex extends Component
                     return $query
                         ->where('email', 'like', '%' . $this->search . '%')
                         ->orwhere('web_site', 'like', '%' . $this->search . '%')
+                        ->orwhere('direccion', 'like', '%' . $this->search . '%')
                         ->orwhere('telefono', 'like', '%' . $this->search . '%');
                 }
             )->orderBy('id', 'desc')
@@ -56,6 +65,11 @@ class ClientesIndex extends Component
         return view('livewire.admin.clientes.clientes-index', compact('clientes'));
     }
 
+    public function updateClientes(){
+        
+        $this->render();
+        $this->dispatchBrowserEvent('clientes-import');
+    }
 
     public function filter($dias)
     {
@@ -81,5 +95,11 @@ class ClientesIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
     }
 }

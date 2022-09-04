@@ -55,7 +55,7 @@ class ActasController extends Controller
      */
     public function show(Actas $actas)
     {
-        return view('admin.vehiculos.actas.show');
+        return view('admin.certificados.actas.show');
     }
 
     /**
@@ -66,7 +66,7 @@ class ActasController extends Controller
      */
     public function edit(Actas $actas)
     {
-        return view('admin.vehiculos.actas.edit');
+        return view('admin.certificados.actas.edit');
     }
 
     /**

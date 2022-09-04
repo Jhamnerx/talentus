@@ -8,6 +8,7 @@ use Database\Factories\CertificadosVelocimetrosFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CertificadosVelocimetros extends Model
 {
@@ -18,9 +19,17 @@ class CertificadosVelocimetros extends Model
         return CertificadosVelocimetrosFactory::new();
     }
 
+
     use HasFactory;
+    use SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados_velocimetros';
+
+    protected $casts = [
+        'sello' => 'boolean',
+        'fondo' => 'boolean',
+        'estado' => 'boolean',
+    ];
 
     //Relacion uno a muchos inversa
 

@@ -1282,7 +1282,7 @@ h6 {
 .products-table th {
     padding: 20px;
     background: #fff;
-    font-size: 22px;
+    font-size: 20px;
     color: #88d3de;
     text-align: center;
 }
@@ -1293,7 +1293,7 @@ h6 {
     background: #e8e8e9;
 }
 .products-table tbody td {
-    padding: 20px;
+    padding: 10px;
     vertical-align: middle;
     color: #616262;
     text-align: center;
@@ -1433,7 +1433,7 @@ h6 {
     padding: 0;
 }
 .print .products-table th {
-    font-size: 16px !important;
+    font-size: 15px !important;
 }
 .print .products-table h5 {
     font-size: 13px !important;

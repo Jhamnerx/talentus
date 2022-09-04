@@ -11,10 +11,20 @@ class VehiculosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $openModalSave = false;
+    public $modalOpenImport = false;
+
 
     protected $listeners = [
         'updateTable' => 'render',
+        'echo:vehiculos,VehiculosImportUpdated' => 'updateVehiculos'
     ];
+
+    public function updateVehiculos(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('vehiculos-import');
+    }
 
     public function render()
     {
@@ -24,16 +34,31 @@ class VehiculosIndex extends Component
         $vehiculos = Vehiculos::whereHas('sim_card', function ($query) {
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
                 ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
+            $query->orwhereHas('linea', function ($linea){
+                $linea->where('numero', 'LIKE', '%'. $this->search. '%');
+
+            });
+
         })->orwhereHas('flotas', function ($query) {
+
             $query->where('nombre', 'LIKE', '%' . $this->search . '%');
+            $query->orwhereHas('clientes', function ($cliente){
+                $cliente->where('razon_social', 'LIKE', '%'. $this->search. '%');
+
+            });
+
         })->orwhereHas('dispositivos', function ($query) {
             $query->where('imei', 'LIKE', '%' . $this->search . '%');
         })->orWhere('placa', 'like', '%' . $this->search . '%')
             ->orWhere('marca', 'like', '%' . $this->search . '%')
+            ->orWhere('modelo', 'like', '%' . $this->search . '%')
             ->orWhere('tipo', 'like', '%' . $this->search . '%')
             ->orWhere('color', 'like', '%' . $this->search . '%')
             ->orWhere('motor', 'like', '%' . $this->search . '%')
             ->orWhere('serie', 'like', '%' . $this->search . '%')
+            ->orWhere('dispositivo_imei', 'like', '%' . $this->search . '%')
+            ->orWhere('old_numero', 'like', '%' . $this->search . '%')
+            ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
             ->orWhere('year', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
@@ -92,5 +117,16 @@ class VehiculosIndex extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    public function openModalSave(){
+
+        $this->emit('openModalSave');
+    }
+    
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
     }
 }

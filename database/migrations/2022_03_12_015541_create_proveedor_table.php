@@ -16,15 +16,15 @@ class CreateProveedorTable extends Migration
         Schema::create('proveedores', function (Blueprint $table) {
             $table->id();
             $table->string('razon_social');
-            $table->string('numero_documento');
+            $table->string('numero_documento')->nullable();
             $table->string('telefono')->nullable();
             $table->string('email')->nullable();
             $table->string('web_site')->nullable();
             $table->string('direccion')->nullable();
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->default(1);
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

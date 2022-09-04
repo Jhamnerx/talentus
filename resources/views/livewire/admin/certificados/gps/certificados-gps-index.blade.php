@@ -204,6 +204,9 @@
                                 <div class="font-semibold text-left">Descargar</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Vehiculo</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -243,7 +246,12 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-sky-500">
-                                            {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}
+                                            @if (!$certificado->codigo == null)
+                                                {{ $certificado->codigo }}
+                                            @else
+                                                {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}
+                                            @endif
+
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
@@ -263,6 +271,10 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
+                                            {{ $certificado->vehiculos->placa }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                        <div class="font-medium text-slate-800">
                                             {{ $certificado->vehiculos->flotas->clientes->razon_social }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -272,7 +284,8 @@
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $certificado->fin_cobertura }}</div>
+                                        <div class="font-medium text-slate-800">
+                                            {{ $certificado->fin_cobertura->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $certificado->fecha }}</div>

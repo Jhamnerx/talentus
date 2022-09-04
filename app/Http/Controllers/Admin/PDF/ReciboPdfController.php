@@ -14,4 +14,11 @@ class ReciboPdfController extends Controller
         return $recibo->getPDFData($action);
         
     }
+
+    public function sendToMail(Recibos $recibo, $data)
+    {
+       // dd($this)
+        return $recibo->getPDFDataToMail($data);
+        
+    }
 }

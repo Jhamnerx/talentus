@@ -43,7 +43,7 @@ class SearchController extends Controller
     {
 
         $term = $request->get('term');
-        $querys = Flotas::where('nombre', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Flotas::where('nombre', 'LIKE', '%' . $term . '%')->active()->orderBy('id', 'desc')->get();
 
         $data = [];
 
@@ -51,7 +51,7 @@ class SearchController extends Controller
             $data[] = [
                 'value' => $query->id,
                 'data' => $query->nombre,
-                'flotas' => $query->clientes,
+                'cliente' => $query->clientes,
 
             ];
         }
@@ -185,7 +185,7 @@ class SearchController extends Controller
 
         $term = $request->get('term');
 
-        $vehiculos = Vehiculos::where('placa', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $vehiculos = Vehiculos::where('placa', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
         //$lineas = Lineas::all();
 
         $data = [];

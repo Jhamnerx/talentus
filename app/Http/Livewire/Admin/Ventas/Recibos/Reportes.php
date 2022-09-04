@@ -16,13 +16,29 @@ class Reportes extends Component
     public $estado;
 
 
+
     protected $listeners = [
         'openModalReporte' => 'openModal'
     ];
 
+        protected  $rules = [
+        'fecha_inicio' => 'required',
+        'fecha_fin' => 'required',
+        "estado" => 'required',
+
+
+    ];
+
+    protected $messages = [
+        'fecha_inicio.required' => 'La fecha es requerida',
+        'fecha_fin.required' => 'La fecha es requerida',
+        'estado.required' => 'El estado es requerido',
+
+
+    ];
     public function mount(){
+
         $this->fecha_inicio = Carbon::now()->format('Y-m-d');
- 
         $this->fecha_fin = date('Y-m-d');
         $this->estado = 'PAID';
     }
@@ -45,8 +61,15 @@ class Reportes extends Component
         $this->resetErrorBag();
     }
 
-
     public function ExportReport(){
+
+        $this->validate();
         return Excel::download(new RecibosExport($this->estado, $this->fecha_inicio, $this->fecha_fin), 'recibos_reportes.xlsx');
+    }
+
+    public function updated($label)
+    {
+        $this->validateOnly($label);
+
     }
 }

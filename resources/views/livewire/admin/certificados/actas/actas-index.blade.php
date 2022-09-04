@@ -269,14 +269,18 @@
                                         <div class="font-medium text-slate-800">{{ $acta->vehiculos->placa }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $acta->inicio_cobertura }}</div>
+                                        <div class="font-medium text-slate-800">
+                                            {{ $acta->inicio_cobertura->format('d-m-Y') }}</div>
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $acta->fin_cobertura }}</div>
+                                        <div class="font-medium text-slate-800">
+                                            {{ $acta->fin_cobertura->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $acta->fecha }}</div>
+
+                                        {{-- <div>{{ $acta->created_at->formatLocalized('%d de %B %Y') }}</div> --}}
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                         <div>

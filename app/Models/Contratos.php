@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarContratoCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contratos extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'contratos';
 
@@ -51,13 +53,18 @@ class Contratos extends Model
         return $this->hasMany(DetalleContratos::class, 'contratos_id');
     }
 
-
     //relacion uno a muchos
 
     public function vehiculos()
     {
         return $this->belongsToMany(Vehiculos::class, 'detalle_contratos');
     }
+
+    public function cobros()
+    {
+        return $this->hasOne(Cobros::class, 'contratos_id');
+    }
+
 
     public static function createItems($contrato, $contratoItems)
     {
@@ -84,12 +91,31 @@ class Contratos extends Model
 
         ]);
 
-        $pdf = PDF::loadView('pdf.contrato');
+        $pdf = PDF::loadView('pdf.contrato.pdf');
 
         return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
 
-
-        //return $pdf;
-        //return view('pdf.acta');
     }
+
+    public function getPDFDataToMail($data)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'contrato' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+
+        ]);
+
+        $pdf = PDF::loadView('pdf.contrato.pdf');
+
+        $this->clientes->notify(new EnviarContratoCliente($this, $pdf, $data));
+
+    }
+
 }

@@ -57,7 +57,7 @@
                     <div class="px-4 py-5 bg-white sm:p-6">
                         <div class="grid grid-cols-12 gap-4">
                             <div class="col-span-12 sm:col-span-6">
-                                {!! Form::hidden('empresa_id', session('empresa')) !!}
+
                                 {!! Html::decode(
                                     Form::label('nombre', 'Nombre: <span class="text-rose-500">*</span>', [
                                         'class' => 'block text-sm font-medium mb-1',
@@ -66,9 +66,10 @@
 
 
                                 {!! Form::text('nombre', null, [
-                                    'placeholder' => 'Escribe el nombre',
+                                    'placeholder' => 'Escribe el nombre...',
+                                    'id' => 'nombre',
                                     'class' => 'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               peer',
                                     'required',
                                 ]) !!}
 
@@ -87,8 +88,8 @@
 
                                 {!! Form::select('clientes_id', [], null, [
                                     'class' => 'clientes-ajax  lg:w-80
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            md:w-72 w-72
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            md:w-72 w-72
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ',
                                 ]) !!}
 
 
@@ -117,7 +118,7 @@
                                     {!! Form::text('telefono', null, [
                                         'placeholder' => '987654321',
                                         'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    w-full pl-12',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        w-full pl-12',
                                         'maxlength' => '9',
                                     ]) !!}
 
@@ -155,7 +156,7 @@
                             <div class="col-span-12 sm:col-span-6">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
                                 {!! Form::textarea('descripcion', null, [
                                     'placeholder' => 'Escribe la direccion...',
@@ -172,8 +173,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>
@@ -187,6 +188,8 @@
 @section('js')
     <script>
         $('#nombre').caseEnforcer('capitalize');
+        $('#cargo').caseEnforcer('uppercase');
+        $('#email').caseEnforcer('lowercase');
 
 
 

@@ -11,8 +11,9 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 use App\Models\Dispositivos;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class DispositivosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithCustomValueBinder
+class DispositivosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithCustomValueBinder, ShouldAutoSize
 {
     /**
      * @return \Illuminate\Support\Collection

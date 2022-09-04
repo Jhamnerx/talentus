@@ -92,7 +92,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -153,7 +154,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -165,7 +167,7 @@
             </div>
 
             <!-- Export button -->
-            {{-- <div class="relative inline-flex">
+            <div class="relative inline-flex">
                 <a href="{{ route('admin.export.lineas') }}">
                     <button
                         class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -177,13 +179,25 @@
                     </button>
                 </a>
             </div>
-            --}}
             <!-- Import button -->
-            @livewire('admin.lineas.lineas-import')
+            <div class="relative inline-flex">
+                <button wire:click="openModalImport()" aria-controls="basic-modal"
+                    class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                        <polyline points="7 9 12 4 17 9" />
+                        <line x1="12" y1="4" x2="12" y2="16" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Importar</span>
+                </button>
+            </div>
         </div>
         <!-- Left side -->
-        {{$operador}}
-        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{clickeado: 0}">
+        {{ $operador }}
+        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
                     <button wire:click="operador()"
@@ -225,7 +239,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total lineas <span
-                    class="text-slate-400 font-medium">{{$total}}</span>
+                    class="text-slate-400 font-medium">{{ $total }}</span>
             </h2>
 
         </header>
@@ -280,239 +294,240 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($lineas->count())
-                        @foreach ($lineas as $linea)
+                            @foreach ($lineas as $linea)
+                                <tr>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
 
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div
-                                        class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+                                                <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24" width="20" height="20">
+                                                    <g fill="none" class="nc-icon-wrapper">
+                                                        <path
+                                                            d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
+                                                            fill="white"></path>
+                                                    </g>
+                                                </svg>
+                                            </div>
+                                            @if (!empty($linea->numero))
+                                                <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
+                                            @else
+                                                <div class="font-medium text-slate-800"></div>
+                                            @endif
+                                        </div>
+                                    </td>
 
-                                        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                            width="20" height="20">
-                                            <g fill="none" class="nc-icon-wrapper">
-                                                <path
-                                                    d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
-                                                    fill="white"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    @if (!empty($linea->numero))
-                                    <div class="font-medium text-slate-800">#{{$linea->numero}}</div>
-                                    @else
-                                    <div class="font-medium text-slate-800"></div>
-                                    @endif
-                                </div>
-                            </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left">{{ $linea->operador }}</div>
 
-                                <div class="text-left">{{$linea->operador}}</div>
+                                    </td>
 
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @if (!empty($linea->sim_card))
-                                <div class="text-left font-medium text-slate-800">{{$linea->sim_card->sim_card}}</div>
-                                @else
-                                <div class="text-left font-medium text-red-300">SIN ASIGNAR</div>
-                                @endif
-
-
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-slate-800">
-
-                                </div>
-                                @if (!empty($linea->sim_card))
-                                <div class="text-left font-medium text-slate-800">
-                                    @if (!empty($linea->sim_card->vehiculos))
-                                    {{$linea->sim_card->vehiculos->flotas->clientes->razon_social}}
-                                    @endif
-                                </div>
-                                @else
-                                <div class="text-left font-medium text-red-300"></div>
-                                @endif
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if (!empty($linea->sim_card))
+                                            <div class="text-left font-medium text-slate-800">
+                                                {{ $linea->sim_card->sim_card }}</div>
+                                        @else
+                                            <div class="text-left font-medium text-red-300">SIN ASIGNAR</div>
+                                        @endif
 
 
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-slate-800">
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left font-medium text-slate-800">
 
-                                </div>
-                                @if (!empty($linea->sim_card))
-                                <div class="text-left font-medium text-slate-800">
-                                    @if (!empty($linea->sim_card->vehiculos))
-                                    {{$linea->sim_card->vehiculos->placa}}
-                                    @endif
-                                </div>
-                                @else
-                                <div class="text-left font-medium text-red-300"></div>
-                                @endif
-
-
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @if ($linea->date_to_suspend)
-                                <div class="font-medium text-red-500">
-                                    @php
-
-                                    $dias = $linea->now->diffInDays($linea->date_to_suspend);
-
-                                    @endphp
-                                    Suspendido <br>
-
-                                    @if ($dias > 0)
-                                    {{$dias}} Dias Restantes
-                                    @else
-                                    -
-                                    @endif
+                                        </div>
+                                        @if (!empty($linea->sim_card))
+                                            <div class="text-left font-medium text-slate-800">
+                                                @if (!empty($linea->sim_card->vehiculos))
+                                                    {{ $linea->sim_card->vehiculos->flotas->clientes->razon_social }}
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="text-left font-medium text-red-300"></div>
+                                        @endif
 
 
-                                </div>
-                                @else
-                                <div class="font-medium text-emerald-500">
-                                    Activa
-                                </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left font-medium text-slate-800">
 
-                                @endif
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        </div>
+                                        @if (!empty($linea->sim_card))
+                                            <div class="text-left font-medium text-slate-800">
+                                                @if (!empty($linea->sim_card->vehiculos))
+                                                    {{ $linea->sim_card->vehiculos->placa }}
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="text-left font-medium text-red-300"></div>
+                                        @endif
 
-                                <div class="text-left font-medium text-slate-800">{{$linea->old_sim_card}}</div>
 
-                            </td>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($linea->date_to_suspend)
+                                            <div class="font-medium text-red-500">
+                                                @php
+                                                    
+                                                    $dias = $linea->now->diffInDays($linea->date_to_suspend);
+                                                    
+                                                @endphp
+                                                Suspendido <br>
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="relative inline-flex" x-data="{ open: false }">
-                                    <div class="relative inline-block h-full text-left">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                            :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                            @click.prevent="open = !open" :aria-expanded="open">
-                                            <span class="sr-only">Menu</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <circle cx="16" cy="16" r="2" />
-                                                <circle cx="10" cy="16" r="2" />
-                                                <circle cx="22" cy="16" r="2" />
-                                            </svg>
-                                        </button>
-                                        <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                                            @click.outside="open = false" @keydown.escape.window="open = false"
-                                            x-show="open"
-                                            x-transition:enter="transition ease-out duration-200 transform"
-                                            x-transition:enter-start="opacity-0 -translate-y-2"
-                                            x-transition:enter-end="opacity-100 translate-y-0"
-                                            x-transition:leave="transition ease-out duration-200"
-                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                            x-cloak>
-
-                                            <ul>
-                                                @if ($linea->fecha_suspencion)
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="true" id="headlessui-menu-item-28" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                            </path>
-                                                        </svg>
-                                                        Suspender
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="activar({{$linea->id}})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-33" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        Activar
-                                                    </a>
-                                                </li>
+                                                @if ($dias > 0)
+                                                    {{ $dias }} Dias Restantes
                                                 @else
-
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="suspender({{$linea->id}})"
-                                                        class="text-gray-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="true" id="headlessui-menu-item-28" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                            </path>
-                                                        </svg>
-                                                        Suspender
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="activar({{$linea->id}})"
-                                                        class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-33" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        Activar
-                                                    </a>
-                                                </li>
-
+                                                    -
                                                 @endif
 
 
+                                            </div>
+                                        @else
+                                            <div class="font-medium text-emerald-500">
+                                                Activa
+                                            </div>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                        <div class="text-left font-medium text-slate-800">{{ $linea->old_sim_card }}
+                                        </div>
+
+                                    </td>
+
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
+                                                    </svg>
+                                                </button>
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+
+                                                    <ul>
+                                                        @if ($linea->fecha_suspencion)
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="true" id="headlessui-menu-item-28"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Suspender
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="activar({{ $linea->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Activar
+                                                                </a>
+                                                            </li>
+                                                        @else
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="suspender({{ $linea->id }})"
+                                                                    class="text-gray-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="true" id="headlessui-menu-item-28"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Suspender
+                                                                </a>
+                                                            </li>
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="activar({{ $linea->id }})"
+                                                                    class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Activar
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
 
-                                            </ul>
 
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
 
                                         </div>
-                                    </div>
 
-                                </div>
-
-                            </td>
+                                    </td>
 
 
 
-                        </tr>
-
-
-                        @endforeach
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

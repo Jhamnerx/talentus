@@ -4,6 +4,7 @@
 
     <!-- Table -->
     @livewire('admin.clientes.clientes-index')
+    @livewire('admin.clientes.import')
 
 @stop
 
@@ -65,7 +66,16 @@
             });
         </script>
     @endif
+    <script>
+        window.addEventListener('clientes-import', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'IMPORTE COMPLETO',
+                message: 'se importo los clientes perfectamente',
+            });
 
+        })
+    </script>
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {

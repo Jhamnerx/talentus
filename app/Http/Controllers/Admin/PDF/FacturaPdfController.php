@@ -14,4 +14,11 @@ class FacturaPdfController extends Controller
         return $factura->getPDFData($action);
         
     }
+
+    public function sendToMail(Facturas $factura, $data)
+    {
+       // dd($this)
+        return $factura->getPDFDataToMail($data);
+        
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Ventas\EnviarReciboCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -31,9 +32,9 @@ class Recibos extends Model
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id');
     }
-    
+
     public function presupuesto()
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
@@ -45,6 +46,13 @@ class Recibos extends Model
     {
         return $this->hasMany(DetalleRecibos::class, 'recibos_id');
     }
+
+    public function payments()
+    {
+
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
 
 
     public static function createItems($recibo, $reciboItems)
@@ -83,5 +91,22 @@ class Recibos extends Model
 
        // return view('pdf.presupuesto.pdf');
     }
+
+    public function getPDFDataToMail($data)
+    {
+
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+
+        view()->share([
+            'recibo' => $this,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.recibo.pdf');
+
+        $this->clientes->notify(new EnviarReciboCliente($this, $pdf, $data));
+
+    }
+
 
 }

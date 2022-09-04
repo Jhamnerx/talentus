@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
     {{-- dataTables --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/css/jquery.dataTables.min.css') }}">
@@ -88,12 +89,31 @@
 </body>
 <script>
     $(document).ready(function() {
+
         Echo.private('App.Models.User.' + {{ Auth::user()->id }})
             .notification((notification) => {
                 Livewire.emit('notificaciones-update');
+                //console.log("evento");
             });
+
+        // Echo.channel('clientes')
+        //     .listen('ClientesImportUpdated', (e) => {
+        //         console.log("evento recibido");
+        //     });
+
+        // Echo.channel('clientes')
+        //     .listen('ClientesImportUpdated', (e) => {
+        //         console.log("evento recibido");
+        //     });
 
     });
 </script>
+<script>
+    Livewire.onPageExpired((response, message) => {
+        console.log('pagina expirada')
+
+    })
+</script>
+
 
 </html>

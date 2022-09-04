@@ -142,7 +142,7 @@
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
                                         required name="fecha_fin" type="text"
-                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
+                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDateCertificadoFinal font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"

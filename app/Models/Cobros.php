@@ -16,12 +16,25 @@ class Cobros extends Model
     protected $table = 'cobros';
     protected $casts = [
 
-        'fecha_vencimiento' => 'date:Y/m/d',
+        'fecha_vencimiento' => 'date:Y-m-d',
+        'vencido' => 'boolean',
 
     ];
 
+    public function scopeVencido($query,$estado = NULL)
+    {
+        return $query->where('vencido', $estado);
+    }
 
-
+    public function scopeEstado($query,$estado = NULL)
+    {
+        return $query->where('estado', $estado);
+    }
+    
+    public function scopeVerificado($query,$estado = 0)
+    {
+        return $query->where('verificado', $estado);
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -32,4 +45,19 @@ class Cobros extends Model
     public function vehiculos(){
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
     }
+
+
+
+    public function contrato()
+    {
+        return $this->belongsTo(Contratos::class, 'contratos_id');
+    }
+
+
+    public function payments()
+    {
+        return $this->hasMany(Payments::class, 'cobros_id');
+    }
+
+
 }

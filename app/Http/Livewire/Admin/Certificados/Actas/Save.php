@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ActasController;
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
 use App\Models\Ciudades;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Vinkla\Hashids\Facades\Hashids;
@@ -37,6 +38,8 @@ class Save extends Component
         $newActa = new ActasController();
       //  dd($newActa->setNextSequenceNumber());
         $this->numero = $newActa->setNextSequenceNumber();
+        $this->inicio_cobertura = Carbon::now()->format('Y-m-d');
+        $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
 
     }
 
@@ -62,7 +65,6 @@ class Save extends Component
        // $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
         $acta =  new Actas();
 
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $acta->numero;
         $acta->vehiculos_id = $values["vehiculos_id"];
         $acta->numero = $values["numero"];
         $acta->inicio_cobertura = $values["inicio_cobertura"];

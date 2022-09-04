@@ -46,7 +46,7 @@ class CrearRecordatorio extends Notification implements ShouldQueue
     {
         return (new MailMessage)
                 ->subject('Tienes un nuevo Mensaje')
-                ->view('mail.recordatorio', ['mensaje' => $this->recordatorio]);
+                ->view('mail.recordatorio', ['recordatorio' => $this->recordatorio]);
    
     }
 
@@ -59,9 +59,11 @@ class CrearRecordatorio extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'placa' => 'AHF-976',
-            'accion' => '',
-            'mensaje' => '',
+            'url' => route('admin.vehiculos.reportes.show', $this->recordatorio->reporte->id),
+            'asunto' => 'RECORDATORIO - REPORTE VEHICULO '.$this->recordatorio->reporte->vehiculos->placa,
+            'mensaje' => $this->recordatorio->data,
+            'accion' => 'recordatorio_reporte',
+            'tipo' => 'recordatorio',
         ];
     }
 
@@ -70,4 +72,24 @@ class CrearRecordatorio extends Notification implements ShouldQueue
         return new BroadcastMessage([]);
 
     }
+
+    // public function withDelay($notifiable)
+    // {
+    //     return [
+
+    //         'mail' => now()->addSeconds(30),
+    //         'database' => now()->addSeconds(30),
+    //         'broadcast' => now()->addSeconds(30),
+
+    //     ];
+    // }
+
+    // public function viaQueues()
+    // {
+    //     return [
+    //         'mail' => 'mail',
+    //         'database' => 'database',
+    //         'broadcast' => 'broadcast',
+    //     ];
+    // }
 }

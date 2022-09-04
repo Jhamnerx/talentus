@@ -19,7 +19,7 @@ window.axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 
 // import Echo from 'laravel-echo';
 
-window.Pusher = require("pusher-js");
+//window.Pusher = require("pusher-js");
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
@@ -30,7 +30,9 @@ window.Pusher = require("pusher-js");
 
 import Echo from "laravel-echo";
 
-window.Pusher = require("pusher-js");
+import Pusher from "pusher-js";
+
+window.Pusher = Pusher;
 
 window.Echo = new Echo({
     broadcaster: "pusher",

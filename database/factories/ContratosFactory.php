@@ -23,7 +23,7 @@ class ContratosFactory extends Factory
             'fecha' => $this->faker->date($format = 'Y-m-d', $max = 'now'),
             'empresa_id' => Empresa::all()->random()->id,
             'ciudades_id' => Ciudades::all()->random()->id,
-            'unique_hash' => Hashids::connection(Contratos::class)->encode($this->faker->ean13()),
+            'unique_hash' => Hashids::connection(Contratos::class)->encode((int)$this->faker->ean13()),
         ];
     }
 }

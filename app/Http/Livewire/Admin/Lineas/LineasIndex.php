@@ -12,8 +12,19 @@ class LineasIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
+    public $modalOpenImport = false;
     // public $openUnAsign = false;
-    protected $listeners = ['render' => 'render'];
+    protected $listeners = [
+        'render' => 'render',
+        'echo:sim,SimCardImportUpdated' => 'updateSimCard'
+    ];
+
+
+    public function updateSimCard(){
+
+        $this->render();
+        $this->dispatchBrowserEvent('sim-import');
+    }
 
 
     public function render()
@@ -22,8 +33,14 @@ class LineasIndex extends Component
         $hasta = $this->to;
 
         $sim_cards = SimCard::whereHas('linea', function ($query) {
+
             $query->where('numero', 'like', '%' . $this->search . '%')
                 ->orwhere('operador', 'like', '%' . $this->search . '%');
+                
+        })->orwhereHas('vehiculos', function ($query) {
+
+            $query->where('placa', 'like', '%' . $this->search . '%');
+
         })->orWhere('sim_card', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')->with('linea', 'vehiculos')
             ->orderBy('id', 'desc')
@@ -80,4 +97,11 @@ class LineasIndex extends Component
                 break;
         }
     }
+
+    public function openModalImport(){
+
+        $this->emit('openModalImport');
+
+    }
+
 }

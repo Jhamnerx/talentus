@@ -32,7 +32,7 @@ class CertificadosVelocimetros extends Migration
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('set null');
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

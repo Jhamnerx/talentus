@@ -29,12 +29,18 @@ class ProductoSeeder extends Seeder
             'descripcion' => '',
             'empresa_id' => 1,
         ]);
+
         Categoria::create([
             'nombre' => 'MONITOREO SATELITAL',
             'descripcion' => '',
             'empresa_id' => 1,
         ]);
 
+        Categoria::create([
+            'nombre' => 'VELOCIMETROS DIGITALES',
+            'descripcion' => '',
+            'empresa_id' => 1,
+        ]);
 
         $productos = [[
             'codigo' => 'PROD-001',
@@ -74,6 +80,24 @@ class ProductoSeeder extends Seeder
             'empresa_id' => '1',
         ],[
             'codigo' => 'PROD-005',
+            'nombre' => 'CAMBIO DE SIM CARD',
+            'stock' => '0',
+            'precio' => '45',
+            'divisa' => 'PEN',
+            'tipo' => 'servicio',
+            'categoria_id' => '2',
+            'empresa_id' => '1',
+        ],[
+            'codigo' => 'PROD-006',
+            'nombre' => 'MANTENIMIENTO EQUIPO GPS',
+            'stock' => '0',
+            'precio' => '45',
+            'divisa' => 'PEN',
+            'tipo' => 'servicio',
+            'categoria_id' => '2',
+            'empresa_id' => '1',
+        ],[
+            'codigo' => 'PROD-007',
             'nombre' => 'MONITOREO SATELITAL | PLATAFORMA PREMIUM',
             'stock' => '0',
             'precio' => '45',
@@ -82,10 +106,28 @@ class ProductoSeeder extends Seeder
             'categoria_id' => '3',
             'empresa_id' => '1',
         ],[
-            'codigo' => 'PROD-006',
-            'nombre' => 'MONITOREO SATELITAL | PLATAFORMA BASICA',
+            'codigo' => 'PROD-008',
+            'nombre' => 'MONITOREO SATELITAL| PLATAFORMA BASICA',
             'stock' => '0',
             'precio' => '35',
+            'divisa' => 'PEN',
+            'tipo' => 'servicio',
+            'categoria_id' => '3',
+            'empresa_id' => '1',
+        ],[
+            'codigo' => 'PROD-009',
+            'nombre' => 'MONITOREO SATELITAL ANUAL| PLATAFORMA BASICA',
+            'stock' => '0',
+            'precio' => '420',
+            'divisa' => 'PEN',
+            'tipo' => 'servicio',
+            'categoria_id' => '3',
+            'empresa_id' => '1',
+        ],[
+            'codigo' => 'PROD-010',
+            'nombre' => 'MONITOREO SATELITAL ANUAL| PLATAFORMA PREMIUM',
+            'stock' => '0',
+            'precio' => '540',
             'divisa' => 'PEN',
             'tipo' => 'servicio',
             'categoria_id' => '3',
