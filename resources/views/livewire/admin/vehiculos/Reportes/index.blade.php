@@ -247,30 +247,40 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($reporte->vehiculos->flotas)
+                                            @if (count($reporte->vehiculos->flotas->clientes->contactos) > 0)
+                                                <div wire:click="openModalContactos({{ $reporte->vehiculos->flotas->clientes->id }})"
+                                                    class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
+                                                    {{ $reporte->vehiculos->flotas->clientes->razon_social }}
+                                                </div>
+                                                <div class="font-sm text-slate-900">
+                                                    <p class="text-xs">
+                                                        {{ $reporte->vehiculos->flotas->nombre }}
+                                                    </p>
 
-                                        @if (count($reporte->vehiculos->flotas->clientes->contactos) > 0)
-                                            <div wire:click="openModalContactos({{ $reporte->vehiculos->flotas->clientes->id }})"
-                                                class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
-                                                {{ $reporte->vehiculos->flotas->clientes->razon_social }}
-                                            </div>
-                                            <div class="font-sm text-slate-900">
-                                                <p class="text-xs">
-                                                    {{ $reporte->vehiculos->flotas->nombre }}
-                                                </p>
+                                                </div>
+                                            @else
+                                                <div class="font-medium text-slate-800">
+                                                    {{ $reporte->vehiculos->flotas->clientes->razon_social }}
+                                                </div>
+                                                <div class="font-sm text-slate-900">
+                                                    <p class="text-xs">
 
-                                            </div>
+                                                        {{ $reporte->vehiculos->flotas->nombre }}
+                                                    </p>
+
+                                                </div>
+                                            @endif
                                         @else
-                                            <div class="font-medium text-slate-800">
-                                                {{ $reporte->vehiculos->flotas->clientes->razon_social }}
-                                            </div>
                                             <div class="font-sm text-slate-900">
                                                 <p class="text-xs">
 
-                                                    {{ $reporte->vehiculos->flotas->nombre }}
+                                                    Sin flota registrada
                                                 </p>
 
                                             </div>
                                         @endif
+
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
