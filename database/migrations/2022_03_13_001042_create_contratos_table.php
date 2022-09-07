@@ -21,7 +21,7 @@ class CreateContratosTable extends Migration
             $table->boolean('sello')->default(true);
             $table->boolean('fondo')->default(true);
             $table->boolean('estado')->default(true);
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->unsignedBigInteger('ciudades_id')->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);

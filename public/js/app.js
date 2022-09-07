@@ -11236,8 +11236,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_fintech_card_12__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/fintech-card-12 */ "./resources/js/components/fintech-card-12.js");
 /* harmony import */ var _components_fintech_card_13__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/fintech-card-13 */ "./resources/js/components/fintech-card-13.js");
 /* harmony import */ var _components_fintech_card_14__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/fintech-card-14 */ "./resources/js/components/fintech-card-14.js");
+ // import flatpickr from "flatpickr";
 
-
+ // import { Spanish } from "flatpickr/dist/l10n/es.js";
+// flatpickr(myElem, {
+//     locale: Spanish, // locale for this instance only
+// });
 
 var Spanish = (__webpack_require__(/*! flatpickr/dist/l10n/es.js */ "./node_modules/flatpickr/dist/l10n/es.js")["default"].es); // or import { Spanish } from "flatpickr/dist/l10n/es.js"
 
@@ -11330,15 +11334,15 @@ document.addEventListener("DOMContentLoaded", function () {
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>'
   });
   var hoy = new Date();
-  var hora = hoy.getHours() + ":" + hoy.getMinutes();
-  (0,flatpickr__WEBPACK_IMPORTED_MODULE_1__["default"])(".inputTime", {
-    enableTime: true,
-    noCalendar: true,
-    dateFormat: "H:i",
-    time_24hr: true,
-    disableMobile: "true",
-    defaultDate: hora
-  });
+  var hora = hoy.getHours() + ":" + hoy.getMinutes(); // flatpickr(".inputTime", {
+  //     enableTime: true,
+  //     noCalendar: true,
+  //     dateFormat: "H:i",
+  //     time_24hr: true,
+  //     disableMobile: "true",
+  //     defaultDate: hora,
+  // });
+
   (0,_components_dashboard_card_01__WEBPACK_IMPORTED_MODULE_4__["default"])();
   (0,_components_dashboard_card_02__WEBPACK_IMPORTED_MODULE_5__["default"])();
   (0,_components_dashboard_card_03__WEBPACK_IMPORTED_MODULE_6__["default"])();
@@ -40798,7 +40802,8 @@ function FlatpickrInstance(element, instanceConfig) {
     }
     function getClosestActiveElement() {
         var _a;
-        return ((_a = self.calendarContainer) === null || _a === void 0 ? void 0 : _a.getRootNode()).activeElement || document.activeElement;
+        return (((_a = self.calendarContainer) === null || _a === void 0 ? void 0 : _a.getRootNode())
+            .activeElement || document.activeElement);
     }
     function bindToInstance(fn) {
         return fn.bind(self);
@@ -41123,7 +41128,7 @@ function FlatpickrInstance(element, instanceConfig) {
                 ? self.config.appendTo
                 : window.document.body).appendChild(self.calendarContainer);
     }
-    function createDay(className, date, dayNumber, i) {
+    function createDay(className, date, _dayNumber, i) {
         var dateIsEnabled = isEnabled(date, true), dayElement = (0,_utils_dom__WEBPACK_IMPORTED_MODULE_3__.createElement)("span", className, date.getDate().toString());
         dayElement.dateObj = date;
         dayElement.$i = i;
@@ -41159,7 +41164,7 @@ function FlatpickrInstance(element, instanceConfig) {
         if (self.weekNumbers &&
             self.config.showMonths === 1 &&
             className !== "prevMonthDay" &&
-            dayNumber % 7 === 1) {
+            i % 7 === 6) {
             self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='flatpickr-day'>" + self.config.getWeek(date) + "</span>");
         }
         triggerEvent("onDayCreate", dayElement);
@@ -41723,8 +41728,9 @@ function FlatpickrInstance(element, instanceConfig) {
     }
     function onBlur(e) {
         var isInput = e.target === self._input;
+        var valueChanged = self._input.value.trimEnd() !== getDateStr();
         if (isInput &&
-            (self.selectedDates.length > 0 || self._input.value.length > 0) &&
+            valueChanged &&
             !(e.relatedTarget && isCalendarElem(e.relatedTarget))) {
             self.setDate(self._input.value, true, e.target === self.altInput
                 ? self.config.altFormat
@@ -42555,7 +42561,8 @@ function FlatpickrInstance(element, instanceConfig) {
     function isDateSelected(date) {
         for (var i = 0; i < self.selectedDates.length; i++) {
             var selectedDate = self.selectedDates[i];
-            if (selectedDate instanceof Date && (0,_utils_dates__WEBPACK_IMPORTED_MODULE_4__.compareDates)(selectedDate, date) === 0)
+            if (selectedDate instanceof Date &&
+                (0,_utils_dates__WEBPACK_IMPORTED_MODULE_4__.compareDates)(selectedDate, date) === 0)
                 return "" + i;
         }
         return false;
@@ -42593,7 +42600,9 @@ function FlatpickrInstance(element, instanceConfig) {
                     ? self.currentMonth + 1 > self.config.maxDate.getMonth()
                     : self.currentYear > self.config.maxDate.getFullYear());
     }
-    function getDateStr(format) {
+    function getDateStr(specificFormat) {
+        var format = specificFormat ||
+            (self.config.altInput ? self.config.altFormat : self.config.dateFormat);
         return self.selectedDates
             .map(function (dObj) { return self.formatDate(dObj, format); })
             .filter(function (d, i, arr) {
@@ -55686,6 +55695,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Channel": () => (/* binding */ Channel),
 /* harmony export */   "default": () => (/* binding */ Echo)
 /* harmony export */ });
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -56614,8 +56633,13 @@ var Connector = /*#__PURE__*/function () {
         headers: {}
       },
       authEndpoint: '/broadcasting/auth',
+      userAuthentication: {
+        endpoint: '/broadcasting/user-auth',
+        headers: {}
+      },
       broadcaster: 'pusher',
       csrfToken: null,
+      bearerToken: null,
       host: null,
       key: null,
       namespace: 'App.Events'
@@ -56632,9 +56656,18 @@ var Connector = /*#__PURE__*/function () {
     key: "setOptions",
     value: function setOptions(options) {
       this.options = _extends(this._defaultOptions, options);
+      var token = this.csrfToken();
 
-      if (this.csrfToken()) {
-        this.options.auth.headers['X-CSRF-TOKEN'] = this.csrfToken();
+      if (token) {
+        this.options.auth.headers['X-CSRF-TOKEN'] = token;
+        this.options.userAuthentication.headers['X-CSRF-TOKEN'] = token;
+      }
+
+      token = this.options.bearerToken;
+
+      if (token) {
+        this.options.auth.headers['Authorization'] = 'Bearer ' + token;
+        this.options.userAuthentication.headers['Authorization'] = 'Bearer ' + token;
       }
 
       return options;
@@ -56698,6 +56731,15 @@ var PusherConnector = /*#__PURE__*/function (_Connector) {
       } else {
         this.pusher = new Pusher(this.options.key, this.options);
       }
+    }
+    /**
+     * Sign in the user via Pusher user authentication (https://pusher.com/docs/channels/using_channels/user-authentication/).
+     */
+
+  }, {
+    key: "signin",
+    value: function signin() {
+      this.pusher.signin();
     }
     /**
      * Listen for an event on a channel instance.
@@ -56769,7 +56811,7 @@ var PusherConnector = /*#__PURE__*/function (_Connector) {
     value: function leave(name) {
       var _this2 = this;
 
-      var channels = [name, 'private-' + name, 'presence-' + name];
+      var channels = [name, 'private-' + name, 'private-encrypted-' + name, 'presence-' + name];
       channels.forEach(function (name, index) {
         _this2.leaveChannel(name);
       });
@@ -57205,6 +57247,10 @@ var Echo = /*#__PURE__*/function () {
       if (typeof jQuery === 'function') {
         this.registerjQueryAjaxSetup();
       }
+
+      if ((typeof Turbo === "undefined" ? "undefined" : _typeof(Turbo)) === 'object') {
+        this.registerTurboRequestInterceptor();
+      }
     }
     /**
      * Register a Vue HTTP interceptor to add the X-Socket-ID header.
@@ -57256,6 +57302,19 @@ var Echo = /*#__PURE__*/function () {
           }
         });
       }
+    }
+    /**
+     * Register the Turbo Request interceptor to add the X-Socket-ID header.
+     */
+
+  }, {
+    key: "registerTurboRequestInterceptor",
+    value: function registerTurboRequestInterceptor() {
+      var _this4 = this;
+
+      document.addEventListener('turbo:before-fetch-request', function (event) {
+        event.detail.fetchOptions.headers['X-Socket-Id'] = _this4.socketId();
+      });
     }
   }]);
 
@@ -98357,7 +98416,7 @@ process.umask = function() { return 0; };
 /***/ ((module) => {
 
 /*!
- * Pusher JavaScript Library v7.1.1-beta
+ * Pusher JavaScript Library v7.4.0
  * https://pusher.com/
  *
  * Copyright 2020, Pusher
@@ -98374,7 +98433,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	var installedModules = {};
 /******/
 /******/ 	// The require function
-/******/ 	function __nested_webpack_require_674__(moduleId) {
+/******/ 	function __nested_webpack_require_669__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
 /******/ 		if(installedModules[moduleId]) {
@@ -98388,7 +98447,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		};
 /******/
 /******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_674__);
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __nested_webpack_require_669__);
 /******/
 /******/ 		// Flag the module as loaded
 /******/ 		module.l = true;
@@ -98399,20 +98458,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__nested_webpack_require_674__.m = modules;
+/******/ 	__nested_webpack_require_669__.m = modules;
 /******/
 /******/ 	// expose the module cache
-/******/ 	__nested_webpack_require_674__.c = installedModules;
+/******/ 	__nested_webpack_require_669__.c = installedModules;
 /******/
 /******/ 	// define getter function for harmony exports
-/******/ 	__nested_webpack_require_674__.d = function(exports, name, getter) {
-/******/ 		if(!__nested_webpack_require_674__.o(exports, name)) {
+/******/ 	__nested_webpack_require_669__.d = function(exports, name, getter) {
+/******/ 		if(!__nested_webpack_require_669__.o(exports, name)) {
 /******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
 /******/ 		}
 /******/ 	};
 /******/
 /******/ 	// define __esModule on exports
-/******/ 	__nested_webpack_require_674__.r = function(exports) {
+/******/ 	__nested_webpack_require_669__.r = function(exports) {
 /******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 		}
@@ -98424,35 +98483,35 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// mode & 2: merge all properties of value into the ns
 /******/ 	// mode & 4: return value when already ns object
 /******/ 	// mode & 8|1: behave like require
-/******/ 	__nested_webpack_require_674__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __nested_webpack_require_674__(value);
+/******/ 	__nested_webpack_require_669__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __nested_webpack_require_669__(value);
 /******/ 		if(mode & 8) return value;
 /******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
 /******/ 		var ns = Object.create(null);
-/******/ 		__nested_webpack_require_674__.r(ns);
+/******/ 		__nested_webpack_require_669__.r(ns);
 /******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __nested_webpack_require_674__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __nested_webpack_require_669__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
 /******/ 		return ns;
 /******/ 	};
 /******/
 /******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__nested_webpack_require_674__.n = function(module) {
+/******/ 	__nested_webpack_require_669__.n = function(module) {
 /******/ 		var getter = module && module.__esModule ?
 /******/ 			function getDefault() { return module['default']; } :
 /******/ 			function getModuleExports() { return module; };
-/******/ 		__nested_webpack_require_674__.d(getter, 'a', getter);
+/******/ 		__nested_webpack_require_669__.d(getter, 'a', getter);
 /******/ 		return getter;
 /******/ 	};
 /******/
 /******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__nested_webpack_require_674__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/ 	__nested_webpack_require_669__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
 /******/ 	// __webpack_public_path__
-/******/ 	__nested_webpack_require_674__.p = "";
+/******/ 	__nested_webpack_require_669__.p = "";
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __nested_webpack_require_674__(__nested_webpack_require_674__.s = 2);
+/******/ 	return __nested_webpack_require_669__(__nested_webpack_require_669__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -98900,19 +98959,19 @@ exports.decode = decode;
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __nested_webpack_require_19906__) {
+/***/ (function(module, exports, __nested_webpack_require_19901__) {
 
 // required so we don't have to do require('pusher').default etc.
-module.exports = __nested_webpack_require_19906__(3).default;
+module.exports = __nested_webpack_require_19901__(3).default;
 
 
 /***/ }),
 /* 3 */
-/***/ (function(module, __webpack_exports__, __nested_webpack_require_20110__) {
+/***/ (function(module, __webpack_exports__, __nested_webpack_require_20105__) {
 
 "use strict";
 // ESM COMPAT FLAG
-__nested_webpack_require_20110__.r(__webpack_exports__);
+__nested_webpack_require_20105__.r(__webpack_exports__);
 
 // CONCATENATED MODULE: ./src/runtimes/web/dom/script_receiver_factory.ts
 var ScriptReceiverFactory = (function () {
@@ -98946,7 +99005,7 @@ var ScriptReceivers = new ScriptReceiverFactory('_pusher_script_', 'Pusher.Scrip
 
 // CONCATENATED MODULE: ./src/core/defaults.ts
 var Defaults = {
-    VERSION: "7.1.1-beta",
+    VERSION: "7.4.0",
     PROTOCOL: 7,
     wsPort: 80,
     wssPort: 443,
@@ -100661,6 +100720,9 @@ var channel_Channel = (function (_super) {
         if (eventName === 'pusher_internal:subscription_succeeded') {
             this.handleSubscriptionSucceededEvent(event);
         }
+        else if (eventName === 'pusher_internal:subscription_count') {
+            this.handleSubscriptionCountEvent(event);
+        }
         else if (eventName.indexOf('pusher_internal:') !== 0) {
             var metadata = {};
             this.emit(eventName, data, metadata);
@@ -100675,6 +100737,12 @@ var channel_Channel = (function (_super) {
         else {
             this.emit('pusher:subscription_succeeded', event.data);
         }
+    };
+    Channel.prototype.handleSubscriptionCountEvent = function (event) {
+        if (event.data.subscription_count) {
+            this.subscriptionCount = event.data.subscription_count;
+        }
+        this.emit('pusher:subscription_count', event.data);
     };
     Channel.prototype.subscribe = function () {
         var _this = this;
@@ -100817,6 +100885,41 @@ var presence_channel_extends = ( false) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __awaiter = ( false) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = ( false) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 
 
 
@@ -100830,21 +100933,38 @@ var presence_channel_PresenceChannel = (function (_super) {
     }
     PresenceChannel.prototype.authorize = function (socketId, callback) {
         var _this = this;
-        _super.prototype.authorize.call(this, socketId, function (error, authData) {
-            if (!error) {
-                authData = authData;
-                if (authData.channel_data === undefined) {
-                    var suffix = url_store.buildLogSuffix('authenticationEndpoint');
-                    logger.error("Invalid auth response for channel '" + _this.name + "'," +
-                        ("expected 'channel_data' field. " + suffix));
-                    callback('Invalid auth response');
-                    return;
+        _super.prototype.authorize.call(this, socketId, function (error, authData) { return __awaiter(_this, void 0, void 0, function () {
+            var channelData, suffix;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        if (!!error) return [3, 3];
+                        authData = authData;
+                        if (!(authData.channel_data != null)) return [3, 1];
+                        channelData = JSON.parse(authData.channel_data);
+                        this.members.setMyID(channelData.user_id);
+                        return [3, 3];
+                    case 1: return [4, this.pusher.user.signinDonePromise];
+                    case 2:
+                        _a.sent();
+                        if (this.pusher.user.user_data != null) {
+                            this.members.setMyID(this.pusher.user.user_data.id);
+                        }
+                        else {
+                            suffix = url_store.buildLogSuffix('authorizationEndpoint');
+                            logger.error("Invalid auth response for channel '" + this.name + "', " +
+                                ("expected 'channel_data' field. " + suffix + ", ") +
+                                "or the user should be signed in.");
+                            callback('Invalid auth response');
+                            return [2];
+                        }
+                        _a.label = 3;
+                    case 3:
+                        callback(error, authData);
+                        return [2];
                 }
-                var channelData = JSON.parse(authData.channel_data);
-                _this.members.setMyID(channelData.user_id);
-            }
-            callback(error, authData);
-        });
+            });
+        }); });
     };
     PresenceChannel.prototype.handleEvent = function (event) {
         var eventName = event.event;
@@ -100866,6 +100986,9 @@ var presence_channel_PresenceChannel = (function (_super) {
         switch (eventName) {
             case 'pusher_internal:subscription_succeeded':
                 this.handleSubscriptionSucceededEvent(event);
+                break;
+            case 'pusher_internal:subscription_count':
+                this.handleSubscriptionCountEvent(event);
                 break;
             case 'pusher_internal:member_added':
                 var addedMember = this.members.addMember(data);
@@ -100899,10 +101022,10 @@ var presence_channel_PresenceChannel = (function (_super) {
 /* harmony default export */ var presence_channel = (presence_channel_PresenceChannel);
 
 // EXTERNAL MODULE: ./node_modules/@stablelib/utf8/lib/utf8.js
-var utf8 = __nested_webpack_require_20110__(1);
+var utf8 = __nested_webpack_require_20105__(1);
 
 // EXTERNAL MODULE: ./node_modules/@stablelib/base64/lib/base64.js
-var base64 = __nested_webpack_require_20110__(0);
+var base64 = __nested_webpack_require_20105__(0);
 
 // CONCATENATED MODULE: ./src/core/channels/encrypted_channel.ts
 var encrypted_channel_extends = ( false) || (function () {
@@ -102826,6 +102949,17 @@ function buildChannelAuthorizer(opts, pusher) {
     return channel_authorizer(channelAuthorization);
 }
 
+// CONCATENATED MODULE: ./src/core/utils/flat_promise.ts
+function flatPromise() {
+    var resolve, reject;
+    var promise = new Promise(function (res, rej) {
+        resolve = res;
+        reject = rej;
+    });
+    return { promise: promise, resolve: resolve, reject: reject };
+}
+/* harmony default export */ var flat_promise = (flatPromise);
+
 // CONCATENATED MODULE: ./src/core/user.ts
 var user_extends = ( false) || (function () {
     var extendStatics = function (d, b) {
@@ -102843,6 +102977,7 @@ var user_extends = ( false) || (function () {
 
 
 
+
 var user_UserFacade = (function (_super) {
     user_extends(UserFacade, _super);
     function UserFacade(pusher) {
@@ -102852,15 +102987,29 @@ var user_UserFacade = (function (_super) {
         _this.signin_requested = false;
         _this.user_data = null;
         _this.serverToUserChannel = null;
+        _this.signinDonePromise = null;
+        _this._signinDoneResolve = null;
+        _this._onAuthorize = function (err, authData) {
+            if (err) {
+                logger.warn("Error during signin: " + err);
+                _this._cleanup();
+                return;
+            }
+            _this.pusher.send_event('pusher:signin', {
+                auth: authData.auth,
+                user_data: authData.user_data
+            });
+        };
         _this.pusher = pusher;
-        _this.pusher.connection.bind('connected', function () {
-            _this._signin();
-        });
-        _this.pusher.connection.bind('connecting', function () {
-            _this._disconnect();
-        });
-        _this.pusher.connection.bind('disconnected', function () {
-            _this._disconnect();
+        _this.pusher.connection.bind('state_change', function (_a) {
+            var previous = _a.previous, current = _a.current;
+            if (previous !== 'connected' && current === 'connected') {
+                _this._signin();
+            }
+            if (previous === 'connected' && current !== 'connected') {
+                _this._cleanup();
+                _this._newSigninPromiseIfNeeded();
+            }
         });
         _this.pusher.connection.bind('message', function (event) {
             var eventName = event.event;
@@ -102882,26 +103031,16 @@ var user_UserFacade = (function (_super) {
         this._signin();
     };
     UserFacade.prototype._signin = function () {
-        var _this = this;
         if (!this.signin_requested) {
             return;
         }
+        this._newSigninPromiseIfNeeded();
         if (this.pusher.connection.state !== 'connected') {
             return;
         }
-        var onAuthorize = function (err, authData) {
-            if (err) {
-                logger.warn("Error during signin: " + err);
-                return;
-            }
-            _this.pusher.send_event('pusher:signin', {
-                auth: authData.auth,
-                user_data: authData.user_data
-            });
-        };
         this.pusher.config.userAuthenticator({
             socketId: this.pusher.connection.socket_id
-        }, onAuthorize);
+        }, this._onAuthorize);
     };
     UserFacade.prototype._onSigninSuccess = function (data) {
         try {
@@ -102909,12 +103048,15 @@ var user_UserFacade = (function (_super) {
         }
         catch (e) {
             logger.error("Failed parsing user data after signin: " + data.user_data);
+            this._cleanup();
             return;
         }
         if (typeof this.user_data.id !== 'string' || this.user_data.id === '') {
             logger.error("user_data doesn't contain an id. user_data: " + this.user_data);
+            this._cleanup();
             return;
         }
+        this._signinDoneResolve();
         this._subscribeChannels();
     };
     UserFacade.prototype._subscribeChannels = function () {
@@ -102938,13 +103080,32 @@ var user_UserFacade = (function (_super) {
         });
         ensure_subscribed(this.serverToUserChannel);
     };
-    UserFacade.prototype._disconnect = function () {
+    UserFacade.prototype._cleanup = function () {
         this.user_data = null;
         if (this.serverToUserChannel) {
             this.serverToUserChannel.unbind_all();
             this.serverToUserChannel.disconnect();
             this.serverToUserChannel = null;
         }
+        if (this.signin_requested) {
+            this._signinDoneResolve();
+        }
+    };
+    UserFacade.prototype._newSigninPromiseIfNeeded = function () {
+        if (!this.signin_requested) {
+            return;
+        }
+        if (this.signinDonePromise && !this.signinDonePromise.done) {
+            return;
+        }
+        var _a = flat_promise(), promise = _a.promise, resolve = _a.resolve, _ = _a.reject;
+        promise.done = false;
+        var setDone = function () {
+            promise.done = true;
+        };
+        promise.then(setDone)["catch"](setDone);
+        this.signinDonePromise = promise;
+        this._signinDoneResolve = resolve;
     };
     return UserFacade;
 }(dispatcher));

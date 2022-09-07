@@ -51,11 +51,9 @@
                                     <input class="form-input w-full pl-9" type="text" readonly wire:model='vehiculo'>
 
                                     @error('vehiculo')
-
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{$message}}
-                                    </p>
-
+                                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                            {{ $message }}
+                                        </p>
                                     @enderror
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -63,8 +61,8 @@
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                             <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
                                                 stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper">
-                                                <line data-cap="butt" x1="32" y1="29" x2="41" y2="19"
-                                                    stroke-linecap="butt">
+                                                <line data-cap="butt" x1="32" y1="29" x2="41"
+                                                    y2="19" stroke-linecap="butt">
                                                 </line>
                                                 <path data-cap="butt"
                                                     d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29"
@@ -76,17 +74,16 @@
                                                 <circle cx="11" cy="40" r="3"></circle>
                                                 <polyline points="58 54 58 58 48 58 48 54"></polyline>
                                                 <circle cx="53" cy="40" r="3"></circle>
-                                                <line x1="25" y1="40" x2="39" y2="40"></line>
+                                                <line x1="25" y1="40" x2="39" y2="40">
+                                                </line>
                                             </g>
                                         </svg>
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -110,11 +107,9 @@
                                     </div>
                                 </div>
                                 @error('fecha_t')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -126,7 +121,7 @@
                                 <div class="relative">
 
                                     <input maxlength="6" wire:model="hora_t" type="text"
-                                        class="form-input w-full pl-9 inputTime" placeholder="Selecciona la Hora"
+                                        class="form-input w-full pl-9 hora_t" placeholder="Selecciona la Hora"
                                         required />
 
 
@@ -150,11 +145,9 @@
                                     </div>
                                 </div>
                                 @error('hora_t')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -184,8 +177,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion"
-                                        id="descripcion" rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
+                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
+                                        placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -239,64 +232,58 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            $('.vehiculos_id').select2({
+                placeholder: '    Buscar un Vehiculo',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                minimumInputLength: 2,
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.vehiculos') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
 
-<script>
-    $('.vehiculos_id').select2({
-       placeholder: '    Buscar un Vehiculo',
-        language: "es",
-        selectionCssClass: 'pl-9',
-        minimumInputLength: 2,
-        width: '100%',
-        ajax: {
-            url: '{{route("search.vehiculos")}}',
-            dataType: 'json',
-            delay: 250,
-            cache: true,
-            data: function (params) {
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
 
-                var query = {
-                    term: params.term,
-                    //type: 'public'
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
+
+
                 }
-
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
-
-                    results: suggestions,
-    
-                };
-                
-            },
-
-
-        }
-    });
-$('.vehiculos_id').on('select2:select', function (e) {
-    var data = e.params.data;
-    console.log(data.id);
-    @this.set('vehiculos_id',data.id)
-});
-
-
-
-
-</script>
-
-@endpush
+            });
+            $('.vehiculos_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                console.log(data.id);
+                @this.set('vehiculos_id', data.id)
+            });
+        </script>
+    @endpush
 @endonce

@@ -1,6 +1,14 @@
 import { Chart } from "chart.js";
 
+// import flatpickr from "flatpickr";
+
 import flatpickr from "flatpickr";
+
+// import { Spanish } from "flatpickr/dist/l10n/es.js";
+
+// flatpickr(myElem, {
+//     locale: Spanish, // locale for this instance only
+// });
 
 const Spanish = require("flatpickr/dist/l10n/es.js").default.es;
 // or import { Spanish } from "flatpickr/dist/l10n/es.js"
@@ -115,14 +123,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     var hora = hoy.getHours() + ":" + hoy.getMinutes();
 
-    flatpickr(".inputTime", {
-        enableTime: true,
-        noCalendar: true,
-        dateFormat: "H:i",
-        time_24hr: true,
-        disableMobile: "true",
-        defaultDate: hora,
-    });
+    // flatpickr(".inputTime", {
+    //     enableTime: true,
+    //     noCalendar: true,
+    //     dateFormat: "H:i",
+    //     time_24hr: true,
+    //     disableMobile: "true",
+    //     defaultDate: hora,
+    // });
 
     dashboardCard01();
     dashboardCard02();

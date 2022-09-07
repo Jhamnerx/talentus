@@ -37,7 +37,7 @@ class VehiculosImport implements ToModel, WithChunkReading, WithEvents, ShouldQu
 
     public function chunkSize(): int
     {
-        return 1000;
+        return 500;
     }
 
     public static function afterImport(AfterImport $event)

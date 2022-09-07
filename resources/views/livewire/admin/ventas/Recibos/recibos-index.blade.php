@@ -159,7 +159,7 @@
 
         </div>
         <!-- Left side -->
-        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
                     <button wire:click="status()"
@@ -379,6 +379,7 @@
                                                         </li>
                                                         <li>
                                                             <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalDelete({{ $recibo->id }})"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">

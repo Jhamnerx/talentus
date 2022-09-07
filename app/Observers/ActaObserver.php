@@ -40,6 +40,7 @@ class ActaObserver
         }
        
     }
+    
     public function created(Actas $acta)
     {
         if(! \App::runningInConsole()){

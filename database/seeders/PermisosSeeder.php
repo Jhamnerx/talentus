@@ -19,6 +19,8 @@ class PermisosSeeder extends Seeder
     {
         $role = Role::create(['name' => 'cliente']);
         $admin = Role::create(['name' => 'admin']);
+        $monitoreo = Role::create(['name' => 'monitoreo']);
+        $tecnico = Role::create(['name' => 'tecnico']);
 
         $permisos = [
             'admin.home',
@@ -156,6 +158,8 @@ class PermisosSeeder extends Seeder
         }
         $role->givePermissionTo('cliente.home');
         $admin->givePermissionTo('admin.home');
+        $monitoreo->givePermissionTo('ver-vehiculos-vehiculos');
+        $tecnico->givePermissionTo('ver-vehiculos-vehiculos');
 
     }
 }

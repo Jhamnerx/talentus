@@ -15,6 +15,12 @@ class RecibosIndex extends Component
     public $status = null;
     public $openModalReporte = false;
     public $modalOpenSend = false;
+    public $openModalDelete = false;
+
+
+    protected $listeners = [
+        'render'
+    ];
     
     public function render()
     {
@@ -145,5 +151,10 @@ class RecibosIndex extends Component
         $this->emit('modalOpenSend', $recibo);
 
     }
+    public function openModalDelete(Recibos $recibo){
+        //dd($presupuesto);
+        $this->emit('openModalDelete', $recibo);
+        $this->openModalDelete = true;
 
+    }
 }

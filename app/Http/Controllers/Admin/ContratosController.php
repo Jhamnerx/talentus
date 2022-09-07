@@ -43,16 +43,13 @@ class ContratosController extends Controller
     public function store(ContratosRequest $request)
     {
         // dd($request->all());
-        $contrato = Contratos::create([
-            'empresa_id' => $request->empresa_id,
-            'clientes_id' => $request->clientes_id,
-            'fecha' => $request->fecha,
-            'ciudades_id' => $request->ciudades_id,
-            'fondo' => $request->fondo ? $request->fondo : '0',
-            'sello' => $request->sello ? $request->sello : '0',
-        ]);
+        $contrato =  new Contratos();
 
-        $contrato->unique_hash = Hashids::connection(Contratos::class)->encode($contrato->id);
+        $contrato->clientes_id = $request->clientes_id;
+        $contrato->fecha = $request->fecha;
+        $contrato->ciudades_id = $request->ciudades_id;
+        $contrato->fondo = $request->fondo ? $request->fondo : '0';
+        $contrato->sello = $request->sello ? $request->sello : '0';
         $contrato->save();
 
         Contratos::createItems($contrato, $request->items);

@@ -50,7 +50,7 @@
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
                     {{-- CLIENTE --}}
-                    <div class="col-span-12 mb-5">
+                    <div class="col-span-12 mb-2">
 
 
                         <label
@@ -153,7 +153,7 @@
                         @enderror
 
                     </div>
-                    <div class="col-span-12 mt-2">
+                    <div class="col-span-12 mt-2 mb-2">
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                             <div>
@@ -214,7 +214,7 @@
                         <div class="col-span-2 sm:col-span-1">
                             <div class="flex">
                                 <button id="productos-button"
-                                    class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                                    class="flex-shrink-0 z-10 hidden sm:inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                                     type="button">
                                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                                         <path
@@ -364,8 +364,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>

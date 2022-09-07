@@ -49,7 +49,7 @@
                     <div class="px-4 py-5 bg-white sm:p-6">
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-12 sm:col-span-4">
-                                {!! Form::hidden('empresa_id', session('empresa')) !!}
+
 
                                 {!! Html::decode(
                                     Form::label('clientes_id', 'Cliente: <span class="text-rose-500">*</span>', [
@@ -62,7 +62,7 @@
                                     $contrato->clientes_id,
                                     [
                                         'class' => 'w-full clientes_id
-                                                                                                                            pl-3',
+                                                                                                                                                                                                                            pl-3',
                                     ],
                                 ) !!}
 
@@ -82,11 +82,11 @@
                                     {!! Form::text('fecha', null, [
                                         'placeholder' => 'yyyy-mm-dd',
                                         'class' => 'form-input
-                                                                                                                                            valid:border-emerald-300
-                                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2
-                                                                                                                                            outline-none focus:ring-primary-400
-                                                                                                                                            focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
-                                                                                                                                            text-black input w-full',
+                                                                                                                                                                                                                                                        valid:border-emerald-300
+                                                                                                                                                                                                                                                        required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2
+                                                                                                                                                                                                                                                        outline-none focus:ring-primary-400
+                                                                                                                                                                                                                                                        focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md
+                                                                                                                                                                                                                                                        text-black input w-full',
                                         'maxlength' => '10',
                                         'required',
                                     ]) !!}
@@ -134,7 +134,7 @@
                                         $contrato->ciudades_id,
                                         [
                                             'class' => 'form-select w-full
-                                                                                                                                            pl-9 ciudades',
+                                                                                                                                                                                                                                                        pl-9 ciudades',
                                         ],
                                     ) !!}
 
@@ -208,7 +208,7 @@
 
                             </div>
 
-                            <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 mb-5">
+                            <div class="col-span-12 mt-10 pt-4 border-2 bg-white shadow-lg rounded-lg px-3 mb-5">
                                 <div class="flex -mx-1 border-b px-2 py-2 ">
 
                                     <div class="flex-auto px-5 xl:w-32 text-left">
@@ -238,10 +238,10 @@
                         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                             {!! Form::submit('GUARDAR', [
                                 'class' => 'btnGuardarContrato btn bg-emerald-500
-                                                                                                            hover:bg-emerald-600
-                                                                                                            focus:outline-none
-                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                hover:bg-emerald-600
+                                                                                                                                                                                                focus:outline-none
+                                                                                                                                                                                                focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                focus:ring-emerald-600 text-white',
                             ]) !!}
 
                         </div>
