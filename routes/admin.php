@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\ReportesController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\VehiculosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
@@ -177,3 +178,7 @@ route::get('notificaciones', [NotificacionesController::class, 'index'])->name('
 Route::group(['middleware' => ['role:super-admin']], function () {
     //
 });
+
+
+
+Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin.profile.show');

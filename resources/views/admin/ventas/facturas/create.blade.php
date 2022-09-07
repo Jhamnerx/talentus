@@ -364,8 +364,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -395,7 +395,9 @@
     <script>
         var tipoCambio = parseFloat($(".tipoCambio").text());
 
-        $("#money").maskMoney();
+        $("#money").maskMoney({
+            'thousands': '.'
+        });
         // FUNCION PARA CAMBIAR DATOS Y DIVISA
         function cambiarDivisa(e) {
 
