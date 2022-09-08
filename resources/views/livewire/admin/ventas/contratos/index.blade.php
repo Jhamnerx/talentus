@@ -429,7 +429,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('admin.ventas.recibos.show', $contrato) }}"
+                                                            <a href="{{ route('admin.ventas.contratos.show', $contrato) }}"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-29"
                                                                 role="menuitem" tabindex="-1"><svg
