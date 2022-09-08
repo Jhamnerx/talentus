@@ -35,6 +35,8 @@ class Save extends Component
 
     public function openModal()
     {
+
+         $this->dispatchBrowserEvent('open-modal');
         $this->openModalSave = true;
     }
 

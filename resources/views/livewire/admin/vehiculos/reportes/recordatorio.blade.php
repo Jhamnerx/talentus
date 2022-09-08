@@ -60,14 +60,14 @@
                                 </p>
                             @enderror
                         </div>
-                        <div class="col-span-12 sm:col-span-6 mb-2">
+                        <div class="col-span-12 sm:col-span-6 mt-2">
 
                             <label class="block text-sm font-medium mb-1" for="nota">Nota:</label>
                             <div class="relative">
 
 
                                 <textarea wire:model="nota" placeholder="Ingresa una nota"
-                                    class="form-input fechaRecordatorio pl-8 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full"
+                                    class="form-input pl-8 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                     name="nota" id="nota" cols="30" rows="10"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -113,7 +113,6 @@
                 mode: 'single',
                 defaultDate: new Date().fp_incr(14),
                 minDate: "today",
-                disableMobile: "true",
                 dateFormat: "Y-m-d",
                 prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
                 nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',

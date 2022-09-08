@@ -25,6 +25,7 @@ class PresupuestosIndex extends Component
     protected $listeners = [
         'render'
     ];
+    
     public function render()
     {
 

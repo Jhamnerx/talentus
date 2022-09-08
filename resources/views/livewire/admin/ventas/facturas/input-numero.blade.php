@@ -5,18 +5,17 @@
     <div class="relative">
 
         <input required wire:model="numero" name="numero" id="numero"
-            class="form-input w-2/4 valid:border-emerald-300
-                                                                required:border-rose-300 invalid:border-rose-300 peer pl-14" type="text" />
+            class="form-input w-full md:w-2/4 valid:border-emerald-300
+                                                                required:border-rose-300 invalid:border-rose-300 peer pl-14"
+            type="text" />
         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-            <input type="hidden" name="serie" value="{{$serie}}">
-            <span class="text-sm text-slate-400 font-medium px-3">{{$serie}}</span>
+            <input type="hidden" name="serie" value="{{ $serie }}">
+            <span class="text-sm text-slate-400 font-medium px-3">{{ $serie }}</span>
         </div>
     </div>
     @error('numero')
-
-    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-        {{$message}}
-    </p>
-
+        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+            {{ $message }}
+        </p>
     @enderror
 </div>

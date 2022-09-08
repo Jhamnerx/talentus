@@ -21,6 +21,7 @@
 
 
 @section('js')
+
     <script>
         window.addEventListener('reporte-edit', event => {
             iziToast.success({

@@ -118,18 +118,17 @@
 
 
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="numero">Hora Transmision: <span
+                                <label class="block text-sm font-medium mb-1" for="hora">Hora Transmision: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
                                     <input maxlength="6" wire:model="hora_t" type="text"
-                                        class="form-input w-full pl-9 inputTime" placeholder="Selecciona la Hora"
+                                        class="form-input w-full pl-9 hora_t" placeholder="Selecciona la Hora"
                                         required />
 
 
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                             <g class="nc-icon-wrapper">
@@ -156,8 +155,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
-                                        placeholder="Ingresar Breve Descripcíon"></textarea>
+                                    <textarea title="Hola" wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
+                                        rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -211,6 +210,33 @@
 
 @once
     @push('scripts')
+        <script>
+            window.addEventListener('open-modal', event => {
+
+                flatpickr(".hora_t", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+
+                });
+
+            })
+
+            $(document).ready(function() {
+                var hoy = new Date();
+
+                var hora = hoy.getHours() + ":" + hoy.getMinutes();
+
+                flatpickr(".hora_t", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "H:i",
+                    time_24hr: true,
+
+                });
+            });
+        </script>
         <script>
             $('.vehiculos_id').select2({
                 placeholder: '    Buscar un Vehiculo',

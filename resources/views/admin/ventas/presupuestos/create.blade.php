@@ -50,7 +50,7 @@
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
                     {{-- CLIENTE --}}
-                    <div class="col-span-12 mb-5">
+                    <div class="col-span-12 mb-2">
 
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
@@ -92,6 +92,7 @@
                     @enderror
                 </div> --}}
                     {{-- FECHA PRESUPUESTO --}}
+
                     <div class="col-span-6 gap-2">
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
@@ -153,12 +154,9 @@
 
                 </div>
 
-                <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6">
+                <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6 gap-2">
                     {{-- moneda --}}
-                    <div class="col-span-6">
-                        <label class="block text-sm font-medium mb-1 text-gray-800">Tipo de Cambio:
-                            <span class="text-rose-500 tipoCambio"> {{ $tipoCambio }}</span> </label>
-                        <input type="hidden" value="{{ $tipoCambio }}" name="tipoCambio">
+                    <div class="col-span-12 md:col-span-6 mb-2">
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
@@ -176,7 +174,12 @@
                         @enderror
 
                     </div>
+                    <div class="col-span-12 md:col-span-6 mb-2">
+                        <label class="block text-sm font-medium mb-1 text-gray-800">Tipo de Cambio:
+                            <span class="text-rose-500 tipoCambio"> {{ $tipoCambio }}</span> </label>
+                        <input type="hidden" value="{{ $tipoCambio }}" name="tipoCambio">
 
+                    </div>
                     <div class="col-span-12">
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
@@ -185,7 +188,7 @@
                             <!---->
                             <!---->
                         </label>
-                        <textarea class="form-input w-full px-4 py-3" name="nota" id="" cols="30" rows="5"
+                        <textarea class="form-input w-full px-4 py-3" name="nota" id="" rows="5"
                             placeholder="Ingresar nota (opcional)"></textarea>
                     </div>
                     <!-- ... -->
@@ -200,9 +203,9 @@
 
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
                         <div class="col-span-2 sm:col-span-1">
-                            <div class="flex">
+                            <div class="flex btnAddProducto">
                                 <button id="productos-button"
-                                    class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
+                                    class="flex-shrink-0 cursor-default z-10 hidden md:inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                                     type="button">
                                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                                         <path
@@ -255,7 +258,7 @@
                                 <!-- Row -->
                                 <tr class="main bg-slate-50">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea rows="4" class="form-input descripcion" placeholder="Descripción"></textarea>
+                                        <textarea rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
                                         <p class="mt-2 hidden text-pink-600 text-sm errorDescripcion">
                                             Rellena todos los campos
                                         </p>
@@ -447,8 +450,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                            focus:ring-2 focus:ring-offset-2
-                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -478,7 +481,9 @@
     <script>
         var tipoCambio = parseFloat($(".tipoCambio").text());
 
-        $("#money").maskMoney();
+        $("#money").maskMoney({
+            'thousands': '.'
+        });
         // FUNCION PARA CAMBIAR DATOS Y DIVISA
         function cambiarDivisa(e) {
 
@@ -562,6 +567,7 @@
             placeholder: 'Añadir Artículo',
             language: "es",
             width: '100%',
+
             ajax: {
                 url: '{{ route('search.productos') }}',
                 dataType: 'json',

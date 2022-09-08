@@ -22,7 +22,9 @@ Route::get('consulta/actas/{acta:codigo?}', [ConsultasController::class, 'consul
 
 
 
-Route::resource('solicitudes', SolicitudesController::class)->names('solicitudes');
+Route::resource('solicitudes', SolicitudesController::class)->names('solicitudes')->parameters([
+    'solicitudes' => 'solicitud'
+]);;
 
 
 

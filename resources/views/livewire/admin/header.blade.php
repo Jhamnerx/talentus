@@ -21,7 +21,7 @@
             <div class="flex items-center space-x-3">
 
                 <!-- Search button -->
-                <div x-data="{ searchOpen: false }">
+                {{-- <div x-data="{ searchOpen: false }">
                     <!-- Button -->
                     <button
                         class="w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 transition duration-150 rounded-full"
@@ -191,7 +191,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Notifications button -->
                 @livewire('admin.header.notificaciones')

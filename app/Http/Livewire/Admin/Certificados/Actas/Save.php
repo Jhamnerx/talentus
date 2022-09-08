@@ -74,7 +74,7 @@ class Save extends Component
         $acta->sello = $values["sello"];
         $acta->codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
         $acta->year = today()->year;
-        $acta->empresa_id = session('empresa');
+        //$acta->empresa_id = session('empresa');
         $acta->fecha = $fecha;
         $acta->save();
         //$this->openModalSave = false;
