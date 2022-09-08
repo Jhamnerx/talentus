@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Facturas;
 use App\Models\plantilla;
 use Illuminate\Http\Request;
 
@@ -28,6 +29,7 @@ class HomeController extends Controller
     public function getDataVentas()
     {
         ///$df = new DataFeed();
+
 
         return (object)[
             'labels' => [
@@ -58,7 +60,8 @@ class HomeController extends Controller
     public function getDataFeed()
     {
 
-
+        Facturas::whereMonth('created_at', '08')->get();
+        
 
 
         // $query = $this->where('data_type', $dataType)
