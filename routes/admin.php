@@ -182,3 +182,8 @@ Route::group(['middleware' => ['role:super-admin']], function () {
 
 
 Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin.profile.show');
+
+
+// DATA CHARTS
+
+Route::get('/json-data-feed', [HomeController::class, 'getDataVentas'])->name('json_data_feed');

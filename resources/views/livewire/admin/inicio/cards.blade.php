@@ -1,167 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'dashboard-inicio')
-@section('contenido')
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" :class="{ 'sidebar-expanded': sidebarExpanded }"
-        x-data="{ page: 'dashboard-inicio', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
-
-        <div class="relative bg-indigo-200 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
-
-            <!-- Background illustration -->
-            <div class="absolute right-0 top-0 -mt-4 mr-16 pointer-events-none hidden xl:block" aria-hidden="true">
-                <svg width="319" height="198" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <defs>
-                        <path id="welcome-a" d="M64 0l64 128-64-20-64 20z" />
-                        <path id="welcome-e" d="M40 0l40 80-40-12.5L0 80z" />
-                        <path id="welcome-g" d="M40 0l40 80-40-12.5L0 80z" />
-                        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="welcome-b">
-                            <stop stop-color="#A5B4FC" offset="0%" />
-                            <stop stop-color="#818CF8" offset="100%" />
-                        </linearGradient>
-                        <linearGradient x1="50%" y1="24.537%" x2="50%" y2="100%" id="welcome-c">
-                            <stop stop-color="#4338CA" offset="0%" />
-                            <stop stop-color="#6366F1" stop-opacity="0" offset="100%" />
-                        </linearGradient>
-                    </defs>
-                    <g fill="none" fill-rule="evenodd">
-                        <g transform="rotate(64 36.592 105.604)">
-                            <mask id="welcome-d" fill="#fff">
-                                <use xlink:href="#welcome-a" />
-                            </mask>
-                            <use fill="url(#welcome-b)" xlink:href="#welcome-a" />
-                            <path fill="url(#welcome-c)" mask="url(#welcome-d)" d="M64-24h80v152H64z" />
-                        </g>
-                        <g transform="rotate(-51 91.324 -105.372)">
-                            <mask id="welcome-f" fill="#fff">
-                                <use xlink:href="#welcome-e" />
-                            </mask>
-                            <use fill="url(#welcome-b)" xlink:href="#welcome-e" />
-                            <path fill="url(#welcome-c)" mask="url(#welcome-f)" d="M40.333-15.147h50v95h-50z" />
-                        </g>
-                        <g transform="rotate(44 61.546 392.623)">
-                            <mask id="welcome-h" fill="#fff">
-                                <use xlink:href="#welcome-g" />
-                            </mask>
-                            <use fill="url(#welcome-b)" xlink:href="#welcome-g" />
-                            <path fill="url(#welcome-c)" mask="url(#welcome-h)" d="M40.333-15.147h50v95h-50z" />
-                        </g>
-                    </g>
-                </svg>
-            </div>
-
-            <!-- Content -->
-            <div class="relative">
-                <h1 class="text-2xl md:text-3xl text-slate-800 font-bold mb-1">Bienvenido al Panel de Talentus. 👋
-                </h1>
-                <p>Aqui veras el resumen de todo el sistema:</p>
-
-            </div>
-
-        </div>
-        <div class="sm:flex sm:justify-between sm:items-center mb-8">
-
-            <!-- Left: Avatars -->
-            @livewire('admin.inicio.avatars')
-
-            <!-- Right: Actions -->
-            <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-
-                <!-- Filter button -->
-                <div class="relative inline-flex" x-data="{ open: false }">
-                    <button class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                        aria-haspopup="true" @click.prevent="open = !open" :aria-expanded="open">
-                        <span class="sr-only">Filtro</span><wbr>
-                        <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                            <path
-                                d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
-                        </svg>
-                    </button>
-                    <div class="origin-top-right z-10 absolute top-full left-0 right-auto md:left-auto md:right-0 min-w-56 bg-white border border-slate-200 pt-1.5 rounded shadow-lg overflow-hidden mt-1"
-                        @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                        x-transition:enter="transition ease-out duration-200 transform"
-                        x-transition:enter-start="opacity-0 -translate-y-2"
-                        x-transition:enter-end="opacity-100 translate-y-0"
-                        x-transition:leave="transition ease-out duration-200" x-transition:leave-start="opacity-100"
-                        x-transition:leave-end="opacity-0" x-cloak>
-                        <div class="text-xs font-semibold text-slate-400 uppercase pt-1.5 pb-2 px-4">Filters
-                        </div>
-                        <ul class="mb-4">
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" checked />
-                                    <span class="text-sm font-medium ml-2">Direct VS Indirect</span>
-                                </label>
-                            </li>
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" checked />
-                                    <span class="text-sm font-medium ml-2">Real Time Value</span>
-                                </label>
-                            </li>
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" checked />
-                                    <span class="text-sm font-medium ml-2">Top Channels</span>
-                                </label>
-                            </li>
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" />
-                                    <span class="text-sm font-medium ml-2">Sales VS Refunds</span>
-                                </label>
-                            </li>
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" />
-                                    <span class="text-sm font-medium ml-2">Last Order</span>
-                                </label>
-                            </li>
-                            <li class="py-1 px-3">
-                                <label class="flex items-center">
-                                    <input type="checkbox" class="form-checkbox" />
-                                    <span class="text-sm font-medium ml-2">Total Spent</span>
-                                </label>
-                            </li>
-                        </ul>
-                        <div class="py-2 px-3 border-t border-slate-200 bg-slate-50">
-                            <ul class="flex items-center justify-between">
-                                <li>
-                                    <button
-                                        class="btn-xs bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                                        Limpiar
-                                    </button>
-                                </li>
-                                <li>
-                                    <button class="btn-xs bg-indigo-500 hover:bg-indigo-600 text-white"
-                                        @click="open = false" @focusout="open = false">Aplicar</button>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Datepicker built with flatpickr -->
-                <div class="relative">
-                    <input
-                        class="datepicker form-input pl-9 text-slate-500 hover:text-slate-600 font-medium focus:border-slate-300 w-60"
-                        placeholder="Select dates" data-class="flatpickr-right" />
-                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 fill-current text-slate-500 ml-3" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                    </div>
-                </div>
-
-
-            </div>
-
-        </div>
-
-        <!-- Cards -->
-        @livewire('admin.inicio.cards')
-
-        {{-- <div class="grid grid-cols-12 gap-6">
-
+        <div class="grid grid-cols-12 gap-6">
             <!-- card  (Clientes) -->
             <div
                 class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
@@ -175,13 +12,26 @@
                             <div class="px-4 mt-10">
                                 <div class="w-full bg-white rounded-xl overflow-hdden shadow-md p-4 undefined">
                                     <div class="flex flex-wrap border-b border-gray-200 undefined">
-                                        <div
-                                            class="bg-gradient-to-tr from-blue-500 to-blue-700 -mt-10 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
-                                            <span class="material-icons text-white text-3xl leading-none">Icono</span>
+                                        <div wire:click="toClientes"
+                                            class="bg-gradient-to-tr from-blue-400 to-blue-600 hover:scale-75 ease-in duration-500 cursor-pointer -mt-10 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
+
+                                            <svg class="w-full  fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 64 64">
+                                                <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
+                                                    stroke="currentColor" stroke-linejoin="miter"
+                                                    class="nc-icon-wrapper">
+                                                    <path
+                                                        d="M38,39H26A18,18,0,0,0,8,57H8s9,4,24,4,24-4,24-4h0A18,18,0,0,0,38,39Z">
+                                                    </path>
+                                                    <path
+                                                        d="M19,17.067a13,13,0,1,1,26,0C45,24.283,39.18,32,32,32S19,24.283,19,17.067Z">
+                                                    </path>
+                                                </g>
+                                            </svg>
                                         </div>
                                         <div class="w-full pl-4 max-w-full flex-grow flex-1 mb-2 text-right undefined">
                                             <h5 class="text-gray-500 font-light tracking-wide text-base mb-1">Hoy</h5>
-                                            <span class="text-3xl text-gray-900">10</span>
+                                            <span class="text-3xl text-gray-900">{{ $totales['clientes-hoy'] }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -193,7 +43,9 @@
                     <h2 class="text-lg font-semibold text-slate-800 mb-2">Clientes</h2>
                     <div class="text-xs font-semibold text-slate-400 uppercase mb-1">Total</div>
                     <div class="flex items-start">
-                        <div class="text-3xl font-bold text-slate-800 mr-2">17.489</div>
+                        <div class="text-3xl font-bold text-slate-800 mr-2">
+                            {{ number_format($totales['clientes-total'], 0, '.', '.') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -210,13 +62,45 @@
                             <div class="px-4 mt-10">
                                 <div class="w-full bg-white rounded-xl overflow-hdden shadow-md p-4 undefined">
                                     <div class="flex flex-wrap border-b border-gray-200 undefined">
-                                        <div
-                                            class="bg-gradient-to-tr from-blue-500 to-blue-700 -mt-10 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
-                                            <span class="material-icons text-white text-3xl leading-none">Icono</span>
+                                        <div wire:click="toVehiculos"
+                                            class="bg-gradient-to-tr from-white to-green-100 cursor-pointer -mt-10 hover:scale-75 ease-in duration-500 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
+                                            <svg class="w-full  fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 48 48">
+                                                <g class="nc-icon-wrapper">
+                                                    <path
+                                                        d="M11,45H5a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,11,45Z"
+                                                        fill="#363636"></path>
+                                                    <path
+                                                        d="M43,45H37a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,43,45Z"
+                                                        fill="#363636"></path>
+                                                    <path
+                                                        d="M42,21,40.415,7.533A4,4,0,0,0,36.443,4H11.557A4,4,0,0,0,7.585,7.533L6,21Z"
+                                                        fill="#e3e3e3"></path>
+                                                    <path
+                                                        d="M42,22a1,1,0,0,1-.992-.883L39.422,7.649A3,3,0,0,0,36.442,5H11.558a3,3,0,0,0-2.98,2.649L6.993,21.117a1,1,0,0,1-1.986-.234L6.592,7.415A5,5,0,0,1,11.558,3H36.442a5,5,0,0,1,4.966,4.415l1.585,13.468a1,1,0,0,1-.876,1.11A.945.945,0,0,1,42,22Z"
+                                                        fill="#38a838"></path>
+                                                    <path
+                                                        d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
+                                                        fill="#78d478"></path>
+                                                    <circle cx="40" cy="27" r="3" fill="#fff">
+                                                    </circle>
+                                                    <circle cx="8" cy="27" r="3" fill="#fff">
+                                                    </circle>
+                                                    <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
+                                                    </path>
+                                                    <path
+                                                        d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
+                                                        fill="#49c549"></path>
+                                                    <circle cx="8" cy="34" r="2" fill="#f7bf26">
+                                                    </circle>
+                                                    <circle cx="40" cy="34" r="2" fill="#f7bf26">
+                                                    </circle>
+                                                </g>
+                                            </svg>
                                         </div>
                                         <div class="w-full pl-4 max-w-full flex-grow flex-1 mb-2 text-right undefined">
                                             <h5 class="text-gray-500 font-light tracking-wide text-base mb-1">Hoy</h5>
-                                            <span class="text-3xl text-gray-900">10</span>
+                                            <span class="text-3xl text-gray-900">{{ $totales['vehiculos-hoy'] }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -228,7 +112,9 @@
                     <h2 class="text-lg font-semibold text-slate-800 mb-2">Vehiculos</h2>
                     <div class="text-xs font-semibold text-slate-400 uppercase mb-1">Total</div>
                     <div class="flex items-start">
-                        <div class="text-3xl font-bold text-slate-800 mr-2">17.489</div>
+                        <div class="text-3xl font-bold text-slate-800 mr-2">
+                            {{ number_format($totales['vehiculos-total'], 0, '.', '.') }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -246,13 +132,50 @@
                             <div class="px-4 mt-10">
                                 <div class="w-full bg-white rounded-xl overflow-hdden shadow-md p-4 undefined">
                                     <div class="flex flex-wrap border-b border-gray-200 undefined">
-                                        <div
-                                            class="bg-gradient-to-tr from-blue-500 to-blue-700 -mt-10 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
-                                            <span class="material-icons text-white text-3xl leading-none">Icono</span>
+                                        <div wire:click="toFlotas"
+                                            class="bg-gradient-to-tr from-white to-cyan-200 cursor-pointer -mt-10 hover:scale-75 ease-in duration-500 rounded-xl text-white grid items-center w-24 h-24 py-4 px-4 justify-center shadow-lg-blue mb-0">
+                                            <svg class="w-full  fill-white" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 48 48">
+                                                <g class="nc-icon-wrapper">
+                                                    <path
+                                                        d="M11,45H5a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,11,45Z"
+                                                        fill="#363636"></path>
+                                                    <path
+                                                        d="M43,45H37a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,43,45Z"
+                                                        fill="#363636"></path>
+                                                    <path
+                                                        d="M42,21,40.415,7.533A4,4,0,0,0,36.443,4H11.557A4,4,0,0,0,7.585,7.533L6,21Z"
+                                                        fill="#e3e3e3"></path>
+                                                    <path
+                                                        d="M42,22a1,1,0,0,1-.992-.883L39.422,7.649A3,3,0,0,0,36.442,5H11.558a3,3,0,0,0-2.98,2.649L6.993,21.117a1,1,0,0,1-1.986-.234L6.592,7.415A5,5,0,0,1,11.558,3H36.442a5,5,0,0,1,4.966,4.415l1.585,13.468a1,1,0,0,1-.876,1.11A.945.945,0,0,1,42,22Z"
+                                                        fill="#38a838"></path>
+                                                    <path
+                                                        d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
+                                                        fill="#78d478"></path>
+                                                    <circle cx="40" cy="27" r="3"
+                                                        fill="#fff">
+                                                    </circle>
+                                                    <circle cx="8" cy="27" r="3"
+                                                        fill="#fff">
+                                                    </circle>
+                                                    <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z"
+                                                        fill="#363636">
+                                                    </path>
+                                                    <path
+                                                        d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
+                                                        fill="#49c549"></path>
+                                                    <circle cx="8" cy="34" r="2"
+                                                        fill="#f7bf26">
+                                                    </circle>
+                                                    <circle cx="40" cy="34" r="2"
+                                                        fill="#f7bf26">
+                                                    </circle>
+                                                </g>
+                                            </svg>
                                         </div>
                                         <div class="w-full pl-4 max-w-full flex-grow flex-1 mb-2 text-right undefined">
                                             <h5 class="text-gray-500 font-light tracking-wide text-base mb-1">Hoy</h5>
-                                            <span class="text-3xl text-gray-900">10</span>
+                                            <span class="text-3xl text-gray-900">{{ $totales['flotas-hoy'] }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -264,12 +187,15 @@
                     <h2 class="text-lg font-semibold text-slate-800 mb-2">Flotas</h2>
                     <div class="text-xs font-semibold text-slate-400 uppercase mb-1">Total</div>
                     <div class="flex items-start">
-                        <div class="text-3xl font-bold text-slate-800 mr-2">17.489</div>
+                        <div class="text-3xl font-bold text-slate-800 mr-2">
+                            {{ number_format($totales['flotas-total'], 0, '.', '.') }}</div>
                     </div>
                 </div>
             </div>
             <!-- Bar chart (Direct vs Indirect) -->
-            <div class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
+            @livewire('admin.inicio.charts.ventas')
+            {{-- <div
+                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100">
                     <h2 class="font-semibold text-slate-800">Direct VS Indirect</h2>
                 </header>
@@ -282,9 +208,10 @@
                     <!-- Change the height attribute to adjust the chart height -->
                     <canvas id="dashboard-card-04" width="595" height="248"></canvas>
                 </div>
-            </div>
+            </div> --}}
             <!-- Line chart (Real Time Value) -->
-            <div class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
+            <div
+                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100 flex items-center">
                     <h2 class="font-semibold text-slate-800">Real Time Value</h2>
                     <div class="relative ml-2" x-data="{ open: false }" @mouseenter="open = true"
@@ -366,7 +293,8 @@
                 </div>
             </div>
             <!-- Line chart (Sales Over Time) -->
-            <div class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
+            <div
+                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100 flex items-center">
                     <h2 class="font-semibold text-slate-800">Sales Over Time (all stores)</h2>
                 </header>
@@ -390,7 +318,8 @@
                 </div>
             </div>
             <!-- Stacked bar chart (Sales VS Refunds) -->
-            <div class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
+            <div
+                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100 flex items-center">
                     <h2 class="font-semibold text-slate-800">Sales VS Refunds</h2>
                     <div class="relative ml-2" x-data="{ open: false }" @mouseenter="open = true"
@@ -472,7 +401,8 @@
                             <li class="flex px-2">
                                 <div class="w-9 h-9 rounded-full shrink-0 bg-rose-500 my-2 mr-3">
                                     <svg class="w-9 h-9 fill-current text-rose-50" viewBox="0 0 36 36">
-                                        <path d="M25 24H11a1 1 0 01-1-1v-5h2v4h12v-4h2v5a1 1 0 01-1 1zM14 13h8v2h-8z" />
+                                        <path
+                                            d="M25 24H11a1 1 0 01-1-1v-5h2v4h12v-4h2v5a1 1 0 01-1 1zM14 13h8v2h-8z" />
                                     </svg>
                                 </div>
                                 <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
@@ -702,9 +632,4 @@
                 </div>
             </div>
 
-        </div> --}}
-
-    </div>
-
-
-@stop
+        </div>

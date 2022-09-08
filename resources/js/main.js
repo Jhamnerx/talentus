@@ -21,7 +21,6 @@ import tailwindConfig from "../../tailwind.config";
 import dashboardCard01 from "./components/dashboard-card-01";
 import dashboardCard02 from "./components/dashboard-card-02";
 import dashboardCard03 from "./components/dashboard-card-03";
-import dashboardCard04 from "./components/dashboard-card-04";
 import dashboardCard05 from "./components/dashboard-card-05";
 import dashboardCard06 from "./components/dashboard-card-06";
 import dashboardCard08 from "./components/dashboard-card-08";
@@ -44,6 +43,8 @@ import fintechCard11 from "./components/fintech-card-11";
 import fintechCard12 from "./components/fintech-card-12";
 import fintechCard13 from "./components/fintech-card-13";
 import fintechCard14 from "./components/fintech-card-14";
+
+import dashboardCard04 from "./components/dashboard-card-04";
 
 const fullConfig = resolveConfig(tailwindConfig);
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
     public function index(Request $request)
     {
         $plantilla = plantilla::where('empresas_id', session('empresa'));
@@ -21,8 +22,58 @@ class HomeController extends Controller
         //$request->session()->pull('empresa', '1');
         
        return view('admin.index', compact('plantilla'));
-
-
        
     }
+
+    public function getDataVentas()
+    {
+        ///$df = new DataFeed();
+
+        return (object)[
+            'labels' => [
+                '12-01-2020',
+                '01-01-2021',
+                '02-01-2021'
+            ],
+            'data' =>[
+                'facturas' =>[  
+                    'totales' => [
+                        1000,
+                        900,
+                        300
+                    ],
+                ],
+                'recibos' =>[   
+                    'totales' => [
+                        800,
+                        500,
+                        100
+                    ],
+                ],
+            ]
+
+        ];
+    }
+
+    public function getDataFeed()
+    {
+
+
+
+
+        // $query = $this->where('data_type', $dataType)
+        //     ->where(function($q) use ($field){
+        //         if ('label' == $field) {
+        //             $q->whereNotNull('label');
+        //         }
+        //     })->pluck($field)
+        //     ->toArray();
+
+        // if (null !== $limit) {
+        //     return array_slice($query, 0, $limit);
+        // }
+
+        //return $query;
+    }
+
 }

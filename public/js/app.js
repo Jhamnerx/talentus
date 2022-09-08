@@ -8744,13 +8744,13 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(chart_js__WEBPACK_IMPORTED_
 // https://www.chartjs.org/
 
 var dashboardCard03 = function dashboardCard03() {
-  var ctx = document.getElementById('dashboard-card-03');
+  var ctx = document.getElementById("dashboard-card-03");
   if (!ctx) return; // eslint-disable-next-line no-unused-vars
 
   var chart = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(ctx, {
-    type: 'line',
+    type: "line",
     data: {
-      labels: ['12-01-2020', '01-01-2021', '02-01-2021', '03-01-2021', '04-01-2021', '05-01-2021', '06-01-2021', '07-01-2021', '08-01-2021', '09-01-2021', '10-01-2021', '11-01-2021', '12-01-2021', '01-01-2022', '02-01-2022', '03-01-2022', '04-01-2022', '05-01-2022', '06-01-2022', '07-01-2022', '08-01-2022', '09-01-2022', '10-01-2022', '11-01-2022', '12-01-2022', '01-01-2023'],
+      labels: ["12-01-2020", "01-01-2021", "02-01-2021", "03-01-2021", "04-01-2021", "05-01-2021", "06-01-2021", "07-01-2021", "08-01-2021", "09-01-2021", "10-01-2021", "11-01-2021", "12-01-2021", "01-01-2022", "02-01-2022", "03-01-2022", "04-01-2022", "05-01-2022", "06-01-2022", "07-01-2022", "08-01-2022", "09-01-2022", "10-01-2022", "11-01-2022", "12-01-2022", "01-01-2023"],
       datasets: [// Indigo line
       {
         data: [540, 466, 540, 466, 385, 432, 334, 334, 289, 289, 200, 289, 222, 289, 289, 403, 554, 304, 289, 270, 134, 270, 829, 344, 388, 364],
@@ -8788,10 +8788,10 @@ var dashboardCard03 = function dashboardCard03() {
           beginAtZero: true
         },
         x: {
-          type: 'time',
+          type: "time",
           time: {
-            parser: 'MM-DD-YYYY',
-            unit: 'month'
+            parser: "MM-DD-YYYY",
+            unit: "month"
           },
           display: false
         }
@@ -8814,7 +8814,7 @@ var dashboardCard03 = function dashboardCard03() {
       },
       interaction: {
         intersect: false,
-        mode: 'nearest'
+        mode: "nearest"
       },
       maintainAspectRatio: false
     }
@@ -8842,8 +8842,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _tailwind_config__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../tailwind.config */ "./tailwind.config.js");
 /* harmony import */ var _tailwind_config__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_tailwind_config__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./resources/js/utils.js");
-/* eslint-disable prefer-destructuring */
- // Import TailwindCSS variables
+// Import Chart.js
+ // Import utilities
+// Import TailwindCSS variables
 
 
  // Import utilities
@@ -8855,164 +8856,175 @@ chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart.register(chart_js__WEBPACK_IMPORTED_
 // https://www.chartjs.org/
 
 var dashboardCard04 = function dashboardCard04() {
-  var ctx = document.getElementById('dashboard-card-04');
-  if (!ctx) return; // eslint-disable-next-line no-unused-vars
-
-  var chart = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['12-01-2020', '01-01-2021', '02-01-2021', '03-01-2021', '04-01-2021', '05-01-2021'],
-      datasets: [// Light blue bars
-      {
-        label: 'Direct',
-        data: [800, 1600, 900, 1300, 1950, 1700],
-        backgroundColor: fullConfig.theme.colors.blue[400],
-        hoverBackgroundColor: fullConfig.theme.colors.blue[500],
-        barPercentage: 0.66,
-        categoryPercentage: 0.66
-      }, // Blue bars
-      {
-        label: 'Indirect',
-        data: [4900, 2600, 5350, 4800, 5200, 4800],
-        backgroundColor: fullConfig.theme.colors.indigo[500],
-        hoverBackgroundColor: fullConfig.theme.colors.indigo[600],
-        barPercentage: 0.66,
-        categoryPercentage: 0.66
-      }]
-    },
-    options: {
-      layout: {
-        padding: {
-          top: 12,
-          bottom: 16,
-          left: 20,
-          right: 20
-        }
+  var ctx = document.getElementById("dashboard-card-04");
+  if (!ctx) return;
+  fetch("/admin/json-data-feed").then(function (a) {
+    return a.json();
+  }).then(function (result) {
+    var dataset1 = result.data.facturas.totales;
+    var dataset2 = result.data.recibos.totales;
+    var chart = new chart_js__WEBPACK_IMPORTED_MODULE_0__.Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: result.labels,
+        datasets: [// Light blue bars
+        {
+          label: "Facturas",
+          data: dataset1,
+          // data: [
+          //     800, 1600, 900, 1300, 1950, 1700,
+          // ],
+          backgroundColor: fullConfig.theme.colors.blue[400],
+          hoverBackgroundColor: fullConfig.theme.colors.blue[500],
+          barPercentage: 0.66,
+          categoryPercentage: 0.66
+        }, // Blue bars
+        {
+          label: "Recibos",
+          data: dataset2,
+          // data: [
+          //     4900, 2600, 5350, 4800, 5200, 4800,
+          // ],
+          backgroundColor: fullConfig.theme.colors.indigo[500],
+          hoverBackgroundColor: fullConfig.theme.colors.indigo[600],
+          barPercentage: 0.66,
+          categoryPercentage: 0.66
+        }]
       },
-      scales: {
-        y: {
-          grid: {
-            drawBorder: false
-          },
-          ticks: {
-            maxTicksLimit: 5,
-            callback: function callback(value) {
-              return (0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(value);
-            }
+      options: {
+        layout: {
+          padding: {
+            top: 12,
+            bottom: 16,
+            left: 20,
+            right: 20
           }
         },
-        x: {
-          type: 'time',
-          time: {
-            parser: 'MM-DD-YYYY',
-            unit: 'month',
-            displayFormats: {
-              month: 'MMM YY'
-            }
-          },
-          grid: {
-            display: false,
-            drawBorder: false
-          }
-        }
-      },
-      plugins: {
-        legend: {
-          display: false
-        },
-        htmlLegend: {
-          // ID of the container to put the legend in
-          containerID: 'dashboard-card-04-legend'
-        },
-        tooltip: {
-          callbacks: {
-            title: function title() {
-              return false;
+        scales: {
+          y: {
+            grid: {
+              drawBorder: false
             },
-            // Disable tooltip title
-            label: function label(context) {
-              return (0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(context.parsed.y);
+            ticks: {
+              maxTicksLimit: 5,
+              callback: function callback(value) {
+                return (0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(value);
+              }
+            }
+          },
+          x: {
+            type: "time",
+            time: {
+              parser: "MM-DD-YYYY",
+              unit: "month",
+              displayFormats: {
+                month: "MMM YY"
+              }
+            },
+            grid: {
+              display: false,
+              drawBorder: false
             }
           }
+        },
+        plugins: {
+          legend: {
+            display: false
+          },
+          htmlLegend: {
+            // ID of the container to put the legend in
+            containerID: "dashboard-card-04-legend"
+          },
+          tooltip: {
+            callbacks: {
+              title: function title() {
+                return false;
+              },
+              // Disable tooltip title
+              label: function label(context) {
+                return (0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(context.parsed.y);
+              }
+            }
+          }
+        },
+        interaction: {
+          intersect: false,
+          mode: "nearest"
+        },
+        animation: {
+          duration: 200
+        },
+        maintainAspectRatio: false
+      },
+      plugins: [{
+        id: "htmlLegend",
+        afterUpdate: function afterUpdate(c, args, options) {
+          var legendContainer = document.getElementById(options.containerID);
+          var ul = legendContainer.querySelector("ul");
+          if (!ul) return; // Remove old legend items
+
+          while (ul.firstChild) {
+            ul.firstChild.remove();
+          } // Reuse the built-in legendItems generator
+
+
+          var items = c.options.plugins.legend.labels.generateLabels(c);
+          items.forEach(function (item) {
+            var li = document.createElement("li");
+            li.style.marginRight = fullConfig.theme.margin[4]; // Button element
+
+            var button = document.createElement("button");
+            button.style.display = "inline-flex";
+            button.style.alignItems = "center";
+            button.style.opacity = item.hidden ? ".3" : "";
+
+            button.onclick = function () {
+              c.setDatasetVisibility(item.datasetIndex, !c.isDatasetVisible(item.datasetIndex));
+              c.update();
+            }; // Color box
+
+
+            var box = document.createElement("span");
+            box.style.display = "block";
+            box.style.width = fullConfig.theme.width[3];
+            box.style.height = fullConfig.theme.height[3];
+            box.style.borderRadius = fullConfig.theme.borderRadius.full;
+            box.style.marginRight = fullConfig.theme.margin[2];
+            box.style.borderWidth = "3px";
+            box.style.borderColor = item.fillStyle;
+            box.style.pointerEvents = "none"; // Label
+
+            var labelContainer = document.createElement("span");
+            labelContainer.style.display = "flex";
+            labelContainer.style.alignItems = "center";
+            var value = document.createElement("span");
+            value.style.color = fullConfig.theme.colors.slate[800];
+            value.style.fontSize = fullConfig.theme.fontSize["3xl"][0];
+            value.style.lineHeight = fullConfig.theme.fontSize["3xl"][1].lineHeight;
+            value.style.fontWeight = fullConfig.theme.fontWeight.bold;
+            value.style.marginRight = fullConfig.theme.margin[2];
+            value.style.pointerEvents = "none";
+            var label = document.createElement("span");
+            label.style.color = fullConfig.theme.colors.slate[500];
+            label.style.fontSize = fullConfig.theme.fontSize.sm[0];
+            label.style.lineHeight = fullConfig.theme.fontSize.sm[1].lineHeight;
+            var theValue = c.data.datasets[item.datasetIndex].data.reduce(function (a, b) {
+              return a + b;
+            }, 0);
+            var valueText = document.createTextNode((0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(theValue));
+            var labelText = document.createTextNode(item.text);
+            value.appendChild(valueText);
+            label.appendChild(labelText);
+            li.appendChild(button);
+            button.appendChild(box);
+            button.appendChild(labelContainer);
+            labelContainer.appendChild(value);
+            labelContainer.appendChild(label);
+            ul.appendChild(li);
+          });
         }
-      },
-      interaction: {
-        intersect: false,
-        mode: 'nearest'
-      },
-      animation: {
-        duration: 200
-      },
-      maintainAspectRatio: false
-    },
-    plugins: [{
-      id: 'htmlLegend',
-      afterUpdate: function afterUpdate(c, args, options) {
-        var legendContainer = document.getElementById(options.containerID);
-        var ul = legendContainer.querySelector('ul');
-        if (!ul) return; // Remove old legend items
-
-        while (ul.firstChild) {
-          ul.firstChild.remove();
-        } // Reuse the built-in legendItems generator
-
-
-        var items = c.options.plugins.legend.labels.generateLabels(c);
-        items.forEach(function (item) {
-          var li = document.createElement('li');
-          li.style.marginRight = fullConfig.theme.margin[4]; // Button element
-
-          var button = document.createElement('button');
-          button.style.display = 'inline-flex';
-          button.style.alignItems = 'center';
-          button.style.opacity = item.hidden ? '.3' : '';
-
-          button.onclick = function () {
-            c.setDatasetVisibility(item.datasetIndex, !c.isDatasetVisible(item.datasetIndex));
-            c.update();
-          }; // Color box
-
-
-          var box = document.createElement('span');
-          box.style.display = 'block';
-          box.style.width = fullConfig.theme.width[3];
-          box.style.height = fullConfig.theme.height[3];
-          box.style.borderRadius = fullConfig.theme.borderRadius.full;
-          box.style.marginRight = fullConfig.theme.margin[2];
-          box.style.borderWidth = '3px';
-          box.style.borderColor = item.fillStyle;
-          box.style.pointerEvents = 'none'; // Label
-
-          var labelContainer = document.createElement('span');
-          labelContainer.style.display = 'flex';
-          labelContainer.style.alignItems = 'center';
-          var value = document.createElement('span');
-          value.style.color = fullConfig.theme.colors.slate[800];
-          value.style.fontSize = fullConfig.theme.fontSize['3xl'][0];
-          value.style.lineHeight = fullConfig.theme.fontSize['3xl'][1].lineHeight;
-          value.style.fontWeight = fullConfig.theme.fontWeight.bold;
-          value.style.marginRight = fullConfig.theme.margin[2];
-          value.style.pointerEvents = 'none';
-          var label = document.createElement('span');
-          label.style.color = fullConfig.theme.colors.slate[500];
-          label.style.fontSize = fullConfig.theme.fontSize.sm[0];
-          label.style.lineHeight = fullConfig.theme.fontSize.sm[1].lineHeight;
-          var theValue = c.data.datasets[item.datasetIndex].data.reduce(function (a, b) {
-            return a + b;
-          }, 0);
-          var valueText = document.createTextNode((0,_utils__WEBPACK_IMPORTED_MODULE_3__.formatValue)(theValue));
-          var labelText = document.createTextNode(item.text);
-          value.appendChild(valueText);
-          label.appendChild(labelText);
-          li.appendChild(button);
-          button.appendChild(box);
-          button.appendChild(labelContainer);
-          labelContainer.appendChild(value);
-          labelContainer.appendChild(label);
-          ul.appendChild(li);
-        });
-      }
-    }]
+      }]
+    });
   });
 };
 
@@ -11213,29 +11225,29 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_dashboard_card_01__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/dashboard-card-01 */ "./resources/js/components/dashboard-card-01.js");
 /* harmony import */ var _components_dashboard_card_02__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/dashboard-card-02 */ "./resources/js/components/dashboard-card-02.js");
 /* harmony import */ var _components_dashboard_card_03__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/dashboard-card-03 */ "./resources/js/components/dashboard-card-03.js");
-/* harmony import */ var _components_dashboard_card_04__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dashboard-card-04 */ "./resources/js/components/dashboard-card-04.js");
-/* harmony import */ var _components_dashboard_card_05__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/dashboard-card-05 */ "./resources/js/components/dashboard-card-05.js");
-/* harmony import */ var _components_dashboard_card_06__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/dashboard-card-06 */ "./resources/js/components/dashboard-card-06.js");
-/* harmony import */ var _components_dashboard_card_08__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/dashboard-card-08 */ "./resources/js/components/dashboard-card-08.js");
-/* harmony import */ var _components_dashboard_card_09__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/dashboard-card-09 */ "./resources/js/components/dashboard-card-09.js");
-/* harmony import */ var _components_analytics_card_01__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/analytics-card-01 */ "./resources/js/components/analytics-card-01.js");
-/* harmony import */ var _components_analytics_card_02__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/analytics-card-02 */ "./resources/js/components/analytics-card-02.js");
-/* harmony import */ var _components_analytics_card_03__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/analytics-card-03 */ "./resources/js/components/analytics-card-03.js");
-/* harmony import */ var _components_analytics_card_04__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/analytics-card-04 */ "./resources/js/components/analytics-card-04.js");
-/* harmony import */ var _components_analytics_card_08__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/analytics-card-08 */ "./resources/js/components/analytics-card-08.js");
-/* harmony import */ var _components_analytics_card_09__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/analytics-card-09 */ "./resources/js/components/analytics-card-09.js");
-/* harmony import */ var _components_analytics_card_10__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/analytics-card-10 */ "./resources/js/components/analytics-card-10.js");
-/* harmony import */ var _components_fintech_card_01__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/fintech-card-01 */ "./resources/js/components/fintech-card-01.js");
-/* harmony import */ var _components_fintech_card_03__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/fintech-card-03 */ "./resources/js/components/fintech-card-03.js");
-/* harmony import */ var _components_fintech_card_04__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/fintech-card-04 */ "./resources/js/components/fintech-card-04.js");
-/* harmony import */ var _components_fintech_card_07__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/fintech-card-07 */ "./resources/js/components/fintech-card-07.js");
-/* harmony import */ var _components_fintech_card_08__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/fintech-card-08 */ "./resources/js/components/fintech-card-08.js");
-/* harmony import */ var _components_fintech_card_09__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/fintech-card-09 */ "./resources/js/components/fintech-card-09.js");
-/* harmony import */ var _components_fintech_card_10__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/fintech-card-10 */ "./resources/js/components/fintech-card-10.js");
-/* harmony import */ var _components_fintech_card_11__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/fintech-card-11 */ "./resources/js/components/fintech-card-11.js");
-/* harmony import */ var _components_fintech_card_12__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/fintech-card-12 */ "./resources/js/components/fintech-card-12.js");
-/* harmony import */ var _components_fintech_card_13__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/fintech-card-13 */ "./resources/js/components/fintech-card-13.js");
-/* harmony import */ var _components_fintech_card_14__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/fintech-card-14 */ "./resources/js/components/fintech-card-14.js");
+/* harmony import */ var _components_dashboard_card_05__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/dashboard-card-05 */ "./resources/js/components/dashboard-card-05.js");
+/* harmony import */ var _components_dashboard_card_06__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/dashboard-card-06 */ "./resources/js/components/dashboard-card-06.js");
+/* harmony import */ var _components_dashboard_card_08__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/dashboard-card-08 */ "./resources/js/components/dashboard-card-08.js");
+/* harmony import */ var _components_dashboard_card_09__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/dashboard-card-09 */ "./resources/js/components/dashboard-card-09.js");
+/* harmony import */ var _components_analytics_card_01__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/analytics-card-01 */ "./resources/js/components/analytics-card-01.js");
+/* harmony import */ var _components_analytics_card_02__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/analytics-card-02 */ "./resources/js/components/analytics-card-02.js");
+/* harmony import */ var _components_analytics_card_03__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/analytics-card-03 */ "./resources/js/components/analytics-card-03.js");
+/* harmony import */ var _components_analytics_card_04__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./components/analytics-card-04 */ "./resources/js/components/analytics-card-04.js");
+/* harmony import */ var _components_analytics_card_08__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/analytics-card-08 */ "./resources/js/components/analytics-card-08.js");
+/* harmony import */ var _components_analytics_card_09__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/analytics-card-09 */ "./resources/js/components/analytics-card-09.js");
+/* harmony import */ var _components_analytics_card_10__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/analytics-card-10 */ "./resources/js/components/analytics-card-10.js");
+/* harmony import */ var _components_fintech_card_01__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/fintech-card-01 */ "./resources/js/components/fintech-card-01.js");
+/* harmony import */ var _components_fintech_card_03__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/fintech-card-03 */ "./resources/js/components/fintech-card-03.js");
+/* harmony import */ var _components_fintech_card_04__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./components/fintech-card-04 */ "./resources/js/components/fintech-card-04.js");
+/* harmony import */ var _components_fintech_card_07__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./components/fintech-card-07 */ "./resources/js/components/fintech-card-07.js");
+/* harmony import */ var _components_fintech_card_08__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./components/fintech-card-08 */ "./resources/js/components/fintech-card-08.js");
+/* harmony import */ var _components_fintech_card_09__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./components/fintech-card-09 */ "./resources/js/components/fintech-card-09.js");
+/* harmony import */ var _components_fintech_card_10__WEBPACK_IMPORTED_MODULE_24__ = __webpack_require__(/*! ./components/fintech-card-10 */ "./resources/js/components/fintech-card-10.js");
+/* harmony import */ var _components_fintech_card_11__WEBPACK_IMPORTED_MODULE_25__ = __webpack_require__(/*! ./components/fintech-card-11 */ "./resources/js/components/fintech-card-11.js");
+/* harmony import */ var _components_fintech_card_12__WEBPACK_IMPORTED_MODULE_26__ = __webpack_require__(/*! ./components/fintech-card-12 */ "./resources/js/components/fintech-card-12.js");
+/* harmony import */ var _components_fintech_card_13__WEBPACK_IMPORTED_MODULE_27__ = __webpack_require__(/*! ./components/fintech-card-13 */ "./resources/js/components/fintech-card-13.js");
+/* harmony import */ var _components_fintech_card_14__WEBPACK_IMPORTED_MODULE_28__ = __webpack_require__(/*! ./components/fintech-card-14 */ "./resources/js/components/fintech-card-14.js");
+/* harmony import */ var _components_dashboard_card_04__WEBPACK_IMPORTED_MODULE_29__ = __webpack_require__(/*! ./components/dashboard-card-04 */ "./resources/js/components/dashboard-card-04.js");
  // import flatpickr from "flatpickr";
 
  // import { Spanish } from "flatpickr/dist/l10n/es.js";
@@ -11346,29 +11358,29 @@ document.addEventListener("DOMContentLoaded", function () {
   (0,_components_dashboard_card_01__WEBPACK_IMPORTED_MODULE_4__["default"])();
   (0,_components_dashboard_card_02__WEBPACK_IMPORTED_MODULE_5__["default"])();
   (0,_components_dashboard_card_03__WEBPACK_IMPORTED_MODULE_6__["default"])();
-  (0,_components_dashboard_card_04__WEBPACK_IMPORTED_MODULE_7__["default"])();
-  (0,_components_dashboard_card_05__WEBPACK_IMPORTED_MODULE_8__["default"])();
-  (0,_components_dashboard_card_06__WEBPACK_IMPORTED_MODULE_9__["default"])();
-  (0,_components_dashboard_card_08__WEBPACK_IMPORTED_MODULE_10__["default"])();
-  (0,_components_dashboard_card_09__WEBPACK_IMPORTED_MODULE_11__["default"])();
-  (0,_components_analytics_card_01__WEBPACK_IMPORTED_MODULE_12__["default"])();
-  (0,_components_analytics_card_02__WEBPACK_IMPORTED_MODULE_13__["default"])();
-  (0,_components_analytics_card_03__WEBPACK_IMPORTED_MODULE_14__["default"])();
-  (0,_components_analytics_card_04__WEBPACK_IMPORTED_MODULE_15__["default"])();
-  (0,_components_analytics_card_08__WEBPACK_IMPORTED_MODULE_16__["default"])();
-  (0,_components_analytics_card_09__WEBPACK_IMPORTED_MODULE_17__["default"])();
-  (0,_components_analytics_card_10__WEBPACK_IMPORTED_MODULE_18__["default"])();
-  (0,_components_fintech_card_01__WEBPACK_IMPORTED_MODULE_19__["default"])();
-  (0,_components_fintech_card_03__WEBPACK_IMPORTED_MODULE_20__["default"])();
-  (0,_components_fintech_card_04__WEBPACK_IMPORTED_MODULE_21__["default"])();
-  (0,_components_fintech_card_07__WEBPACK_IMPORTED_MODULE_22__["default"])();
-  (0,_components_fintech_card_08__WEBPACK_IMPORTED_MODULE_23__["default"])();
-  (0,_components_fintech_card_09__WEBPACK_IMPORTED_MODULE_24__["default"])();
-  (0,_components_fintech_card_10__WEBPACK_IMPORTED_MODULE_25__["default"])();
-  (0,_components_fintech_card_11__WEBPACK_IMPORTED_MODULE_26__["default"])();
-  (0,_components_fintech_card_12__WEBPACK_IMPORTED_MODULE_27__["default"])();
-  (0,_components_fintech_card_13__WEBPACK_IMPORTED_MODULE_28__["default"])();
-  (0,_components_fintech_card_14__WEBPACK_IMPORTED_MODULE_29__["default"])();
+  (0,_components_dashboard_card_04__WEBPACK_IMPORTED_MODULE_29__["default"])();
+  (0,_components_dashboard_card_05__WEBPACK_IMPORTED_MODULE_7__["default"])();
+  (0,_components_dashboard_card_06__WEBPACK_IMPORTED_MODULE_8__["default"])();
+  (0,_components_dashboard_card_08__WEBPACK_IMPORTED_MODULE_9__["default"])();
+  (0,_components_dashboard_card_09__WEBPACK_IMPORTED_MODULE_10__["default"])();
+  (0,_components_analytics_card_01__WEBPACK_IMPORTED_MODULE_11__["default"])();
+  (0,_components_analytics_card_02__WEBPACK_IMPORTED_MODULE_12__["default"])();
+  (0,_components_analytics_card_03__WEBPACK_IMPORTED_MODULE_13__["default"])();
+  (0,_components_analytics_card_04__WEBPACK_IMPORTED_MODULE_14__["default"])();
+  (0,_components_analytics_card_08__WEBPACK_IMPORTED_MODULE_15__["default"])();
+  (0,_components_analytics_card_09__WEBPACK_IMPORTED_MODULE_16__["default"])();
+  (0,_components_analytics_card_10__WEBPACK_IMPORTED_MODULE_17__["default"])();
+  (0,_components_fintech_card_01__WEBPACK_IMPORTED_MODULE_18__["default"])();
+  (0,_components_fintech_card_03__WEBPACK_IMPORTED_MODULE_19__["default"])();
+  (0,_components_fintech_card_04__WEBPACK_IMPORTED_MODULE_20__["default"])();
+  (0,_components_fintech_card_07__WEBPACK_IMPORTED_MODULE_21__["default"])();
+  (0,_components_fintech_card_08__WEBPACK_IMPORTED_MODULE_22__["default"])();
+  (0,_components_fintech_card_09__WEBPACK_IMPORTED_MODULE_23__["default"])();
+  (0,_components_fintech_card_10__WEBPACK_IMPORTED_MODULE_24__["default"])();
+  (0,_components_fintech_card_11__WEBPACK_IMPORTED_MODULE_25__["default"])();
+  (0,_components_fintech_card_12__WEBPACK_IMPORTED_MODULE_26__["default"])();
+  (0,_components_fintech_card_13__WEBPACK_IMPORTED_MODULE_27__["default"])();
+  (0,_components_fintech_card_14__WEBPACK_IMPORTED_MODULE_28__["default"])();
 });
 
 /***/ }),
