@@ -1,7 +1,7 @@
 <ul class="flex flex-wrap justify-center sm:justify-start mb-8 sm:mb-0 -space-x-3 -ml-px">
     @foreach ($usuarios as $usuario)
         <li>
-            <a class="block" href="#0">
+            <a class="block cursor-pointer">
                 <img class="w-9 h-9 rounded-full" src="{{ $usuario->profile_photo_url }}" width="36" height="36"
                     alt="{{ $usuario->name }}" />
             </a>
