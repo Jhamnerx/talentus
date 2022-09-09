@@ -24,7 +24,7 @@
             <div class="">
                 @guest
                     <div class="">
-                        <a href="{{ route('login') }}" class="thm-btn main-nav__btn">Iniciar Sesion</a>
+                        <a href="{{ route('login') }}" class="thm-btn main-nav__btn">Iniciar Sesión</a>
                         <a href="{{ route('register') }}" class="thm-btn main-nav__btn">Registrarse</a>
                     </div>
                 @endguest
@@ -67,7 +67,7 @@
                                 <li>
                                     <a class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                                         href="{{ route('admin.home') }}" @click="open = false" @focus="open = true"
-                                        @focusout="open = false">DashBoard</a>
+                                        @focusout="open = false">Panel de Control</a>
                                 </li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">

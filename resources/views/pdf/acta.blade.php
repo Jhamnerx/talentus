@@ -200,7 +200,7 @@
                                 " \n ACTA VALIDA HASTA: " .
                                 $acta->fin_cobertura .
                                 "
-                                                                        \nCONSULTAR VALIDEZ EN: " .
+                                                                                                                                        \nCONSULTAR VALIDEZ EN: " .
                                 route('consulta.actas', $acta->codigo),
                         ),
                 ) }}">
@@ -214,7 +214,7 @@
         <div>
             <span>
                 <b>{{ $plantilla->razon_social }}</b>, con RUC {{ $plantilla->ruc }}, Certifica que nuestro cliente:
-                <b>{{ strtoupper($acta->vehiculos->flotas->clientes->razon_social) }}</b>
+                <b>{{ $acta->vehiculos->flotas ? strtoupper($acta->vehiculos->flotas->clientes->razon_social) : 'no existe' }}</b>
                 con DNI/RUC: {{ $acta->vehiculos->flotas->clientes->numero_documento }}, ha adquirido un equipo
                 GPS,
                 para la unidad que se detalla a continuación:
