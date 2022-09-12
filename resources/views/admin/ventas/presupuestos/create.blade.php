@@ -72,7 +72,7 @@
                     </div>
                     {{-- NUMERO --}}
 
-                    @livewire('admin.ventas.presupuestos.save', ['serial' => $serial])
+                    @livewire('admin.ventas.presupuestos.save', ['numero' => $numero])
 
                     {{-- <div class="col-span-12 mb-5">
                     <label
@@ -454,8 +454,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>

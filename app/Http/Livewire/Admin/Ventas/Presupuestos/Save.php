@@ -9,7 +9,7 @@ class Save extends Component
 {
 
     public $numero;
-    public $serial;
+
 
 
     protected $messages = [
@@ -35,7 +35,7 @@ class Save extends Component
 
     public function mount(){
 
-        $this->numero = $this->serial;
+        $this->numero = $this->numero;
     }
 
     public function updated($label)

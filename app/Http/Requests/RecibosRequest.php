@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class RecibosRequest extends FormRequest
 {
@@ -25,20 +26,23 @@ class RecibosRequest extends FormRequest
     {
 
         $recibo = $this->route()->parameter('recibo');
+        
         $rules = [
+
             'clientes_id' => 'required',
-            'numero' => 'required|unique:recibos,numero',
+            'numero' => ['required', Rule::unique('recibos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),],
             'fecha' => 'required',
             'divisa' => 'required',
             'items.*.producto' => 'required',
             'items.*.cantidad' => 'required',
             'items.*.precio' => 'required',
             'items.*.importe' => 'required',
+
         ];
+
         if ($recibo) {
 
-
-            $rules['numero'] = 'required|unique:recibos,numero,' . $recibo->id;
+            $rules['numero'] = ['required', Rule::unique('recibos', 'numero')->ignore($recibo->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))];
 
         }
 

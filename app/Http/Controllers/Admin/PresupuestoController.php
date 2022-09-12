@@ -30,9 +30,9 @@ class PresupuestoController extends Controller
     public function create()
     {
         $tipoCambio = UtilesController::tipoCambio();
-        $serial = $this->setNextSequenceNumber();
+        $numero = $this->setNextSequenceNumber();
        
-        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'serial'));
+        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'numero'));
     }
 
     public function setNextSequenceNumber()

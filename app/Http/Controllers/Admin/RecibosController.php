@@ -29,16 +29,20 @@ class RecibosController extends Controller
     public function create()
     {   
         $numero = $this->setNextSequenceNumber();
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
-        return view('admin.ventas.recibos.create', compact('numero', 'plantilla'));
+        return view('admin.ventas.recibos.create', compact('numero'));
     }
 
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        // $id = IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
 
-        return trim($id);
+        // return trim($id);
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $id = IdGenerator::generate(['table' => 'recibos','field'=>'numero', 'length' => 9, 'prefix' => $plantilla->serie_recibo."-", 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
+
+        return trim($id);   
+
     }
     /**
      * Store a newly created resource in storage.

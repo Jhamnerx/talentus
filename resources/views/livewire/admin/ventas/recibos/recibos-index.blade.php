@@ -264,13 +264,13 @@
                                         @if ($recibo->estado == 'BORRADOR')
                                             <div class="font-medium text-red-500">
                                                 <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                    B-#{{ $recibo->serie }}-{{ $recibo->numero }}
+                                                    B-#{{ $recibo->numero }}
                                                 </a>
                                             </div>
                                         @else
                                             <div class="font-medium text-sky-600">
                                                 <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                    #{{ $recibo->serie }}-{{ $recibo->numero }}
+                                                    #{{ $recibo->numero }}
                                                 </a>
                                             </div>
                                         @endif

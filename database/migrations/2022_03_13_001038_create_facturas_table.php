@@ -16,7 +16,6 @@ class CreateFacturasTable extends Migration
         Schema::create('compras_factura', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('proveedores_id')->nullable();
-            $table->string('serie');
             $table->string('numero');
             $table->date('fecha');
             $table->date('fecha_vencimiento');
