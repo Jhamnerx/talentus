@@ -17,7 +17,9 @@ class PresupuestoController extends Controller
      */
     public function index()
     {
+
         return view('admin.ventas.presupuestos.index');
+        
     }
 
     /**
@@ -40,8 +42,8 @@ class PresupuestoController extends Controller
         //     ->take(1)
         //     ->first();
 
-     //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-']);
-       $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 8, 'prefix' => 'PRE-']);
+     //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-', 'reset_on_prefix_change' => true]);
+       $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 8, 'prefix' => 'PRE-', 'where' => ['empresa_id' => session('empresa')]]);
         //output: P00001
         //output: INV-000001
        // $nextSequenceNumber = ($last) ? $last + 1 : 1;
@@ -57,10 +59,7 @@ class PresupuestoController extends Controller
      */
     public function store(PresupuestosRequest $request)
     {
-
-        //dd($request->items);
-
-
+        
         $presupuesto = Presupuestos::create([
             //'empresa_id' => $request->empresa_id,
             'clientes_id' => $request->clientes_id,
