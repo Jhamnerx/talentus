@@ -29,15 +29,15 @@ class VentasFacturasController extends Controller
     public function create()
     {
         $numero = $this->setNextSequenceNumber();
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
-
-        return view('admin.ventas.facturas.create', compact('numero', 'plantilla'));
+        
+        return view('admin.ventas.facturas.create', compact('numero'));
     }
 
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $id = IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 9, 'prefix' => $plantilla->serie_factura."-", 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
 
         return trim($id);
     }

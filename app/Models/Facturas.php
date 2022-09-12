@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Notifications\Ventas\EnviarFacturaCliente;
 use App\Scopes\ActiveScope;
-
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -26,17 +26,21 @@ class Facturas extends Model
         'fecha_pago' => 'date:Y/m/d',
     ];
 
-    
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
     public function presupuesto()
     {
-        return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
+        return $this->belongsTo(Presupuestos::class, 'presupuestos_id')->withTrashed();
     }
 
     public function getSerie(){

@@ -44,7 +44,11 @@
 
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
-            {!! Form::open(['route' => 'admin.ventas.presupuestos.store', 'class' => 'formularioPresupuesto']) !!}
+            {!! Form::open([
+                'route' => 'admin.ventas.presupuestos.store',
+                'class' => 'formularioPresupuesto',
+                'autocomplete' => 'off',
+            ]) !!}
             <div class="grid grid-cols-12 gap-2">
 
 
@@ -450,8 +454,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>

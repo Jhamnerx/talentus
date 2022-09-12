@@ -46,7 +46,8 @@ class PresupuestosRequest extends FormRequest
         if ($presupuesto) {
 
 
-            $rules['numero'] = 'required|unique:presupuestos,numero,' . $presupuesto->id;
+            $rules['numero'] = ['required', Rule::unique('presupuestos', 'numero')->ignore($presupuesto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))];
+
 
         }
 

@@ -70,7 +70,7 @@
 
                     {{-- NUMERO --}}
 
-                    @livewire('admin.ventas.facturas.input-numero', ['numero' => $numero, 'serie' => $plantilla->serie_factura])
+                    @livewire('admin.ventas.facturas.input-numero', ['numero' => $numero])
                     {{-- FECHA Factura --}}
                     <div class="col-span-6 gap-2">
                         <label
@@ -274,7 +274,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                        <input type="number" min="0" value="1" step="1"
+                                        <input type="number" min="1" value="1" step="1"
                                             class="form-input qyt" placeholder="Cantidad">
                                         <input type="hidden" class="divise">
                                     </td>
@@ -364,8 +364,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -559,7 +559,7 @@
                 '</textarea>' +
                 '</td>' +
                 '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +
-                '<input required type="number" name="items[' + cont + '][cantidad]" min="0" value="' + cantidad +
+                '<input required type="number" name="items[' + cont + '][cantidad]" min="1" value="' + cantidad +
                 '" class="form-input cantidad" placeholder="Cantidad" >' +
                 '</td>' +
                 '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +

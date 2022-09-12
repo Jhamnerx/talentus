@@ -2,16 +2,12 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Facturas;
 
+use Illuminate\Validation\Rule;
 use Livewire\Component;
 
 class InputNumero extends Component
 {
     public $numero;
-    public $serie;
-
-    protected $rules = [
-        'numero' => 'required|unique:facturas,numero',
-    ];
 
     protected $messages = [
         'numero.required' => 'El número requerido',
@@ -19,13 +15,25 @@ class InputNumero extends Component
 
     ];
 
+    protected function rules()
+    {
+        return [
+
+            'numero' => Rule::unique('facturas', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+
+        ];
+    }    
+
+
+
+
     public function render()
     {
         return view('livewire.admin.ventas.facturas.input-numero');
     }
     public function mount(){
         $this->numero = $this->numero;
-        $this->serie = $this->serie;
+
     }
 
     public function updated($label)
