@@ -89,7 +89,7 @@
                         <li>
                             <a class="font-medium text-sm text-indigo-500 hover:text-indigo-600 flex items-center py-1 px-3"
                                 href="{{ route('admin.home') }}" @click="open = false" @focus="open = true"
-                                @focusout="open = false">DashBoard</a>
+                                @focusout="open = false">Panel de Control</a>
                         </li>
                         <li>
                             <form method="POST" action="{{ route('logout') }}">
