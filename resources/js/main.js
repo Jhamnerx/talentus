@@ -1,4 +1,11 @@
+import moment from "moment";
+import "moment/locale/es";
+
 import { Chart } from "chart.js";
+
+import "chartjs-adapter-moment";
+
+moment.locale("es");
 
 // import flatpickr from "flatpickr";
 
@@ -44,7 +51,8 @@ import fintechCard12 from "./components/fintech-card-12";
 import fintechCard13 from "./components/fintech-card-13";
 import fintechCard14 from "./components/fintech-card-14";
 
-import dashboardCard04 from "./components/dashboard-card-04";
+import cardVentaSoles from "./components/dashboard-ventas-soles";
+import cardVentaDolares from "./components/dashboard-ventas-dolares";
 
 const fullConfig = resolveConfig(tailwindConfig);
 
@@ -136,7 +144,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dashboardCard01();
     dashboardCard02();
     dashboardCard03();
-    dashboardCard04();
     dashboardCard05();
     dashboardCard06();
     dashboardCard08();
@@ -159,4 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fintechCard12();
     fintechCard13();
     fintechCard14();
+
+    cardVentaSoles();
+    cardVentaDolares();
 });

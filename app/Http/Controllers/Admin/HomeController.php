@@ -17,47 +17,44 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $plantilla = plantilla::where('empresas_id', session('empresa'));
-        
+
         if (!$request->session()->has('empresa')) {
-            
+
             //$request->session('empresa', '1');
             $request->session()->put('empresa', 1);
             //return $request->session()->all();
         }
         //$request->session()->pull('empresa', '1');
-        
-       return view('admin.index', compact('plantilla'));
-       
 
+        return view('admin.index', compact('plantilla'));
     }
 
 
-    public function getDataVentas()
+    public function getDataVentas(Request $request)
     {
+        // dd($request->all());
         ///$df = new DataFeed();
-       // Facturas::
+        // Facturas::
 
         $fecha = Carbon::now();
-        
-        //$labels = $this->getLabels(6);
-        $labels = UtilesController::getLabels(6); 
-        
-        $total_facturas = $this->getTotalesFacturas(6);
-        $total_recibos = $this->getTotalesRecibos(6);
-      //  dd($totales);
 
+        //$labels = $this->getLabels(6);
+        $labels = UtilesController::getLabels(6);
+
+        $total_facturas = $this->getTotalesFacturas(6, $request->divisa);
+        $total_recibos = $this->getTotalesRecibos(6, $request->divisa);
 
         return (object)[
 
             'labels' => $labels,
 
-            'data' =>[
-                'facturas' =>[  
+            'data' => [
+                'facturas' => [
 
                     'totales' => $total_facturas,
 
                 ],
-                'recibos' =>[   
+                'recibos' => [
                     'totales' => $total_recibos,
                 ],
             ]
@@ -66,39 +63,38 @@ class HomeController extends Controller
     }
 
 
-    public function getTotalesFacturas($nMeses = 1)
+    public function getTotalesFacturas($nMeses = 1, $divisa = "usd")
     {
-            
+
         $totales = [];
 
-        for ($i=0; $i < $nMeses; $i++) { 
+        for ($i = 0; $i < $nMeses; $i++) {
 
-            //array_push($totales, Carbon::now()->subMonth($i)->format('m'));
-           $total  = Facturas::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->sum('total');
+            $total  = Facturas::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->Where('divisa', $divisa)->sum('total');
+
             array_push(
-                $totales, (int)$total
-                
+                $totales,
+                floatval($total)
             );
-                
         }
 
         return $totales;
     }
 
-    public function getTotalesRecibos($nMeses = 1)
+    public function getTotalesRecibos($nMeses = 1, $divisa = "usd")
     {
-            
+
         $totales = [];
 
-        for ($i=0; $i < $nMeses; $i++) { 
+        for ($i = 0; $i < $nMeses; $i++) {
 
             //array_push($totales, Carbon::now()->subMonth($i)->format('m'));
-
+            $total  = Recibos::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->Where('divisa', $divisa)->sum('total');
             array_push(
                 $totales,
-                Recibos::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->sum('total')
+                floatval($total)
+
             );
-                
         }
 
         return $totales;
@@ -111,7 +107,7 @@ class HomeController extends Controller
     {
 
         Facturas::whereMonth('created_at', '08')->get();
-        
+
 
 
         // $query = $this->where('data_type', $dataType)
@@ -128,5 +124,4 @@ class HomeController extends Controller
 
         //return $query;
     }
-
 }

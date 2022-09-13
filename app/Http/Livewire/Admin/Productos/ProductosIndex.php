@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Productos;
 use App\Models\Productos;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ProductosIndex extends Component
 {
     use WithPagination;
@@ -13,10 +14,10 @@ class ProductosIndex extends Component
     public function render()
     {
 
-       $productos = Productos::whereHas('categoria', function ($query) {
+        $productos = Productos::whereHas('categoria', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })->orWhere('nombre', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%')->with('image','categoria')
+            ->orWhere('codigo', 'like', '%' . $this->search . '%')->with('image', 'categoria')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
