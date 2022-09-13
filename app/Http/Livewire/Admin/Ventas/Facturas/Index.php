@@ -27,7 +27,7 @@ class Index extends Component
 
         $facturas = Facturas::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })->orWhere('serie', 'like', '%' . $this->search . '%')
+        })
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')

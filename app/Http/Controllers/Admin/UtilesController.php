@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
@@ -82,5 +83,23 @@ class UtilesController extends Controller
         $response = json_decode($res->getBody()->getContents(), true);
 
         return $response;
+    }
+
+
+    public static function getLabels($months = 1){
+        
+        $labels = [];
+
+        for ($i=0; $i < $months ; $i++) { 
+
+            array_push(
+                $labels,
+                Carbon::now()->startOfMonth()->subMonth($i)->format('m-d-Y')
+            );
+                
+        }
+
+        return $labels;
+
     }
 }

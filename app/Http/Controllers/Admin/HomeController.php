@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Facturas;
 use App\Models\plantilla;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\UtilesController;
+use App\Models\Recibos;
+use Illuminate\Support\Arr;
 
 class HomeController extends Controller
 {
@@ -24,38 +28,84 @@ class HomeController extends Controller
         
        return view('admin.index', compact('plantilla'));
        
+
     }
+
 
     public function getDataVentas()
     {
         ///$df = new DataFeed();
+       // Facturas::
+
+        $fecha = Carbon::now();
+        
+        //$labels = $this->getLabels(6);
+        $labels = UtilesController::getLabels(6); 
+        
+        $total_facturas = $this->getTotalesFacturas(6);
+        $total_recibos = $this->getTotalesRecibos(6);
+      //  dd($totales);
 
 
         return (object)[
-            'labels' => [
-                '12-01-2020',
-                '01-01-2021',
-                '02-01-2021'
-            ],
+
+            'labels' => $labels,
+
             'data' =>[
                 'facturas' =>[  
-                    'totales' => [
-                        1000,
-                        900,
-                        300
-                    ],
+
+                    'totales' => $total_facturas,
+
                 ],
                 'recibos' =>[   
-                    'totales' => [
-                        800,
-                        500,
-                        100
-                    ],
+                    'totales' => $total_recibos,
                 ],
             ]
 
         ];
     }
+
+
+    public function getTotalesFacturas($nMeses = 1)
+    {
+            
+        $totales = [];
+
+        for ($i=0; $i < $nMeses; $i++) { 
+
+            //array_push($totales, Carbon::now()->subMonth($i)->format('m'));
+           $total  = Facturas::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->sum('total');
+            array_push(
+                $totales, (int)$total
+                
+            );
+                
+        }
+
+        return $totales;
+    }
+
+    public function getTotalesRecibos($nMeses = 1)
+    {
+            
+        $totales = [];
+
+        for ($i=0; $i < $nMeses; $i++) { 
+
+            //array_push($totales, Carbon::now()->subMonth($i)->format('m'));
+
+            array_push(
+                $totales,
+                Recibos::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->sum('total')
+            );
+                
+        }
+
+        return $totales;
+    }
+
+
+
 
     public function getDataFeed()
     {
