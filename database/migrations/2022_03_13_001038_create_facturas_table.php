@@ -19,16 +19,15 @@ class CreateFacturasTable extends Migration
             $table->string('numero');
             $table->date('fecha');
             $table->date('fecha_vencimiento');
+            $table->decimal('subtotal', 10, 2);
+            $table->decimal('impuesto', 10, 2);
             $table->decimal('total', 10, 2);
-            $table->boolean('eliminado')->default(false);
+            $table->string('divisa');
             $table->unsignedBigInteger('empresa_id');
-            $table->string('nota');
+            $table->string('nota')->nullable();
 
             $table->foreign('proveedores_id')->references('id')->on('proveedores')->onDelete('set null');
-
-
-
-
+            $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();

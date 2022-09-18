@@ -29,7 +29,7 @@ class VentasFacturasController extends Controller
     public function create()
     {
         $numero = $this->setNextSequenceNumber();
-        
+
         return view('admin.ventas.facturas.create', compact('numero'));
     }
 
@@ -37,7 +37,7 @@ class VentasFacturasController extends Controller
     {
 
         $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
-        $id = IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 9, 'prefix' => $plantilla->serie_factura."-", 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
+        $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'numero', 'length' => 9, 'prefix' => $plantilla->serie_factura . "-", 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
 
         return trim($id);
     }
@@ -45,7 +45,7 @@ class VentasFacturasController extends Controller
 
     public function store(FacturasRequest $request)
     {
-       //dd($request->all());
+        //dd($request->all());
 
         $factura = Facturas::create($request->all());
 
@@ -74,7 +74,7 @@ class VentasFacturasController extends Controller
      */
     public function edit(Facturas $factura)
     {
-        
+
         return view('admin.ventas.facturas.edit', compact('factura'));
     }
 

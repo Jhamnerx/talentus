@@ -72,9 +72,15 @@ Route::resource('proveedor', ProveedoresController::class)->names('admin.proveed
 
 // COMPRAS
 
+
+
+
 Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([
     'compras-factura' => 'factura'
 ]);
+
+
+
 
 // VENTAS
 Route::resource('presupuestos', PresupuestoController::class)->names('admin.ventas.presupuestos');

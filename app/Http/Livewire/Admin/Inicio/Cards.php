@@ -12,7 +12,7 @@ class Cards extends Component
 {
 
 
-    
+
 
     public function render()
     {
@@ -38,12 +38,19 @@ class Cards extends Component
     }
 
 
-    public function toClientes(){
+    public function toClientes()
+    {
 
         return redirect()->route('admin.clientes.index');
     }
-    public function toVehiculos(){
+    public function toVehiculos()
+    {
 
         return redirect()->route('admin.vehiculos.index');
+    }
+    public function toFlotas()
+    {
+
+        return redirect()->route('admin.vehiculos.flotas.index');
     }
 }

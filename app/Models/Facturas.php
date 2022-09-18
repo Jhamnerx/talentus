@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Barryvdh\DomPDF\Facade\Pdf;
+
 class Facturas extends Model
 {
 
@@ -43,10 +44,10 @@ class Facturas extends Model
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id')->withTrashed();
     }
 
-    public function getSerie(){
+    public function getSerie()
+    {
 
         return plantilla::get('serie')->where('empresas_id', session('empresa'));
-
     }
 
     //relacion uno a muchos
@@ -85,15 +86,14 @@ class Facturas extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.factura.pdf');
-        
-        if($action == 1){
 
-            return $pdf->download('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
-        }else{
-           
-            return $pdf->stream('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
+        if ($action == 1) {
+
+            return $pdf->download('FACTURA ' . $this->serie . "-" . $this->numero . '.pdf');
+        } else {
+
+            return $pdf->stream('FACTURA ' . $this->serie . "-" . $this->numero . '.pdf');
         };
-
     }
 
     public function getPDFDataToMail($data)
@@ -109,8 +109,5 @@ class Facturas extends Model
         $pdf = PDF::loadView('pdf.factura.pdf');
 
         $this->clientes->notify(new EnviarFacturaCliente($this, $pdf, $data));
-
     }
-
-
 }
