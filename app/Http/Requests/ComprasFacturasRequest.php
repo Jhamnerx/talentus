@@ -30,8 +30,7 @@ class ComprasFacturasRequest extends FormRequest
 
             'proveedores_id' => 'required',
             'numero' => ['required', Rule::unique('compras_factura', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))],
-            'fecha' => 'required',
-            'fecha_vencimiento',
+            'fecha_emision' => 'required',
             'divisa' => 'required',
             'subtotal' => 'required',
             'subtotal' => 'required',

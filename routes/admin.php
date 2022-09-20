@@ -133,6 +133,9 @@ Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('ad
 
 
 Route::get('search/clientes', [SearchController::class, 'clientes'])->name('search.clientes');
+Route::get('search/cliente/{cliente}', [SearchController::class, 'cliente'])->name('search.cliente');
+Route::get('search/proveedores', [SearchController::class, 'proveedores'])->name('search.proveedores');
+Route::get('search/proveedor/{proveedor?}', [SearchController::class, 'proveedor'])->name('search.proveedor');
 Route::get('search/flotas', [SearchController::class, 'flotas'])->name('search.flotas');
 Route::get('search/flota', [SearchController::class, 'flota'])->name('search.flota');
 Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('busqueda.clientes');

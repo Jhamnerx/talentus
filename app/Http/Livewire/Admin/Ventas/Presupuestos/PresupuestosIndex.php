@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
+
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 
@@ -21,11 +22,11 @@ class PresupuestosIndex extends Component
     public $status = null;
     public $openModalDelete = false;
     public $modalOpenSend = false;
-    
+
     protected $listeners = [
         'render'
     ];
-    
+
     public function render()
     {
 
@@ -41,7 +42,7 @@ class PresupuestosIndex extends Component
             ->orderBy('numero', 'DESC')
             ->paginate(10);
 
-        
+
 
 
         $pendientes = Presupuestos::where('estado', '0')->count();
@@ -58,7 +59,7 @@ class PresupuestosIndex extends Component
 
         $estado = $this->status;
 
-        if($estado != null){
+        if ($estado != null) {
 
             $presupuestos = Presupuestos::Where('estado', $estado)->paginate(10);
         }
@@ -118,20 +119,22 @@ class PresupuestosIndex extends Component
     {
         $this->status = $status;
         // $this->render();
-        
+
     }
     public function updatingSearch()
     {
         $this->resetPage();
     }
-    public function markAccept(Presupuestos $presupuesto){
+    public function markAccept(Presupuestos $presupuesto)
+    {
 
         $presupuesto->update([
             'estado' => '1',
         ]);
         $this->render();
     }
-    public function markReject(Presupuestos $presupuesto){
+    public function markReject(Presupuestos $presupuesto)
+    {
 
 
         $presupuesto->update([
@@ -145,10 +148,9 @@ class PresupuestosIndex extends Component
     public function convertInvoice(Presupuestos $presupuesto)
     {
         $facturasController = new VentasFacturasController();
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
-        if(!$presupuesto->factura)
-        {
+        if (!$presupuesto->factura) {
             $venta = $presupuesto->factura()->create([
                 'clientes_id' => $presupuesto->clientes_id,
                 'serie' => $plantilla->serie_factura,
@@ -167,7 +169,7 @@ class PresupuestosIndex extends Component
                 'nota' => $presupuesto->nota,
             ]);
 
-            foreach($presupuesto->detalles->toArray() as $item){
+            foreach ($presupuesto->detalles->toArray() as $item) {
 
                 $item['facturas_id'] = $venta->id;
                 $venta->detalles()->create($item);
@@ -175,20 +177,15 @@ class PresupuestosIndex extends Component
 
             $this->dispatchBrowserEvent('save-invoice', ['numero' => $venta->numero]);
             $this->render();
-
-        }else{
+        } else {
 
             $this->dispatchBrowserEvent('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
         }
-
-
-        
     }
 
     public function convertRecibo(Presupuestos $presupuesto)
     {
-        if(!$presupuesto->recibo)
-        {
+        if (!$presupuesto->recibo) {
             $recibosController = new RecibosController();
             $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
 
@@ -204,10 +201,10 @@ class PresupuestosIndex extends Component
                 'pago_estado' => 'UNPAID',
                 'nota' => $presupuesto->nota,
                 'user_id' => auth()->user()->id,
-                
+
             ]);
 
-            foreach($presupuesto->detalles->toArray() as $item){
+            foreach ($presupuesto->detalles->toArray() as $item) {
 
                 $item['recibos_id'] = $recibo->id;
                 $recibo->detalles()->create($item);
@@ -215,26 +212,24 @@ class PresupuestosIndex extends Component
 
             $this->dispatchBrowserEvent('save-recibo', ['numero' => $recibo->numero]);
             $this->render();
-
-        }else{
+        } else {
 
             $this->dispatchBrowserEvent('save-error', ['mensaje' => 'El recibo de este presupuesto ya fue creado']);
         }
     }
 
-    public function openModalDelete(Presupuestos $presupuesto){
+    public function openModalDelete(Presupuestos $presupuesto)
+    {
         //dd($presupuesto);
         $this->emit('openModalDelete', $presupuesto);
         $this->openModalDelete = true;
-
     }
 
 
-    public function modalOpenSend(Presupuestos $presupuesto){
+    public function modalOpenSend(Presupuestos $presupuesto)
+    {
 
 
         $this->emit('modalOpenSend', $presupuesto);
-
     }
-    
 }

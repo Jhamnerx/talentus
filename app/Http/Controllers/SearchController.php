@@ -10,6 +10,7 @@ use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Lineas;
 use App\Models\Productos;
+use App\Models\Proveedores;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
@@ -17,7 +18,7 @@ use Illuminate\Support\Arr;
 
 class SearchController extends Controller
 {
-    //
+    // buscar clientes por nombre
     public function clientes(Request $request)
     {
 
@@ -35,9 +36,70 @@ class SearchController extends Controller
             ];
         }
 
+        return array("suggestions" => $data);
+    }
+
+    //buscar cliente por id
+    public function cliente(Request $request)
+    {
+
+        $id = $request->get('id');
+        $querys = Clientes::where('id', $id)->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->razon_social,
+                'data' => $query->id,
+                'flotas' => $query->flotas,
+
+            ];
+        }
+        return array("suggestions" => $data);
+    }
+
+    //buscar proveedores por razon social
+    public function proveedores(Request $request)
+    {
+
+        $term = $request->get('term');
+        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->razon_social,
+                'data' => $query->id,
+
+            ];
+        }
+
         // return array("suggestions" => $data);
         return array("suggestions" => $data);
     }
+
+    public function proveedor(Request $request)
+    {
+
+        $query = Proveedores::where('id', $request->proveedor)->first();
+
+
+        $data = [];
+        if ($query) {
+
+            $data = array(
+                'razon_social' => $query->razon_social,
+                'id' => $query->id,
+            );
+        }
+
+
+
+        return $data;
+    }
+
 
     public function flotas(Request $request)
     {
@@ -243,20 +305,21 @@ class SearchController extends Controller
     }
 
 
-    public function sunat(Request $request){
-        
+    public function sunat(Request $request)
+    {
+
         $term = $request->get('numero');
         $tipo = $request->get('tipo');
-       // return $term;
-       $util = new UtilesController;
-       if ($tipo == 'DNI') {
+        // return $term;
+        $util = new UtilesController;
+        if ($tipo == 'DNI') {
             $resultado = $util->consultaPersona($term);
-       } else {
+        } else {
             $resultado = $util->consultaEmpresa($term);
-       }
-       
-      
+        }
 
-       return $resultado;
+
+
+        return $resultado;
     }
 }
