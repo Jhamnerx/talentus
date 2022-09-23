@@ -74,27 +74,6 @@
 
                     @livewire('admin.ventas.presupuestos.save', ['numero' => $numero])
 
-                    {{-- <div class="col-span-12 mb-5">
-                    <label
-                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>Número de Presupuesto <span class="text-sm text-red-500"> * </span></div>
-                    </label>
-                    <div class="relative">
-                        <input required name="numero" id="numero"
-                            class="form-input w-2/4 valid:border-emerald-300
-                                                                required:border-rose-300 invalid:border-rose-300 peer pl-12" type="text" />
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <span class="text-sm text-slate-400 font-medium px-3">PRE-</span>
-                        </div>
-                    </div>
-                    @error('numero')
-
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{$message}}
-                    </p>
-
-                    @enderror
-                </div> --}}
                     {{-- FECHA PRESUPUESTO --}}
 
                     <div class="col-span-6 gap-2">
@@ -113,10 +92,12 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha" type="text"
-                                class="form-input valid:border-emerald-300
-                                                                                                            required:border-rose-300 invalid:border-rose-300 peer fechaPresupuesto  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                placeholder="Selecciona la fecha">
+
+                            {!! Form::text('fecha', null, [
+                                'class' =>
+                                    'form-input fechaPresupuesto font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full',
+                                'placeholder' => 'Selecciona la fecha',
+                            ]) !!}
                         </div>
                         @error('fecha')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -144,10 +125,16 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_caducidad" type="text"
+                            {{-- <input name="fecha_caducidad" type="text"
                                 class="form-input fechaFinPresupuesto valid:border-emerald-300
                                                                                                             required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500"
-                                placeholder="Selecciona la fecha">
+                                placeholder="Selecciona la fecha"> --}}
+
+                            {!! Form::text('fecha_caducidad', null, [
+                                'class' =>
+                                    'form-input fechaFinPresupuesto font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full',
+                                'placeholder' => 'Selecciona la fecha',
+                            ]) !!}
                         </div>
                         @error('fecha_caducidad')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -166,8 +153,8 @@
 
                         <select name="divisa" id="moneda" class="form-select w-full divisa"
                             @change="cambiarDivisa($event.target.value)">
-                            <option value="PEN">PEN</option>
-                            <option value="USD">USD</option>
+                            <option @selected(old('divisa') == 'PEN') value="PEN">SOLES</option>
+                            <option @selected(old('divisa') == 'USD') value="USD">DOLARES</option>
                         </select>
 
 
@@ -192,8 +179,14 @@
                             <!---->
                             <!---->
                         </label>
-                        <textarea class="form-input w-full px-4 py-3" name="nota" id="" rows="5"
-                            placeholder="Ingresar nota (opcional)"></textarea>
+                        {!! Form::textarea('nota', null, [
+                            'class' => 'form-input w-full px-4 py-3',
+                            'cols' => '30',
+                            'rows' => '4',
+                            'placeholder' => 'Ingresar nota [opcional]',
+                        ]) !!}
+                        {{-- <textarea class="form-input w-full px-4 py-3" name="nota" id="" rows="5"
+                            placeholder="Ingresar nota (opcional)"></textarea> --}}
                     </div>
                     <!-- ... -->
 
@@ -308,73 +301,49 @@
 
 
                                 {{-- fila para añadir --}}
-                                {{-- <div class="filasAddTest">
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea name="items[1][descripcion]" class="form-input"
-                                            rows="5">Instalación de Equipo GPS</textarea>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" onblur="calculate_total();" onchange="calculate_total();"
-                                            name="cantidad" min="0" value="1" class="form-input cantidad"
-                                            placeholder="Cantidad" value="1">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" min="0" onblur="calculate_total();"
-                                            onchange="calculate_total();" data-quantity="" name="items[1][precio]"
-                                            value="19.99" class="form-input precio">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" onblur="calculate_total();" onchange="calculate_total();"
-                                            name="items[1][total]" value="00.00" class="form-input importe subtotal">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                <span class="sr-only">Delete</span>
-                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                    <path
-                                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
 
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea name="items[1][descripcion]" class="form-input"
-                                            rows="5">Equipo GPS FMB920</textarea>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" onblur="calculate_total();" onchange="calculate_total();"
-                                            name="cantidad" min="0" value="1" class="form-input cantidad"
-                                            placeholder="Cantidad" value="2">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" min="0" onblur="calculate_total();"
-                                            onchange="calculate_total();" data-quantity="" name="items[1][precio]"
-                                            value="460" class="form-input precio">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input type="number" onblur="calculate_total();" onchange="calculate_total();"
-                                            name="items[1][total]" value="00.00" class="form-input importe subtotal">
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                <span class="sr-only">Delete</span>
-                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                    <path
-                                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </div> --}}
+                                @if (!empty(old('items')))
+
+
+                                    @foreach (old('items') as $detalle)
+                                        <tr id="fila{{ $loop->index }}">
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <textarea required name="items[{{ $loop->index }}][producto]" class="form-input" rows="4">{{ $detalle['producto'] }}</textarea>
+
+                                            </td>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <input required type="number"
+                                                    name="items[{{ $loop->index }}][cantidad]" min="0"
+                                                    value="{{ $detalle['cantidad'] }}" class="form-input cantidad"
+                                                    placeholder="Cantidad" value="2">
+                                            </td>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <input required type="number" min="0" data-quantity=""
+                                                    step="0.01" name="items[{{ $loop->index }}][precio]"
+                                                    value="{{ $detalle['precio'] }}" class="form-input precio">
+                                            </td>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <input type="number" value="{{ $detalle['importe'] }}"
+                                                    name="items[{{ $loop->index }}][importe]"
+                                                    class="form-input importe subtotal" readonly>
+                                            </td>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                                <div class="space-x-1">
+                                                    <button type="button"
+                                                        @click.prevent="eliminarDetalle({{ $loop->index }})"
+                                                        class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                        <span class="sr-only">Delete</span>
+                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                            <path
+                                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             </tbody>
                             <tfoot>
                                 @error('items')
@@ -454,8 +423,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -497,10 +466,13 @@
         };
 
 
-        // INICIALIZAR LOS INPUTS DE FECHA
+
         $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
+
+            cont = {{ old('items') ? count(old('items')) : 0 }};
+            detalles = {{ old('items') ? count(old('items')) : 0 }};
+
+            // INICIALIZAR LOS INPUTS DE FECHA
             flatpickr('.fechaPresupuesto', {
                 mode: 'single',
                 defaultDate: "today",
@@ -510,6 +482,7 @@
                 prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
                 nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
             });
+
             flatpickr('.fechaFinPresupuesto', {
                 mode: 'single',
                 defaultDate: new Date().fp_incr(14),
@@ -521,6 +494,29 @@
             });
         })
 
+
+        //verificamos si existe un valor previo en proveedores y consultamos para seleccionarlo en el select
+        let clienteId = {{ old('clientes_id') ? old('clientes_id') : 'undefined' }};
+        if (clienteId) {
+            //Obtenga el elemento preseleccionado y agréguelo al control
+            var clienteSelect = $('.clientes_id');
+            $.ajax({
+                type: 'GET',
+                url: "{{ route('search.cliente', old('clientes_id')) }}"
+            }).then(function(data) {
+                // crear la opción y agregar a Select2
+                var option = new Option(data.razon_social, data.id, true, true);
+                clienteSelect.append(option).trigger('change');
+
+                // activar manualmente el evento `select2:select`
+                clienteSelect.trigger({
+                    type: 'select2:select',
+                    params: {
+                        data: data
+                    }
+                });
+            });
+        }
 
         $('.clientes_id').select2({
             placeholder: 'Buscar Cliente',
