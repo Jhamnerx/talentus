@@ -43,20 +43,21 @@ class SearchController extends Controller
     public function cliente(Request $request)
     {
 
-        $id = $request->get('id');
-        $querys = Clientes::where('id', $id)->get();
+        $query = Clientes::where('id', $request->proveedor)->first();
+
 
         $data = [];
+        if ($query) {
 
-        foreach ($querys as $query) {
-            $data[] = [
-                'value' => $query->razon_social,
-                'data' => $query->id,
-                'flotas' => $query->flotas,
-
-            ];
+            $data = array(
+                'razon_social' => $query->razon_social,
+                'id' => $query->id,
+            );
         }
-        return array("suggestions" => $data);
+
+
+
+        return $data;
     }
 
     //buscar proveedores por razon social

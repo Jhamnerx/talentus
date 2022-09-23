@@ -25,7 +25,7 @@ class ComprasFacturasController extends Controller
 
     public function store(ComprasFacturasRequest $request)
     {
-        dd($request);
+
 
         $factura = ComprasFacturas::create($request->all());
 

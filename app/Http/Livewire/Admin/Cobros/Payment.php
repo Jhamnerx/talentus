@@ -13,18 +13,19 @@ class Payment extends Component
     public $tipo_pago = "FACTURA";
     public $documentos = [];
     public $titulo_documento = "Numero";
-    
+
     public $cobro;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',
     ];
 
-    public function mount(Cobros $cobro){
+    public function mount(Cobros $cobro)
+    {
 
         $this->cobro = $cobro;
         $this->tipo_pago = $cobro->tipo_pago;
-
+        $this->cobro->reset;
     }
 
     public function render()
@@ -32,88 +33,84 @@ class Payment extends Component
         return view('livewire.admin.cobros.payment');
     }
 
-    public function openModal(){
+    public function openModal()
+    {
 
         $this->modalPayment = true;
-        $cliente = Clientes::where('id',$this->cobro->clientes_id)->first();
+        $cliente = Clientes::where('id', $this->cobro->clientes_id)->first();
 
-        if($this->cobro->tipo_pago == "FACTURA"){
+        if ($this->cobro->tipo_pago == "FACTURA") {
 
             $this->titulo_documento = "Numero Factura";
             $this->documentos = $this->loadFacturas($cliente);
-
-        }else{
+        } else {
 
             $this->titulo_documento = "Numero Recibo";
             $this->documentos = $this->loadRecibos($cliente);
         }
 
         $this->dispatchBrowserEvent('dataDocumentos', ['data' => $this->documentos]);
-
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalPayment = false;
-
     }
 
 
-    public function updatedtipoPago($tipo_pago){
+    public function updatedtipoPago($tipo_pago)
+    {
 
 
-        $cliente = Clientes::where('id',$this->cobro->clientes_id)->first();
+        $cliente = Clientes::where('id', $this->cobro->clientes_id)->first();
 
-        if($tipo_pago == "FACTURA"){
+        if ($tipo_pago == "FACTURA") {
 
             $this->titulo_documento = "Numero Factura";
             $this->documentos = $this->loadFacturas($cliente);
-
-        }else{
+        } else {
 
             $this->titulo_documento = "Numero Recibo";
             $this->documentos = $this->loadRecibos($cliente);
-
         }
 
         $this->dispatchBrowserEvent('dataDocumentos', ['data' => $this->documentos]);
-       
+
         //$this->dataVehiculos = $data;
     }
 
-    public function loadFacturas(Clientes $cliente){
+    public function loadFacturas(Clientes $cliente)
+    {
 
         $data = [];
 
-        foreach($cliente->facturas as $factura){
+        foreach ($cliente->facturas as $factura) {
 
 
-            if($factura->is_active){
+            if ($factura->is_active) {
 
                 $data[] = [
                     'id' => $factura->id,
-                    'text' => $factura->serie."-".$factura->numero,
+                    'text' => $factura->serie . "-" . $factura->numero,
                 ];
             }
-
         }
 
         return $data;
     }
 
-    public function loadRecibos(Clientes $cliente){
+    public function loadRecibos(Clientes $cliente)
+    {
 
         $data = [];
-        foreach($cliente->recibos as $recibo){
+        foreach ($cliente->recibos as $recibo) {
 
             $data[] = [
                 'id' => $recibo->id,
-                'text' => $recibo->serie."-".$recibo->numero,
+                'text' => $recibo->serie . "-" . $recibo->numero,
             ];
-
         }
         return $data;
     }
-
 }

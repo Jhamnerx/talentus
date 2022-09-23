@@ -10,7 +10,7 @@ class DetalleFacturasCompras extends Model
     use HasFactory;
 
     protected $table = 'detalle_compras';
-    protected $guardes = ['id', 'created_at', 'updated_at'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
 
     //Relacion uno a muchos inversa a facturas compras

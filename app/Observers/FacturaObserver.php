@@ -9,25 +9,21 @@ class FacturaObserver
     public function creating(Facturas $factura)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $factura->empresa_id = session('empresa');
-
+            $factura->user_id = auth()->user()->id;
         }
-       
-
-    }    
+    }
     public function updating(Facturas $factura)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $factura->empresa_id = session('empresa');
-
         }
-       
     }
     /**
      * Handle the Facturas "created" event.

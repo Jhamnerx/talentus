@@ -7,23 +7,15 @@ use Illuminate\Validation\Rule;
 
 class ComprasFacturasRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, mixed>
-     */
     public function rules()
     {
+
         $factura = $this->route()->parameter('factura');
 
         $rules = [
@@ -33,7 +25,7 @@ class ComprasFacturasRequest extends FormRequest
             'fecha_emision' => 'required',
             'divisa' => 'required',
             'subtotal' => 'required',
-            'subtotal' => 'required',
+            'impuesto' => 'required',
             'total' => 'required',
             'items.*.producto' => 'required',
             'items.*.cantidad' => 'required',

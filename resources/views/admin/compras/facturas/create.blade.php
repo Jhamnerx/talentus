@@ -44,7 +44,11 @@
 
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
-            {!! Form::open(['route' => 'admin.ventas.facturas.store', 'class' => 'formularioFactura']) !!}
+            {!! Form::open([
+                'route' => 'admin.compras.facturas.store',
+                'class' => 'formularioFactura',
+                'autocomplete' => 'off',
+            ]) !!}
             <div class="grid grid-cols-12 gap-2">
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
@@ -88,8 +92,7 @@
                                 'id' => 'numero',
                                 'required',
                                 'placeholder' => 'F001-003',
-                                'class' => 'form-input w-full  valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                required:border-rose-300 invalid:border-rose-300 peer',
+                                'class' => 'form-input w-full  required:border-rose-200 invalid:border-rose-200 peer',
                             ]) !!}
 
                         </div>
@@ -115,15 +118,10 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            {{-- <input name="fecha_emision" type="text" required
-                                class="form-input valid:border-emerald-300
-                                    required:border-rose-300 invalid:border-rose-300 peer fechaEmision pl-9 py-2 outline-none   block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                placeholder="Selecciona la fecha"> --}}
                             {!! Form::text('fecha_emision', null, [
-                                'required',
                                 'placeholder' => 'Selecciona la fecha',
-                                'class' => 'form-input valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    required:border-rose-300 invalid:border-rose-300 peer fechaEmision pl-9 py-2 outline-none   block sm:text-sm border-gray-200 rounded-md text-black input w-full',
+                                'class' =>
+                                    'form-input fechaEmision pl-9 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full',
                             ]) !!}
                         </div>
                         @error('fecha_emision')
@@ -146,8 +144,8 @@
 
                         <select name="divisa" id="moneda" class="form-select w-full divisa"
                             @change="cambiarDivisa($event.target.value)">
-                            <option @selected(old('divisa') == 'PEN') value="PEN">PEN</option>
-                            <option @selected(old('divisa') == 'USD') value="USD">USD</option>
+                            <option @selected(old('divisa') == 'PEN') value="PEN">SOLES</option>
+                            <option @selected(old('divisa') == 'USD') value="USD">DOLARES</option>
                         </select>
 
 
@@ -381,8 +379,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -417,6 +415,7 @@
         });
         $('#numero').caseEnforcer('uppercase');
         // FUNCION PARA CAMBIAR DATOS Y DIVISA
+
         function cambiarDivisa(e) {
 
             calculate_totales(e)
@@ -425,11 +424,18 @@
         };
 
 
-        // INICIALIZAR LOS INPUTS DE FECHA
+
         $(document).ready(function() {
 
+
             cont = {{ old('items') ? count(old('items')) : 0 }};
-            detalles = 0;
+            detalles = {{ old('items') ? count(old('items')) : 0 }};
+
+            calculate_totales({{ old('divisa') ? old('divisa') : '' }});
+
+
+
+            // INICIALIZAR LOS INPUTS DE FECHA
             flatpickr('.fechaEmision', {
                 mode: 'single',
                 defaultDate: "{{ old('fecha_emision') ?: 'today' }}",
@@ -439,6 +445,7 @@
                 nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
             });
         })
+
         //verificamos si existe un valor previo en proveedores y consultamos para seleccionarlo en el select
         let proveedorId = {{ old('proveedores_id') ? old('proveedores_id') : 'undefined' }};
         if (proveedorId) {
@@ -461,12 +468,6 @@
                 });
             });
         }
-
-        //verificamos si existen items de productos agregados anteriormente en el registro
-
-
-
-
 
 
         $('.proveedores_id').select2({

@@ -190,7 +190,7 @@
                                 </div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Factura</div>
+                                <div class="font-semibold text-left">Factura N°</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Proveedor</div>
@@ -201,6 +201,9 @@
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Emitido el</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Nota</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
@@ -225,9 +228,9 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
 
-                                        <div class="font-medium text-red-500">
+                                        <div class="font-medium text-slate-800">
                                             <a href="{{ route('admin.compras.facturas.show', $factura) }}">
-                                                B#{{ $factura->numero }}
+                                                #{{ $factura->numero }}
                                             </a>
                                         </div>
 
@@ -253,6 +256,11 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <div>{{ $factura->fecha_emision->format('d-m-Y') }}</div>
+
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                        <div>{{ $factura->nota }}</div>
 
                                     </td>
 
