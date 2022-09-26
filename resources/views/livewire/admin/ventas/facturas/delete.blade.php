@@ -27,7 +27,7 @@
                     <div>
                         <!-- Modal header -->
                         <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800 uppercase">ELIMINAR factura</div>
+                            <div class="text-lg font-semibold text-slate-800 uppercase">ELIMINAR FACTURA</div>
 
                         </div>
                         <!-- Modal content -->

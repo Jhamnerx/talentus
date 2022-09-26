@@ -10,7 +10,7 @@ class Delete extends Component
 {
     public Model $recibo;
     public $openModalDelete;
-    
+
     protected $listeners = [
         'openModalDelete'
     ];
@@ -22,7 +22,8 @@ class Delete extends Component
         $this->emit('render');
         //$flight->forceDelete();
     }
-    public function openModalDelete(Recibos $recibo){
+    public function openModalDelete(Recibos $recibo)
+    {
         $this->openModalDelete = true;
         $this->recibo = $recibo;
     }

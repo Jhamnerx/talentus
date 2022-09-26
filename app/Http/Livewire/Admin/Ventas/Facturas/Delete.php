@@ -8,23 +8,24 @@ use Livewire\Component;
 
 class Delete extends Component
 {
-    public Model $presupuesto;
+    public Model $factura;
     public $openModalDelete;
-    
+
     protected $listeners = [
         'openModalDelete'
     ];
 
     public function delete()
     {
-        $this->presupuesto->delete();
+        $this->factura->delete();
         $this->dispatchBrowserEvent('factura-delete');
         $this->emit('render');
         //$flight->forceDelete();
     }
-    public function openModalDelete(Facturas $presupuesto){
+    public function openModalDelete(Facturas $factura)
+    {
         $this->openModalDelete = true;
-        $this->presupuesto = $presupuesto;
+        $this->factura = $factura;
     }
     public function render()
     {

@@ -42,7 +42,7 @@
 
 
     <script>
-        window.addEventListener('presupuesto-delete', event => {
+        window.addEventListener('factura-delete', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
