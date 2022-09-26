@@ -76,8 +76,7 @@
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
                                 <li class="mb-1 last:mb-0">
-                                    <a x-on:click="page = dashboard-inicio"
-                                        class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'dashboard-inicio' && '!text-indigo-500'"
                                         href="{{ route('admin.home') }}">
                                         <span

@@ -18,7 +18,9 @@ class ComprasFacturas extends Model
 
     protected $casts = [
         'numero' => 'string',
+        'divisa' => 'string',
         'fecha_emision' => 'date:Y/m/d',
+
 
     ];
 
@@ -33,6 +35,7 @@ class ComprasFacturas extends Model
     protected static function booted()
     {
         //
+        old('divisa');
     }
 
     //Relacion uno a muchos inversa

@@ -28,7 +28,7 @@ class CreateFacturasTable extends Migration
 
             $table->foreign('proveedores_id')->references('id')->on('proveedores')->onDelete('set null');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();
             $table->softDeletes();

@@ -291,7 +291,7 @@
                                                     <ul>
                                                         <li>
 
-                                                            <a href="{{ route('admin.ventas.facturas.edit', $factura) }}"
+                                                            <a href="{{ route('admin.compras.facturas.edit', $factura) }}"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-27"
                                                                 role="menuitem" tabindex="-1">
@@ -324,7 +324,7 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <a href="{{ route('admin.ventas.facturas.show', $factura) }}"
+                                                            <a href="{{ route('admin.compras.facturas.show', $factura) }}"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-29"
                                                                 role="menuitem" tabindex="-1"><svg

@@ -200,7 +200,7 @@
                                 " \n ACTA VALIDA HASTA: " .
                                 $acta->fin_cobertura .
                                 "
-                                                                                                                                        \nCONSULTAR VALIDEZ EN: " .
+                                                                                                                                                        \nCONSULTAR VALIDEZ EN: " .
                                 route('consulta.actas', $acta->codigo),
                         ),
                 ) }}">

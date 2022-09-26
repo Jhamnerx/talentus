@@ -31,13 +31,13 @@ class ComprasFacturasController extends Controller
 
         ComprasFacturas::createItems($factura, $request->items);
 
-        return redirect()->route('admin.compras.facturas.index');
+        return redirect()->route('admin.compras.facturas.index')->with('store', 'La Factura se guardo con exito');
     }
 
 
     public function show(ComprasFacturas $factura)
     {
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
         return view('admin.compras.facturas.show', compact('factura', 'plantilla'));
     }
 
@@ -53,6 +53,6 @@ class ComprasFacturasController extends Controller
 
         ComprasFacturas::createItems($factura, $request->items);
 
-        return redirect()->route('admin.compras.facturas.index');
+        return redirect()->route('admin.compras.facturas.index')->with('update', 'La Factura se actualizo con exito');
     }
 }
