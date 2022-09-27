@@ -1,0 +1,40 @@
+FACTURA
+BOLETA DE VENTA
+NOTA DE CREDITO
+NOTA DE DEBITO
+GUIA DE REMISION REMITENTE
+
+
+TIPOS DE DOCUMENTO SUNAT:
+	
+	0 Doc.trib.no.dom.sin.ruc
+	1 Doc. Nacional de identidad
+	4 Carnet de extranjería
+	6 Registro Único de contribuyentes
+	7 Pasaporte
+	A Ced. Diplomática de identidad
+	B Documento identidad país residencia-no.d
+	C Tax Identification Number - TIN – Doc Trib PP.NN
+	D Identification Number - IN – Doc Trib PP. JJ
+	E TAM- Tarjeta Andina de Migración
+
+UNIDAD DE MEDIDA
+PIEZAS
+UNIDADES
+
+
+MOTIVOS DE TRASLADO:
+	01 Venta
+	14 Venta sujeta a confirmación del comprador
+	02 Compra
+	04 Traslado entre establecimientos de la misma empresa
+	18 Traslado emisor itinerante CP
+	08 Importación
+	09 Exportación
+	19 Traslado a zona primaria
+	13 Otros
+	
+MODALIDAD DE TRASLADO:
+	01 Transporte público
+	02 Transporte privado
+
