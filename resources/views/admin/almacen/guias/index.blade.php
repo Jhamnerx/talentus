@@ -1,54 +1,106 @@
-<!DOCTYPE html>
+@extends('layouts.admin')
 @section('ruta', 'almacen-guias')
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}" defer></script>
+@section('contenido')
 
 
+    <!-- Table -->
+    @livewire('admin.guias-remision.index')
 
-</head>
 
-<body class="font-inter antialiased bg-slate-100 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: 'dashboard-main', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }"
-    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+@stop
+
+@section('js')
+    @if (session('store'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardada',
+                    text: '{{ session('store') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        </script>
+    @endif
+
+    @if (session('update'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizada',
+                    text: '{{ session('update') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        </script>
+    @endif
+
 
     <script>
-        if (localStorage.getItem('sidebar-expanded') == 'true') {
-            document.querySelector('body').classList.add('sidebar-expanded');
-        } else {
-            document.querySelector('body').classList.remove('sidebar-expanded');
-        }
+        window.addEventListener('factura-delete', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: 'Factura Eliminada',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        })
     </script>
 
-    <!-- Page wrapper -->
-    <div class="flex h-screen overflow-hidden">
+    <script>
+        window.addEventListener('factura-send', event => {
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'CORREO ENVIADO',
+                timeout: 1500,
+                message: 'Se ha enviado la cotización ' + event.detail.factura.numero + '-' + event.detail
+                    .factura + '!',
+                position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(5, 44, 82)'
+            });
+        })
+    </script>
 
-        <!-- Sidebar -->
-        @livewire('admin.sidebar')
-
-        <!-- Content area -->
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
-            <!-- Site header -->
-            @livewire('admin.header')
-
-            index
-
-
-        </div>
-
-    </div>
-
-</body>
-
-</html>
+    <script>
+        // A basic demo function to handle "select all" functionality
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('handleSelect', () => ({
+                selectall: false,
+                selectAction() {
+                    countEl = document.querySelector('.table-items-action');
+                    if (!countEl) return;
+                    checkboxes = document.querySelectorAll('input.table-item:checked');
+                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
+                    if (checkboxes.length > 0) {
+                        countEl.classList.remove('hidden');
+                    } else {
+                        countEl.classList.add('hidden');
+                    }
+                },
+                toggleAll() {
+                    this.selectall = !this.selectall;
+                    checkboxes = document.querySelectorAll('input.table-item');
+                    [...checkboxes].map((el) => {
+                        el.checked = this.selectall;
+                    });
+                    this.selectAction();
+                },
+                uncheckParent() {
+                    this.selectall = false;
+                    document.getElementById('parent-checkbox').checked = false;
+                    this.selectAction();
+                }
+            }))
+        })
+    </script>
+@stop
