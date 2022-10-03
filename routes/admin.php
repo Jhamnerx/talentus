@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActasController;
 use App\Http\Controllers\Admin\AjustesController;
+use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
@@ -62,7 +63,7 @@ Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
-Route::resource('guias', GuiasController::class)->names('admin.almacen.guias');
+Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
@@ -131,23 +132,31 @@ Route::get('tecnico/tareas-completadas', [ServicioTecnicoController::class, 'com
 Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('admin.servicio.tecnico');
 
 
+Route::controller(SearchController::class)->prefix('search')->group(function () {
 
-Route::get('search/clientes', [SearchController::class, 'clientes'])->name('search.clientes');
-Route::get('search/cliente/{cliente}', [SearchController::class, 'cliente'])->name('search.cliente');
-Route::get('search/proveedores', [SearchController::class, 'proveedores'])->name('search.proveedores');
-Route::get('search/proveedor/{proveedor?}', [SearchController::class, 'proveedor'])->name('search.proveedor');
-Route::get('search/flotas', [SearchController::class, 'flotas'])->name('search.flotas');
-Route::get('search/flota', [SearchController::class, 'flota'])->name('search.flota');
+    Route::get('clientes', 'clientes')->name('search.clientes');
+    Route::get('cliente/{cliente}', 'cliente')->name('search.cliente');
+    Route::get('proveedores', 'proveedores')->name('search.proveedores');
+    Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
+    Route::get('flotas', 'flotas')->name('search.flotas');
+    Route::get('flota', 'flota')->name('search.flota');
+
+    Route::get('sim_card', 'sim_card')->name('search.sim_card');
+    Route::get('lineas', 'lineas')->name('search.lineas');
+    Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
+    Route::get('ciudades', 'ciudades')->name('search.ciudades');
+    Route::get('productos', 'productos')->name('search.productos');
+    Route::get('facturas', 'facturas')->name('search.facturas');
+});
+
+
 Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('busqueda.clientes');
-Route::get('search/sim_card', [SearchController::class, 'sim_card'])->name('search.sim_card');
-Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.lineas');
-Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
-Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('search.vehiculos');
-Route::get('search/ciudades', [SearchController::class, 'ciudades'])->name('search.ciudades');
-Route::get('search/productos', [SearchController::class, 'productos'])->name('search.productos');
 
 //consulta sunat
 Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
+
+
 
 // VERIFICAR
 
