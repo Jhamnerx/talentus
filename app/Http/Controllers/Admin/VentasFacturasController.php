@@ -11,21 +11,13 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class VentasFacturasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('admin.ventas.facturas.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $numero = $this->setNextSequenceNumber();

@@ -46,6 +46,30 @@
                     <div class="px-8 py-5 bg-white sm:p-6">
                         <div class="grid grid-cols-12 gap-6">
                             {{-- TIPO PAGO --}}
+
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="numero">Número: <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="relative" lang="es">
+
+                                    <input type="text" class="form-input w-full" wire:model='numero' disabled>
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <svg class="absolute inset-0 right-auto flex items-center pointer-events-none"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M2 11h14v2H2v-2zm16 6h2v.5h-1v1h1v.5h-2v1h3v-4h-3v1zm0-6h1.8L18 13.1v.9h3v-1h-1.8l1.8-2.1V10h-3v1zm2-3V4h-2v1h1v3h1zM2 17h14v2H2v-2zM2 5h14v2H2V5z"
+                                                    fill="currentColor"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('tipo_pago')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="tipo_pago">Tipo Pago: <span
                                         class="text-rose-500">*</span></label>
@@ -53,15 +77,12 @@
 
                                     <select id="tipo_pago" name="tipo_pago" wire:model="tipo_pago"
                                         class="tipo_pago w-full form-input pl-9" required>
-
                                         <option selected value="FACTURA">FACTURA</option>
                                         <option value="RECIBO">RECIBO</option>
 
                                     </select>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                             <g class="nc-icon-wrapper">
@@ -113,29 +134,92 @@
                                 @enderror
                             </div>
 
+                            {{-- metodo de pago --}}
+
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="tipo_pago">Metodo de pago: <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="relative">
+
+                                    <select id="payment_method" name="payment_method" wire:model="payment_method_id"
+                                        class="payment_method w-full form-input pl-9">
+
+                                        @foreach ($paymentsMethods as $methods)
+                                            <option value="{{ $methods->id }}">{{ $methods->name }}</option>
+                                        @endforeach
+
+                                    </select>
+
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"
+                                                    fill="currentColor"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('payment_method')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            {{-- monto --}}
+                            <div class="col-span-12 sm:col-span-6">
+
+                                <label class="block text-sm font-medium mb-1" for="monto">Monto:</label>
+
+                                <div class="relative">
+
+                                    <input wire:model="monto" type="text" class="form-input w-full pl-12"
+                                        placeholder="$199.00">
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <span class="text-sm text-slate-400 font-medium px-3">S/</span>
+                                    </div>
+                                </div>
+                                @error('monto')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+
+                            {{-- nota --}}
                             <div class="col-span-12 sm:col-span-12 mb-2">
                                 <label class="block text-sm font-medium mb-1" for="nota">
                                     Nota:
                                 </label>
 
                                 <div class="relative">
-
-
-
-                                    <textarea class="w-full form-input pl-9 " name="nota" id="" rows="4" placeholder="Ingresa una nota">
-
-
+                                    <textarea class="w-full form-input pl-9" wire:model="notaPayment" name="nota" id="" rows="4"
+                                        placeholder="Ingresa una nota">
                                     </textarea>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
+                                        <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                             <g class="nc-icon-wrapper">
-                                                <path d="M1,13V40a4,4,0,0,0,4,4H43a4,4,0,0,0,4-4V13Z" fill="#6cc4f5">
+                                                <path
+                                                    d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
+                                                    fill="#e3e3e3"></path>
+                                                <path d="M38,13H32a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z" fill="#aeaeae">
                                                 </path>
-                                                <path d="M47,14H1V6A2,2,0,0,1,3,4H13l4,4H43a4,4,0,0,1,4,4Z"
-                                                    fill="#2594d0"></path>
+                                                <path d="M38,21H32a1,1,0,0,1,0-2h6a1,1,0,0,1,0,2Z" fill="#aeaeae">
+                                                </path>
+                                                <path d="M38,29H18a1,1,0,0,1,0-2H38a1,1,0,0,1,0,2Z" fill="#aeaeae">
+                                                </path>
+                                                <path d="M38,37H18a1,1,0,0,1,0-2H38a1,1,0,0,1,0,2Z" fill="#aeaeae">
+                                                </path>
+                                                <path
+                                                    d="M26,21H18a1,1,0,0,1-1-1V12a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v8A1,1,0,0,1,26,21Z"
+                                                    fill="#3aace9"></path>
+                                                <path d="M6,46H6a4,4,0,0,0,4-4V27H3a1,1,0,0,0-1,1V42A4,4,0,0,0,6,46Z"
+                                                    fill="#aeaeae"></path>
                                             </g>
                                         </svg>
                                     </div>
@@ -194,9 +278,10 @@
 
         $('.documentos').on('select2:select', function(e) {
             var data = e.params.data;
-            console.log(data.id);
+            //console.log(data.paymentable_type);
 
-            //@this.set('documentos', data.id)
+            @this.set('paymentable_type', data.paymentable_type)
+            @this.set('paymentable_id', data.paymentable_id)
         });
     </script>
 @endsection

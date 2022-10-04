@@ -27,6 +27,7 @@ use App\Models\Facturas;
 use App\Models\Flotas;
 use App\Models\Lineas;
 use App\Models\ModelosDispositivo;
+use App\Models\Payments;
 use App\Models\Presupuestos;
 use App\Models\Productos;
 use App\Models\Recibos;
@@ -46,6 +47,7 @@ use App\Observers\FacturaObserver;
 use App\Observers\FlotasObserver;
 use App\Observers\LineasObserver;
 use App\Observers\ModelosDispositivosObserver;
+use App\Observers\PaymentsObserver;
 use App\Observers\PresupuestosObserver;
 use App\Observers\ProductoObserver;
 use App\Observers\ReciboObserver;
@@ -103,5 +105,6 @@ class EventServiceProvider extends ServiceProvider
         Reportes::observe(ReportesObserver::class);
         Certificados::observe(CertificadosObserver::class);
         ModelsCertificadosVelocimetros::observe(CertificadosVelocimetrosObserver::class);
+        Payments::observe(PaymentsObserver::class);
     }
 }

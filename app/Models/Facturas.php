@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Notifications\Ventas\EnviarFacturaCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EmpresaScope;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class Facturas extends Model
 {
@@ -26,6 +28,24 @@ class Facturas extends Model
         'fecha_vencimiento' => 'date:Y/m/d',
         'fecha_pago' => 'date:Y/m/d',
     ];
+
+    protected $attributes = [
+        'empresa_id' => "session('empresa')",
+        'user_id' => " Auth::user()->id",
+    ];
+
+    protected function empresaId(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => session('empresa'),
+        );
+    }
+    protected function userId(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => Auth::user()->id,
+        );
+    }
 
     protected static function booted()
     {

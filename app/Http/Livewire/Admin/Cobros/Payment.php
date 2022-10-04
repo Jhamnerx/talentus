@@ -2,8 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Cobros;
 
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Models\Clientes;
 use App\Models\Cobros;
+use App\Models\Facturas;
+use App\Models\PaymentMethods;
+use App\Models\Payments;
+use App\Models\Recibos;
+use Carbon\Carbon;
 use Livewire\Component;
 
 class Payment extends Component
@@ -14,7 +20,11 @@ class Payment extends Component
     public $documentos = [];
     public $titulo_documento = "Numero";
 
+    public $paymentsMethods = [];
+
     public $cobro;
+
+    public $numero, $payment_method_id, $nota, $monto, $paymentable_type, $paymentable_id;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',
@@ -22,15 +32,37 @@ class Payment extends Component
 
     public function mount(Cobros $cobro)
     {
-
         $this->cobro = $cobro;
         $this->tipo_pago = $cobro->tipo_pago;
         $this->cobro->reset;
+        $this->paymentsMethods = PaymentMethods::all();
+        $paymentController = new PaymentsController();
+        $this->numero = $paymentController->setNextSequenceNumber();
     }
 
     public function render()
     {
         return view('livewire.admin.cobros.payment');
+    }
+
+
+
+    public function save()
+    {
+
+
+
+        Payments::create([
+            'numero' => '001',
+            'fecha' => Carbon::now()->format('Y-m-d'),
+            'nota' => $this->nota,
+            'monto' => $this->monto,
+            'paymentable_type' => $this->paymentable_type,
+            'paymentable_id' => $this->paymentable_id,
+            'unique_hash' => '9390233084',
+            'cobros_id' => $this->cobro->id,
+            'payment_method_id' => $this->payment_method_id
+        ]);
     }
 
     public function openModal()
@@ -62,7 +94,6 @@ class Payment extends Component
     public function updatedtipoPago($tipo_pago)
     {
 
-
         $cliente = Clientes::where('id', $this->cobro->clientes_id)->first();
 
         if ($tipo_pago == "FACTURA") {
@@ -76,8 +107,6 @@ class Payment extends Component
         }
 
         $this->dispatchBrowserEvent('dataDocumentos', ['data' => $this->documentos]);
-
-        //$this->dataVehiculos = $data;
     }
 
     public function loadFacturas(Clientes $cliente)
@@ -92,7 +121,9 @@ class Payment extends Component
 
                 $data[] = [
                     'id' => $factura->id,
-                    'text' => $factura->serie . "-" . $factura->numero,
+                    'text' => $factura->numero,
+                    'paymentable_type' => Facturas::class,
+                    'paymentable_id' => $factura->id,
                 ];
             }
         }
@@ -108,7 +139,9 @@ class Payment extends Component
 
             $data[] = [
                 'id' => $recibo->id,
-                'text' => $recibo->serie . "-" . $recibo->numero,
+                'text' => $recibo->numero,
+                'paymentable_type' => Recibos::class,
+                'paymentable_id' => $recibo->id,
             ];
         }
         return $data;
