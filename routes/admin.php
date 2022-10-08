@@ -114,8 +114,14 @@ Route::resource('usuarios', UsersController::class)->names('admin.users')->param
 ]);
 
 Route::resource('cobros', CobrosController::class)->names('admin.cobros');
-Route::resource('payments', PaymentsController::class)->names('admin.payments');
+// Route::resource('payments', PaymentsController::class)->names('admin.payments');
 
+
+Route::controller(PaymentsController::class)->group(function () {
+
+    Route::get('payments', 'index')->name('admin.payments.index');
+    Route::get('payments/{payment}', 'show')->name('admin.payments.show');
+});
 
 Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
 Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
