@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FacturasRequest extends FormRequest
 {
@@ -23,12 +24,12 @@ class FacturasRequest extends FormRequest
      */
     public function rules()
     {
-
+        //dd(Rule::unique('facturas', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))));
         $factura = $this->route()->parameter('factura');
        // dd($factura);
         $rules = [
             'clientes_id' => 'required',
-            'numero' => 'required|unique:facturas,numero',
+            'numero' => ['required', Rule::unique('facturas', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))],
             'fecha_emision' => 'required',
             'fecha_vencimiento' => 'required',
             'divisa' => 'required',
@@ -44,7 +45,8 @@ class FacturasRequest extends FormRequest
         if ($factura) {
 
 
-            $rules['numero'] = 'required|unique:facturas,numero,' . $factura->id;
+            //$rules['numero'] = 'required|unique:facturas,numero,' . $factura->id;
+            $rules['numero'] = ['required', Rule::unique('facturas', 'numero')->ignore($factura->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))];
 
         }
 

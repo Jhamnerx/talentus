@@ -32,7 +32,6 @@ class CreateActasTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->string('codigo')->nullable();
             $table->string('unique_hash')->nullable();
-
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('vehiculos_id')->references('id')->on('vehiculos')->onDelete('cascade');
             $table->foreign('ciudades_id')->references('id')->on('ciudades')->onDelete('set null');

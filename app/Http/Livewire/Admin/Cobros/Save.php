@@ -7,6 +7,7 @@ use App\Models\Clientes;
 use App\Models\Cobros;
 use Livewire\Component;
 use Carbon\Carbon;
+
 class Save extends Component
 {
 
@@ -16,7 +17,8 @@ class Save extends Component
     public $dataVehiculos = [];
     public $nota;
 
-    public function mount(){
+    public function mount()
+    {
 
         $this->fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
     }
@@ -27,32 +29,31 @@ class Save extends Component
     }
 
 
-    public function updatedCliente($id){
+    public function updatedCliente($id)
+    {
 
-        $cliente = Clientes::where('id',$id)->first();
-        
+        $cliente = Clientes::where('id', $id)->first();
+
 
         $data = [];
-        foreach($cliente->flotas as $flota){
+        foreach ($cliente->flotas as $flota) {
             foreach ($flota->vehiculos as $vehiculo) {
 
-                if($vehiculo->is_active){
+                if ($vehiculo->is_active) {
                     $data[] = [
                         'id' => $vehiculo->id,
                         'text' => $vehiculo->placa,
                     ];
                 }
-
-
             }
-
         }
 
-            $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
-            $this->dataVehiculos = $data;
+        $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
+        $this->dataVehiculos = $data;
     }
 
-    public function updatedPeriodo($periodo){
+    public function updatedPeriodo($periodo)
+    {
         switch ($periodo) {
             case 'MENSUAL':
                 $this->fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
@@ -76,12 +77,11 @@ class Save extends Component
     {
         $requestCobros = new CobrosRequest();
         $this->validateOnly($label, $requestCobros->rules(), $requestCobros->messages());
-
     }
 
     public function GuardarCobro()
     {
-       // dd($this->imei);
+        // dd($this->imei);
         $requestCobros = new CobrosRequest();
 
         $values = $this->validate($requestCobros->rules(), $requestCobros->messages());
@@ -100,5 +100,4 @@ class Save extends Component
 
         return redirect()->route('admin.cobros.index')->with('store', 'Se guardo con exito');
     }
-
 }

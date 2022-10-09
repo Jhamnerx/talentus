@@ -194,13 +194,14 @@
         <div class="qr">
             <img
                 src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
+                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+                    ->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
                                 $acta->vehiculos->placa .
                                 " \n ACTA VALIDA HASTA: " .
                                 $acta->fin_cobertura .
                                 "
-                                                                                                                                        \nCONSULTAR VALIDEZ EN: " .
+                                                \nCONSULTAR VALIDEZ EN: " .
                                 route('consulta.actas', $acta->codigo),
                         ),
                 ) }}">

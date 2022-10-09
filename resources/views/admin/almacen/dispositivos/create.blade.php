@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-
+@section('ruta', 'almacen-dispositivos')
 @section('contenido')
     <!-- Code block starts -->
     <div
@@ -66,8 +66,8 @@
                                 {!! Form::text('imei', null, [
                                     'placeholder' => 'Escribe un imei...',
                                     'class' => 'form-input
-                                                                                                                                                                                                                            w-full md:w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                                                                                                                                                                                            peer',
+                                                                                                                                                                                                                                                            w-full md:w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
+                                                                                                                                                                                                                                                            peer',
                                 ]) !!}
                                 @error('imei')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -116,8 +116,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-600 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                    focus:ring-emerald-600 text-white',
+                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>

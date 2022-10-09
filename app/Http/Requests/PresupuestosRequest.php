@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PresupuestosRequest extends FormRequest
 {
@@ -22,12 +23,17 @@ class PresupuestosRequest extends FormRequest
      * @return array
      */
     public function rules()
+
+
     {
 
+
+       // dd(Rule::unique('presupuestos', 'numero')->ignore(session('empresa'), 'empresa_id')->where('empresa_id', session('empresa')));
         $presupuesto = $this->route()->parameter('presupuesto');
+
         $rules = [
             'clientes_id' => 'required',
-            'numero' => 'required|unique:presupuestos,numero',
+            'numero' => ['required', Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),],
             'fecha' => 'required',
             'fecha_caducidad' => 'required',
             'divisa' => 'required',
@@ -36,10 +42,12 @@ class PresupuestosRequest extends FormRequest
             'items.*.precio' => 'required',
             'items.*.importe' => 'required',
         ];
+
         if ($presupuesto) {
 
 
-            $rules['numero'] = 'required|unique:presupuestos,numero,' . $presupuesto->id;
+            $rules['numero'] = ['required', Rule::unique('presupuestos', 'numero')->ignore($presupuesto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))];
+
 
         }
 

@@ -4,11 +4,14 @@ namespace App\Models;
 
 use App\Notifications\Ventas\EnviarFacturaCliente;
 use App\Scopes\ActiveScope;
-
+use App\Scopes\EmpresaScope;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+
 class Facturas extends Model
 {
 
@@ -26,23 +29,45 @@ class Facturas extends Model
         'fecha_pago' => 'date:Y/m/d',
     ];
 
-    
+    protected $attributes = [
+        'empresa_id' => "session('empresa')",
+        'user_id' => " Auth::user()->id",
+    ];
+
+    protected function empresaId(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => session('empresa'),
+        );
+    }
+    protected function userId(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => Auth::user()->id,
+        );
+    }
+
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
     public function presupuesto()
     {
-        return $this->belongsTo(Presupuestos::class, 'presupuestos_id');
+        return $this->belongsTo(Presupuestos::class, 'presupuestos_id')->withTrashed();
     }
 
-    public function getSerie(){
+    public function getSerie()
+    {
 
         return plantilla::get('serie')->where('empresas_id', session('empresa'));
-
     }
 
     //relacion uno a muchos
@@ -81,15 +106,14 @@ class Facturas extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.factura.pdf');
-        
-        if($action == 1){
 
-            return $pdf->download('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
-        }else{
-           
-            return $pdf->stream('FACTURA ' . $this->serie."-".$this->numero.'.pdf');
+        if ($action == 1) {
+
+            return $pdf->download('FACTURA ' . $this->serie . "-" . $this->numero . '.pdf');
+        } else {
+
+            return $pdf->stream('FACTURA ' . $this->serie . "-" . $this->numero . '.pdf');
         };
-
     }
 
     public function getPDFDataToMail($data)
@@ -105,8 +129,5 @@ class Facturas extends Model
         $pdf = PDF::loadView('pdf.factura.pdf');
 
         $this->clientes->notify(new EnviarFacturaCliente($this, $pdf, $data));
-
     }
-
-
 }

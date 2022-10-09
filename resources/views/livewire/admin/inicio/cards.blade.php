@@ -192,78 +192,25 @@
                     </div>
                 </div>
             </div>
-            <!-- Bar chart (Direct vs Indirect) -->
-            @livewire('admin.inicio.charts.ventas')
-            {{-- <div
-                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100">
-                    <h2 class="font-semibold text-slate-800">Direct VS Indirect</h2>
-                </header>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/dashboard-card-04.js for config -->
-                <div id="dashboard-card-04-legend" class="px-5 py-3">
-                    <ul class="flex flex-wrap"></ul>
-                </div>
-                <div class="grow">
-                    <!-- Change the height attribute to adjust the chart height -->
-                    <canvas id="dashboard-card-04" width="595" height="248"></canvas>
-                </div>
-            </div> --}}
-            <!-- Line chart (Real Time Value) -->
-            <div
-                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100 flex items-center">
-                    <h2 class="font-semibold text-slate-800">Real Time Value</h2>
-                    <div class="relative ml-2" x-data="{ open: false }" @mouseenter="open = true"
-                        @mouseleave="open = false">
-                        <button class="block" aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                            @focusout="open = false" @click.prevent>
-                            <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
-                                <path
-                                    d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                            </svg>
-                        </button>
-                        <div class="z-10 absolute bottom-full left-1/2 transform -translate-x-1/2">
-                            <div class="bg-white border border-slate-200 p-3 rounded shadow-lg overflow-hidden mb-2"
-                                x-show="open" x-transition:enter="transition ease-out duration-200 transform"
-                                x-transition:enter-start="opacity-0 translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-out duration-200"
-                                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
-                                <div class="text-xs text-center whitespace-nowrap">Built with <a class="underline"
-                                        @focus="open = true" @focusout="open = false" href="https://www.chartjs.org/"
-                                        target="_blank">Chart.js</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/dashboard-card-05.js for config -->
-                <div class="px-5 py-3">
-                    <div class="flex items-start">
-                        <div class="text-3xl font-bold text-slate-800 mr-2 tabular-nums">$<span
-                                id="dashboard-card-05-value">57.81</span></div>
-                        <div id="dashboard-card-05-deviation"
-                            class="text-sm font-semibold text-white px-1.5 rounded-full">
-                        </div>
-                    </div>
-                </div>
-                <div class="grow">
-                    <!-- Change the height attribute to adjust the chart height -->
-                    <canvas id="dashboard-card-05" width="595" height="248"></canvas>
-                </div>
-            </div>
-            <!-- Doughnut chart (Top Countries) -->
+
+
+            <!-- Bar chart (fact vs recibos soles) -->
+
+            @livewire('admin.inicio.charts.ventas-soles')
+
+
+            <!-- Bar chart (fact vs recibos dolares) -->
+
+            @livewire('admin.inicio.charts.ventas-dolares')
+
             <div
                 class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100">
-                    <h2 class="font-semibold text-slate-800">Top Countries</h2>
+                    <h2 class="font-semibold text-slate-800">Top Ventas</h2>
                 </header>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/dashboard-card-06.js for config -->
                 <div class="grow flex flex-col justify-center">
                     <div>
-                        <!-- Change the height attribute to adjust the chart height -->
+
                         <canvas id="dashboard-card-06" width="389" height="260"></canvas>
                     </div>
                     <div id="dashboard-card-06-legend" class="px-5 pt-2 pb-6">
@@ -271,98 +218,12 @@
                     </div>
                 </div>
             </div>
-            <!-- Table (Top Channels) -->
-            <div
-                class="flex flex-col col-span-full sm:col-span-12 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100 flex items-center">
-                    <h2 class="font-semibold text-slate-800">Portfolio Returns</h2>
-                </header>
-                <div class="px-5 py-3">
-                    <div class="text-sm italic mb-2">Hey Mark, you're very close to your goal:</div>
-                    <div class="flex items-center">
-                        <div class="text-3xl font-bold text-slate-800 mr-2">$5,247.09</div>
-                        <div class="text-sm"><span class="font-medium text-amber-500">97.4%</span></div>
-                    </div>
-                    <div class="text-sm text-slate-500">Out of $6,000</div>
-                </div>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/fintech-card-07.js for config -->
-                <div class="grow">
-                    <!-- Change the height attribute to adjust the chart height -->
-                    <canvas id="fintech-card-07" width="389" height="262"></canvas>
-                </div>
-            </div>
-            <!-- Line chart (Sales Over Time) -->
-            <div
-                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100 flex items-center">
-                    <h2 class="font-semibold text-slate-800">Sales Over Time (all stores)</h2>
-                </header>
-                <div class="px-5 py-3">
-                    <div class="flex flex-wrap justify-between items-end">
-                        <div class="flex items-start">
-                            <div class="text-3xl font-bold text-slate-800 mr-2">$1,482</div>
-                            <div class="text-sm font-semibold text-white px-1.5 bg-yellow-500 rounded-full">
-                                -22%</div>
-                        </div>
-                        <div id="dashboard-card-08-legend" class="grow ml-2 mb-1">
-                            <ul class="flex flex-wrap justify-end"></ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/dashboard-card-08.js for config -->
-                <div class="grow">
-                    <!-- Change the height attribute to adjust the chart height -->
-                    <canvas id="dashboard-card-08" width="595" height="248"></canvas>
-                </div>
-            </div>
-            <!-- Stacked bar chart (Sales VS Refunds) -->
-            <div
-                class="flex flex-col col-span-full sm:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100 flex items-center">
-                    <h2 class="font-semibold text-slate-800">Sales VS Refunds</h2>
-                    <div class="relative ml-2" x-data="{ open: false }" @mouseenter="open = true"
-                        @mouseleave="open = false">
-                        <button class="block" href="#0" aria-haspopup="true" :aria-expanded="open"
-                            @focus="open = true" @focusout="open = false" @click.prevent>
-                            <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
-                                <path
-                                    d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                            </svg>
-                        </button>
-                        <div class="z-10 absolute bottom-full left-1/2 transform -translate-x-1/2">
-                            <div class="min-w-72 bg-white border border-slate-200 p-3 rounded shadow-lg overflow-hidden mb-2"
-                                x-show="open" x-transition:enter="transition ease-out duration-200 transform"
-                                x-transition:enter-start="opacity-0 translate-y-2"
-                                x-transition:enter-end="opacity-100 translate-y-0"
-                                x-transition:leave="transition ease-out duration-200"
-                                x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" x-cloak>
-                                <div class="text-sm">Sint occaecat cupidatat non proident, sunt in culpa qui
-                                    officia deserunt
-                                    mollit.</div>
-                            </div>
-                        </div>
-                    </div>
-                </header>
-                <div class="px-5 py-3">
-                    <div class="flex items-start">
-                        <div class="text-3xl font-bold text-slate-800 mr-2">+$6,796</div>
-                        <div class="text-sm font-semibold text-white px-1.5 bg-yellow-500 rounded-full">-34%
-                        </div>
-                    </div>
-                </div>
-                <!-- Chart built with Chart.js 3 -->
-                <!-- Check out src/js/components/dashboard-card-09.js for config -->
-                <div class="grow">
-                    <!-- Change the height attribute to adjust the chart height -->
-                    <canvas id="dashboard-card-09" width="595" height="248"></canvas>
-                </div>
-            </div>
+
+
             <!-- Card (Recent Activity) -->
             <div class="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
                 <header class="px-5 py-4 border-b border-slate-100">
-                    <h2 class="font-semibold text-slate-800">Recent Activity</h2>
+                    <h2 class="font-semibold text-slate-800">Actividad Reciente</h2>
                 </header>
                 <div class="p-3">
 
@@ -493,135 +354,6 @@
                                             <a class="font-medium text-indigo-500 hover:text-indigo-600"
                                                 href="#0">View<span class="hidden sm:inline">
                                                     -&gt;</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-            </div>
-            <!-- Card (Income/Expenses) -->
-            <div class="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
-                <header class="px-5 py-4 border-b border-slate-100">
-                    <h2 class="font-semibold text-slate-800">Income/Expenses</h2>
-                </header>
-                <div class="p-3">
-
-                    <!-- Card content -->
-                    <!-- "Today" group -->
-                    <div>
-                        <header class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm font-semibold p-2">
-                            Today</header>
-                        <ul class="my-1">
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-rose-500 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-rose-50" viewBox="0 0 36 36">
-                                        <path d="M17.7 24.7l1.4-1.4-4.3-4.3H25v-2H14.8l4.3-4.3-1.4-1.4L11 18z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">Qonto</a> billing</div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-slate-800">-$49.88</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-emerald-500 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-emerald-50" viewBox="0 0 36 36">
-                                        <path d="M18.3 11.3l-1.4 1.4 4.3 4.3H11v2h10.2l-4.3 4.3 1.4 1.4L25 18z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">Cruip.com</a> Market Ltd 70 Wilson St London</div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-emerald-500">+249.88</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-emerald-500 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-emerald-50" viewBox="0 0 36 36">
-                                        <path d="M18.3 11.3l-1.4 1.4 4.3 4.3H11v2h10.2l-4.3 4.3 1.4 1.4L25 18z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">Notion
-                                                Labs Inc</a></div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-emerald-500">+99.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-emerald-500 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-emerald-50" viewBox="0 0 36 36">
-                                        <path d="M18.3 11.3l-1.4 1.4 4.3 4.3H11v2h10.2l-4.3 4.3 1.4 1.4L25 18z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">Market
-                                                Cap Ltd</a></div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-emerald-500">+1,200.88</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-slate-200 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-slate-400" viewBox="0 0 36 36">
-                                        <path
-                                            d="M21.477 22.89l-8.368-8.367a6 6 0 008.367 8.367zm1.414-1.413a6 6 0 00-8.367-8.367l8.367 8.367zM18 26a8 8 0 110-16 8 8 0 010 16z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">App.com</a> Market Ltd 70 Wilson St London</div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-slate-800 line-through">+$99.99</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            <!-- Item -->
-                            <li class="flex px-2">
-                                <div class="w-9 h-9 rounded-full shrink-0 bg-rose-500 my-2 mr-3">
-                                    <svg class="w-9 h-9 fill-current text-rose-50" viewBox="0 0 36 36">
-                                        <path d="M17.7 24.7l1.4-1.4-4.3-4.3H25v-2H14.8l4.3-4.3-1.4-1.4L11 18z" />
-                                    </svg>
-                                </div>
-                                <div class="grow flex items-center text-sm py-2">
-                                    <div class="grow flex justify-between">
-                                        <div class="self-center"><a
-                                                class="font-medium text-slate-800 hover:text-slate-900"
-                                                href="#0">App.com</a> Market Ltd 70 Wilson St London</div>
-                                        <div class="shrink-0 self-start ml-2">
-                                            <span class="font-medium text-slate-800">-$49.88</span>
                                         </div>
                                     </div>
                                 </div>

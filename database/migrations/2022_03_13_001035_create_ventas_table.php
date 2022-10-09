@@ -17,7 +17,6 @@ class CreateVentasTable extends Migration
             $table->id();
 
             $table->unsignedBigInteger('clientes_id')->nullable();
-            $table->string('serie')->nullable();
             $table->string('numero')->nullable();
             $table->date('fecha_emision');
             $table->date('fecha_vencimiento');

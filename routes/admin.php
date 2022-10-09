@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActasController;
 use App\Http\Controllers\Admin\AjustesController;
+use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CategoriaController;
 use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
@@ -18,6 +19,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\NotificacionesController;
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
@@ -36,7 +38,6 @@ use App\Http\Controllers\Admin\UserProfileController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\VehiculosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
-use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\SearchController;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\Route;
@@ -62,7 +63,7 @@ Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
-Route::resource('guias', GuiasController::class)->names('admin.almacen.guias');
+Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
@@ -72,9 +73,15 @@ Route::resource('proveedor', ProveedoresController::class)->names('admin.proveed
 
 // COMPRAS
 
+
+
+
 Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([
     'compras-factura' => 'factura'
 ]);
+
+
+
 
 // VENTAS
 Route::resource('presupuestos', PresupuestoController::class)->names('admin.ventas.presupuestos');
@@ -107,12 +114,18 @@ Route::resource('usuarios', UsersController::class)->names('admin.users')->param
 ]);
 
 Route::resource('cobros', CobrosController::class)->names('admin.cobros');
-Route::resource('payments', PaymentsController::class)->names('admin.payments');
+// Route::resource('payments', PaymentsController::class)->names('admin.payments');
 
+
+Route::controller(PaymentsController::class)->group(function () {
+
+    Route::get('payments', 'index')->name('admin.payments.index');
+    Route::get('payments/{payment}', 'show')->name('admin.payments.show');
+});
 
 Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
-Route::get('ajustes/ciudades',[ AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
-Route::get('ajustes/notificaciones',[ AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
+Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
+Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
@@ -125,20 +138,31 @@ Route::get('tecnico/tareas-completadas', [ServicioTecnicoController::class, 'com
 Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('admin.servicio.tecnico');
 
 
+Route::controller(SearchController::class)->prefix('search')->group(function () {
 
-Route::get('search/clientes', [SearchController::class, 'clientes'])->name('search.clientes');
-Route::get('search/flotas', [SearchController::class, 'flotas'])->name('search.flotas');
-Route::get('search/flota', [SearchController::class, 'flota'])->name('search.flota');
+    Route::get('clientes', 'clientes')->name('search.clientes');
+    Route::get('cliente/{cliente}', 'cliente')->name('search.cliente');
+    Route::get('proveedores', 'proveedores')->name('search.proveedores');
+    Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
+    Route::get('flotas', 'flotas')->name('search.flotas');
+    Route::get('flota', 'flota')->name('search.flota');
+
+    Route::get('sim_card', 'sim_card')->name('search.sim_card');
+    Route::get('lineas', 'lineas')->name('search.lineas');
+    Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
+    Route::get('ciudades', 'ciudades')->name('search.ciudades');
+    Route::get('productos', 'productos')->name('search.productos');
+    Route::get('facturas', 'facturas')->name('search.facturas');
+});
+
+
 Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('busqueda.clientes');
-Route::get('search/sim_card', [SearchController::class, 'sim_card'])->name('search.sim_card');
-Route::get('search/lineas', [SearchController::class, 'lineas'])->name('search.lineas');
-Route::get('search/dispositivos', [SearchController::class, 'dispositivos'])->name('search.dispositivos');
-Route::get('search/vehiculos', [SearchController::class, 'vehiculos'])->name('search.vehiculos');
-Route::get('search/ciudades', [SearchController::class, 'ciudades'])->name('search.ciudades');
-Route::get('search/productos', [SearchController::class, 'productos'])->name('search.productos');
 
 //consulta sunat
 Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
+
+
 
 // VERIFICAR
 
@@ -186,4 +210,4 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin
 
 // DATA CHARTS
 
-Route::get('/json-data-feed', [HomeController::class, 'getDataVentas'])->name('json_data_feed');
+Route::get('/json-data-ventas', [HomeController::class, 'getDataVentas'])->name('json_data_feed');

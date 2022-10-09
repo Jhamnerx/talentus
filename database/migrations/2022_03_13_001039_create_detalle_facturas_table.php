@@ -17,19 +17,11 @@ class CreateDetalleFacturasTable extends Migration
             $table->id();
             $table->unsignedBigInteger('facturas_id')->nullable();
 
-            $table->string('descripcion');
+            $table->string('producto');
             $table->integer('cantidad');
             $table->decimal('precio', 10, 2);
-            $table->decimal('impuesto', 10, 2);
             $table->decimal('importe', 10, 2);
-
-
             $table->foreign('facturas_id')->references('id')->on('compras_factura')->onDelete('cascade');
-
-
-
-
-
 
             $table->timestamps();
         });

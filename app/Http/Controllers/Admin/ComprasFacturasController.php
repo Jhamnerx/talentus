@@ -3,84 +3,56 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ComprasFacturasRequest;
 use App\Models\ComprasFacturas;
+use App\Models\plantilla;
 use Illuminate\Http\Request;
 
 class ComprasFacturasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('admin.compras.facturas.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('admin.compras.facturas.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+
+    public function store(ComprasFacturasRequest $request)
     {
-        //
+
+
+        $factura = ComprasFacturas::create($request->all());
+
+        ComprasFacturas::createItems($factura, $request->items);
+
+        return redirect()->route('admin.compras.facturas.index')->with('store', 'La Factura se guardo con exito');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ComprasFacturas  $comprasFacturas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ComprasFacturas $comprasFacturas)
+
+    public function show(ComprasFacturas $factura)
     {
-        return view('admin.compras.facturas.show');
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        return view('admin.compras.facturas.show', compact('factura', 'plantilla'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ComprasFacturas  $comprasFacturas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ComprasFacturas $comprasFacturas)
+    public function edit(ComprasFacturas $factura)
     {
-        return view('admin.compras.facturas.edit');
+        return view('admin.compras.facturas.edit', compact('factura'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ComprasFacturas  $comprasFacturas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ComprasFacturas $comprasFacturas)
+    public function update(Request $request, ComprasFacturas $factura)
     {
-        //
-    }
+        $factura->update($request->all());
+        $factura->detalles()->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ComprasFacturas  $comprasFacturas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ComprasFacturas $comprasFacturas)
-    {
-        //
+        ComprasFacturas::createItems($factura, $request->items);
+
+        return redirect()->route('admin.compras.facturas.index')->with('update', 'La Factura se actualizo con exito');
     }
 }

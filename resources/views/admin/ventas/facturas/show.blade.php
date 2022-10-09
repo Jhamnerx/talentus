@@ -147,7 +147,7 @@
                                 <div class="space-y-2">
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> Factura# </p>
-                                        <p>{{ $factura->serie . '-' . $factura->numero }} </p>
+                                        <p>{{ $factura->numero }} </p>
                                     </div>
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> Fecha Emision </p>

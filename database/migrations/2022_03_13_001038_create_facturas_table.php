@@ -16,20 +16,18 @@ class CreateFacturasTable extends Migration
         Schema::create('compras_factura', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('proveedores_id')->nullable();
-            $table->string('serie');
             $table->string('numero');
-            $table->date('fecha');
-            $table->date('fecha_vencimiento');
+            $table->date('fecha_emision');
+            $table->string('divisa');
+            $table->decimal('subtotal', 10, 2);
+            $table->decimal('impuesto', 10, 2);
             $table->decimal('total', 10, 2);
-            $table->boolean('eliminado')->default(false);
-            $table->unsignedBigInteger('empresa_id');
-            $table->string('nota');
-
+            $table->string('nota')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable();
+            $table->unsignedBigInteger('users_id')->nullable();
             $table->foreign('proveedores_id')->references('id')->on('proveedores')->onDelete('set null');
-
-
-
-
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->foreign('users_id', 'compras_fac_users')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();
             $table->softDeletes();

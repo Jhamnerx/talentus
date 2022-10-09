@@ -7,9 +7,11 @@ use App\Models\Ciudades;
 use Illuminate\Http\Request;
 use App\Models\Clientes;
 use App\Models\Dispositivos;
+use App\Models\Facturas;
 use App\Models\Flotas;
 use App\Models\Lineas;
 use App\Models\Productos;
+use App\Models\Proveedores;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
@@ -17,9 +19,52 @@ use Illuminate\Support\Arr;
 
 class SearchController extends Controller
 {
-    //
+    // buscar clientes por nombre
     public function clientes(Request $request)
     {
+
+
+        // $data = [];
+        // $arrays = [
+        //     "warehouse_id" => [
+        //         0 => "7",
+        //         2 => "7",
+        //         3 => "7",
+        //         4 => "7",
+        //         5 => "7",
+        //         6 => "7",
+        //     ],
+        //     "detalle_servicio" => [
+        //         0 => "Valida 1",
+        //         2 => "Valida 2",
+        //         3 => "Valida 3",
+        //         4 => "Valida 4",
+        //         5 => "Valida 5",
+        //         6 => "Valida 6",
+        //     ],
+        //     "valor" => [
+        //         0 => "10",
+        //         2 => "20",
+        //         3 => "30",
+        //         4 => "40",
+        //         5 => "50",
+        //         6 => "60",
+        //     ]
+        // ];
+        // for ($i = 0; $i < count($arrays["warehouse_id"]) + 1; $i++) {
+        //     if (array_key_exists($i, $arrays["warehouse_id"])) {
+        //         $data[] = [
+        //             'warehouse_id' => $arrays["warehouse_id"][$i],
+        //             'detalle_servicio' => $arrays["detalle_servicio"][$i],
+        //             'valor' => $arrays["valor"][$i]
+        //         ];
+        //     }
+        // }
+        // return $data;
+
+
+
+        // return $array;
 
         $term = $request->get('term');
         $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
@@ -35,9 +80,71 @@ class SearchController extends Controller
             ];
         }
 
+        return array("suggestions" => $data);
+    }
+
+    //buscar cliente por id
+    public function cliente(Request $request)
+    {
+
+        $query = Clientes::where('id', $request->proveedor)->first();
+
+
+        $data = [];
+        if ($query) {
+
+            $data = array(
+                'razon_social' => $query->razon_social,
+                'id' => $query->id,
+            );
+        }
+
+
+
+        return $data;
+    }
+
+    //buscar proveedores por razon social
+    public function proveedores(Request $request)
+    {
+
+        $term = $request->get('term');
+        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->razon_social,
+                'data' => $query->id,
+
+            ];
+        }
+
         // return array("suggestions" => $data);
         return array("suggestions" => $data);
     }
+
+    public function proveedor(Request $request)
+    {
+
+        $query = Proveedores::where('id', $request->proveedor)->first();
+
+
+        $data = [];
+        if ($query) {
+
+            $data = array(
+                'razon_social' => $query->razon_social,
+                'id' => $query->id,
+            );
+        }
+
+
+
+        return $data;
+    }
+
 
     public function flotas(Request $request)
     {
@@ -226,8 +333,15 @@ class SearchController extends Controller
     {
 
         $term = $request->get('term');
+        $tipo = $request->get('tipo');
 
-        $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
+        if ($tipo) {
+            $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->where('tipo', $tipo)->orderby('id', 'desc')->get();
+        } else {
+            $productos = Productos::active(true)->where('nombre', 'LIKE', '%' . $term . '%')->orderby('id', 'desc')->get();
+        }
+
+
         $data = [];
         foreach ($productos as $producto) {
 
@@ -243,20 +357,41 @@ class SearchController extends Controller
     }
 
 
-    public function sunat(Request $request){
-        
+    public function sunat(Request $request)
+    {
+
         $term = $request->get('numero');
         $tipo = $request->get('tipo');
-       // return $term;
-       $util = new UtilesController;
-       if ($tipo == 'DNI') {
+        // return $term;
+        $util = new UtilesController;
+        if ($tipo == 'DNI') {
             $resultado = $util->consultaPersona($term);
-       } else {
+        } else {
             $resultado = $util->consultaEmpresa($term);
-       }
-       
-      
+        }
 
-       return $resultado;
+
+
+        return $resultado;
+    }
+
+    public function facturas(Request $request)
+    {
+
+        $term = $request->get('term');
+        $querys = Facturas::where('numero', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->numero,
+                'data' => $query->id,
+
+            ];
+        }
+
+        // return array("suggestions" => $data);
+        return array("suggestions" => $data);
     }
 }

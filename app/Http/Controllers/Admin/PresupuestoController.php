@@ -17,6 +17,7 @@ class PresupuestoController extends Controller
      */
     public function index()
     {
+
         return view('admin.ventas.presupuestos.index');
     }
 
@@ -28,23 +29,23 @@ class PresupuestoController extends Controller
     public function create()
     {
         $tipoCambio = UtilesController::tipoCambio();
-        $serial = $this->setNextSequenceNumber();
-       
-        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'serial'));
+        $numero = $this->setNextSequenceNumber();
+
+        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'numero'));
     }
 
     public function setNextSequenceNumber()
     {
-        
+
         // $last = Presupuestos::orderBy('numero', 'desc')
         //     ->take(1)
         //     ->first();
 
-     //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-']);
-       $id = IdGenerator::generate(['table' => 'presupuestos','field'=>'numero', 'length' => 8, 'prefix' => 'PRE-']);
+        //  $last = IdGenerator::generate(['table' => 'presupuestos', 'length' => 8,'field' => 'numero', 'prefix' =>'PRE-', 'reset_on_prefix_change' => true]);
+        $id = IdGenerator::generate(['table' => 'presupuestos', 'field' => 'numero', 'length' => 8, 'prefix' => 'PRE-', 'where' => ['empresa_id' => session('empresa')]]);
         //output: P00001
         //output: INV-000001
-       // $nextSequenceNumber = ($last) ? $last + 1 : 1;
+        // $nextSequenceNumber = ($last) ? $last + 1 : 1;
 
         return $id;
     }
@@ -57,9 +58,6 @@ class PresupuestoController extends Controller
      */
     public function store(PresupuestosRequest $request)
     {
-
-        //dd($request->items);
-
 
         $presupuesto = Presupuestos::create([
             //'empresa_id' => $request->empresa_id,
@@ -80,7 +78,7 @@ class PresupuestoController extends Controller
         ]);
 
 
-       // $presupuesto->save();
+        // $presupuesto->save();
 
         Presupuestos::createItems($presupuesto, $request->items);
 
@@ -97,7 +95,7 @@ class PresupuestoController extends Controller
     {
 
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         return view('admin.ventas.presupuestos.show', compact('presupuesto', 'plantilla'));
     }
 

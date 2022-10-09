@@ -30,11 +30,11 @@ Chart.register(
 
 // A chart built with Chart.js 3
 // https://www.chartjs.org/
-const dashboardCard04 = () => {
-    const ctx = document.getElementById("dashboard-card-04");
+const cardVentaDolares = () => {
+    const ctx = document.getElementById("card-ventas-dolares");
     if (!ctx) return;
 
-    fetch("/admin/json-data-feed")
+    fetch("/admin/json-data-ventas?divisa=usd")
         .then((a) => {
             return a.json();
         })
@@ -92,7 +92,10 @@ const dashboardCard04 = () => {
                             },
                             ticks: {
                                 maxTicksLimit: 5,
-                                callback: (value) => formatValue(value),
+                                callback: (value) =>
+                                    value.toLocaleString("es-US", {
+                                        style: "decimal",
+                                    }),
                             },
                         },
                         x: {
@@ -116,13 +119,17 @@ const dashboardCard04 = () => {
                         },
                         htmlLegend: {
                             // ID of the container to put the legend in
-                            containerID: "dashboard-card-04-legend",
+                            containerID: "card-ventas-dolares-legend",
                         },
                         tooltip: {
                             callbacks: {
                                 title: () => false, // Disable tooltip title
                                 label: (context) =>
-                                    formatValue(context.parsed.y),
+                                    context.parsed.y.toLocaleString("es-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        currencyDisplay: "symbol",
+                                    }),
                             },
                         },
                     },
@@ -190,10 +197,10 @@ const dashboardCard04 = () => {
                                 value.style.color =
                                     fullConfig.theme.colors.slate[800];
                                 value.style.fontSize =
-                                    fullConfig.theme.fontSize["3xl"][0];
+                                    fullConfig.theme.fontSize["2xl"][0];
                                 value.style.lineHeight =
                                     fullConfig.theme.fontSize[
-                                        "3xl"
+                                        "2xl"
                                     ][1].lineHeight;
                                 value.style.fontWeight =
                                     fullConfig.theme.fontWeight.bold;
@@ -211,7 +218,11 @@ const dashboardCard04 = () => {
                                     item.datasetIndex
                                 ].data.reduce((a, b) => a + b, 0);
                                 const valueText = document.createTextNode(
-                                    formatValue(theValue)
+                                    theValue.toLocaleString("es-US", {
+                                        style: "currency",
+                                        currency: "USD",
+                                        currencyDisplay: "code",
+                                    })
                                 );
                                 const labelText = document.createTextNode(
                                     item.text
@@ -232,4 +243,4 @@ const dashboardCard04 = () => {
         });
 };
 
-export default dashboardCard04;
+export default cardVentaDolares;

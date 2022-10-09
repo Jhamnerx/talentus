@@ -262,13 +262,13 @@
                                         @if ($factura->estado == 'BORRADOR')
                                             <div class="font-medium text-red-500">
                                                 <a href="{{ route('admin.ventas.facturas.show', $factura) }}">
-                                                    B-#{{ $factura->serie }}-{{ $factura->numero }}
+                                                    B#{{ $factura->numero }}
                                                 </a>
                                             </div>
                                         @else
                                             <div class="font-medium text-sky-600">
                                                 <a href="{{ route('admin.ventas.facturas.show', $factura) }}">
-                                                    #{{ $factura->serie }}-{{ $factura->numero }}
+                                                    #{{ $factura->numero }}
                                                 </a>
                                             </div>
                                         @endif

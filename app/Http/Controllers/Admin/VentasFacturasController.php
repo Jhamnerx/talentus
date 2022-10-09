@@ -11,33 +11,25 @@ use Haruncpi\LaravelIdGenerator\IdGenerator;
 
 class VentasFacturasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('admin.ventas.facturas.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $numero = $this->setNextSequenceNumber();
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
 
-        return view('admin.ventas.facturas.create', compact('numero', 'plantilla'));
+        return view('admin.ventas.facturas.create', compact('numero'));
     }
 
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'facturas','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'numero', 'length' => 9, 'prefix' => $plantilla->serie_factura . "-", 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
 
         return trim($id);
     }
@@ -45,7 +37,7 @@ class VentasFacturasController extends Controller
 
     public function store(FacturasRequest $request)
     {
-       //dd($request->all());
+        //dd($request->all());
 
         $factura = Facturas::create($request->all());
 
@@ -74,7 +66,7 @@ class VentasFacturasController extends Controller
      */
     public function edit(Facturas $factura)
     {
-        
+
         return view('admin.ventas.facturas.edit', compact('factura'));
     }
 

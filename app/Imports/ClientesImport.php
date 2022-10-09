@@ -31,21 +31,20 @@ class ClientesImport implements ToModel, WithChunkReading, WithEvents, ShouldQue
     public function model(array $row)
     {
 
-        dd($row);
+        //dd($row);
         //no añadir la primera linea
         // if (!isset($row[0])) {
         //     return null;
         // }
 
-        // return new Clientes([
-        //     'razon_social'    => $row['razon_social'],
-        //     'numero_documento' => $row['numero_documento'],
-        //     'direccion' => $row['direccion'],
-        //     'telefono' => $row['telefono'],
-        //     'email' => $row['email'],
-        
-        //     'empresa_id' => 1,
-        // ]);
+        return new Clientes([
+            'razon_social'    => $row['razon_social'],
+            'numero_documento' => $row['numero_documento'],
+            'direccion' => $row['direccion'],
+            'telefono' => $row['telefono'],
+            'email' => $row['email'],
+            'empresa_id' => 1,
+        ]);
     }
 
     public function chunkSize(): int

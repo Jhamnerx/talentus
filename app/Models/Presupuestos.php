@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EliminadoScope;
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -31,6 +32,7 @@ class Presupuestos extends Model
     {
         //
         static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
     //Relacion uno a muchos inversa

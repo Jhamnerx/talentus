@@ -70,7 +70,7 @@
 
                     {{-- NUMERO --}}
 
-                    @livewire('admin.ventas.recibos.imput-numero', ['numero' => $numero, 'serie' => $plantilla->serie_recibo])
+                    @livewire('admin.ventas.recibos.imput-numero', ['numero' => $numero])
                     {{-- FECHA Recibo --}}
                     <div class="col-span-6 gap-2">
                         <label
@@ -364,8 +364,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>

@@ -16,10 +16,8 @@ class CreateRecibosTable extends Migration
         Schema::create('recibos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('clientes_id')->nullable();
-            $table->string('serie');
             $table->string('numero');
             $table->string('tipo_pago');
-
             $table->date('fecha');
             $table->string('divisa')->default('PEN');
             $table->decimal('total', 10, 2);
