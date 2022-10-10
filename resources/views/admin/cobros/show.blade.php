@@ -3,7 +3,7 @@
 @section('contenido')
 
 
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-white shadow-lg rounded-sm border border-slate-200 min-h-screen">
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-white shadow-lg rounded-sm border border-slate-200">
 
         <!-- Page content -->
         <div class="max-w-5xl mx-auto flex flex-col lg:flex-row lg:space-x-8 xl:space-x-16">
@@ -19,7 +19,7 @@
                         </li>
                         <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
                             <div>Placa: </div>
-                            <div class="font-medium text-slate-800">{{ $cobro->vehiculos->placa }}</div>
+                            <div class="font-medium text-slate-800">{{ $cobro->vehiculo->placa }}</div>
                         </li>
                         <li class="text-sm w-full flex justify-between py-3 border-b border-slate-200 font-bold">
 
@@ -50,20 +50,17 @@
                         </li>
                     </ul>
                     <!-- observacion -->
-                    <div class="mb-6">
-                        <div class="flex items-center justify-between">
-                            <label class="block text-sm font-medium mb-1" for="observacion">Observacion: </label>
-                            <div class="text-sm text-slate-400 italic">opcional</div>
-                        </div>
-                        <textarea placeholder="Ingresa una observación" name="observacion" rows="5" id="observacion"
-                            class="form-input w-full mb-2" type="text">
-                        </textarea>
-                        <button class="btn w-full bg-red-500 hover:bg-red-600 text-white  shadow-none">
-                            Suspender
-                        </button>
-                    </div>
 
-                    @livewire('admin.cobros.payment', ['cobro' => $cobro->id], key('cobro' . $cobro->id))
+                    @livewire('admin.cobros.suspend', ['cobro' => $cobro->id], key('suspend' . $cobro->id))
+                    @livewire('admin.cobros.modal-suspend')
+                    @livewire('admin.cobros.modal-activar')
+
+
+                    @if (!$cobro->suspendido)
+                        @livewire('admin.cobros.payment', ['cobro' => $cobro->id], key('payment' . $cobro->id))
+                    @endif
+
+
                     <div class="text-xs text-slate-500 italic text-center">
                         {{ $cobro->comentario }}
                     </div>
@@ -71,7 +68,7 @@
             </div>
 
             <!-- pagos -->
-            <div class="mt-6 lg:mt-0 xl:ml-12 overflow-y-auto">
+            <div class="mt-6 lg:mt-0 xl:ml-12">
                 <div class="mb-3">
                     <div class="flex text-sm font-medium text-slate-400 space-x-2">
                         <span class="text-indigo-500">Administración</span>
@@ -87,10 +84,10 @@
 
                 {{-- PAGOS REALIZADOS --}}
                 @if ($cobro->payments)
-                    <ul>
+                    <div class="overflow-auto min-h-screen h-screen">
                         @foreach ($cobro->payments as $payment)
-                            <li class="sm:flex items-center py-6 border-b border-slate-200 bg-white shadow-md">
-                                <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0" href="#0">
+                            <div class="sm:flex items-center py-6 border-b border-slate-200 bg-white shadow-md mx-2 px-2">
+                                <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0">
 
                                     <svg class="w-44 h-44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
@@ -104,36 +101,37 @@
                                     </svg>
                                 </a>
                                 <div class="grow">
-                                    <a href="#0">
-                                        <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                                            Titulo
-                                        </h3>
-                                    </a>
+
+                                    <h3 class="text-lg font-semibold text-slate-800 mb-1">
+                                        PAGO DEL DOCUMENTO {{ $payment->paymentable->numero }} .
+                                    </h3>
+
                                     <div class="text-sm mb-2">
-                                        Descripcion del pago................................................
+                                        Pago Realizado en {{ $payment->paymentMethod->name }}
                                     </div>
                                     <!-- Product meta -->
                                     <div class="flex flex-wrap justify-between items-center">
                                         <!-- Rating and price -->
                                         <div class="flex flex-wrap items-center space-x-2 mr-2">
 
-                                            <div class="text-slate-400">·</div>
+                                            <div class="text-slate-400">{{ $payment->numero }}</div>
                                             <!-- Price -->
                                             <div>
                                                 <div
                                                     class="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2 py-0.5">
-                                                    $30.00
+                                                    {{ $payment->paymentable->divisa }}
+                                                    {{ $payment->monto }}
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="text-sm underline hover:no-underline">12-09-2022</button>
+                                        <button class="text-sm underline hover:no-underline">{{ $payment->fecha }}</button>
                                     </div>
                                 </div>
-                            </li>
+                            </div>
                         @endforeach
 
 
-                    </ul>
+                    </div>
 
                 @endif
 
@@ -158,6 +156,20 @@
 @push('modals')
 @endpush
 
-@section('js')
 
-@stop
+@section('js')
+    @if (session('store'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: '{{ session('store') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        </script>
+    @endif
+@endsection

@@ -12,6 +12,7 @@ use App\Models\Recibos;
 use Carbon\Carbon;
 use Livewire\Component;
 
+
 class Payment extends Component
 {
     public $modalPayment = false;
@@ -24,7 +25,7 @@ class Payment extends Component
 
     public $cobro;
 
-    public $numero, $payment_method_id, $nota, $monto, $paymentable_type, $paymentable_id;
+    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',
@@ -46,23 +47,21 @@ class Payment extends Component
     }
 
 
-
     public function save()
     {
-
-
-
-        Payments::create([
-            'numero' => '001',
+        $payment = Payments::create([
+            'numero' => $this->numero,
             'fecha' => Carbon::now()->format('Y-m-d'),
             'nota' => $this->nota,
             'monto' => $this->monto,
             'paymentable_type' => $this->paymentable_type,
             'paymentable_id' => $this->paymentable_id,
-            'unique_hash' => '9390233084',
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id
         ]);
+        $this->closeModal();
+        //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
+        return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
     }
 
     public function openModal()
@@ -93,7 +92,7 @@ class Payment extends Component
 
     public function updatedtipoPago($tipo_pago)
     {
-
+        $this->reset('paymentable_type', 'paymentable_id');
         $cliente = Clientes::where('id', $this->cobro->clientes_id)->first();
 
         if ($tipo_pago == "FACTURA") {
@@ -124,6 +123,7 @@ class Payment extends Component
                     'text' => $factura->numero,
                     'paymentable_type' => Facturas::class,
                     'paymentable_id' => $factura->id,
+                    'monto' => $factura->total,
                 ];
             }
         }
@@ -142,6 +142,7 @@ class Payment extends Component
                 'text' => $recibo->numero,
                 'paymentable_type' => Recibos::class,
                 'paymentable_id' => $recibo->id,
+                'monto' => $recibo->total,
             ];
         }
         return $data;

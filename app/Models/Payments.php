@@ -26,7 +26,10 @@ class Payments extends Model
     //     );
     // }
 
-
+    public function getRouteKeyName()
+    {
+        return 'numero';
+    }
 
     protected function empresaId(): Attribute
     {
@@ -64,5 +67,12 @@ class Payments extends Model
     {
 
         return $this->belongsTo(Cobros::class, 'cobros_id');
+    }
+
+
+    public function paymentMethod()
+    {
+
+        return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
     }
 }

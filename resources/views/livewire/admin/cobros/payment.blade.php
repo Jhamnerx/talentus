@@ -42,7 +42,6 @@
 
                 <form autocomplete="off" autocapitalize="true">
 
-
                     <div class="px-8 py-5 bg-white sm:p-6">
                         <div class="grid grid-cols-12 gap-6">
                             {{-- TIPO PAGO --}}
@@ -196,7 +195,7 @@
                                 </label>
 
                                 <div class="relative">
-                                    <textarea class="w-full form-input pl-9" wire:model="notaPayment" name="nota" id="" rows="4"
+                                    <textarea class="w-full form-input pl-9" wire:model="nota" name="nota" id="" rows="4"
                                         placeholder="Ingresa una nota">
                                     </textarea>
 
@@ -282,6 +281,21 @@
 
             @this.set('paymentable_type', data.paymentable_type)
             @this.set('paymentable_id', data.paymentable_id)
+            @this.set('monto', data.monto)
         });
+    </script>
+
+
+    <script>
+        window.addEventListener('savePayment', event => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado',
+                text: 'se ha creado ' + event.detail.payment.numero,
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+            })
+
+        })
     </script>
 @endsection

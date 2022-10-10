@@ -245,8 +245,10 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <div class="font-medium text-sky-600">
+                                            <a
+                                                href="{{ route('admin.cobros.list.clientes', ['cliente' => $cobro->clientes]) }}">{{ $cobro->clientes->razon_social }}</a>
 
-                                            {{ $cobro->clientes->razon_social }}
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -268,7 +270,7 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <div class="font-medium text-slate-800">
-                                            {{ $cobro->vehiculos->placa }}
+                                            {{ $cobro->vehiculo->placa }}
                                         </div>
 
                                     </td>

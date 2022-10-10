@@ -42,7 +42,7 @@ class Cobros extends Model
         return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
     }

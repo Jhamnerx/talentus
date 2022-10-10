@@ -41,8 +41,7 @@ use App\Http\Controllers\Admin\VentasFacturasController;
 use App\Http\Controllers\SearchController;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\Route;
-
-
+use Maatwebsite\Excel\Row;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 // ALMACEN
@@ -113,8 +112,20 @@ Route::resource('usuarios', UsersController::class)->names('admin.users')->param
     'usuarios' => 'user'
 ]);
 
-Route::resource('cobros', CobrosController::class)->names('admin.cobros');
+//Route::resource('cobros', CobrosController::class)->names('admin.cobros');
 // Route::resource('payments', PaymentsController::class)->names('admin.payments');
+
+
+Route::controller(CobrosController::class)->group(function () {
+
+    Route::get('cobros/crear', 'create')->name('admin.cobros.create');
+    Route::get('cobros', 'index')->name('admin.cobros.index');
+    Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
+    Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
+    Route::get('cobros/clientes/{cliente}', 'cobrosClientes')->name('admin.cobros.list.clientes');
+});
+
+
 
 
 Route::controller(PaymentsController::class)->group(function () {

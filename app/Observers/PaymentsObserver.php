@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\ChangesModels;
 use App\Models\Payments;
 use Illuminate\Support\Facades\Auth;
+use Vinkla\Hashids\Facades\Hashids;
 
 class PaymentsObserver
 {
@@ -21,6 +22,9 @@ class PaymentsObserver
 
     public function created(Payments $payment)
     {
+
+        $payment->unique_hash = Hashids::connection(Payments::class)->encode($payment->id);
+
         ChangesModels::create([
             'change_id' => $payment->getKey(),
             'change_type' => Payments::class,

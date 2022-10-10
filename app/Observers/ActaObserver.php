@@ -4,9 +4,7 @@ namespace App\Observers;
 
 use App\Events\nuevaActaCreada;
 use App\Models\Actas;
-use App\Models\Admin\Mensaje;
 use App\Models\ChangesModels;
-use App\Notifications\ActaCreada;
 use Vinkla\Hashids\Facades\Hashids;
 
 class ActaObserver
@@ -20,34 +18,28 @@ class ActaObserver
     public function creating(Actas $acta)
     {
 
-        if(! \App::runningInConsole()){
-           // dd($acta);
+        if (!\App::runningInConsole()) {
+            // dd($acta);
             $acta->empresa_id = session('empresa');
             $acta->user_id = auth()->user()->id;
-            
-
-
         }
-       
-    }   
-     public function updating(Actas $acta)
+    }
+    public function updating(Actas $acta)
     {
 
-        if(! \App::runningInConsole()){
+        if (!\App::runningInConsole()) {
 
             $acta->empresa_id = session('empresa');
-
         }
-       
     }
-    
+
     public function created(Actas $acta)
     {
-        if(! \App::runningInConsole()){
+        if (!\App::runningInConsole()) {
 
             $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
             $acta->save();
-            
+
             //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
             nuevaActaCreada::dispatch($acta);
 
@@ -59,9 +51,7 @@ class ActaObserver
                 'type' => 'create',
                 'user_id' => auth()->user()->id,
             ]);
-
         }
-
     }
 
     /**
@@ -112,7 +102,6 @@ class ActaObserver
             'type' => 'restored',
             'user_id' => auth()->user()->id,
         ]);
-
     }
 
     /**
