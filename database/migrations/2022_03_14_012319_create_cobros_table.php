@@ -23,6 +23,7 @@ class CreateCobrosTable extends Migration
             $table->decimal('monto_unidad', 10, 2);
             $table->integer('cantidad_unidades')->nullable();
             $table->string('tipo_pago');
+            $table->string('nota')->nullable();
             $table->string('observacion')->nullable();
             $table->date('fecha_vencimiento');
             $table->enum('estado', [0, 1, 2])->default(0);

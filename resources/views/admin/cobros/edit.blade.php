@@ -43,11 +43,7 @@
 
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
 
-
-
-
-        @livewire('admin.cobros.edit', $cobro)
-
+        @livewire('admin.cobros.edit', ['cobro' => $cobro])
 
     </div>
 
