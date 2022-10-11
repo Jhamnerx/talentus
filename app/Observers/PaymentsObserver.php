@@ -24,6 +24,7 @@ class PaymentsObserver
     {
 
         $payment->unique_hash = Hashids::connection(Payments::class)->encode($payment->id);
+        $payment->save();
 
         ChangesModels::create([
             'change_id' => $payment->getKey(),

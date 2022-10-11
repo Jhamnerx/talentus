@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,10 @@ class Payments extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'fecha' => 'date:Y/m/d',
+    ];
 
 
     // protected function empresaId(): Attribute
@@ -31,6 +36,12 @@ class Payments extends Model
         return 'numero';
     }
 
+
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
     protected function empresaId(): Attribute
     {
         return new Attribute(
