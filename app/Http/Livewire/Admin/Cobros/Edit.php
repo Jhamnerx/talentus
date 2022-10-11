@@ -23,6 +23,8 @@ class Edit extends Component
         $this->tipo_pago = $this->cobro->tipo_pago;
         $this->monto_unidad = $this->cobro->monto_unidad;
         $this->nota = $this->cobro->nota;
+        $this->cliente = $this->cobro->clientes_id;
+        $this->vehiculos_id = $this->cobro->vehiculos_id;
         $this->dataVehiculos = $this->LoadDataVehiculos($this->cobro->clientes_id);
     }
 
@@ -31,28 +33,6 @@ class Edit extends Component
         return view('livewire.admin.cobros.edit');
     }
 
-    public function updatedCliente($id)
-    {
-
-        $cliente = Clientes::where('id', $id)->first();
-
-        $data = [];
-
-        foreach ($cliente->flotas as $flota) {
-            foreach ($flota->vehiculos as $vehiculo) {
-
-                if ($vehiculo->is_active) {
-                    $data[] = [
-                        'id' => $vehiculo->id,
-                        'text' => $vehiculo->placa,
-                    ];
-                }
-            }
-        }
-
-        $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
-        $this->dataVehiculos = $data;
-    }
 
 
     public function LoadDataVehiculos($id)
@@ -60,7 +40,6 @@ class Edit extends Component
 
 
         $cliente = Clientes::where('id', $id)->first();
-
 
         $data = [];
         foreach ($cliente->flotas as $flota) {
@@ -103,5 +82,25 @@ class Edit extends Component
     {
         $requestCobros = new CobrosRequest();
         $this->validateOnly($label, $requestCobros->rules(), $requestCobros->messages());
+    }
+
+    public function updateCobro()
+    {
+
+        $requestCobros = new CobrosRequest();
+
+        $values = $this->validate($requestCobros->rules(), $requestCobros->messages());
+
+
+        $this->cobro->update([
+            'periodo' => $this->periodo,
+            'fecha_vencimiento' => $this->fecha_vencimiento,
+            'nota' => $this->nota,
+            'tipo_pago' => $this->tipo_pago,
+            'monto_unidad' => $this->monto_unidad,
+
+        ]);
+
+        return redirect()->route('admin.cobros.index')->with('update', 'Se actualizo con exito');
     }
 }

@@ -165,7 +165,6 @@
         </div>
 
     </div>
-    Estado: {{ $estado }}
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
@@ -424,99 +423,6 @@
                                                                 </svg> Ver
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a href="javascript: void(0)"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-32"
-                                                                role="menuitem" tabindex="-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-500">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
-                                                                    </path>
-                                                                </svg> Enviar
-                                                            </a>
-                                                        </li>
-
-                                                        @if ($cobro->pago_estado == 'PAID')
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="markPaid({{ $cobro->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                                    disabled="true" id="headlessui-menu-item-33"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-300">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Marcar como Pagada
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    @click.prevent="open = !open"
-                                                                    wire:click.prevent="markUnPaid({{ $cobro->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-34"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                        </path>
-                                                                    </svg> Marcar como No Pagada
-                                                                </a>
-                                                            </li>
-                                                        @else
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    @click.prevent="open = !open"
-                                                                    wire:click.prevent="markPaid({{ $cobro->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-33"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Marcar como Pagada
-                                                                </a>
-                                                            </li>
-
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="markUnPaid({{ $cobro->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                                    disabled="true" id="headlessui-menu-item-34"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-300">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                        </path>
-                                                                    </svg> Marcar como No Pagada
-                                                                </a>
-                                                            </li>
-                                                        @endif
 
 
 
