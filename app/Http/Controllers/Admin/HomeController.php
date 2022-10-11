@@ -16,7 +16,7 @@ class HomeController extends Controller
 
     public function index(Request $request)
     {
-        $plantilla = plantilla::where('empresas_id', session('empresa'));
+        $plantilla = plantilla::where('empresa_id', session('empresa'));
 
         if (!$request->session()->has('empresa')) {
 

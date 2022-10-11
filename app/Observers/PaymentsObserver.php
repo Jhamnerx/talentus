@@ -16,7 +16,7 @@ class PaymentsObserver
     }
     public function creating(Payments $payment)
     {
-        $payment->empresas_id = session('empresa');
+        $payment->empresa_id = session('empresa');
         $payment->user_id = Auth::user()->id;
     }
 

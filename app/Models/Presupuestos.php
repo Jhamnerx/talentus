@@ -64,7 +64,7 @@ class Presupuestos extends Model
     public function getPDFData($action)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -73,20 +73,18 @@ class Presupuestos extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.presupuesto.pdf');
-        
-        if($action == 1){
 
-            return $pdf->download('PRE-' . $this->numero.'.pdf');
+        if ($action == 1) {
 
-        }else{
-            return $pdf->stream('PRE-' . $this->numero.'.pdf');
+            return $pdf->download('PRE-' . $this->numero . '.pdf');
+        } else {
+            return $pdf->stream('PRE-' . $this->numero . '.pdf');
         };
-
     }
     public function getPDFDataToMail($data)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
 
@@ -99,7 +97,6 @@ class Presupuestos extends Model
 
         //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
-
     }
 
 

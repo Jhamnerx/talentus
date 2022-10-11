@@ -65,7 +65,7 @@ class Payments extends Model
 
     // public function setEmpresaIdAttribute($empresa)
     // {
-    //     $this->attributes['empresas_id'] = session('empresa');
+    //     $this->attributes['empresa_id'] = session('empresa');
     // }
 
     public function paymentable()

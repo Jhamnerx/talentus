@@ -67,7 +67,7 @@ class Facturas extends Model
     public function getSerie()
     {
 
-        return plantilla::get('serie')->where('empresas_id', session('empresa'));
+        return plantilla::get('serie')->where('empresa_id', session('empresa'));
     }
 
     //relacion uno a muchos
@@ -97,7 +97,7 @@ class Facturas extends Model
     }
     public function getPDFData($action)
     {
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -119,7 +119,7 @@ class Facturas extends Model
     public function getPDFDataToMail($data)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
         view()->share([
             'factura' => $this,

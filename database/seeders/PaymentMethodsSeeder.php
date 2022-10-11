@@ -19,23 +19,23 @@ class PaymentMethodsSeeder extends Seeder
             [
                 [
                     'name' => 'DEPOSITO EN CTA',
-                    'empresas_id' => 1,
+                    'empresa_id' => 1,
                 ],
                 [
                     'name' => 'DEPOSITO EN CTA CORRIENTE',
-                    'empresas_id' => 1,
+                    'empresa_id' => 1,
                 ],
                 [
                     'name' => 'DEPOSITO EN AGENTE',
-                    'empresas_id' => 1,
+                    'empresa_id' => 1,
                 ],
                 [
                     'name' => 'YAPE',
-                    'empresas_id' => 1,
+                    'empresa_id' => 1,
                 ],
                 [
                     'name' => 'PLIN',
-                    'empresas_id' => 1,
+                    'empresa_id' => 1,
                 ],
             ]
 
