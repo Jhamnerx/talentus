@@ -36,5 +36,11 @@ class ModalSuspend extends Component
         $vehiculo = Vehiculos::find($this->cobro->vehiculo->id);
         $vehiculo->is_active = 0;
         $vehiculo->save();
+
+        //return redirect()->route('admin.cobros.show', $this->cobro)->with('suspend', 'Se suspendio el servicio');
+        session()->flash('flash.banner', 'Se suspendio el servicio');
+        session()->flash('flash.bannerStyle', 'danger');
+
+        return redirect()->route('admin.cobros.show', $this->cobro);
     }
 }

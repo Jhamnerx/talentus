@@ -61,7 +61,14 @@ class Payment extends Component
         ]);
         $this->closeModal();
         //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
-        return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
+        // return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
+
+
+
+        // return redirect()->route('admin.cobros.show', $this->cobro);
+        // session()->flash('store', 'Se guardo con exito' . $payment->numero);
+        return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.banner', 'Se guardo con exito el pago ' . $payment->numero);
+        return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.bannerStyle', 'success');
     }
 
     public function openModal()

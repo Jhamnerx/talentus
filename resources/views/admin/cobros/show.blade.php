@@ -158,18 +158,5 @@
 
 
 @section('js')
-    @if (session('store'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Guardado',
-                    text: '{{ session('store') }}',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
 
-                })
-            });
-        </script>
-    @endif
-@endsection
+@stop
