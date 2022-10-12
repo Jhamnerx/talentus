@@ -25,7 +25,7 @@ class Payment extends Component
 
     public $cobro;
 
-    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id;
+    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',

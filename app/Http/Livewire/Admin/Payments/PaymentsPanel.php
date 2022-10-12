@@ -34,6 +34,7 @@ class PaymentsPanel extends Component
     public function PaymentPanel(Payments $payment)
     {
         $this->payment = $payment;
+        $this->nota = $payment->nota;
         $this->reset('file');
     }
 

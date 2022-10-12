@@ -7,6 +7,7 @@
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">$47,347.09</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">{{ $total }}</h1>
         </div>
 
         <!-- Right: Actions -->

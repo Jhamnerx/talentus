@@ -49,13 +49,22 @@
                     <!-- Bottom -->
                     <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3">
                         <div class="flex justify-between space-x-1">
-                            <span class="italic">N° OPERACION:</span>
-                            <span class="font-medium text-slate-700 text-right">IT17 2207 1010 0504 0006 88</span>
+                            <span class="italic">NUMERO PAGO:</span>
+                            <span class="font-medium text-slate-700 text-right">{{ $payment->numero }}</span>
+                        </div>
+                        <div class="flex justify-between space-x-1">
+                            <span class="italic">DOCUMENTO PAGADO:</span>
+                            <span
+                                class="font-medium text-slate-700 text-right">{{ $payment->paymentable->numero }}</span>
                         </div>
                         <div class="flex justify-between space-x-1">
                             <span class="italic">METODO DE PAGO:</span>
                             <span
                                 class="font-medium text-slate-700 text-right">{{ $payment->paymentMethod->name }}</span>
+                        </div>
+                        <div class="flex justify-between space-x-1">
+                            <span class="italic">N° OPERACION:</span>
+                            <span class="font-medium text-slate-700 text-right">{{ $payment->numero_operacion }}</span>
                         </div>
                         <div class="flex justify-between space-x-1">
                             <span class="italic">Registrado por:</span>
@@ -81,7 +90,7 @@
                                         d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
                                 </svg>
                                 <label for="upload" class="block text-sm text-slate-500 italic cursor-pointer">
-                                    Formatos PNG, JPEG, y PDF.
+                                    Formatos PNG, JPEG.
                                 </label>
                                 <input class="sr-only cursor-pointer" id="upload" type="file" wire:model="file" />
                             </form>
@@ -101,7 +110,7 @@
                     <form>
                         <label class="sr-only" for="notes">Escribe una nota</label>
                         <textarea wire:model="nota" id="notes" class="form-textarea w-full focus:border-slate-300" rows="4"
-                            placeholder="Escribe una nota…"></textarea>
+                            placeholder="Escribe una nota…">{{ $payment->nota }}</textarea>
                     </form>
                 </div>
 

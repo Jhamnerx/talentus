@@ -22,8 +22,10 @@ class Index extends Component
             $query->where('numero', 'LIKE', '%' . $this->search . '%');
         })->orWhere('numero', 'like', '%' . $this->search . '%')->paginate(10);
 
+        $total = Payments::all()->sum('monto');
+        //$total = money_format('%(#10n', $montoTotal);
 
-        return view('livewire.admin.payments.index', compact('payments'));
+        return view('livewire.admin.payments.index', compact('payments', 'total'));
     }
 
 
