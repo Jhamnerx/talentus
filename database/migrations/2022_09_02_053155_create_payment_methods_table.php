@@ -19,7 +19,6 @@ class CreatePaymentMethodsTable extends Migration
                 $table->string('name');
                 $table->unsignedBigInteger('empresa_id')->unsigned()->nullable();
                 $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
-                $table->timestamps();
             });
         }
     }

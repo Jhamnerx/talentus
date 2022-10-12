@@ -423,8 +423,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -461,7 +461,6 @@
         function cambiarDivisa(e) {
 
             calculate_totales(e)
-
 
         };
 
@@ -627,14 +626,16 @@
             $('.importe').val(data.precio);
             // $('.cantidad').val(cantidad.precio);
 
-            let divisa = $(".divisa option:selected").text();
+            let divisa = $(".divisa option:selected").val();
 
             calculate_total(divisa)
         }
 
         function add_item_to_table() {
 
-            let divisa = $(".divisa option:selected").text();
+            let divisa = $(".divisa option:selected").val();
+
+            console.log(divisa);
             var descripcion = $('.descripcion').val();
             var cantidad = $('.qyt').val();
             var precio = $('.importe').val();
@@ -694,6 +695,7 @@
                 $('.qyt').val(1);
                 $('.importe').val(0);
                 addAlert();
+
                 calculate_total(divisa)
 
             } else {
@@ -741,7 +743,7 @@
 
 
         function calculate_totales(divisa = "PEN") {
-
+            // console.log(divisa);
             var subTotal = $(".subtotal");
             //console.log(divisa);
             // var divisa = $(".divisa option:selected").text();
@@ -831,12 +833,12 @@
         }
 
         $(document).on("change", ".listaItems .cantidad", function() {
-            let divisa = $(".divisa option:selected").text();
+            let divisa = $(".divisa option:selected").val();
             calculate_total(divisa);
 
         })
         $(document).on("change", ".listaItems .precio", function() {
-            let divisa = $(".divisa option:selected").text();
+            let divisa = $(".divisa option:selected").val();
             calculate_total(divisa);
 
         })
@@ -844,7 +846,7 @@
 
         function eliminarDetalle(indice) {
             detalles = detalles - 1;
-            let divisa = $(".divisa option:selected").text();
+            let divisa = $(".divisa option:selected").val();
             $("#fila" + indice).remove();
             calculate_total(divisa);
         }

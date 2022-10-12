@@ -87,7 +87,7 @@ class SearchController extends Controller
     public function cliente(Request $request)
     {
 
-        $query = Clientes::where('id', $request->proveedor)->first();
+        $query = Clientes::where('id', $request->cliente)->first();
 
 
         $data = [];
@@ -371,6 +371,18 @@ class SearchController extends Controller
         }
 
 
+
+        return $resultado;
+    }
+
+    public function placa(Request $request)
+    {
+
+        $util = new UtilesController;
+
+        $placa = $request->get('placa');
+
+        $resultado = $util->consultaPaca($placa);
 
         return $resultado;
     }

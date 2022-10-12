@@ -152,7 +152,7 @@ Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('ad
 Route::controller(SearchController::class)->prefix('search')->group(function () {
 
     Route::get('clientes', 'clientes')->name('search.clientes');
-    Route::get('cliente/{cliente}', 'cliente')->name('search.cliente');
+    Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
     Route::get('proveedores', 'proveedores')->name('search.proveedores');
     Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
     Route::get('flotas', 'flotas')->name('search.flotas');
@@ -173,6 +173,7 @@ Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('bu
 //consulta sunat
 Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
 
+Route::get('consulta/placa', [SearchController::class, 'placa'])->name('consulta.placa');
 
 
 // VERIFICAR
