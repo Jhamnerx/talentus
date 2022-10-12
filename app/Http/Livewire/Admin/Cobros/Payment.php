@@ -59,6 +59,11 @@ class Payment extends Component
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id
         ]);
+
+        $payment->paymentable->pago_estado = 'PAID';
+        $payment->paymentable->estado = 'COMPLETADO';
+        $payment->paymentable->save();
+
         $this->closeModal();
         //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
         // return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);

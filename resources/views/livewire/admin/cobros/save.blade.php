@@ -175,9 +175,23 @@
                         </div>
                         <!---->
                     </label>
-                    <input required value="30" type="number" step="1" wire:model="monto_unidad"
-                        class="form-input valid:border-emerald-300
+                    <div class="relative">
+                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+
+                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <g fill="none" class="nc-icon-wrapper">
+                                    <path
+                                        d="M11.5 17.1c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79z"
+                                        fill="currentColor"></path>
+                                </g>
+                            </svg>
+                        </div>
+                        <input required value="30" type="number" step="1" wire:model="monto_unidad"
+                            class="form-input valid:border-emerald-300
                     required:border-rose-300 invalid:border-rose-300 peer font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500">
+                    </div>
+
                     @error('monto_unidad')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}

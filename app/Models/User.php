@@ -77,7 +77,7 @@ class User extends Authenticatable
         return $this->hasMany(Reportes::class);
     }
 
-    
+
     public function reportes_detalle()
     {
 
@@ -88,5 +88,11 @@ class User extends Authenticatable
     {
 
         return $this->hasMany(Recordatorio::class, 'user_id');
+    }
+
+    public function payments()
+    {
+
+        return $this->hasMany(Payments::class, 'user_id');
     }
 }

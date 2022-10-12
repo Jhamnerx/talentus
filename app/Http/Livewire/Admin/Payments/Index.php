@@ -31,7 +31,19 @@ class Index extends Component
 
     public function openPaymentPanel(Payments $payment)
     {
-        //dd($payment);
-        $this->emit('PaymentPanel', $payment);
+
+        $this->emit('PaymentPanel', $payment->numero);
+
+        $this->setPaymentOpen();
+    }
+
+    public function setPaymentOpen()
+    {
+        $this->PaymentOpen = true;
+    }
+    public function setPaymentClose()
+    {
+        $this->PaymentOpen = false;
+        sleep(5);
     }
 }

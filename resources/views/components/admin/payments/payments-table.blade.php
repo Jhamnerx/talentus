@@ -42,7 +42,7 @@
                     @foreach ($payments as $payment)
                         {{-- @click.stop="$dispatch('set-transactionopen', true)" --}}
                         <tr class="hover:cursor-pointer hover:shadow-sm"
-                            wire:click.prevent="openPaymentPanel('{{ $payment->numero }}')">
+                            wire:click.debounce.150ms="openPaymentPanel('{{ $payment->numero }}')">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
                                     <label class="inline-flex">

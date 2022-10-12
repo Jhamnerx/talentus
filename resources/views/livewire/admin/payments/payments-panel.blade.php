@@ -15,8 +15,8 @@
         <div class="py-8 px-4 lg:px-8">
             <div class="max-w-sm mx-auto lg:max-w-none">
 
-                <div class="text-slate-800 font-semibold text-center mb-1">Bank Transfer</div>
-                <div class="text-sm text-center italic">22/01/2022, 8:56 PM</div>
+                <div class="text-slate-800 font-semibold text-center mb-1">Pago Realizado</div>
+                <div class="text-sm text-center italic">{{ $payment->created_at->format('d/m/Y, h:i A') }}</div>
 
                 <!-- Details -->
                 <div class="drop-shadow-lg mt-12">
@@ -27,11 +27,12 @@
                                 src="{{ asset('images/transactions-image-04.svg') }}" width="48" height="48"
                                 alt="Transaction 04" />
                         </div>
-                        <div class="text-2xl font-semibold text-emerald-500 mb-1">+$2,179.36</div>
-                        <div class="text-sm font-medium text-slate-800 mb-3">Acme LTD UK</div>
+                        <div class="text-2xl font-semibold text-emerald-500 mb-1">+${{ $payment->monto }}</div>
+                        <div class="text-sm font-medium text-slate-800 mb-3">
+                            {{ $payment->cobros->clientes->razon_social }}</div>
                         <div
                             class="text-xs inline-flex font-medium bg-slate-100 text-slate-500 rounded-full text-center px-2.5 py-1">
-                            Pending</div>
+                            Realizado</div>
                     </div>
                     <!-- Divider -->
                     <div class="flex justify-between items-center" aria-hidden="true">
@@ -48,58 +49,67 @@
                     <!-- Bottom -->
                     <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3">
                         <div class="flex justify-between space-x-1">
-                            <span class="italic">IBAN:</span>
+                            <span class="italic">N° OPERACION:</span>
                             <span class="font-medium text-slate-700 text-right">IT17 2207 1010 0504 0006 88</span>
                         </div>
                         <div class="flex justify-between space-x-1">
-                            <span class="italic">BIC:</span>
-                            <span class="font-medium text-slate-700 text-right">BARIT22</span>
+                            <span class="italic">METODO DE PAGO:</span>
+                            <span
+                                class="font-medium text-slate-700 text-right">{{ $payment->paymentMethod->name }}</span>
                         </div>
                         <div class="flex justify-between space-x-1">
-                            <span class="italic">Reference:</span>
-                            <span class="font-medium text-slate-700 text-right">Freelance Work</span>
-                        </div>
-                        <div class="flex justify-between space-x-1">
-                            <span class="italic">Emitter:</span>
-                            <span class="font-medium text-slate-700 text-right">Acme LTD UK</span>
+                            <span class="italic">Registrado por:</span>
+                            <span class="font-medium text-slate-700 text-right">{{ $payment->user->name }}</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Receipts -->
                 <div class="mt-6">
-                    <div class="text-sm font-semibold text-slate-800 mb-2">Receipts</div>
-                    <form class="rounded bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
-                        <svg class="inline-flex w-4 h-4 fill-slate-400 mb-3" viewBox="0 0 16 16"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
-                        </svg>
-                        <label for="upload" class="block text-sm text-slate-500 italic">We accept PNG, JPEG, and PDF
-                            files.</label>
-                        <input class="sr-only" id="upload" type="file" />
-                    </form>
+                    <div class="text-sm font-semibold text-slate-800 mb-2">Comprobante</div>
+                    @if ($file)
+                        <img src="{{ $file->temporaryUrl() }}">
+                    @else
+                        <form class="rounded bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
+                            <svg class="inline-flex w-4 h-4 fill-slate-400 mb-3" viewBox="0 0 16 16"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
+                            </svg>
+                            <label for="upload" class="block text-sm text-slate-500 italic cursor-pointer">
+                                Formatos PNG, JPEG, y PDF.
+                            </label>
+                            <input class="sr-only cursor-pointer" id="upload" type="file" wire:model="file" />
+                        </form>
+                    @endif
+
+                    @error('photo')
+                        <span class="error">{{ $message }}</span>
+                    @enderror
                 </div>
+                <div wire:loading wire:target="file">Cargando...</div>
 
                 <!-- Notes -->
                 <div class="mt-6">
-                    <div class="text-sm font-semibold text-slate-800 mb-2">Notes</div>
+                    <div class="text-sm font-semibold text-slate-800 mb-2">Nota</div>
                     <form>
-                        <label class="sr-only" for="notes">Write a note</label>
-                        <textarea id="notes" class="form-textarea w-full focus:border-slate-300" rows="4" placeholder="Write a note…"></textarea>
+                        <label class="sr-only" for="notes">Escribe una nota</label>
+                        <textarea id="notes" class="form-textarea w-full focus:border-slate-300" rows="4"
+                            placeholder="Escribe una nota…"></textarea>
                     </form>
                 </div>
 
                 <!-- Download / Report -->
                 <div class="flex items-center space-x-3 mt-6">
                     <div class="w-1/2">
-                        <button class="btn w-full border-slate-200 hover:border-slate-300 text-slate-600">
+                        <button wire:click.prevent="save"
+                            class="btn w-full border-slate-200 hover:border-slate-300 text-slate-600">
                             <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 rotate-180" viewBox="0 0 16 16"
                                 xmlns="http://www.w3.org/2000/svg">
                                 <path
                                     d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
                             </svg>
-                            <span class="ml-2">Download</span>
+                            <span class="ml-2">Guardar</span>
                         </button>
                     </div>
                     <div class="w-1/2">
@@ -108,7 +118,7 @@
                                 <path
                                     d="M7.001 3h2v4h-2V3Zm1 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM15 16a1 1 0 0 1-.6-.2L10.667 13H1a1 1 0 0 1-1-1V1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1ZM2 11h9a1 1 0 0 1 .6.2L14 13V2H2v9Z" />
                             </svg>
-                            <span class="ml-2">Report</span>
+                            <span class="ml-2">Cancelar</span>
                         </button>
                     </div>
                 </div>

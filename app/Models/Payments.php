@@ -86,4 +86,10 @@ class Payments extends Model
 
         return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
     }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
