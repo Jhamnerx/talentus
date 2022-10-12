@@ -92,4 +92,9 @@ class Payments extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function image()
+    {
+
+        return $this->morphOne(Imagen::class, 'imageable');
+    }
 }

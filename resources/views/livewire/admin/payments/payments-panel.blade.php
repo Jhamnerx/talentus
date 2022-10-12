@@ -64,23 +64,29 @@
                     </div>
                 </div>
 
-                <!-- Receipts -->
+                <!-- imagen -->
                 <div class="mt-6">
                     <div class="text-sm font-semibold text-slate-800 mb-2">Comprobante</div>
                     @if ($file)
                         <img src="{{ $file->temporaryUrl() }}">
                     @else
-                        <form class="rounded bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
-                            <svg class="inline-flex w-4 h-4 fill-slate-400 mb-3" viewBox="0 0 16 16"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path
-                                    d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
-                            </svg>
-                            <label for="upload" class="block text-sm text-slate-500 italic cursor-pointer">
-                                Formatos PNG, JPEG, y PDF.
-                            </label>
-                            <input class="sr-only cursor-pointer" id="upload" type="file" wire:model="file" />
-                        </form>
+                        @if ($payment->image)
+                            <img src="{{ Storage::url($payment->image->url) }}">
+                        @else
+                            <form
+                                class="rounded bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
+                                <svg class="inline-flex w-4 h-4 fill-slate-400 mb-3" viewBox="0 0 16 16"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
+                                </svg>
+                                <label for="upload" class="block text-sm text-slate-500 italic cursor-pointer">
+                                    Formatos PNG, JPEG, y PDF.
+                                </label>
+                                <input class="sr-only cursor-pointer" id="upload" type="file" wire:model="file" />
+                            </form>
+                        @endif
+
                     @endif
 
                     @error('photo')
@@ -89,12 +95,12 @@
                 </div>
                 <div wire:loading wire:target="file">Cargando...</div>
 
-                <!-- Notes -->
+                <!-- Notas -->
                 <div class="mt-6">
                     <div class="text-sm font-semibold text-slate-800 mb-2">Nota</div>
                     <form>
                         <label class="sr-only" for="notes">Escribe una nota</label>
-                        <textarea id="notes" class="form-textarea w-full focus:border-slate-300" rows="4"
+                        <textarea wire:model="nota" id="notes" class="form-textarea w-full focus:border-slate-300" rows="4"
                             placeholder="Escribe una nota…"></textarea>
                     </form>
                 </div>

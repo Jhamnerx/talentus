@@ -12,7 +12,7 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-            <!-- Delete button -->
+            <!-- Eliminar button -->
             <div class="table-items-action hidden">
                 <div class="flex items-center">
                     <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <!-- Search form -->
+            <!-- buscador -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Search</label>
                 <input id="action-search" wire:model="search" class="form-input pl-9 focus:border-slate-300"
@@ -38,15 +38,15 @@
                 </button>
             </form>
 
-            <!-- Export button -->
-            <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">Export Transactions</button>
+            <!-- crear button -->
+            <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">Crear Pago</button>
 
         </div>
 
     </div>
 
 
-    <!-- Filters -->
+    <!-- filtro -->
     <div class="mb-5">
         <ul class="flex flex-wrap -m-1">
             <li class="m-1">
