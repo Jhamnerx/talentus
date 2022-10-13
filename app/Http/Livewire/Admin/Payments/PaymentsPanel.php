@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Payments;
 
 use App\Http\Livewire\Admin\Cobros\Payment;
 use App\Models\Payments;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -23,7 +24,9 @@ class PaymentsPanel extends Component
 
     public function mount()
     {
-        $this->payment = Payments::find('1');
+
+        // $this->payment = new Collection();
+        // dd($this->payment);
     }
 
     public function render()

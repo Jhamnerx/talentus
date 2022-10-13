@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -20,6 +21,14 @@ class Cobros extends Model
         'vencido' => 'boolean',
 
     ];
+    //SCOPE GLOBAL DE EMPRES
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+
 
     public function scopeVencido($query, $estado = NULL)
     {

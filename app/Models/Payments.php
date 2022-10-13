@@ -42,6 +42,7 @@ class Payments extends Model
         //
         static::addGlobalScope(new EmpresaScope);
     }
+
     protected function empresaId(): Attribute
     {
         return new Attribute(
