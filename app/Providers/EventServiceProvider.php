@@ -19,6 +19,7 @@ use App\Models\Categoria;
 use App\Models\Certificados;
 use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
 use App\Models\Clientes;
+use App\Models\Cobros;
 use App\Models\ComprasFacturas;
 use App\Models\Contactos;
 use App\Models\Contratos;
@@ -39,6 +40,7 @@ use App\Observers\CategoriasObserver;
 use App\Observers\CertificadosObserver;
 use App\Observers\CertificadosVelocimetrosObserver;
 use App\Observers\ClientesObserver;
+use App\Observers\CobrosObserver;
 use App\Observers\ComprasFacturasObserver;
 use App\Observers\ContactosObserver;
 use App\Observers\ContratosObserver;
@@ -106,5 +108,6 @@ class EventServiceProvider extends ServiceProvider
         Certificados::observe(CertificadosObserver::class);
         ModelsCertificadosVelocimetros::observe(CertificadosVelocimetrosObserver::class);
         Payments::observe(PaymentsObserver::class);
+        Cobros::observe(CobrosObserver::class);
     }
 }
