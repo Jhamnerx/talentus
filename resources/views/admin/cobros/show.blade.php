@@ -107,7 +107,11 @@
                                     </h3>
 
                                     <div class="text-sm mb-2">
-                                        Pago Realizado en {{ $payment->paymentMethod->name }}
+                                        Pago Realizado en
+                                        <span
+                                            class="font-semibold text-slate-900">{{ $payment->paymentMethod->name }}</span>
+                                        con número de operación
+                                        <span class="font-semibold text-slate-900">{{ $payment->numero_operacion }}</span>
                                     </div>
                                     <!-- Product meta -->
                                     <div class="flex flex-wrap justify-between items-center">

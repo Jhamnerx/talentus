@@ -126,7 +126,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('documentos')
+                                @error('paymentable_id')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
@@ -160,7 +160,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('payment_method')
+                                @error('payment_method_id')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
@@ -188,7 +188,7 @@
                             </div>
                             <div class="col-span-12 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="numero_operacion">Numero de
+                                <label class="block text-sm font-medium mb-1" for="numeronumero_operacion">Numero de
                                     operación:</label>
 
                                 <div class="relative">
@@ -305,7 +305,15 @@
                 selectionCssClass: 'pl-9',
                 width: '100%',
                 // minimumInputLength: 2,
-                data: data
+                data: data,
+                "language": {
+                    "noResults": function() {
+                        return 'No hay documentos sin pagar...';
+                    }
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                }
             });
 
             $('.documentos').val(null).trigger('change');

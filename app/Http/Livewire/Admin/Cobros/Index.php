@@ -12,10 +12,14 @@ class Index extends Component
     use WithPagination;
     public $search;
     public $estado;
+    public $openModalDelete = false;
 
 
     protected $listeners = [
         'render'
+    ];
+    protected $queryString = [
+        'search' => ['except' => '']
     ];
 
     public function render()
@@ -81,5 +85,12 @@ class Index extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function openModalDelete(Cobros $cobro)
+    {
+        //dd($factura);
+        $this->emit('openModalDelete', $cobro);
+        $this->openModalDelete = true;
     }
 }

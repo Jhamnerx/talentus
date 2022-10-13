@@ -14,9 +14,23 @@ use Illuminate\Support\Facades\Auth;
 
 class Facturas extends Model
 {
-
     use HasFactory;
     use SoftDeletes;
+
+    public const COMPLETADO = 'COMPLETADO';
+    public const BORRADOR = 'BORRADOR';
+
+    public const PAID = 'PAID';
+    public const UNPAID = 'UNPAID';
+
+
+    public const PEN = 'PEN';
+    public const USDO = 'USD';
+
+
+
+
+
 
     protected $table = 'facturas';
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -46,12 +60,34 @@ class Facturas extends Model
             set: fn ($value) => Auth::user()->id,
         );
     }
+    //LOCAL SCOPES
+    public function scopePaid($query)
+    {
+        return $query->where('pago_estado', '=', Facturas::PAID);
+    }
 
+    public function scopeUnPaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::UNPAID);
+    }
+
+    public function scopeCompletado($query)
+    {
+        return $query->where('estado', '=', $this::COMPLETADO);
+    }
+    public function scopeBorrador($query)
+    {
+        return $query->where('estado', '=', $this::BORRADOR);
+    }
+
+    //GLOBAL SCOPES
     protected static function booted()
     {
-        //
         static::addGlobalScope(new EmpresaScope);
     }
+
+
+
     //Relacion uno a muchos inversa
 
     public function clientes()

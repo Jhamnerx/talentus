@@ -12,6 +12,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class Recibos extends Model
 {
     use HasFactory;
+
+    public const COMPLETADO = 'COMPLETADO';
+    public const BORRADOR = 'BORRADOR';
+
+    public const PAID = 'PAID';
+    public const UNPAID = 'UNPAID';
+
+
+    public const PEN = 'PEN';
+    public const USD = 'USD';
+
     protected $table = 'recibos';
 
     protected $casts = [
@@ -21,7 +32,30 @@ class Recibos extends Model
         'fecha_pago' => 'date:Y/m/d',
     ];
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    // SCOPE DE EMPRESA
+
+
+
+    //LOCAL SCOPES
+    public function scopePaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::PAID);
+    }
+
+    public function scopeUnPaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::UNPAID);
+    }
+
+    public function scopeCompletado($query)
+    {
+        return $query->where('estado', '=', $this::COMPLETADO);
+    }
+    public function scopeBorrador($query)
+    {
+        return $query->where('estado', '=', $this::BORRADOR);
+    }
+
+    //GLOBAL SCOPES
 
     protected static function booted()
     {

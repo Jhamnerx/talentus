@@ -22,6 +22,7 @@ class PaymentsRequest extends FormRequest
         $rules = [
             'numero' => ['required', Rule::unique('payments', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))],
             "numero_operacion" => 'required',
+            "monto" => 'required|numeric',
             "payment_method_id" => 'required',
             "paymentable_id" => 'required',
         ];
@@ -35,7 +36,9 @@ class PaymentsRequest extends FormRequest
         $messages = [
 
             'numero.required' => 'El número es obligatorio',
-            'numero_operacion.required' => 'Selecciona un vehiculo',
+            'monto.required' => 'Ingresa el monto del pago',
+            'monto.numeric' => 'Ingresa datos correctos',
+            'numero_operacion.required' => 'Ingresa un dato correcto',
             'payment_method_id.required' => 'Elige un metodo de pago',
             'paymentable_id.required' => 'Elige un documento a pagar',
 

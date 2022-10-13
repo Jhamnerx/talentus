@@ -187,7 +187,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <input required value="30" type="number" step="1" wire:model="monto_unidad"
+                        <input required value="30" type="number" step="0.1" wire:model="monto_unidad"
                             class="form-input valid:border-emerald-300
                     required:border-rose-300 invalid:border-rose-300 peer font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500">
                     </div>

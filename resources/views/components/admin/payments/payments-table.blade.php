@@ -39,53 +39,59 @@
                 <!-- Table body -->
                 <tbody class="text-sm divide-y divide-slate-200 border-b border-slate-200">
                     <!-- Row -->
-                    @foreach ($payments as $payment)
-                        {{-- @click.stop="$dispatch('set-transactionopen', true)" --}}
-                        <tr class="hover:cursor-pointer hover:shadow-sm"
-                            wire:click.debounce.150ms="openPaymentPanel('{{ $payment->numero }}')">
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click.stop="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">
-                                    {{ $payment->numero }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">
-                                    {{ $payment->paymentable->numero }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">
-                                    {{ $payment->fecha->format('d-m-Y') }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">
-                                    {{ $payment->paymentMethod->name }}
-                                </div>
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">
-                                    <div
-                                        class="text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 bg-emerald-100 text-emerald-600">
-                                        Completado
+                    @if ($payments->count())
+                        @foreach ($payments as $payment)
+                            {{-- @click.stop="$dispatch('set-transactionopen', true)" --}}
+                            <tr class="hover:cursor-pointer hover:shadow-sm"
+                                wire:click.debounce.150ms="openPaymentPanel('{{ $payment->numero }}')">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input class="table-item form-checkbox" type="checkbox"
+                                                @click.stop="uncheckParent" />
+                                        </label>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="text-right font-medium text-emerald-500">{{ $payment->monto }}</div>
-                            </td>
-                        </tr>
-                    @endforeach
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        {{ $payment->numero }}
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        {{ $payment->paymentable->numero }}
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        {{ $payment->fecha->format('d-m-Y') }}
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        {{ $payment->paymentMethod->name }}
+                                    </div>
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        <div
+                                            class="text-xs inline-flex font-medium rounded-full text-center px-2.5 py-1 bg-emerald-100 text-emerald-600">
+                                            Completado
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="text-right font-medium text-emerald-500">{{ $payment->monto }}</div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
+                    @endif
                 </tbody>
             </table>
 

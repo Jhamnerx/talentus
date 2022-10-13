@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Cobros;
 
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Http\Requests\PaymentsRequest;
 use App\Models\Clientes;
 use App\Models\Cobros;
 use App\Models\Facturas;
@@ -49,8 +50,11 @@ class Payment extends Component
 
     public function save()
     {
+        $request = new PaymentsRequest();
+        $this->validate($request->rules(), $request->messages());
         $payment = Payments::create([
             'numero' => $this->numero,
+            'numero_operacion' => $this->numero_operacion,
             'fecha' => Carbon::now()->format('Y-m-d'),
             'nota' => $this->nota,
             'monto' => $this->monto,
@@ -124,8 +128,9 @@ class Payment extends Component
     {
 
         $data = [];
-
-        foreach ($cliente->facturas as $factura) {
+        //dd(Facturas::where('clientes_id', '=', $cliente->id)->paid()->get());
+        //dd($cliente->facturas()->paid()->get());
+        foreach ($cliente->facturas()->unpaid()->get() as $factura) {
 
 
             if ($factura->is_active) {
@@ -147,7 +152,7 @@ class Payment extends Component
     {
 
         $data = [];
-        foreach ($cliente->recibos as $recibo) {
+        foreach ($cliente->recibos()->unpaid()->get() as $recibo) {
 
             $data[] = [
                 'id' => $recibo->id,
@@ -158,5 +163,11 @@ class Payment extends Component
             ];
         }
         return $data;
+    }
+
+    public function updated($attr)
+    {
+        $request = new PaymentsRequest();
+        $this->validateOnly($attr, $request->rules(), $request->messages());
     }
 }

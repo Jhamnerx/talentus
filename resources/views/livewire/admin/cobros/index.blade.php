@@ -231,7 +231,7 @@
                         <!-- Row -->
                         @if ($cobros->count())
                             @foreach ($cobros as $cobro)
-                                <tr>
+                                <tr wire:key='cobro-{{ $cobro->id }}'>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center">
                                             <label class="inline-flex">
@@ -275,30 +275,39 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                        @switch($cobro->estado)
-                                            @case(0)
-                                                <div class="font-medium text-emerald-500">
-                                                    ACTIVO
 
-                                                </div>
-                                            @break
 
-                                            @case(1)
-                                                <div class="font-medium text-orange-400">
-                                                    POR VENCER
+                                        @if ($cobro->suspendido)
+                                            <div
+                                                class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
+                                                Suspendido</div>
+                                        @else
+                                            @switch($cobro->estado)
+                                                @case(0)
+                                                    <div class="font-medium text-emerald-500">
+                                                        ACTIVO
 
-                                                </div>
-                                            @break
+                                                    </div>
+                                                @break
 
-                                            @case(2)
-                                                <div class="font-medium text-red-500">
-                                                    VENCIDO
+                                                @case(1)
+                                                    <div class="font-medium text-orange-400">
+                                                        POR VENCER
 
-                                                </div>
-                                            @break
+                                                    </div>
+                                                @break
 
-                                            @default
-                                        @endswitch
+                                                @case(2)
+                                                    <div class="font-medium text-rose-500">
+                                                        VENCIDO
+
+                                                    </div>
+                                                @break
+
+                                                @default
+                                            @endswitch
+                                        @endif
+
 
 
                                     </td>
