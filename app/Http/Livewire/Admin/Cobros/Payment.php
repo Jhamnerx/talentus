@@ -26,7 +26,7 @@ class Payment extends Component
 
     public $cobro;
 
-    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion;
+    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',
@@ -35,6 +35,7 @@ class Payment extends Component
     public function mount(Cobros $cobro)
     {
         $this->cobro = $cobro;
+        $this->divisa = $cobro->divisa;
         $this->tipo_pago = $cobro->tipo_pago;
         $this->cobro->reset;
         $this->paymentsMethods = PaymentMethods::all();
@@ -50,14 +51,17 @@ class Payment extends Component
 
     public function save()
     {
+        // dd($this->divisa, $this->divisaDoc);
         $request = new PaymentsRequest();
         $this->validate($request->rules(), $request->messages());
+
         $payment = Payments::create([
             'numero' => $this->numero,
             'numero_operacion' => $this->numero_operacion,
             'fecha' => Carbon::now()->format('Y-m-d'),
             'nota' => $this->nota,
             'monto' => $this->monto,
+            'divisa' => $this->divisa,
             'paymentable_type' => $this->paymentable_type,
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
@@ -141,6 +145,7 @@ class Payment extends Component
                     'paymentable_type' => Facturas::class,
                     'paymentable_id' => $factura->id,
                     'monto' => $factura->total,
+                    'divisa' => $factura->divisa,
                 ];
             }
         }
@@ -160,6 +165,7 @@ class Payment extends Component
                 'paymentable_type' => Recibos::class,
                 'paymentable_id' => $recibo->id,
                 'monto' => $recibo->total,
+                'divisa' => $recibo->divisa,
             ];
         }
         return $data;

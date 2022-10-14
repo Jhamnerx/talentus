@@ -340,8 +340,12 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <div class="font-medium text-slate-800">
+                                            @if ($cobro->divisa == 'PEN')
+                                                S/. {{ $cobro->monto_unidad }}
+                                            @else
+                                                ${{ $cobro->monto_unidad }}
+                                            @endif
 
-                                            {{ $cobro->monto_unidad }}
 
                                         </div>
 

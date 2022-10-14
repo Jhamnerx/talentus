@@ -43,6 +43,8 @@
                 <form autocomplete="off" autocapitalize="true">
 
                     <div class="px-8 py-5 bg-white sm:p-6">
+                        {{ $divisaDoc }}
+                        {{ $divisa }}
                         <div class="grid grid-cols-12 gap-6">
                             {{-- TIPO PAGO --}}
 
@@ -225,7 +227,13 @@
                                     </p>
                                 @enderror
                             </div>
-
+                            <div class="col-span-12">
+                                @error('divisa')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
                             {{-- nota --}}
                             <div class="col-span-12 sm:col-span-12 mb-2">
                                 <label class="block text-sm font-medium mb-1" for="nota">
@@ -328,6 +336,7 @@
             @this.set('paymentable_type', data.paymentable_type)
             @this.set('paymentable_id', data.paymentable_id)
             @this.set('monto', data.monto)
+            @this.set('divisaDoc', data.divisa)
         });
     </script>
 

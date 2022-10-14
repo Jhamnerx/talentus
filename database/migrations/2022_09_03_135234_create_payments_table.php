@@ -19,7 +19,8 @@ class CreatePaymentsTable extends Migration
             $table->string('numero_operacion');
             $table->date('fecha');
             $table->text('nota')->nullable();
-            $table->unsignedBigInteger('monto');
+            $table->text('divisa');
+            $table->decimal('monto', 10, 2);
             $table->morphs('paymentable');
             $table->string('unique_hash')->nullable();
             $table->unsignedBigInteger('user_id')->unsigned();
