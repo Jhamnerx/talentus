@@ -52,7 +52,6 @@ class Actas extends Model
     public function vehiculos()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
-
     }
     /**
      * Scope para traer activos y no
@@ -69,7 +68,7 @@ class Actas extends Model
     public function getPDFData()
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -88,6 +87,4 @@ class Actas extends Model
         //return $pdf;
         //return view('pdf.acta');
     }
-
-    
 }

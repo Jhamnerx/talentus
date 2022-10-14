@@ -42,8 +42,9 @@
 
                 <form autocomplete="off" autocapitalize="true">
 
-
                     <div class="px-8 py-5 bg-white sm:p-6">
+                        {{ $divisaDoc }}
+                        {{ $divisa }}
                         <div class="grid grid-cols-12 gap-6">
                             {{-- TIPO PAGO --}}
 
@@ -127,7 +128,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('documentos')
+                                @error('paymentable_id')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
@@ -151,7 +152,7 @@
                                     </select>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
+                                        <svg class="w-4 h-4 fill-current text-slate-600 shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                             <g fill="none" class="nc-icon-wrapper">
                                                 <path
@@ -161,7 +162,7 @@
                                         </svg>
                                     </div>
                                 </div>
-                                @error('payment_method')
+                                @error('payment_method_id')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
@@ -187,8 +188,52 @@
                                     </p>
                                 @enderror
                             </div>
+                            <div class="col-span-12 sm:col-span-6">
 
+                                <label class="block text-sm font-medium mb-1" for="numeronumero_operacion">Numero de
+                                    operación:</label>
 
+                                <div class="relative">
+
+                                    <input wire:model="numero_operacion" type="text"
+                                        class="form-input w-full pl-12" placeholder="45474001">
+
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 fill-current text-slate-600 shrink-0 ml-3 mr-2"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                            <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
+                                                stroke="currentColor" stroke-linejoin="miter"
+                                                class="nc-icon-wrapper">
+                                                <line x1="10" y1="33" x2="24" y2="33">
+                                                </line>
+                                                <line x1="32" y1="33" x2="38" y2="33">
+                                                </line>
+                                                <path
+                                                    d="M43,41H5a2.946,2.946,0,0,1-3-3V12A2.946,2.946,0,0,1,5,9H43a2.946,2.946,0,0,1,3,3V38A2.946,2.946,0,0,1,43,41Z">
+                                                </path>
+                                                <path d="M31.189,23.392a3.933,3.933,0,0,0,0-4.784"></path>
+                                                <path d="M35.991,26.993a9.943,9.943,0,0,0,0-11.986"></path>
+                                                <circle cx="26" cy="21" r="2" stroke="none"
+                                                    fill="currentColor"></circle>
+                                                <rect x="10" y="17" width="7" height="6">
+                                                </rect>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('numero_operacion')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12">
+                                @error('divisa')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
                             {{-- nota --}}
                             <div class="col-span-12 sm:col-span-12 mb-2">
                                 <label class="block text-sm font-medium mb-1" for="nota">
@@ -196,7 +241,7 @@
                                 </label>
 
                                 <div class="relative">
-                                    <textarea class="w-full form-input pl-9" wire:model="notaPayment" name="nota" id="" rows="4"
+                                    <textarea class="w-full form-input pl-9" wire:model="nota" name="nota" id="" rows="4"
                                         placeholder="Ingresa una nota">
                                     </textarea>
 
@@ -268,7 +313,15 @@
                 selectionCssClass: 'pl-9',
                 width: '100%',
                 // minimumInputLength: 2,
-                data: data
+                data: data,
+                "language": {
+                    "noResults": function() {
+                        return 'No hay documentos sin pagar...';
+                    }
+                },
+                escapeMarkup: function(markup) {
+                    return markup;
+                }
             });
 
             $('.documentos').val(null).trigger('change');
@@ -282,6 +335,22 @@
 
             @this.set('paymentable_type', data.paymentable_type)
             @this.set('paymentable_id', data.paymentable_id)
+            @this.set('monto', data.monto)
+            @this.set('divisaDoc', data.divisa)
         });
+    </script>
+
+
+    <script>
+        window.addEventListener('savePayment', event => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado',
+                text: 'se ha creado ' + event.detail.payment.numero,
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+            })
+
+        })
     </script>
 @endsection

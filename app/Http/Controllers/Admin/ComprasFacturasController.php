@@ -37,7 +37,7 @@ class ComprasFacturasController extends Controller
 
     public function show(ComprasFacturas $factura)
     {
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         return view('admin.compras.facturas.show', compact('factura', 'plantilla'));
     }
 

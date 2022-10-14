@@ -13,13 +13,12 @@ class CreatePaymentMethodsTable extends Migration
      */
     public function up()
     {
-        if (! Schema::hasTable('payment_methods')) {
+        if (!Schema::hasTable('payment_methods')) {
             Schema::create('payment_methods', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('name');
-                $table->unsignedBigInteger('empresas_id')->unsigned()->nullable();
-                $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('cascade');
-                $table->timestamps();
+                $table->unsignedBigInteger('empresa_id')->unsigned()->nullable();
+                $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             });
         }
     }

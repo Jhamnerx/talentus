@@ -9,10 +9,12 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "asantibanez/laravel-blade-sortable": "*",
         "barryvdh/laravel-dompdf": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4",
         "haruncpi/laravel-id-generator": "^1.1",
+        "intervention/image": "^2.7",
         "laravel-lang/lang": "9.0",
         "laravel/framework": "^9.0",
         "laravel/jetstream": "^2.6",

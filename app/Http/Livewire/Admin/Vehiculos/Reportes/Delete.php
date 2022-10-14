@@ -8,6 +8,7 @@ use Livewire\Component;
 
 class Delete extends Component
 {
+
     public Model $model;
 
     public $openModalDelete = false;
@@ -17,6 +18,8 @@ class Delete extends Component
     protected $listeners = [
         'EliminarReporte' => 'openModal'
     ];
+
+
     public function delete()
     {
         $this->model->setAttribute($this->field, '1')->save();

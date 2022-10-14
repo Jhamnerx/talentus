@@ -15,20 +15,36 @@ class PaymentMethodsSeeder extends Seeder
      */
     public function run()
     {
-        PaymentMethods::create(
+        $metodos = [
             [
-                'name' => 'DEPOSITO EN CTA',
-                'empresas_id' => 1,
-            ],
-            [
-                'name' => 'DEPOSITO EN CTA CORRIENTE',
-                'empresas_id' => 1,
-            ],
-            [
-                'name' => 'DEPOSITO EN AGENTE',
-                'empresas_id' => 1,
-            ],
 
-        );
+                'name' => 'DEPOSITO EN CTA',
+                'empresa_id' => '1',
+            ],
+            [
+
+                'name' => 'DEPOSITO EN CTA CORRIENTE',
+                'empresa_id' => '1',
+            ],
+            [
+
+                'name' => 'DEPOSITO EN AGENTE',
+                'empresa_id' => '1',
+            ],
+            [
+
+                'name' => 'YAPE',
+                'empresa_id' => '1',
+            ],
+            [
+
+                'name' => 'PLIN',
+                'empresa_id' => '1',
+            ]
+        ];
+        foreach ($metodos as $metodo) {
+
+            PaymentMethods::create($metodo);
+        }
     }
 }

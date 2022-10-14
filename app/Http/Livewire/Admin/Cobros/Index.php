@@ -6,15 +6,22 @@ use Livewire\Component;
 use App\Models\Cobros;
 use Livewire\WithPagination;
 use Carbon\Carbon;
+
 class Index extends Component
 {
     use WithPagination;
     public $search;
     public $estado;
+    public $openModalDelete = false;
 
 
     protected $listeners = [
         'render'
+    ];
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'estado' => ['except' => '']
+
     ];
 
     public function render()
@@ -24,10 +31,10 @@ class Index extends Component
 
         $cobros = Cobros::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
-            $query->orWhereHas('contactos', function ($contacto){
+            $query->orWhereHas('contactos', function ($contacto) {
                 $contacto->Where('nombre', 'like', '%' . $this->search . '%');
             });
-        })->orwhereHas('vehiculos', function ($query) {
+        })->orwhereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
             ->orWhere('periodo', 'like', '%' . $this->search . '%')
@@ -39,10 +46,10 @@ class Index extends Component
 
             $cobros = Cobros::whereHas('clientes', function ($query) {
                 $query->where('razon_social', 'like', '%' . $this->search . '%');
-                $query->orWhereHas('contactos', function ($contacto){
+                $query->orWhereHas('contactos', function ($contacto) {
                     $contacto->Where('nombre', 'like', '%' . $this->search . '%');
                 });
-            })->orwhereHas('vehiculos', function ($query) {
+            })->orwhereHas('vehiculo', function ($query) {
                 $query->where('placa', 'like', '%' . $this->search . '%');
             })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
                 ->orWhere('periodo', 'like', '%' . $this->search . '%')
@@ -55,10 +62,10 @@ class Index extends Component
 
             $cobros = Cobros::whereHas('clientes', function ($query) {
                 $query->where('razon_social', 'like', '%' . $this->search . '%');
-                $query->orWhereHas('contactos', function ($contacto){
+                $query->orWhereHas('contactos', function ($contacto) {
                     $contacto->Where('nombre', 'like', '%' . $this->search . '%');
                 });
-            })->orwhereHas('vehiculos', function ($query) {
+            })->orwhereHas('vehiculo', function ($query) {
                 $query->where('placa', 'like', '%' . $this->search . '%');
             })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
                 ->orWhere('periodo', 'like', '%' . $this->search . '%')
@@ -80,8 +87,12 @@ class Index extends Component
     public function updatingSearch()
     {
         $this->resetPage();
-    }   
+    }
 
-
-
+    public function openModalDelete(Cobros $cobro)
+    {
+        //dd($factura);
+        $this->emit('openModalDelete', $cobro);
+        $this->openModalDelete = true;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Clientes;
 use App\Models\Cobros;
 use Illuminate\Http\Request;
 
@@ -21,12 +22,6 @@ class CobrosController extends Controller
     }
 
 
-    public function store(Request $request)
-    {
-        //
-    }
-
-
     public function show(Cobros $cobro)
     {
         return view('admin.cobros.show', compact('cobro'));
@@ -38,15 +33,8 @@ class CobrosController extends Controller
         return view('admin.cobros.edit', compact('cobro'));
     }
 
-
-    public function update(Request $request, Cobros $cobros)
+    public function cobrosClientes(Clientes $cliente)
     {
-        //
-    }
-
-
-    public function destroy(Cobros $cobros)
-    {
-        //
+        return view('admin.cobros.list', compact('cliente'));
     }
 }

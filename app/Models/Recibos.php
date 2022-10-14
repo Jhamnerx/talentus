@@ -12,6 +12,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 class Recibos extends Model
 {
     use HasFactory;
+
+    public const COMPLETADO = 'COMPLETADO';
+    public const BORRADOR = 'BORRADOR';
+
+    public const PAID = 'PAID';
+    public const UNPAID = 'UNPAID';
+
+
+    public const PEN = 'PEN';
+    public const USD = 'USD';
+
     protected $table = 'recibos';
 
     protected $casts = [
@@ -21,12 +32,35 @@ class Recibos extends Model
         'fecha_pago' => 'date:Y/m/d',
     ];
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    // SCOPE DE EMPRESA
+
+
+
+    //LOCAL SCOPES
+    public function scopePaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::PAID);
+    }
+
+    public function scopeUnPaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::UNPAID);
+    }
+
+    public function scopeCompletado($query)
+    {
+        return $query->where('estado', '=', $this::COMPLETADO);
+    }
+    public function scopeBorrador($query)
+    {
+        return $query->where('estado', '=', $this::BORRADOR);
+    }
+
+    //GLOBAL SCOPES
 
     protected static function booted()
     {
         //
-       static::addGlobalScope(new EmpresaScope);
+        static::addGlobalScope(new EmpresaScope);
     }
     //Relacion uno a muchos inversa
 
@@ -68,7 +102,7 @@ class Recibos extends Model
     public function getPDFData($action)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -77,25 +111,24 @@ class Recibos extends Model
         ]);
 
         $pdf = PDF::loadView('pdf.recibo.pdf');
-        
-        if($action == 1){
 
-            return $pdf->download('RECIBO ' . $this->serie."-".$this->numero.'.pdf');
-        }else{
-           // return view('pdf.factura.pdf');
-           
-            return $pdf->stream('RECIBO ' . $this->serie."-".$this->numero.'.pdf');
+        if ($action == 1) {
 
+            return $pdf->download('RECIBO ' . $this->serie . "-" . $this->numero . '.pdf');
+        } else {
+            // return view('pdf.factura.pdf');
+
+            return $pdf->stream('RECIBO ' . $this->serie . "-" . $this->numero . '.pdf');
         };
 
 
-       // return view('pdf.presupuesto.pdf');
+        // return view('pdf.presupuesto.pdf');
     }
 
     public function getPDFDataToMail($data)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
         view()->share([
             'recibo' => $this,
@@ -105,8 +138,5 @@ class Recibos extends Model
         $pdf = PDF::loadView('pdf.recibo.pdf');
 
         $this->clientes->notify(new EnviarReciboCliente($this, $pdf, $data));
-
     }
-
-
 }

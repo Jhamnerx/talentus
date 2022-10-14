@@ -13,7 +13,7 @@ class Save extends Component
 
 
     public $cliente, $vehiculos_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
-    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion;
+    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
     public $dataVehiculos = [];
     public $nota;
 
@@ -92,6 +92,7 @@ class Save extends Component
             'comentario' => $values["comentario"],
             'periodo' => $values["periodo"],
             'monto_unidad' => $values["monto_unidad"],
+            'divisa' => $values["divisa"],
             'fecha_vencimiento' => $values["fecha_vencimiento"],
             'tipo_pago' => $values["tipo_pago"],
             'nota' => $values["nota"],

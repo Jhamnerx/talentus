@@ -80,7 +80,7 @@ class Contratos extends Model
     public function getPDFData()
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -94,13 +94,12 @@ class Contratos extends Model
         $pdf = PDF::loadView('pdf.contrato.pdf');
 
         return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
-
     }
 
     public function getPDFDataToMail($data)
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
@@ -115,7 +114,5 @@ class Contratos extends Model
         $pdf = PDF::loadView('pdf.contrato.pdf');
 
         $this->clientes->notify(new EnviarContratoCliente($this, $pdf, $data));
-
     }
-
 }

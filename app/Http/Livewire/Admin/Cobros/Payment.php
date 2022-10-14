@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Cobros;
 
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Http\Requests\PaymentsRequest;
 use App\Models\Clientes;
 use App\Models\Cobros;
 use App\Models\Facturas;
@@ -11,6 +12,7 @@ use App\Models\Payments;
 use App\Models\Recibos;
 use Carbon\Carbon;
 use Livewire\Component;
+
 
 class Payment extends Component
 {
@@ -24,7 +26,7 @@ class Payment extends Component
 
     public $cobro;
 
-    public $numero, $payment_method_id, $nota, $monto, $paymentable_type, $paymentable_id;
+    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
 
     protected $listeners = [
         'openModalPayment' => 'openModal',
@@ -33,6 +35,7 @@ class Payment extends Component
     public function mount(Cobros $cobro)
     {
         $this->cobro = $cobro;
+        $this->divisa = $cobro->divisa;
         $this->tipo_pago = $cobro->tipo_pago;
         $this->cobro->reset;
         $this->paymentsMethods = PaymentMethods::all();
@@ -46,23 +49,39 @@ class Payment extends Component
     }
 
 
-
     public function save()
     {
+        // dd($this->divisa, $this->divisaDoc);
+        $request = new PaymentsRequest();
+        $this->validate($request->rules(), $request->messages());
 
-
-
-        Payments::create([
-            'numero' => '001',
+        $payment = Payments::create([
+            'numero' => $this->numero,
+            'numero_operacion' => $this->numero_operacion,
             'fecha' => Carbon::now()->format('Y-m-d'),
             'nota' => $this->nota,
             'monto' => $this->monto,
+            'divisa' => $this->divisa,
             'paymentable_type' => $this->paymentable_type,
             'paymentable_id' => $this->paymentable_id,
-            'unique_hash' => '9390233084',
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id
         ]);
+
+        $payment->paymentable->pago_estado = 'PAID';
+        $payment->paymentable->estado = 'COMPLETADO';
+        $payment->paymentable->save();
+
+        $this->closeModal();
+        //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
+        // return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
+
+
+
+        // return redirect()->route('admin.cobros.show', $this->cobro);
+        // session()->flash('store', 'Se guardo con exito' . $payment->numero);
+        return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.banner', 'Se guardo con exito el pago ' . $payment->numero);
+        return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.bannerStyle', 'success');
     }
 
     public function openModal()
@@ -93,7 +112,7 @@ class Payment extends Component
 
     public function updatedtipoPago($tipo_pago)
     {
-
+        $this->reset('paymentable_type', 'paymentable_id');
         $cliente = Clientes::where('id', $this->cobro->clientes_id)->first();
 
         if ($tipo_pago == "FACTURA") {
@@ -113,8 +132,9 @@ class Payment extends Component
     {
 
         $data = [];
-
-        foreach ($cliente->facturas as $factura) {
+        //dd(Facturas::where('clientes_id', '=', $cliente->id)->paid()->get());
+        //dd($cliente->facturas()->paid()->get());
+        foreach ($cliente->facturas()->unpaid()->get() as $factura) {
 
 
             if ($factura->is_active) {
@@ -124,6 +144,8 @@ class Payment extends Component
                     'text' => $factura->numero,
                     'paymentable_type' => Facturas::class,
                     'paymentable_id' => $factura->id,
+                    'monto' => $factura->total,
+                    'divisa' => $factura->divisa,
                 ];
             }
         }
@@ -135,15 +157,23 @@ class Payment extends Component
     {
 
         $data = [];
-        foreach ($cliente->recibos as $recibo) {
+        foreach ($cliente->recibos()->unpaid()->get() as $recibo) {
 
             $data[] = [
                 'id' => $recibo->id,
                 'text' => $recibo->numero,
                 'paymentable_type' => Recibos::class,
                 'paymentable_id' => $recibo->id,
+                'monto' => $recibo->total,
+                'divisa' => $recibo->divisa,
             ];
         }
         return $data;
+    }
+
+    public function updated($attr)
+    {
+        $request = new PaymentsRequest();
+        $this->validateOnly($attr, $request->rules(), $request->messages());
     }
 }

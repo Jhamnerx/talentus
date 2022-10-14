@@ -26,10 +26,10 @@ return new class extends Migration
             $table->string('direccion_llegada')->nullable();
             $table->string('ubigeo_llegada')->nullable();
             $table->date('fecha_inicio_traslado')->nullable();
-            $table->unsignedBigInteger('empresas_id')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->unsignedBigInteger('users_id')->nullable();
 
-            $table->foreign('empresas_id')->references('id')->on('empresas')->onDelete('set null');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
             $table->foreign('users_id')->references('id')->on('users')->onDelete('set null');
 
             $table->timestamps();

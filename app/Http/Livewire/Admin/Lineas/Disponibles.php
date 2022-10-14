@@ -24,12 +24,13 @@ class Disponibles extends Component
     ];
 
 
-    public function updateLineasToSimCard(){
+    public function updateLineasToSimCard()
+    {
 
         $this->render();
-
     }
-    public function updateLineas(){
+    public function updateLineas()
+    {
 
         $this->render();
         $this->dispatchBrowserEvent('lineas-import');
@@ -39,15 +40,24 @@ class Disponibles extends Component
     {
         $desde = $this->from;
         $hasta = $this->to;
-       
+
         $lineas = Lineas::whereHas('sim_card', function ($query) {
 
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%');
 
-            $query->orWhereHas('vehiculos', function($vehiculo){
-                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
-            });
+            $query->orWhereHas('vehiculos', function ($vehiculo) {
 
+                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+
+                $vehiculo->orWhereHas('flotas', function ($flota) {
+
+                    $flota->where('nombre', 'like', '%' . $this->search . '%');
+
+                    $flota->orWhereHas('clientes', function ($cliente) {
+                        $cliente->where('razon_social', 'like', '%' . $this->search . '%');
+                    });
+                });
+            });
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')
             ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
@@ -56,7 +66,7 @@ class Disponibles extends Component
 
         $operador = $this->operador;
 
-        if($operador != null){
+        if ($operador != null) {
 
             $lineas = Lineas::Where('operador', $operador)
                 ->Where('numero', 'like', '%' . $this->search . '%')
@@ -64,7 +74,7 @@ class Disponibles extends Component
         }
 
         $total = Lineas::all()->count();
-  
+
 
         return view('livewire.admin.lineas.disponibles', compact('lineas', 'total'));
     }
@@ -72,9 +82,9 @@ class Disponibles extends Component
     {
         $this->operador = $operador;
         //dd($operador);
-       // $this->emit('render');
+        // $this->emit('render');
 
-        
+
     }
     public function updatingSearch()
     {
@@ -106,25 +116,26 @@ class Disponibles extends Component
         }
     }
 
-    public function suspender(Lineas $linea){
+    public function suspender(Lineas $linea)
+    {
 
         $linea->fecha_suspencion = Carbon::now();
         $linea->date_to_suspend = Carbon::now()->addDays(59);
-        
+
         $linea->save();
     }
 
-    public function activar(Lineas $linea){
+    public function activar(Lineas $linea)
+    {
 
         $linea->fecha_suspencion = NULL;
         $linea->date_to_suspend = NULL;
         $linea->save();
-
     }
 
-    public function openModalImport(){
+    public function openModalImport()
+    {
 
         $this->emit('openModalImport');
-
     }
 }

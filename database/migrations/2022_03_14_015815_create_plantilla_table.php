@@ -15,7 +15,7 @@ class CreatePlantillaTable extends Migration
     {
         Schema::create('plantilla', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('empresas_id');
+            $table->unsignedBigInteger('empresa_id');
             $table->string('razon_social');
             $table->string('ruc');
             $table->integer('impuesto');
@@ -27,7 +27,7 @@ class CreatePlantillaTable extends Migration
             $table->string('serie_boleta');
             $table->string('serie_recibo');
 
-            $table->foreign('empresas_id')->references('id')->on('empresas')->onUpdate('cascade');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onUpdate('cascade');
 
             $table->timestamps();
         });

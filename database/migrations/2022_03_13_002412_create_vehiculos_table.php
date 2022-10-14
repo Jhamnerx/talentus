@@ -27,14 +27,13 @@ class CreateVehiculosTable extends Migration
             $table->string('dispositivo_imei')->nullable();
             $table->unsignedBigInteger('sim_card_id')->nullable();
             $table->string('numero')->unique()->nullable();
-            $table->string('old_numero')->nullable(); 
+            $table->string('old_numero')->nullable();
             $table->string('old_sim_card')->nullable();
             $table->unsignedBigInteger('flotas_id')->nullable();
             $table->unsignedBigInteger('dispositivos_id')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->enum('estado', [1, 2])->default(1);
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
 
             $table->foreign('flotas_id')->references('id')->on('flotas')->onDelete('set null');
             $table->foreign('dispositivos_id')->references('id')->on('dispositivos')->onDelete('set null');

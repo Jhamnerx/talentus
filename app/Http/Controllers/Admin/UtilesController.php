@@ -84,22 +84,35 @@ class UtilesController extends Controller
 
         return $response;
     }
+    public function consultaPaca($placa = "BCY-729")
+    {
+        $username = 'Jhamner';
+        $regNumber = 'placa';
+        $xmlData =
+            file_get_contents("https://www.regcheck.org.uk/api/reg.asmx/CheckPeru?RegistrationNumber=BCY729&username=Jhamner");
+        $xml = simplexml_load_string($xmlData);
+        $strJson = $xml->vehicleJson;
+        $json = json_decode($strJson);
+        //print_r($json->Description);
 
 
-    public static function getLabels($months = 1){
-        
+        return $json;
+    }
+
+
+    public static function getLabels($months = 1)
+    {
+
         $labels = [];
 
-        for ($i=0; $i < $months ; $i++) { 
+        for ($i = 0; $i < $months; $i++) {
 
             array_push(
                 $labels,
                 Carbon::now()->startOfMonth()->subMonth($i)->format('m-d-Y')
             );
-                
         }
 
         return $labels;
-
     }
 }

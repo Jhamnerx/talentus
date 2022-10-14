@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,10 @@ class Payments extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    protected $casts = [
+        'fecha' => 'date:Y/m/d',
+    ];
 
 
     // protected function empresaId(): Attribute
@@ -26,7 +31,17 @@ class Payments extends Model
     //     );
     // }
 
+    public function getRouteKeyName()
+    {
+        return 'numero';
+    }
 
+
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
 
     protected function empresaId(): Attribute
     {
@@ -51,7 +66,7 @@ class Payments extends Model
 
     // public function setEmpresaIdAttribute($empresa)
     // {
-    //     $this->attributes['empresas_id'] = session('empresa');
+    //     $this->attributes['empresa_id'] = session('empresa');
     // }
 
     public function paymentable()
@@ -64,5 +79,23 @@ class Payments extends Model
     {
 
         return $this->belongsTo(Cobros::class, 'cobros_id');
+    }
+
+
+    public function paymentMethod()
+    {
+
+        return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
+    }
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+    public function image()
+    {
+
+        return $this->morphOne(Imagen::class, 'imageable');
     }
 }

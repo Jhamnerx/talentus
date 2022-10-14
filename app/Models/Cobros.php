@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,6 +14,8 @@ class Cobros extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const VENCIDOS = '2';
+
     protected $table = 'cobros';
     protected $casts = [
 
@@ -20,6 +23,14 @@ class Cobros extends Model
         'vencido' => 'boolean',
 
     ];
+    //SCOPE GLOBAL DE EMPRES
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+
 
     public function scopeVencido($query, $estado = NULL)
     {
@@ -42,7 +53,7 @@ class Cobros extends Model
         return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
     }

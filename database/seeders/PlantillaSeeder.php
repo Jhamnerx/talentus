@@ -25,7 +25,7 @@ class PlantillaSeeder extends Seeder
             'serie_factura' => 'F001',
             'serie_boleta' => 'B001',
             'serie_recibo' => 'R001',
-            'empresas_id' => '1',
+            'empresa_id' => '1',
 
         ]);
         plantilla::create([
@@ -39,7 +39,7 @@ class PlantillaSeeder extends Seeder
             'serie_factura' => 'F001',
             'serie_boleta' => 'B001',
             'serie_recibo' => 'R001',
-            'empresas_id' => '2',
+            'empresa_id' => '2',
         ]);
     }
 }

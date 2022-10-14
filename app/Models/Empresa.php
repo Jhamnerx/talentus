@@ -30,7 +30,7 @@ class Empresa extends Model
 
     public function plantilla()
     {
-        return $this->hasOne(plantilla::class, 'empresas_id');
+        return $this->hasOne(plantilla::class, 'empresa_id');
     }
     //Relacion polimorfica
 

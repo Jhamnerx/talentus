@@ -53,7 +53,7 @@ class PaymentsController extends Controller
 
     public function setNextSequenceNumber()
     {
-        $id = IdGenerator::generate(['table' => 'payments', 'field' => 'numero', 'length' => 8, 'prefix' => 'PAY-']);
+        $id = IdGenerator::generate(['table' => 'payments', 'field' => 'numero', 'length' => 8, 'prefix' => 'PAY-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
         return trim($id);
     }
 }

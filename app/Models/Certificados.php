@@ -67,7 +67,7 @@ class Certificados extends Model
     public function getPDFData()
     {
 
-        $plantilla = plantilla::where('empresas_id', session('empresa'))->first();;
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>FACTURA #{{ $factura->serie . '-' . $factura->numero }}</title>
+    <title>FACTURA #{{ $factura->numero }}</title>
 
 
     {{-- <link rel="stylesheet" href="{{ ltrim(public_path('factura/normalize.css'), '/') }}" />
@@ -136,7 +136,7 @@
                             </td>
                             <td>
                                 Factura #:<br>
-                                <strong>{{ $factura->serie . '-' . $factura->numero }}</strong>
+                                <strong>{{ $factura->numero }}</strong>
                             </td>
                         </tr>
                     </tbody>

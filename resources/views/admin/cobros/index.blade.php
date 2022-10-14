@@ -5,6 +5,8 @@
 
     <!-- Table -->
     @livewire('admin.cobros.index')
+    {{-- delete --}}
+    @livewire('admin.cobros.delete')
 
 @stop
 
@@ -52,20 +54,20 @@
         </script>
     @endif
 
-    @if (session('delete'))
-        <script>
+    <script>
+        window.addEventListener('cobro-delete', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Eliminado',
-                    text: '{{ session('delete') }}',
+                    text: 'Registro Eliminado',
                     showConfirmButton: true,
                     confirmButtonText: "Cerrar"
 
                 })
             });
-        </script>
-    @endif
+        })
+    </script>
 
     <script>
         document.addEventListener('alpine:init', () => {

@@ -187,7 +187,7 @@ class PresupuestosIndex extends Component
     {
         if (!$presupuesto->recibo) {
             $recibosController = new RecibosController();
-            $plantilla = plantilla::where('empresas_id', session('empresa'))->first();
+            $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
             $recibo = $presupuesto->recibo()->create([
                 'clientes_id' => $presupuesto->clientes_id,
