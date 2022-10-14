@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
             'numero_documento' => '75103149',
             'direccion' => 'Trujillo',
             'telefonos' => '961482121',
-            'birthday' => '17/03/1999',
+            'birthday' => '1999-17-03',
             'is_client' => 'no',
             'password' => bcrypt('12345678'),
         ]);

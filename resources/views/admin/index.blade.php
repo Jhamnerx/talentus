@@ -66,7 +66,7 @@
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
                 <!-- Filter button -->
-                <div class="relative inline-flex" x-data="{ open: false }">
+                {{-- <div class="relative inline-flex" x-data="{ open: false }">
                     <button class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                         aria-haspopup="true" @click.prevent="open = !open" :aria-expanded="open">
                         <span class="sr-only">Filtro</span><wbr>
@@ -137,7 +137,7 @@
                             </ul>
                         </div>
                     </div>
-                </div>
+                </div> --}}
 
                 <!-- Datepicker built with flatpickr -->
                 <div class="relative">

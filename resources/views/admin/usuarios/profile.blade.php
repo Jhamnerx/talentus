@@ -17,21 +17,23 @@
                                 <!-- Profile image -->
                                 <div class="relative">
                                     <div class="grow flex items-center truncate">
-                                        <img class="w-8 h-8 rounded-full mr-2" src="../images/user-avatar-32.png"
+                                        <img class="w-8 h-8 rounded-full mr-2" src="{{ $user->profile_photo_url }}"
                                             width="32" height="32" alt="Group 01" />
                                         <div class="truncate">
-                                            <span class="font-semibold text-slate-800">Acme Inc.</span>
+                                            <span class="font-semibold text-slate-800">{{ $user->name }}</span>
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Add button -->
-                                <button
-                                    class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm ml-2">
-                                    <svg class="w-4 h-4 fill-current text-indigo-500" viewBox="0 0 16 16">
-                                        <path
-                                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1Z" />
-                                    </svg>
-                                </button>
+                                <a href="{{ route('admin.users.create') }}">
+                                    <button
+                                        class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm ml-2">
+                                        <svg class="w-4 h-4 fill-current text-indigo-500" viewBox="0 0 16 16">
+                                            <path
+                                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1Z" />
+                                        </svg>
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -39,7 +41,7 @@
                     <div class="px-5 py-4">
                         <!-- Search form -->
                         <form class="relative">
-                            <label for="profile-search" class="sr-only">Search</label>
+                            <label for="profile-search" class="sr-only">Buscar</label>
                             <input id="profile-search" class="form-input w-full pl-9 focus:border-slate-300" type="search"
                                 placeholder="Search…" />
                             <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
@@ -54,104 +56,17 @@
                         </form>
                         <!-- Team members -->
                         <div class="mt-4">
-                            <div class="text-xs font-semibold text-slate-400 uppercase mb-3">Team members</div>
+                            <div class="text-xs font-semibold text-slate-400 uppercase mb-3">Equipo de Trabajo</div>
                             <ul class="mb-6">
                                 <li class="-mx-2">
                                     <button class="w-full p-2 rounded bg-indigo-100" @click="profileSidebarOpen = false">
                                         <div class="flex items-center">
                                             <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-08.jpg"
+                                                <img class="w-8 h-8 rounded-full" src="{{ $user->profile_photo_url }}"
                                                     width="32" height="32" alt="User 08" />
                                             </div>
                                             <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Carolyn McNeail</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-06.jpg"
-                                                    width="32" height="32" alt="User 06" />
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Mary Roszczewski</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-03.jpg"
-                                                    width="32" height="32" alt="User 03" />
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Jerzy Wierzy</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-02.jpg"
-                                                    width="32" height="32" alt="User 02" />
-                                                <div
-                                                    class="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full">
-                                                </div>
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Tisha Yanchev</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-05.jpg"
-                                                    width="32" height="32" alt="User 05" />
-                                                <div
-                                                    class="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full">
-                                                </div>
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Simona Lürwer</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-04.jpg"
-                                                    width="32" height="32" alt="User 04" />
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Adrian Przetocki</span>
-                                            </div>
-                                        </div>
-                                    </button>
-                                </li>
-                                <li class="-mx-2">
-                                    <button class="w-full p-2 rounded" @click="profileSidebarOpen = false">
-                                        <div class="flex items-center truncate">
-                                            <div class="relative mr-2">
-                                                <img class="w-8 h-8 rounded-full" src="../images/user-32-01.jpg"
-                                                    width="32" height="32" alt="User 01" />
-                                                <div
-                                                    class="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full">
-                                                </div>
-                                            </div>
-                                            <div class="truncate">
-                                                <span class="text-sm font-medium text-slate-800">Brian Halligan</span>
+                                                <span class="text-sm font-medium text-slate-800">{{ $user->name }}</span>
                                             </div>
                                         </div>
                                     </button>
@@ -165,13 +80,12 @@
         </div>
 
         {{-- PROFILE BODY --}}
-
-        <div class="grow flex flex-col md:translate-x-0 transform transition-transform duration-300 ease-in-out"
+        <div class="bg-white grow flex flex-col md:translate-x-0 transform transition-transform duration-300 ease-in-out"
             :class="profileSidebarOpen ? 'translate-x-1/3' : 'translate-x-0'">
 
             <!-- Profile background -->
             <div class="relative h-56 bg-slate-200">
-                <img class="object-cover h-full w-full" src="../images/profile-bg.jpg" width="979" height="220"
+                <img class="object-cover h-full w-full" src="{{ $user->profile_photo_url }}" width="979" height="220"
                     alt="Profile background" />
                 <!-- Close button -->
                 <button class="md:hidden absolute top-4 left-4 sm:left-6 text-white opacity-80 hover:opacity-100"
@@ -194,22 +108,20 @@
 
                         <!-- Avatar -->
                         <div class="inline-flex -ml-1 -mt-1 mb-4 sm:mb-0">
-                            <img class="rounded-full border-4 border-white" src="../images/user-128-01.jpg"
+                            <img class="rounded-full border-4 border-white" src="{{ $user->profile_photo_url }}"
                                 width="128" height="128" alt="Avatar" />
                         </div>
 
                         <!-- Actions -->
                         <div class="flex space-x-2 sm:mb-2">
-                            <button
-                                class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm">
+                            <button class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm">
                                 <svg class="w-4 h-1 fill-current text-slate-400" viewBox="0 0 16 4">
                                     <circle cx="8" cy="2" r="2" />
                                     <circle cx="2" cy="2" r="2" />
                                     <circle cx="14" cy="2" r="2" />
                                 </svg>
                             </button>
-                            <button
-                                class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm">
+                            <button class="p-1.5 shrink-0 rounded border border-slate-200 hover:border-slate-300 shadow-sm">
                                 <svg class="w-4 h-4 fill-current text-indigo-500" viewBox="0 0 16 16">
                                     <path
                                         d="M8 0C3.6 0 0 3.1 0 7s3.6 7 8 7h.6l5.4 2v-4.4c1.2-1.2 2-2.8 2-4.6 0-3.9-3.6-7-8-7Zm4 10.8v2.3L8.9 12H8c-3.3 0-6-2.2-6-5s2.7-5 6-5 6 2.2 6 5c0 2.2-2 3.8-2 3.8Z" />
@@ -219,7 +131,7 @@
                                 <svg class="fill-current shrink-0" width="11" height="8" viewBox="0 0 11 8">
                                     <path d="m.457 4.516.969-.99 2.516 2.481L9.266.702l.985.99-6.309 6.284z" />
                                 </svg>
-                                <span class="ml-2">Following</span>
+                                <span class="ml-2">Siguiendo</span>
                             </button>
                         </div>
 
@@ -231,7 +143,7 @@
                 <header class="text-center sm:text-left mb-6">
                     <!-- Name -->
                     <div class="inline-flex items-start mb-2">
-                        <h1 class="text-2xl text-slate-800 font-bold">Carolyn McNeail</h1>
+                        <h1 class="text-2xl text-slate-800 font-bold">{{ $user->name }}</h1>
                         <svg class="w-4 h-4 fill-current shrink-0 text-yellow-500 ml-2" viewBox="0 0 16 16">
                             <path
                                 d="M13 6a.75.75 0 0 1-.75-.75 1.5 1.5 0 0 0-1.5-1.5.75.75 0 1 1 0-1.5 1.5 1.5 0 0 0 1.5-1.5.75.75 0 1 1 1.5 0 1.5 1.5 0 0 0 1.5 1.5.75.75 0 1 1 0 1.5 1.5 1.5 0 0 0-1.5 1.5A.75.75 0 0 1 13 6ZM6 16a1 1 0 0 1-1-1 4 4 0 0 0-4-4 1 1 0 0 1 0-2 4 4 0 0 0 4-4 1 1 0 1 1 2 0 4 4 0 0 0 4 4 1 1 0 0 1 0 2 4 4 0 0 0-4 4 1 1 0 0 1-1 1Z" />
@@ -247,7 +159,8 @@
                                 <path
                                     d="M8 8.992a2 2 0 1 1-.002-3.998A2 2 0 0 1 8 8.992Zm-.7 6.694c-.1-.1-4.2-3.696-4.2-3.796C1.7 10.69 1 8.892 1 6.994 1 3.097 4.1 0 8 0s7 3.097 7 6.994c0 1.898-.7 3.697-2.1 4.996-.1.1-4.1 3.696-4.2 3.796-.4.3-1 .3-1.4-.1Zm-2.7-4.995L8 13.688l3.4-2.997c1-1 1.6-2.198 1.6-3.597 0-2.798-2.2-4.996-5-4.996S3 4.196 3 6.994c0 1.399.6 2.698 1.6 3.697 0-.1 0-.1 0 0Z" />
                             </svg>
-                            <span class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">Milan, IT</span>
+                            <span
+                                class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{ $user->direccion }}</span>
                         </div>
                         <div class="flex items-center">
                             <svg class="w-4 h-4 fill-current shrink-0 text-slate-400" viewBox="0 0 16 16">
@@ -255,7 +168,7 @@
                                     d="M11 0c1.3 0 2.6.5 3.5 1.5 1 .9 1.5 2.2 1.5 3.5 0 1.3-.5 2.6-1.4 3.5l-1.2 1.2c-.2.2-.5.3-.7.3-.2 0-.5-.1-.7-.3-.4-.4-.4-1 0-1.4l1.1-1.2c.6-.5.9-1.3.9-2.1s-.3-1.6-.9-2.2C12 1.7 10 1.7 8.9 2.8L7.7 4c-.4.4-1 .4-1.4 0-.4-.4-.4-1 0-1.4l1.2-1.1C8.4.5 9.7 0 11 0ZM8.3 12c.4-.4 1-.5 1.4-.1.4.4.4 1 0 1.4l-1.2 1.2C7.6 15.5 6.3 16 5 16c-1.3 0-2.6-.5-3.5-1.5C.5 13.6 0 12.3 0 11c0-1.3.5-2.6 1.5-3.5l1.1-1.2c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4L2.9 8.9c-.6.5-.9 1.3-.9 2.1s.3 1.6.9 2.2c1.1 1.1 3.1 1.1 4.2 0L8.3 12Zm1.1-6.8c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4l-4.2 4.2c-.2.2-.5.3-.7.3-.2 0-.5-.1-.7-.3-.4-.4-.4-1 0-1.4l4.2-4.2Z" />
                             </svg>
                             <a class="text-sm font-medium whitespace-nowrap text-indigo-500 hover:text-indigo-600 ml-2"
-                                href="#0">carolinmcneail.com</a>
+                                href="#0">{{ $user->email }}</a>
                         </div>
                     </div>
                 </header>
@@ -273,12 +186,12 @@
                         <li
                             class="mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                             <a class="block pb-3 text-slate-500 hover:text-slate-600 whitespace-nowrap"
-                                href="#0">Connections</a>
+                                href="#0">Conexiones</a>
                         </li>
                         <li
                             class="mr-6 last:mr-0 first:pl-4 sm:first:pl-6 lg:first:pl-8 last:pr-4 sm:last:pr-6 lg:last:pr-8">
                             <a class="block pb-3 text-slate-500 hover:text-slate-600 whitespace-nowrap"
-                                href="#0">Contributions</a>
+                                href="#0">Contribuciones</a>
                         </li>
                     </ul>
                 </div>
@@ -291,22 +204,19 @@
 
                         <!-- About Me -->
                         <div>
-                            <h2 class="text-slate-800 font-semibold mb-2">About Me</h2>
+                            <h2 class="text-slate-800 font-semibold mb-2">Info</h2>
                             <div class="text-sm space-y-2">
                                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                                    ut
-                                    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-                                    ullamco
-                                    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
-                                    in
-                                    voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+                                    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                                    reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
                                 <p>Consectetur adipiscing elit, sed do eiusmod tempor magna aliqua.</p>
                             </div>
                         </div>
 
                         <!-- Departments -->
                         <div>
-                            <h2 class="text-slate-800 font-semibold mb-2">Departments</h2>
+                            <h2 class="text-slate-800 font-semibold mb-2">Areas</h2>
                             <!-- Cards -->
                             <div class="grid xl:grid-cols-2 gap-4">
 
@@ -320,34 +230,33 @@
                                                 height="14" alt="Icon 03" />
                                         </div>
                                         <div class="truncate">
-                                            <span class="text-sm font-medium text-slate-800">Acme Marketing</span>
+                                            <span class="text-sm font-medium text-slate-800">Administracion</span>
                                         </div>
                                     </div>
                                     <!-- Card content -->
                                     <div class="text-sm mb-3">Duis aute irure dolor in reprehenderit in voluptate velit
-                                        esse
-                                        cillum dolore.</div>
+                                        esse cillum dolore.</div>
                                     <!-- Card footer -->
                                     <div class="flex justify-between items-center">
                                         <!-- Avatars group -->
                                         <div class="flex -space-x-3 -ml-0.5">
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-02.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-03.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-04.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-05.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                         </div>
                                         <!-- Link -->
                                         <div>
                                             <a class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                                                href="#0">View -&gt;</a>
+                                                href="#0">Ver -&gt;</a>
                                         </div>
                                     </div>
                                 </div>
@@ -362,31 +271,30 @@
                                                 height="14" alt="Icon 02" />
                                         </div>
                                         <div class="truncate">
-                                            <span class="text-sm font-medium text-slate-800">Acme Product</span>
+                                            <span class="text-sm font-medium text-slate-800">Ventas</span>
                                         </div>
                                     </div>
                                     <!-- Card content -->
                                     <div class="text-sm mb-3">Duis aute irure dolor in reprehenderit in voluptate velit
-                                        esse
-                                        cillum dolore.</div>
+                                        esse cillum dolore.</div>
                                     <!-- Card footer -->
                                     <div class="flex justify-between items-center">
                                         <!-- Avatars group -->
                                         <div class="flex -space-x-3 -ml-0.5">
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-06.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-03.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                             <img class="rounded-full border-2 border-white box-content"
-                                                src="../images/avatar-01.jpg" width="24" height="24"
+                                                src="{{ $user->profile_photo_url }}" width="24" height="24"
                                                 alt="Avatar" />
                                         </div>
                                         <!-- Link -->
                                         <div>
                                             <a class="text-sm font-medium text-indigo-500 hover:text-indigo-600"
-                                                href="#0">View -&gt;</a>
+                                                href="#0">Ver -&gt;</a>
                                         </div>
                                     </div>
                                 </div>
@@ -397,7 +305,7 @@
 
                         <!-- Work History -->
                         <div>
-                            <h2 class="text-slate-800 font-semibold mb-2">Work History</h2>
+                            <h2 class="text-slate-800 font-semibold mb-2">Historial de Trabajo</h2>
                             <div class="bg-white p-4 border border-slate-200 rounded-sm shadow-sm">
                                 <ul class="space-y-3">
 
@@ -515,24 +423,28 @@
                     <!-- Sidebar -->
                     <aside class="xl:min-w-56 xl:w-56 space-y-3">
                         <div class="text-sm">
-                            <h3 class="font-medium text-slate-800">Title</h3>
-                            <div>Senior Product Designer</div>
+                            <h3 class="font-medium text-slate-800">Rol</h3>
+                            <div>
+                                @foreach ($user->roles as $rol)
+                                    {{ $rol->name }}
+                                @endforeach
+                            </div>
                         </div>
                         <div class="text-sm">
-                            <h3 class="font-medium text-slate-800">Location</h3>
-                            <div>Milan, IT - Remote</div>
+                            <h3 class="font-medium text-slate-800">Ubicación</h3>
+                            <div>{{ $user->direccion }} - Remote</div>
                         </div>
                         <div class="text-sm">
                             <h3 class="font-medium text-slate-800">Email</h3>
-                            <div>carolinmcneail@acme.com</div>
+                            <div>{{ $user->email }}</div>
                         </div>
                         <div class="text-sm">
-                            <h3 class="font-medium text-slate-800">Birthdate</h3>
-                            <div>4 April, 1987</div>
+                            <h3 class="font-medium text-slate-800">Cumpleaños</h3>
+                            <div>{{ $user->birthday->format('d F, Y') }}</div>
                         </div>
                         <div class="text-sm">
-                            <h3 class="font-medium text-slate-800">Joined Acme</h3>
-                            <div>7 April, 2017</div>
+                            <h3 class="font-medium text-slate-800">Inicio Laboral</h3>
+                            <div>{{ $user->created_at->format('d F, Y') }}</div>
                         </div>
                     </aside>
 
