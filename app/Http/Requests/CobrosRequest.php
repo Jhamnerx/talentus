@@ -31,11 +31,12 @@ class CobrosRequest extends FormRequest
             "comentario" => 'nullable',
             "periodo" => 'required',
             "monto_unidad" => 'required',
+            "divisa" => 'required',
             "fecha_vencimiento" => 'required|date',
             "cantidad_unidades" => 'nullable',
             "tipo_pago" => 'required',
             "nota" => 'nullable',
-            "observacion" =>'nullable',
+            "observacion" => 'nullable',
         ];
 
         return $rules;
@@ -49,6 +50,7 @@ class CobrosRequest extends FormRequest
             'cliente.required' => 'Selecciona un cliente',
             'vehiculos_id.required' => 'Selecciona un vehiculo',
             'periodo.required' => 'Selecciona un periodo',
+            'divisa.required' => 'Selecciona una divisa',
             'monto_unidad.required' => 'Ingresa un monto',
             'fecha_vencimiento.required' => 'Ingresa la fecha de vencimiento',
             'fecha_vencimiento.date' => 'El formato debe ser de fecha',

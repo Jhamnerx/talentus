@@ -16,7 +16,7 @@ class Delete extends Component
 
     public function delete()
     {
-        dd($this->cobro);
+
         $this->cobro->delete();
         $this->dispatchBrowserEvent('cobro-delete');
         $this->emit('render');

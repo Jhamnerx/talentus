@@ -128,7 +128,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <button class="text-sm underline hover:no-underline">{{ $payment->fecha }}</button>
+                                        <button
+                                            class="text-sm underline hover:no-underline">{{ $payment->fecha->format('d-m-Y') }}</button>
                                     </div>
                                 </div>
                             </div>

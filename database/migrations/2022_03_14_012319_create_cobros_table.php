@@ -20,6 +20,7 @@ class CreateCobrosTable extends Migration
             $table->unsignedBigInteger('contratos_id')->nullable();
             $table->text('comentario')->nullable();
             $table->string('periodo');
+            $table->string('divisa');
             $table->decimal('monto_unidad', 10, 2);
             $table->integer('cantidad_unidades')->nullable();
             $table->string('tipo_pago');

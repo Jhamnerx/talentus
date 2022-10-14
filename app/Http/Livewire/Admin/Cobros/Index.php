@@ -19,7 +19,9 @@ class Index extends Component
         'render'
     ];
     protected $queryString = [
-        'search' => ['except' => '']
+        'search' => ['except' => ''],
+        'estado' => ['except' => '']
+
     ];
 
     public function render()

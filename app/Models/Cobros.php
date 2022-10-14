@@ -14,6 +14,8 @@ class Cobros extends Model
     use HasFactory;
     use SoftDeletes;
 
+    public const VENCIDOS = '2';
+
     protected $table = 'cobros';
     protected $casts = [
 
