@@ -52,6 +52,7 @@
     },
     "dependencies": {
         "@alpinejs/intersect": "^3.10.2",
+        "@alpinejs/mask": "^3.10.4",
         "alpinejs": "^3.9.1",
         "chart.js": "^3.9.1",
         "chartjs-adapter-moment": "^1.0.0",

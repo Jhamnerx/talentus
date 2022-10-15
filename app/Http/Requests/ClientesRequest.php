@@ -13,11 +13,8 @@ class ClientesRequest extends FormRequest
      */
     public function authorize()
     {
-        if ($this->empresa_id == session('empresa')) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return true;
     }
 
     /**
@@ -31,7 +28,7 @@ class ClientesRequest extends FormRequest
 
         $rules = [
             'razon_social' => 'required',
-            'numero_documento' => 'required|digits_between:8,11|numeric',
+            'numero_documento' => 'required|digits_between:8,11|numeric|unique:clientes',
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable'
         ];
@@ -53,6 +50,7 @@ class ClientesRequest extends FormRequest
             'numero_documento.required' => 'Ingresa un documento',
             'numero_documento.digits_between' => 'Ingresa como minimo 8 caracteres',
             'numero_documento.numeric' => 'El numero documento debe ser un numero',
+            'numero_documento.unique' => 'El cliente ya esta registrado',
             'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
             'telefono.numeric' => 'El numero de telefono debe ser un numero',
             'email.email' => 'Debe tener formato de correo electronico',

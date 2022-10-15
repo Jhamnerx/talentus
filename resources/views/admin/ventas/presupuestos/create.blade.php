@@ -61,9 +61,19 @@
                             <div>Cliente <span class="text-sm text-red-500"> * </span></div>
                         </label>
 
-                        <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
 
-                        </select>
+                        <div class="flex ">
+                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
+
+                            </select>
+
+
+
+
+                            @livewire('admin.clientes.button-open-modal')
+
+                        </div>
+
                         @error('clientes_id')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                 {{ $message }}
@@ -423,8 +433,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -443,6 +453,13 @@
 
 
 @stop
+
+@push('modals')
+    @livewire('admin.clientes.save')
+@endpush
+
+
+
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
         integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA=="
@@ -561,6 +578,15 @@
 
             }
         });
+        $('.clientes_id').append(`
+                            <button
+                                class="btn  bg-indigo-500 hover:bg-indigo-600 text-white flex-shrink-0 cursor-default items-center">
+                                <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                                </svg>
+
+                            </button>`)
 
         $('.productoSelect').select2({
             placeholder: 'Añadir Artículo',

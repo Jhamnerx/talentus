@@ -364,8 +364,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -384,6 +384,11 @@
 
 
 @stop
+
+@push('modals')
+    @livewire('admin.clientes.save')
+@endpush
+
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
         integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA=="
