@@ -38,7 +38,7 @@ class CreateVehiculosTable extends Migration
             $table->foreign('flotas_id')->references('id')->on('flotas')->onDelete('set null');
             $table->foreign('dispositivos_id')->references('id')->on('dispositivos')->onDelete('set null');
             $table->foreign('sim_card_id')->references('id')->on('sim_card')->onDelete('set null');
-
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

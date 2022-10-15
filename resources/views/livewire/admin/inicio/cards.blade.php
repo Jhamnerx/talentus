@@ -194,6 +194,9 @@
             </div>
 
 
+
+            @livewire('admin.inicio.cards.dispositivos')
+
             <!-- Bar chart (fact vs recibos soles) -->
 
             @livewire('admin.inicio.charts.ventas-soles')
@@ -202,6 +205,7 @@
             <!-- Bar chart (fact vs recibos dolares) -->
 
             @livewire('admin.inicio.charts.ventas-dolares')
+            {{-- card disposivitos --}}
 
             <div
                 class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">

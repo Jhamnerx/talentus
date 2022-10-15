@@ -1,7 +1,7 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
-        <a href="{{route('admin.almacen.dispositivos.index')}}">
+        <a href="{{ route('admin.almacen.dispositivos.index') }}">
             <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
                     viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
@@ -77,8 +77,8 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total dispositivos <span
-                    class="text-slate-400 font-medium">100</span>
+            <h2 class="font-semibold text-slate-800">Total dispositivos <span class="text-slate-400 font-medium">
+                </span>
             </h2>
 
         </header>
@@ -122,77 +122,77 @@
                         <!-- Row -->
 
                         @foreach ($modelos as $modelo)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center relative">
-                                    <button>
-                                        <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div
-                                        class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
-
-                                        @if ($modelo->image)
-                                        <img class="ml-1" src="{{Storage::url($modelo->image->url)}}.webp" width="20"
-                                            height="20" alt="Icon 01" />
-                                        @else
-
-                                        @endif
-
+                            <tr>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input class="table-item form-checkbox" type="checkbox"
+                                                @click="uncheckParent" />
+                                        </label>
                                     </div>
-                                    <div class="font-medium text-slate-800">{{$modelo->modelo}}</div>
-                                </div>
-                            </td>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center relative">
+                                        <button>
+                                            <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{$modelo->marca}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">{{$modelo->certificado}}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-                                    <button wire:click.prevent="showModal({{$modelo->id}})"
-                                        class="text-slate-400 hover:text-slate-500 rounded-full">
-                                        <span class="sr-only">Editar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path
-                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                        </svg>
-                                    </button>
-                                    {{-- <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            @if ($modelo->image)
+                                                <img class="ml-1" src="{{ Storage::url($modelo->image->url) }}.webp"
+                                                    width="20" height="20" alt="Icon 01" />
+                                            @else
+                                            @endif
+
+                                        </div>
+                                        <div class="font-medium text-slate-800">{{ $modelo->modelo }}</div>
+                                    </div>
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">{{ $modelo->marca }}</div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">{{ $modelo->certificado }}</div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="space-x-1">
+                                        <button wire:click.prevent="showModal({{ $modelo->id }})"
+                                            class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            <span class="sr-only">Editar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path
+                                                    d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                            </svg>
+                                        </button>
+                                        {{-- <button class="text-slate-400 hover:text-slate-500 rounded-full">
                                         <span class="sr-only">Download</span>
                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                             <path
                                                 d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
                                         </svg>
                                     </button> --}}
-                                    <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                        <span class="sr-only">Eliminar</span>
-                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                                        <button class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            <span class="sr-only">Eliminar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                <path
+                                                    d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
                         @endforeach
 
 
@@ -218,23 +218,18 @@
 
 
 @push('scripts')
-@if (session()->has('store-modelo'))
+    @if (session()->has('store-modelo'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: '{{ session('store-modelo') }}',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
-
-<script>
-    $( document ).ready(function() {
-        Swal.fire({
-        icon: 'success',
-        title: 'Guardado',
-        text: '{{session("store-modelo")}}',
-        showConfirmButton: true,
-        confirmButtonText: "Cerrar"
-
-        })
-    });
-
-
-</script>
-
-@endif
+                })
+            });
+        </script>
+    @endif
 @endpush

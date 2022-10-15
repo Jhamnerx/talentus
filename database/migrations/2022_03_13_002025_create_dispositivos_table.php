@@ -18,11 +18,13 @@ class CreateDispositivosTable extends Migration
             $table->id();
             $table->string('imei');
             $table->unsignedBigInteger('modelo_id')->nullable();
-            $table->unsignedBigInteger('empresa_id');
             $table->boolean('of_client')->default(false);
-            $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
-            $table->timestamps();
+            $table->unsignedBigInteger('empresa_id');
+            $table->enum('estado', ['VENDIDO', 'STOCK'])->default('VENDIDO');
 
+            $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

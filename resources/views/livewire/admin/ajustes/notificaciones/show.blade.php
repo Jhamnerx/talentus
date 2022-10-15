@@ -1,4 +1,4 @@
-<div class="p-6 space-y-6">
+<div class="p-6 space-y-6 bg-white items-center text-center shadow-xl">
     <!-- General -->
     <section>
         <!-- Notification -->
@@ -7,7 +7,12 @@
             <div class="space-y-3">
 
                 <!-- Start -->
-                <div x-show="open" x-data="{ open: true }">
+
+
+                @foreach (auth()->user()->notifications as $notification)
+                    {{ $notification->data['asunto'] }}
+                @endforeach
+                {{-- <div x-show="open" x-data="{ open: true }">
                     <div
                         class="inline-flex flex-col max-w-lg px-4 py-2 rounded-sm text-sm bg-white shadow-lg border border-slate-200 text-slate-600">
                         <div class="flex w-full justify-between items-start">
@@ -37,10 +42,10 @@
                         </div>
                     </div>
                     <!-- End -->
-                </div>
+                </div> --}}
 
                 <!-- Start -->
-                <div x-show="open" x-data="{ open: true }">
+                {{-- <div x-show="open" x-data="{ open: true }">
                     <div
                         class="inline-flex flex-col max-w-lg px-4 py-2 rounded-sm text-sm bg-white shadow-lg border border-slate-200 text-slate-600">
                         <div class="flex w-full justify-between items-start">
@@ -69,11 +74,11 @@
                             <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">Action -&gt;</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- End -->
 
                 <!-- Start -->
-                <div x-show="open" x-data="{ open: true }">
+                {{-- <div x-show="open" x-data="{ open: true }">
                     <div
                         class="inline-flex flex-col max-w-lg px-4 py-2 rounded-sm text-sm bg-white shadow-lg border border-slate-200 text-slate-600">
                         <div class="flex w-full justify-between items-start">
@@ -102,11 +107,11 @@
                             <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">Action -&gt;</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- End -->
 
                 <!-- Start -->
-                <div x-show="open" x-data="{ open: true }">
+                {{-- <div x-show="open" x-data="{ open: true }">
                     <div
                         class="inline-flex flex-col max-w-lg px-4 py-2 rounded-sm text-sm bg-white shadow-lg border border-slate-200 text-slate-600">
                         <div class="flex w-full justify-between items-start">
@@ -135,7 +140,7 @@
                             <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">Action -&gt;</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- End -->
 
             </div>

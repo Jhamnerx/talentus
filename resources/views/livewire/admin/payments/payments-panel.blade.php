@@ -29,7 +29,9 @@
                                     src="{{ asset('images/transactions-image-04.svg') }}" width="48" height="48"
                                     alt="Transaction 04" />
                             </div>
-                            <div class="text-2xl font-semibold text-emerald-500 mb-1">+${{ $payment->monto }}</div>
+                            <div class="text-2xl font-semibold text-emerald-500 mb-1">
+                                +{{ $payment->divisa == 'PEN' ? 'S/. ' . $payment->monto : '$' . $payment->monto }}
+                            </div>
                             <div class="text-sm font-medium text-slate-800 mb-3">
                                 {{ $payment->cobros->clientes->razon_social }}</div>
                             <div

@@ -84,6 +84,7 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="text-right font-medium text-emerald-500">
+
                                         @if ($payment->divisa == 'PEN')
                                             S/. {{ $payment->monto }}
                                         @else

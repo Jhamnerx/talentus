@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Inicio;
 
 use App\Models\Clientes;
+use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Vehiculos;
 use Carbon\Carbon;
@@ -23,6 +24,10 @@ class Cards extends Component
         $vehiculos_hoy = Vehiculos::whereDate('created_at', Carbon::now())->get();
         $flotas = Flotas::all();
         $flotas_hoy = Flotas::whereDate('created_at', Carbon::now())->get();
+
+
+
+
 
         $totales = [
             'clientes-total' => $clientes->count(),
