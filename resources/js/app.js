@@ -7,6 +7,10 @@ import Alpine from "alpinejs";
 
 window.Alpine = Alpine;
 
+import mask from "@alpinejs/mask";
+
+Alpine.plugin(mask);
+
 Alpine.start();
 
 import Swal from "sweetalert2";
