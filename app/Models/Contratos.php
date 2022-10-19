@@ -81,7 +81,7 @@ class Contratos extends Model
     {
 
         $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
-        $fondo = $plantilla->img_documentos;
+        $fondo = $plantilla->fondo_contrato;
         $sello = $plantilla->img_firma;
         view()->share([
             'contrato' => $this,
@@ -94,6 +94,8 @@ class Contratos extends Model
         $pdf = PDF::loadView('pdf.contrato.pdf');
 
         return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
+
+        // return view('pdf.contrato.pdf');
     }
 
     public function getPDFDataToMail($data)

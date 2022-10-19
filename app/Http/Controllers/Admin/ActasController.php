@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Actas;
 use App\Models\Ciudades;
 use Illuminate\Http\Request;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
+
 class ActasController extends Controller
 {
     /**
@@ -32,7 +33,7 @@ class ActasController extends Controller
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'actas','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        $id = IdGenerator::generate(['table' => 'actas', 'field' => 'numero', 'length' => 5, 'prefix' => ' ']);
 
         return trim($id);
     }

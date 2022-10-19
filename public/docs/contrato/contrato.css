@@ -1,0 +1,97 @@
+body {
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: "Arial, Helvetica, sans-serif";
+    /* background-repeat: no-repeat; */
+    /* background-size: 100%;
+            background-image: url(data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}) */
+}
+
+p {
+    text-align: justify;
+    padding-top: 0rem;
+    padding-bottom: 1rem;
+}
+
+@page {
+    display: block;
+    flex-wrap: wrap;
+    overflow: hidden;
+
+    margin-top: 3.8rem;
+    margin-left: 5rem;
+    margin-right: 2rem;
+    margin-bottom: 4rem;
+}
+
+.contrato {
+    padding-top: 1.5rem;
+    padding-left: 2.1rem;
+    padding-right: 1rem;
+    padding-bottom: 2.6rem;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.tabla-vehiculos {
+    border: 1px solid;
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+.tabla-border td {
+    border: 1px solid;
+}
+
+.tabla-vehiculos-header {
+    font-weight: 700;
+    background-image: none;
+}
+
+.tabla-vehiculos-body {
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+
+.color-table {
+    color: #ffffff;
+    background-color: #052c52;
+}
+
+.sutitulo {
+    font-size: 1.125rem;
+}
+.tabla-ciudad {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0px solid;
+}
+.tabla-ciudad td {
+    padding: 10px;
+}
+
+.tabla-ciudad-header {
+    font-weight: 700;
+    padding: 10px;
+    text-align: center;
+}
+.tabla-ciudad-body {
+    text-align: center;
+
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+
+.u-table-alt-palette-1-light-3 tr:nth-child(even) {
+    color: #111111;
+    background-color: #e9f2fa;
+}
