@@ -80,7 +80,7 @@ class Facturas extends Model
         return $query->where('estado', '=', $this::BORRADOR);
     }
 
-    //GLOBAL SCOPES
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);

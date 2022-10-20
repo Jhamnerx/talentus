@@ -66,8 +66,8 @@
                                     {!! Form::text('nombre', null, [
                                         'id' => 'nombre',
                                         'class' => 'form-input w-full pl-9
-                                                                                                                                                                                                                                                        valid:border-emerald-300
-                                                                                                                                                                                                                                                        required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            valid:border-emerald-300
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     ]) !!}
 
 
@@ -106,7 +106,11 @@
                                 <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente:</label>
                                 <div class="relative">
 
-                                    {!! Form::select('clientes_id', $clientes, null, ['class' => 'form-select w-full pl-9']) !!}
+                                    {!! Form::select('clientes_id', [$flota->clientes_id => $flota->clientes->razon_social], $flota->clientes_id, [
+                                        'class' => 'w-full clientes_id
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pl-3',
+                                        'required',
+                                    ]) !!}
 
 
 
@@ -170,8 +174,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                    focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>
@@ -184,5 +188,50 @@
 @push('scripts')
     <script>
         $('#nombre').caseEnforcer('uppercase');
+
+        $('.clientes_id').select2({
+            placeholder: 'Buscar Cliente',
+            language: "es",
+            selectionCssClass: 'pl-9',
+            minimumInputLength: 2,
+            width: '100%',
+            ajax: {
+                url: '{{ route('search.clientes') }}',
+                dataType: 'json',
+                delay: 250,
+                cache: true,
+                data: function(params) {
+
+                    var query = {
+                        term: params.term,
+                        //type: 'public'
+                    }
+
+                    // Query parameters will be ?search=[term]&type=public
+                    return query;
+                },
+                processResults: function(data, params) {
+
+                    var suggestions = $.map(data.suggestions, function(obj) {
+
+                        obj.id = obj.id || obj.value; // replace pk with your identifier
+                        obj.text = obj.data; // replace pk with your identifier
+
+                        return obj;
+
+                    });
+                    //console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+
+                        results: suggestions,
+
+                    };
+
+                },
+
+
+            }
+        });
     </script>
 @endpush
