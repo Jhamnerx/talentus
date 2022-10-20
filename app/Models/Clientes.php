@@ -15,7 +15,7 @@ class Clientes extends Model
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
-    
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'clientes';
     // SCOPE DE EMPRESA
@@ -23,7 +23,7 @@ class Clientes extends Model
 
     protected static function booted()
     {
-       
+
         //static::addGlobalScope(new EliminadoScope);
         //static::addGlobalScope(new ActiveScope);
     }
@@ -42,38 +42,39 @@ class Clientes extends Model
     }
 
     //relacion uno a muchos
-
     public function facturas()
     {
         return $this->hasMany(Facturas::class, 'clientes_id');
     }
-    //relacion uno a muchos
 
+    //relacion uno a muchos
     public function recibos()
     {
         return $this->hasMany(Recibos::class, 'clientes_id');
     }
 
-    
-    //relacion uno a muchos
 
+    //relacion uno a muchos
     public function contratos()
     {
         return $this->hasMany(Contratos::class, 'clientes_id');
     }
 
-    //relacion uno a muchos
 
+    //relacion uno a muchos
     public function flotas()
     {
         return $this->hasMany(Flotas::class, 'clientes_id');
     }
-    public function flota()
-    {
-        return $this->hasOne(Flotas::class, 'clientes_id');
-    }
-    //Relacion uno a muchos inversa
 
+
+    public function vehiculos()
+    {
+        return $this->hasMany(Vehiculos::class, 'clientes_id');
+    }
+
+
+    //Relacion uno a muchos inversa
     public function empresa()
     {
         return $this->belongsTo(Empresa::class, 'empresa_id')->withoutGlobalScope(EliminadoScope::class);

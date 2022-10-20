@@ -34,9 +34,9 @@ class Vehiculos extends Model
     }
     //Relacion uno a muchos inversa
 
-    public function flota()
+    public function cliente()
     {
-        return $this->belongsTo(Flotas::class, 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class);
     }
     //relacion uno a muchos a modelos
     public function sim_card()

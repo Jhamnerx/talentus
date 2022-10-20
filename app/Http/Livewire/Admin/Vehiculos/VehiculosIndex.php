@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Vehiculos;
 use App\Models\Vehiculos;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class VehiculosIndex extends Component
 {
     use WithPagination;
@@ -20,7 +21,8 @@ class VehiculosIndex extends Component
         'echo:vehiculos,VehiculosImportUpdated' => 'updateVehiculos'
     ];
 
-    public function updateVehiculos(){
+    public function updateVehiculos()
+    {
 
         $this->render();
         $this->dispatchBrowserEvent('vehiculos-import');
@@ -34,19 +36,15 @@ class VehiculosIndex extends Component
         $vehiculos = Vehiculos::whereHas('sim_card', function ($query) {
             $query->where('sim_card', 'LIKE', '%' . $this->search . '%')
                 ->orWhere('operador', 'LIKE', '%' . $this->search . '%');
-            $query->orwhereHas('linea', function ($linea){
-                $linea->where('numero', 'LIKE', '%'. $this->search. '%');
-
+            $query->orwhereHas('linea', function ($linea) {
+                $linea->where('numero', 'LIKE', '%' . $this->search . '%');
             });
-
         })->orwhereHas('flotas', function ($query) {
 
             $query->where('nombre', 'LIKE', '%' . $this->search . '%');
-            $query->orwhereHas('clientes', function ($cliente){
-                $cliente->where('razon_social', 'LIKE', '%'. $this->search. '%');
-
+            $query->orwhereHas('clientes', function ($cliente) {
+                $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%');
             });
-
         })->orwhereHas('dispositivos', function ($query) {
             $query->where('imei', 'LIKE', '%' . $this->search . '%');
         })->orWhere('placa', 'like', '%' . $this->search . '%')
@@ -119,14 +117,22 @@ class VehiculosIndex extends Component
         }
     }
 
-    public function openModalSave(){
+    public function openModalSave()
+    {
 
         $this->emit('openModalSave');
     }
-    
-    public function openModalImport(){
+
+    public function openModalImport()
+    {
 
         $this->emit('openModalImport');
+    }
 
+
+    public function deleteVehiculo(Vehiculos $vehiculo)
+    {
+
+        $this->emit('deleteVehiculo', $vehiculo);
     }
 }

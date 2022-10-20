@@ -73,8 +73,8 @@ class SearchController extends Controller
 
         foreach ($querys as $query) {
             $data[] = [
-                'value' => $query->razon_social,
-                'data' => $query->id,
+                'data' => $query->razon_social,
+                'value' => $query->id,
                 'flotas' => $query->flotas,
 
             ];

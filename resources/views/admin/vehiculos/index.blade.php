@@ -5,6 +5,7 @@
     <!-- Table -->
     @livewire('admin.vehiculos.vehiculos-index')
     @livewire('admin.vehiculos.save-vehiculo')
+    @livewire('admin.vehiculos.delete')
     @livewire('admin.vehiculos.import')
 
 @stop
