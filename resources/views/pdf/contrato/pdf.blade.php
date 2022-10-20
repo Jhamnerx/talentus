@@ -96,7 +96,7 @@
 
 
     {{-- tabla --}}
-    <section class="center-text">
+    <section class="center-text padding-1">
         <div>
             <div>
                 <table class="tabla">
@@ -146,7 +146,7 @@
                 realizar: compra de equipo (…) / alquiler de equipo (…) / cambio de chip (…).<br>
                 <br>
             </p>
-            <p>
+            <p class="padding-4">
                 <b>2.2.- TALENTUS TECHNOLOGY E.I.R.L.</b>&nbsp;no se responsabiliza por los eventuales cortes en la
                 prestación del servicio&nbsp;dentro de la cobertura de la señal contratada, que pueda surgir como
                 consecuencia de la falta de cobertura por parte de la empresa proveedora de comunicación
@@ -543,11 +543,11 @@
             </div>
         </div>
     </section>
-    <section>
+    <section class="padding-2">
         <div>
             <p><b>&nbsp;Estos precios no incluyen IGV.</b>
             </p>
-            <p> No es
+            <p class="padding-6"> No es
                 indispensable la firma del contrato para la aceptación de los términos y
                 condiciones generales, Así mismo estos términos están sujetos a la aceptación
                 tácita con emisión de comprobantes de pago del servicio y/o con sólo contar un
