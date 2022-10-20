@@ -14,14 +14,10 @@ class Lineas extends Model
     protected $guarded = array();
 
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
+        static::addGlobalScope(new EmpresaScope);
     }
 
 
@@ -55,8 +51,6 @@ class Lineas extends Model
         } else {
             return $value;
         }
-        
-        
     }
     public function getDateToSuspendAttribute($value)
     {

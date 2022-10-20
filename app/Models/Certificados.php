@@ -51,16 +51,10 @@ class Certificados extends Model
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
     }
-
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        static::addGlobalScope(new EliminadoScope);
-        //
+        static::addGlobalScope(new EmpresaScope);
     }
 
 

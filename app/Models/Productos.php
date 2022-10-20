@@ -27,15 +27,10 @@ class Productos extends Model
         return $query->where('is_active', $status);
     }
 
-    /**
-     * The "booted" method of the model.
-     *
-     * @return void
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        // static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
 

@@ -22,9 +22,12 @@ class CreateContactoFlotasTable extends Migration
             $table->string('birthday')->nullable();
             $table->string('email')->nullable();
             $table->boolean('is_active')->default(true);
+
             $table->string('descripcion')->nullable();
             $table->text('nota')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable();
 
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
 
             $table->timestamps();

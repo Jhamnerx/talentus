@@ -16,13 +16,10 @@ class Proveedores extends Model
 
     protected $table = 'proveedores';
 
-
-    // SCOPE DE EMPRESA
-
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-       // static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
 

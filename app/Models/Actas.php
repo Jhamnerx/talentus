@@ -20,13 +20,6 @@ class Actas extends Model
 
     protected $table = 'actas';
 
-
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var boolean
-     */
     protected $casts = [
         'sello' => 'boolean',
         'fondo' => 'boolean',
@@ -35,6 +28,15 @@ class Actas extends Model
         'fin_cobertura' => 'date:Y/m/d',
         'eliminado' => 'boolean',
     ];
+
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+
 
     // Scope local de activo
     public function scopeActive($query, $status)
@@ -46,29 +48,19 @@ class Actas extends Model
 
     public function ciudades()
     {
-        return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Ciudades::class, 'ciudades_id');
     }
 
     public function vehiculos()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
-    }
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new EliminadoScope);
-        //
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
     }
 
 
     public function getPDFData()
     {
 
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
+        $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([

@@ -16,11 +16,18 @@ class Reportes extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'reportes';
 
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
     //relacion uno a muchos
 
     public function vehiculos()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
     }
 
 
@@ -39,15 +46,5 @@ class Reportes extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
-    protected static function booted()
-    {
-        static::addGlobalScope(new EliminadoScope);
-        //
     }
 }

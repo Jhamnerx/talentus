@@ -22,47 +22,48 @@ class Vehiculos extends Model
     }
 
 
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        //static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
-    //Relacion uno a muchos inversa
 
+    //Relacion uno a muchos inversa
     public function cliente()
     {
         return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class);
     }
+
     //relacion uno a muchos a modelos
     public function sim_card()
     {
         return $this->belongsTo(SimCard::class, 'sim_card_id')->withoutGlobalScope(EliminadoScope::class);
     }
+
     //relacion uno a muchos a dispositivos
     public function dispositivos()
     {
         return $this->belongsTo(Dispositivos::class);
     }
+
     //relacion uno a muchos a reportes
     public function reportes()
     {
         return $this->hasMany(Reportes::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function actas()
     {
         return $this->hasMany(Actas::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function certificados()
     {
         return $this->hasMany(Certificados::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function cert_velocimetros()
     {
@@ -70,30 +71,23 @@ class Vehiculos extends Model
     }
 
     //Relacion muchos a ,muchos
-
     public function detalle_contrato()
     {
-
-
         return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);;
     }
 
-    //Relacion muchos a ,muchos
 
+    //Relacion muchos a ,muchos
     public function contratos()
     {
-
         return $this->belongsToMany(Contratos::class);
     }
 
-
     //relacion uno a muchos
-
     public function cobros()
     {
         return $this->hasMany(Cobros::class, 'vehiculos_id');
     }
-
 
     public function flotas()
     {

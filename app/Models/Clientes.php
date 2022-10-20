@@ -21,11 +21,10 @@ class Clientes extends Model
     // SCOPE DE EMPRESA
 
 
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-
-        //static::addGlobalScope(new EliminadoScope);
-        //static::addGlobalScope(new ActiveScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
 

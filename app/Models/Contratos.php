@@ -23,27 +23,23 @@ class Contratos extends Model
         'eliminado' => 'boolean',
     ];
 
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
     //Relacion uno a muchos inversa
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id');
     }
 
 
     public function ciudades()
     {
-        return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Ciudades::class, 'ciudades_id');
     }
 
     //relacion uno a muchos
@@ -80,7 +76,7 @@ class Contratos extends Model
     public function getPDFData()
     {
 
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
+        $plantilla = plantilla::first();
         $fondo = $plantilla->fondo_contrato;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -100,9 +96,7 @@ class Contratos extends Model
 
     public function getPDFDataToMail($data)
     {
-
         $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
-
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -110,7 +104,6 @@ class Contratos extends Model
             'plantilla' => $plantilla,
             'fondo' => $fondo,
             'sello' => $sello,
-
         ]);
 
         $pdf = PDF::loadView('pdf.contrato.pdf');

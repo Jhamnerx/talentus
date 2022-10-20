@@ -30,10 +30,10 @@ class Contactos extends Model
      *
      * eliminados
      */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        //static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
     //Relacion uno a muchos inversa
 

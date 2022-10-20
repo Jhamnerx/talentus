@@ -15,15 +15,11 @@ class Flotas extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'flotas';
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        //static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
     public function scopeActive($query)

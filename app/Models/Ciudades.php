@@ -15,7 +15,7 @@ class Ciudades extends Model
 
     protected $table = 'ciudades';
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    //relacion uno a muchos
+
 
     // Scope local de activo
     public function scopeActive($query, $status)
