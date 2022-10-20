@@ -29,7 +29,7 @@ class Flotas extends Model
     public function scopeActive($query)
     {
         $query->where('is_active', 1);
-    }    
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -38,9 +38,13 @@ class Flotas extends Model
     }
     //relacion uno a muchos
 
+    // public function vehiculos()
+    // {
+    //     return $this->hasMany(Vehiculos::class, 'flotas_id');
+    // }
     public function vehiculos()
     {
-        return $this->hasMany(Vehiculos::class, 'flotas_id');
+        return $this->belongsToMany(Vehiculos::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id');
     }
 
 

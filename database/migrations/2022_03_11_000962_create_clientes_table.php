@@ -25,7 +25,6 @@ class CreateClientesTable extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->softDeletes();
-            
         });
     }
 

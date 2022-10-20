@@ -34,7 +34,7 @@ class Vehiculos extends Model
     }
     //Relacion uno a muchos inversa
 
-    public function flotas()
+    public function flota()
     {
         return $this->belongsTo(Flotas::class, 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
     }
@@ -92,5 +92,11 @@ class Vehiculos extends Model
     public function cobros()
     {
         return $this->hasMany(Cobros::class, 'vehiculos_id');
+    }
+
+
+    public function flotas()
+    {
+        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
     }
 }

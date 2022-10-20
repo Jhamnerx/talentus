@@ -17,11 +17,11 @@ class CreateFlotasTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->unsignedBigInteger('clientes_id')->nullable();
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->string('descripcion')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
