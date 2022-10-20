@@ -98,15 +98,14 @@
                                 </p>
                             @enderror
                         </div>
-                        <div class="col-span-12 sm:col-span-12">
+                        <div class="col-span-12 sm:col-span-12 selectCliente" wire:ignore>
 
-                            <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente:</label>
+                            <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente: <span
+                                    class="text-rose-500">*</span></label>
+
                             <div class="relative">
-                                <input wire:model="nombre_cliente" placeholder="BUSCAR CLIENTE" id="cliente"
-                                    class="form-input w-full pl-9" type="text" />
-
-                                <input type="hidden" id="clientes_id" name="clientes_id" wire:model="clientes_id">
-
+                                <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
+                                    class="clientes_id w-full" required></select>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
@@ -122,6 +121,9 @@
                                     </svg>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-span-12">
+
                             @error('clientes_id')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
@@ -182,9 +184,82 @@
     <!-- End -->
 
 </div>
-
 @push('scripts')
     <script>
         $('#nombre').caseEnforcer('uppercase');
+    </script>
+    <script>
+        $('.clientes_id').select2({
+            placeholder: 'Selecciona cliente',
+            selectionCssClass: 'pl-9',
+            language: "es",
+            //tags: true,
+            width: '100%',
+            ajax: {
+                url: '{{ route('search.clientes') }}',
+                dataType: 'json',
+                delay: 250,
+                cache: true,
+                data: function(params) {
+
+                    var query = {
+                        term: params.term,
+                        //type: 'public'
+                    }
+
+                    return query;
+                },
+                processResults: function(data, params) {
+
+                    var suggestions = $.map(data.suggestions, function(obj) {
+
+                        obj.id = obj.id || obj.value; // replace pk with your identifier
+                        obj.text = obj.data; // replace pk with your identifier
+
+                        return obj;
+
+                    });
+                    //console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
+                    return {
+
+                        results: suggestions,
+
+                    };
+
+                },
+
+
+            },
+            minimumInputLength: 1,
+            templateResult: formatCliente,
+            // templateSelection: formatSelectioncliente,
+        });
+
+        function formatCliente(cliente) {
+            if (cliente.loading) {
+                return cliente.text;
+            }
+
+            var $container = $(
+
+                "<div class='select2-result-clientes clearfix'>" +
+                "<div class='select2-result-clientes__meta'>" +
+                "<div class='select2-result-clientes__title'></div>" +
+                "<div class='select2-result-clientes__description'></div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-clientes__title").text(cliente.text);
+            $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
+            // $container.find(".select2-result-clientes__stargazers").append(repo.stargazers_count + " Stars");
+
+            return $container;
+        }
+        $('.clientes_id').on('change', function() {
+
+            @this.set('clientes_id', this.value)
+        })
     </script>
 @endpush
