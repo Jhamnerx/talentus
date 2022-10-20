@@ -10,7 +10,7 @@ use Livewire\Component;
 
 class SaveVehiculo extends Component
 {
-    public $data;
+    public $flotas;
 
 
     public $clientes_id;
@@ -25,17 +25,6 @@ class SaveVehiculo extends Component
 
     public function mount()
     {
-        $this->empresa_id = session('empresa');
-
-        $querys = Flotas::all();
-
-        $flotas = [];
-        //$data = [];
-        foreach ($querys as $query) {
-
-            $flotas[$query->id] = $query->nombre;
-        }
-        $this->data = $flotas;
     }
 
     public function render()
@@ -85,9 +74,9 @@ class SaveVehiculo extends Component
         $this->modalOpen = true;
     }
 
-    public function updatedClientesId($cliente)
+    public function updatedClientesId($value)
     {
 
-        dd($cliente);
+        $this->flotas = Clientes::find($value)->flotas()->get();
     }
 }

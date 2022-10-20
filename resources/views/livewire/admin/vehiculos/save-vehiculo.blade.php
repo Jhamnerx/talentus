@@ -247,7 +247,7 @@
                                 </div>
                             </div>
                         </div>
-                        {{ $clientes_id }}
+
                         <div class="col-span-12 sm:col-span-12 selectCliente" wire:ignore>
 
                             <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente: <span
@@ -256,10 +256,6 @@
 
                             <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
                                 class="clientes_id w-full" required></select>
-
-
-
-
 
 
                         </div>
@@ -271,6 +267,28 @@
                                 </p>
                             @enderror
                         </div>
+                        @if ($flotas)
+                            <div class="col-span-12 sm:col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="clientes_id">Flotas:</label>
+
+                                @foreach ($flotas as $flota)
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <span class="text-sm mr-2">{{ $flota->nombre }} </span>
+                                            {!! Form::checkbox('flotas[]', $flota->id, null, ['class' => 'form-checkbox']) !!}
+
+                                        </label>
+                                    </div>
+                                @endforeach
+
+                                @error('tags')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                        @endif
+
 
                         <div class="col-span-6 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
