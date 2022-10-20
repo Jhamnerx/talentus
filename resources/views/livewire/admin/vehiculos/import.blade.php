@@ -94,6 +94,9 @@
 
 
                     </div>
+                    <div wire:loading wire:target="file">
+                        <span class="text-emerald-500">Cargando...</span>
+                    </div>
                     @error('file')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}

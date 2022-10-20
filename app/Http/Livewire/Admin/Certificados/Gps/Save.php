@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Vinkla\Hashids\Facades\Hashids;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -33,13 +33,12 @@ class Save extends Component
         $this->openModalSave = true;
         $this->numero = $this->setNextSequenceNumber();
         $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
-
     }
 
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'certificados','field'=>'numero', 'length' => 5, 'prefix' => ' ']);
+        $id = IdGenerator::generate(['table' => 'certificados', 'field' => 'numero', 'length' => 5, 'prefix' => ' ']);
 
         return trim($id);
     }
@@ -80,7 +79,6 @@ class Save extends Component
         $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculos->placa]);
         $this->closeModal();
         $this->emit('updateTable');
-
     }
 
     public function updated($label)
