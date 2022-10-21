@@ -15,8 +15,8 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 class RecibosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithCustomValueBinder, ShouldAutoSize, WithStyles, ShouldQueue
 {
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     use Exportable;
     public function styles(Worksheet $sheet)
     {
@@ -48,4 +48,3 @@ class RecibosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder imp
         ]);
     }
 }
-

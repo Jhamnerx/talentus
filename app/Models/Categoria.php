@@ -21,10 +21,10 @@ class Categoria extends Model
     protected $table = 'categorias';
 
     //GLOBAL SCOPE EMPRESA
-    protected static function booted()
-    {
-        static::addGlobalScope(new EmpresaScope);
-    }
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new EmpresaScope);
+    // }
 
     // Scope local de activo
     public function scopeActive($query, $status)

@@ -69,7 +69,7 @@
                                 {!! Form::text('nombre', null, [
                                     'placeholder' => 'Escribe el nombre',
                                     'class' => 'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                                                                                                                                                                                                                                                                                                                                                            peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                            peer',
                                     'required',
                                 ]) !!}
 
@@ -89,8 +89,8 @@
 
                                 {!! Form::select('clientes_id', [], $contacto->clientes_id, [
                                     'class' => 'pr-6
-                                                                                                                                                                                                                                                                                                                                                                                            clientes-ajax
-                                                                                                                                                                                                                                                                                                                                                                                            w-full',
+                                                                                                                                                                                                                                                                                                                                                                                                                            clientes-ajax
+                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
                                 ]) !!}
 
 
@@ -119,7 +119,7 @@
                                     {!! Form::text('telefono', null, [
                                         'placeholder' => '987654321',
                                         'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full pl-12',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                w-full pl-12',
                                         'maxlength' => '9',
                                     ]) !!}
 
@@ -148,7 +148,7 @@
                             <div class="col-span-12 sm:col-span-6">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
                                 {!! Form::textarea('descripcion', null, [
                                     'placeholder' => 'Escribe la direccion...',
@@ -165,8 +165,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                    focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>
@@ -200,16 +200,16 @@
                 },
                 processResults: function(data, params) {
 
-                    // console.log(data.suggestions);
                     var suggestions = $.map(data.suggestions, function(obj) {
 
-                        obj.text = obj.id || obj.value;
-                        obj.id = obj.data;
+                        obj.id = obj.id || obj.value; // replace pk with your identifier
+                        obj.text = obj.data; // replace pk with your identifier
 
                         return obj;
 
                     });
-
+                    //console.log(data);
+                    // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
 
                         results: suggestions,

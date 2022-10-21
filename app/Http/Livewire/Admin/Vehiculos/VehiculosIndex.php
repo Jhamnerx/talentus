@@ -39,12 +39,9 @@ class VehiculosIndex extends Component
             $query->orwhereHas('linea', function ($linea) {
                 $linea->where('numero', 'LIKE', '%' . $this->search . '%');
             });
-        })->orwhereHas('flotas', function ($query) {
+        })->orwhereHas('cliente', function ($query) {
 
-            $query->where('nombre', 'LIKE', '%' . $this->search . '%');
-            $query->orwhereHas('clientes', function ($cliente) {
-                $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%');
-            });
+            $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
         })->orwhereHas('dispositivos', function ($query) {
             $query->where('imei', 'LIKE', '%' . $this->search . '%');
         })->orWhere('placa', 'like', '%' . $this->search . '%')

@@ -67,7 +67,7 @@ class SearchController extends Controller
         // return $array;
 
         $term = $request->get('term');
-        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
 
         $data = [];
 
@@ -109,7 +109,7 @@ class SearchController extends Controller
     {
 
         $term = $request->get('term');
-        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
 
         $data = [];
 

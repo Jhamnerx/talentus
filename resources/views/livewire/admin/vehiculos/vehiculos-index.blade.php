@@ -303,7 +303,7 @@
                                         @if ($vehiculo->cliente)
                                             <div class="font-sm text-slate-900">
                                                 <p class="text-xs">
-                                                    {{ $vehiculo->cliente->razon_social }}
+                                                    {{ $vehiculo->cliente->numero_documento }}
                                                 </p>
 
                                             </div>
