@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Contratos;
 
+use App\Http\Requests\ContratosRequest;
 use App\Models\Clientes;
+use App\Models\Contratos;
 use App\Models\Vehiculos;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -63,5 +65,29 @@ class Save extends Component
     public function veritems()
     {
         dd($this->items->all());
+    }
+
+
+    public function save()
+    {
+        $request = new ContratosRequest();
+
+        $validate = $this->validate($request->rules(), $request->messages());
+        $contrato = Contratos::create([
+            'clientes_id' => $validate["clientes_id"],
+            'fecha' => $validate["fecha"],
+            'sello' => $validate["sello"],
+            'fondo' => $validate["fondo"],
+            'ciudades_id' => $validate["ciudades_id"],
+        ]);
+
+        Contratos::createItems($contrato, $validate["items"]);
+    }
+
+    public function updated($field)
+    {
+
+        $request = new ContratosRequest();
+        $this->validateOnly($field, $request->rules(), $request->messages());
     }
 }

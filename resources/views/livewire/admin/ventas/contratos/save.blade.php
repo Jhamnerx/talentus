@@ -114,8 +114,8 @@
                         <!-- Start -->
                         <div class="flex items-center" x-data="{ checked: true }">
                             <div class="form-switch">
-                                <input value="1" wire:model="fondo" name="fondo" type="checkbox" id="fondo-1"
-                                    class="sr-only fondo" x-model="checked" />
+                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only fondo"
+                                    x-model="checked" />
                                 <label class="bg-slate-400" for="fondo-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                     <span class="sr-only">fondo switch</span>
@@ -126,13 +126,14 @@
                         </div>
                         <!-- End -->
                     </div>
+                    {{ $fondo }}
                     <div class="m-2 w-full">
                         <label for="sello">Sello:</label>
                         <!-- Start -->
                         <div class="flex items-center" x-data="{ checked: true }">
                             <div class="form-switch">
-                                <input value="1" wire:model="sello" name="sello" type="checkbox" id="sello-1"
-                                    class="sr-only" x-model="checked" />
+                                <input wire:model="sello" name="sello" type="checkbox" id="sello-1" class="sr-only"
+                                    x-model="checked" />
                                 <label class="bg-slate-400" for="sello-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                     <span class="sr-only">sello switch</span>
@@ -145,7 +146,7 @@
                     </div>
                 </div>
             </div>
-            {{ $items }}
+
 
 
             <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between">
@@ -153,6 +154,7 @@
                     <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
                         Lista de Vehiculos
                     </h2>
+
                     <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
                         <div class="mt-2 flex items-center text-sm text-gray-500">
                             <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
@@ -213,10 +215,7 @@
                     </svg>
                 </div>
                 <div class="detallesvehiculos">
-                    {{-- {{ json_encode($items->all()) }} --}}
-                    {{-- @foreach ($items->all() as $placa => $vehiculo)
-                        {{ json_encode($vehiculo['placa']) }}
-                    @endforeach --}}
+
                     @if ($items->count() > 0)
                         @foreach ($items->all() as $placa => $vehiculo)
                             <div class="flex -mx-1 px-2 py-4 border-b box-border">
@@ -232,6 +231,13 @@
                                     <input wire:model="items.{{ $placa }}.plan"
                                         class="form-input w-16 md:w-28 lg:w-28" type="text">
 
+                                    @if ($errors->has('items.' . $placa . '.plan'))
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('items.' . $placa . '.plan') }}
+                                        </p>
+                                    @endif
+
+
                                 </div>
 
                                 <div class="flex-auto xl:w-20 text-center">
@@ -240,6 +246,8 @@
                                         class="text-red-500 hover:text-red-600 text-sm font-semibold">Eliminar</button>
                                 </div>
 
+
+
                             </div>
                         @endforeach
                     @else
@@ -247,8 +255,14 @@
                             <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
                                 <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
+                                @if ($errors->has('items'))
+                                    <p class="mt-2  text-pink-600 text-sm">
+                                        {{ $errors->first('items') }}
+                                    </p>
+                                @endif
 
                             </div>
+
                         </div>
 
                     @endif
@@ -276,13 +290,10 @@
             </div>
         </div>
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
-            {!! Form::submit('GUARDAR', [
-                'class' => 'btnGuardarContrato cursor-pointer btn bg-emerald-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            hover:bg-emerald-600
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
-            ]) !!}
+
+            <button class="btnGuardarContrato cursor-pointer btn bg-emerald-500 hover:bg-emerald-600 text-white"
+                wire:click.prevent="save">GUARDAR</button>
+
 
         </div>
     </div>

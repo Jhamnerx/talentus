@@ -64,6 +64,8 @@ class Contratos extends Model
 
     public static function createItems($contrato, $contratoItems)
     {
+
+
         foreach ($contratoItems as $contratoItem) {
 
             $contratoItem['contratos_id'] = $contrato->id;

@@ -23,12 +23,20 @@ class ContratosRequest extends FormRequest
      */
     public function rules()
     {
-        $contrato = $this->route()->parameter('contrato');
+        // $contrato = $this->route()->parameter('contrato');
 
         $rules = [
             'clientes_id' => 'required',
             'fecha' => 'required',
             'ciudades_id' => 'required',
+            'items' => 'array|between:1,30',
+            'items.*.plan' => 'required|integer',
+            'items.*.placa' => 'required',
+            'items.*.vehiculos_id' => 'required',
+            'sello' => 'boolean',
+            'fondo' => 'boolean',
+
+
         ];
 
         return $rules;
@@ -42,6 +50,10 @@ class ContratosRequest extends FormRequest
             'clientes_id.required' => 'Debes Seleccionar un Cliente',
             'fecha.required' => 'Selecciona una fecha',
             'ciudades_id.required' => 'Debe seleccionar una ciudad',
+            'items.*.plan.required' => 'Ingresa un plan valido',
+            'items.*.plan.integer' => 'No puedes ingresar letras aqui',
+            'items.array' => 'Ingresa como minimo un vehiculo',
+            'items.between' => 'Ingresa como minimo un vehiculo'
         ];
 
         return $messages;
