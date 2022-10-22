@@ -33,7 +33,13 @@ class ItemsVehiculo extends Component
     }
 
 
+    public function agregarVehiculo(Vehiculos $vehiculo)
+    {
 
+        $this->emit('addVehiculo', $vehiculo);
+
+        //dd($vehiculo);
+    }
 
     // public function addVehiculo(Vehiculos $vehiculo)
     // {

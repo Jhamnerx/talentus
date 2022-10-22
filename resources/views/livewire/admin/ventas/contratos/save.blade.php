@@ -145,6 +145,7 @@
                     </div>
                 </div>
             </div>
+            {{ $items }}
 
 
             <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between">
@@ -211,45 +212,63 @@
                         <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
                     </svg>
                 </div>
-                <div class="detallesvehiculos" wire:ignore>
-
-                    @if (!empty($detalles))
-                        @foreach ($detalles as $detalle)
-                            <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila{{ $loop->index }}"
-                                idvehiculo="{{ $detalle->vehiculos->id }}">
+                <div class="detallesvehiculos">
+                    {{-- {{ json_encode($items->all()) }} --}}
+                    {{-- @foreach ($items->all() as $placa => $vehiculo)
+                        {{ json_encode($vehiculo['placa']) }}
+                    @endforeach --}}
+                    @if ($items->count() > 0)
+                        @foreach ($items->all() as $placa => $vehiculo)
+                            <div class="flex -mx-1 px-2 py-4 border-b box-border">
 
                                 <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
-                                    <p class="text-gray-800 xs:text-base">{{ $detalle->vehiculos->placa }}</p>
-                                    <input type="hidden" class="idvehiculo hidden"
-                                        idvehiculo="{{ $detalle->vehiculos->id }}"
-                                        name="items[{{ $loop->index }}][vehiculos_id]"
-                                        value="{{ $detalle->vehiculos->id }}">
+                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
 
                                 </div>
 
                                 <div class="flex-auto xl:w-28 text-center">
-                                    <input class="form-input w-16 md:w-28 lg:w-28" type="text"
-                                        name="items[{{ $loop->index }}][plan]" value="{{ $detalle->plan }}">
+
+                                    <input wire:model="items.{{ $placa }}.plan"
+                                        class="form-input w-16 md:w-28 lg:w-28" type="text">
+
                                 </div>
+
                                 <div class="flex-auto xl:w-20 text-center">
                                     <button type="button"
-                                        class="text-red-500 hover:text-red-600 text-sm font-semibold"
-                                        onclick="eliminarDetalleVehiculos({{ $loop->index }})">Eliminar</button>
+                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')"
+                                        class="text-red-500 hover:text-red-600 text-sm font-semibold">Eliminar</button>
                                 </div>
+
                             </div>
                         @endforeach
                     @else
+                        <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
+                            <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+
+                                <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
+
+                            </div>
+                        </div>
+
                     @endif
 
 
 
 
+
                 </div>
+
                 <button type="button" @click.stop="$dispatch('vehiculosPanelOpen', true)"
                     class="btnAgregarVehiculo mt-6 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded shadow-sm"
                     wire:click.prevent="openPanelVehiculos" aria-controls="basic-modal">
                     Añadir Vehiculo
+                </button>
+
+                <button type="button"
+                    class=" mt-6 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded shadow-sm"
+                    wire:click.prevent="veritems" aria-controls="basic-modal">
+                    ver
                 </button>
 
                 <div class="py-3 w-20 text-center">
@@ -259,10 +278,10 @@
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
             {!! Form::submit('GUARDAR', [
                 'class' => 'btnGuardarContrato cursor-pointer btn bg-emerald-500
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            hover:bg-emerald-600
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            hover:bg-emerald-600
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:outline-none
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
             ]) !!}
 
         </div>
@@ -278,99 +297,10 @@
 
 @section('js')
     <script>
-        window.addEventListener('vehiculo-add', event => {
-            console.log(event.detail.vehiculo);
-        })
-
         var estado = $(".fondo").checked = true | false;
     </script>
 
     <script>
-        function agregarVehiculo(vehiculo) {
-
-            //console.log(vehiculo.placa);
-
-            var plan = 30;
-
-            if (localStorage.getItem("listaVehiculosContrato") == null) {
-
-                listado = [];
-
-            } else {
-
-                var listaVehiculosContrato = JSON.parse(localStorage.getItem("listaVehiculosContrato"));
-
-                for (var i = 0; i < listaVehiculosContrato.length; i++) {
-
-                    if (listaVehiculosContrato[i] == vehiculo.id) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Ya existe',
-                            text: 'El vehiculo ya esta agregado',
-                            showConfirmButton: true,
-                            confirmButtonColor: "#DD6B55",
-                            confirmButtonText: "Cerrar"
-                        })
-                        return;
-                    }
-                }
-
-                //listado.concat(localStorage.getItem("listaVehiculosContrato"));
-            }
-
-            listado.push(
-
-                vehiculo.id
-            );
-
-            localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
-            addAlert();
-
-            /**
-             * AGREGAR VEHICULO
-             */
-            var fila = '<div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila' + cont + '" idvehiculo="' +
-                vehiculo.id + '">' +
-                '<div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-left">' +
-                '<p class="text-gray-800 xs:text-base">' + vehiculo.placa + '</p>' +
-                '<input type="hidden" class="idvehiculo" idvehiculo="' + vehiculo.id + '" name="items[' + cont +
-                '][vehiculos_id]" value="' + vehiculo.id + '">' +
-                '</div>' +
-                '<div class="flex-auto xl:w-28 text-left">' +
-                '<input class="form-input w-16 md:w-28 lg:w-28" type="number" name="items[' + cont + '][plan]" value="' +
-                plan + '">' +
-                '</div>' +
-                '<div class="flex-auto xl:w-20 text-center">' +
-
-                '<button type="button" class="text-red-500 hover:text-red-600 text-sm font-semibold" onclick="eliminarDetalleVehiculos(' +
-                cont + ')">Eliminar</button>' +
-                '</div>' +
-                '</div>';
-
-
-            cont++;
-            detalles = detalles + 1;
-            $('.detallesvehiculos').append(fila);
-            evaluar();
-
-        }
-
-        $(".btnAgregarVehiculo").on("click", function() {
-
-            //localStorage.removeItem("listaVehiculosContrato");
-
-        })
-
-
-        function evaluar() {
-            if (detalles > 0) {
-                $(".btnGuardarContrato").show();
-            } else {
-                $(".btnGuardarContrato").hide();
-                cont = 0;
-            }
-        }
-
         function addAlert() {
             iziToast.success({
                 position: 'topRight',

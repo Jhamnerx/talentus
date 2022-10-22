@@ -113,8 +113,8 @@
                                                         <div class="m-3 text-center">
 
                                                             <button type="button"
-                                                                class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm"
-                                                                onclick="agregarVehiculo({{ json_encode($vehiculo) }})">
+                                                                wire:click.prevent="agregarVehiculo({{ $vehiculo->id }})"
+                                                                class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
                                                                 Añadir
                                                             </button>
 

