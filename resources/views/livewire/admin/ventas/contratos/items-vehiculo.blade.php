@@ -70,7 +70,21 @@
                             <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
                         </svg>
                     </div>
-                    <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3">
+
+
+
+                    <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3 text-center">
+
+                        @if ($cliente)
+                            <input wire:model='search' class="form-input pl-9 focus:border-slate-300" type="search"
+                                placeholder="Buscar contrato…" />
+                        @endif
+
+
+
+
+
+
 
                         <div class="overflow-x-auto">
                             <table class="table-auto w-full" @click.stop="$dispatch('vehiculosPanelOpen', true)">
@@ -93,43 +107,43 @@
                                     </tr>
                                 </thead>
                                 <tbody class="text-sm divide-y divide-slate-200 border-b border-slate-200">
-                                    @if ($cliente)
-                                        @if ($cliente->vehiculos->count())
-                                            @foreach ($cliente->vehiculos as $vehiculo)
-                                                <tr>
-                                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                        <div class="font-medium text-blue-500 text-center">
-                                                            {{ $vehiculo->id }}
-                                                        </div>
-                                                    </td>
-                                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                        <div class="font-medium text-blue-500 text-center">
-                                                            {{ $vehiculo->placa }}
-                                                        </div>
-                                                    </td>
 
-                                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if ($vehiculos)
+                                        @foreach ($vehiculos as $vehiculo)
+                                            <tr>
+                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-medium text-blue-500 text-center">
+                                                        {{ $vehiculo->id }}
+                                                    </div>
+                                                </td>
+                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-medium text-blue-500 text-center">
+                                                        {{ $vehiculo->placa }}
+                                                    </div>
+                                                </td>
 
-                                                        <div class="m-3 text-center">
+                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                                            <button type="button"
-                                                                wire:click.prevent="agregarVehiculo({{ $vehiculo->id }})"
-                                                                class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
-                                                                Añadir
-                                                            </button>
+                                                    <div class="m-3 text-center">
 
-                                                        </div>
+                                                        <button type="button"
+                                                            wire:click.prevent="agregarVehiculo({{ $vehiculo->id }})"
+                                                            class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
+                                                            Añadir
+                                                        </button>
 
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @else
-                                            <td colspan="10"
-                                                class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                                <div class="text-center">No hay Registros</div>
-                                            </td>
-                                        @endif
+                                                    </div>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <td colspan="10"
+                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                            <div class="text-center">No hay Registros</div>
+                                        </td>
                                     @endif
+
 
 
                                 </tbody>
