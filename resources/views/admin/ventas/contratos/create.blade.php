@@ -43,9 +43,9 @@
 
             <div class="mt-5 md:mt-0 md:col-span-3 col-span-3 mx-2 md:mx-6">
 
-                {!! Form::open(['route' => 'admin.ventas.contratos.store', 'autocomplete' => 'off', 'files' => 'true']) !!}
+
                 @livewire('admin.ventas.contratos.save')
-                {!! Form::close() !!}
+
             </div>
         </div>
     </div>

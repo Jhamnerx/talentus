@@ -48,12 +48,20 @@ class Save extends Component
 
     public function addVehiculo(Vehiculos $vehiculo)
     {
+        if (array_key_exists($vehiculo->placa, $this->items->all())) {
 
-        $this->items[$vehiculo->placa] = [
-            'vehiculos_id' => $vehiculo->id,
-            'placa' => $vehiculo->placa,
-            'plan' => 30
-        ];
+            $this->dispatchBrowserEvent('error-vehiculo', ['vehiculo' => $vehiculo]);
+        } else {
+
+
+            $this->dispatchBrowserEvent('add-vehiculo', ['vehiculo' => $vehiculo]);
+
+            $this->items[$vehiculo->placa] = [
+                'vehiculos_id' => $vehiculo->id,
+                'placa' => $vehiculo->placa,
+                'plan' => 30
+            ];
+        }
     }
 
     public function eliminarVehiculo($key)
@@ -64,7 +72,8 @@ class Save extends Component
 
     public function veritems()
     {
-        dd($this->items->all());
+
+        dd(array_key_exists('M7N-710', $this->items->all()));
     }
 
 
@@ -82,6 +91,9 @@ class Save extends Component
         ]);
 
         Contratos::createItems($contrato, $validate["items"]);
+
+
+        return redirect()->route('admin.ventas.contratos.index')->with('store', 'El contrato de guardo con exito');
     }
 
     public function updated($field)

@@ -312,34 +312,34 @@
     </script>
 
     <script>
-        function addAlert() {
+        window.addEventListener('add-vehiculo', event => {
+            addAlert(event.detail.vehiculo.placa);
+        })
+
+        window.addEventListener('error-vehiculo', event => {
+            errorAdd(event.detail.vehiculo.placa);
+        })
+
+        function addAlert(placa) {
+            console.log(placa);
             iziToast.success({
                 position: 'topRight',
                 title: 'AGREGADO',
-                message: 'Añadiste el vehiculo',
+                message: 'Añadiste el vehiculo ' + placa,
+                timeout: 1000,
             });
         }
 
-        function eliminarDetalleVehiculos(indice) {
-            $("#fila" + indice).remove();
-            detalles = detalles - 1;
-            evaluar();
-            var idVehiculo = $(".filas");
+        function errorAdd(placa) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ya existe',
+                text: 'El vehiculo ' + placa + ' ya esta agregado',
+                showConfirmButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Cerrar"
 
-            listado = [];
-
-            console.log(idVehiculo.length)
-
-            // if (idVehiculo.length != 0) {
-            for (var i = 0; i < idVehiculo.length; i++) {
-
-                var idVehiculoArray = parseInt($(idVehiculo[i]).attr("idvehiculo"));
-
-                listado.push(idVehiculoArray);
-            }
-
-            localStorage.setItem("listaVehiculosContrato", JSON.stringify(listado));
-            //}
+            })
         }
     </script>
     <script>
