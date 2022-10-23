@@ -27,17 +27,30 @@ class Edit extends Component
         'contrato.fecha' => 'required',
         'contrato.sello' => 'boolean',
         'contrato.fondo' => 'boolean',
+        'items' => 'array|between:1,100',
+        'items.*.plan' => 'required|integer',
+        'items.*.placa' => 'required',
+        'items.*.vehiculos_id' => 'required',
+    ];
 
+    protected $messages = [
+        'contrato.clientes_id.required' => 'Debes Seleccionar un Cliente',
+        'contrato.fecha.required' => 'Selecciona una fecha',
+        'ciudades_id.required' => 'Debe seleccionar una ciudad',
+        'items.*.plan.required' => 'Ingresa un plan valido',
+        'items.*.plan.integer' => 'No puedes ingresar letras aqui',
+        'items.array' => 'Ingresa como minimo un vehiculo',
+        'items.between' => 'Ingresa como minimo un vehiculo'
     ];
 
     public function mount()
     {
         $this->items = collect();
-        foreach ($this->contrato->vehiculos as $vehiculo) {
-            $this->items[$vehiculo->placa] = [
-                'vehiculos_id' => $vehiculo->id,
-                'placa' => $vehiculo->placa,
-                'plan' => 30
+        foreach ($this->contrato->detalle as $detalle) {
+            $this->items[$detalle->vehiculos->placa] = [
+                'vehiculos_id' => $detalle->vehiculos->id,
+                'placa' => $detalle->vehiculos->placa,
+                'plan' => $detalle->plan
             ];
         }
     }
@@ -88,10 +101,24 @@ class Edit extends Component
 
         dd(array_key_exists('M7N-710', $this->items->all()));
     }
-    // public function updated($field)
-    // {
 
-    //     $request = new ContratosRequest();
-    //     $this->validateOnly($field, $request->rules(), $request->messages());
-    // }
+
+
+    public function updated($field)
+    {
+        $this->validateOnly($field);
+    }
+    public function save()
+    {
+
+        $this->validate();
+
+        $this->contrato->save();
+
+        $this->contrato->detalle()->delete();
+
+        Contratos::createItems($this->contrato, $this->items);
+
+        return redirect()->route('admin.ventas.contratos.index')->with('update', 'El contrato de actualizo con exito');
+    }
 }

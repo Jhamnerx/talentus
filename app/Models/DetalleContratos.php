@@ -17,8 +17,6 @@ class DetalleContratos extends Model
 
     public function vehiculos()
     {
-
-
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
     }
 

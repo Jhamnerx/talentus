@@ -87,7 +87,7 @@
                         $contrato->ciudades_id,
                         [
                             'class' => 'form-select w-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        pl-9 ciudades',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9 ciudades',
                         ],
                     ) !!}
 
@@ -160,7 +160,7 @@
                     </div>
                 </div>
             </div>
-            {{ $items }}
+            {{-- {{ $items }} --}}
 
 
             <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between">
@@ -198,7 +198,7 @@
                 </div>
 
             </div>
-
+            {{ $items }}
             <div class="col-span-12 mt-10 pt-4 border-2 bg-white shadow-lg rounded-lg px-3 mb-5">
                 <div class="flex -mx-1 border-b px-2 py-2 ">
 
@@ -215,7 +215,6 @@
                     <div class="flex-auto xl:w-20 text-center">
                     </div>
                 </div>
-                {{ $panelVehiculosOpen }}
 
                 <div class="detallesvehiculos">
 
@@ -282,12 +281,6 @@
                     Añadir Vehiculo
                 </button>
 
-                <button type="button"
-                    class=" mt-6 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded shadow-sm"
-                    wire:click.prevent="veritems" aria-controls="basic-modal">
-                    ver
-                </button>
-
                 <div class="py-3 w-20 text-center">
                 </div>
             </div>
@@ -308,20 +301,34 @@
 @endpush
 @section('js')
     <script>
-        function evaluar() {
-            if (detalles > 0) {
-                $(".btnGuardarContrato").show();
-            } else {
-                $(".btnGuardarContrato").show();
-            }
-        }
+        window.addEventListener('add-vehiculo', event => {
+            addAlert(event.detail.vehiculo.placa);
+        })
 
-        function addAlert() {
+        window.addEventListener('error-vehiculo', event => {
+            errorAdd(event.detail.vehiculo.placa);
+        })
+
+        function addAlert(placa) {
+            console.log(placa);
             iziToast.success({
                 position: 'topRight',
                 title: 'AGREGADO',
-                message: 'Añadiste el vehiculo',
+                message: 'Añadiste el vehiculo ' + placa,
+                timeout: 1000,
             });
+        }
+
+        function errorAdd(placa) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Ya existe',
+                text: 'El vehiculo ' + placa + ' ya esta agregado',
+                showConfirmButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Cerrar"
+
+            })
         }
     </script>
 

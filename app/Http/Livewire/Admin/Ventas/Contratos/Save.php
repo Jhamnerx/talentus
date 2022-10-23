@@ -12,7 +12,7 @@ use Livewire\Component;
 
 class Save extends Component
 {
-    public $clientes_id, $ciudades_id, $fondo, $sello;
+    public $clientes_id, $ciudades_id, $fondo = false, $sello = false;
     public $fecha, $vehiculos_id;
     public $panelVehiculosOpen = false;
 
@@ -77,11 +77,12 @@ class Save extends Component
     }
 
 
-    public function save()
+    public function saveContrato()
     {
         $request = new ContratosRequest();
 
         $validate = $this->validate($request->rules(), $request->messages());
+        // dd($validate);
         $contrato = Contratos::create([
             'clientes_id' => $validate["clientes_id"],
             'fecha' => $validate["fecha"],

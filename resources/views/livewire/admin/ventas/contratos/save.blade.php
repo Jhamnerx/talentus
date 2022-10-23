@@ -279,20 +279,15 @@
                     Añadir Vehiculo
                 </button>
 
-                <button type="button"
-                    class=" mt-6 bg-white hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 text-sm border border-gray-300 rounded shadow-sm"
-                    wire:click.prevent="veritems" aria-controls="basic-modal">
-                    ver
-                </button>
-
                 <div class="py-3 w-20 text-center">
                 </div>
             </div>
         </div>
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
 
-            <button class="btnGuardarContrato cursor-pointer btn bg-emerald-500 hover:bg-emerald-600 text-white"
-                wire:click.prevent="save">GUARDAR</button>
+            <button type="button"
+                class="btnGuardarContrato cursor-pointer btn bg-emerald-500 hover:bg-emerald-600 text-white"
+                wire:click.prevent="saveContrato">GUARDAR</button>
 
 
         </div>
