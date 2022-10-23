@@ -20,6 +20,7 @@ class ItemsVehiculo extends Component
         'openPanelVehiculos'
     ];
 
+
     public function render()
     {
         return view('livewire.admin.ventas.contratos.items-vehiculo');

@@ -88,6 +88,8 @@ Route::resource('ventas-factura', VentasFacturasController::class)->names('admin
     'ventas-factura' => 'factura'
 ]);;
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
+
+
 Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
 
 // VEHICULOS

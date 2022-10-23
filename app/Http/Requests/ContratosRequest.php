@@ -29,7 +29,7 @@ class ContratosRequest extends FormRequest
             'clientes_id' => 'required',
             'fecha' => 'required',
             'ciudades_id' => 'required',
-            'items' => 'array|between:1,30',
+            'items' => 'array|between:1,100',
             'items.*.plan' => 'required|integer',
             'items.*.placa' => 'required',
             'items.*.vehiculos_id' => 'required',

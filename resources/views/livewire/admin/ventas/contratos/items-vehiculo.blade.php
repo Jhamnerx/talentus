@@ -75,6 +75,7 @@
 
                     <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3 text-center">
 
+
                         @if ($cliente)
                             <input wire:model='search' class="form-input pl-9 focus:border-slate-300" type="search"
                                 placeholder="Buscar contrato…" />

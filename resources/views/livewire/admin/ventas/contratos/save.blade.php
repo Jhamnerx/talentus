@@ -4,7 +4,7 @@
         <div class="grid grid-cols-12 gap-6">
 
 
-            <div class="col-span-12 sm:col-span-4" wire:ignore>
+            <div class="col-span-12 sm:col-span-4">
 
 
                 {!! Html::decode(
@@ -12,7 +12,7 @@
                         'class' => 'block text-sm font-medium mb-1',
                     ]),
                 ) !!}
-                <div class="flex ">
+                <div class="flex " wire:ignore>
                     {!! Form::select('clientes_id', [], null, ['class' => 'w-full clientes_id pl-3']) !!}
 
                     @livewire('admin.clientes.button-open-modal')
@@ -126,7 +126,7 @@
                         </div>
                         <!-- End -->
                     </div>
-                    {{ $fondo }}
+
                     <div class="m-2 w-full">
                         <label for="sello">Sello:</label>
                         <!-- Start -->
