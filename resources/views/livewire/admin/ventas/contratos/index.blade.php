@@ -255,7 +255,7 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                        <div class="font-medium text-slate-800">{{ $contrato->clientes->razon_social }}
+                                        <div class="font-medium text-slate-800">{{ $contrato->cliente->razon_social }}
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

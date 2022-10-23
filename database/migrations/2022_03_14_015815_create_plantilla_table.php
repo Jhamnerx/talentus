@@ -19,6 +19,7 @@ class CreatePlantillaTable extends Migration
             $table->string('razon_social');
             $table->string('ruc');
             $table->integer('impuesto');
+            $table->string('fondo_contrato');
             $table->string('img_documentos');
             $table->string('img_icono');
             $table->string('img_login');

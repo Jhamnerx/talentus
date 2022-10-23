@@ -8,8 +8,9 @@ use Carbon\Carbon;
 use Exception;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class Index extends Component
-{   
+{
     use WithPagination;
     public $search;
     public $from = '';
@@ -27,7 +28,7 @@ class Index extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $contratos = Contratos::whereHas('clientes', function ($query) {
+        $contratos = Contratos::whereHas('cliente', function ($query) {
             $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
         })
             ->orWhere('fecha', 'LIKE', '%' . $this->search . '%')
@@ -82,21 +83,22 @@ class Index extends Component
                 break;
         }
     }
-    public function openModalDelete(Contratos $contrato){
+    public function openModalDelete(Contratos $contrato)
+    {
 
         $this->emit('openModalDelete', $contrato);
         $this->openModalDelete = true;
-
     }
-    public function modalOpenSend(Contratos $contrato){
+    public function modalOpenSend(Contratos $contrato)
+    {
 
 
         $this->emit('modalOpenSend', $contrato);
-
     }
 
 
-    public function createCobro(Contratos $contrato){
+    public function createCobro(Contratos $contrato)
+    {
 
         try {
 
@@ -114,19 +116,11 @@ class Index extends Component
                     'nota' => "",
                     'observacion' => "",
                 ]);
-
-                
-
             }
             $this->dispatchBrowserEvent('create-cobro');
-            
         } catch (Exception $e) {
 
             $this->dispatchBrowserEvent('error-cobro');
-            
-            
         }
-
-        
     }
 }

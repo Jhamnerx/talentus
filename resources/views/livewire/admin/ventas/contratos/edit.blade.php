@@ -9,18 +9,8 @@
                 </label>
                 <div class="flex" wire:ignore>
 
-                    {{-- {!! Form::select(
-                        'clientes_id',
-                        [$contrato->clientes_id => $contrato->clientes->razon_social],
-                        $contrato->clientes_id,
-                        [
-                            'class' => 'w-full clientes_id
-                                                                                                                                                                                                                                                                                                                                                                                         pl-3',
-                        ],
-                    ) !!} --}}
-
                     <select class="w-full clientes_id pl-3" name="clientes_id">
-                        <option selected value="{{ $contrato->clientes_id }}">{{ $contrato->clientes->razon_social }}
+                        <option selected value="{{ $contrato->clientes_id }}">{{ $contrato->cliente->razon_social }}
                         </option>
                     </select>
 
@@ -87,7 +77,7 @@
                         $contrato->ciudades_id,
                         [
                             'class' => 'form-select w-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                pl-9 ciudades',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    pl-9 ciudades',
                         ],
                     ) !!}
 
@@ -198,7 +188,6 @@
                 </div>
 
             </div>
-            {{ $items }}
             <div class="col-span-12 mt-10 pt-4 border-2 bg-white shadow-lg rounded-lg px-3 mb-5">
                 <div class="flex -mx-1 border-b px-2 py-2 ">
 
@@ -293,7 +282,7 @@
 
         </div>
     </div>
-    @livewire('admin.ventas.contratos.items-vehiculo', ['vehiculos' => $contrato->clientes->vehiculos, 'cliente' => $contrato->clientes])
+    @livewire('admin.ventas.contratos.items-vehiculo', ['vehiculos' => $contrato->cliente->vehiculos, 'cliente' => $contrato->cliente])
 </div>
 
 @push('modals')

@@ -19,7 +19,8 @@ class Send extends Component
         'modalOpenSend' => 'openModal'
     ];
 
-    public function resetPropiedades(){
+    public function resetPropiedades()
+    {
         $this->reset('from');
         $this->reset('to');
         $this->reset('asunto');
@@ -32,25 +33,26 @@ class Send extends Component
         return view('livewire.admin.ventas.contratos.send');
     }
 
-    public function openModal(Contratos $contrato){
+    public function openModal(Contratos $contrato)
+    {
 
         $this->modalOpenSend = true;
         $this->contrato = $contrato;
-        $this->to = $contrato->clientes->email." | ".$contrato->clientes->razon_social;
-        $this->asunto = "TALENTUS - CONTRATO ".$contrato->clientes->razon_social;
+        $this->to = $contrato->cliente->email . " | " . $contrato->cliente->razon_social;
+        $this->asunto = "TALENTUS - CONTRATO " . $contrato->cliente->razon_social;
 
-       // dd($presupuesto);
+        // dd($presupuesto);
 
     }
     public function closeModal()
     {
         $this->modalOpenSend = false;
         $this->resetPropiedades();
-
     }
 
 
-    public function sendContrato(){
+    public function sendContrato()
+    {
 
         $data = array(
             'asunto' => $this->asunto,
@@ -61,20 +63,15 @@ class Send extends Component
 
             $pdfContrato = new ContratoPdfController();
             $pdfContrato->sendToMail($this->contrato, $data);
-
-
         } catch (Exception $e) {
             dd($e);
             $e->getMessage();
-
-        }finally{
+        } finally {
 
             $this->modalOpenSend = false;
             $this->dispatchBrowserEvent('contrato-send', ['contrato' => $this->contrato]);
-            
+
             $this->resetPropiedades();
-
         }
-
     }
 }

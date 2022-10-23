@@ -31,7 +31,7 @@ class Contratos extends Model
     }
     //Relacion uno a muchos inversa
 
-    public function clientes()
+    public function cliente()
     {
         return $this->belongsTo(Clientes::class, 'clientes_id');
     }
@@ -91,7 +91,7 @@ class Contratos extends Model
 
         $pdf = PDF::loadView('pdf.contrato.pdf');
 
-        return $pdf->stream('CONTRATO-' . $this->clientes->razon_social . '.pdf');
+        return $pdf->stream('CONTRATO-' . $this->cliente->razon_social . '.pdf');
 
         // return view('pdf.contrato.pdf');
     }
@@ -110,6 +110,6 @@ class Contratos extends Model
 
         $pdf = PDF::loadView('pdf.contrato.pdf');
 
-        $this->clientes->notify(new EnviarContratoCliente($this, $pdf, $data));
+        $this->cliente->notify(new EnviarContratoCliente($this, $pdf, $data));
     }
 }

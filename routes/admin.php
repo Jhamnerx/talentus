@@ -90,7 +90,16 @@ Route::resource('ventas-factura', VentasFacturasController::class)->names('admin
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
 
 
-Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
+//Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
+
+
+Route::controller(ContratosController::class)->group(function () {
+
+    Route::get('contratos/crear', 'create')->name('admin.ventas.contratos.create');
+    Route::get('contratos', 'index')->name('admin.ventas.contratos.index');
+    Route::get('contratos/{cobro}', 'show')->name('admin.ventas.contratos.show');
+    Route::get('contratos/{cobro}/editar', 'edit')->name('admin.ventas.contratos.edit');
+});
 
 // VEHICULOS
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
