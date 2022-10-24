@@ -43,8 +43,7 @@
                 <form autocomplete="off" autocapitalize="true">
 
                     <div class="px-8 py-5 bg-white sm:p-6">
-                        {{ $divisaDoc }}
-                        {{ $divisa }}
+
                         <div class="grid grid-cols-12 gap-6">
                             {{-- TIPO PAGO --}}
 

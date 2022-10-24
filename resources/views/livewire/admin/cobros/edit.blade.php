@@ -277,9 +277,9 @@
                     // console.log(data.suggestions);
                     var suggestions = $.map(data.suggestions, function(obj) {
 
-                        obj.id = obj.id || obj.data; // replace pk with your identifier
-                        obj.text = obj.value; // replace pk with your identifier
-                        // console.log(obj);
+                        obj.id = obj.id || obj.value; // replace pk with your identifier
+                        obj.text = obj.data; // replace pk with your identifier
+
                         return obj;
 
                     });

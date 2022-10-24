@@ -36,17 +36,17 @@ class Save extends Component
 
 
         $data = [];
-        foreach ($cliente->flotas as $flota) {
-            foreach ($flota->vehiculos as $vehiculo) {
 
-                if ($vehiculo->is_active) {
-                    $data[] = [
-                        'id' => $vehiculo->id,
-                        'text' => $vehiculo->placa,
-                    ];
-                }
+        foreach ($cliente->vehiculos as $vehiculo) {
+
+            if ($vehiculo->is_active) {
+                $data[] = [
+                    'id' => $vehiculo->id,
+                    'text' => $vehiculo->placa,
+                ];
             }
         }
+
 
         $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
         $this->dataVehiculos = $data;
