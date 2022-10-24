@@ -21,8 +21,8 @@ class CreateContactoFlotasTable extends Migration
             $table->string('telefono')->nullable();
             $table->string('birthday')->nullable();
             $table->string('email')->nullable();
+            $table->boolval('is_gerente')->default(false);
             $table->boolean('is_active')->default(true);
-
             $table->string('descripcion')->nullable();
             $table->text('nota')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();

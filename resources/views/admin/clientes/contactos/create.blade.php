@@ -50,12 +50,13 @@
                     </p>
                 </div>
             </div>
-            <div class="mt-5 md:mt-0 md:col-span-2">
+            <div class="mt-5 md:mt-0 md:col-span-2 clienteId">
 
                 {!! Form::open(['route' => 'admin.clientes.contactos.store', 'autocomplete' => 'off']) !!}
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-5 bg-white sm:p-6">
                         <div class="grid grid-cols-12 gap-4">
+
                             <div class="col-span-12 sm:col-span-6">
 
                                 {!! Html::decode(
@@ -69,7 +70,7 @@
                                     'placeholder' => 'Escribe el nombre...',
                                     'id' => 'nombre',
                                     'class' => 'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               peer',
                                     'required',
                                 ]) !!}
 
@@ -79,20 +80,18 @@
                                     </p>
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-6">
-                                {!! Html::decode(
-                                    Form::label('clientes_id', 'Cliente: <span class="text-rose-500">*</span>', [
-                                        'class' => 'block text-sm font-medium mb-1',
-                                    ]),
-                                ) !!}
+                            <div class="col-span-12 sm:col-span-6 mb-2">
+                                <div wire:ignore>
+                                    <label
+                                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                                        <div>Cliente <span class="text-sm text-red-500"> * </span></div>
+                                    </label>
 
-                                {!! Form::select('clientes_id', [], null, [
-                                    'class' => 'clientes-ajax  w-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            md:w-72 w-72
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ',
-                                ]) !!}
+                                    <select required name="clientes_id" id=""
+                                        class="form-select w-full clientes_id pl-3">
 
-
+                                    </select>
+                                </div>
 
 
                                 @error('clientes_id')
@@ -115,12 +114,10 @@
                                 {!! Form::label('telefono', 'Telefono:', ['class' => 'block text-sm font-medium mb-1']) !!}
 
                                 <div class="relative">
-                                    {!! Form::text('telefono', null, [
-                                        'placeholder' => '987654321',
-                                        'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    w-full pl-12',
-                                        'maxlength' => '9',
-                                    ]) !!}
+
+
+                                    <input x-mask="999999999" type="tel" value="{{ old('telefono') }}" max="maxlength"
+                                        w-full pl-12', placeholder="987654321" class="form-input pl-12">
 
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -153,10 +150,34 @@
                                     </p>
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-12 mt-4">
+                                <span class="text-bold text-center mb-2">Opciones Adicionales:</span>
+                                <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
+
+
+                                    <div class="m-2 w-full mt-2">
+                                        <label for="fondo">Es Gerente:</label>
+                                        <!-- Start -->
+                                        <div class="flex items-center" x-data="{ checked: false }">
+                                            <div class="form-switch">
+                                                <input name="is_gerente" value="1" type="checkbox" id="fondo-1"
+                                                    class="sr-only fondo" x-model="checked" />
+                                                <label class="bg-slate-400" for="fondo-1">
+                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
+
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                        <!-- End -->
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-span-12">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
                                 {!! Form::textarea('descripcion', null, [
                                     'placeholder' => 'Escribe la direccion...',
@@ -172,9 +193,9 @@
                     </div>
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
-                            'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                            'class' => 'btn hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 focus:outline-none
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>
@@ -193,10 +214,11 @@
 
 
 
-        $('.clientes-ajax').select2({
-            placeholder: 'Buscar un Cliente',
+        $('.clientes_id').select2({
+            placeholder: 'Buscar Cliente',
             language: "es",
-            minimumInputLength: 1,
+            minimumInputLength: 2,
+            width: '100%',
             ajax: {
                 url: '{{ route('search.clientes') }}',
                 dataType: 'json',
@@ -209,10 +231,12 @@
                         //type: 'public'
                     }
 
+                    // Query parameters will be ?search=[term]&type=public
                     return query;
                 },
                 processResults: function(data, params) {
 
+                    // console.log(data.suggestions);
                     var suggestions = $.map(data.suggestions, function(obj) {
 
                         obj.id = obj.id || obj.value; // replace pk with your identifier
@@ -221,7 +245,7 @@
                         return obj;
 
                     });
-                    //console.log(data);
+                    // console.log(suggestions);
                     // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
 
@@ -238,8 +262,7 @@
 
         // INICIALIZAR LOS INPUTS DE FECHA
         $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
+
             flatpickr('#birthday', {
                 mode: 'single',
                 defaultDate: "today",

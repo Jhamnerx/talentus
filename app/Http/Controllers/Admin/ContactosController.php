@@ -17,15 +17,13 @@ class ContactosController extends Controller
      */
     public function index()
     {
-        $date = Carbon::createFromDate(1970,19,12)->age;
+
+        $date = Carbon::createFromDate(1970, 19, 12)->age;
+
         return view('admin.clientes.contactos.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('admin.clientes.contactos.create');
@@ -39,6 +37,7 @@ class ContactosController extends Controller
      */
     public function store(ContactosRequest $request)
     {
+        // dd($request->all());
 
         Contactos::create($request->all());
         return redirect()->route('admin.clientes.contactos.index')->with('store', 'El contacto se guardo con exito');

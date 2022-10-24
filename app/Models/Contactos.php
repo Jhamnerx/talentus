@@ -7,29 +7,28 @@ use App\Scopes\EmpresaScope;
 use Database\Factories\ContactosFlotasFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contactos extends Model
 {
-    /**
-     * Create a new factory instance for the model.
-     *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
-     */
+
     protected static function newFactory()
     {
         return ContactosFlotasFactory::new();
     }
 
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'contactos';
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+
+
+    // protected $casts = [
+    //     'is_gerente' => 'boolean',
+    // ];
+
+
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
