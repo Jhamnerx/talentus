@@ -24,10 +24,15 @@ class Contactos extends Model
     protected $table = 'contactos';
 
 
-    // protected $casts = [
-    //     'is_gerente' => 'boolean',
-    // ];
+    protected $casts = [
+        'is_gerente' => 'boolean',
+    ];
 
+    // Scope local de activo
+    public function scopeGerente($query, $value)
+    {
+        return $query->where('is_gerente', $value);
+    }
 
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
