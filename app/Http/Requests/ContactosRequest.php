@@ -29,6 +29,7 @@ class ContactosRequest extends FormRequest
         $rules = [
             'nombre' => 'required',
             'clientes_id' => 'required',
+            'numero_documento' => 'required',
             'telefono' => 'nullable|digits_between:6,9|numeric',
 
         ];
@@ -46,6 +47,7 @@ class ContactosRequest extends FormRequest
         return [
             'nombre.required' => 'No dejes vacio este campo',
             'clientes_id.required' => 'Ingresa un cliente',
+            'numero_documento.required' => 'Ingresa un numero de documento',
             'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
             'telefono.numeric' => 'El numero de telefono debe ser un numero',
 

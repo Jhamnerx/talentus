@@ -73,9 +73,12 @@
                     con domicilio
                     fiscal en {{ $contrato->cliente->direccion }},
                     debidamente
-                    representada por su <b>Gerente General</b><b>___(X)___</b>, identificado con DNI N°
-                    <b>___(X)___</b>,
-                    con correo electrónico <b>___(X)___</b>, a quien en adelante se le denominará <b>“LA EMPRESA/EL
+                    representada por su <b>Gerente General
+                    </b><b>{{ $contrato->cliente->contactos()->gerente(1)->first()->nombre }}</b>, identificado con DNI
+                    N°
+                    <b>{{ $contrato->cliente->contactos()->gerente(1)->first()->numero_documento }}</b>,
+                    con correo electrónico <b>{{ $contrato->cliente->contactos()->gerente(1)->first()->email }}</b>, a
+                    quien en adelante se le denominará <b>“LA EMPRESA/EL
                         CLIENTE”;</b> y de la otra parte la <b>{{ $plantilla->razon_social }}</b>, con RUC N°
                     {{ $plantilla->ruc }},
                     debidamente representada por su <b>Titular Gerente, María Jhovana Centurión Torres</b>, identificada
@@ -843,7 +846,7 @@
                     Civil.
                 </p>
 
-                {{-- <p>
+                <p>
                     <b>8.5.-</b> La resolución se formaliza a través de la recepción de la carta notarial o&nbsp;un
                     correo
                     indicando la baja del servicio al correo indicado en el ítem anterior, según sea el caso,
@@ -882,7 +885,7 @@
                     continuación
                     y este tendrá un plazo de 48 hrs., o del tiempo que demore en tener contacto con el vehículo para su
                     correcto funcionamiento, lo cual exime de responsabilidad a <b>TALENTUS TECHNOLOGY E.I.R.L</b>.
-                </p> --}}
+                </p>
             </div>
         </div>
 
@@ -920,11 +923,12 @@
                 </p>
             </div>
         </div>
-        <div class="row">
-            <div class="medium-12 columns">
-                <h2 class="sutitulo"><b><u>Cláusula novena:</u></b><u><b>Domicilio</b></u><b>.<u></u></b>
+        <div class="row  padding-2">
+            <div class="medium-12 columns" style="margin-top: 40px;">
+                <h2 class="sutitulo"><b><u>Cláusula novena: </u></b><u><b>Domicilio</b></u><b>.<u></u></b>
                 </h2>
-                <p> Para la validez de todas las comunicaciones y notificaciones a las partes, con motivo de la
+                <p class=" padding-2"> Para la validez de todas las comunicaciones y notificaciones a las partes, con
+                    motivo de la
                     ejecución de
                     este contrato, ambas señalan como sus respectivos domicilios los indicados en la introducción de
                     este
