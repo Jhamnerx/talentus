@@ -20,7 +20,11 @@ class Vehiculos extends Model
     {
         return $query->where('is_active', $status);
     }
-
+    // Scope local de activo
+    public function order($query, $order)
+    {
+        return $query->orderBy($order, 'desc');
+    }
 
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
@@ -31,13 +35,13 @@ class Vehiculos extends Model
     //Relacion uno a muchos inversa
     public function cliente()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
 
     //relacion uno a muchos a modelos
     public function sim_card()
     {
-        return $this->belongsTo(SimCard::class, 'sim_card_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(SimCard::class, 'sim_card_id')->withTrashed();
     }
 
     //relacion uno a muchos a dispositivos
@@ -73,7 +77,7 @@ class Vehiculos extends Model
     //Relacion muchos a ,muchos
     public function detalle_contrato()
     {
-        return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);;
+        return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withTrashed();
     }
 
 
@@ -91,6 +95,6 @@ class Vehiculos extends Model
 
     public function flotas()
     {
-        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed();
     }
 }

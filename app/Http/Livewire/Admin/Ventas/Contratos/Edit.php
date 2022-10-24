@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Contratos;
 
-use App\Http\Requests\ContratosRequest;
+
 use App\Models\Contratos;
 use App\Models\Vehiculos;
 use Livewire\Component;
@@ -43,9 +43,10 @@ class Edit extends Component
         'items.between' => 'Ingresa como minimo un vehiculo'
     ];
 
-    public function mount()
+    public function mount($contrato)
     {
         $this->items = collect();
+
         foreach ($this->contrato->detalle as $detalle) {
             $this->items[$detalle->vehiculos->placa] = [
                 'vehiculos_id' => $detalle->vehiculos->id,

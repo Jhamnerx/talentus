@@ -24,7 +24,6 @@ class EnviarContratoCliente extends Notification
         $this->contrato = $contrato;
         $this->pdf = $pdf;
         $this->data = $data;
-       
     }
 
     /**
@@ -47,11 +46,11 @@ class EnviarContratoCliente extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->attachData($this->pdf->output(), 'CONTRATO '.$this->contrato->clientes->razon_social.'.pdf', [
-                        'mime' => 'application/pdf',
-                    ])
-                    ->subject($this->data["asunto"])
-                    ->view('mail.ventas.contrato', ['contrato' => $this->contrato, 'data' => $this->data]);
+            ->attachData($this->pdf->output(), 'CONTRATO ' . $this->contrato->cliente->razon_social . '.pdf', [
+                'mime' => 'application/pdf',
+            ])
+            ->subject($this->data["asunto"])
+            ->view('mail.ventas.contrato', ['contrato' => $this->contrato, 'data' => $this->data]);
     }
 
     /**

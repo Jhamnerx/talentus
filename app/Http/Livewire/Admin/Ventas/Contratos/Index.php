@@ -30,7 +30,7 @@ class Index extends Component
 
         $contratos = Contratos::whereHas('cliente', function ($query) {
             $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })
+        })->with(['detalle', 'detalle.vehiculos'])->with('cliente')
             ->orWhere('fecha', 'LIKE', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);

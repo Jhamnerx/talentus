@@ -3,11 +3,11 @@
 
 <head>
 
-    <title>CONTRATO {{ $contrato->cliente->razon_social }}</title>
+    <title>{{ $contrato->detalle->count() }} | CONTRATO {{ $contrato->cliente->razon_social }}</title>
 
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="stylesheet" href="{{ asset('docs/contrato/styles.css') }}">
+
     <link rel="stylesheet" href="{{ asset('docs/contrato/contrato.css') }}">
     {{ header('Content-type:application/pdf') }}
     @if ($contrato->fondo)
@@ -76,8 +76,8 @@
                     representada por su <b>Gerente General</b><b>___(X)___</b>, identificado con DNI N°
                     <b>___(X)___</b>,
                     con correo electrónico <b>___(X)___</b>, a quien en adelante se le denominará <b>“LA EMPRESA/EL
-                        CLIENTE”;</b> y de la otra parte la <b>TALENTUS TECHNOLOGY EIRL (T Y T)</b>, con RUC N°
-                    20496172168,
+                        CLIENTE”;</b> y de la otra parte la <b>{{ $plantilla->razon_social }}</b>, con RUC N°
+                    {{ $plantilla->ruc }},
                     debidamente representada por su <b>Titular Gerente, María Jhovana Centurión Torres</b>, identificada
                     con
                     DNI N° 40969356, con domicilio fiscal sito en el Jirón Santa María N° 209, Barrio Mollepampa, del
@@ -112,7 +112,7 @@
                     exacta en cualquier momento, siempre que se encuentre el móvil dentro del área de cobertura de
                     alguno de
                     los sistemas de comunicación inalámbrica que estos equipos utilizan para la transmisión de la
-                    información hacia la Central de Operaciones de<b>TALENTUS TECHNOLOGY E.I.R.L.</b>entre los que se
+                    información hacia la Central de Operaciones de <b>TALENTUS TECHNOLOGY E.I.R.L.</b>entre los que se
                     incluyen el rastreo satelital para la localización de vehículos, gestión, control y seguridad de
                     flotas, con las autorizaciones, registros y licencias necesarias para brindar el mencionado servicio
                     a
@@ -120,39 +120,305 @@
                 </p>
             </div>
         </section>
+        <section>
+            @if ($contrato->detalle->count() <= 5)
+
+                <section class="center-text padding-1">
+                    <div>
+                        <div>
+                            <table class="tabla">
+
+                                <thead class="tabla-vehiculos-header color-table">
+                                    <tr style="height: 21px;">
+                                        <th class="tabla-vehiculos">ITEM</th>
+                                        <th class="tabla-vehiculos">TIPO</th>
+                                        <th class="tabla-vehiculos">PLACA</th>
+                                        <th class="tabla-vehiculos">PLAN</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="tabla-vehiculos-body center-tex">
 
 
-        {{-- tabla --}}
-        <section class="center-text padding-1">
-            <div>
-                <div>
-                    <table class="tabla">
+                                    @for ($i = 0; $i < $contrato->detalle->count(); $i++)
+                                        <tr>
+                                            <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                            <td class="tabla-vehiculos">
+                                                {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                            </td>
+                                            <td class="tabla-vehiculos">
+                                                {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                            </td>
+                                            <td class="tabla-vehiculos">{{ $contrato->detalle[$i]->plan }}</td>
 
-                        </colgroup>
-                        <thead class="tabla-vehiculos-header color-table">
-                            <tr style="height: 21px;">
-                                <th class="tabla-vehiculos">ITEM</th>
-                                <th class="tabla-vehiculos">TIPO</th>
-                                <th class="tabla-vehiculos">PLACA</th>
-                                <th class="tabla-vehiculos">PLAN</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tabla-vehiculos-body center-tex">
-                            <tr>
-                                <td class="tabla-vehiculos"> 1 </td>
-                                <td class="tabla-vehiculos">PLACA</td>
-                                <td class="tabla-vehiculos">PLACA</td>
-                                <td class="tabla-vehiculos">PREMIUM</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                        </tr>
+                                    @endfor
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+
+
+            @endif
+
+
+            @if ($contrato->detalle->count() > 5 && $contrato->detalle->count() <= 10)
+                <div class="row">
+                    <div class="columns medium-6 tabla-1">
+
+                        <table class="tabla">
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">ITEM</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 0; $i < 5; $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="columns medium-6 tabla-2">
+
+
+                        <table class="tabla">
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">ITEM</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 5; $i < $contrato->detalle->count(); $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
-            </div>
+            @endif
+
+
+
+            @if ($contrato->detalle->count() > 10 && $contrato->detalle->count() <= 20)
+
+                <div class="row">
+                    <div class="columns medium-6 tabla-1">
+
+                        <table class="tabla">
+
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">ITEM</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 0; $i < 10; $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="columns medium-6 tabla-2">
+
+
+                        <table class="tabla">
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">ITEM</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 10; $i < $contrato->detalle->count(); $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            @endif
+
+
+            {{-- tabla mas de 20 vehiculos --}}
+
+            @if ($contrato->detalle->count() > 20 && $contrato->detalle->count() <= 30)
+
+                <div class="row">
+                    <div class="columns medium-4 tabla-20-1">
+
+                        <table class="tabla tabla-20">
+
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos" style="width: 10px">#</th>
+                                    <th class="tabla-vehiculos" style="width: 20px">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 0; $i < 10; $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <div class="columns medium-4 tabla-20-2">
+
+
+                        <table class="tabla tabla-20">
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">#</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 10; $i < 20; $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="columns medium-4 tabla-20-3">
+
+
+                        <table class="tabla tabla-20">
+
+                            <thead class="tabla-vehiculos-header color-table">
+                                <tr style="height: 21px;">
+                                    <th class="tabla-vehiculos">#</th>
+                                    <th class="tabla-vehiculos">TIPO</th>
+                                    <th class="tabla-vehiculos">PLACA</th>
+
+                                </tr>
+                            </thead>
+                            <tbody class="tabla-vehiculos-body center-tex">
+
+                                @for ($i = 20; $i < $contrato->detalle->count(); $i++)
+                                    <tr>
+                                        <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->tipo }}
+                                        </td>
+                                        <td class="tabla-vehiculos">
+                                            {{ $contrato->detalle[$i]->vehiculos->placa }}
+                                        </td>
+
+                                    </tr>
+                                @endfor
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            @endif
         </section>
 
-
-        <section>
-            <div>
+        <div class="">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b>
                         <u>Cláusula segunda: Objeto del contrato</u>
@@ -203,11 +469,11 @@
                     siguiente 987816560 / 977794338 / 944299794.
                 </p>
             </div>
-        </section>
+        </div>
 
 
-        <section>
-            <div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b>
                         <u>Cláusula tercera: Contraprestación</u>
@@ -226,20 +492,20 @@
                 </p>
                 <p><b>3.</b><b>2.- EL CLIENTE</b>&nbsp;faculta, en caso de incumplimiento con los pagos,&nbsp;a
                     <b>TALENTUS
-                        TECHNOLOGY E.I.R.L.,&nbsp;</b>para que envíe un reporte a las empresas prestadoras de
+                        TECHNOLOGY E.I.R.L., </b>para que envíe un reporte a las empresas prestadoras de
                     información
                     crediticia, respetando la normativa respectiva sobre información a centrales de riesgo de acuerdo a
                     la
                     normativa estipulada por la S.B.S. (Superintendencia de Banca, Seguros y AFP); así como la referente
                     a
-                    protección de datos y el código de ética que las empresas de las centrales de riesgo manejan.<b></b>
+                    protección de datos y el código de ética que las empresas de las centrales de riesgo manejan.
                 </p>
             </div>
-        </section>
-        <section>
-            <div>
+        </div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
-                    <b><u>Cláusula cuarta: Ejecución y plazo del contrato</u></b><b>.<u></u></b>
+                    <b><u>Cláusula cuarta: Ejecución y plazo del contrato</u></b><b>.</b>
                 </h2>
 
                 <p>
@@ -252,14 +518,13 @@
                     anticipación sin expresión de causa. Del mismo modo, si <b>EL CLIENTE</b> desea renovar el presente
                     contrato, debe manifestar su intención con un pre aviso de 05 días naturales (razonable) de
                     anticipación
-                    antes de la culminación del mismo.<b>
-                    </b>
+                    antes de la culminación del mismo.
                 </p>
             </div>
-        </section>
+        </div>
 
-        <section>
-            <div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b><u>Cláusula quinta: Obligaciones de las partes</u></b>
                     <b>.</b>
@@ -311,11 +576,11 @@
                     Los plazos de atención son los siguientes:
                 </p>
             </div>
-        </section>
+        </div>
 
-        <section>
-            <div>
-                <div>
+        <div class="row">
+            <div class="medium-12 columns">
+                <div class="medium-12 columns">
                     <table class="tabla">
                         <colgroup>
                             <col width="2.26%">
@@ -456,10 +721,10 @@
                 </p>
             </div>
 
-        </section>
+        </div>
 
-        <section>
-            <div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b><u>Cláusula sexta:&nbsp;Extinción de responsabilidad</u></b><b>.</b>
                 </h2>
@@ -504,9 +769,9 @@
                         E.I.R.L</b>.
                 </p>
             </div>
-        </section>
-        <section>
-            <div>
+        </div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b><u>Cláusula séptima: Cumplimiento de normatividad</u></b><b>.</b>
                 </h2>
@@ -537,10 +802,10 @@
                     datos”.
                 </p>
             </div>
-        </section>
+        </div>
 
-        <section>
-            <div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo">
                     <b><u>Cláusula octava: Resolución del contrato y penalidades</u></b><b>.</b>
                 </h2>
@@ -578,7 +843,7 @@
                     Civil.
                 </p>
 
-                <p>
+                {{-- <p>
                     <b>8.5.-</b> La resolución se formaliza a través de la recepción de la carta notarial o&nbsp;un
                     correo
                     indicando la baja del servicio al correo indicado en el ítem anterior, según sea el caso,
@@ -617,12 +882,12 @@
                     continuación
                     y este tendrá un plazo de 48 hrs., o del tiempo que demore en tener contacto con el vehículo para su
                     correcto funcionamiento, lo cual exime de responsabilidad a <b>TALENTUS TECHNOLOGY E.I.R.L</b>.
-                </p>
+                </p> --}}
             </div>
-        </section>
+        </div>
 
-        <section>
-            <div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <div>
                     <table class="tabla-ciudad">
                         <colgroup>
@@ -642,9 +907,9 @@
                     </table>
                 </div>
             </div>
-        </section>
-        <section class="padding-2">
-            <div>
+        </div>
+        <div class="row padding-2">
+            <div class="medium-12 columns">
                 <p><b>&nbsp;Estos precios no incluyen IGV.</b>
                 </p>
                 <p class="padding-6"> No es
@@ -654,9 +919,9 @@
                     usuario en la plataforma del panel de <b>TALENTUS TECHNOLOGY E.I.R.L</b>
                 </p>
             </div>
-        </section>
-        <section>
-            <div>
+        </div>
+        <div class="row">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo"><b><u>Cláusula novena:</u></b><u><b>Domicilio</b></u><b>.<u></u></b>
                 </h2>
                 <p> Para la validez de todas las comunicaciones y notificaciones a las partes, con motivo de la
@@ -689,7 +954,7 @@
                     ciudad de Cajamarca.
                 </p>
             </div>
-        </section>
+        </div>
 
 </body>
 

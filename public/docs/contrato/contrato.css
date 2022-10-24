@@ -111,3 +111,91 @@ p {
 .padding-6 {
     padding-bottom: 6rem;
 }
+
+.tabla-1 {
+    background-color: aqua;
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+
+.tabla-2 {
+    background-color: red;
+    position: absolute;
+    top: 0px;
+    left: 352px;
+}
+
+.tabla-20 {
+    font-size: 13px;
+}
+
+.tabla-20-1 {
+    background-color: aqua;
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+
+.tabla-20-2 {
+    background-color: red;
+    position: absolute;
+    top: 0px;
+    left: 238px;
+}
+
+.tabla-20-3 {
+    background-color: yellow;
+    position: absolute;
+    top: 0px;
+    left: 470px;
+}
+
+.row {
+    width: 100%;
+}
+
+.column,
+.columns {
+    width: 100%;
+    //float: left;
+    margin-bottom: 10px;
+    margin-right: 2px;
+}
+
+.medium-1 {
+    width: 8.3333333333%;
+}
+.medium-2 {
+    width: 16.6666666667%;
+}
+.medium-3 {
+    width: 25%;
+}
+.medium-4 {
+    width: 33.3333333333%;
+}
+.medium-5 {
+    width: 41.6666666667%;
+}
+.medium-6 {
+    width: 50%;
+}
+.medium-7 {
+    width: 58.3333333333%;
+}
+.medium-8 {
+    width: 66.6666666667%;
+}
+.medium-9 {
+    width: 75%;
+}
+.medium-10 {
+    width: 83.3333333333%;
+}
+.medium-11 {
+    width: 91.6666666667%;
+}
+.medium-12 {
+    width: 100%;
+}

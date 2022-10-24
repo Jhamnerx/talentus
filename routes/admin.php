@@ -97,8 +97,8 @@ Route::controller(ContratosController::class)->group(function () {
 
     Route::get('contratos/crear', 'create')->name('admin.ventas.contratos.create');
     Route::get('contratos', 'index')->name('admin.ventas.contratos.index');
-    Route::get('contratos/{cobro}', 'show')->name('admin.ventas.contratos.show');
-    Route::get('contratos/{cobro}/editar', 'edit')->name('admin.ventas.contratos.edit');
+    Route::get('contratos/{contrato}', 'show')->name('admin.ventas.contratos.show');
+    Route::get('contratos/{contrato}/editar', 'edit')->name('admin.ventas.contratos.edit');
 });
 
 // VEHICULOS

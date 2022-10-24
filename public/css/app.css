@@ -1329,6 +1329,10 @@ select {
   margin-left: -0.25rem;
   margin-right: -0.25rem;
 }
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
@@ -1344,10 +1348,6 @@ select {
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-}
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
 }
 .my-1 {
   margin-top: 0.25rem;
@@ -1733,6 +1733,9 @@ select {
 .w-40 {
   width: 10rem;
 }
+.w-72 {
+  width: 18rem;
+}
 .w-2\.5 {
   width: 0.625rem;
 }
@@ -1756,9 +1759,6 @@ select {
 }
 .w-24 {
   width: 6rem;
-}
-.w-72 {
-  width: 18rem;
 }
 .w-36 {
   width: 9rem;
@@ -2831,11 +2831,11 @@ select {
 .pl-8 {
   padding-left: 2rem;
 }
-.pl-9 {
-  padding-left: 2.25rem;
-}
 .pl-12 {
   padding-left: 3rem;
+}
+.pl-9 {
+  padding-left: 2.25rem;
 }
 .pb-6 {
   padding-bottom: 1.5rem;
@@ -5473,12 +5473,12 @@ select {
     grid-column: span 6 / span 6;
   }
 
-  .md\:col-span-7 {
-    grid-column: span 7 / span 7;
-  }
-
   .md\:col-span-3 {
     grid-column: span 3 / span 3;
+  }
+
+  .md\:col-span-7 {
+    grid-column: span 7 / span 7;
   }
 
   .md\:col-span-10 {
@@ -5563,6 +5563,10 @@ select {
     height: 24rem;
   }
 
+  .md\:w-72 {
+    width: 18rem;
+  }
+
   .md\:w-3\/4 {
     width: 75%;
   }
@@ -5581,10 +5585,6 @@ select {
 
   .md\:w-auto {
     width: auto;
-  }
-
-  .md\:w-72 {
-    width: 18rem;
   }
 
   .md\:w-1\/2 {
@@ -6030,6 +6030,10 @@ select {
 
   .xl\:col-span-6 {
     grid-column: span 6 / span 6;
+  }
+
+  .xl\:col-span-12 {
+    grid-column: span 12 / span 12;
   }
 
   .xl\:col-span-8 {

@@ -266,14 +266,20 @@
                                             <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
                                                 aria-haspopup="true" :aria-expanded="open" @focus="open = true"
                                                 @focusout="open = false" @click.prevent>
-                                                <span class="mr-2">Ver vehiculos</span>
+                                                <span class="mr-2">Ver vehiculos
+                                                    @if (!$contrato->detalle->isEmpty())
+                                                        ({{ $contrato->detalle->count() }})
+                                                    @endif
+
+
+                                                </span>
                                                 <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
                                                     <path
                                                         d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
                                                 </svg>
                                             </button>
                                             <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
-                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full"
+                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
                                                     x-show="open"
                                                     x-transition:enter="transition ease-out duration-200 transform"
                                                     x-transition:enter-start="opacity-0 translate-y-2"
