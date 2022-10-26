@@ -41,7 +41,7 @@ class Vehiculos extends Model
     //relacion uno a muchos a modelos
     public function sim_card()
     {
-        return $this->belongsTo(SimCard::class, 'sim_card_id')->withTrashed();
+        return $this->belongsTo(SimCard::class, 'sim_card_id');
     }
 
     //relacion uno a muchos a dispositivos

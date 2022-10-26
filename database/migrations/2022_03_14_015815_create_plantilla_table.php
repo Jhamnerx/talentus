@@ -21,12 +21,15 @@ class CreatePlantillaTable extends Migration
             $table->integer('impuesto');
             $table->string('fondo_contrato');
             $table->string('img_documentos');
-            $table->string('img_icono');
-            $table->string('img_login');
+            $table->string('logo');
+            $table->string('banner');
             $table->string('img_firma');
-            $table->string('serie_factura');
-            $table->string('serie_boleta');
-            $table->string('serie_recibo');
+            $table->string('fav_icon');
+            $table->text('direccion')->nullable();
+            $table->string('telefono')->nullable();
+            $table->text('sunat')->nullable();
+            $table->string('correo')->nullable();
+            $table->text('series');
 
             $table->foreign('empresa_id')->references('id')->on('empresas')->onUpdate('cascade');
 

@@ -76,8 +76,9 @@
                 </a>
             </li>
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'plantilla' && 'bg-indigo-50'" href="plantilla.html">
+                <a href="{{ route('admin.ajustes.plantilla') }}"
+                    class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                    :class="settingsPanel === 'plantilla' && 'bg-indigo-50'">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
                         :class="settingsPanel === 'plantilla' && 'text-indigo-400'" viewBox="0 0 16 16">
                         <path

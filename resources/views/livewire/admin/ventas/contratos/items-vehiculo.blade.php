@@ -59,6 +59,7 @@
                             class="text-xs inline-flex font-medium bg-slate-100 text-slate-500 rounded-full text-center px-2.5 py-1">
                             Vehiculos</div>
                     </div>
+
                     <div class="flex justify-between items-center" aria-hidden="true">
                         <svg class="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
                             <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
@@ -80,12 +81,6 @@
                             <input wire:model='search' class="form-input pl-9 focus:border-slate-300" type="search"
                                 placeholder="Buscar contrato…" />
                         @endif
-
-
-
-
-
-
 
                         <div class="overflow-x-auto">
                             <table class="table-auto w-full" @click.stop="$dispatch('vehiculosPanelOpen', true)">
