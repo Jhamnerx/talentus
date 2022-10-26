@@ -24,7 +24,7 @@ class Logo extends Component
 
         $this->emit('openModal', $titulo, $val);
     }
-    public function updatedImgDocumento()
+    public function updatedLogo()
     {
 
         $this->validate([
@@ -46,7 +46,7 @@ class Logo extends Component
         $url = $this->logo->storeAs($empresa . '/imagenes', 'logo.png');
         $this->plantilla->logo = $url;
         $this->plantilla->save();
-        $this->dispatchBrowserEvent('save.image', ['mensaje' => 'Imagen Documentos Guardada Correctamente.']);
+        $this->dispatchBrowserEvent('save.image', ['mensaje' => 'Imagen Logo Guardada Correctamente.']);
         //session()->flash('save.image', 'Imagen Documentos Guardada Correctamente.');
     }
 }

@@ -504,6 +504,14 @@
             @livewire('admin.ajustes.plantilla.images.fav-icon', ['plantilla' => $plantilla], key('fav-icon' . $plantilla->id))
         </div>
 
+        <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+
+            @livewire('admin.ajustes.plantilla.images.banner', ['plantilla' => $plantilla], key('banner' . $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.firma', ['plantilla' => $plantilla], key('firma' . $plantilla->id))
+
+
+        </div>
+
     </div>
 
 </div>
