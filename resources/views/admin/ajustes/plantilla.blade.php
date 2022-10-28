@@ -57,6 +57,20 @@
     @endif
 
     <script>
+        window.addEventListener('save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: event.detail.mensaje,
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+        })
+    </script>
+    <script>
         window.addEventListener('save.image', event => {
             $(document).ready(function() {
                 Swal.fire({

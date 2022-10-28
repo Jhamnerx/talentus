@@ -21,7 +21,7 @@
                 <!-- Company name and info -->
                 <div class="mb-4">
                     <h2 class="text-2xl text-slate-800 font-bold mb-2">{{ $plantilla->razon_social }}</h2>
-                    <p>We're building a financial superapp that combines all the best tools into one place 🚀</p>
+
                 </div>
                 <!-- Meta -->
                 <div class="inline-flex flex-wrap justify-center sm:justify-start space-x-4">
@@ -31,8 +31,8 @@
                                 d="M8 8.992a2 2 0 1 1-.002-3.998A2 2 0 0 1 8 8.992Zm-.7 6.694c-.1-.1-4.2-3.696-4.2-3.796C1.7 10.69 1 8.892 1 6.994 1 3.097 4.1 0 8 0s7 3.097 7 6.994c0 1.898-.7 3.697-2.1 4.996-.1.1-4.1 3.696-4.2 3.796-.4.3-1 .3-1.4-.1Zm-2.7-4.995L8 13.688l3.4-2.997c1-1 1.6-2.198 1.6-3.597 0-2.798-2.2-4.996-5-4.996S3 4.196 3 6.994c0 1.399.6 2.698 1.6 3.697 0-.1 0-.1 0 0Z" />
                         </svg>
                         <span
-                            class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{ $plantilla->region }},
-                            {{ $plantilla->pais }}</span>
+                            class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{ $plantilla->direccion['region'] }},
+                            PERÚ</span>
                     </div>
                     <div class="flex items-center">
                         <svg class="w-4 h-4 fill-current shrink-0 text-slate-400" viewBox="0 0 16 16">
@@ -90,6 +90,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('ruc')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-6">
 
@@ -108,6 +113,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('razon_social')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="telefono">TELEFONO:</label>
@@ -129,8 +139,13 @@
                         </svg>
                     </div>
                 </div>
+                @error('telefono')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
-            <div class="col-span-12"> {{ json_encode($direccion) }}</div>
+
 
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="ubigeo">UBIGEO:</label>
@@ -148,6 +163,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('direccion.ubigeo')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-6">
                 <label class="block text-sm font-medium mb-1" for="direccion">DIRECCION:</label>
@@ -165,6 +185,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('direccion.direccion')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="region">REGION:</label>
@@ -182,6 +207,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('direccion.region')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="provincia">PROVINCIA:</label>
@@ -199,6 +229,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('direccion.provincia')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="distrito">DISTRITO:</label>
@@ -216,6 +251,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('direccion.distrito')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
 
@@ -238,9 +278,7 @@
                     </svg>
                 </div>
             </div>
-            <div class="col-span-12">
-                {{ json_encode($sunat) }}
-            </div>
+
 
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="usuario_sol_sunat">USUARIO SOL SUNAT:</label>
@@ -260,6 +298,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('sunat.usuario_sol_sunat')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
 
             <div class="col-span-12 sm:col-span-3">
@@ -280,6 +323,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('sunat.clave_sol_sunat')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="clave_certificado_cdt">CLAVE CERTIFICADO
@@ -300,11 +348,16 @@
                         </svg>
                     </div>
                 </div>
+                @error('sunat.clave_certificado_cdt')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
 
                 <button type="button" wire:click.prevent="saveSunat"
-                    class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600  text-white">GUARDAR</button>
+                    class="btn cursor-pointer bg-talentus-100 hover:bg-talentus-200  text-white">GUARDAR</button>
 
 
             </div>
@@ -324,9 +377,7 @@
         </div>
 
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
-            <div class="col-span-12">
-                {{ json_encode($series) }}
-            </div>
+
 
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="serie_factura">SERIE FACTURA:</label>
@@ -351,6 +402,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.factura')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
 
             <div class="col-span-10 sm:col-span-2">
@@ -376,6 +432,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.boleta')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.recibos">SERIE RECIBO:</label>
@@ -400,6 +461,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.recibo')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.nota_credito">SERIE NOTA DE CREDITO:</label>
@@ -424,6 +490,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.nota_credito')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.nota_debito">SERIE NOTA DE DEBITO:</label>
@@ -448,6 +519,11 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.nota_debito')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.nota_debito">SERIE COTIZACION:</label>
@@ -472,11 +548,16 @@
                         </svg>
                     </div>
                 </div>
+                @error('series.cotizacion')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
 
                 <button type="button" wire:click.prevent="saveSeries"
-                    class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600  text-white">GUARDAR</button>
+                    class="btn cursor-pointer bg-indigo-500 hover:bg-indigo-600  text-white">GUARDAR</button>
 
             </div>
 
