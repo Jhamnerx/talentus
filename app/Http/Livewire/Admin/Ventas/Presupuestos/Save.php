@@ -10,8 +10,6 @@ class Save extends Component
 
     public $numero;
 
-
-
     protected $messages = [
         'numero.required' => 'El número requerido',
         'numero.unique' => 'El número ya esta registrado',
@@ -26,14 +24,15 @@ class Save extends Component
             'numero' => Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
 
         ];
-    }    
+    }
 
     public function render()
     {
         return view('livewire.admin.ventas.presupuestos.save');
     }
 
-    public function mount(){
+    public function mount()
+    {
 
         $this->numero = $this->numero;
     }
@@ -42,7 +41,5 @@ class Save extends Component
     {
 
         $error = $this->validateOnly($label);
-        
-   
     }
 }
