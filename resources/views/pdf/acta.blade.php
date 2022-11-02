@@ -194,14 +194,13 @@
         <div class="qr">
             <img
                 src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')
-                    ->style('square')->eye('circle')->encoding('UTF-8')->generate(
+                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
                                 $acta->vehiculos->placa .
                                 " \n ACTA VALIDA HASTA: " .
                                 $acta->fin_cobertura .
                                 "
-                                                \nCONSULTAR VALIDEZ EN: " .
+                                                                \nCONSULTAR VALIDEZ EN: " .
                                 route('consulta.actas', $acta->codigo),
                         ),
                 ) }}">
@@ -215,8 +214,8 @@
         <div>
             <span>
                 <b>{{ $plantilla->razon_social }}</b>, con RUC {{ $plantilla->ruc }}, Certifica que nuestro cliente:
-                <b>{{ $acta->vehiculos->flotas ? strtoupper($acta->vehiculos->flotas->clientes->razon_social) : 'no existe' }}</b>
-                con DNI/RUC: {{ $acta->vehiculos->flotas->clientes->numero_documento }}, ha adquirido un equipo
+                <b>{{ $acta->vehiculos->cliente ? strtoupper($acta->vehiculos->cliente->razon_social) : 'no existe' }}</b>
+                con DNI/RUC: {{ $acta->vehiculos->cliente->numero_documento }}, ha adquirido un equipo
                 GPS,
                 para la unidad que se detalla a continuación:
                 Así mismo a la fecha se encuentra transmitiendo a nuestra Plataforma de Monitoreo Satelital en

@@ -10,7 +10,6 @@ class Save extends Component
 
     public $nombre;
     public $nombre_cliente, $descripcion;
-    public $empresa_id;
     public $clientes_id;
     public $modalOpen = false;
 
@@ -18,11 +17,7 @@ class Save extends Component
 
     protected $rules = [
         'nombre' => 'required|unique:flotas,nombre',
-        'nombre_cliente' => 'required',
-        'empresa_id' => 'required',
         'clientes_id' => 'required|exists:clientes,id',
-
-
     ];
 
     protected $messages = [
@@ -34,18 +29,6 @@ class Save extends Component
 
     ];
 
-
-
-
-    public function mount()
-    {
-        $this->empresa_id = session('empresa');
-    }
-    public function ChangeCliente($id, $nombre)
-    {
-        $this->clientes_id = $id;
-        $this->nombre_cliente = $nombre;
-    }
     public function render()
     {
         return view('livewire.admin.vehiculos.flotas.save');
@@ -63,27 +46,17 @@ class Save extends Component
     }
 
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
     private function resetInputFields()
     {
         $this->descripcion = '';
         $this->clientes_id = '';
         $this->nombre = '';
-        $this->nombre_cliente = '';
     }
 
     public function save()
     {
 
-
         $validatedDate = $this->validate();
-        // dd($this->clientes_id);
-
-
         Flotas::create([
             'nombre' => $this->nombre,
             'clientes_id' => $this->clientes_id,
@@ -100,7 +73,7 @@ class Save extends Component
     {
         $this->validateOnly($propertyName);
     }
-    public function updatingArray($value, $key){
-
+    public function updatingArray($value, $key)
+    {
     }
 }

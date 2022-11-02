@@ -20,49 +20,54 @@ class Vehiculos extends Model
     {
         return $query->where('is_active', $status);
     }
+    // Scope local de activo
+    public function order($query, $order)
+    {
+        return $query->orderBy($order, 'desc');
+    }
 
-
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        //static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
-    //Relacion uno a muchos inversa
 
-    public function flotas()
+    //Relacion uno a muchos inversa
+    public function cliente()
     {
-        return $this->belongsTo(Flotas::class, 'flotas_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
     }
+
     //relacion uno a muchos a modelos
     public function sim_card()
     {
-        return $this->belongsTo(SimCard::class, 'sim_card_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(SimCard::class, 'sim_card_id');
     }
+
     //relacion uno a muchos a dispositivos
     public function dispositivos()
     {
         return $this->belongsTo(Dispositivos::class);
     }
+
     //relacion uno a muchos a reportes
     public function reportes()
     {
         return $this->hasMany(Reportes::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function actas()
     {
         return $this->hasMany(Actas::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function certificados()
     {
         return $this->hasMany(Certificados::class, 'vehiculos_id');
     }
+
     //relacion uno a muchos a actas
     public function cert_velocimetros()
     {
@@ -70,27 +75,26 @@ class Vehiculos extends Model
     }
 
     //Relacion muchos a ,muchos
-
     public function detalle_contrato()
     {
-
-
-        return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);;
+        return $this->hasMany(DetalleContratos::class, 'vehiculos_id')->withTrashed();
     }
 
-    //Relacion muchos a ,muchos
 
+    //Relacion muchos a ,muchos
     public function contratos()
     {
-
         return $this->belongsToMany(Contratos::class);
     }
 
-
     //relacion uno a muchos
-
     public function cobros()
     {
         return $this->hasMany(Cobros::class, 'vehiculos_id');
+    }
+
+    public function flotas()
+    {
+        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed();
     }
 }

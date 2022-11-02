@@ -1,6 +1,6 @@
 <div class="m-1.5">
     <div x-data="{ modalOpen: false }">
-        <a href="{{ route('admin.clientes.contactos.edit', $model) }}">
+        <a href="{{ route('admin.clientes.contactos.edit', $contacto) }}">
             <button class="text-slate-400 hover:text-slate-500 rounded-full">
                 <span class="sr-only">Editar</span>
                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">

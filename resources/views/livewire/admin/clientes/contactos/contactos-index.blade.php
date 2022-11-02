@@ -105,6 +105,9 @@
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">DNI</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Telefono</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -136,7 +139,7 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center relative">
                                             <button>
-                                                <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500"
+                                                <svg class="w-4 h-4 shrink-0 fill-current {{ $contacto->is_gerente ? 'text-yellow-500' : 'text-slate-500' }}"
                                                     viewBox="0 0 16 16">
                                                     <path
                                                         d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
@@ -160,6 +163,10 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left">{{ $contacto->numero_documento }}</div>
+
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left">{{ $contacto->telefono }}</div>
 
                                     </td>
@@ -173,7 +180,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="space-x-1">
-                                            @livewire('admin.clientes.contactos.delete', ['model' => $contacto], key('delete' . $contacto->id))
+                                            @livewire('admin.clientes.contactos.delete', ['contacto' => $contacto], key('delete' . $contacto->id))
                                         </div>
                                     </td>
                                 </tr>

@@ -22,8 +22,7 @@
             <!-- Logo -->
             <a class="block" href="{{ route('admin.home') }}">
 
-                <img width="56" height="56" src="{{ asset('images/plantilla/talentus/icono.png') }}"
-                    alt="">
+                <img width="56" height="56" src="{{ asset('images/logo.png') }}" alt="">
 
 
             </a>

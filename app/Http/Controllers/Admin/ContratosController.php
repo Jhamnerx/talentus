@@ -34,35 +34,6 @@ class ContratosController extends Controller
         return view('admin.ventas.contratos.create', compact('vehiculos'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(ContratosRequest $request)
-    {
-        // dd($request->all());
-        $contrato =  new Contratos();
-
-        $contrato->clientes_id = $request->clientes_id;
-        $contrato->fecha = $request->fecha;
-        $contrato->ciudades_id = $request->ciudades_id;
-        $contrato->fondo = $request->fondo ? $request->fondo : '0';
-        $contrato->sello = $request->sello ? $request->sello : '0';
-        $contrato->save();
-
-        Contratos::createItems($contrato, $request->items);
-
-        return redirect()->route('admin.ventas.contratos.index')->with('store', 'El Contrato se creo con exito');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Contratos  $contratos
-     * @return \Illuminate\Http\Response
-     */
     public function show(Contratos $contratos)
     {
         return view('admin.ventas.contratos.show');

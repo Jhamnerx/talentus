@@ -59,15 +59,13 @@
                         <select wire:model="modelo" class="form-select w-full" name="modelo" id="modelo">
                             <option selected>Selecciona un modelo</option>
                             @foreach ($modelos as $modelo)
-                            <option value="{{$modelo->id}}">{{$modelo->modelo}}</option>
+                                <option value="{{ $modelo->id }}">{{ $modelo->modelo }}</option>
                             @endforeach
                         </select>
                         @error('modelo')
-
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{$message}}
-                        </p>
-
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
 
                     </div>
@@ -97,12 +95,13 @@
                         </div>
 
                     </div>
+                    <div wire:loading wire:target="file">
+                        <span class="text-emerald-500">Cargando...</span>
+                    </div>
                     @error('file')
-
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{$message}}
-                    </p>
-
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                     @enderror
                 </div>
 

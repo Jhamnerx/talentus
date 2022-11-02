@@ -12,37 +12,17 @@
                     <div class="flex-1">
                         <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
                             <!-- Logo -->
-                            <a class="block" href="{{route('web.home')}}">
-                                <svg width="32" height="32" viewBox="0 0 32 32">
-                                    <defs>
-                                        <linearGradient x1="28.538%" y1="20.229%" x2="100%" y2="108.156%" id="logo-a">
-                                            <stop stop-color="#A5B4FC" stop-opacity="0" offset="0%" />
-                                            <stop stop-color="#A5B4FC" offset="100%" />
-                                        </linearGradient>
-                                        <linearGradient x1="88.638%" y1="29.267%" x2="22.42%" y2="100%" id="logo-b">
-                                            <stop stop-color="#38BDF8" stop-opacity="0" offset="0%" />
-                                            <stop stop-color="#38BDF8" offset="100%" />
-                                        </linearGradient>
-                                    </defs>
-                                    <rect fill="#6366F1" width="32" height="32" rx="16" />
-                                    <path
-                                        d="M18.277.16C26.035 1.267 32 7.938 32 16c0 8.837-7.163 16-16 16a15.937 15.937 0 01-10.426-3.863L18.277.161z"
-                                        fill="#4F46E5" />
-                                    <path
-                                        d="M7.404 2.503l18.339 26.19A15.93 15.93 0 0116 32C7.163 32 0 24.837 0 16 0 10.327 2.952 5.344 7.404 2.503z"
-                                        fill="url(#logo-a)" />
-                                    <path
-                                        d="M2.223 24.14L29.777 7.86A15.926 15.926 0 0132 16c0 8.837-7.163 16-16 16-5.864 0-10.991-3.154-13.777-7.86z"
-                                        fill="url(#logo-b)" />
-                                </svg>
+                            <a class="block" href="{{ route('web.home') }}">
+
+                                <img src="{{ asset('images/logo-2-1.png') }}" alt="">
                             </a>
                         </div>
                     </div>
 
                     @if (session('status'))
-                    <div class="mb-4 font-medium text-sm text-green-600">
-                        {{ session('status') }}
-                    </div>
+                        <div class="mb-4 font-medium text-sm text-green-600">
+                            {{ session('status') }}
+                        </div>
                     @endif
                     <div class="max-w-sm mx-auto px-4 py-8">
 
@@ -51,26 +31,20 @@
                         <x-jet-validation-errors class="mb-4" />
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
-                            <p tabindex="0" class="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
+                            <p tabindex="0"
+                                class="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
                                 Ingresa en tu cuenta</p>
 
 
                             <button aria-label="Continue with google" role="button"
-                                class="focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
-                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg2.svg" alt="google">
-                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Google</p>
+                                class="focus:outline-none hover:bg-slate-50 hover:border-gray-400 focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
+                                <img src="{{ asset('images/icons/google.svg') }}" alt="google">
+                                <p class="text-base font-medium ml-4 text-gray-700">Ingresar con Google</p>
                             </button>
-
-                            <button aria-label="Continue with github" role="button"
-                                class="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg3.svg" alt="github">
-                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Github</p>
-                            </button>
-
-                            <button aria-label="Continue with twitter" role="button"
-                                class="focus:outline-none  focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-                                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg4.svg" alt="twitter">
-                                <p class="text-base font-medium ml-4 text-gray-700">Continue with Twitter</p>
+                            <button aria-label="Continue with facebook" role="button"
+                                class="focus:outline-none hover:bg-slate-50 hover:border-gray-400 focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
+                                <img class="w-5 h-5" src="{{ asset('images/icons/facebook.svg') }}" alt="facebook">
+                                <p class="text-base font-medium ml-4 text-gray-700">Ingresar con Facebook</p>
                             </button>
 
                             <div class="w-full flex items-center justify-between py-5">
@@ -82,17 +56,18 @@
 
                             <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium mb-1" for="email">Correo Electronico</label>
+                                    <label class="block text-sm font-medium mb-1" for="email">Correo
+                                        Electronico</label>
                                     <input id="email"
-                                        class="w-full bg-gray-100 border rounded  text-xs font-medium leading-none text-gray-800 py-3 pl-3 mt-2"
-                                        name="email" value="{{old('email')}}" type="email" required autofocus />
+                                        class="w-full bg-gray-100 border rounded form-input text-xs font-medium leading-none text-gray-800 py-3 pl-3 mt-2"
+                                        name="email" value="{{ old('email') }}" type="email" required autofocus />
                                 </div>
                                 <label class="block text-sm font-medium mb-1" for="password">Contraseña</label>
                                 <div class="relative flex items-center justify-center">
 
                                     <input autocomplete="on" required autocomplete="current-password" id="password"
                                         type="password" name="password"
-                                        class="bg-gray-200 border rounded  text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
+                                        class="bg-gray-200 border rounded form-input text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
                                     <div class="absolute right-0 mt-2 mr-3 cursor-pointer">
                                         <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg5.svg"
                                             alt="viewport">
@@ -115,9 +90,9 @@
                             <div class="flex items-center justify-between mt-6">
                                 <div class="mr-1">
                                     @if (Route::has('password.request'))
-                                    <a class="text-sm underline hover:no-underline"
-                                        href="{{ route('password.request') }}">Olvidaste tu
-                                        Contraseña?</a>
+                                        <a class="text-sm underline hover:no-underline"
+                                            href="{{ route('password.request') }}">Olvidaste tu
+                                            Contraseña?</a>
                                     @endif
                                 </div>
 
@@ -134,7 +109,7 @@
                         <div class="pt-5 mt-6 border-t border-slate-200">
                             <div class="text-sm">
                                 No tienes una cuenta? <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                    href="{{route('register')}}">Registrate</a>
+                                    href="{{ route('register') }}">Registrate</a>
                             </div>
                             <!-- Warning -->
                             <div class="mt-5">
@@ -144,7 +119,7 @@
                                             d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
                                     </svg>
                                     <span class="text-sm">
-
+                                        Panel Disponible solo para administradores y personal
                                     </span>
                                 </div>
                             </div>
@@ -161,8 +136,13 @@
                 <img class="object-cover object-center w-full h-full" src="images/auth-image.jpg" width="760"
                     height="1024" alt="Authentication image" />
                 <img class="absolute top-1/4 left-0 transform -translate-x-1/2 ml-8 hidden lg:block"
-                    src="images/auth-decoration.png" width="218" height="224" alt="Authentication decoration" />
+                    src="images/auth-decoration-2.png" width="536" height="548" alt="Authentication decoration" />
             </div>
+            {{-- <div class="block md:hidden absolute top-0 bottom-0 -z-10 right-0 md:w-1/2" aria-hidden="true">
+                <img class="object-cover object-center bg-no-repeat w-full h-full" src="images/auth-mobile.jpg"
+                    alt="Authentication image" />
+
+            </div> --}}
 
         </div>
 

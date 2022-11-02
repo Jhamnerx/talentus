@@ -1,0 +1,196 @@
+body {
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: "Arial, Helvetica, sans-serif";
+    /* background-repeat: no-repeat; */
+    /* background-size: 100%;
+            background-image: url(data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}) */
+}
+
+p {
+    text-align: justify;
+    padding-top: 0rem;
+    padding-bottom: 1rem;
+}
+
+@page {
+    display: block;
+    flex-wrap: wrap;
+    overflow: hidden;
+
+    margin-top: 3.8rem;
+    margin-left: 5rem;
+    margin-right: 2rem;
+    margin-bottom: 3.8rem;
+    padding-bottom: 1rem;
+}
+
+.contrato {
+    padding-top: 1.5rem;
+    padding-left: 2.1rem;
+    padding-right: 1rem;
+    padding-bottom: 2.6rem;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+.tabla-vehiculos {
+    border: 1px solid;
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+.tabla-border td {
+    border: 1px solid;
+}
+
+.tabla-vehiculos-header {
+    font-weight: 700;
+    background-image: none;
+}
+
+.tabla-vehiculos-body {
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+
+.color-table {
+    color: #ffffff;
+    background-color: #052c52;
+}
+
+.sutitulo {
+    font-size: 1.125rem;
+}
+.tabla-ciudad {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0px solid;
+}
+.tabla-ciudad td {
+    padding: 10px;
+}
+
+.tabla-ciudad-header {
+    font-weight: 700;
+    padding: 10px;
+    text-align: center;
+}
+.tabla-ciudad-body {
+    text-align: center;
+
+    padding: 10px;
+    font-weight: inherit;
+    position: inherit;
+}
+
+.u-table-alt-palette-1-light-3 tr:nth-child(even) {
+    color: #111111;
+    background-color: #e9f2fa;
+}
+.padding-1 {
+    padding-bottom: 1rem;
+}
+.padding-2 {
+    padding-bottom: 2rem;
+}
+.padding-3 {
+    padding-bottom: 3rem;
+}
+.padding-4 {
+    padding-bottom: 4rem;
+}
+.padding-6 {
+    padding-bottom: 6rem;
+}
+
+.tabla-1 {
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+
+.tabla-2 {
+    position: absolute;
+    top: 0px;
+    left: 352px;
+}
+
+.tabla-20 {
+    font-size: 13px;
+}
+
+.tabla-20-1 {
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+
+.tabla-20-2 {
+    position: absolute;
+    top: 0px;
+    left: 238px;
+}
+
+.tabla-20-3 {
+    position: absolute;
+    top: 0px;
+    left: 470px;
+}
+
+.row {
+    width: 100%;
+}
+
+.column,
+.columns {
+    width: 100%;
+    //float: left;
+    margin-bottom: 10px;
+    margin-right: 2px;
+}
+
+.medium-1 {
+    width: 8.3333333333%;
+}
+.medium-2 {
+    width: 16.6666666667%;
+}
+.medium-3 {
+    width: 25%;
+}
+.medium-4 {
+    width: 33.3333333333%;
+}
+.medium-5 {
+    width: 41.6666666667%;
+}
+.medium-6 {
+    width: 50%;
+}
+.medium-7 {
+    width: 58.3333333333%;
+}
+.medium-8 {
+    width: 66.6666666667%;
+}
+.medium-9 {
+    width: 75%;
+}
+.medium-10 {
+    width: 83.3333333333%;
+}
+.medium-11 {
+    width: 91.6666666667%;
+}
+.medium-12 {
+    width: 100%;
+}

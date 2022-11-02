@@ -15,10 +15,10 @@ class EmpresasSeeder extends Seeder
     public function run()
     {
         Empresa::create([
-            'nombre' => 'TALENTUS TECHNOLOGY E.I.R.L',
+            'nombre' => 'talentus',
         ]);
         Empresa::create([
-            'nombre' => 'KATARY SERVICIOS GENERALES S.A.C',
+            'nombre' => 'katary',
         ]);
     }
 }

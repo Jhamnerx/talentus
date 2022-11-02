@@ -13,10 +13,10 @@ class SimCard extends Model
     protected $table = 'sim_card';
 
 
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-
-        //
+        static::addGlobalScope(new EmpresaScope);
     }
 
     //relacion uno a muchos

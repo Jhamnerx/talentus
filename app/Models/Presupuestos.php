@@ -31,7 +31,7 @@ class Presupuestos extends Model
     protected static function booted()
     {
         //
-        static::addGlobalScope(new EliminadoScope);
+
         static::addGlobalScope(new EmpresaScope);
     }
 
@@ -39,7 +39,7 @@ class Presupuestos extends Model
 
     public function clientes()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withoutGlobalScope(EliminadoScope::class, ActiveScope::class);
+        return $this->belongsTo(Clientes::class, 'clientes_id');
     }
 
     //relacion uno a muchos
@@ -64,7 +64,7 @@ class Presupuestos extends Model
     public function getPDFData($action)
     {
 
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
+        $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
         view()->share([
@@ -84,7 +84,7 @@ class Presupuestos extends Model
     public function getPDFDataToMail($data)
     {
 
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
+        $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
 

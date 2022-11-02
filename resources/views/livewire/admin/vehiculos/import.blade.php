@@ -24,7 +24,7 @@
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
-                        <div class="font-semibold text-slate-800">IMPORTAR CLIENTES</div>
+                        <div class="font-semibold text-slate-800">IMPORTAR VEHICULOS</div>
                         <button class="text-slate-400 hover:text-slate-500" @click="modalOpen = false, files = null">
                             <div class="sr-only">Close</div>
                             <svg class="w-4 h-4 fill-current">
@@ -93,6 +93,9 @@
                         </div>
 
 
+                    </div>
+                    <div wire:loading wire:target="file">
+                        <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">

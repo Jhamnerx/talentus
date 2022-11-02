@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Clientes\Contactos;
 use App\Models\Contactos;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ContactosIndex extends Component
 {
     use WithPagination;
@@ -20,8 +21,9 @@ class ContactosIndex extends Component
         })->orWhere('cargo', 'like', '%' . $this->search . '%')
             ->orWhere('nombre', 'like', '%' . $this->search . '%')
             ->orWhere('telefono', 'like', '%' . $this->search . '%')
+            ->orWhere('numero_documento', 'like', '%' . $this->search . '%')
             ->orWhere('birthday', 'like', '%' . $this->search . '%')
-            ->orWhere('email', 'like', '%' . $this->search . '%')
+            ->orWhere('email', 'like', '%' . $this->search . '%')->with('clientes')
             ->orderBy('id', 'desc')
             ->paginate(10);
         // ->get();

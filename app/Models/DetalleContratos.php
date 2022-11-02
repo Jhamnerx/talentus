@@ -17,9 +17,7 @@ class DetalleContratos extends Model
 
     public function vehiculos()
     {
-
-
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
     }
 
 
@@ -27,6 +25,6 @@ class DetalleContratos extends Model
 
     public function contratos()
     {
-        return $this->belongsTo(Contratos::class, 'contratos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Contratos::class, 'contratos_id')->withTrashed();
     }
 }

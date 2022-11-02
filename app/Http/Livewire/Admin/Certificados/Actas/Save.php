@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Vinkla\Hashids\Facades\Hashids;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
@@ -36,11 +36,10 @@ class Save extends Component
         $this->openModalSave = true;
         //dd($this->setNextSequenceNumber());
         $newActa = new ActasController();
-      //  dd($newActa->setNextSequenceNumber());
+        //  dd($newActa->setNextSequenceNumber());
         $this->numero = $newActa->setNextSequenceNumber();
         $this->inicio_cobertura = Carbon::now()->format('Y-m-d');
         $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
-
     }
 
 
@@ -62,7 +61,7 @@ class Save extends Component
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
-       // $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
+        // $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
         $acta =  new Actas();
 
         $acta->vehiculos_id = $values["vehiculos_id"];
@@ -89,6 +88,4 @@ class Save extends Component
         $actaRequest = new ActasRequest();
         $this->validateOnly($label, $actaRequest->rules(), $actaRequest->messages());
     }
-
-
 }

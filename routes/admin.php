@@ -88,7 +88,18 @@ Route::resource('ventas-factura', VentasFacturasController::class)->names('admin
     'ventas-factura' => 'factura'
 ]);;
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
-Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
+
+
+//Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
+
+
+Route::controller(ContratosController::class)->group(function () {
+
+    Route::get('contratos/crear', 'create')->name('admin.ventas.contratos.create');
+    Route::get('contratos', 'index')->name('admin.ventas.contratos.index');
+    Route::get('contratos/{contrato}', 'show')->name('admin.ventas.contratos.show');
+    Route::get('contratos/{contrato}/editar', 'edit')->name('admin.ventas.contratos.edit');
+});
 
 // VEHICULOS
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
@@ -138,6 +149,7 @@ Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.
 Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
 Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
+Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
 Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');

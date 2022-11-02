@@ -19,26 +19,71 @@ class PlantillaSeeder extends Seeder
             'ruc' => '20496172168',
             'impuesto' => '18',
             'img_documentos' => 'plantilla/talentus/img_documentos.png',
+            'fondo_contrato' => 'plantilla/talentus/fondo_contrato.png',
             'img_firma' => 'plantilla/talentus/img_firma.png',
-            'img_icono' => 'plantilla/talentus/icono.png',
-            'img_login' => 'plantilla/talentus/img_login.png',
-            'serie_factura' => 'F001',
-            'serie_boleta' => 'B001',
-            'serie_recibo' => 'R001',
+            'logo' => 'plantilla/talentus/logo.png',
+            'fav_icon' => 'plantilla/talentus/logo.png',
+            'banner' => 'plantilla/talentus/banner.png',
+            'direccion' => [
+                "ubigeo" => "060101",
+                "direccion" => "JR. SANTA MARIA NRO. 221 BAR. MOLLEPAMPA CAJAMARCA - CAJAMARCA - CAJAMARCA",
+                "region" => "CAJAMARCA",
+                "provincia" =>
+                "CAJAMARCA",
+                "distrito" => "CAJAMARCA"
+            ],
+            'telefono' => '9877654321',
+            'sunat' => [
+                "usuario_sol_sunat" => "MODDATOS",
+                "clave_sol_sunat" => "MODDATOS",
+                "clave_certificado_cdt" => "MODDATOS",
+            ],
+            'correo' => 'administracion@talentustechnology.com',
+            'series' => [
+                'factura' => 'F001',
+                'boleta' => 'B001',
+                'recibo' => 'R001',
+                'nota_credito' => 'FF001',
+                'nota_debito' => 'FF001',
+                'cotizacion' => 'PRE',
+            ],
             'empresa_id' => '1',
 
         ]);
+
         plantilla::create([
             'razon_social' => 'KATARY SERVICIOS GENERALES S.A.C',
-            'ruc' => '20496172168',
+            'ruc' => '20605873783 ',
             'impuesto' => '18',
             'img_documentos' => 'plantilla/katary/img_documentos.png',
+            'fondo_contrato' => 'plantilla/katary/fondo_contrato.png',
             'img_firma' => 'plantilla/katary/img_firma.png',
-            'img_icono' => 'plantilla/katary/icono.png',
-            'img_login' => 'plantilla/katary/img_login.png',
-            'serie_factura' => 'F001',
-            'serie_boleta' => 'B001',
-            'serie_recibo' => 'R001',
+            'logo' => 'plantilla/katary/logo.png',
+            'fav_icon' => 'plantilla/katary/logo.png',
+            'banner' => 'plantilla/katary/banner.png',
+            'direccion' => [
+                "ubigeo" => "060101",
+                "direccion" => "JR. SANTA MARIA NRO. 221 BAR. MOLLEPAMPA CAJAMARCA - CAJAMARCA - CAJAMARCA",
+                "region" => "CAJAMARCA",
+                "provincia" =>
+                "CAJAMARCA",
+                "distrito" => "CAJAMARCA"
+            ],
+            'telefono' => '9877654321',
+            'sunat' => [
+                "usuario_sol_sunat" => "MODDATOS",
+                "clave_sol_sunat" => "MODDATOS",
+                "clave_certificado_cdt" => "MODDATOS",
+            ],
+            'correo' => 'administracion@talentustechnology.com',
+            'series' => [
+                'factura' => 'F001',
+                'boleta' => 'B001',
+                'recibo' => 'R001',
+                'nota_credito' => 'FF001',
+                'nota_debito' => 'FF001',
+                'cotizacion' => 'PRE',
+            ],
             'empresa_id' => '2',
         ]);
     }

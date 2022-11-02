@@ -18,6 +18,26 @@ class Save extends Component
         'openModalSaveCliente'
     ];
 
+    protected $rules =
+    [
+        'razon_social' => 'required',
+        'numero_documento' => 'required|digits_between:8,11|numeric|unique:clientes',
+        'telefono' => 'nullable|digits_between:6,9|numeric',
+        'email' => 'email|nullable'
+    ];
+
+    protected $messages =
+    [
+        'razon_social.required' => 'No dejes vacio este campo',
+        'numero_documento.required' => 'Ingresa un documento',
+        'numero_documento.digits_between' => 'Ingresa como minimo 8 caracteres',
+        'numero_documento.numeric' => 'El numero documento debe ser un numero',
+        'numero_documento.unique' => 'El cliente ya esta registrado',
+        'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
+        'telefono.numeric' => 'El numero de telefono debe ser un numero',
+        'email.email' => 'Debe tener formato de correo electronico',
+    ];
+
     public function render()
     {
         return view('livewire.admin.clientes.save');
@@ -51,8 +71,8 @@ class Save extends Component
 
     public function saveCliente()
     {
-        $request = new ClientesRequest();
-        $this->validate($request->rules(), $request->messages());
+
+        $this->validate();
 
         Clientes::create([
             'razon_social' => $this->razon_social,
@@ -71,9 +91,7 @@ class Save extends Component
 
     public function updated($value)
     {
-        $request = new ClientesRequest();
-
-        $this->validateOnly($value, $request->rules(), $request->messages());
+        $this->validateOnly($value);
     }
 
     public function closeModal()

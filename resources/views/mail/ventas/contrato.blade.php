@@ -188,7 +188,7 @@
 
                                                             <h1
                                                                 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Raleway',sans-serif; font-size: 24px;">
-                                                                CONTRATO: {{ $contrato->clientes->razon_social }}
+                                                                CONTRATO: {{ $contrato->cliente->razon_social }}
                                                             </h1>
 
                                                         </td>
@@ -234,7 +234,7 @@
                                                                     <span
                                                                         style="font-family: 'courier new', courier; font-size: 14px; line-height: 19.6px;">
                                                                         contrato A:
-                                                                        {{ $contrato->clientes->razon_social }}
+                                                                        {{ $contrato->cliente->razon_social }}
                                                                     </span>
                                                                 </p>
                                                             </div>

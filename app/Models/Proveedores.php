@@ -16,16 +16,18 @@ class Proveedores extends Model
 
     protected $table = 'proveedores';
 
-
-    // SCOPE DE EMPRESA
-
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-       // static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
 
+    // Scope local de activo
+    public function scopeActive($query, $status)
+    {
+        return $query->where('is_active', $status);
+    }
     //relacion uno a muchos
 
     public function compras_factura()

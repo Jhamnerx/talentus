@@ -7,7 +7,7 @@ use App\Http\Requests\RecibosRequest;
 use App\Models\Recibos;
 use App\Models\plantilla;
 use Illuminate\Http\Request;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class RecibosController extends Controller
 {

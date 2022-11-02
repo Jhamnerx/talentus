@@ -363,9 +363,9 @@
             </div>
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
-                    'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                    'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -462,13 +462,13 @@
                     // console.log(data.suggestions);
                     var suggestions = $.map(data.suggestions, function(obj) {
 
-                        obj.id = obj.id || obj.data; // replace pk with your identifier
-                        obj.text = obj.value; // replace pk with your identifier
+                        obj.id = obj.id || obj.value; // replace pk with your identifier
+                        obj.text = obj.data; // replace pk with your identifier
 
                         return obj;
 
                     });
-                    //console.log(data);
+                    // console.log(suggestions);
                     // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
 

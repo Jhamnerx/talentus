@@ -43,7 +43,7 @@ class VehiculosRequest extends FormRequest
             "sim_card_id" => 'nullable|required',
             "numero" =>
             'required|unique:vehiculos,numero',
-            "flotas_id"  => "required",
+            "clientes_id"  => "required",
             "dispositivos_id" =>
             'nullable|unique:vehiculos',
             "empresa_id" => 'exists:empresas,id',
@@ -82,7 +82,7 @@ class VehiculosRequest extends FormRequest
 
             'placa.required' => 'La placa es requerida',
             'placa.unique' => 'Esta placa ya esta registrada',
-            'flotas_id.required' => 'Debe seleccionar una flota',
+            'clientes_id.required' => 'Debe seleccionar un cliente',
             'sim_card_id.required' => 'Debe seleccionas un numero asignado',
             'numero.required' => 'El numero es requerido',
             'numero.unique' => 'ya estas registrando este sim en la placa ' . $numero . '',

@@ -67,14 +67,14 @@ class SearchController extends Controller
         // return $array;
 
         $term = $request->get('term');
-        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
 
         $data = [];
 
         foreach ($querys as $query) {
             $data[] = [
-                'value' => $query->razon_social,
-                'data' => $query->id,
+                'data' => $query->razon_social,
+                'value' => $query->id,
                 'flotas' => $query->flotas,
 
             ];
@@ -109,7 +109,7 @@ class SearchController extends Controller
     {
 
         $term = $request->get('term');
-        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Proveedores::where('razon_social', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
 
         $data = [];
 

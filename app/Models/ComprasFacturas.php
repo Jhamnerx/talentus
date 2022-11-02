@@ -27,15 +27,10 @@ class ComprasFacturas extends Model
 
 
 
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        old('divisa');
+        static::addGlobalScope(new EmpresaScope);
     }
 
     //Relacion uno a muchos inversa

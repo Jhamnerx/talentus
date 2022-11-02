@@ -13,6 +13,13 @@ class Empresa extends Model
     protected $table = 'empresas';
 
 
+
+    // Scope local de activo
+    public function scopeActual($query)
+    {
+        return $query->where('id', session('empresa'));
+    }
+
     //relacion uno a muchos
 
     public function producto()

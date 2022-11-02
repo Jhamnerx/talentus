@@ -248,29 +248,47 @@
                             </div>
                         </div>
 
-                        <div class="col-span-12 sm:col-span-12 selectFlota" wire:ignore>
+                        <div class="col-span-12 sm:col-span-12 selectCliente" wire:ignore>
 
-                            <label class="block text-sm font-medium mb-1" for="flotas_id">Flota: <span
+                            <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente: <span
                                     class="text-rose-500">*</span></label>
 
 
-                            <select wire:model="flotas_id" name="flotas_id" id="flotas_id" class="flotas_id w-full"
-                                required></select>
-
-
-
-
+                            <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
+                                class="clientes_id w-full" required></select>
 
 
                         </div>
                         <div class="col-span-12">
 
-                            @error('flotas_id')
+                            @error('clientes_id')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
                                 </p>
                             @enderror
                         </div>
+                        @if ($flotas)
+                            <div class="col-span-12 sm:col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="clientes_id">Flotas:</label>
+
+                                @foreach ($flotas as $flota)
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <span class="text-sm mr-2">{{ $flota->nombre }} </span>
+                                            {!! Form::checkbox('flotas[]', $flota->id, null, ['class' => 'form-checkbox']) !!}
+
+                                        </label>
+                                    </div>
+                                @endforeach
+
+                                @error('tags')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                        @endif
+
 
                         <div class="col-span-6 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
@@ -498,13 +516,13 @@
         </script>
 
         <script>
-            $('.flotas_id').select2({
-                placeholder: 'Buscar una flota',
+            $('.clientes_id').select2({
+                placeholder: 'Selecciona cliente',
                 language: "es",
                 //tags: true,
                 width: '100%',
                 ajax: {
-                    url: '{{ route('search.flotas') }}',
+                    url: '{{ route('search.clientes') }}',
                     dataType: 'json',
                     delay: 250,
                     cache: true,
@@ -520,75 +538,53 @@
                     },
                     processResults: function(data, params) {
 
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
 
                             return obj;
 
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
                         return {
-
                             results: suggestions,
-
                         };
-
                     },
 
 
                 },
                 minimumInputLength: 1,
-                templateResult: formatFlota,
-                // templateSelection: formatSelectionFlota,
+                templateResult: formatCliente,
+                // templateSelection: formatSelectioncliente,
             });
 
 
-            $('.flotas_id').on('change', function() {
+            $('.clientes_id').on('change', function() {
 
-                @this.set('flotas_id', this.value)
+                @this.set('clientes_id', this.value)
             })
 
-            function formatFlota(flota) {
-                if (flota.loading) {
-                    return flota.text;
+            function formatCliente(cliente) {
+                if (cliente.loading) {
+                    return cliente.text;
                 }
 
                 var $container = $(
 
-                    "<div class='select2-result-flotas clearfix'>" +
-                    "<div class='select2-result-flotas__meta'>" +
-                    "<div class='select2-result-flotas__title'></div>" +
-                    "<div class='select2-result-flotas__description'></div>" +
+                    "<div class='select2-result-clientes clearfix'>" +
+                    "<div class='select2-result-clientes__meta'>" +
+                    "<div class='select2-result-clientes__title'></div>" +
+                    "<div class='select2-result-clientes__description'></div>" +
                     "</div>" +
                     "</div>"
                 );
 
-                $container.find(".select2-result-flotas__title").text(flota.text);
-                $container.find(".select2-result-flotas__description").text(flota.cliente.razon_social);
-                // $container.find(".select2-result-flotas__stargazers").append(repo.stargazers_count + " Stars");
+                $container.find(".select2-result-clientes__title").text(cliente.text);
+                $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
+                // $container.find(".select2-result-clientes__stargazers").append(repo.stargazers_count + " Stars");
 
                 return $container;
             }
-
-
-            // function formatSelectionFlota(flota) {
-            //     if (!flota.id) {
-            //         return flota.text;
-            //     }
-
-            //     var $flota = $(
-            //         '<span class="select2-flotas_result"></span>'
-            //     );
-
-            //     // Use .text() instead of HTML string concatenation to avoid script injection issues
-            //     $flota.find(".select2-flotas_result").text(flota.text);
-
-            //     return $flota;
-            // };
         </script>
 
 
@@ -628,8 +624,6 @@
                 onHint: function(hint) {
                     //$('#numero').val(hint);
                     //console.log(hint);
-
-
                 },
                 onSearchComplete: function(query, suggestions) {
 
@@ -663,9 +657,7 @@
                 autoSelectFirst: false,
                 deferRequestBy: 5,
                 onSelect: function(suggestion) {
-
                     //console.log(suggestion.operador);
-
                     $('.modelo').val(suggestion.modelo);
                     @this.set('modelo_gps', suggestion.modelo)
                     $('.dispositivos_id').val(suggestion.data);
@@ -677,8 +669,7 @@
                 },
                 onHint: function(hint) {
                     //$('#numero').val(hint);
-                    console.log(hint);
-
+                    // console.log(hint);
 
                 },
                 onSearchComplete: function(query, suggestions) {

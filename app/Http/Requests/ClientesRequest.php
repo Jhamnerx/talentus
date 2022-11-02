@@ -24,7 +24,7 @@ class ClientesRequest extends FormRequest
      */
     public function rules()
     {
-
+        $cliente = $this->route()->parameter('cliente');
 
         $rules = [
             'razon_social' => 'required',
@@ -34,6 +34,10 @@ class ClientesRequest extends FormRequest
         ];
 
 
+        if ($cliente) {
+
+            $rules['numero_documento'] = 'required|digits_between:8,11|numeric|unique:clientes,numero_documento,' . $cliente->id;
+        }
 
         return $rules;
     }

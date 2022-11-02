@@ -30,10 +30,10 @@ class CreateUsersTable extends Migration
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->boolean('estado')->default(false);
-            $table->unsignedBigInteger('clientes_id')->nullable();
+            //$table->unsignedBigInteger('clientes_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            // $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
         });
     }
 

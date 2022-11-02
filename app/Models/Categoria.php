@@ -20,6 +20,12 @@ class Categoria extends Model
 
     protected $table = 'categorias';
 
+    //GLOBAL SCOPE EMPRESA
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new EmpresaScope);
+    // }
+
     // Scope local de activo
     public function scopeActive($query, $status)
     {
@@ -39,21 +45,13 @@ class Categoria extends Model
         return $this->morphMany(ChangesModels::class, 'changes');
     }
 
-    public function cambios(){
+    public function cambios()
+    {
         return $this->hasMany(ChangesModels::class, 'change_id');
     }
 
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
-    protected static function booted()
+    public function getKey()
     {
-       // static::addGlobalScope(new EliminadoScope);
-        //
-    }
-    public function getKey() {
         return $this->id;
     }
 }

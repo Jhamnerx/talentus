@@ -7,7 +7,7 @@ use App\Http\Requests\FacturasRequest;
 use App\Models\Facturas;
 use App\Models\plantilla;
 use Illuminate\Http\Request;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class VentasFacturasController extends Controller
 {

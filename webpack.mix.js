@@ -55,6 +55,6 @@ if (mix.inProduction()) {
 
 // mix.webpackConfig({
 //     stats: {
-//          children: true
-//     }
+//         children: true,
+//     },
 // });

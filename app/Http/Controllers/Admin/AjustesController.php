@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ajustes;
+use App\Models\plantilla;
 use Illuminate\Http\Request;
 
 class AjustesController extends Controller
@@ -29,6 +30,15 @@ class AjustesController extends Controller
     {
         return view('admin.ajustes.roles');
     }
+
+    public function plantilla()
+    {
+
+        $plantilla = plantilla::first();
+        return view('admin.ajustes.plantilla', compact('plantilla'));
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *

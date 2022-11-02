@@ -15,21 +15,17 @@ class Flotas extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'flotas';
-    /**
-     * Scope para traer activos y no
-     *
-     * eliminados
-     */
+
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
-        //
-        //static::addGlobalScope(new EliminadoScope);
+        static::addGlobalScope(new EmpresaScope);
     }
 
     public function scopeActive($query)
     {
         $query->where('is_active', 1);
-    }    
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -38,9 +34,13 @@ class Flotas extends Model
     }
     //relacion uno a muchos
 
+    // public function vehiculos()
+    // {
+    //     return $this->hasMany(Vehiculos::class, 'flotas_id');
+    // }
     public function vehiculos()
     {
-        return $this->hasMany(Vehiculos::class, 'flotas_id');
+        return $this->belongsToMany(Vehiculos::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id');
     }
 
 

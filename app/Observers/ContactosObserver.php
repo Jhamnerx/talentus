@@ -7,71 +7,42 @@ use App\Models\Contactos;
 class ContactosObserver
 {
 
-    public function creating(Contactos $contactos)
+    public function creating(Contactos $contacto)
     {
 
+        if (!\App::runningInConsole()) {
+            // dd($acta);
+            $contacto->empresa_id = session('empresa');
+        }
+    }
 
-       
-
-    } 
-
-
-    /**
-     * Handle the Contactos "created" event.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return void
-     */
-    public function created(Contactos $contactos)
+    public function created(Contactos $contacto)
     {
         //
     }
-    public function updating(Contactos $contactos)
+    public function updating(Contactos $contacto)
     {
-
-    
-       
     }
-    /**
-     * Handle the Contactos "updated" event.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return void
-     */
-    public function updated(Contactos $contactos)
+
+    public function updated(Contactos $contacto)
     {
         //
     }
 
-    /**
-     * Handle the Contactos "deleted" event.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return void
-     */
-    public function deleted(Contactos $contactos)
+
+    public function deleted(Contactos $contacto)
     {
         //
     }
 
-    /**
-     * Handle the Contactos "restored" event.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return void
-     */
-    public function restored(Contactos $contactos)
+
+    public function restored(Contactos $contacto)
     {
         //
     }
 
-    /**
-     * Handle the Contactos "force deleted" event.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return void
-     */
-    public function forceDeleted(Contactos $contactos)
+
+    public function forceDeleted(Contactos $contacto)
     {
         //
     }
