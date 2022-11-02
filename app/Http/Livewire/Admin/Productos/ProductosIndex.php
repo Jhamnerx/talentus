@@ -17,7 +17,11 @@ class ProductosIndex extends Component
         $productos = Productos::whereHas('categoria', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })->orWhere('nombre', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%')->with('image', 'categoria')
+            ->orWhere('codigo', 'like', '%' . $this->search . '%')
+            ->orWhere('unit_code', 'like', '%' . $this->search . '%')
+            ->orWhere('descripcion', 'like', '%' . $this->search . '%')
+            ->orWhere('tipo', 'like', '%' . $this->search . '%')
+            ->with('image', 'categoria')
             ->orderBy('id', 'desc')
             ->paginate(10);
 

@@ -26,7 +26,9 @@ class CreateProductosTable extends Migration
             $table->unsignedBigInteger('empresa_id');
             $table->enum('is_favorite', ['yes', 'no'])->default('no');
             $table->boolean('is_active')->default(true);
+            $table->string('unit_code')->nullable();
 
+            $table->foreign('unit_code')->references('codigo')->on('units')->onDelete('cascade');
             $table->foreign('categoria_id')->references('id')->on('categorias')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
