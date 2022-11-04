@@ -86,7 +86,7 @@
 
                                 {!! Form::text('nombre', null, [
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'required' => '',
                                     'placeholder' => 'Escribe el nombre',
                                 ]) !!}
@@ -103,7 +103,7 @@
                                     Form::label(
                                         'categoria_id',
                                         'Categoria: <span
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="text-rose-500">*</span>',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="text-rose-500">*</span>',
                                         ['class' => 'block text-sm font-medium mb-1'],
                                     ),
                                 ) !!}
@@ -134,7 +134,7 @@
                                 {!! Form::number('stock', null, [
                                     'placeholder' => '10 Unidades',
                                     'class' => 'form-input
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
                                 ]) !!}
 
                                 @error('stock')
@@ -146,7 +146,7 @@
                             <div class="col-span-12 sm:col-span-12 ">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
 
                                 {!! Form::textarea('descripcion', null, [
@@ -195,8 +195,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                    focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
                     </div>
                 </div>

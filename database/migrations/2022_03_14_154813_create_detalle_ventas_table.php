@@ -16,12 +16,21 @@ class CreateDetalleVentasTable extends Migration
         Schema::create('detalle_facturas', function (Blueprint $table) {
             $table->id();
             $table->string('producto');
+            $table->string('description')->nullable();
+            $table->string('descuento_type')->nullable();
             $table->integer('cantidad');
-            $table->decimal('precio', 10, 2);
-            $table->decimal('importe', 10, 2);
-            $table->decimal('descuento', 10, 2)->nullable();
+            $table->decimal('precio', 15, 2);
+            $table->decimal('descuento', 15, 2)->nullable();
+            $table->unsignedBigInteger('descuento_val')->unsigned()->nullable();
+            $table->unsignedBigInteger('impuesto');
+            $table->decimal('total', 15, 2);
             $table->unsignedBigInteger('facturas_id');
+            $table->unsignedBigInteger('producto_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('empresa_id')->unsigned()->nullable();
+
             $table->foreign('facturas_id')->references('id')->on('facturas')->onDelete('cascade');
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->timestamps();
         });
     }

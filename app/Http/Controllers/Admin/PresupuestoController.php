@@ -29,13 +29,13 @@ class PresupuestoController extends Controller
     public function create()
     {
 
-        $tipoCambio = UtilesController::tipoCambio();
-        $numero = $this->setNextSequenceNumber();
+        // $tipoCambio = UtilesController::tipoCambio();
+        // $numero = $this->setNextSequenceNumber();
 
-        return view('admin.ventas.presupuestos.create', compact('tipoCambio', 'numero'));
+        return view('admin.ventas.presupuestos.create');
     }
 
-    public function setNextSequenceNumber()
+    public static function setNextSequenceNumber()
     {
 
         $plantilla = plantilla::first();

@@ -16,13 +16,11 @@ class CreateVentasTable extends Migration
         Schema::create('facturas', function (Blueprint $table) {
             $table->id();
 
-            $table->unsignedBigInteger('clientes_id')->nullable();
+
             $table->string('numero')->nullable();
             $table->date('fecha_emision');
             $table->date('fecha_vencimiento');
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('impuesto', 10, 2);
-            $table->decimal('total', 10, 2);
+
             $table->string('divisa')->default('PEN');
             $table->string('tipo_pago');
             $table->enum('estado', ['BORRADOR', 'COMPLETADO'])->default('BORRADOR');
@@ -32,12 +30,21 @@ class CreateVentasTable extends Migration
             $table->boolean('enviado')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('eliminado')->default(false);
-
             $table->string('nota')->nullable();
+
             $table->string('discount_type')->nullable();
-            $table->string('descuento')->nullable();
+            $table->decimal('descuento', 15, 2)->nullable();
+            $table->unsignedBigInteger('descuento_val')->nullable();
+
+            $table->decimal('sub_total', 10, 2);
+            $table->decimal('impuesto', 10, 2);
+            $table->decimal('total', 10, 2);
+            $table->boolean('sent')->default(false);
+            $table->boolean('viewed')->default(false);
+            $table->string('unique_hash')->nullable();
 
             $table->unsignedBigInteger('presupuestos_id')->nullable();
+            $table->unsignedBigInteger('clientes_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
