@@ -7,33 +7,35 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
 
+
 class UtilesController extends Controller
 {
     public static function tipoCambio()
     {
+        try {
+            $token = env('TOKEN_API_SUNAT');
 
-        // $data = json_decode(file_get_contents('https://api.apis.net.pe/v1/tipo-cambio-sunat'), true);
+            $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
-        // return $data["venta"];
-        $token = env('TOKEN_API_SUNAT');
+            $parameters = [
+                'http_errors' => false,
+                'connect_timeout' => 5,
+                'headers' => [
+                    'Authorization' => 'Bearer ' . $token,
+                    'Referer' => 'https://apis.net.pe/api-sunat-tipo-de-cambio',
+                    'User-Agent' => 'laravel/guzzle',
+                    'Accept' => 'application/json',
+                ],
+            ];
 
-        $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
+            $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
+            $response = json_decode($res->getBody()->getContents(), true);
 
-        $parameters = [
-            'http_errors' => false,
-            'connect_timeout' => 5,
-            'headers' => [
-                'Authorization' => 'Bearer ' . $token,
-                'Referer' => 'https://apis.net.pe/api-sunat-tipo-de-cambio',
-                'User-Agent' => 'laravel/guzzle',
-                'Accept' => 'application/json',
-            ],
-        ];
+            return $response["venta"];
+        } catch (\Exception $e) {
 
-        $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
-        $response = json_decode($res->getBody()->getContents(), true);
-
-        return $response["venta"];
+            return $e->getMessage();
+        }
     }
 
     public function consultaEmpresa($numero)

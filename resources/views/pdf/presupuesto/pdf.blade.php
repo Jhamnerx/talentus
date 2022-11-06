@@ -168,10 +168,11 @@
                             <tr>
                                 <td>
                                     <p>{{ $detalle->producto }}.</p>
+                                    <p>{{ $detalle->descripcion }}</p>
                                 </td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
                                 <td>{{ $detalle->cantidad }}</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->importe }}</td>
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
                             </tr>
                         @endforeach
 
@@ -190,14 +191,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><strong>Metodos de Pago:</strong> Cheque,<br>
-                                    BCP</th>
+                                <th><strong>Metodos de Pago:</strong> </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <p><strong>administracion@talentustechnology.com</strong></p>
+                                    <p><strong>BCP: </strong></p>
                                 </td>
                             </tr>
 
@@ -210,18 +210,18 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>S/. {{ $presupuesto->subtotalSoles }}</td>
+                                <td>S/. {{ $presupuesto->sub_total_soles }}</td>
                             </tr>
                             <tr>
                                 <td>IGV: 18%</td>
-                                <td>S/. {{ $presupuesto->impuestoSoles }}</td>
+                                <td>S/. {{ $presupuesto->impuesto_soles }}</td>
                             </tr>
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>S/. {{ $presupuesto->totalSoles }}</td>
+                                <td>S/. {{ $presupuesto->total_soles }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -231,7 +231,7 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->subtotal }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->sub_total }}
                                 </td>
                             </tr>
                             <tr>
@@ -254,14 +254,13 @@
                     <table>
                         <thead>
                             <tr>
-                                <th><strong>Metodos de Pago:</strong> Cheque,<br>
-                                    BCP</th>
+                                <th><strong>Metodos de Pago:</strong> </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <td>
-                                    <p><strong>administracion@talentustechnology.com</strong></p>
+                                    <p><strong>BCP:</strong></p>
                                 </td>
                             </tr>
 
@@ -274,7 +273,7 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->subtotal }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->sub_total }}
                                 </td>
                             </tr>
                             <tr>

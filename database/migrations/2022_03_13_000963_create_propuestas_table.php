@@ -20,25 +20,22 @@ class CreatePropuestasTable extends Migration
             $table->date('fecha');
             $table->date('fecha_caducidad');
             $table->string('divisa')->default('PEN');
-
-            $table->decimal('subtotal', 10, 2)->nullable();
+            $table->decimal('sub_total', 10, 2)->nullable();
             $table->decimal('impuesto', 10, 2)->nullable();
             $table->decimal('total', 10, 2)->nullable();
-
-            $table->decimal('subtotalSoles', 10, 2)->nullable();
-            $table->decimal('impuestoSoles', 10, 2)->nullable();
-            $table->decimal('totalSoles', 10, 2)->nullable();
+            $table->decimal('sub_total_soles', 10, 2)->nullable();
+            $table->decimal('impuesto_soles', 10, 2)->nullable();
+            $table->decimal('total_soles', 10, 2)->nullable();
             $table->decimal('tipoCambio', 10, 3)->nullable();
-
-
             $table->enum('estado', [0, 1, 2])->default(0);
             $table->string('nota')->nullable();
-            $table->unsignedBigInteger('empresa_id');
+            $table->unsignedBigInteger('empresa_id')->unsigned()->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
+            $table->unsignedBigInteger('user_id')->nullable();
 
-
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->softDeletes();
             $table->timestamps();
         });

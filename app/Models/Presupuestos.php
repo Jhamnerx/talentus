@@ -51,13 +51,14 @@ class Presupuestos extends Model
 
 
 
-    public static function createItems($presupuesto, $presupuestoItems)
+    public static function createItems($presupuesto, $items)
     {
-        foreach ($presupuestoItems as $presupuestoItem) {
 
-            $presupuestoItem['presupuestos_id'] = $presupuesto->id;
+        foreach ($items as $item) {
 
-            $item = $presupuesto->detalles()->create($presupuestoItem);
+            $item['presupuestos_id'] = $presupuesto->id;
+
+            $item = $presupuesto->detalles()->create($item);
         }
     }
 
@@ -72,7 +73,7 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf');
+        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
 
         if ($action == 1) {
 
@@ -93,7 +94,7 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf');
+        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
 
         //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));

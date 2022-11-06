@@ -218,7 +218,7 @@
 
                     @if ($items->count() > 0)
                         @foreach ($items->all() as $placa => $vehiculo)
-                            <div class="flex -mx-1 px-2 py-4 border-b box-border">
+                            <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
 
                                 <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 

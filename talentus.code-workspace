@@ -1,9 +1,12 @@
 {
-  "folders": [
-	{
-		"name": "talentus",
-		"path": "."
-	}
-],
-  "settings": {}
+    "folders": [
+        {
+            "name": "talentus",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "editor.fontSize": 12,
+        "files.autoSave": "onFocusChange"
+    }
 }

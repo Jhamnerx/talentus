@@ -14,8 +14,6 @@ class Productos extends Model
     use HasFactory;
     use SoftDeletes;
 
-
-
     protected $table = 'productos';
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -27,11 +25,11 @@ class Productos extends Model
         return $query->where('is_active', $status);
     }
 
-    //GLOBAL SCOPE EMPRESA
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new EmpresaScope);
-    // }
+    // GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
 
 
     //Relacion uno a muchos inversa
@@ -40,6 +38,12 @@ class Productos extends Model
     {
         return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();
     }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class, 'unit_code');
+    }
+
 
     //Relacion uno a muchos inversa
 

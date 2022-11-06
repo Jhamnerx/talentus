@@ -36,74 +36,78 @@
 
                 <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
-
-                    <div class="grid grid-cols-12 gap-6">
-
+                    <form autocomplete="off">
 
 
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium mb-1" for="numero">DNI/RUC: <span
-                                    class="text-rose-500">*</span></label>
-                            <input x-mask="99999999999" placeholder="Escribe el N° de documento"
-                                class="form-input w-full" required type="text" wire:model.lazy="numero_documento"
-                                maxlength="11">
+                        <div class="grid grid-cols-12 gap-6">
 
-                            @error('numero_documento')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
+
+
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="numero">DNI/RUC: <span
+                                        class="text-rose-500">*</span></label>
+                                <input x-mask="99999999999" placeholder="Escribe el N° de documento"
+                                    class="form-input w-full" required type="text" wire:model.lazy="numero_documento"
+                                    maxlength="11">
+
+                                @error('numero_documento')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="numero">Razon Social o Nombre:
+                                    <span class="text-rose-500">*</span></label>
+                                <input id="razon_social" placeholder="Razon Social o Nombre" class="form-input w-full"
+                                    required type="text" wire:model.defer="razon_social">
+
+                                @error('razon_social')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="telefono">Telefono: </label>
+
+                                <input x-mask="999999999" type="tel" placeholder="987654321"
+                                    class="form-input w-full" type="text" wire:model="telefono" maxlength="9">
+
+                                @error('telefono')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="email">Correo: </label>
+
+                                <input id="email" placeholder="clientes@correo.com" class="form-input w-full"
+                                    type="email" wire:model="email">
+
+                                @error('email')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+
+                            <div class="col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="email">Dirección: </label>
+
+                                <input id="direccion" placeholder="Escribe la direccion..." class="form-input w-full"
+                                    type="email" wire:model="direccion">
+
+                                @error('direccion')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
                         </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium mb-1" for="numero">Razon Social o Nombre: <span
-                                    class="text-rose-500">*</span></label>
-                            <input id="razon_social" placeholder="Razon Social o Nombre" class="form-input w-full"
-                                required type="text" wire:model.defer="razon_social">
 
-                            @error('razon_social')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium mb-1" for="telefono">Telefono: </label>
-
-                            <input x-mask="999999999" type="tel" placeholder="987654321" class="form-input w-full"
-                                type="text" wire:model="telefono" maxlength="9">
-
-                            @error('telefono')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium mb-1" for="email">Correo: </label>
-
-                            <input id="email" placeholder="clientes@correo.com" class="form-input w-full"
-                                type="email" wire:model="email">
-
-                            @error('email')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-
-                        <div class="col-span-12">
-                            <label class="block text-sm font-medium mb-1" for="email">Dirección: </label>
-
-                            <input id="direccion" placeholder="Escribe la direccion..." class="form-input w-full"
-                                type="email" wire:model="direccion">
-
-                            @error('direccion')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                    </div>
+                    </form>
 
                 </div>
 

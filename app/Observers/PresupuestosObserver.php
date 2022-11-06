@@ -15,24 +15,21 @@ class PresupuestosObserver
     public function creating(Presupuestos $presupuesto)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $presupuesto->empresa_id = session('empresa');
-
+            $presupuesto->user_id = auth()->user()->id;
         }
-       
-    }    
+    }
     public function updating(Presupuestos $presupuesto)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $presupuesto->empresa_id = session('empresa');
-
         }
-       
     }
 
     public function created(Presupuestos $presupuesto)

@@ -39,7 +39,7 @@
 
 
     <div class="mt-10 sm:mt-0">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
+        <div class="md:grid md:grid-cols-6 md:gap-6">
             <div class="md:col-span-1 ml-4">
                 <div class="px-6 sm:px-2">
                     <h3 class="text-lg font-medium leading-6 text-gray-900">Formulario para crear un producto
@@ -49,18 +49,31 @@
                     </p>
                 </div>
             </div>
-            <div class="mt-5 md:mt-0 md:col-span-2 mr-6">
+            <div class="mt-5 md:mt-0 md:col-span-5 mr-2">
 
 
                 {!! Form::open(['route' => 'admin.almacen.productos.store', 'autocomplete' => 'off', 'files' => 'true']) !!}
                 <div class="shadow overflow-hidden sm:rounded-md">
                     <div class="px-4 py-5 bg-white sm:p-6">
-                        <div class="grid grid-cols-12 gap-6">
-                            <div class="col-span-12 sm:col-span-4">
+                        <div class="grid grid-cols-12 gap-4">
+                            <div class="col-span-12 sm:col-span-2">
                                 {!! Html::decode(
                                     Form::label('tipo', 'Tipo: <span class="text-rose-500">*</span>', ['class' => 'block text-sm font-medium mb-1']),
                                 ) !!}
-                                {!! Form::select('tipo', ['Producto' => 'Producto', 'Servicio' => 'Servicio'], null, ['class' => 'form-select']) !!}
+                                {!! Form::select('tipo', ['Producto' => 'Producto', 'Servicio' => 'Servicio'], null, [
+                                    'class' => 'form-select w-full',
+                                ]) !!}
+
+                            </div>
+                            <div class="col-span-12 sm:col-span-3">
+                                {!! Html::decode(
+                                    Form::label('tipo', 'Unidad de medida: <span class="text-rose-500">*</span>', [
+                                        'class' => 'block text-sm font-medium mb-1',
+                                    ]),
+                                ) !!}
+                                {!! Form::select('unit_code', $units, null, [
+                                    'class' => 'form-select w-full',
+                                ]) !!}
 
                             </div>
                             <div class="col-span-12 sm:col-span-4">
@@ -73,7 +86,7 @@
 
                                 {!! Form::text('nombre', null, [
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'required' => '',
                                     'placeholder' => 'Escribe el nombre',
                                 ]) !!}
@@ -83,18 +96,18 @@
                                     </p>
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-4">
+                            <div class="col-span-12 sm:col-span-3">
 
 
                                 {!! Html::decode(
                                     Form::label(
                                         'categoria_id',
                                         'Categoria: <span
-                                                                                                class="text-rose-500">*</span>',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                class="text-rose-500">*</span>',
                                         ['class' => 'block text-sm font-medium mb-1'],
                                     ),
                                 ) !!}
-                                {!! Form::select('categoria_id', $categorias, null, ['class' => 'form-select']) !!}
+                                {!! Form::select('categoria_id', $categorias, null, ['class' => 'form-select w-full']) !!}
 
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -121,7 +134,7 @@
                                 {!! Form::number('stock', null, [
                                     'placeholder' => '10 Unidades',
                                     'class' => 'form-input
-                                                                                            w-full',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
                                 ]) !!}
 
                                 @error('stock')
@@ -133,7 +146,7 @@
                             <div class="col-span-12 sm:col-span-12 ">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
 
                                 {!! Form::textarea('descripcion', null, [
@@ -181,9 +194,9 @@
                     </div>
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
-                            'class' => 'btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                    focus:ring-2 focus:ring-offset-2
-                                                                    focus:ring-emerald-600 text-white',
+                            'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
                     </div>
                 </div>

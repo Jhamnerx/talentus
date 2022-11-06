@@ -51,7 +51,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-002',
             'nombre' => 'EQUIPO GPS FMU130',
             'stock' => '0',
@@ -60,7 +61,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-003',
             'nombre' => 'EQUIPO GPS FMC130',
             'stock' => '0',
@@ -69,7 +71,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-004',
             'nombre' => 'INSTALACION EQUIPO GPS',
             'stock' => '0',
@@ -78,7 +81,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '2',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-005',
             'nombre' => 'CAMBIO DE SIM CARD',
             'stock' => '0',
@@ -87,7 +91,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '2',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-006',
             'nombre' => 'MANTENIMIENTO EQUIPO GPS',
             'stock' => '0',
@@ -96,7 +101,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '2',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-007',
             'nombre' => 'MONITOREO SATELITAL | PLATAFORMA PREMIUM',
             'stock' => '0',
@@ -105,7 +111,8 @@ class ProductoSeeder extends Seeder
             'divisa' => 'PEN',
             'categoria_id' => '3',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-008',
             'nombre' => 'MONITOREO SATELITAL| PLATAFORMA BASICA',
             'stock' => '0',
@@ -114,7 +121,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '3',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-009',
             'nombre' => 'MONITOREO SATELITAL ANUAL| PLATAFORMA BASICA',
             'stock' => '0',
@@ -123,7 +131,8 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '3',
             'empresa_id' => '1',
-        ],[
+            'unit_code' => 'ZZ'
+        ], [
             'codigo' => 'PROD-010',
             'nombre' => 'MONITOREO SATELITAL ANUAL| PLATAFORMA PREMIUM',
             'stock' => '0',
@@ -132,12 +141,11 @@ class ProductoSeeder extends Seeder
             'tipo' => 'servicio',
             'categoria_id' => '3',
             'empresa_id' => '1',
+            'unit_code' => 'ZZ'
         ]];
-        
-        foreach($productos as $producto){
+
+        foreach ($productos as $producto) {
             Productos::create($producto);
         }
-        
-        
     }
 }
