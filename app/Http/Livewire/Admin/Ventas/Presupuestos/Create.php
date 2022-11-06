@@ -5,6 +5,8 @@ namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 use App\Http\Controllers\Admin\PresupuestoController;
 use Livewire\Component;
 use App\Http\Controllers\Admin\UtilesController;
+use App\Http\Requests\PresupuestosRequest;
+use App\Models\Presupuestos;
 use App\Models\Productos;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -12,18 +14,20 @@ use Illuminate\Validation\Rule;
 
 class Create extends Component
 {
-    public $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
+    public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
+    public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
+    public $sub_total_soles = 0.00, $impuesto_soles = 0.00, $total_soles = 0.00;
+
 
     public $tipoCambio = 0;
-    public $producto;
+    public $ConvertirSoles = false;
 
     public Collection $items;
 
     public Collection $selected;
-    public Collection $datos;
+    public $simbolo = "S/. ";
 
 
-    public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
 
 
     protected $messages = [
@@ -52,7 +56,7 @@ class Create extends Component
             'producto' => "",
             'descripcion' => "",
             'cantidad' => 1,
-            'precio' => ""
+            'total' => ""
         ]);
     }
 
@@ -73,7 +77,7 @@ class Create extends Component
             'selected.precio' => 'required',
 
         ], [
-            'selected.producto_id.required' => 'Seleccion un producto',
+            'selected.producto_id.required' => 'Seleccion una producto',
             'selected.producto.required' => 'Por favor ingresa un producto',
             'selected.cantidad.required' => 'Por favor ingresa una cantidad',
             'selected.precio.required' => 'Por favor ingresa un precio',
@@ -87,7 +91,8 @@ class Create extends Component
                 'descripcion' => $this->selected["descripcion"],
                 'cantidad' => $this->selected["cantidad"],
                 'precio' => $this->selected["precio"],
-                'subtotal' => round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2),
+                'igv' => round(round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2) * 18 / 100, 2),
+                'total' => round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2),
             ]);
 
             $this->selected = collect();
@@ -96,6 +101,8 @@ class Create extends Component
             $this->sub_total = $this->calcularSubTotal();
             $this->impuesto = $this->calcularImpuesto();
             $this->total = $this->calcularTotal();
+
+            $this->calcularTotalSoles();
         } catch (\Exception $e) {
             throw $e;
         }
@@ -117,24 +124,48 @@ class Create extends Component
     {
         $this->items = $this->items->map(function ($item, $key) {
 
-            $item["subtotal"] =  round(floatval($item["cantidad"]) *  floatval($item["precio"]), 2);
+            $item["total"] =  round(floatval($item["cantidad"]) *  floatval($item["precio"]), 2);
+            $item["igv"] =  round(floatval($item["total"]) * 18 / 100, 2);
 
             return $item;
         });
 
-        $this->sub_total = $this->calcularSubTotal();
-        $this->impuesto = $this->calcularImpuesto();
-        $this->total = $this->calcularTotal();
+        $this->reCalTotal();
     }
+
+
+    public function reCalTotal()
+    {
+        $this->sub_total =   $this->calcularSubTotal();
+        $this->impuesto =  $this->calcularImpuesto();
+        $this->total =  $this->calcularTotal();
+
+        $this->calcularTotalSoles();
+    }
+
+    public function calcularTotalSoles()
+    {
+        if ($this->divisa == "USD") {
+
+            $this->sub_total_soles = number_format(floatval($this->tipoCambio * $this->sub_total), 2, '.', '');
+
+            //dd(floatval($this->sub_total_soles));
+
+
+            $this->impuesto_soles = number_format((floatval($this->sub_total_soles) * 18) / 100, 2, '.', '');
+            $this->total_soles = number_format((floatval($this->impuesto_soles) + floatval($this->sub_total_soles)), 2, '.', '');
+        }
+    }
+
 
     public function calcularSubTotal()
     {
         $sub_total = $this->items->map(function ($item, $key) {
 
             $sub_total = 0;
-            $sub_total =  $sub_total + $item["subtotal"];
+            $sub_total =  $sub_total + $item["total"];
 
-            return number_format($sub_total, 2);
+            return number_format($sub_total, 2, '.', '');
         });
 
         return $sub_total->sum();
@@ -144,7 +175,7 @@ class Create extends Component
     {
         $impuesto = (floatval($this->sub_total) * 18) / 100;
 
-        return number_format($impuesto, 2);
+        return number_format($impuesto, 2, '.', '');
     }
 
     public function calcularTotal()
@@ -152,14 +183,23 @@ class Create extends Component
 
         $total = $this->sub_total + $this->impuesto;
 
-        return number_format($total, 2);
+        return number_format($total, 2, '.', '');
     }
 
 
-    public function updatingSubTotal($name, $value)
+    public function updatedDivisa($value)
+
     {
-        dd($name, $value);
+        if ($value == "USD") {
+            $this->ConvertirSoles = true;
+            $this->simbolo = "$";
+            $this->calcularTotalSoles();
+        } else {
+            $this->ConvertirSoles = false;
+            $this->simbolo = "S/. ";
+        }
     }
+
 
 
 
@@ -167,5 +207,29 @@ class Create extends Component
     {
         //dd($name, $value);
         $error = $this->validateOnly($name);
+    }
+
+
+    public function save()
+    {
+
+        $request = new PresupuestosRequest();
+
+        $data = $this->validate($request->rules(), $request->messages());
+
+        $presupuesto = Presupuestos::create($data);
+        $presupuesto->tipoCambio = $this->tipoCambio;
+        $presupuesto->save();
+
+        Presupuestos::createItems($presupuesto, $data["items"]);
+
+        return redirect()->route('admin.ventas.presupuestos.index')->with('store', 'El Presupuesto se creo con exito');
+    }
+
+    public function eliminarProducto($key)
+    {
+        unset($this->items[$key]);
+        $this->items;
+        $this->reCalTotal();
     }
 }

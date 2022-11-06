@@ -13,7 +13,7 @@ class CreateDetallePropuestasTable extends Migration
      */
     public function up()
     {
-        Schema::create('detalle_propuestas', function (Blueprint $table) {
+        Schema::create('detalle_presupuestos', function (Blueprint $table) {
             $table->id();
             $table->string('producto');
             $table->string('descripcion')->nullable();
@@ -41,6 +41,6 @@ class CreateDetallePropuestasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('detalle_propuestas');
+        Schema::dropIfExists('detalle_presupuestos');
     }
 }

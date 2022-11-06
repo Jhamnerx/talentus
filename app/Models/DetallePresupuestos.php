@@ -10,7 +10,11 @@ class DetallePresupuestos extends Model
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $table = 'detalle_propuestas';
+    protected $table = 'detalle_presupuestos';
+
+    protected $casts = [
+        'cantidad' => 'integer',
+    ];
 
 
     //Relacion uno a muchos inversa

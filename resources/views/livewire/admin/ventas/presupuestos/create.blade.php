@@ -152,8 +152,9 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa"
-                            @change="cambiarDivisa($event.target.value)">
+                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+
+
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -203,7 +204,7 @@
                         </div>
 
                         <div class="col-span-2 sm:col-span-1">
-                            {{ $producto }}
+
                         </div>
                     </div>
 
@@ -243,6 +244,7 @@
                             <tbody class="text-sm divide-y divide-slate-200 listaItems">
                                 <!-- Row -->
                                 {{ json_encode($items) }}
+                                {{ json_encode($errors->all()) }}
 
                                 <tr class="main bg-slate-50">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -319,12 +321,16 @@
 
 
                                     @foreach ($items->all() as $clave => $item)
-                                        <tr wire:key="item-{{ $item['producto_id'] }}">
+                                        <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
                                                 </textarea>
-
+                                                @if ($errors->has('items.' . $clave . '.cantidad'))
+                                                    <p class="mt-2  text-pink-600 text-sm">
+                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                                    </p>
+                                                @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
@@ -333,23 +339,34 @@
 
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input required type="text" x-mask="99999"
+                                                <input required type="number" x-mask="99999"
                                                     wire:model="items.{{ $clave }}.cantidad" min="1"
                                                     step="1" class="form-input cantidad" placeholder="Cantidad"
                                                     value="2">
+                                                @if ($errors->has('items.' . $clave . '.cantidad'))
+                                                    <p class="mt-2  text-pink-600 text-sm">
+                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                                    </p>
+                                                @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <input required type="number" required min="1" step="0.1"
                                                     wire:model="items.{{ $clave }}.precio"
                                                     class="form-input precio">
+                                                @if ($errors->has('items.' . $clave . '.cantidad'))
+                                                    <p class="mt-2  text-pink-600 text-sm">
+                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                                    </p>
+                                                @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input type="text" wire:model="items.{{ $clave }}.subtotal"
+                                                <input type="text" wire:model="items.{{ $clave }}.total"
                                                     class="form-input importe subtotal" readonly>
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                                 <div class="space-x-1">
                                                     <button type="button"
+                                                        wire:click.prevent="eliminarProducto('{{ $clave }}')"
                                                         class="text-rose-500 hover:text-rose-600 rounded-full">
                                                         <span class="sr-only">Delete</span>
                                                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -376,11 +393,13 @@
 
 
                     <div class="flex">
-                        <div class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 -mr-8 hidden ConvertirSoles">
+                        <div
+                            class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2 {{ $ConvertirSoles ? '' : 'hidden' }}">
                             <div class="flex justify-between mb-3">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Total neto Soles</div>
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Sub Total</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm"> S/. <span x-text="$wire.sub_total"></span>
+                                    <div class="text-gray-800 text-sm"> S/.
+                                        <span>{{ number_format($sub_total_soles, 2) }}</span>
                                     </div>
 
                                 </div>
@@ -388,7 +407,9 @@
                             <div class="flex justify-between mb-4">
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%) Soles</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm" x-text="$wire.impuesto"></div>
+                                    <div class="text-gray-800 text-sm">S/.
+                                        <span>{{ number_format($impuesto_soles, 2) }}</span>
+                                    </div>
 
                                 </div>
                             </div>
@@ -398,8 +419,8 @@
                                     <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total Soles
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-xl text-gray-800 font-bold" x-text="$wire.total"></div>
-
+                                        <div class="text-xl text-gray-800 font-bold">
+                                            S/. <span>{{ number_format($total_soles, 2) }}</span></div>
                                     </div>
                                 </div>
                             </div>
@@ -408,27 +429,32 @@
                         {{-- DIV PARA SUB Y TOTALES --}}
                         <div class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2">
                             <div class="flex justify-between mb-3">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Total neto Soles</div>
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Sub Total</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm"> S/. <span x-text="$wire.sub_total"></span>
+                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
+                                        <span>{{ number_format($sub_total, 2) }}</span>
                                     </div>
 
                                 </div>
                             </div>
                             <div class="flex justify-between mb-4">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%) Soles</div>
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm" x-text="$wire.impuesto"></div>
+                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
+                                        <span>{{ number_format($impuesto, 2) }}</span>
+                                    </div>
 
                                 </div>
                             </div>
 
                             <div class="py-2 border-t border-b">
                                 <div class="flex justify-between">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total Soles
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-xl text-gray-800 font-bold" x-text="$wire.total"></div>
+                                        <div class="text-xl text-gray-800 font-bold">
+                                            {{ $simbolo }}<span>{{ number_format($total, 2) }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -438,8 +464,8 @@
             </div>
 
             <div class="px-4 py-3 text-right sm:px-6">
-                <button
-                    class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white">Guardar</button>
+                <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
+                    wire:click.prevent="save">Guardar</button>
             </div>
 
         </div>
@@ -477,7 +503,7 @@
 
             flatpickr('.fechaFinPresupuesto', {
                 mode: 'single',
-                defaultDate: new Date().fp_incr(14),
+                defaultDate: new Date().fp_incr(15),
                 minDate: "today",
                 disableMobile: "true",
                 dateFormat: "Y-m-d",
@@ -515,15 +541,11 @@
                     };
 
                 },
-
-
             }
         });
 
-        $('.clientes_id').on('change', function() {
-            // @this.set('ciudades_id', this.value)
-            // @this.call('selectProduct', this.value)
-
+        $('.clientes_id').on('select2:select', function(e) {
+            @this.set('clientes_id', this.value)
         })
 
         $('.productoSelect').on('select2:select', function(e) {
@@ -569,242 +591,6 @@
             }
         });
 
-        // funcion para colocar los datos del producto seleccionado
-        // a los inputs
-        // $('.productoSelect').on('select2:select', function(e) {
-
-        //     var data = e.params.data;
-        //     enviarDatosProductos(data);
-        //     $('.errorDescripcion').addClass('hidden');
-        //     $('.errorPrecio').addClass('hidden');
-
-        // });
-
-        // colocar los datos
-        // function enviarDatosProductos(data) {
-        //     //console.log(data);
-        //     $('.descripcion').val(data.text);
-        //     $('.divise').val(data.divisa);
-        //     $('.importe').val(data.precio);
-        //     // $('.cantidad').val(cantidad.precio);
-
-        //     let divisa = $(".divisa option:selected").val();
-
-        //     calculate_total(divisa)
-        // }
-
-        // function add_item_to_table() {
-
-        //     let divisa = $(".divisa option:selected").val();
-
-        //     console.log(divisa);
-        //     var descripcion = $('.descripcion').val();
-        //     var cantidad = $('.qyt').val();
-        //     var precio = $('.importe').val();
-        //     var divisaProducto = $('.divise').val();
-
-        //     //console.log(divisaProducto);
-
-        //     // if(divisaProducto == 'USD'){
-
-        //     //     $(".divisa.divisa").val('USD');
-        //     //     cambiarDivisa('USD');
-        //     // }
-
-
-        //     var fila = '<tr id="fila' + cont + '">' +
-        //         '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +
-        //         '<textarea required name="items[' + cont + '][producto]" class="form-input" rows="5">' + descripcion +
-        //         '</textarea>' +
-        //         '</td>' +
-        //         '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +
-        //         '<input required type="number" name="items[' + cont + '][cantidad]" min="0" value="' + cantidad +
-        //         '" class="form-input cantidad" placeholder="Cantidad" >' +
-        //         '</td>' +
-        //         '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +
-        //         '<input required type="number" min="0" data-quantity="" step="0.01" name="items[' + cont +
-        //         '][precio]" value="' + precio + '" class="form-input precio">' +
-        //         '</td>' +
-        //         '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">' +
-        //         '<input type="number" value="00.00" name="items[' + cont +
-        //         '][importe]" class="form-input importe subtotal" readonly>' +
-        //         '</td>' +
-        //         '<td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">' +
-        //         '<div class="space-x-1">' +
-        //         '<button type="button" @click.prevent="eliminarDetalle(' + cont +
-        //         ')"  class="text-rose-500 hover:text-rose-600 rounded-full">' +
-        //         '<span class="sr-only">Delete</span>' +
-        //         '<svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">' +
-        //         '<path d="M13 15h2v6h-2zM17 15h2v6h-2z" />' +
-        //         '<path d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />' +
-        //         '</svg>' +
-        //         '</button>' +
-        //         '</div>' +
-        //         '</td>' +
-        //         '</tr>';
-
-
-
-        //     if (descripcion && precio) {
-        //         //console.log('enviar tabla');
-        //         cont++;
-        //         detalles = detalles + 1;
-        //         $('.errorDescripcion').addClass('hidden');
-        //         $('.errorPrecio').addClass('hidden');
-        //         $('.listaItems').append(fila);
-
-        //         $('.descripcion').val("");
-        //         $('.qyt').val(1);
-        //         $('.importe').val(0);
-        //         addAlert();
-
-        //         calculate_total(divisa)
-
-        //     } else {
-        //         $('.errorDescripcion').removeClass('hidden');
-        //         $('.errorPrecio').removeClass('hidden');
-        //     }
-
-
-
-
-
-
-
-        // }
-
-
-        // function calculate_total(divisa = "PEN") {
-
-        //     var cant = $(".cantidad");
-        //     var prec = $(".precio");
-        //     var sub = $(".subtotal");
-
-
-        //     //console.log(cant);
-        //     for (var i = 0; i < cant.length; i++) {
-
-        //         var inpC = cant[i];
-        //         var inpP = prec[i];
-        //         var inpS = sub[i];
-
-        //         inpS.value = (inpC.value * inpP.value).toFixed(2);
-
-        //         $(".subtotal")[i].innerHTML = parseFloat(inpS.value);
-        //         // console.log(parseFloat(inpS.value));
-        //     }
-        //     calculate_totales(divisa);
-        // }
-
-        // function getDivisa() {
-
-        //     // return $(".divisa option:selected").text();
-        //     return parseFloat($(".tipoCambio").text());
-
-        // }
-
-
-        // function calculate_totales(divisa = "PEN") {
-        //     // console.log(divisa);
-        //     var subTotal = $(".subtotal");
-        //     //console.log(divisa);
-        //     // var divisa = $(".divisa option:selected").text();
-
-        //     /**
-        //      * MOSTRAS SIMBOLO SEGUN DIVISA
-        //      */
-
-
-        //     var total = 0;
-
-        //     for (var i = 0; i < subTotal.length; i++) {
-
-        //         // console.log(total);
-        //         total += parseFloat($(".subtotal")[i].value);
-
-
-
-        //     }
-
-        //     // var divisa = cambiarDivisa();
-        //     var simbolo = "S/."
-
-        //     if (divisa === "PEN") {
-
-        //         simbolo = "S/.";
-        //         $(".ConvertirSoles").hide();
-
-        //         igvTotal = calcularIgv(total);
-
-        //         totalPresupuesto = total + igvTotal;
-
-        //         $(".total").html(simbolo + " " + numeral(total).format('0,0.00'));
-
-
-
-        //         $('.igv').html(simbolo + " " + numeral(igvTotal).format('0,0.00'))
-        //         $('.totalPresupuesto').html(simbolo + " " + numeral(totalPresupuesto).format('0,0.00'));
-
-
-        //         // ENVIAR DATOS DE TOTAL A INPUTS
-        //         $(".subTotalPresupuesto").val(numeral(total).format('0.00'));
-        //         $(".impuestoPresupuesto").val(numeral(igvTotal).format('0.00'));
-        //         $(".totalPresupuesto").val(numeral(totalPresupuesto).format('0.00'));
-
-        //     } else if (divisa == "USD") {
-
-        //         simbolo = "$";
-        //         igvTotal = calcularIgv(total);
-        //         totalPresupuesto = total + igvTotal;
-
-        //         $(".total").html(simbolo + " " + numeral(total).format('0,0.00'));
-        //         $('.igv').html(simbolo + " " + numeral(igvTotal).format('0,0.00'))
-        //         $('.totalPresupuesto').html(simbolo + " " + numeral(totalPresupuesto).format('0,0.00'));
-
-        //         // ENVIAR DATOS DE TOTAL A INPUTS
-        //         $(".subTotalPresupuesto").val(numeral(total).format('0.00'));
-        //         $(".impuestoPresupuesto").val(numeral(igvTotal).format('0.00'));
-        //         $(".totalPresupuesto").val(numeral(totalPresupuesto).format('0.00'));
-
-
-
-        //         //MOSTRAR DATOS SOLES cuando el presupuesto es en dolares
-        //         valorUSD = getDivisa();
-        //         $(".ConvertirSoles").show();
-        //         $(".totalSoles").html("S/. " + numeral(total * valorUSD).format('0,0.00'));
-        //         $('.igvSoles').html("S/. " + numeral(igvTotal * valorUSD).format('0,0.00'))
-        //         $('.totalPresupuestoSoles').html("S/. " + numeral(totalPresupuesto * valorUSD).format('0,0.00'));
-
-        //         $(".subTotalPresupuestoSoles").val(numeral(total * valorUSD).format('0.00'));
-        //         $(".impuestoPresupuestoSoles").val(numeral(igvTotal * valorUSD).format('0.00'));
-        //         $(".totalPresupuestoSoles").val(numeral(totalPresupuesto * valorUSD).format('0.00'));
-        //     }
-
-
-
-
-        //     // evaluarGuardarVenta();
-        // }
-
-
-        // function calcularIgv(monto) {
-
-        //     igv = (parseFloat(monto) * 18) / 100;
-
-        //     return igv;
-        // }
-
-        // $(document).on("change", ".listaItems .cantidad", function() {
-        //     let divisa = $(".divisa option:selected").val();
-        //     calculate_total(divisa);
-
-        // })
-        // $(document).on("change", ".listaItems .precio", function() {
-        //     let divisa = $(".divisa option:selected").val();
-        //     calculate_total(divisa);
-
-        // })
-
 
         function eliminarDetalle(indice) {
             detalles = detalles - 1;
@@ -822,16 +608,5 @@
                 message: 'Se añadio un producto al presupuesto',
             });
         }
-
-        // function evaluarGuardarPresupuesto() {
-
-        //     //console.log(detalles);
-        //     if (detalles > 0) {
-        //         $(".guardarPresupuesto").addClass('disabled');
-        //     } else {
-        //         $(".guardarPresupuesto").removeClass('disabled');
-        //         cont = 0;
-        //     }
-        // }
     </script>
 @endsection
