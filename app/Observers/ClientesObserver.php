@@ -12,6 +12,15 @@ class ClientesObserver
      * @param  \App\Models\Clientes  $clientes
      * @return void
      */
+
+    public function creating(Clientes $cliente)
+    {
+
+        if (!\App::runningInConsole()) {
+            // dd($acta);
+            $cliente->empresa_id = session('empresa');
+        }
+    }
     public function created(Clientes $clientes)
     {
         //
