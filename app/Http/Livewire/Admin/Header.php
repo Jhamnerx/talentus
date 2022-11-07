@@ -7,21 +7,35 @@ use Livewire\Component;
 
 class Header extends Component
 {
+    public $page;
+
     public function render()
     {
 
         $empresas = Empresa::all();
         return view('livewire.admin.header', compact('empresas'));
-
-
     }
 
-    public function changeBussines(Empresa $empresa){
+    public function mount($page)
+    {
+
+        $this->page = $page;
+    }
+
+    public function changeBussines(Empresa $empresa)
+    {
 
         session()->put('empresa', $empresa->id);
         $this->emit('render');
-        $mensaje = "SE CAMBIO DE EMPRESA, ahora veras los registros de la EMPRESA: ".$empresa->nombre."";
-        return redirect()->route('admin.home')->with('flash.banner', $mensaje);
-        return redirect()->route('admin.home')->with('flash.abnnerStyle', 'success');
+        $mensaje = "SE CAMBIO DE EMPRESA, ahora veras los registros de la EMPRESA: " . $empresa->plantilla->razon_social . "";
+        return redirect($this->page)->with('flash.banner', $mensaje);
+        return redirect($this->page)->with('flash.abnnerStyle', 'success');
+        //  return redirect($this->page);
+    }
+
+    public function showInfo(Empresa $empresa)
+    {
+
+        dd($empresa->plantilla->razon_social);
     }
 }

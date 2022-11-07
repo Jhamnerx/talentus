@@ -29,9 +29,6 @@ class PresupuestoController extends Controller
     public function create()
     {
 
-        // $tipoCambio = UtilesController::tipoCambio();
-        // $numero = $this->setNextSequenceNumber();
-
         return view('admin.ventas.presupuestos.create');
     }
 
@@ -40,7 +37,6 @@ class PresupuestoController extends Controller
 
         $plantilla = plantilla::first();
         $id = IdGenerator::generate(['table' => 'presupuestos', 'field' => 'numero', 'length' => 8, 'prefix' => $plantilla->series["cotizacion"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
-
         return $id;
     }
 
