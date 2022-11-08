@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Certificados\Gps;
 use App\Models\Certificados;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class CertificadosGpsIndex extends Component
 {
     use WithPagination;
@@ -29,8 +30,11 @@ class CertificadosGpsIndex extends Component
         $certificados = Certificados::whereHas('ciudades', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%')
                 ->orwhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('vehiculos', function ($query) {
+        })->orwhereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
+            $query->orWhereHas('cliente', function ($cliente) {
+                $cliente->where('razon_social', 'like', '%' . $this->search . '%');
+            });
         })->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
@@ -96,6 +100,7 @@ class CertificadosGpsIndex extends Component
     //Enviar datos para editar Certificado
     public function openModalEdit(Certificados $certificado)
     {
+        dd($certificado);
         $this->emit('actualizarCertificado', $certificado);
         $this->openModalEdit = true;
     }
@@ -119,5 +124,6 @@ class CertificadosGpsIndex extends Component
     public function cambiarEstado(Certificados $certificado, $field, $value)
     {
         $certificado->setAttribute($field, $value)->save();
+        $this->render();
     }
 }

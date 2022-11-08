@@ -182,7 +182,7 @@
         <div x-data="handleSelect">
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
@@ -216,13 +216,13 @@
                                 <div class="font-semibold text-left">Fecha Fin</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Fecha</div>
+                                <div class="font-semibold text-left">Fecha Emisión</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Accesorios</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Caracteristicas</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Estado</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
@@ -249,7 +249,7 @@
                                             @if (!$certificado->codigo == null)
                                                 {{ $certificado->codigo }}
                                             @else
-                                                {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}
+                                                {{ $certificado->ciudades->prefijo . '-' . $certificado->numero }}
                                             @endif
 
                                         </div>
@@ -271,15 +271,15 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
-                                            {{ $certificado->vehiculos->placa }}</div>
+                                            {{ $certificado->vehiculo->placa }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-slate-800">
-                                            {{ $certificado->vehiculos->flotas->clientes->razon_social }}</div>
+                                            {{ $certificado->vehiculo->cliente->razon_social }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
-                                            {{ $certificado->vehiculos->dispositivos->modelo->modelo }}
+                                            {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
                                         </div>
                                     </td>
 
@@ -289,6 +289,94 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $certificado->fecha }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                        <!-- Start -->
+                                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                            @mouseleave="open = false">
+                                            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                                aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                                @focusout="open = false" @click.prevent>
+                                                <span class="mr-2">Accesorios
+                                                    @if (!$certificado->accesorios->isEmpty())
+                                                        ({{ $certificado->accesorios->count() }})
+                                                    @endif
+
+
+                                                </span>
+                                                <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                                                </svg>
+                                            </button>
+                                            <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
+                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
+                                                    x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+                                                    <div class="">
+                                                        <div
+                                                            class="font-medium text-slate-800 mb-0.5 pb-2 text-center text-base">
+                                                            <b>ACCESORIOS</b>
+                                                        </div>
+                                                        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                                            <table
+                                                                class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                                <thead
+                                                                    class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                                    <tr class="text-center">
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            #
+                                                                        </th>
+                                                                        <th scope="col"
+                                                                            class="px-6 py-3 text-center">
+                                                                            Accesorio
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    @if ($certificado->accesorios->isEmpty())
+                                                                        <tr
+                                                                            class="bg-white border-b text-center dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+                                                                            <td colspan="2">SIN ACCESORIOS</td>
+
+                                                                        </tr>
+                                                                    @else
+                                                                        @foreach ($certificado->accesorios as $key => $accesorio)
+                                                                            <tr
+                                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+
+                                                                                <th scope="row"
+                                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                                    {{ $key + 1 }}
+                                                                                </th>
+
+                                                                                <td class="px-6 py-4">
+                                                                                    {{ $accesorio }}
+                                                                                </td>
+
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    @endif
+
+
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                         <div>
@@ -302,42 +390,157 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
-
-                                                @livewire('admin.certificados.gps.change-status', ['model' => $certificado, 'field' => 'estado'], key('estado' . $certificado->id))
-                                                <!-- End -->
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            <button wire:click.prevent="openModalEdit({{ $certificado->id }})"
-                                                class="text-slate-400 hover:text-slate-500 rounded-full">
-                                                <span class="sr-only">Editar</span>
-                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                    <path
-                                                        d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                                </svg>
-                                            </button>
-
-                                            <form class="inline-flex formularioEliminar"
-                                                action="{{ route('admin.certificados.gps.destroy', $certificado) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('delete')
-                                                <button class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                    <span class="sr-only">Eliminar</span>
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                        <path
-                                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
                                                     </svg>
                                                 </button>
-                                            </form>
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+
+                                                    <ul>
+                                                        <li>
+
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalEdit({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                    </path>
+                                                                </svg> Editar
+
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <form class="inline-flex formularioEliminar"
+                                                                action="{{ route('admin.certificados.gps.destroy', $certificado) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('delete')
+                                                                <button type="submit"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Eliminar
+                                                                </button>
+                                                            </form>
+
+
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('admin.certificados.gps.show', $certificado) }}"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-29"
+                                                                role="menuitem" tabindex="-1"><svg
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                                                    </path>
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                                    </path>
+                                                                </svg> Ver
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a wire:click.prevent="cambiarEstado('{{ $certificado->id }}', 'estado', '{{ $certificado->estado ? 0 : 1 }}')"
+                                                                class="text-gray-700 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-29"
+                                                                role="menuitem" tabindex="-1">
+                                                                @if (!$certificado->estado)
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        class="h-6 w-6 mr-3" viewBox="0 0 48 48">
+                                                                        <g stroke-linecap="square"
+                                                                            transform="translate(0.5 0.5)"
+                                                                            fill="none" stroke="currentColor"
+                                                                            stroke-linejoin="miter"
+                                                                            class="nc-icon-wrapper"
+                                                                            stroke-miterlimit="10">
+                                                                            <path data-cap="butt"
+                                                                                d="M16,10H32A14,14,0,0,1,46,24h0A14,14,0,0,1,32,38H16"
+                                                                                stroke-linecap="butt"></path>
+                                                                            <circle cx="16" cy="24"
+                                                                                r="14"></circle>
+                                                                        </g>
+                                                                    </svg>
+                                                                @else
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        class="h-6 w-6 mr-3" viewBox="0 0 48 48">
+                                                                        <g class="nc-icon-wrapper">
+                                                                            <path
+                                                                                d="M33,9H15a15,15,0,0,0,0,30H33A15,15,0,0,0,33,9Z"
+                                                                                fill="#6cc4f5"></path>
+                                                                            <circle cx="15" cy="24"
+                                                                                r="13" fill="#fff">
+                                                                            </circle>
+                                                                        </g>
+                                                                    </svg>
+                                                                @endif
+                                                                Cambiar Estado
+                                                            </a>
+                                                        </li>
+
+
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click="modalOpenSend({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-32"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+                                                                    </path>
+                                                                </svg> Enviar
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
+
                                         </div>
+
                                     </td>
+
                                 </tr>
                             @endforeach
                         @else
@@ -381,7 +584,7 @@
             e.preventDefault();
             Swal.fire({
                 title: 'Estas Seguro?',
-                text: "Se eliminara el certificado seleccionada!",
+                text: "Se eliminara el certificado seleccionado!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

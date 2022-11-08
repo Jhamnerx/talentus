@@ -30,6 +30,7 @@ class CertificadosGpsRequest extends FormRequest
                 "fin_cobertura" => 'required',
                 "ciudades_id" => 'required',
 
+
             ];
         } else {
             $rules = [

@@ -323,6 +323,7 @@ class SearchController extends Controller
             $data[] = [
                 'value' => $ciudad->id,
                 'data' => $ciudad->nombre,
+                'prefijo' => $ciudad->prefijo,
             ];
         }
 

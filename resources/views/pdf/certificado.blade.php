@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>CERTIFICADO GPS {{ $certificado->vehiculos->placa }}
+    <title>CERTIFICADO GPS {{ $certificado->vehiculo->placa }}
         {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}</title>
 
 
@@ -180,7 +180,7 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
         <body>
@@ -203,18 +203,18 @@
             <span>CERTIFICA</span>
         </div>
         <div class="qr">
-            <img
+            {{-- <img
                 src="data:image/jpeg;base64, {{ base64_encode(
                     QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
-                                $certificado->vehiculos->placa .
+                                $certificado->vehiculo->placa .
                                 " \n CERTIFICADO VALIDO HASTA: " .
                                 $certificado->fin_cobertura .
                                 "
-                                                                                        \nEXPEDIDO A: " .
-                                $certificado->vehiculos->flotas->clientes->razon_social,
+                                                                                                                        \nEXPEDIDO A: " .
+                                $certificado->vehiculo->cliente->razon_social,
                         ),
-                ) }}">
+                ) }}"> --}}
 
         </div>
 
@@ -225,7 +225,7 @@
         <div>
             <span>
                 <b>Que, el sistema localizador vía GPS/GPRS/GSM – TRACKER Modelo
-                    {{ $certificado->vehiculos->dispositivos->modelo->modelo }}</b>
+                    {{ $certificado->vehiculo->dispositivos->modelo->modelo }}</b>
             </span>
             <span class="acredita">
                 <b>
@@ -264,10 +264,10 @@
         fecha de
         expedición.
         <div class="cliente">
-            Se expide el siguiente certificado a: {{ $certificado->vehiculos->flotas->clientes->razon_social }}
+            Se expide el siguiente certificado a: {{ $certificado->vehiculo->cliente->razon_social }}
         </div>
         <div class="vehiculo">
-            <b>Placa de la Unidad: {{ $certificado->vehiculos->placa }}</b>
+            <b>Placa de la Unidad: {{ $certificado->vehiculo->placa }}</b>
         </div>
 
     </div>
@@ -275,7 +275,7 @@
     <div class="footer">
         <div class="sello">
             @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $sello)) }}"
+                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
                     alt="">
             @endif
 

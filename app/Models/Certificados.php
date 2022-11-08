@@ -5,9 +5,11 @@ namespace App\Models;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Certificados extends Model
 {
@@ -16,21 +18,23 @@ class Certificados extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados';
 
-
-
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var boolean
-     */
     protected $casts = [
         'sello' => 'boolean',
         'fondo' => 'boolean',
         'estado' => 'boolean',
         'eliminado' => 'boolean',
+        'accesorios' => AsCollection::class,
         'fin_cobertura' => 'date:Y/m/d',
     ];
+
+
+    // protected function accesorios(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => json_decode($value, true),
+    //         set: fn ($value) => json_encode($value),
+    //     );
+    // }
 
 
     // Scope local de activo
@@ -47,10 +51,11 @@ class Certificados extends Model
         return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
     }
 
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
     }
+
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
@@ -74,8 +79,7 @@ class Certificados extends Model
 
         $pdf = PDF::loadView('pdf.certificado');
 
-        return $pdf->stream('CERTIFICADO-' . $this->vehiculos->placa . ' ' . $this->codigo . '.pdf');
-
+        return $pdf->stream('CERTIFICADO-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
 
         //return $pdf;
         //return view('pdf.acta');

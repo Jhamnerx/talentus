@@ -268,6 +268,7 @@
                                 </div>
                             </div>
                             <div class="col-span-12 mt-2">
+                                {{ json_encode($accesorios) }}
                                 <label
                                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                                     <div>
@@ -280,7 +281,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" name="accesorios" value="CORTE DE MOTOR"
+                                            <input type="checkbox" wire:model="accesorios" value="CORTE DE MOTOR"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">CORTE DE MOTOR</span>
                                         </label>
@@ -289,7 +290,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" name="accesorios" value="BOTON DE PANICO"
+                                            <input type="checkbox" wire:model="accesorios" value="BOTON DE PANICO"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">BOTON DE PANICO</span>
                                         </label>
@@ -298,7 +299,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" name="accesorios" value="BUZZER"
+                                            <input type="checkbox" wire:model="accesorios" value="BUZZER"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">BUZZER</span>
                                         </label>
@@ -307,7 +308,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" name="accesorios" value="CIERRE DE PUERTA"
+                                            <input type="checkbox" wire:model="accesorios" value="CIERRE DE PUERTA"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">CIERRE DE PUERTAS</span>
                                         </label>
@@ -400,7 +401,7 @@
                 language: "es",
                 width: '100%',
                 ajax: {
-                    url: '{{ route('search.ciudades') }}',
+                    url: "{{ route('search.ciudades') }}",
                     dataType: 'json',
 
                     cache: true,
@@ -448,7 +449,6 @@
 
             $('.ciudades').on('select2:select', function(e) {
                 var data = e.params.data;
-                //console.log(data.id);
                 @this.set('ciudades_id', data.id)
             });
         </script>
