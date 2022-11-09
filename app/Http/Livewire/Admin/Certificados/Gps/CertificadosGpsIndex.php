@@ -100,7 +100,6 @@ class CertificadosGpsIndex extends Component
     //Enviar datos para editar Certificado
     public function openModalEdit(Certificados $certificado)
     {
-        dd($certificado);
         $this->emit('actualizarCertificado', $certificado);
         $this->openModalEdit = true;
     }
@@ -113,8 +112,6 @@ class CertificadosGpsIndex extends Component
     }
 
 
-
-
     public function openModalShow(Certificados $certificado)
     {
         $this->emit('verDetalleCertificado', $certificado);
@@ -125,5 +122,10 @@ class CertificadosGpsIndex extends Component
     {
         $certificado->setAttribute($field, $value)->save();
         $this->render();
+    }
+
+    public function modalOpenSend(Certificados $certificado)
+    {
+        $this->emit('modalOpenSend', $certificado);
     }
 }

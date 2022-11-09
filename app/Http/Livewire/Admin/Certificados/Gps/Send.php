@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
+namespace App\Http\Livewire\Admin\Certificados\Gps;
 
-use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
-use App\Models\Presupuestos;
+use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
+use App\Models\Certificados;
 use Exception;
 use Livewire\Component;
 
@@ -11,12 +11,13 @@ class Send extends Component
 {
     public $modalOpenSend = false;
 
-    public $presupuesto;
+    public $certificado;
     public $correo;
     public $disabled =  false;
 
     public $from = "talentus@talentustechnology.com", $to, $asunto = "", $body;
 
+    public $failMsg;
 
     protected $listeners = [
         'modalOpenSend' => 'openModal'
@@ -28,61 +29,56 @@ class Send extends Component
         $this->reset('to');
         $this->reset('asunto');
         $this->reset('body');
-        $this->reset('presupuesto');
+        $this->reset('certificado');
     }
 
     public function render()
     {
-        return view('livewire.admin.ventas.presupuestos.send');
+        return view('livewire.admin.certificados.gps.send');
     }
 
-    public function openModal(Presupuestos $presupuesto)
+    public function openModal(Certificados $certificado)
     {
 
         $this->modalOpenSend = true;
-        $this->presupuesto = $presupuesto;
-        $this->to = $presupuesto->clientes->email . " | " . $presupuesto->clientes->razon_social;
-        $this->asunto = "TALENTUS - COTIZACIÓN #" . $presupuesto->numero;
-        $this->correo =  $presupuesto->clientes->email;
+        $this->certificado = $certificado;
+        $this->to = $certificado->vehiculo->cliente->email . " | " . $certificado->vehiculo->cliente->razon_social;
+        $this->asunto = "TALENTUS - CERTIFICADO #" . $certificado->codigo;
+        $this->correo =  $certificado->vehiculo->cliente->email;
 
-        if (empty($presupuesto->clientes->email)) {
+        if (empty($certificado->vehiculo->cliente->email)) {
 
             $this->disabled = true;
         } else {
 
             $this->disabled = false;
         }
-        // dd($presupuesto);
-
     }
+
     public function closeModal()
     {
         $this->modalOpenSend = false;
         $this->resetPropiedades();
     }
 
-
-    public function sendPresupuesto()
+    public function sendCertificado()
     {
-
-        //dd($this->presupuesto);
         $data = array(
             'asunto' => $this->asunto,
             'body' => $this->body,
         );
-        //dd($this->presupuesto);
 
         try {
 
-            $pdfPresupuesto = new PresupuestoPdfController();
-            $pdfPresupuesto->sendToMail($this->presupuesto, $data);
+            $pdfCertificado = new CertificadoPdfController();
+            $respuesta = $pdfCertificado->sendToMail($this->certificado, $data);
         } catch (Exception $e) {
-            dd($e);
-            $e->getMessage();
+
+            $this->failMsg = $e->getMessage();
         } finally {
 
             $this->modalOpenSend = false;
-            $this->dispatchBrowserEvent('presupuesto-send', ['presupuesto' => $this->presupuesto]);
+            $this->dispatchBrowserEvent('certificado-send', ['certificado' => $this->certificado]);
             $this->resetPropiedades();
         }
     }

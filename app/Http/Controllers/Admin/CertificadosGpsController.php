@@ -19,7 +19,7 @@ class CertificadosGpsController extends Controller
     public function setNextSequenceNumber()
     {
 
-        $id = IdGenerator::generate(['table' => 'certificados', 'field' => 'numero', 'length' => 7, 'prefix' => date('y') . '-']);
+        $id = IdGenerator::generate(['table' => 'certificados', 'field' => 'numero', 'length' => 7, 'prefix' => date('y') . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
         return trim($id);
     }
 

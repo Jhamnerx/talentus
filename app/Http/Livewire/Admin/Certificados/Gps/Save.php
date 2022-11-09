@@ -7,17 +7,15 @@ use App\Http\Requests\CertificadosGpsRequest;
 use App\Models\Certificados;
 use App\Models\Ciudades;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 use Illuminate\Support\Str;
-use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
 
-
     public $openModalSave = false;
     public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1;
+    public $fecha_instalacion;
     public $fin_cobertura;
     public $accesorios = [];
 
@@ -25,6 +23,7 @@ class Save extends Component
     protected $listeners = [
         'guardarCertificado' => 'openModal'
     ];
+
 
     public function render()
     {
@@ -36,6 +35,7 @@ class Save extends Component
         $this->openModalSave = true;
         $certController = new CertificadosGpsController();
         $this->numero = $certController->setNextSequenceNumber();
+        $this->fecha_instalacion = Carbon::now()->format('Y-m-d');
         $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
     }
 
@@ -67,6 +67,7 @@ class Save extends Component
         $certificado->vehiculos_id = $values["vehiculos_id"];
         $certificado->numero = $values["numero"];
         $certificado->fin_cobertura = $values["fin_cobertura"];
+        $certificado->fecha_instalacion = $values["fecha_instalacion"];
         $certificado->ciudades_id = $values["ciudades_id"];
         $certificado->fondo = $values["fondo"];
         $certificado->sello = $values["sello"];
@@ -78,7 +79,7 @@ class Save extends Component
         $certificado->save();
 
         //$this->openModalSave = false;
-        $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculos->placa]);
+        $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculo->placa]);
         $this->closeModal();
         $this->emit('updateTable');
     }

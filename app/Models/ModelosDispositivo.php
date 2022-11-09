@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,15 +15,9 @@ class ModelosDispositivo extends Model
 
     protected $appends = ['porcentaje'];
 
-    //LOCAL SCOPES
-
-
-    // protected function getPorcentaje()
-    // {
-    //     $porcentaje = ($this->dispositivo()->vendido()->empresa()->get()->count() * 100) / $this->dispositivo()->empresa()->get()->count();
-    //     return $porcentaje;
-    // }
-
+    protected $casts = [
+        'caracteristicas' => AsCollection::class,
+    ];
 
     protected function porcentaje(): Attribute
     {

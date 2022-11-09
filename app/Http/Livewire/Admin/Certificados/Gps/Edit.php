@@ -13,7 +13,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $certificado;
-    public $numero, $vehiculos_id, $fin_cobertura, $ciudades_id, $fondo, $sello;
+    public $numero, $vehiculos_id, $fecha_instalacion, $fin_cobertura, $ciudades_id, $fondo, $sello, $accesorios;
 
 
     protected $listeners = [
@@ -43,29 +43,34 @@ class Edit extends Component
         $this->numero = $certificado->numero;
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
-        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $certificado->vehiculos, 'ciudad' => $certificado->ciudades]);
+        $this->accesorios = $certificado->accesorios;
+        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $certificado->vehiculo, 'ciudad' => $certificado->ciudades]);
+        $this->fecha_instalacion = $certificado->fecha_instalacion->format('Y-m-d');
         $this->fin_cobertura = $certificado->fin_cobertura->format('Y-m-d');
     }
 
     public function actualizarCertificado()
     {
         $certificadoRequest = new CertificadosGpsRequest();
-        
+
         $values = $this->validate($certificadoRequest->rules($this->certificado), $certificadoRequest->messages());
 
         $ciudad = Ciudades::find($values["ciudades_id"]);
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
-        
+
         $update = Certificados::find($this->certificado->id);
 
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $update->numero;
+        $codigo = $ciudad->prefijo . "-" . $update->numero;
 
         $update->numero = $values["numero"];
+
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->fecha = $fecha;
+        $update->fecha_instalacion = $values["fecha_instalacion"];
         $update->fin_cobertura = $values["fin_cobertura"];
         $update->codigo = $codigo;
+        $update->accesorios = $this->accesorios;
         $update->ciudades_id = $values["ciudades_id"];
         $update->save();
 

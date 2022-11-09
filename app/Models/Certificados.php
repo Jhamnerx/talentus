@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Certificados\EnviarCertificadoCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -15,6 +16,7 @@ class Certificados extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados';
 
@@ -24,17 +26,9 @@ class Certificados extends Model
         'estado' => 'boolean',
         'eliminado' => 'boolean',
         'accesorios' => AsCollection::class,
+        'fecha_instalacion' => 'date:Y/m/d',
         'fin_cobertura' => 'date:Y/m/d',
     ];
-
-
-    // protected function accesorios(): Attribute
-    // {
-    //     return Attribute::make(
-    //         get: fn ($value) => json_decode($value, true),
-    //         set: fn ($value) => json_encode($value),
-    //     );
-    // }
 
 
     // Scope local de activo
@@ -45,7 +39,6 @@ class Certificados extends Model
 
 
     //Relacion uno a muchos inversa
-
     public function ciudades()
     {
         return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
@@ -62,13 +55,12 @@ class Certificados extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
-
     public function getPDFData()
     {
-
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();;
+        $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
+
         view()->share([
             'certificado' => $this,
             'plantilla' => $plantilla,
@@ -80,8 +72,23 @@ class Certificados extends Model
         $pdf = PDF::loadView('pdf.certificado');
 
         return $pdf->stream('CERTIFICADO-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
-
         //return $pdf;
         //return view('pdf.acta');
+    }
+
+    public function getPDFDataToMail($data)
+    {
+        $plantilla = plantilla::first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'certificado' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+        ]);
+
+        $pdf = PDF::loadView('pdf.certificado');
+        $this->vehiculo->cliente->notify(new EnviarCertificadoCliente($this, $pdf, $data));
     }
 }

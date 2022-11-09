@@ -6,6 +6,7 @@ use App\Events\nuevoCertificadoCreado;
 use App\Models\Certificados;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Models\ChangesModels;
+
 class CertificadosObserver
 {
     /**
@@ -17,36 +18,25 @@ class CertificadosObserver
     public function creating(Certificados $certificados)
     {
 
-        if(! \App::runningInConsole()){
-           // dd($certificados);
+        if (!\App::runningInConsole()) {
+            // dd($certificados);
             $certificados->empresa_id = session('empresa');
             $certificados->user_id = auth()->user()->id;
-            
-
-
         }
-       
-    }  
+    }
 
     public function updating(Certificados $certificados)
     {
-
-        if(! \App::runningInConsole()){
-
-            $certificados->empresa_id = session('empresa');
-
-        }
-       
     }
 
 
     public function created(Certificados $certificado)
     {
-        if(! \App::runningInConsole()){
+        if (!\App::runningInConsole()) {
 
             $certificado->unique_hash = Hashids::connection(Certificados::class)->encode($certificado->id);
             $certificado->save();
-            
+
             //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
             nuevoCertificadoCreado::dispatch($certificado);
 
@@ -58,7 +48,6 @@ class CertificadosObserver
                 'type' => 'create',
                 'user_id' => auth()->user()->id,
             ]);
-
         }
     }
 

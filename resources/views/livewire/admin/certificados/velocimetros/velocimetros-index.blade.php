@@ -268,7 +268,7 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $certificado->vehiculos->placa }}
+                                        <div class="font-medium text-slate-800">{{ $certificado->vehiculo->placa }}
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

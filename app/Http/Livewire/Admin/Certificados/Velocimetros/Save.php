@@ -72,7 +72,7 @@ class Save extends Component
         $certificado->save();
 
         //$this->openModalSave = false;
-        $this->dispatchBrowserEvent('certificado-velocimetro-save', ['vehiculo' => $certificado->vehiculos->placa]);
+        $this->dispatchBrowserEvent('certificado-velocimetro-save', ['vehiculo' => $certificado->vehiculo->placa]);
         $this->emit('updateTable');
         $this->reset();
     }

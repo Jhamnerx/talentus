@@ -16,6 +16,7 @@ class CreateCertificadosTable extends Migration
         Schema::create('certificados', function (Blueprint $table) {
             $table->id();
             $table->string('numero');
+            $table->date('fecha_instalacion');
             $table->date('fin_cobertura');
             $table->string('fecha')->nullable();
             $table->year('year')->nullable();
