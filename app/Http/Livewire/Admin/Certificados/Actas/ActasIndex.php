@@ -5,9 +5,11 @@ namespace App\Http\Livewire\Admin\Certificados\Actas;
 use App\Models\Actas;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ActasIndex extends Component
 {
     use WithPagination;
+
     public $search;
     public $from = '';
     public $to = '';
@@ -26,11 +28,10 @@ class ActasIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-
         $actas = Actas::whereHas('ciudades', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%')
                 ->orwhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('vehiculos', function ($query) {
+        })->orwhereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
@@ -42,7 +43,6 @@ class ActasIndex extends Component
 
         $total = Actas::all()->count();
         if (!empty($desde)) {
-
 
             $actas = Actas::whereRaw(
                 "(created_at >= ? AND created_at <= ?)",
@@ -64,6 +64,7 @@ class ActasIndex extends Component
 
         return view('livewire.admin.certificados.actas.actas-index', compact('actas', 'total'));
     }
+
     public function filter($dias)
     {
         $this->search = null;
@@ -110,9 +111,6 @@ class ActasIndex extends Component
         $this->openModalDelete = true;
     }
 
-
-
-
     public function openModalShow(Actas $acta)
     {
         $this->emit('verDetalleActa', $acta);
@@ -122,5 +120,10 @@ class ActasIndex extends Component
     public function cambiarEstado(Actas $acta, $field, $value)
     {
         $acta->setAttribute($field, $value)->save();
+    }
+    public function modalOpenSend(Actas $acta)
+    {
+
+        $this->emit('modalOpenSend', $acta);
     }
 }

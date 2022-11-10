@@ -13,4 +13,9 @@ class ActaPdfController extends Controller
     {
         return $acta->getPDFData();
     }
+    public function sendToMail(Actas $acta, $data)
+    {
+
+        return $acta->getPDFDataToMail($data);
+    }
 }

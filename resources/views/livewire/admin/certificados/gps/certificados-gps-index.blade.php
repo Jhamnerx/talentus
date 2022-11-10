@@ -216,7 +216,7 @@
                                 <div class="font-semibold text-left">Fecha Fin</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Fecha Emisión</div>
+                                <div class="font-semibold text-left">Fecha Instalación</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accesorios</div>
@@ -288,7 +288,7 @@
                                             {{ $certificado->fin_cobertura->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $certificado->fecha }}</div>
+                                        <div>{{ $certificado->fecha_instalacion }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -512,8 +512,6 @@
                                                                 Cambiar Estado
                                                             </a>
                                                         </li>
-
-
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click="modalOpenSend({{ $certificado->id }})"

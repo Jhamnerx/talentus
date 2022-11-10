@@ -2,8 +2,8 @@
 <html>
 
 <head>
-    @if ($acta->vehiculos && $acta->ciudades)
-        <title>ACTA {{ $acta->vehiculos->placa }}
+    @if ($acta->vehiculo && $acta->ciudades)
+        <title>ACTA {{ $acta->vehiculo->placa }}
             {{ $acta->ciudades->prefijo . '-' . $acta->year . '-' . $acta->numero }}
         </title>
     @else
@@ -80,7 +80,7 @@
         }
 
         .footer .sello {
-            margin-top: 3rem;
+            margin-top: 1.6rem;
             width: 50%;
             text-align: center;
         }
@@ -169,7 +169,7 @@
 
 @if ($acta->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
         <body>
@@ -191,19 +191,32 @@
         <div class=" title">
             <span>ACTA DE INSTALACIÓN DE EQUIPO GPS</span>
         </div>
+
+        @php
+            
+            // $qr = base64_encode(
+            //     QrCode::format('png')
+            //         ->size(120)
+            //         ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+            //         ->style('square')
+            //         ->eye('circle')
+            //         ->encoding('UTF-8')
+            //         ->generate(
+            //             ' VEHICULO: ' .
+            //                 $acta->vehiculo->placa .
+            //                 '|' .
+            //                 " \n VALIDA: " .
+            //                 $acta->inicio_cobertura->format('d-m-Y') .
+            //                 '|' .
+            //                 $acta->fin_cobertura->format('d-m-Y') .
+            //                 "
+//                                                                                                                             \nCONSULTAR VALIDEZ EN: " .
+            //                 route('consulta.actas', $acta->codigo),
+            //         ),
+            // );
+        @endphp
         <div class="qr">
-            <img
-                src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
-                            ' VEHICULO: ' .
-                                $acta->vehiculos->placa .
-                                " \n ACTA VALIDA HASTA: " .
-                                $acta->fin_cobertura .
-                                "
-                                                                \nCONSULTAR VALIDEZ EN: " .
-                                route('consulta.actas', $acta->codigo),
-                        ),
-                ) }}">
+            {{-- <img src="data:image/jpeg;base64, {{ $qr }}"> --}}
 
         </div>
 
@@ -214,8 +227,8 @@
         <div>
             <span>
                 <b>{{ $plantilla->razon_social }}</b>, con RUC {{ $plantilla->ruc }}, Certifica que nuestro cliente:
-                <b>{{ $acta->vehiculos->cliente ? strtoupper($acta->vehiculos->cliente->razon_social) : 'no existe' }}</b>
-                con DNI/RUC: {{ $acta->vehiculos->cliente->numero_documento }}, ha adquirido un equipo
+                <b>{{ $acta->vehiculo->cliente ? strtoupper($acta->vehiculo->cliente->razon_social) : 'no existe' }}</b>
+                con DNI/RUC: {{ $acta->vehiculo->cliente->numero_documento }}, ha adquirido un equipo
                 GPS,
                 para la unidad que se detalla a continuación:
                 Así mismo a la fecha se encuentra transmitiendo a nuestra Plataforma de Monitoreo Satelital en
@@ -228,67 +241,72 @@
         <table class="tabla">
             <tr>
                 <td height="20">Fecha de Instalación</td>
-                <td height="20">:{{ $acta->created_at->format('d-m-Y') }}</td>
+                <td height="20">: {{ $acta->created_at->format('d-m-Y') }}</td>
             </tr>
 
 
             <tr>
                 <td height="20">Modelo GPS</td>
-                <td height="20">:{{ $acta->vehiculos->dispositivos->modelo->modelo }}</td>
+                <td height="20">: {{ $acta->vehiculo->dispositivos->modelo->modelo }}</td>
             </tr>
 
             <tr>
                 <td height="20">Imei</td>
-                <td height="20">:{{ $acta->vehiculos->dispositivos->imei }}</td>
+                <td height="20">: {{ $acta->vehiculo->dispositivos->imei }}</td>
             </tr>
 
             <tr>
                 <td height="20">Certificado de Homologación</td>
-                <td height="20">: {{ $acta->vehiculos->dispositivos->modelo->certificado }} </td>
+                <td height="20">: {{ $acta->vehiculo->dispositivos->modelo->certificado }} </td>
             </tr>
 
             <tr>
                 <td height="20">Placa</td>
-                <td height="20">:{{ $acta->vehiculos->placa }}</td>
+                <td height="20">: {{ $acta->vehiculo->placa }}</td>
             </tr>
             <tr>
                 <td height="20">Marca</td>
-                <td height="20">:{{ $acta->vehiculos->marca }}</td>
+                <td height="20">: {{ $acta->vehiculo->marca }}</td>
             </tr>
             <tr>
                 <td height="20">Modelo</td>
-                <td height="30">:{{ $acta->vehiculos->modelo }}</td>
+                <td height="30">: {{ $acta->vehiculo->modelo }}</td>
 
             </tr>
             <tr>
                 <td height="20">Tipo</td>
-                <td height="20">:{{ $acta->vehiculos->tipo }}</td>
+                <td height="20">: {{ $acta->vehiculo->tipo }}</td>
 
             </tr>
             <tr>
                 <td height="20">A&ntilde;o</td>
-                <td height="20">:{{ $acta->vehiculos->year }}</td>
+                <td height="20">: {{ $acta->vehiculo->year }}</td>
             </tr>
             <tr>
                 <td height="20">Color</td>
-                <td height="20">:{{ $acta->vehiculos->color }}</td>
+                <td height="20">: {{ $acta->vehiculo->color }}</td>
             </tr>
             <tr>
                 <td height="20">Motor</td>
-                <td height="20">:{{ $acta->vehiculos->motor }}</td>
+                <td height="20">: {{ $acta->vehiculo->motor }}</td>
             </tr>
             <tr>
                 <td height="20">Serie</td>
-                <td height="20">:{{ $acta->vehiculos->serie }}</td>
+                <td height="20">: {{ $acta->vehiculo->serie }}</td>
+            </tr>
+            <tr>
+                <td height="20">Plataforma</td>
+                <td height="20">: <b>{{ ucfirst($acta->plataforma) }}</b></td>
+
             </tr>
             <tr>
                 <td height="20">Inicio Cobertura</td>
-                <td height="20">:<b>{{ $acta->inicio_cobertura->format('d-m-Y') }}</b></td>
+                <td height="20">: <b>{{ $acta->inicio_cobertura->format('d-m-Y') }}</b></td>
 
             </tr>
             <tr>
                 <td height="20">Fin de cobertura</td>
-                <td height="20">:<b>{{ $acta->fin_cobertura->format('d-m-Y') }}</b></td>
+                <td height="20">: <b>{{ $acta->fin_cobertura->format('d-m-Y') }}</b></td>
             </tr>
         </table>
 
@@ -297,7 +315,7 @@
     <div class="footer">
         <div class="sello">
             @if ($acta->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $sello)) }}"
+                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
                     alt="">
             @endif
 

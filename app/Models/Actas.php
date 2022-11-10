@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App;
+use App\Notifications\Certificados\EnviarActaCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -51,7 +52,7 @@ class Actas extends Model
         return $this->belongsTo(Ciudades::class, 'ciudades_id');
     }
 
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
     }
@@ -73,10 +74,25 @@ class Actas extends Model
 
         $pdf = PDF::loadView('pdf.acta');
 
-        return $pdf->stream('ACTA-' . $this->vehiculos->placa . ' ' . $this->codigo . '.pdf');
-
-
+        return $pdf->stream('ACTA-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
         //return $pdf;
         //return view('pdf.acta');
+    }
+
+    public function getPDFDataToMail($data)
+    {
+        $plantilla = plantilla::first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'acta' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+        ]);
+
+        $pdf = PDF::loadView('pdf.acta');
+
+        $this->vehiculo->cliente->notify(new EnviarActaCliente($this, $pdf, $data));
     }
 }

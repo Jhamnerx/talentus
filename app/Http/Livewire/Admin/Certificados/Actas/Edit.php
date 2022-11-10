@@ -14,7 +14,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $acta;
-    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo, $sello;
+    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo, $sello, $plataforma;
 
 
     protected $listeners = [
@@ -44,7 +44,8 @@ class Edit extends Component
         $this->numero = $acta->numero;
         $this->vehiculos_id = $acta->vehiculos_id;
         $this->ciudades_id = $acta->ciudades_id;
-        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculos, 'ciudad' => $acta->ciudades]);
+        $this->plataforma = $acta->plataforma;
+        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculo, 'ciudad' => $acta->ciudades]);
         $this->inicio_cobertura = $acta->inicio_cobertura->format('Y-m-d');
         $this->fin_cobertura = $acta->fin_cobertura->format('Y-m-d');
     }
@@ -59,13 +60,14 @@ class Edit extends Component
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
         $update = Actas::find($this->acta->id);
         $update->numero = $values["numero"];
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $update->numero;
+        $codigo = $ciudad->prefijo . "-" .  $update->numero;
         $update->codigo = $codigo;
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->fecha = $fecha;
         $update->inicio_cobertura = $values["inicio_cobertura"];
         $update->fin_cobertura = $values["fin_cobertura"];
         $update->ciudades_id = $values["ciudades_id"];
+        $update->plataforma = $values["plataforma"];
         $update->save();
 
         $this->openModalEdit = false;

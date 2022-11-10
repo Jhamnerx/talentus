@@ -30,6 +30,12 @@ class Certificados extends Model
         'fin_cobertura' => 'date:Y/m/d',
     ];
 
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
 
     // Scope local de activo
     public function scopeActive($query, $status)
@@ -41,19 +47,14 @@ class Certificados extends Model
     //Relacion uno a muchos inversa
     public function ciudades()
     {
-        return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Ciudades::class, 'ciudades_id');
     }
 
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
     }
 
-    //GLOBAL SCOPE EMPRESA
-    protected static function booted()
-    {
-        static::addGlobalScope(new EmpresaScope);
-    }
 
     public function getPDFData()
     {

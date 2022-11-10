@@ -22,7 +22,7 @@
                 bottom: -84px;
                 left: -82px;
 
-                background-image: url(data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }});
+                background-image: url(data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }});
                 background-size: 100%;
                 background-repeat: no-repeat;
                 /* opacity: .2; */
@@ -74,10 +74,13 @@
                     fiscal en {{ $contrato->cliente->direccion }},
                     debidamente
                     representada por su <b>Gerente General
-                    </b><b>{{ $contrato->cliente->contactos()->gerente(1)->first()->nombre }}</b>, identificado con DNI
+                    </b><b>{{ $contrato->cliente->contactos()->gerente(1)->first()? $contrato->cliente->contactos()->gerente(1)->first()->nombre: '"agregar"' }}</b>,
+                    identificado con DNI
                     N°
-                    <b>{{ $contrato->cliente->contactos()->gerente(1)->first()->numero_documento }}</b>,
-                    con correo electrónico <b>{{ $contrato->cliente->contactos()->gerente(1)->first()->email }}</b>, a
+                    <b>{{ $contrato->cliente->contactos()->gerente(1)->first()? $contrato->cliente->contactos()->gerente(1)->first()->numero_documento: '"agregar"' }}</b>,
+                    con correo electrónico
+                    <b>{{ $contrato->cliente->contactos()->gerente(1)->first()? $contrato->cliente->contactos()->gerente(1)->first()->email: '"agregar"' }}</b>,
+                    a
                     quien en adelante se le denominará <b>“LA EMPRESA/EL
                         CLIENTE”;</b> y de la otra parte la <b>{{ $plantilla->razon_social }}</b>, con RUC N°
                     {{ $plantilla->ruc }},

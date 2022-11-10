@@ -423,7 +423,10 @@
                                                                         style="font-size: 18px; line-height: 25.2px;"><strong><span
                                                                                 style="font-family: Montserrat, sans-serif; line-height: 25.2px; font-size: 18px;">SERVICIO
                                                                                 DE MONITOREO
-                                                                                SATELITAL</span></strong></span></p>
+                                                                                SATELITAL</span></strong></span>
+                                                                    <br>
+                                                                    Descarga tu certificado en los archivos adjuntos
+                                                                </p>
                                                             </div>
 
                                                         </td>

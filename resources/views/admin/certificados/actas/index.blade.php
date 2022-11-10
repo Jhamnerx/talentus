@@ -10,6 +10,7 @@
 @push('modals')
     @livewire('admin.certificados.actas.save')
     @livewire('admin.certificados.actas.edit')
+    @livewire('admin.certificados.actas.send')
 @endpush
 
 @section('js')

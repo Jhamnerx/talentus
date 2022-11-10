@@ -43,8 +43,8 @@ class NotifyClienteCertificadoVelocimetroCreada extends Notification implements 
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->subject('SE HA CREADO UN CERTIFICADO VELOCIMETRO')
-                ->view('mail.certificados.certificado-velocimetro', ['certificado' => $this->certificado]);
+            ->subject('SE HA CREADO UN CERTIFICADO VELOCIMETRO')
+            ->view('mail.certificados.certificado-velocimetro', ['certificado' => $this->certificado]);
     }
 
     /**
@@ -60,19 +60,19 @@ class NotifyClienteCertificadoVelocimetroCreada extends Notification implements 
         ];
     }
 
-    // public function withDelay($notifiable)
-    // {
-    //     return [
+    public function withDelay($notifiable)
+    {
+        return [
 
-    //         'mail' => now()->addSeconds(30),
+            'mail' => now()->addSeconds(30),
 
-    //     ];
-    // }
+        ];
+    }
 
-    // public function viaQueues()
-    // {
-    //     return [
-    //         'mail' => 'mail',
-    //     ];
-    // }
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+        ];
+    }
 }
