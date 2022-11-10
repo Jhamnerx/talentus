@@ -6,23 +6,22 @@ use App\Models\Vehiculos;
 
 class VehiculosObserver
 {
-    /**
-     * Handle the Vehiculos "created" event.
-     *
-     * @param  \App\Models\Vehiculos  $vehiculos
-     * @return void
-     */
+
+    public function creating(Vehiculos $vehiculo)
+    {
+
+        if (!\App::runningInConsole()) {
+            // dd($acta);
+            $vehiculo->empresa_id = session('empresa');
+        }
+    }
+
     public function created(Vehiculos $vehiculos)
     {
         //
     }
 
-    /**
-     * Handle the Vehiculos "updated" event.
-     *
-     * @param  \App\Models\Vehiculos  $vehiculos
-     * @return void
-     */
+
     public function updated(Vehiculos $vehiculos)
     {
         //

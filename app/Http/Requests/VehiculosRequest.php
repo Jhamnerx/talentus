@@ -7,11 +7,6 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class VehiculosRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
 
     public $vehiculo;
     public $vehiculo2;
@@ -46,7 +41,6 @@ class VehiculosRequest extends FormRequest
             "clientes_id"  => "required",
             "dispositivos_id" =>
             'nullable|unique:vehiculos',
-            "empresa_id" => 'exists:empresas,id',
             "modelo_gps" => 'nullable',
             "operador" => 'nullable',
             "sim_card" => 'nullable',

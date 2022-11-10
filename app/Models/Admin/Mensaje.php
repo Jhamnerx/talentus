@@ -18,9 +18,8 @@ class Mensaje extends Model
 
     public function sendMessage($data)
     {
-       
-        $users = User::role('admin')->get();
 
+        $users = User::role('admin')->get();
 
         // foreach ($users as $user){
 
@@ -37,25 +36,20 @@ class Mensaje extends Model
         //         'from_user_id' => auth()->id(),
 
         //     ]);
-            
+
         // }
 
         try {
 
             Notification::send($users, new EnviarMensaje($data));
-
         } catch (Exception $e) {
-            
-            //dd($e);
 
-        }finally{
-        
+            //dd($e);
+            return $e->getMessage();
+        } finally {
+
             return redirect()->back();
         }
-       
-
-
-
     }
 
 
@@ -77,12 +71,9 @@ class Mensaje extends Model
         // }
 
         Notification::send($users, new EnviarMensajeCobro($mensaje, $cobro));
-        
+
         //return redirect()->back();
 
 
     }
-
-        
-    
 }

@@ -67,7 +67,7 @@
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50">
 
             <!-- Site header -->
-            @livewire('admin.header')
+            @livewire('admin.header', ['page' => request()->fullUrl()])
             <x-jet-banner />
             <main>
 

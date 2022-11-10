@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ClientesRequest extends FormRequest
 {
@@ -28,7 +29,12 @@ class ClientesRequest extends FormRequest
 
         $rules = [
             'razon_social' => 'required',
-            'numero_documento' => 'required|digits_between:8,11|numeric|unique:clientes',
+            'numero_documento' => [
+                'required',
+                'digits_between:8,11',
+                'numeric',
+                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+            ],
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable'
         ];
@@ -36,17 +42,18 @@ class ClientesRequest extends FormRequest
 
         if ($cliente) {
 
-            $rules['numero_documento'] = 'required|digits_between:8,11|numeric|unique:clientes,numero_documento,' . $cliente->id;
+            $rules['numero_documento'] = [
+                'required',
+                'digits_between:8,11',
+                'numeric',
+                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                    ->ignore($cliente->id),
+            ];
         }
 
         return $rules;
     }
 
-    /**
-     * Get the error messages for the defined validation rules.
-     *
-     * @return array
-     */
     public function messages()
     {
         return [

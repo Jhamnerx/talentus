@@ -65,7 +65,6 @@ class SaveVehiculo extends Component
     {
         $requestVehiculo = new VehiculosRequest();
         $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
-        //dd($label);
     }
 
     public function openModalSave()

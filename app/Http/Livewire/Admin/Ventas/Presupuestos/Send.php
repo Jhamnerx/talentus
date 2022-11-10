@@ -22,7 +22,8 @@ class Send extends Component
         'modalOpenSend' => 'openModal'
     ];
 
-    public function resetPropiedades(){
+    public function resetPropiedades()
+    {
         $this->reset('from');
         $this->reset('to');
         $this->reset('asunto');
@@ -35,35 +36,34 @@ class Send extends Component
         return view('livewire.admin.ventas.presupuestos.send');
     }
 
-    public function openModal(Presupuestos $presupuesto){
+    public function openModal(Presupuestos $presupuesto)
+    {
 
         $this->modalOpenSend = true;
         $this->presupuesto = $presupuesto;
-        $this->to = $presupuesto->clientes->email." | ".$presupuesto->clientes->razon_social;
-        $this->asunto = "TALENTUS - COTIZACIÓN #".$presupuesto->numero;
+        $this->to = $presupuesto->clientes->email . " | " . $presupuesto->clientes->razon_social;
+        $this->asunto = "TALENTUS - COTIZACIÓN #" . $presupuesto->numero;
         $this->correo =  $presupuesto->clientes->email;
 
-        if(empty($presupuesto->clientes->email)){
-            
-            $this->disabled = true;
+        if (empty($presupuesto->clientes->email)) {
 
-        }else{
+            $this->disabled = true;
+        } else {
 
             $this->disabled = false;
-
         }
-       // dd($presupuesto);
+        // dd($presupuesto);
 
     }
     public function closeModal()
     {
         $this->modalOpenSend = false;
         $this->resetPropiedades();
-
     }
 
 
-    public function sendPresupuesto(){
+    public function sendPresupuesto()
+    {
 
         //dd($this->presupuesto);
         $data = array(
@@ -76,20 +76,14 @@ class Send extends Component
 
             $pdfPresupuesto = new PresupuestoPdfController();
             $pdfPresupuesto->sendToMail($this->presupuesto, $data);
-
-
         } catch (Exception $e) {
             dd($e);
             $e->getMessage();
-
-        }finally{
+        } finally {
 
             $this->modalOpenSend = false;
             $this->dispatchBrowserEvent('presupuesto-send', ['presupuesto' => $this->presupuesto]);
             $this->resetPropiedades();
-
         }
-
     }
-
 }

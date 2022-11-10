@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Dispositivos;
 
 use App\Http\Requests\ModelosDispositivosRequest;
 use App\Models\ModelosDispositivo;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class EditModeloDispositivo extends Component
@@ -11,6 +12,7 @@ class EditModeloDispositivo extends Component
     public $modalEditOpen = false;
 
     public $modelo, $marca, $certificado;
+    public $caracteristicas;
 
     public $model;
 
@@ -24,12 +26,6 @@ class EditModeloDispositivo extends Component
         return view('livewire.admin.dispositivos.edit-modelo-dispositivo');
     }
 
-
-    // public function openModal()
-    // {
-
-    //     $this->modalEditOpen = true;
-    // }
     public function ActualizarModelo()
     {
         $requestModelo = new ModelosDispositivosRequest();
@@ -46,20 +42,31 @@ class EditModeloDispositivo extends Component
 
         $this->emit('ActualizarTabla');
     }
+
     public function abrirModal(ModelosDispositivo $model)
     {
-
         $this->model = $model;
         $this->modelo = $model->modelo;
         $this->marca = $model->marca;
         $this->certificado = $model->certificado;
+        $this->caracteristicas = $model->caracteristicas;
         $this->modalEditOpen = true;
     }
+
+    // public function addCaracteristica()
+    // {
+    //     $this->caracteristicas->push([
+    //         'text' => "",
+    //     ]);
+    // }
+    // public function eliminarCaracteristica($key)
+    // {
+    //     unset($this->caracteristicas[$key]);
+    // }
 
     public function updated($label)
     {
         $requestModelo = new ModelosDispositivosRequest();
         $this->validateOnly($label, $requestModelo->rules($this->model), $requestModelo->messages());
-        //dd($label);
     }
 }

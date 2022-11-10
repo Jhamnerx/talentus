@@ -361,7 +361,7 @@
                                                                         <span
                                                                             style="font-family: Montserrat, sans-serif; font-size: 18px; line-height: 25.2px;">
                                                                             Hola
-                                                                            {{ $certificado->vehiculos->flotas->clientes->razon_social }}!</span>
+                                                                            {{ $certificado }}!</span>
                                                                     </strong>
                                                                 </p>
                                                                 <p style="font-size: 14px; line-height: 140%;">

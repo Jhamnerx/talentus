@@ -9,6 +9,9 @@
     <meta name="x-apple-disable-message-reformatting">
     <!--[if !mso]><!-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    {{ header('Content-type:application/pdf') }}
     <!--<![endif]-->
     <title></title>
 
@@ -358,13 +361,16 @@
                                                                         <span
                                                                             style="font-family: Montserrat, sans-serif; font-size: 18px; line-height: 25.2px;">
                                                                             Hola
-                                                                            {{ $acta->vehiculos->flotas->clientes->razon_social }}!</span>
+                                                                            {{ $acta->vehiculo->cliente->razon_social }}!</span>
                                                                     </strong>
                                                                 </p>
                                                                 <p style="font-size: 14px; line-height: 140%;">
-                                                                    <strong><span
+                                                                    <strong>
+                                                                        <span
                                                                             style="font-family: Montserrat, sans-serif; font-size: 18px; line-height: 25.2px;">Gracias
-                                                                            por tu preferencia!</span></strong>
+                                                                            por tu preferencia!
+                                                                        </span>
+                                                                    </strong>
                                                                 </p>
                                                             </div>
 
@@ -705,8 +711,6 @@
             </tr>
         </tbody>
     </table>
-    <!--[if mso]></div><![endif]-->
-    <!--[if IE]></div><![endif]-->
 </body>
 
 </html>

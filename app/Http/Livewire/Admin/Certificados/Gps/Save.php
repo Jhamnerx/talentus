@@ -2,26 +2,28 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Gps;
 
+use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Requests\CertificadosGpsRequest;
 use App\Models\Certificados;
 use App\Models\Ciudades;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
-use Vinkla\Hashids\Facades\Hashids;
-use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class Save extends Component
 {
 
-
     public $openModalSave = false;
     public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1;
+    public $fecha_instalacion;
     public $fin_cobertura;
+    public $accesorios = [];
+
 
     protected $listeners = [
         'guardarCertificado' => 'openModal'
     ];
+
 
     public function render()
     {
@@ -31,17 +33,17 @@ class Save extends Component
     public function openModal()
     {
         $this->openModalSave = true;
-        $this->numero = $this->setNextSequenceNumber();
+        $certController = new CertificadosGpsController();
+        $this->numero = $certController->setNextSequenceNumber();
+        $this->fecha_instalacion = Carbon::now()->format('Y-m-d');
         $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
     }
 
-    public function setNextSequenceNumber()
+    function updatedCiudadesId()
     {
-
-        $id = IdGenerator::generate(['table' => 'certificados', 'field' => 'numero', 'length' => 5, 'prefix' => ' ']);
-
-        return trim($id);
+        // $this->numero = $this->setNextSequenceNumber($this->ciudad_prefijo);
     }
+
     public function closeModal()
     {
         $this->openModalSave = false;
@@ -54,7 +56,6 @@ class Save extends Component
         $certificadoRequest = new CertificadosGpsRequest();
 
         $values = $this->validate($certificadoRequest->rules(), $certificadoRequest->messages());
-        //  dd($values);
 
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
@@ -66,17 +67,19 @@ class Save extends Component
         $certificado->vehiculos_id = $values["vehiculos_id"];
         $certificado->numero = $values["numero"];
         $certificado->fin_cobertura = $values["fin_cobertura"];
+        $certificado->fecha_instalacion = $values["fecha_instalacion"];
         $certificado->ciudades_id = $values["ciudades_id"];
         $certificado->fondo = $values["fondo"];
         $certificado->sello = $values["sello"];
+        $certificado->accesorios = $this->accesorios;
         $certificado->year = today()->year;
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $certificado->numero;
+        $codigo = $ciudad->prefijo . "-" . $certificado->numero;
         $certificado->codigo = $codigo;
         $certificado->fecha = $fecha;
         $certificado->save();
 
         //$this->openModalSave = false;
-        $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculos->placa]);
+        $this->dispatchBrowserEvent('certificado-save', ['vehiculo' => $certificado->vehiculo->placa]);
         $this->closeModal();
         $this->emit('updateTable');
     }

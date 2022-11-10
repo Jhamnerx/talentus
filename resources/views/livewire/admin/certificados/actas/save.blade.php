@@ -22,7 +22,6 @@
 
             <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-6/12 max-h-full"
                 @keydown.escape.window="modalSave = false">
-                <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold text-slate-800">CREAR ACTA GPS</div>
@@ -37,7 +36,6 @@
                 </div>
 
                 <form autocomplete="off">
-                    <!-- Modal content -->
                     <div class="px-8 py-5 bg-white sm:p-6 formSaveActa">
 
                         <div class="grid grid-cols-12 gap-6">
@@ -82,11 +80,8 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
 
-
                                     <select id="vehiculos_id" name="vehiculos_id"
                                         class="vehiculos_id w-full form-input pl-9 " required></select>
-
-
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -167,12 +162,14 @@
                                         </svg>
                                     </div>
                                 </div>
+
                                 @error('inicio_cobertura')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
                                 @enderror
                             </div>
+
                             <div class="col-span-12 sm:col-span-6">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
@@ -222,13 +219,7 @@
 
                                     <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
                                         id="">
-                                        {{-- <option value="">Selecciona una Ciudad:</option>
-                                        @foreach ($ciudades as $ciudad)
-                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{-- @endforeach --}}
                                     </select>
-
-
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -254,20 +245,44 @@
                                         </svg>
                                     </div>
                                 </div>
+
                                 @error('ciudades_id')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
                                     </p>
                                 @enderror
                             </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="plataforma">Plataforma: <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="flex flex-wrap items-center">
+
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model="plataforma" value="basica" />
+                                            <span class="text-sm ml-2">Basica</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model="plataforma" value="premium" />
+                                            <span class="text-sm ml-2">Premium</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                            </div>
+
                             <div class="col-span-12 sm:col-span-12 mt-4">
                                 <span class="text-bold text-center mb-2">Caracteristicas:</span>
                                 <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
 
-
                                     <div class="m-2 w-full mt-2">
                                         <label for="fondo">Fondo:</label>
-                                        <!-- Start -->
+
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
                                                 <input wire:model="fondo" type="checkbox" id="fondo-1"
@@ -280,11 +295,11 @@
                                             <div class="text-sm text-slate-400 italic ml-2"
                                                 x-text="checked ? 'Activado' : 'Desactivado'"></div>
                                         </div>
-                                        <!-- End -->
+
                                     </div>
                                     <div class="m-2 w-full">
                                         <label for="sello">Sello:</label>
-                                        <!-- Start -->
+
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
                                                 <input wire:model="sello" type="checkbox" id="sello-1"
@@ -297,11 +312,8 @@
                                             <div class="text-sm text-slate-400 italic ml-2"
                                                 x-text="checked ? 'Activado' : 'Desactivado'"></div>
                                         </div>
-                                        <!-- End -->
+
                                     </div>
-
-
-
 
                                 </div>
                             </div>
@@ -311,7 +323,7 @@
 
                     </div>
                 </form>
-                <!-- Modal footer -->
+
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
@@ -326,7 +338,6 @@
 
         </div>
     </div>
-    <!-- End -->
 
 </div>
 
@@ -345,32 +356,21 @@
                     delay: 250,
                     cache: true,
                     data: function(params) {
-
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
-                        console.log(query);
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
 
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
                             return obj;
-
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
+
                         return {
-
                             results: suggestions,
-
                         };
 
                     },
@@ -378,6 +378,7 @@
 
                 }
             });
+
             $('.ciudades').select2({
                 placeholder: '    Selecciona una ciudad',
                 language: "es",
@@ -389,28 +390,20 @@
 
                     cache: true,
                     data: function(params) {
-
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
 
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
-
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
                             return obj;
-
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
+
                         return {
 
                             results: suggestions,
@@ -424,16 +417,18 @@
             });
 
             $('.vehiculos_id').on('select2:select', function(e) {
+
                 var data = e.params.data;
-                // console.log(data.id);
                 @this.set('vehiculos_id', data.id)
+
             });
 
 
             $('.ciudades').on('select2:select', function(e) {
+
                 var data = e.params.data;
-                //console.log(data.id);
                 @this.set('ciudades_id', data.id)
+
             });
         </script>
     @endpush

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,7 +38,7 @@ class Empresa extends Model
 
     public function plantilla()
     {
-        return $this->hasOne(plantilla::class, 'empresa_id');
+        return $this->hasOne(plantilla::class, 'empresa_id')->withoutGlobalScope(EmpresaScope::class);
     }
     //Relacion polimorfica
 

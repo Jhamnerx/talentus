@@ -3,8 +3,8 @@
 
 <head>
 
-    <title>CERTIFICADO GPS {{ $certificado->vehiculos->placa }}
-        {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}</title>
+    <title>CERTIFICADO GPS {{ $certificado->vehiculo->placa }}
+        {{ $certificado->codigo }}</title>
 
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -41,11 +41,11 @@
 
 
         .certifica {
-            margin-top: -1rem;
+            margin-top: -2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 17px;
+            font-size: 14px;
             color: #000;
             line-height: 1.7;
             // position: relative;
@@ -57,18 +57,18 @@
         }
 
         .descripcion {
-            margin-top: 5rem;
+            margin-top: 2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 16px;
+            font-size: 14px;
             color: #000;
             line-height: 1.7;
             text-align: left;
         }
 
         .descripcion span {
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .tabla {
@@ -77,24 +77,24 @@
         }
 
         .footer {
-            font-size: 16px;
+            font-size: 14px;
             color: #000;
             width: 100%;
 
         }
 
         .footer .sello {
-            margin-top: 3rem;
+            margin-top: 2rem;
             width: 50%;
             text-align: center;
         }
 
         .data {
-            margin-top: 8rem;
+            margin-top: 3rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 16px;
+            font-size: 14px;
             color: #000;
             line-height: 2.2;
             text-align: left;
@@ -151,17 +151,15 @@
         }
 
 
-
         .title {
 
             font-weight: bold;
-            font-size: 22px;
+            font-size: 20px;
             text-align: center;
             justify-content: center;
             width: 50%;
             padding-left: 12.5rem;
             position: relative;
-
         }
 
         .title span {
@@ -180,7 +178,7 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
         <body>
@@ -191,30 +189,28 @@
 
     <div class="header">
 
-
-
         <div class="numero">
             {{ $certificado->codigo }}
         </div>
 
     </div>
     <div class="titulo">
-        <div class=" title">
-            <span>CERTIFICA</span>
+        <div class="title">
+            <span>CERTIFICADO DE INSTALACION</span>
         </div>
         <div class="qr">
-            <img
+            {{-- <img
                 src="data:image/jpeg;base64, {{ base64_encode(
                     QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
-                                $certificado->vehiculos->placa .
+                                $certificado->vehiculo->placa .
                                 " \n CERTIFICADO VALIDO HASTA: " .
                                 $certificado->fin_cobertura .
                                 "
-                                                                                        \nEXPEDIDO A: " .
-                                $certificado->vehiculos->flotas->clientes->razon_social,
+                                                                                                                        \nEXPEDIDO A: " .
+                                $certificado->vehiculo->cliente->razon_social,
                         ),
-                ) }}">
+                ) }}"> --}}
 
         </div>
 
@@ -223,9 +219,17 @@
 
     <div class="certifica">
         <div>
+            <span>TALENTUS TECHNOLOGY EIRL con RUC: 20496172168, registro N° 6260 autorizada y Homologa por el MTC como
+                empresa Prestadora de servicios de Valor añadido.</span>
             <span>
-                <b>Que, el sistema localizador vía GPS/GPRS/GSM – TRACKER Modelo
-                    {{ $certificado->vehiculos->dispositivos->modelo->modelo }}</b>
+                <p>
+                    <b>CERTIFICA</b> que la empresa: <b>{{ $certificado->vehiculo->cliente->razon_social }}</b> cuenta
+                    con el
+                    sistema localizador vía
+                    GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
+                    {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
+                </p>
+
             </span>
             <span class="acredita">
                 <b>
@@ -240,16 +244,16 @@
     <div class="descripcion">
         <span>Con las siguientes características:</span>
         <ul>
-            <li>
-                Localización : Mediante tecnología satelital GPS
-            </li>
-            <li>
-                Transmisión de datos: Utilizando tecnología celular (SIM CARD) para determinar posición minuto
-                al minuto del vehículo en tiempo real.
-            </li>
 
-            <li>
-                Accesorios del equipo: botón de pánico y bloqueo del motor.
+            @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
+                <li>
+                    {{ $caracteristica['text'] }}
+                </li>
+            @endforeach
+            <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
+
+            <li style="padding-top: 10px">
+                <b>Placa de la unidad: {{ $certificado->vehiculo->placa }}</b>
             </li>
         </ul>
 
@@ -257,17 +261,34 @@
 
     <div class="data">
 
-        <div class="valido">
-
-        </div>
-        El presente certificado es válido hasta el {{ $certificado->fin_cobertura->format('d-m-Y') }}, a partir de la
-        fecha de
-        expedición.
-        <div class="cliente">
-            Se expide el siguiente certificado a: {{ $certificado->vehiculos->flotas->clientes->razon_social }}
-        </div>
         <div class="vehiculo">
-            <b>Placa de la Unidad: {{ $certificado->vehiculos->placa }}</b>
+            <table style="border: 1px solid">
+                <tr style="border: 1px solid">
+                    <td style="border: 1px solid">
+                        <span style="padding-left: 2px; padding-right: 4px">
+                            Fecha de Instalación
+                        </span>
+                    </td>
+                    <td style="border: 1px solid">
+                        <span style="padding-left: 2px; padding-right: 4px">
+                            {{ $certificado->fecha_instalacion->format('d-m-Y') }}
+                        </span>
+                    </td>
+                </tr>
+                <tr style="border: 1px solid">
+                    <td style="border: 1px solid">
+                        <span style="padding-left: 2px; padding-right: 4px">
+                            Fecha de Vencimiento
+                        </span>
+                    </td>
+                    <td style="border: 1px solid">
+                        <span style="padding-left: 2px; padding-right: 4px">
+                            {{ $certificado->fin_cobertura->format('d-m-Y') }}
+                        </span>
+
+                    </td>
+                </tr>
+            </table>
         </div>
 
     </div>
@@ -275,7 +296,7 @@
     <div class="footer">
         <div class="sello">
             @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $sello)) }}"
+                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
                     alt="">
             @endif
 

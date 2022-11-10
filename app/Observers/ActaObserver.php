@@ -19,18 +19,12 @@ class ActaObserver
     {
 
         if (!\App::runningInConsole()) {
-            // dd($acta);
             $acta->empresa_id = session('empresa');
             $acta->user_id = auth()->user()->id;
         }
     }
     public function updating(Actas $acta)
     {
-
-        if (!\App::runningInConsole()) {
-
-            $acta->empresa_id = session('empresa');
-        }
     }
 
     public function created(Actas $acta)

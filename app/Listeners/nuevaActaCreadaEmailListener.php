@@ -10,30 +10,22 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class nuevaActaCreadaEmailListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         //
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  \App\Events\nuevaActaCreada  $event
-     * @return void
-     */
+
     public function handle(nuevaActaCreada $event)
     {
+
         //NOTIFICACION PARA CLIENTES ACTAS CREADA
-        if($event->acta->vehiculos->flotas){
+        //dd($event->acta->vehiculo->cliente);
 
-            $event->acta->vehiculos->flotas->clientes->notify(new NotifyClienteActaCreada($event->acta));
+        if ($event->acta->vehiculo->cliente) {
+
+            $event->acta->vehiculo->cliente->notify(new NotifyClienteActaCreada($event->acta));
         }
-       
-
     }
 }

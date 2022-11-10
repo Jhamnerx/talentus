@@ -5,11 +5,13 @@
     <!-- Table -->
     @livewire('admin.certificados.gps.certificados-gps-index')
 
+
 @stop
 
 @push('modals')
     @livewire('admin.certificados.gps.save')
     @livewire('admin.certificados.gps.edit')
+    @livewire('admin.certificados.gps.send')
 @endpush
 
 @section('js')

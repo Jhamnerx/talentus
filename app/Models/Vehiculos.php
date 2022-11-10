@@ -15,6 +15,12 @@ class Vehiculos extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'vehiculos';
 
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
     // Scope local de activo
     public function scopeActive($query, $status)
     {
@@ -24,12 +30,6 @@ class Vehiculos extends Model
     public function order($query, $order)
     {
         return $query->orderBy($order, 'desc');
-    }
-
-    //GLOBAL SCOPE EMPRESA
-    protected static function booted()
-    {
-        static::addGlobalScope(new EmpresaScope);
     }
 
     //Relacion uno a muchos inversa

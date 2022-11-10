@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Requests\ClientesRequest;
 use App\Models\Clientes;
 use Livewire\Component;
+use Illuminate\Validation\Rule;
 
 class Save extends Component
 {
@@ -18,13 +19,7 @@ class Save extends Component
         'openModalSaveCliente'
     ];
 
-    protected $rules =
-    [
-        'razon_social' => 'required',
-        'numero_documento' => 'required|digits_between:8,11|numeric|unique:clientes',
-        'telefono' => 'nullable|digits_between:6,9|numeric',
-        'email' => 'email|nullable'
-    ];
+
 
     protected $messages =
     [
@@ -37,6 +32,17 @@ class Save extends Component
         'telefono.numeric' => 'El numero de telefono debe ser un numero',
         'email.email' => 'Debe tener formato de correo electronico',
     ];
+
+    protected function rules()
+    {
+        return [
+            'razon_social' => 'required',
+            'telefono' => 'nullable|digits_between:6,9|numeric',
+            'email' => 'email|nullable',
+            'numero_documento' => Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+            'numero_documento' => 'required|digits_between:8,11|numeric',
+        ];
+    }
 
     public function render()
     {
