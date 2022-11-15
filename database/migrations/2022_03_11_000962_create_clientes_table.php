@@ -23,6 +23,8 @@ class CreateClientesTable extends Migration
             $table->string('direccion')->nullable();
             $table->unsignedBigInteger('empresa_id')->default(1);
             $table->boolean('is_active')->default(true);
+
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

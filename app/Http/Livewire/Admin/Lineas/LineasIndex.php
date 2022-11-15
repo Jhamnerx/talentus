@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Lineas;
 use App\Models\SimCard;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class LineasIndex extends Component
 {
     use WithPagination;
@@ -13,19 +14,18 @@ class LineasIndex extends Component
     public $from = '';
     public $to = '';
     public $modalOpenImport = false;
-    // public $openUnAsign = false;
+
     protected $listeners = [
         'render' => 'render',
         'echo:sim,SimCardImportUpdated' => 'updateSimCard'
     ];
 
-
-    public function updateSimCard(){
+    public function updateSimCard()
+    {
 
         $this->render();
         $this->dispatchBrowserEvent('sim-import');
     }
-
 
     public function render()
     {
@@ -36,13 +36,10 @@ class LineasIndex extends Component
 
             $query->where('numero', 'like', '%' . $this->search . '%')
                 ->orwhere('operador', 'like', '%' . $this->search . '%');
-                
         })->orwhereHas('vehiculos', function ($query) {
-
             $query->where('placa', 'like', '%' . $this->search . '%');
-
         })->orWhere('sim_card', 'like', '%' . $this->search . '%')
-            ->orWhere('operador', 'like', '%' . $this->search . '%')->with('linea', 'vehiculos')
+            ->orWhere('operador', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -67,7 +64,7 @@ class LineasIndex extends Component
                 ->paginate(10);
         }
         $total = SimCard::all()->count();
-        
+
         return view('livewire.admin.lineas.lineas-index', compact('sim_cards', 'total'));
     }
 
@@ -98,10 +95,9 @@ class LineasIndex extends Component
         }
     }
 
-    public function openModalImport(){
+    public function openModalImport()
+    {
 
         $this->emit('openModalImport');
-
     }
-
 }

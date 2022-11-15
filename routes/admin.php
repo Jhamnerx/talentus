@@ -50,21 +50,40 @@ Route::get('', [HomeController::class, 'index'])->name('admin.home');
 Route::resource('categorias', CategoriaController::class)->names('admin.almacen.categorias');
 Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
 
-Route::resource('lineas', LineasController::class)->names('admin.almacen.lineas');
 
-Route::get('disponibles/lineas', [LineasController::class, 'disponibles'])->name('admin.almacen.lineas.disponibles.index');
+Route::controller(LineasController::class)->group(function () {
 
-Route::get('asign/lineas', [LineasController::class, 'asignLinea'])->name('admin.asign.lineas');
-Route::post('asign/lineas/store', [LineasController::class, 'asignLineaStore'])->name('admin.asign.lineas.store');
+    Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
+    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
+    Route::get('disponibles/lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
+    Route::get('asign/lineas', 'asignLinea')->name('admin.asign.lineas');
+    Route::get('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+});
+
 
 
 Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('admin.almacen.modelos-dispositivos');
+
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
 Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+
+Route::controller(ClientesController::class)->group(function () {
+
+    Route::get('clientes', 'index')->name('admin.clientes.index');
+    Route::post('clientes', 'store')->name('admin.clientes.store');
+    Route::get('clientes/crear', 'create')->name('admin.clientes.create');
+    Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
+    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.update');
+    Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
+});
+
+
+
+
 Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
 
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);

@@ -13,11 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LineasController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('admin.almacen.lineas.index');
@@ -27,78 +23,13 @@ class LineasController extends Controller
         return view('admin.almacen.lineas.disponibles');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         return view('admin.almacen.lineas.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(LineasRequest $request)
 
-    {
-        //dd($request);
-        // SimCard::create($request->all());
-        // return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Lineas  $lineas
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Lineas $lineas)
-    {
-        return view('admin.almacen.lineas.show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Lineas  $lineas
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Lineas $lineas)
-    {
-        return view('admin.almacen.lineas.edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Lineas  $lineas
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Lineas $lineas)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Lineas  $lineas
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Lineas $lineas)
-    {
-        //
-    }
-
-    /**
-     * @return \Illuminate\Support\Collection
-     */
     public function exportExcel()
     {
         return Excel::download(new LineasExport, 'lineas.xls');
@@ -119,7 +50,6 @@ class LineasController extends Controller
                 'sim_card_id' => 'required|exists:sim_card,id',
                 'numero' => 'required',
             ]);
-
         } elseif ($request->numero == null) {
             $request->validate([
                 'sim_card_id' => 'required|exists:sim_card,id',
@@ -132,14 +62,13 @@ class LineasController extends Controller
             ]);
         }
 
-        //dd($request->all());
         //verificar si enviamos el id de la linea                                         
         if ($request->lineas_id) {
-            
+
             $sim_card_linea = SimCard::where('lineas_id', $request->lineas_id)->first();
 
             $sim_card = SimCard::where('id', $request->sim_card_id)->first();
-          
+
 
             if ($sim_card_linea) {
 
@@ -150,7 +79,7 @@ class LineasController extends Controller
                 CambiosLineas::create([
                     'tipo_cambio' => 'Asinacion de numero, existe numero',
                     'sim_card_id' => $request->sim_card_id,
-                    'old_numero' => $sim_card->linea ? $sim_card->linea->id: NULL,
+                    'old_numero' => $sim_card->linea ? $sim_card->linea->id : NULL,
                     'new_numero' => $request->lineas_id,
                     'user_id' => auth()->user()->id,
                 ]);
@@ -161,44 +90,42 @@ class LineasController extends Controller
 
 
                 //consultamos el nuevo sim card
-                $sim_card_new = SimCard::where('id',$request->sim_card_id)->first();
+                $sim_card_new = SimCard::where('id', $request->sim_card_id)->first();
 
                 //asignamos la nueva linea al sim card
                 $sim_card_new->lineas_id = $request->lineas_id;
                 $sim_card_new->save();
 
                 //consultamos la linea
-                $linea = Lineas::where('id',$request->lineas_id)->first();
+                $linea = Lineas::where('id', $request->lineas_id)->first();
 
                 #Colocar el old sim card a la linea
                 $linea->old_sim_card = $sim_card_linea->sim_card;
                 $linea->save();
 
                 return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea, Con el numero existente');
-
-
             } else {
                 # si no esta asignada
-               # Si la linea no esta asignada hacer lo siguiente
-               #lo mismo pero no verificamos el antiguo sim card
+                # Si la linea no esta asignada hacer lo siguiente
+                #lo mismo pero no verificamos el antiguo sim card
                 #Registra el cambio
                 CambiosLineas::create([
                     'tipo_cambio' => 'Asinacion de numero, existe numero',
                     'sim_card_id' => $request->sim_card_id,
-                    'old_numero' => $sim_card->linea ? $sim_card->linea->id: NULL,
+                    'old_numero' => $sim_card->linea ? $sim_card->linea->id : NULL,
                     'new_numero' => $request->lineas_id,
                     'user_id' => auth()->user()->id,
                 ]);
 
                 //consultamos el nuevo sim card
-                $sim_card_new = SimCard::where('id',$request->sim_card_id)->first();
+                $sim_card_new = SimCard::where('id', $request->sim_card_id)->first();
 
                 //asignamos la nueva linea al sim card
                 $sim_card_new->lineas_id = $request->lineas_id;
                 $sim_card_new->save();
 
                 //consultamos la linea
-                $linea = Lineas::where('id',$request->lineas_id)->first();
+                $linea = Lineas::where('id', $request->lineas_id)->first();
 
                 #Colocar el old sim card a la linea
                 $linea->old_sim_card = null;
@@ -206,7 +133,6 @@ class LineasController extends Controller
 
                 return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea, Con el numero existente');
             }
-            
         }
         //si la linea no existe
         else {
@@ -214,21 +140,21 @@ class LineasController extends Controller
 
             #buscamos el sim card que seleciconamos
             $sim_card = SimCard::where('id', $request->sim_card_id)->first();
-            
+
             # creamos la linea
-           // dd($request->all());
+            // dd($request->all());
             $linea = Lineas::create([
                 'numero' => $request->numero,
                 'operador' => $sim_card->operador,
                 'empresa_id' => session('empresa'),
             ]);
-            
+
 
             #registramso el cambio realizado
             CambiosLineas::create([
                 'tipo_cambio' => 'Asinacion de numero,No existia el numero',
                 'sim_card_id' => $request->sim_card_id,
-                'old_numero' => $sim_card->linea ? $sim_card->linea->id: NULL,
+                'old_numero' => $sim_card->linea ? $sim_card->linea->id : NULL,
                 'new_numero' => $linea->id,
                 'user_id' => auth()->user()->id,
             ]);
@@ -238,9 +164,6 @@ class LineasController extends Controller
 
             $sim_card->save();
             return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea, Con el numero creado');
-
         }
-        
-
     }
 }

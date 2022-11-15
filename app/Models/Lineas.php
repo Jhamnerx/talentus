@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\LineasStatus;
 use App\Scopes\EmpresaScope;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,12 +15,25 @@ class Lineas extends Model
     protected $guarded = array();
 
 
+    protected $casts = [
+
+        'estado' => LineasStatus::class,
+    ];
+
+
+
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
     }
 
+
+    // Scope local de activo
+    public function scopeOperador($query, $operador)
+    {
+        return $query->where('operador', $operador);
+    }
 
     public function sim_card()
     {

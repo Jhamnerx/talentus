@@ -23,12 +23,11 @@ class Disponibles extends Component
         'echo:lineas,LineasImportUpdated' => 'updateLineas'
     ];
 
-
     public function updateLineasToSimCard()
     {
-
         $this->render();
     }
+
     public function updateLineas()
     {
 
@@ -49,13 +48,8 @@ class Disponibles extends Component
 
                 $vehiculo->where('placa', 'like', '%' . $this->search . '%');
 
-                $vehiculo->orWhereHas('flotas', function ($flota) {
-
-                    $flota->where('nombre', 'like', '%' . $this->search . '%');
-
-                    $flota->orWhereHas('clientes', function ($cliente) {
-                        $cliente->where('razon_social', 'like', '%' . $this->search . '%');
-                    });
+                $vehiculo->orWhereHas('cliente', function ($cliente) {
+                    $cliente->where('razon_social', 'like', '%' . $this->search . '%');
                 });
             });
         })->orWhere('numero', 'like', '%' . $this->search . '%')
@@ -78,14 +72,12 @@ class Disponibles extends Component
 
         return view('livewire.admin.lineas.disponibles', compact('lineas', 'total'));
     }
+
     public function operador($operador = null)
     {
         $this->operador = $operador;
-        //dd($operador);
-        // $this->emit('render');
-
-
     }
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -120,22 +112,21 @@ class Disponibles extends Component
     {
 
         $linea->fecha_suspencion = Carbon::now();
+        $linea->estado = 2;
         $linea->date_to_suspend = Carbon::now()->addDays(59);
-
         $linea->save();
     }
 
     public function activar(Lineas $linea)
     {
-
         $linea->fecha_suspencion = NULL;
         $linea->date_to_suspend = NULL;
+        $linea->estado = 1;
         $linea->save();
     }
 
     public function openModalImport()
     {
-
         $this->emit('openModalImport');
     }
 }

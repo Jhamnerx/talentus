@@ -94,6 +94,6 @@ class UserSeeder extends Seeder
         $laury->assignRole('monitoreo');
         $hugo->assignRole('tecnico');
 
-        User::factory(8)->create();
+        // User::factory(8)->create();
     }
 }
