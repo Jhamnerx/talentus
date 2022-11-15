@@ -220,7 +220,7 @@
 
                                                             <h1 class="v-text-align"
                                                                 style="margin: 0px; color: #ffffff; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Lato',sans-serif; font-size: 53px;">
-                                                                <strong>ACTA - #{{ $acta->codigo }}</strong>
+                                                                <strong>ACTA #{{ $acta->codigo }}</strong>
                                                             </h1>
 
                                                         </td>

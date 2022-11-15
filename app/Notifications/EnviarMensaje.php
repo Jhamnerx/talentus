@@ -24,7 +24,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast'];
+        return ['database', 'broadcast'];
     }
 
     public function toMail($notifiable)

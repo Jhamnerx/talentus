@@ -15,10 +15,10 @@ class Vehiculos extends Model
     protected $table = 'vehiculos';
 
     //GLOBAL SCOPE EMPRESA
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new EmpresaScope);
-    // }
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
 
     // Scope local de activo
     public function scopeActive($query, $status)
@@ -28,7 +28,7 @@ class Vehiculos extends Model
 
     public function scopeWhereCompany($query)
     {
-        $query->where('vehiculos.empresa_id', request()->header('company'));
+        return $query->where('vehiculos.empresa_id', session('empresa'));
     }
 
     // Scope local de activo
@@ -40,7 +40,7 @@ class Vehiculos extends Model
     //Relacion uno a muchos inversa
     public function cliente()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos a modelos
@@ -100,6 +100,6 @@ class Vehiculos extends Model
 
     public function flotas()
     {
-        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed();
+        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 }

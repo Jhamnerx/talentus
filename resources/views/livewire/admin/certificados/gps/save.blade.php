@@ -224,7 +224,7 @@
                                 <div class="relative" wire:ignore>
 
                                     <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="">
+                                        id="ciudades_save">
                                     </select>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -418,6 +418,7 @@
             $('.ciudades').select2({
                 placeholder: '    Selecciona una ciudad',
                 language: "es",
+                selectionCssClass: 'pl-9',
                 width: '100%',
                 ajax: {
                     url: "{{ route('search.ciudades') }}",

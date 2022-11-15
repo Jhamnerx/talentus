@@ -11,15 +11,14 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesAndRestoresModelIdentifiers;
 use Illuminate\Queue\SerializesModels;
 
-class NotifyClienteActaCreada extends Notification
+class NotifyClienteActaCreada extends Notification implements ShouldQueue
 {
-    use Queueable, SerializesModels;
+    use Queueable, SerializesModels, SerializesAndRestoresModelIdentifiers;
 
-    public $acta;
 
-    public function __construct(Actas $acta)
+
+    public function __construct(public Actas $acta)
     {
-        $this->acta = $acta;
     }
 
     public function via($notifiable)
@@ -29,9 +28,6 @@ class NotifyClienteActaCreada extends Notification
 
     public function toMail($notifiable)
     {
-
-        // dd($this->acta->vehiculo->cliente);
-
         return (new MailMessage)
             ->subject('SE HA CREADO UN ACTA')
             ->view('mail.certificados.acta', ['acta' => $this->acta]);
