@@ -17,6 +17,7 @@ class nuevoCertificadoEmailListener
 
     public function handle(nuevoCertificadoCreado $event)
     {
+        //NOTIFICACION PARA CLIENTES CERTIFICADO CREADA
         if ($event->certificado->vehiculo->cliente) {
 
             $event->certificado->vehiculo->cliente->notify(new NotifyClienteCertificadoCreada($event->certificado));

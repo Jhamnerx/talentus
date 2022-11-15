@@ -11,6 +11,7 @@
 @push('modals')
     @livewire('admin.certificados.velocimetros.save')
     @livewire('admin.certificados.velocimetros.edit')
+    @livewire('admin.certificados.velocimetros.send')
 @endpush
 
 

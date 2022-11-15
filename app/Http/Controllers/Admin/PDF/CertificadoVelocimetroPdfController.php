@@ -14,4 +14,10 @@ class CertificadoVelocimetroPdfController extends Controller
 
         return $certificado->getPDFData();
     }
+
+    public function sendToMail(CertificadosVelocimetros $certificado, $data)
+    {
+
+        return $certificado->getPDFDataToMail($data);
+    }
 }

@@ -24,9 +24,9 @@ class ActasController extends Controller
         return trim($id);
     }
 
-    public function show(Actas $actas)
+    public function show(Actas $acta)
     {
-        return view('admin.certificados.actas.show');
+        return view('admin.certificados.actas.show', compact('acta'));
     }
 
     public function update(Request $request, Actas $actas)

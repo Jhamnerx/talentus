@@ -1,11 +1,5 @@
 <div>
-
-    <!-- Basic Modal -->
-    <!-- Start -->
     <div x-data="{ modalSave: @entangle('openModalSave') }">
-
-
-        <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSave"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
@@ -35,7 +29,6 @@
                         </button>
                     </div>
                 </div>
-
                 <form autocomplete="off">
                     <!-- Modal content -->
                     <div class="px-8 py-5 bg-white sm:p-6 formVelocimetroSave">
@@ -76,7 +69,6 @@
                                 @enderror
 
                             </div>
-
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                                         class="text-rose-500">*</span></label>
@@ -262,32 +254,21 @@
                     delay: 250,
                     cache: true,
                     data: function(params) {
-
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
-                        //console.log(query);
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
 
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
                             return obj;
-
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
                         return {
-
                             results: suggestions,
-
                         };
 
                     },
@@ -306,32 +287,21 @@
 
                     cache: true,
                     data: function(params) {
-
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
 
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
-
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
                             return obj;
-
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
                         return {
-
                             results: suggestions,
-
                         };
 
                     },
@@ -342,16 +312,20 @@
 
             $('.vehiculos_id').on('select2:select', function(e) {
                 var data = e.params.data;
-                // console.log(data.id);
                 @this.set('vehiculos_id', data.id)
             });
 
 
             $('.ciudades').on('select2:select', function(e) {
                 var data = e.params.data;
-                //console.log(data.id);
                 @this.set('ciudades_id', data.id)
             });
+        </script>
+        <script>
+            window.addEventListener('close-modal', event => {
+                $('.vehiculos_id').val(null).trigger('change');
+                $('.ciudades').val(null).trigger('change');
+            })
         </script>
     @endpush
 @endonce

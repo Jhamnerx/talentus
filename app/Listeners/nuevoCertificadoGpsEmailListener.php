@@ -9,27 +9,17 @@ use Illuminate\Queue\InteractsWithQueue;
 
 class nuevoCertificadoGpsEmailListener
 {
-    /**
-     * Create the event listener.
-     *
-     * @return void
-     */
+
     public function __construct()
     {
         //
     }
 
-    /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
-     */
     public function handle(nuevoCertificadoGpsCreado $event)
     {
         if ($event->certificado->vehiculo->cliente) {
 
-            $event->certificado->vehiculo->clientes->notify(new NotifyClienteCertificadoVelocimetroCreada($event->certificado));
+            $event->certificado->vehiculo->cliente->notify(new NotifyClienteCertificadoVelocimetroCreada($event->certificado));
         }
     }
 }

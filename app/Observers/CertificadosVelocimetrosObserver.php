@@ -6,117 +6,80 @@ use App\Events\nuevoCertificadoGpsCreado;
 use App\Models\CertificadosVelocimetros;
 use Vinkla\Hashids\Facades\Hashids;
 use App\Models\ChangesModels;
+
 class CertificadosVelocimetrosObserver
 {
-    /**
-     * Handle the CertificadosVelocimetros "created" event.
-     *
-     * @param  \App\Models\CertificadosVelocimetros  $certificados
-     * @return void
-     */
-    public function creating(CertificadosVelocimetros $certificados)
+    public function creating(CertificadosVelocimetros $certificado)
     {
 
-        if(! \App::runningInConsole()){
-           // dd($certificados);
-            $certificados->empresa_id = session('empresa');
-            $certificados->user_id = auth()->user()->id;
-            
-
-
+        if (!\App::runningInConsole()) {
+            $certificado->empresa_id = session('empresa');
+            $certificado->user_id = auth()->user()->id;
         }
-       
-    } 
-    public function updating(CertificadosVelocimetros $certificados)
-    {
-
-        if(! \App::runningInConsole()){
-
-            $certificados->empresa_id = session('empresa');
-
-        }
-       
     }
-    public function created(CertificadosVelocimetros $certificados)
+    public function updating(CertificadosVelocimetros $certificado)
     {
-        if(! \App::runningInConsole()){
 
+        if (!\App::runningInConsole()) {
 
-            $certificados->unique_hash = Hashids::connection(CertificadosVelocimetros::class)->encode($certificados->id);
-            $certificados->save();
+            $certificado->empresa_id = session('empresa');
+        }
+    }
+    public function created(CertificadosVelocimetros $certificado)
+    {
+        if (!\App::runningInConsole()) {
 
-            nuevoCertificadoGpsCreado::dispatch($certificados);
+            $certificado->unique_hash = Hashids::connection(CertificadosVelocimetros::class)->encode($certificado->id);
+            $certificado->save();
+
+            nuevoCertificadoGpsCreado::dispatch($certificado);
 
             ChangesModels::create([
-                'change_id' => $certificados->getKey(),
+                'change_id' => $certificado->getKey(),
                 'change_type' => CertificadosVelocimetros::class,
                 'type' => 'create',
                 'user_id' => auth()->user()->id,
             ]);
-
         }
     }
 
-    /**
-     * Handle the CertificadosVelocimetros "updated" event.
-     *
-     * @param  \App\Models\CertificadosVelocimetros  $certificados
-     * @return void
-     */
-    public function updated(CertificadosVelocimetros $certificados)
+    public function updated(CertificadosVelocimetros $certificado)
     {
         ChangesModels::create([
-            'change_id' => $certificados->getKey(),
+            'change_id' => $certificado->getKey(),
             'change_type' => CertificadosVelocimetros::class,
-            'original' => json_encode($certificados->getOriginal()),
-            'changes' => json_encode($certificados->getChanges()),
+            'original' => json_encode($certificado->getOriginal()),
+            'changes' => json_encode($certificado->getChanges()),
             'type' => 'update',
             'user_id' => auth()->user()->id,
         ]);
     }
 
-    /**
-     * Handle the CertificadosVelocimetros "deleted" event.
-     *
-     * @param  \App\Models\CertificadosVelocimetros  $certificados
-     * @return void
-     */
-    public function deleted(CertificadosVelocimetros $certificados)
+
+    public function deleted(CertificadosVelocimetros $certificado)
     {
         ChangesModels::create([
-            'change_id' => $certificados->getKey(),
+            'change_id' => $certificado->getKey(),
             'change_type' => CertificadosVelocimetros::class,
             'type' => 'delete',
             'user_id' => auth()->user()->id,
         ]);
     }
 
-    /**
-     * Handle the CertificadosVelocimetros "restored" event.
-     *
-     * @param  \App\Models\CertificadosVelocimetros  $certificados
-     * @return void
-     */
-    public function restored(CertificadosVelocimetros $certificados)
+    public function restored(CertificadosVelocimetros $certificado)
     {
         ChangesModels::create([
-            'change_id' => $certificados->getKey(),
+            'change_id' => $certificado->getKey(),
             'change_type' => CertificadosVelocimetros::class,
             'type' => 'restored',
             'user_id' => auth()->user()->id,
         ]);
     }
 
-    /**
-     * Handle the CertificadosVelocimetros "force deleted" event.
-     *
-     * @param  \App\Models\CertificadosVelocimetros  $certificados
-     * @return void
-     */
-    public function forceDeleted(CertificadosVelocimetros $certificados)
+    public function forceDeleted(CertificadosVelocimetros $certificado)
     {
         ChangesModels::create([
-            'change_id' => $certificados->getKey(),
+            'change_id' => $certificado->getKey(),
             'change_type' => CertificadosVelocimetros::class,
             'type' => 'forceDeleted',
             'user_id' => auth()->user()->id,

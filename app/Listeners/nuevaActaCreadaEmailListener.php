@@ -23,8 +23,6 @@ class nuevaActaCreadaEmailListener
     public function handle(nuevaActaCreada $event)
     {
         //NOTIFICACION PARA CLIENTES ACTAS CREADA
-        $vehiculo = Vehiculos::where('id', $event->acta->vehiculos_id)->first();
-
         if ($event->acta->vehiculo->cliente) {
 
             $event->acta->vehiculo->cliente->notify(new NotifyClienteActaCreada($event->acta));

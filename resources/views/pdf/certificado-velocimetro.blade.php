@@ -37,15 +37,12 @@
 
         }
 
-
-
-
         .certifica {
             margin-top: 2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 17px;
+            font-size: 16px;
             color: #000;
             line-height: 1.7;
             // position: relative;
@@ -57,7 +54,7 @@
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 17px;
+            font-size: 16px;
             color: #000;
             line-height: 1.7;
         }
@@ -74,7 +71,7 @@
         }
 
         .descripcion span {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .descripcion table {}
@@ -139,9 +136,7 @@
         }
 
 
-
         .titulo {
-
 
             display: grid;
             grid-template-columns: 30% 70% 1fr;
@@ -151,13 +146,11 @@
 
         }
 
-
         .qr {
             padding-left: 37rem;
             position: relative;
             top: -42px;
         }
-
 
 
         .title {
@@ -188,7 +181,7 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $fondo)) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
         <body>
@@ -212,16 +205,16 @@
                 LIMITADOR DE VELOCIDAD</span>
         </div>
         <div class="qr">
-            <img
+            {{-- <img
                 src="data:image/jpeg;base64, {{ base64_encode(
                     QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
                                 $certificado->vehiculo->placa .
                                 " \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD
-                                                                                        \nEXPEDIDO A: " .
+                                                                                                        \nEXPEDIDO A: " .
                                 $certificado->vehiculo->cliente->razon_social,
                         ),
-                ) }}">
+                ) }}"> --}}
 
         </div>
 
@@ -291,7 +284,7 @@
     <div class="footer">
         <div class="sello">
             @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/' . $sello)) }}"
+                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
                     alt="">
             @endif
 

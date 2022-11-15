@@ -52,7 +52,7 @@ class Certificados extends Model
 
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
 
@@ -82,6 +82,7 @@ class Certificados extends Model
         $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;
+
         view()->share([
             'certificado' => $this,
             'plantilla' => $plantilla,
@@ -89,7 +90,9 @@ class Certificados extends Model
             'sello' => $sello,
         ]);
 
+
         $pdf = PDF::loadView('pdf.certificado');
+
         $this->vehiculo->cliente->notify(new EnviarCertificadoCliente($this, $pdf, $data));
     }
 }

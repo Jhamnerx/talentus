@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Certificados\Gps;
+namespace App\Http\Livewire\Admin\Certificados\Velocimetros;
 
-use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
-use App\Models\Certificados;
+use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+use App\Models\CertificadosVelocimetros;
 use Exception;
 use Livewire\Component;
 
 class Send extends Component
 {
+
     public $modalOpenSend = false;
 
     public $certificado;
@@ -34,16 +35,16 @@ class Send extends Component
 
     public function render()
     {
-        return view('livewire.admin.certificados.gps.send');
+        return view('livewire.admin.certificados.velocimetros.send');
     }
 
-    public function openModal(Certificados $certificado)
+    public function openModal(CertificadosVelocimetros $certificado)
     {
 
         $this->modalOpenSend = true;
         $this->certificado = $certificado;
         $this->to = $certificado->vehiculo->cliente->email . " | " . $certificado->vehiculo->cliente->razon_social;
-        $this->asunto = "TALENTUS - CERTIFICADO #" . $certificado->codigo;
+        $this->asunto = "TALENTUS - CERTIFICADO VELOCIMETRO #" . $certificado->codigo;
         $this->correo =  $certificado->vehiculo->cliente->email;
 
         if (empty($certificado->vehiculo->cliente->email)) {
@@ -60,7 +61,6 @@ class Send extends Component
         $this->modalOpenSend = false;
         $this->resetPropiedades();
     }
-
     public function sendCertificado()
     {
 
@@ -71,7 +71,7 @@ class Send extends Component
 
         try {
 
-            $pdfCertificado = new CertificadoPdfController();
+            $pdfCertificado = new CertificadoVelocimetroPdfController();
             $respuesta = $pdfCertificado->sendToMail($this->certificado, $data);
         } catch (Exception $e) {
 

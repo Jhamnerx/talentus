@@ -41,7 +41,7 @@
 
 
         .certifica {
-            margin-top: -2rem;
+            margin-top: -2.2rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -57,7 +57,7 @@
         }
 
         .descripcion {
-            margin-top: 2rem;
+            margin-top: 1.1rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -102,7 +102,7 @@
 
         .fecha {
             text-align: right;
-            margin-top: -2rem;
+            margin-top: -2.4rem;
             padding-right: 4rem;
         }
 
@@ -169,7 +169,7 @@
 
         .hash {
             padding-left: 31rem;
-            padding-top: 6rem;
+            padding-top: 3rem;
             font-size: 12px;
         }
     </style>
@@ -198,19 +198,21 @@
         <div class="title">
             <span>CERTIFICADO DE INSTALACION</span>
         </div>
+
+        @php
+            // $qr = base64_encode(
+            //     QrCode::format('png')
+            //         ->size(120)
+            //         ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+            //         ->style('square')
+            //         ->eye('circle')
+            //         ->encoding('UTF-8')
+            //         ->generate(' VEHICULO: ' . $certificado->vehiculo->placa . '|' . " \nVALIDO HASTA: " . $certificado->fin_cobertura . '|' . "\nEXPEDIDO A: " . $certificado->vehiculo->cliente->razon_social),
+            // );
+        @endphp
+
         <div class="qr">
-            {{-- <img
-                src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
-                            ' VEHICULO: ' .
-                                $certificado->vehiculo->placa .
-                                " \n CERTIFICADO VALIDO HASTA: " .
-                                $certificado->fin_cobertura .
-                                "
-                                                                                                                        \nEXPEDIDO A: " .
-                                $certificado->vehiculo->cliente->razon_social,
-                        ),
-                ) }}"> --}}
+            {{-- <img src="data:image/jpeg;base64, {{ $qr }}"> --}}
 
         </div>
 
@@ -244,12 +246,16 @@
     <div class="descripcion">
         <span>Con las siguientes características:</span>
         <ul>
+            @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
+                @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
+                    <li>
+                        {{ $caracteristica['text'] }}
+                    </li>
+                @endforeach
+            @else
+                <li>No existen caracteristicas</li>
+            @endif
 
-            @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
-                <li>
-                    {{ $caracteristica['text'] }}
-                </li>
-            @endforeach
             <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
 
             <li style="padding-top: 10px">

@@ -21,7 +21,6 @@ class VehiculosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder i
     public function query()
     {
         return Vehiculos::query();
-
     }
 
     public function headings(): array
@@ -48,12 +47,10 @@ class VehiculosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder i
             $vehiculos->marca,
             $vehiculos->modelo,
             $vehiculos->tipo,
-            $vehiculos->year, 
-            ($vehiculos->flotas) ? $vehiculos->flotas->nombre : "",
+            $vehiculos->year,
+            ($vehiculos->cliente) ? $vehiculos->cliente->razon_social : "",
             ($vehiculos->sim_card) ? $vehiculos->sim_card->linea->numero : "",
             ($vehiculos->dispositivos) ? $vehiculos->dispositivos->imei : "",
         ];
     }
-
-
 }
