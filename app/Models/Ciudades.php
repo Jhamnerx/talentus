@@ -17,6 +17,7 @@ class Ciudades extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
 
+
     // Scope local de activo
     public function scopeActive($query, $status)
     {

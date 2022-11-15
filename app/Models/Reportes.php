@@ -27,7 +27,7 @@ class Reportes extends Model
 
     public function vehiculos()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
     }
 
 
@@ -45,6 +45,6 @@ class Reportes extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'user_id')->withTrashed();
     }
 }

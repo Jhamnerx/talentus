@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,16 +15,22 @@ class Vehiculos extends Model
     protected $table = 'vehiculos';
 
     //GLOBAL SCOPE EMPRESA
-    protected static function booted()
-    {
-        static::addGlobalScope(new EmpresaScope);
-    }
+    // protected static function booted()
+    // {
+    //     static::addGlobalScope(new EmpresaScope);
+    // }
 
     // Scope local de activo
     public function scopeActive($query, $status)
     {
         return $query->where('is_active', $status);
     }
+
+    public function scopeWhereCompany($query)
+    {
+        $query->where('vehiculos.empresa_id', request()->header('company'));
+    }
+
     // Scope local de activo
     public function order($query, $order)
     {
