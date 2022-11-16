@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PresupuestosStatus;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EliminadoScope;
@@ -22,7 +23,9 @@ class Presupuestos extends Model
     protected $casts = [
         'fecha' => 'date:Y/m/d',
         'fecha_caducidad' => 'date:Y/m/d',
+        'estado' => PresupuestosStatus::class,
     ];
+
     /**
      * Scope para traer activos y no
      *

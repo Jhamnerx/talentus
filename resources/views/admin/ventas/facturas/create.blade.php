@@ -4,9 +4,6 @@
 
 @section('contenido')
 
-
-    <!-- Code block starts -->
-
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
         <!-- Add customer button -->
@@ -41,7 +38,6 @@
         </div>
     </div>
     <!-- Code block ends -->
-
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
             {!! Form::open(['route' => 'admin.ventas.facturas.store', 'class' => 'formularioFactura']) !!}
@@ -51,7 +47,6 @@
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2">
-
 
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
@@ -69,8 +64,8 @@
                     </div>
 
                     {{-- NUMERO --}}
-
                     @livewire('admin.ventas.facturas.input-numero', ['numero' => $numero])
+
                     {{-- FECHA Factura --}}
                     <div class="col-span-6 gap-2">
                         <label
@@ -98,7 +93,7 @@
                             </p>
                         @enderror
                     </div>
-                    <!-- ... -->
+
                     {{-- FECHA CADUCIDAD --}}
                     <div class="col-span-6 gap-2">
                         <label
@@ -106,8 +101,6 @@
                             <div>Fecha de vencimiento: <span class="text-sm text-red-500" style="display: none;"> *
                                 </span>
                             </div>
-                            <!---->
-                            <!---->
                         </label>
                         <div class="relative">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -332,7 +325,7 @@
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">Total neto</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm total"> S/. 0.00</div>
-                                    <input type="hidden" class="subTotalFactura" name="subtotal">
+                                    <input type="hidden" class="subTotalFactura" name="sub_total">
                                 </div>
                             </div>
                             <div class="flex justify-between mb-4">
@@ -364,8 +357,8 @@
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>
@@ -408,9 +401,7 @@
 
             calculate_totales(e)
 
-
         };
-
 
         // INICIALIZAR LOS INPUTS DE FECHA
         $(document).ready(function() {
@@ -454,22 +445,21 @@
                         //type: 'public'
                     }
 
-                    // Query parameters will be ?search=[term]&type=public
+
                     return query;
                 },
                 processResults: function(data, params) {
 
-                    // console.log(data.suggestions);
+
                     var suggestions = $.map(data.suggestions, function(obj) {
 
-                        obj.id = obj.id || obj.value; // replace pk with your identifier
-                        obj.text = obj.data; // replace pk with your identifier
+                        obj.id = obj.id || obj.value;
+                        obj.text = obj.data;
 
                         return obj;
 
                     });
-                    // console.log(suggestions);
-                    // Transforms the top-level key of the response object from 'items' to 'results'
+
                     return {
 
                         results: suggestions,
@@ -498,22 +488,21 @@
                         //type: 'public'
                     }
 
-                    // Query parameters will be ?search=[term]&type=public
+
                     return query;
                 },
                 processResults: function(data, params) {
 
-                    // console.log(data.suggestions);
+
                     var suggestions = $.map(data.suggestions, function(obj) {
 
-                        obj.id = obj.id || obj.data; // replace pk with your identifier
-                        obj.text = obj.value; // replace pk with your identifier
+                        obj.id = obj.id || obj.data;
+                        obj.text = obj.value;
 
                         return obj;
 
                     });
                     //console.log(data);
-                    // Transforms the top-level key of the response object from 'items' to 'results'
                     return {
 
                         results: suggestions,

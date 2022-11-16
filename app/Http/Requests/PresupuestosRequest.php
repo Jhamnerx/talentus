@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Presupuestos;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -17,11 +19,13 @@ class PresupuestosRequest extends FormRequest
         return true;
     }
 
-    public function rules()
+    public function rules($presupuesto = null)
     {
         $rules = [
             'clientes_id' => 'required',
-            'numero' => ['required', Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),],
+            'numero' => [
+                'required', Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+            ],
             'fecha' => 'required|date',
             'fecha_caducidad' => 'required|date',
             'divisa' => 'required',
@@ -31,6 +35,7 @@ class PresupuestosRequest extends FormRequest
             'sub_total_soles' => 'required',
             'impuesto_soles' => 'required',
             'total_soles' => 'required',
+            'nota' => 'nullable',
             'items' => 'array|between:1,100',
             'items.*.producto' => 'required',
             'items.*.descripcion' => 'nullable',
@@ -38,6 +43,17 @@ class PresupuestosRequest extends FormRequest
             'items.*.precio' => 'required',
             'items.*.total' => 'required',
         ];
+
+        if ($presupuesto) {
+
+            $rules['numero'] = [
+                'required',
+                Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                    ->ignore($presupuesto->id),
+
+            ];
+        }
+
         return $rules;
     }
 

@@ -1,6 +1,7 @@
 <div>
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
+        <!-- Add customer button -->
         <a href="{{ route('admin.ventas.presupuestos.index') }}">
             <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
@@ -13,7 +14,7 @@
             </button>
         </a>
         <div>
-            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">CREAR PRESUPUESTO</h4>
+            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">EDITAR PRESUPUESTO</h4>
             <ul aria-label="current Status"
                 class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
                 <li class="flex items-center mr-4">
@@ -27,10 +28,11 @@
                     </div>
                     <span>Active</span>
                 </li>
+
             </ul>
         </div>
     </div>
-    <!-- Code block ends -->
+
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
 
@@ -46,6 +48,9 @@
                         <div class="flex" wire:ignore>
                             <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
                                 required>
+                                <option selected value="{{ $presupuesto->clientes_id }}">
+                                    {{ $presupuesto->clientes->razon_social }}
+                                </option>
                             </select>
 
                             @livewire('admin.clientes.button-open-modal')
@@ -191,6 +196,7 @@
 
                         </div>
                     </div>
+
                     {{-- LISTA DE PRODUCTOS --}}
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -290,11 +296,11 @@
                                         Debes añadir al menos 1 item
                                     </p>
                                 </tr>
-
                                 {{-- fila para añadir --}}
                                 @if ($items->count() > 0)
                                     @foreach ($items->all() as $clave => $item)
-                                        <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
+                                        <tr wire:key="item-{{ $clave }}-{{ $item['id'] }}">
+
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
@@ -349,11 +355,13 @@
                                                     </button>
                                                 </div>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 @endif
                             </tbody>
                             <tfoot>
+
                                 @error('items')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $message }}
@@ -433,7 +441,7 @@
             </div>
             <div class="px-4 py-3 text-right sm:px-6">
                 <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
-                    wire:click.prevent="save">Guardar</button>
+                    wire:click.prevent="actualizarPresupuesto">Guardar</button>
             </div>
 
         </div>

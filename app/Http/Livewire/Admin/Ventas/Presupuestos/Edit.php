@@ -2,40 +2,54 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Presupuestos;
 
-use App\Http\Controllers\Admin\PresupuestoController;
+use App\Models\Presupuestos;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Requests\PresupuestosRequest;
-use App\Models\Presupuestos;
 use App\Models\Productos;
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
-use Illuminate\Validation\Rule;
 
-class Create extends Component
+class Edit extends Component
 {
-    public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
+    public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa, $nota;
     public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
     public $sub_total_soles = 0.00, $impuesto_soles = 0.00, $total_soles = 0.00;
 
+    public Presupuestos $presupuesto;
 
     public $tipoCambio = 0;
     public $ConvertirSoles = false;
 
     public Collection $items;
-
     public Collection $selected;
     public $simbolo = "S/. ";
 
     public function mount()
     {
         $this->tipoCambio  = UtilesController::tipoCambio();
-        $this->numero = PresupuestoController::setNextSequenceNumber();
-        $this->fecha = Carbon::now()->format('Y-m-d');
-        $this->fecha_caducidad = Carbon::now()->addDays(15)->format('Y-m-d');
-        $this->items = collect();
+        $this->numero = $this->presupuesto->numero;
+        $this->clientes_id = $this->presupuesto->clientes_id;
+        $this->fecha = $this->presupuesto->fecha->format('Y-m-d');
+        $this->fecha_caducidad = $this->presupuesto->fecha_caducidad->format('Y-m-d');
+        $this->divisa = $this->presupuesto->divisa;
+        $this->sub_total = $this->presupuesto->sub_total;
+        $this->impuesto = $this->presupuesto->impuesto;
+        $this->total = $this->presupuesto->total;
+
+
+        if ($this->presupuesto->divisa == "USD") {
+
+            $this->sub_total_soles = $this->presupuesto->sub_total_soles;
+            $this->impuesto_soles = $this->presupuesto->impuesto_soles;
+            $this->total_soles = $this->presupuesto->total_soles;
+        }
+        $this->nota = $this->presupuesto->nota;
+
+
+        $this->items = collect($this->presupuesto->detalles);
+
         $this->selected = collect([
-            'producto_id' => "",
+            'id' => "",
             'producto' => "",
             'descripcion' => "",
             'cantidad' => 1,
@@ -45,31 +59,28 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.admin.ventas.presupuestos.create');
+        return view('livewire.admin.ventas.presupuestos.edit');
     }
-
 
     function addProducto()
     {
-
         $this->validate([
-            'selected.producto_id' => 'required',
+            'selected.id' => 'required',
             'selected.producto' => 'required',
             'selected.descripcion' => 'nullable',
             'selected.cantidad' => 'required',
             'selected.precio' => 'required',
 
         ], [
-            'selected.producto_id.required' => 'Seleccion una producto',
+            'selected.id.required' => 'Seleccion una producto',
             'selected.producto.required' => 'Por favor ingresa un producto',
             'selected.cantidad.required' => 'Por favor ingresa una cantidad',
             'selected.precio.required' => 'Por favor ingresa un precio',
         ]);
 
         try {
-
             $this->items->push([
-                'producto_id' => $this->selected["producto_id"],
+                'id' => $this->selected["id"],
                 'producto' => $this->selected->get('producto'),
                 'descripcion' => $this->selected["descripcion"],
                 'cantidad' => $this->selected["cantidad"],
@@ -92,10 +103,11 @@ class Create extends Component
         }
     }
 
+
     function selectProduct(Productos $producto)
     {
         $this->selected = collect([
-            'producto_id' => $producto->id,
+            'id' => $producto->id,
             'producto' => $producto->nombre,
             'descripcion' => $producto->descripcion,
             'cantidad' => "1",
@@ -116,7 +128,6 @@ class Create extends Component
 
         $this->reCalTotal();
     }
-
 
     public function reCalTotal()
     {
@@ -165,8 +176,6 @@ class Create extends Component
 
         return number_format($total, 2, '.', '');
     }
-
-
     public function updatedDivisa($value)
     {
         if ($value == "USD") {
@@ -182,23 +191,7 @@ class Create extends Component
     public function updated($name, $value)
     {
         $request = new PresupuestosRequest();
-        $error = $this->validateOnly($name, $request->rules(), $request->messages());
-    }
-
-
-    public function save()
-    {
-
-        $request = new PresupuestosRequest();
-        $data = $this->validate($request->rules(), $request->messages());
-
-        $presupuesto = Presupuestos::create($data);
-        $presupuesto->tipoCambio = $this->tipoCambio;
-        $presupuesto->save();
-
-        Presupuestos::createItems($presupuesto, $data["items"]);
-
-        return redirect()->route('admin.ventas.presupuestos.index')->with('store', 'El Presupuesto se creo con exito');
+        $error = $this->validateOnly($name, $request->rules($this->presupuesto), $request->messages());
     }
 
     public function eliminarProducto($key)
@@ -206,5 +199,19 @@ class Create extends Component
         unset($this->items[$key]);
         $this->items;
         $this->reCalTotal();
+    }
+
+    public function actualizarPresupuesto()
+    {
+        $request = new PresupuestosRequest();
+        $data = $this->validate($request->rules($this->presupuesto), $request->messages());
+
+        $this->presupuesto->update($data);
+
+        $this->presupuesto->detalles()->delete();
+
+        Presupuestos::createItems($this->presupuesto, $data["items"]);
+
+        return redirect()->route('admin.ventas.presupuestos.index')->with('update', 'El Presupuesto se actualizo con exito');
     }
 }

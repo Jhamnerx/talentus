@@ -90,10 +90,6 @@ Route::resource('contactos', ContactosController::class)->names('admin.clientes.
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
 
 // COMPRAS
-
-
-
-
 Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([
     'compras-factura' => 'factura'
 ]);
@@ -102,10 +98,27 @@ Route::resource('compras-factura', ComprasFacturasController::class)->names('adm
 
 
 // VENTAS
-Route::resource('presupuestos', PresupuestoController::class)->names('admin.ventas.presupuestos');
-Route::resource('ventas-factura', VentasFacturasController::class)->names('admin.ventas.facturas')->parameters([
-    'ventas-factura' => 'factura'
-]);;
+Route::controller(PresupuestoController::class)->group(function () {
+    Route::get('presupuestos', 'index')->name('admin.ventas.presupuestos.index');
+    Route::get('presupuestos/crear', 'create')->name('admin.ventas.presupuestos.create');
+    Route::get('presupuestos/{presupuesto}', 'show')->name('admin.ventas.presupuestos.show');
+    Route::get('presupuestos/{presupuesto}/editar', 'edit')->name('admin.ventas.presupuestos.edit');
+});
+
+
+
+Route::controller(VentasFacturasController::class)->group(function () {
+
+    Route::get('ventas-facturas', 'index')->name('admin.ventas.facturas.index');
+    Route::post('ventas-facturas', 'store')->name('admin.ventas.facturas.store');
+    Route::get('ventas-facturas/crear', 'create')->name('admin.ventas.facturas.create');
+    Route::get('ventas-facturas/{factura}', 'show')->name('admin.ventas.facturas.show');
+    Route::get('ventas-facturas/{factura}', 'update')->name('admin.ventas.facturas.update');
+    Route::get('clientes/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
+});
+
+
+
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
 
 

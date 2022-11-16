@@ -302,26 +302,10 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @switch($presupuesto->estado)
-                                            @case(0)
-                                                <div
-                                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Pendiente</div>
-                                            @break
-
-                                            @case(1)
-                                                <div
-                                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Aceptada</div>
-                                            @break
-
-                                            @case(2)
-                                                <div
-                                                    class="inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Rechazada</div>
-                                            @break
-                                        @endswitch
-
+                                        <div
+                                            class="inline-flex font-medium bg-{{ $presupuesto->estado->color() }}-100 text-{{ $presupuesto->estado->color() }}-600 rounded-full text-center px-2.5 py-0.5">
+                                            {{ $presupuesto->estado->name }}
+                                        </div>
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
