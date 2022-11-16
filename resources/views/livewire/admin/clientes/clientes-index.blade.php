@@ -161,7 +161,6 @@
             </div>
 
             <!-- Import button -->
-            {{-- @livewire('admin.clientes.import') --}}
             <div class="relative inline-flex">
                 <button wire:click="openModalImport()" aria-controls="basic-modal"
                     class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -201,7 +200,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total Clientes <span
-                    class="text-slate-400 font-medium">{{ $clientes->count() }}</span>
+                    class="text-slate-400 font-medium">{{ $clientes->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">

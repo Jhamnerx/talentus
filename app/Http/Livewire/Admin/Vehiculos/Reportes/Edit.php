@@ -40,7 +40,7 @@ class Edit extends Component
         //dd($this->reporte);
         $this->vehiculo = $this->reporte->vehiculos->placa;
         $this->hora_t = $this->reporte->hora_t;
-        $this->fecha_t = $this->reporte->fecha_t;
+        $this->fecha_t = $this->reporte->fecha_t->format('Y-m-d');
         $this->detalle = $this->reporte->detalle;
     }
 

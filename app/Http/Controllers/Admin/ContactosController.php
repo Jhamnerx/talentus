@@ -10,11 +10,7 @@ use Illuminate\Http\Request;
 
 class ContactosController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
 
@@ -29,15 +25,10 @@ class ContactosController extends Controller
         return view('admin.clientes.contactos.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(ContactosRequest $request)
     {
-        // dd($request->all());
+
 
         Contactos::create($request->all());
         return redirect()->route('admin.clientes.contactos.index')->with('store', 'El contacto se guardo con exito');

@@ -54,7 +54,7 @@
                 <li class="m-1">
                     <button
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
+                        <span class="ml-1 text-indigo-200">{{ $usuarios->total() }}</span></button>
                 </li>
             </ul>
         </div>
@@ -179,7 +179,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Usuarios <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">

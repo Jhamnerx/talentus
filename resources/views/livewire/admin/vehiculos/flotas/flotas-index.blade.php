@@ -63,7 +63,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total Flotas <span
-                    class="text-slate-400 font-medium">{{ $flotas->count() }}</span>
+                    class="text-slate-400 font-medium">{{ $flotas->total() }}</span>
             </h2>
 
         </header>

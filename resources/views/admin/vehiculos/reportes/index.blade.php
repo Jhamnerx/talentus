@@ -29,6 +29,7 @@
                 title: 'ACTUALIZADO',
                 message: 'El Reporte de ' + event.detail.vehiculo + ' Fue Actualizado',
             });
+            $('.vehiculos_id').val(null).trigger('change');
 
         })
     </script>
@@ -67,6 +68,7 @@
 
                 })
             });
+            $('.vehiculos_id').val(null).trigger('change');
         })
     </script>
 

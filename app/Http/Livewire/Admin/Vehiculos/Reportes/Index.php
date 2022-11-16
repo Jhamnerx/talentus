@@ -7,6 +7,7 @@ use App\Models\Flotas;
 use App\Models\Reportes;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class Index extends Component
 {
     use WithPagination;
@@ -32,12 +33,9 @@ class Index extends Component
             $query->where('placa', 'like', '%' . $this->search . '%')
                 ->orWhere('marca', 'like', '%' . $this->search . '%')
                 ->orWhere('tipo', 'like', '%' . $this->search . '%')
-                ->orwhereHas('flotas', function ($query) {
-                    $query->where('nombre', 'like', '%' . $this->search . '%');
-                    $query->orwhereHas('clientes', function ($cliente){
-                        $cliente->where('razon_social', 'LIKE', '%'. $this->search. '%');
 
-                    });
+                ->orwhereHas('cliente', function ($cliente) {
+                    $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%');
                 });
         })->orWhere('fecha_t', 'like', '%' . $this->search . '%')
             ->orWhere('hora_t', 'like', '%' . $this->search . '%')
@@ -131,7 +129,7 @@ class Index extends Component
     {
         $this->emit('verDetalleReporte', $reporte);
         $this->openModalDetalle = true;
-    } 
+    }
     public function openModalRecordatorio(Reportes $reporte)
     {
         $this->emit('crearRecordatorio', $reporte);

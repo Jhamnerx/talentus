@@ -207,7 +207,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total lineas <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $lineas->total() }}</span>
             </h2>
 
         </header>

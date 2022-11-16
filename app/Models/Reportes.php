@@ -13,8 +13,18 @@ class Reportes extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'reportes';
+
+
+    protected $casts = [
+
+        'fecha_t' => 'date:Y/m/d',
+        'fecha' => 'date:Y/m/d',
+
+    ];
+
 
 
     //GLOBAL SCOPE EMPRESA
@@ -45,6 +55,6 @@ class Reportes extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')->withTrashed();
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

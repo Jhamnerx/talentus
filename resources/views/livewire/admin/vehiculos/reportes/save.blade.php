@@ -1,7 +1,5 @@
 <div>
 
-    <!-- Basic Modal -->
-    <!-- Start -->
     <div x-data="{ modalSave: @entangle('openModalSave') }">
 
 
@@ -89,12 +87,12 @@
                             </div>
                             <div class="col-span-12 sm:col-span-6">
 
-                                <label class="block text-sm font-medium mb-1" for="fecha_t">Fecha Transmision:</label>
+                                <label class="block text-sm font-medium mb-1" for="fecha_t">Fecha Transmisión:</label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_t" required
                                         name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
+                                                            required:border-rose-300 invalid:border-rose-300 peer fechaTransmision font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -126,8 +124,6 @@
                                         class="form-input w-full pl-9 hora_t" placeholder="Selecciona la Hora"
                                         required />
 
-
-
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
@@ -156,7 +152,7 @@
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
                                     <textarea title="Hola" wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
-                                        rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
+                                        rows="5" placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -211,19 +207,24 @@
 @once
     @push('scripts')
         <script>
-            window.addEventListener('open-modal', event => {
+            window.addEventListener('close-modal', event => {
 
-                flatpickr(".hora_t", {
-                    enableTime: true,
-                    noCalendar: true,
-                    dateFormat: "H:i",
-                    time_24hr: true,
-
-                });
+                $('.vehiculos_id').val(null).trigger('change');
 
             })
 
             $(document).ready(function() {
+
+                flatpickr('.fechaTransmision', {
+                    mode: 'single',
+                    defaultDate: "today",
+                    disableMobile: "true",
+                    dateFormat: "Y-m-d",
+                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+                });
+
+
                 var hoy = new Date();
 
                 var hora = hoy.getHours() + ":" + hoy.getMinutes();
@@ -231,6 +232,7 @@
                 flatpickr(".hora_t", {
                     enableTime: true,
                     noCalendar: true,
+                    disableMobile: "true",
                     dateFormat: "H:i",
                     time_24hr: true,
 
@@ -253,36 +255,24 @@
 
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
-
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
 
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
                             return obj;
-
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
                         return {
-
                             results: suggestions,
-
                         };
-
                     },
-
-
                 }
             });
+
             $('.vehiculos_id').on('select2:select', function(e) {
                 var data = e.params.data;
 
