@@ -16,13 +16,13 @@ class CreateDetalleVentasTable extends Migration
         Schema::create('detalle_facturas', function (Blueprint $table) {
             $table->id();
             $table->string('producto');
-            $table->string('description')->nullable();
+            $table->string('descripcion')->nullable();
             $table->string('descuento_type')->nullable();
-            $table->integer('cantidad');
+            $table->decimal('cantidad', 15, 2);
             $table->decimal('precio', 15, 2);
             $table->decimal('descuento', 15, 2)->nullable();
-            $table->unsignedBigInteger('descuento_val')->unsigned()->nullable();
-            $table->unsignedBigInteger('impuesto');
+            $table->decimal('descuento_val', 15, 2)->unsigned()->nullable();
+            $table->decimal('igv', 15, 2)->nullable();
             $table->decimal('total', 15, 2);
             $table->unsignedBigInteger('facturas_id');
             $table->unsignedBigInteger('producto_id')->unsigned()->nullable();

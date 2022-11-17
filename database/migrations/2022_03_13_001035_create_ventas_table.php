@@ -26,18 +26,14 @@ class CreateVentasTable extends Migration
             $table->enum('estado', ['BORRADOR', 'COMPLETADO'])->default('BORRADOR');
             $table->enum('pago_estado', ['UNPAID', 'PAID'])->default('UNPAID');
             $table->date('fecha_pago')->nullable();
-            $table->unsignedBigInteger('empresa_id');
-            $table->boolean('enviado')->default(false);
+            $table->unsignedBigInteger('empresa_id')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('eliminado')->default(false);
             $table->string('nota')->nullable();
-
             $table->string('discount_type')->nullable();
             $table->decimal('descuento', 15, 2)->nullable();
             $table->unsignedBigInteger('descuento_val')->nullable();
-
             $table->decimal('sub_total', 10, 2);
-            $table->decimal('impuesto', 10, 2);
+            $table->decimal('impuesto', 10, 2)->nullable();
             $table->decimal('total', 10, 2);
             $table->boolean('sent')->default(false);
             $table->boolean('viewed')->default(false);
@@ -47,6 +43,7 @@ class CreateVentasTable extends Migration
             $table->unsignedBigInteger('clientes_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
 
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
             $table->foreign('clientes_id')->references('id')->on('clientes')->onDelete('set null');
             $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');

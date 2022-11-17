@@ -19,10 +19,15 @@ class PresupuestosIndex extends Component
     public $search;
     public $from = '';
     public $to = '';
-    public $status = null;
+    public $estado = '';
     public $openModalDelete = false;
     public $modalOpenSend = false;
 
+    protected $queryString = [
+        'estado' => ['except' => ''],
+        'search' => ['except' => ''],
+        'page' => ['except' => 1],
+    ];
     protected $listeners = [
         'render'
     ];
@@ -35,10 +40,9 @@ class PresupuestosIndex extends Component
 
         $presupuestos = Presupuestos::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })->orWhere('estado', 'like', '%' . $this->search . '%')
+        })
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->Where('estado', $this->status)
             ->orderBy('numero', 'DESC')
             ->paginate(10);
 
@@ -57,11 +61,19 @@ class PresupuestosIndex extends Component
             'total' => $total,
         ];
 
-        $estado = $this->status;
+        $estado = $this->estado;
 
         if ($estado != null) {
 
-            $presupuestos = Presupuestos::Where('estado', $estado)->paginate(10);
+
+            $presupuestos = Presupuestos::whereHas('clientes', function ($query) {
+                $query->where('razon_social', 'like', '%' . $this->search . '%');
+            })
+                ->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha', 'like', '%' . $this->search . '%')
+                ->estado($this->estado)
+                ->orderBy('numero', 'DESC')
+                ->paginate(10);
         }
 
 
@@ -87,7 +99,6 @@ class PresupuestosIndex extends Component
 
         return view('livewire.admin.ventas.presupuestos.presupuestos-index', compact('presupuestos', 'total', 'totales'));
     }
-
 
     public function filter($dias)
     {
@@ -117,14 +128,14 @@ class PresupuestosIndex extends Component
 
     public function status($status = null)
     {
-        $this->status = $status;
-        // $this->render();
 
+        $this->estado = $status;
     }
     public function updatingSearch()
     {
         $this->resetPage();
     }
+
     public function markAccept(Presupuestos $presupuesto)
     {
 
@@ -135,14 +146,11 @@ class PresupuestosIndex extends Component
     }
     public function markReject(Presupuestos $presupuesto)
     {
-
-
         $presupuesto->update([
             'estado' => '2',
         ]);
         $this->render();
     }
-
 
 
     public function convertInvoice(Presupuestos $presupuesto)
@@ -157,21 +165,29 @@ class PresupuestosIndex extends Component
                 'numero' => $facturasController->setNextSequenceNumber(),
                 'fecha_emision' => $date = Carbon::now(),
                 'fecha_vencimiento' => $date = Carbon::now(),
-                'subtotal' => $presupuesto->subtotal,
-                'impuesto' => $presupuesto->impuesto,
-                'total' => $presupuesto->total,
                 'divisa' => $presupuesto->divisa,
                 'tipo_pago' => '',
                 'estado' => 'BORRADOR',
                 'pago_estado' => 'UNPAID',
-                'enviado' => false,
+                'fecha_pago' => NULL,
+
+
+                'sub_total' => $presupuesto->sub_total,
+                'impuesto' => $presupuesto->impuesto,
+                'total' => $presupuesto->total,
+
+
+                'sent' => false,
                 'user_id' => auth()->user()->id,
                 'nota' => $presupuesto->nota,
             ]);
 
             foreach ($presupuesto->detalles->toArray() as $item) {
 
+
+
                 $item['facturas_id'] = $venta->id;
+                $item['impuesto'] = "";
                 $venta->detalles()->create($item);
             }
 
@@ -196,7 +212,7 @@ class PresupuestosIndex extends Component
                 'tipo_pago' => '',
                 'fecha' => $date = Carbon::now(),
                 'divisa' => $presupuesto->divisa,
-                'total' => $presupuesto->subtotal,
+                'total' => $presupuesto->sub_total,
                 'estado' => 'COMPLETADO',
                 'pago_estado' => 'UNPAID',
                 'nota' => $presupuesto->nota,

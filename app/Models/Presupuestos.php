@@ -33,11 +33,19 @@ class Presupuestos extends Model
      */
     protected static function booted()
     {
-        //
-
         static::addGlobalScope(new EmpresaScope);
     }
 
+
+    // Scope local de estado
+    public function scopeEstado($query, string $status)
+    {
+        return $query->where('estado', $status);
+    }
+    public function scopePendiente($query)
+    {
+        return $query->where('estado', '0');
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -51,7 +59,6 @@ class Presupuestos extends Model
     {
         return $this->hasMany(DetallePresupuestos::class, 'presupuestos_id');
     }
-
 
 
     public static function createItems($presupuesto, $items)
