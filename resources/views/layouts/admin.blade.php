@@ -64,7 +64,7 @@
         @livewire('admin.sidebar')
 
         <!-- Content area -->
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50">
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
 
             <!-- Site header -->
             @livewire('admin.header', ['page' => request()->fullUrl()])

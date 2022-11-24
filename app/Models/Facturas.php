@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Support\Facades\Auth;
 
 class Facturas extends Model
@@ -25,10 +26,7 @@ class Facturas extends Model
 
 
     public const PEN = 'PEN';
-    public const USDO = 'USD';
-
-
-
+    public const USD = 'USD';
 
 
 
@@ -41,12 +39,23 @@ class Facturas extends Model
         'fecha_emision' => 'date:Y/m/d',
         'fecha_vencimiento' => 'date:Y/m/d',
         'fecha_pago' => 'date:Y/m/d',
+        'detalle_cuotas' => AsCollection::class,
     ];
 
     protected $attributes = [
         'empresa_id' => "session('empresa')",
         'user_id' => " Auth::user()->id",
     ];
+
+
+
+    // protected function detalleCuotas(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn ($value) => json_decode($value, true),
+    //         set: fn ($value) => json_encode($value),
+    //     );
+    // }
 
     protected function empresaId(): Attribute
     {
@@ -60,6 +69,7 @@ class Facturas extends Model
             set: fn ($value) => Auth::user()->id,
         );
     }
+
     //LOCAL SCOPES
     public function scopePaid($query)
     {

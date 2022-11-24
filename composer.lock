@@ -2270,12 +2270,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Jhamnerx/laravel-id-generator.git",
-                "reference": "3764dbbb0b8eede3c3798ecefbaae6db63362304"
+                "reference": "f253ad33b02d3c5dc0bb1ab25104f6fc9ebb0561"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Jhamnerx/laravel-id-generator/zipball/3764dbbb0b8eede3c3798ecefbaae6db63362304",
-                "reference": "3764dbbb0b8eede3c3798ecefbaae6db63362304",
+                "url": "https://api.github.com/repos/Jhamnerx/laravel-id-generator/zipball/f253ad33b02d3c5dc0bb1ab25104f6fc9ebb0561",
+                "reference": "f253ad33b02d3c5dc0bb1ab25104f6fc9ebb0561",
                 "shasum": ""
             },
             "require": {
@@ -2309,7 +2309,7 @@
             "support": {
                 "source": "https://github.com/Jhamnerx/laravel-id-generator/tree/master"
             },
-            "time": "2022-10-19T15:47:35+00:00"
+            "time": "2022-11-22T21:35:26+00:00"
         },
         {
             "name": "laminas/laminas-code",

@@ -28,11 +28,12 @@ class VentasFacturasController extends Controller
     {
 
         $plantilla = plantilla::first();
-        $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'numero', 'length' => 9, 'prefix' => $plantilla->series["factura"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
+        $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'serie_numero', 'length' => 9, 'prefix' => $plantilla->series["factura"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => false]);
         return $id;
     }
     public function store(FacturasRequest $request)
     {
+        dd($request->items);
 
         $factura = Facturas::create($request->all());
         Facturas::createItems($factura, $request->items);
