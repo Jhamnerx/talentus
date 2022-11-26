@@ -202,7 +202,7 @@ class Create extends Component
                 'dias' => $this->vence_cuotas,
                 'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => $fecha->dayName,
-                'importe' => $this->total > 0 ? round(floatval(($this->total - $this->adelanto) / $value), 2)  : 0.00,
+                'importe' => $this->total > 0 ? round(floatval(($this->total - floatval($this->adelanto)) / $value), 2)  : 0.00,
             ]);
         }
     }

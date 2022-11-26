@@ -33,7 +33,6 @@ class VentasFacturasController extends Controller
     }
     public function store(FacturasRequest $request)
     {
-        dd($request->items);
 
         $factura = Facturas::create($request->all());
         Facturas::createItems($factura, $request->items);
