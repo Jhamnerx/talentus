@@ -2,27 +2,26 @@
 
 namespace App\Http\Livewire\Admin\Ventas\Facturas;
 
-use App\Http\Controllers\Admin\VentasFacturasController;
 use App\Http\Requests\FacturasRequest;
 use App\Models\Clientes;
 use App\Models\Facturas;
 use App\Models\PaymentMethods;
-use App\Models\plantilla;
 use App\Models\Productos;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Livewire\Component;
+use Illuminate\Support\Collection;
 
-class Create extends Component
+class Edit extends Component
 {
-
-
-    public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_vencimiento, $divisa = 'PEN', $estado = "BORRADOR";
-    public $forma_pago = 1, $fecha_pago, $sub_total = 0.00, $impuesto = 0.00, $total = 0.0;
-    public $tipo_venta = "CONTADO", $adelanto = 0.00, $numero_cuotas = 0, $vence_cuotas = 30, $nota;
+    public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_vencimiento, $divisa, $estado;
+    public $forma_pago, $fecha_pago, $sub_total = 0.00, $impuesto = 0.00, $total = 0.0;
+    public $tipo_venta, $adelanto = 0.00, $numero_cuotas = 0, $vence_cuotas = 30, $nota;
 
 
     public $showCredit = false;
+
+    public Facturas $factura;
+
     public Collection $items;
 
     public Collection $selected;
@@ -31,18 +30,30 @@ class Create extends Component
 
     public Collection $detalle_cuotas;
 
-
     public function mount()
     {
-        $facturaController = new VentasFacturasController();
-
-        $this->numero = $facturaController->setNextSequenceNumber();
-        $this->serie = plantilla::first()->series["factura"];
+        $this->clientes_id = $this->factura->clientes_id;
+        $this->serie = $this->factura->serie;
+        $this->numero = $this->factura->numero;
         $this->serie_numero = $this->serie . "-" . $this->numero;
-        $this->fecha_emision = Carbon::now()->format('Y-m-d');
-        $this->fecha_vencimiento = Carbon::now()->addDays(1)->format('Y-m-d');
-        $this->items = collect();
-        $this->detalle_cuotas = collect();
+        $this->fecha_emision = $this->factura->fecha_emision->format('Y-m-d');
+        $this->fecha_vencimiento = $this->factura->fecha_vencimiento->format('Y-m-d');
+        $this->divisa = $this->factura->divisa;
+        $this->estado = $this->factura->estado;
+        $this->forma_pago = $this->factura->forma_pago;
+        $this->fecha_pago = $this->factura->fecha_pago;
+        $this->sub_total = $this->factura->sub_total;
+        $this->impuesto = $this->factura->impuesto;
+        $this->total = $this->factura->total;
+        $this->tipo_venta = $this->factura->tipo_venta;
+        $this->adelanto = $this->factura->adelanto;
+        $this->numero_cuotas = $this->factura->numero_cuotas;
+        $this->vence_cuotas = $this->factura->vence_cuotas;
+        $this->nota = $this->factura->nota;
+
+        $this->items = collect($this->factura->detalles);
+        $this->detalle_cuotas = collect($this->factura->detalle_cuotas);
+
         $this->selected = collect([
             'producto_id' => "",
             'producto' => "",
@@ -50,17 +61,18 @@ class Create extends Component
             'cantidad' => 1,
             'total' => ""
         ]);
+
+        if ($this->factura->tipo_venta == "CREDITO") {
+            $this->showCredit = true;
+        }
+        $this->cliente = Clientes::find($this->clientes_id);
     }
 
     public function render()
     {
-
         $payments_methods = PaymentMethods::pluck('name', 'id');
-
-        return view('livewire.admin.ventas.facturas.create', compact('payments_methods'));
+        return view('livewire.admin.ventas.facturas.edit', compact('payments_methods'));
     }
-
-
     function addProducto()
     {
 
@@ -99,7 +111,6 @@ class Create extends Component
             $this->impuesto = $this->calcularImpuesto();
             $this->total = $this->calcularTotal();
 
-            //$this->calcularTotalSoles();
             $this->dispatchBrowserEvent('add-producto');
             $this->calcularCuotas($this->numero_cuotas);
         } catch (\Exception $e) {
@@ -174,7 +185,6 @@ class Create extends Component
         if ($value == "USD") {
             $this->simbolo = "$";
         } else {
-            $this->simbolo = "S/. ";
         }
     }
     public function updatedTipoVenta()
@@ -252,18 +262,21 @@ class Create extends Component
         $request = new FacturasRequest();
         $error = $this->validateOnly($name, $request->rules(), $request->messages());
     }
-    public function save()
+    public function actualizarFactura()
     {
 
 
         $request = new FacturasRequest();
-        $data = $this->validate($request->rules(), $request->messages());
 
-        $factura = Facturas::create($data);
+        $data = $this->validate($request->rules($this->factura), $request->messages());
 
-        Facturas::createItems($factura, $data["items"]);
+        $this->factura->update($data);
 
-        return redirect()->route('admin.ventas.facturas.index')->with('store', 'La factura se registro con exito');
+        $this->factura->detalles()->delete();
+
+        Facturas::createItems($this->factura, $data["items"]);
+
+        return redirect()->route('admin.ventas.facturas.index')->with('update', 'La factura se actualizo con exito');
     }
 
     public function eliminarProducto($key)

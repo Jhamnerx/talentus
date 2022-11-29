@@ -14,7 +14,7 @@ class FacturasRequest extends FormRequest
     }
 
 
-    public function rules($presupuesto = null)
+    public function rules($factura = null)
     {
         $rules = [
             'clientes_id' => 'required',
@@ -41,17 +41,17 @@ class FacturasRequest extends FormRequest
             'items.*.producto' => 'required',
             'items.*.descripcion' => 'nullable',
             'items.*.igv' => 'required',
-            'items.*.cantidad' => 'required|digits_between:1,100',
+            'items.*.cantidad' => 'required|gte:1',
             'items.*.precio' => 'required',
             'items.*.total' => 'required',
         ];
 
-        if ($presupuesto) {
+        if ($factura) {
 
             $rules['serie_numero'] = [
                 'required',
                 Rule::unique('facturas', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
-                    ->ignore($presupuesto->id),
+                    ->ignore($factura->id),
 
             ];
         }
@@ -89,6 +89,7 @@ class FacturasRequest extends FormRequest
 
             'items.*.producto.required' => 'Ingresa el producto',
             'items.*.cantidad.required' => 'Ingresa la cantidad',
+            'items.*.cantidad.gte' => 'Ingresa como minimo 1',
             'items.*.precio.required' => 'Ingresa un precio',
             'items.*.total.required' => 'Ingresa un precio',
             'items.array' => 'Ingresa como minimo un producto',

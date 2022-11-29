@@ -151,7 +151,7 @@ class Facturas extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.factura.pdf');
+        $pdf = PDF::loadView('pdf.factura.pdf')->setPaper('Legal');
 
         if ($action == 1) {
 
@@ -172,7 +172,7 @@ class Facturas extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.factura.pdf');
+        $pdf = PDF::loadView('pdf.factura.pdf')->setPaper('Legal');
 
         $this->clientes->notify(new EnviarFacturaCliente($this, $pdf, $data));
     }

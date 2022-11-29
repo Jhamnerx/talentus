@@ -64,7 +64,7 @@
                 icon: 'far fa-envelope-open',
                 title: 'CORREO ENVIADO',
                 timeout: 1500,
-                message: 'Se ha enviado la cotización ' + event.detail.factura.numero + '-' + event.detail
+                message: 'Se ha enviado la factura ' + event.detail.factura.serie_numero
                     .factura + '!',
                 position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
                 progressBarColor: 'rgb(5, 44, 82)'

@@ -48,7 +48,7 @@
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <input wire:model="selected.cantidad" type="number" min="1" value="1" step="1"
+                    <input wire:model="selected.cantidad" type="text" min="1" value="1" step="1"
                         class="form-input qyt" placeholder="Cantidad">
                     @if ($errors->has('selected.cantidad'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -100,22 +100,19 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
-                        </textarea>
-                            @if ($errors->has('items.' . $clave . '.cantidad'))
+                            </textarea>
+                            @if ($errors->has('items.' . $clave . '.producto'))
                                 <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                    {{ $errors->first('items.' . $clave . '.producto') }}
                                 </p>
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
-                        </textarea>
-
+                            <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input required type="number" x-mask="99999"
-                                wire:model="items.{{ $clave }}.cantidad" min="1" step="1"
-                                class="form-input cantidad" placeholder="Cantidad" value="2">
+                            <input required type="number" wire:model="items.{{ $clave }}.cantidad"
+                                min="1" step="0.1" class="form-input cantidad" placeholder="Cantidad">
                             @if ($errors->has('items.' . $clave . '.cantidad'))
                                 <p class="mt-2  text-pink-600 text-sm">
                                     {{ $errors->first('items.' . $clave . '.cantidad') }}
@@ -125,9 +122,9 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <input required type="number" required min="1" step="0.1"
                                 wire:model="items.{{ $clave }}.precio" class="form-input precio">
-                            @if ($errors->has('items.' . $clave . '.cantidad'))
+                            @if ($errors->has('items.' . $clave . '.precio'))
                                 <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                    {{ $errors->first('items.' . $clave . '.precio') }}
                                 </p>
                             @endif
                         </td>

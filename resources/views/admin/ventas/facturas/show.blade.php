@@ -5,9 +5,7 @@
 
 @section('contenido')
 
-
     <!-- Code block starts -->
-
     <div class="bg-white dark:bg-gray-800">
         <div class="2xl:container 2xl:mx-auto py-5 lg:px-7 sm:px-6  px-4">
             <nav class="">
@@ -147,11 +145,11 @@
                                 <div class="space-y-2">
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> Factura# </p>
-                                        <p>{{ $factura->numero }} </p>
+                                        <p>{{ $factura->serie_numero }} </p>
                                     </div>
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> Fecha Emision </p>
-                                        <p> {{ $factura->fecha_emision->format('Y/m/d') }} </p>
+                                        <p> {{ $factura->fecha_emision->format('d/m/Y') }} </p>
                                     </div>
                                     <div>
                                         <a href="{{ route('admin.pdf.factura', $factura) }}" target="_blank"
@@ -196,14 +194,17 @@
                                     <td class="px-6 py-5 whitespace-nowrap space-x-1 flex items-center">
                                         <div>
                                             <p> {{ $detalle->producto }} </p>
-                                            {{-- <p class="text-sm text-gray-400"> Nuclear-armed ICBM </p> --}}
+                                            <p class="text-sm text-gray-400">{{ $detalle->descripcion }} </p>
                                         </div>
                                     </td>
 
-                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->cantidad }} </td>
+                                    <td class="whitespace-nowrap text-gray-600 truncate">
+                                        {{ $detalle->cantidad }}
+
+                                    </td>
                                     <td class="whitespace-nowrap text-gray-600 truncate">{{ $detalle->precio }}</td>
                                     <td class="whitespace-nowrap text-gray-600 truncate"></td>
-                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->importe }} </td>
+                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->total }} </td>
                                 </tr>
                             @endforeach
 
@@ -216,7 +217,7 @@
                                     <p class="text-gray-900 text-right flex-1 font-medium text-sm"> Subtotal </p>
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm total">{{ $factura->subtotal }}</div>
+                                    <div class="text-gray-800 text-sm total">{{ $factura->sub_total }}</div>
 
                                 </div>
 

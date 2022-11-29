@@ -197,11 +197,22 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <p><strong>BCP: </strong></p>
+                                    <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
                                 </td>
                             </tr>
+                            <tr>
 
+                                <td>
+                                    <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                                </td>
 
+                            </tr>
+                            <tr>
+
+                                <td>
+                                    <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -260,11 +271,22 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <p><strong>BCP:</strong></p>
+                                    <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
                                 </td>
                             </tr>
+                            <tr>
 
+                                <td>
+                                    <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                                </td>
 
+                            </tr>
+                            <tr>
+
+                                <td>
+                                    <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

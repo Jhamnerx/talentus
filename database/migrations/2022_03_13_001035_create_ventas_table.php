@@ -39,6 +39,7 @@ class CreateVentasTable extends Migration
             $table->enum('tipo_venta', ['CONTADO', 'CREDITO'])->default('CONTADO');
             $table->decimal('adelanto', 15, 2)->nullable();
             $table->integer('numero_cuotas')->nullable();
+            $table->integer('vence_cuotas')->nullable();
             $table->text('detalle_cuotas')->nullable();
 
 
