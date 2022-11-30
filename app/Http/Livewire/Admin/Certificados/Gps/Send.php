@@ -63,6 +63,7 @@ class Send extends Component
 
     public function sendCertificado()
     {
+
         $data = array(
             'asunto' => $this->asunto,
             'body' => $this->body,

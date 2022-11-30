@@ -42,7 +42,7 @@
                     <div class="grid grid-cols-12 gap-6">
 
                         <div class="col-span-6 sm:col-span-6">
-                            {{ json_encode($errors->all()) }}
+
                             <label class="block text-sm font-medium mb-1" for="placa">Placa: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">

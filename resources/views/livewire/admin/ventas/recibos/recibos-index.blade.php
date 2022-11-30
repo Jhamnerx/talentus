@@ -264,13 +264,13 @@
                                         @if ($recibo->estado == 'BORRADOR')
                                             <div class="font-medium text-red-500">
                                                 <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                    B-#{{ $recibo->numero }}
+                                                    #{{ $recibo->serie_numero }}
                                                 </a>
                                             </div>
                                         @else
                                             <div class="font-medium text-sky-600">
                                                 <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                    #{{ $recibo->numero }}
+                                                    #{{ $recibo->serie_numero }}
                                                 </a>
                                             </div>
                                         @endif
@@ -322,7 +322,7 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $recibo->fecha->format('d-m-Y') }}</div>
+                                        <div>{{ $recibo->fecha_emision->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>
@@ -333,7 +333,7 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $recibo->tipo_pago }}</div>
+                                        <div>{{ $recibo->tipo_venta }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">

@@ -50,31 +50,46 @@ Route::get('', [HomeController::class, 'index'])->name('admin.home');
 Route::resource('categorias', CategoriaController::class)->names('admin.almacen.categorias');
 Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
 
-Route::resource('lineas', LineasController::class)->names('admin.almacen.lineas');
 
-Route::get('disponibles/lineas', [LineasController::class, 'disponibles'])->name('admin.almacen.lineas.disponibles.index');
+Route::controller(LineasController::class)->group(function () {
 
-Route::get('asign/lineas', [LineasController::class, 'asignLinea'])->name('admin.asign.lineas');
-Route::post('asign/lineas/store', [LineasController::class, 'asignLineaStore'])->name('admin.asign.lineas.store');
+    Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
+    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
+    Route::get('disponibles/lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
+    Route::get('asign/lineas', 'asignLinea')->name('admin.asign.lineas');
+    Route::get('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+});
+
 
 
 Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('admin.almacen.modelos-dispositivos');
+
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
 Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+
+Route::controller(ClientesController::class)->group(function () {
+
+    Route::get('clientes', 'index')->name('admin.clientes.index');
+    Route::post('clientes', 'store')->name('admin.clientes.store');
+    Route::get('clientes/crear', 'create')->name('admin.clientes.create');
+    Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
+    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.update');
+    Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
+});
+
+
+
+
 Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
 
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
 
 // COMPRAS
-
-
-
-
 Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([
     'compras-factura' => 'factura'
 ]);
@@ -83,10 +98,27 @@ Route::resource('compras-factura', ComprasFacturasController::class)->names('adm
 
 
 // VENTAS
-Route::resource('presupuestos', PresupuestoController::class)->names('admin.ventas.presupuestos');
-Route::resource('ventas-factura', VentasFacturasController::class)->names('admin.ventas.facturas')->parameters([
-    'ventas-factura' => 'factura'
-]);;
+Route::controller(PresupuestoController::class)->group(function () {
+    Route::get('presupuestos', 'index')->name('admin.ventas.presupuestos.index');
+    Route::get('presupuestos/crear', 'create')->name('admin.ventas.presupuestos.create');
+    Route::get('presupuestos/{presupuesto}', 'show')->name('admin.ventas.presupuestos.show');
+    Route::get('presupuestos/{presupuesto}/editar', 'edit')->name('admin.ventas.presupuestos.edit');
+});
+
+
+
+Route::controller(VentasFacturasController::class)->group(function () {
+
+    Route::get('ventas-facturas', 'index')->name('admin.ventas.facturas.index');
+    Route::post('ventas-facturas', 'store')->name('admin.ventas.facturas.store');
+    Route::get('ventas-facturas/crear', 'create')->name('admin.ventas.facturas.create');
+    Route::get('ventas-facturas/{factura}', 'show')->name('admin.ventas.facturas.show');
+    Route::get('ventas-facturas/{factura}', 'update')->name('admin.ventas.facturas.update');
+    Route::get('clientes/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
+});
+
+
+
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
 
 

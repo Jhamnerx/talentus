@@ -10,24 +10,22 @@ class ReciboObserver
     public function creating(Recibos $recibo)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $recibo->empresa_id = session('empresa');
-
+            $recibo->serie_numero = $recibo->serie . "-" . $recibo->numero;
+            $recibo->user_id = auth()->user()->id;
         }
-       
-    }    
+    }
     public function updating(Recibos $recibo)
     {
 
-    
-        if(! \App::runningInConsole()){
+
+        if (!\App::runningInConsole()) {
 
             $recibo->empresa_id = session('empresa');
-
         }
-       
     }
     /**
      * Handle the Recibos "created" event.

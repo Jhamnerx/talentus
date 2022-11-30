@@ -32,13 +32,11 @@ class Edit extends Component
         $this->resetErrorBag();
     }
 
-
     public function openModal(CertificadosVelocimetros $certificado)
     {
         $this->openModalEdit = true;
 
         $this->certificado = $certificado;
-
         $this->numero = $certificado->numero;
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
@@ -58,7 +56,7 @@ class Edit extends Component
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->ciudades_id = $values["ciudades_id"];
         $update->fecha = $fecha;
-        $codigo = $ciudad->prefijo . "-" . date('y') . "-" . $values["numero"];
+        $codigo = $ciudad->prefijo . "-" . $values["numero"];
         $update->codigo = $codigo;
         $update->save();
 

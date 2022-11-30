@@ -26,7 +26,7 @@ class VelocimetrosIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $certificados = CertificadosVelocimetros::whereHas('vehiculos', function ($query) {
+        $certificados = CertificadosVelocimetros::whereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%')
                 ->orwhere('motor', 'like', '%' . $this->search . '%');
         })->orwhereHas('ciudades', function ($query) {
@@ -98,14 +98,11 @@ class VelocimetrosIndex extends Component
         $this->openModalEdit = true;
     }
 
-
     public function openModalDelete(CertificadosVelocimetros $certificado)
     {
         $this->emit('EliminarCertificado', $certificado);
         $this->openModalDelete = true;
     }
-
-
 
 
     public function openModalShow(CertificadosVelocimetros $certificado)
@@ -117,5 +114,10 @@ class VelocimetrosIndex extends Component
     public function cambiarEstado(CertificadosVelocimetros $certificado, $field, $value)
     {
         $certificado->setAttribute($field, $value)->save();
+        $this->render();
+    }
+    public function modalOpenSend(CertificadosVelocimetros $certificado)
+    {
+        $this->emit('modalOpenSend', $certificado);
     }
 }

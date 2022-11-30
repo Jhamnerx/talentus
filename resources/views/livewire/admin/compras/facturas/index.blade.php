@@ -168,7 +168,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Facturas Compras <span
-                    class="text-slate-400 font-medium">{{ $facturas->count() }}</span>
+                    class="text-slate-400 font-medium">{{ $facturas->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">

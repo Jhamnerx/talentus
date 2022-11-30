@@ -35,9 +35,9 @@ class ClientesController extends Controller
         return redirect()->route('admin.clientes.index')->with('store', 'El cliente se guardo con exito');
     }
 
-    public function show(Clientes $clientes)
+    public function show(Clientes $cliente)
     {
-        return view('admin.clientes.show');
+        return view('admin.clientes.show', compact('cliente'));
     }
 
     public function edit(Clientes $cliente)
@@ -54,6 +54,5 @@ class ClientesController extends Controller
     public function exportExcel()
     {
         return Excel::download(new ClientesExport, 'clientes.xls');
-        //redirect()->route('admin.clientes.index');
     }
 }

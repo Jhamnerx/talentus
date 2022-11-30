@@ -38,7 +38,6 @@ class Actas extends Model
     }
 
 
-
     // Scope local de activo
     public function scopeActive($query, $status)
     {
@@ -49,12 +48,12 @@ class Actas extends Model
 
     public function ciudades()
     {
-        return $this->belongsTo(Ciudades::class, 'ciudades_id');
+        return $this->belongsTo(Ciudades::class, 'ciudades_id')->withTrashed();
     }
 
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id');
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 

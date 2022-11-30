@@ -6,35 +6,51 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use GuzzleHttp\Client;
-
+use Illuminate\Support\Facades\Cache;
 
 class UtilesController extends Controller
 {
     public static function tipoCambio()
     {
-        try {
-            $token = env('TOKEN_API_SUNAT');
 
-            $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
+        $cambio = Cache::get('cambio');
 
-            $parameters = [
-                'http_errors' => false,
-                'connect_timeout' => 5,
-                'headers' => [
-                    'Authorization' => 'Bearer ' . $token,
-                    'Referer' => 'https://apis.net.pe/api-sunat-tipo-de-cambio',
-                    'User-Agent' => 'laravel/guzzle',
-                    'Accept' => 'application/json',
-                ],
-            ];
+        if ($cambio) {
 
-            $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
-            $response = json_decode($res->getBody()->getContents(), true);
+            return $cambio;
+        } else {
 
-            return $response["venta"];
-        } catch (\Exception $e) {
+            try {
 
-            return $e->getMessage();
+                $token = env('TOKEN_API_SUNAT');
+
+                $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
+
+                $parameters = [
+                    'http_errors' => false,
+                    'connect_timeout' => 5,
+                    'headers' => [
+                        'Authorization' => 'Bearer ' . $token,
+                        'Referer' => 'https://apis.net.pe/api-sunat-tipo-de-cambio',
+                        'User-Agent' => 'laravel/guzzle',
+                        'Accept' => 'application/json',
+                    ],
+                ];
+
+                $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
+                $response = json_decode($res->getBody()->getContents(), true);
+
+                Cache::put(
+                    'cambio',
+                    $response["venta"],
+                    now()->addMinutes(1)
+                );
+
+                return $response["venta"];
+            } catch (\Exception $e) {
+
+                return $e->getMessage();
+            }
         }
     }
 

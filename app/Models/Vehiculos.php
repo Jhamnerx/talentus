@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,6 +25,12 @@ class Vehiculos extends Model
     {
         return $query->where('is_active', $status);
     }
+
+    public function scopeWhereCompany($query)
+    {
+        return $query->where('vehiculos.empresa_id', session('empresa'));
+    }
+
     // Scope local de activo
     public function order($query, $order)
     {
@@ -35,7 +40,7 @@ class Vehiculos extends Model
     //Relacion uno a muchos inversa
     public function cliente()
     {
-        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed();
+        return $this->belongsTo(Clientes::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos a modelos
@@ -95,6 +100,6 @@ class Vehiculos extends Model
 
     public function flotas()
     {
-        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed();
+        return $this->belongsToMany(Flotas::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\PresupuestosStatus;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use App\Scopes\ActiveScope;
 use App\Scopes\EliminadoScope;
@@ -22,7 +23,9 @@ class Presupuestos extends Model
     protected $casts = [
         'fecha' => 'date:Y/m/d',
         'fecha_caducidad' => 'date:Y/m/d',
+        'estado' => PresupuestosStatus::class,
     ];
+
     /**
      * Scope para traer activos y no
      *
@@ -30,11 +33,19 @@ class Presupuestos extends Model
      */
     protected static function booted()
     {
-        //
-
         static::addGlobalScope(new EmpresaScope);
     }
 
+
+    // Scope local de estado
+    public function scopeEstado($query, string $status)
+    {
+        return $query->where('estado', $status);
+    }
+    public function scopePendiente($query)
+    {
+        return $query->where('estado', '0');
+    }
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -48,7 +59,6 @@ class Presupuestos extends Model
     {
         return $this->hasMany(DetallePresupuestos::class, 'presupuestos_id');
     }
-
 
 
     public static function createItems($presupuesto, $items)

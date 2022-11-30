@@ -6,7 +6,7 @@
         }
     ],
     "settings": {
-        "editor.fontSize": 12,
+        "editor.fontSize": 11,
         "files.autoSave": "onFocusChange"
     }
 }

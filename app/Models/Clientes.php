@@ -37,19 +37,19 @@ class Clientes extends Model
 
     public function presupuestos()
     {
-        return $this->hasMany(Presupuestos::class, 'clientes_id');
+        return $this->hasMany(Presupuestos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos
     public function facturas()
     {
-        return $this->hasMany(Facturas::class, 'clientes_id');
+        return $this->hasMany(Facturas::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos
     public function recibos()
     {
-        return $this->hasMany(Recibos::class, 'clientes_id');
+        return $this->hasMany(Recibos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 
@@ -69,14 +69,14 @@ class Clientes extends Model
 
     public function vehiculos()
     {
-        return $this->hasMany(Vehiculos::class, 'clientes_id');
+        return $this->hasMany(Vehiculos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 
     //Relacion uno a muchos inversa
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class, 'empresa_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Empresa::class, 'empresa_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 
@@ -90,13 +90,13 @@ class Clientes extends Model
 
     public function contactos()
     {
-        return $this->hasMany(Contactos::class, 'clientes_id');
+        return $this->hasMany(Contactos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos
 
     public function cobros()
     {
-        return $this->hasMany(Cobros::class, 'clientes_id');
+        return $this->hasMany(Cobros::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 }

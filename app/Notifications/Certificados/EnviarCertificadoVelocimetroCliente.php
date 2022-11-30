@@ -11,9 +11,15 @@ class EnviarCertificadoVelocimetroCliente extends Notification
 {
     use Queueable;
 
-    public function __construct()
+    public $certificado;
+    public $pdf;
+    public $data;
+
+    public function __construct($certificado, $pdf, $data)
     {
-        //
+        $this->certificado = $certificado;
+        $this->pdf = $pdf;
+        $this->data = $data;
     }
 
     public function via($notifiable)
@@ -24,15 +30,10 @@ class EnviarCertificadoVelocimetroCliente extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
-
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+            ->attachData($this->pdf->output(), 'CERTIFICADO VELOCIMETRO ' . $this->certificado->codigo . '.pdf', [
+                'mime' => 'application/pdf',
+            ])
+            ->subject($this->data["asunto"])
+            ->view('mail.certificados.certificado-velocimetro', ['certificado' => $this->certificado, 'data' => $this->data]);
     }
 }

@@ -19,7 +19,8 @@ class CreateCategoriasTable extends Migration
             $table->string('descripcion')->nullable();
             $table->unsignedBigInteger('empresa_id');
             $table->boolean('is_active')->default(true);
-            // $table->boolean('eliminado')->default(false);
+
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

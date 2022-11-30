@@ -194,29 +194,29 @@
 
         @php
             
-            // $qr = base64_encode(
-            //     QrCode::format('png')
-            //         ->size(120)
-            //         ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
-            //         ->style('square')
-            //         ->eye('circle')
-            //         ->encoding('UTF-8')
-            //         ->generate(
-            //             ' VEHICULO: ' .
-            //                 $acta->vehiculo->placa .
-            //                 '|' .
-            //                 " \n VALIDA: " .
-            //                 $acta->inicio_cobertura->format('d-m-Y') .
-            //                 '|' .
-            //                 $acta->fin_cobertura->format('d-m-Y') .
-            //                 "
-//                                                                                                                             \nCONSULTAR VALIDEZ EN: " .
-            //                 route('consulta.actas', $acta->codigo),
-            //         ),
-            // );
+            $qr = base64_encode(
+                QrCode::format('png')
+                    ->size(120)
+                    ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+                    ->style('square')
+                    ->eye('circle')
+                    ->encoding('UTF-8')
+                    ->generate(
+                        ' VEHICULO: ' .
+                            $acta->vehiculo->placa .
+                            '|' .
+                            " \n VALIDA: " .
+                            $acta->inicio_cobertura->format('d-m-Y') .
+                            '|' .
+                            $acta->fin_cobertura->format('d-m-Y') .
+                            "
+                                                                                                                            \nCONSULTAR VALIDEZ EN: " .
+                            route('consulta.actas', $acta->codigo),
+                    ),
+            );
         @endphp
         <div class="qr">
-            {{-- <img src="data:image/jpeg;base64, {{ $qr }}"> --}}
+            <img src="data:image/jpeg;base64, {{ $qr }}">
 
         </div>
 

@@ -3,12 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>FACTURA #{{ $factura->numero }}</title>
-
-
-    {{-- <link rel="stylesheet" href="{{ ltrim(public_path('factura/normalize.css'), '/') }}" />
-    <link rel="stylesheet" href="{{ ltrim(public_path('factura/foundation.css'), '/') }}" />
-    <link rel="stylesheet" href="{{ ltrim(public_path('factura/style.css'), '/') }}" /> --}}
+    <title>FACTURA #{{ $factura->serie_numero }}</title>
 
     <link rel="stylesheet" href="{{ asset('docs/normalize.css') }}">
     <link rel="stylesheet" href="{{ asset('docs/foundation.css') }}">
@@ -86,7 +81,7 @@
 
                 <h3><img class="icon-invoice"
                         src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/invoice.png')) }}"></i>
-                    FACTURA PARA:</h3>
+                    FACTURA A:</h3>
                 <h2>{{ $factura->clientes->razon_social }}</h2>
                 <p style="margin-bottom:10px;line-height:22px;">{{ $factura->clientes->direccion }}<br>
                 </p>
@@ -136,7 +131,7 @@
                             </td>
                             <td>
                                 Factura #:<br>
-                                <strong>{{ $factura->numero }}</strong>
+                                <strong>{{ $factura->serie_numero }}</strong>
                             </td>
                         </tr>
                     </tbody>
@@ -146,7 +141,6 @@
 
         </div>
         <!--header-bottom-->
-
 
         <div class="row">
             <div class="large-12 columns">
@@ -164,7 +158,8 @@
                         @foreach ($factura->detalles as $detalle)
                             <tr>
                                 <td>
-                                    <h4> {{ $detalle->producto }}</h4>
+                                    <p> {{ $detalle->producto }}</p>
+                                    <p>{{ $detalle->descripcion }}</p>
 
                                 </td>
                                 <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
@@ -182,32 +177,32 @@
 
 
         <div class="row" style="margin-top: 2rem">
-            <div class="large-5 medium-5 small-12 columns bottom-left ">
+            <div class="large-5 medium-6 small-12 columns bottom-left ">
                 <table>
                     <thead>
                         <tr>
-                            <th><strong>Metodos de Pago:</strong> Cheque,<br>
-                                BCP, Continental...</th>
+                            <th><strong>Metodos de Pago:</strong> </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <p><strong>administracion@talentustechnology.com</strong></p>
+                                <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
                             </td>
                         </tr>
                         <tr>
+
                             <td>
-                                <p>
-                                    <br>
-                                    Calle Santa María Nº 209.
-                                    <br>
-                                    Cajamarca,<br>
-                                    Perú
-                                </p>
+                                <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
                             </td>
                         </tr>
-
                     </tbody>
                 </table>
             </div>

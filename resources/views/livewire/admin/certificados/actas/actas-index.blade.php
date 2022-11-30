@@ -51,7 +51,7 @@
                 <li class="m-1">
                     <button
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
+                        <span class="ml-1 text-indigo-200">{{ $actas->total() }}</span></button>
                 </li>
             </ul>
         </div>
@@ -182,7 +182,7 @@
         <div x-data="handleSelect">
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead

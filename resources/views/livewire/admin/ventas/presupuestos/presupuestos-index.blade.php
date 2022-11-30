@@ -58,7 +58,7 @@
                         <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="status(1)"
+                    <button wire:click="status('0')"
                         :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 1"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
@@ -66,7 +66,7 @@
                         <span class="ml-1 text-slate-400">{{ $totales['pendientes'] }}</span></button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="status(2)"
+                    <button wire:click="status('1')"
                         :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 2"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
@@ -74,7 +74,7 @@
                         <span class="ml-1 text-slate-400">{{ $totales['aceptadas'] }}</span></button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="status(3)"
+                    <button wire:click="status('2')"
                         :class="clickeado === 3 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 3"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
@@ -207,7 +207,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Presupuestos <span
-                    class="text-slate-400 font-medium">{{ $totales['total'] }}</span>
+                    class="text-slate-400 font-medium">{{ $presupuestos->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -302,26 +302,10 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @switch($presupuesto->estado)
-                                            @case(0)
-                                                <div
-                                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Pendiente</div>
-                                            @break
-
-                                            @case(1)
-                                                <div
-                                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Aceptada</div>
-                                            @break
-
-                                            @case(2)
-                                                <div
-                                                    class="inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-0.5">
-                                                    Rechazada</div>
-                                            @break
-                                        @endswitch
-
+                                        <div
+                                            class="inline-flex font-medium bg-{{ $presupuesto->estado->color() }}-100 text-{{ $presupuesto->estado->color() }}-600 rounded-full text-center px-2.5 py-0.5">
+                                            {{ $presupuesto->estado->name }}
+                                        </div>
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -433,7 +417,8 @@
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                <a wire:click.prevent="convertInvoice({{ $presupuesto->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-30"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"

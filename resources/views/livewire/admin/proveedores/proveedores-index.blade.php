@@ -199,7 +199,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total proveedores <span
-                    class="text-slate-400 font-medium">{{ $proveedores->count() }}</span>
+                    class="text-slate-400 font-medium">{{ $proveedores->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">

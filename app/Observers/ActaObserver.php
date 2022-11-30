@@ -29,6 +29,7 @@ class ActaObserver
 
     public function created(Actas $acta)
     {
+
         if (!\App::runningInConsole()) {
 
             $acta->unique_hash = Hashids::connection(Actas::class)->encode($acta->id);
@@ -36,6 +37,8 @@ class ActaObserver
 
             //EVENTO PARA ENVIAR EMAIL Y NOTIFICAR A ADMIN
             nuevaActaCreada::dispatch($acta);
+
+            //dispatch(new nuevaActaCreada($acta));
 
             //REGISTRAMOS EL CAMBIO REALIZADO EN DB
 

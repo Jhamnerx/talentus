@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\Actas;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -14,23 +15,13 @@ class nuevaActaCreada
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
     public $acta;
 
-    public function __construct($acta)
+    public function __construct(Actas $acta)
     {
         $this->acta = $acta;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
         return new PrivateChannel('channel-name');

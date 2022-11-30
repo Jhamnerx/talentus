@@ -15,15 +15,23 @@ class CreateDetalleRecibosTable extends Migration
     {
         Schema::create('detalle_recibos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('recibos_id')->nullable();
+
             $table->string('producto');
-            $table->integer('cantidad');
-            $table->decimal('precio', 10, 2);
-            $table->decimal('importe', 10, 2);
+            $table->string('descripcion')->nullable();
+            $table->string('descuento_type')->nullable();
+            $table->decimal('descuento', 15, 2)->nullable();
+            $table->decimal('descuento_val', 15, 2)->unsigned()->nullable();
+            $table->decimal('cantidad', 15, 2);
+            $table->decimal('precio', 15, 2);
+            $table->decimal('total', 10, 2);
+            $table->unsignedBigInteger('recibos_id')->nullable();
+            $table->unsignedBigInteger('producto_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('empresa_id')->unsigned()->nullable();
+
 
             $table->foreign('recibos_id')->references('id')->on('recibos')->onDelete('cascade');
-
-
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
             $table->timestamps();
         });
     }

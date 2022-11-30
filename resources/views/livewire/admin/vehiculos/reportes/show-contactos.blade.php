@@ -48,7 +48,7 @@
                                             <div class="grow">
                                                 <div class="flex flex-wrap items-center justify-between mb-0.5">
                                                     <span class="font-medium text-slate-800">{{ $contacto->nombre }}
-                                                        |<span
+                                                        | <span
                                                             class="text-xs italic text-slate-500 align-top">{{ $contacto->cargo }}</span></span>
                                                     <span><span
                                                             class="font-medium text-emerald-600">{{ $contacto->telefono }}</span></span>

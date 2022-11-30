@@ -17,10 +17,6 @@ class Save extends Component
     ];
 
 
-
-
-
-
     public function render()
     {
 
@@ -31,12 +27,13 @@ class Save extends Component
         $this->openModalSave = false;
         $this->reset();
         $this->resetErrorBag();
+        $this->dispatchBrowserEvent('close-modal');
     }
 
     public function openModal()
     {
 
-         $this->dispatchBrowserEvent('open-modal');
+        $this->dispatchBrowserEvent('open-modal');
         $this->openModalSave = true;
     }
 

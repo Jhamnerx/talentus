@@ -22,7 +22,6 @@ class CertificadosVelocimetros extends Migration
             $table->boolean('sello')->default(1);
             $table->boolean('fondo')->default(1);
             $table->boolean('estado')->default(true);
-            $table->boolean('eliminado')->default(false);
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->unsignedBigInteger('ciudades_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();

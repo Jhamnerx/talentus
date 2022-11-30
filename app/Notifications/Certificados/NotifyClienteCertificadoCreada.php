@@ -26,7 +26,6 @@ class NotifyClienteCertificadoCreada extends Notification implements ShouldQueue
 
     public function toMail($notifiable)
     {
-        dd($this->certificado);
         return (new MailMessage)
             ->subject('SE HA CREADO UN CERTIFICADO')
             ->view('mail.certificados.certificado', ['certificado' => $this->certificado]);

@@ -77,18 +77,9 @@ class Save extends Component
         $this->operador = '';
     }
 
-
-
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
     public function store()
     {
-        //dd($this->sim_card_n);
         $validatedDate = $this->validate();
-
 
         foreach ($this->operador as $key => $value) {
 
@@ -104,7 +95,6 @@ class Save extends Component
         $this->resetInputFields();
 
         return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
-        // session()->flash('message', 'Lineas creadas correctamente.');
     }
     public function render()
     {

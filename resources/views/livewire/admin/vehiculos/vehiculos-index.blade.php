@@ -169,7 +169,6 @@
             </div>
 
             <!-- Import button -->
-            {{-- @livewire('admin.clientes.import') --}}
             <div class="relative inline-flex">
                 <button wire:click="openModalImport()" aria-controls="basic-modal"
                     class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -191,7 +190,7 @@
                 <li class="m-1">
                     <button
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
+                        <span class="ml-1 text-indigo-200">{{ $vehiculos->total() }}</span></button>
                 </li>
             </ul>
         </div>
@@ -201,7 +200,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">vehiculos <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $vehiculos->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">

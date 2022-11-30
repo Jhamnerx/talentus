@@ -27,23 +27,6 @@ class Create extends Component
     public Collection $selected;
     public $simbolo = "S/. ";
 
-
-
-
-    protected $messages = [
-        'numero.required' => 'El número requerido',
-        'numero.unique' => 'El número ya esta registrado',
-
-    ];
-
-    protected function rules()
-    {
-        return [
-
-            'numero' => Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
-        ];
-    }
-
     public function mount()
     {
         $this->tipoCambio  = UtilesController::tipoCambio();
@@ -103,6 +86,7 @@ class Create extends Component
             $this->total = $this->calcularTotal();
 
             $this->calcularTotalSoles();
+            $this->dispatchBrowserEvent('add-producto');
         } catch (\Exception $e) {
             throw $e;
         }
@@ -149,9 +133,6 @@ class Create extends Component
 
             $this->sub_total_soles = number_format(floatval($this->tipoCambio * $this->sub_total), 2, '.', '');
 
-            //dd(floatval($this->sub_total_soles));
-
-
             $this->impuesto_soles = number_format((floatval($this->sub_total_soles) * 18) / 100, 2, '.', '');
             $this->total_soles = number_format((floatval($this->impuesto_soles) + floatval($this->sub_total_soles)), 2, '.', '');
         }
@@ -180,7 +161,6 @@ class Create extends Component
 
     public function calcularTotal()
     {
-
         $total = $this->sub_total + $this->impuesto;
 
         return number_format($total, 2, '.', '');
@@ -188,7 +168,6 @@ class Create extends Component
 
 
     public function updatedDivisa($value)
-
     {
         if ($value == "USD") {
             $this->ConvertirSoles = true;
@@ -200,21 +179,17 @@ class Create extends Component
         }
     }
 
-
-
-
     public function updated($name, $value)
     {
-        //dd($name, $value);
-        $error = $this->validateOnly($name);
+        $request = new PresupuestosRequest();
+        $error = $this->validateOnly($name, $request->rules(), $request->messages());
     }
-
 
     public function save()
     {
 
-        $request = new PresupuestosRequest();
 
+        $request = new PresupuestosRequest();
         $data = $this->validate($request->rules(), $request->messages());
 
         $presupuesto = Presupuestos::create($data);

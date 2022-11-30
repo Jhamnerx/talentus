@@ -51,14 +51,14 @@ class Dispositivos extends Model
 
     public function modelo()
     {
-        return $this->belongsTo(ModelosDispositivo::class, 'modelo_id');
+        return $this->belongsTo(ModelosDispositivo::class, 'modelo_id')->withoutGlobalScope(EmpresaScope::class);
     }
     public function vehiculos()
     {
-        return $this->hasOne(Vehiculos::class)->withoutGlobalScope(EliminadoScope::class)->withoutGlobalScope(EliminadoScope::class);
+        return $this->hasOne(Vehiculos::class)->withoutGlobalScope(EmpresaScope::class);
     }
     public function certificados()
     {
-        return $this->hasMany(Certificados::class, 'dispositivos_id');
+        return $this->hasMany(Certificados::class, 'dispositivos_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }

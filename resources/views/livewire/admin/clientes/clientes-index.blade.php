@@ -161,7 +161,6 @@
             </div>
 
             <!-- Import button -->
-            {{-- @livewire('admin.clientes.import') --}}
             <div class="relative inline-flex">
                 <button wire:click="openModalImport()" aria-controls="basic-modal"
                     class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -201,7 +200,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total Clientes <span
-                    class="text-slate-400 font-medium">{{ $clientes->count() }}</span>
+                    class="text-slate-400 font-medium">{{ $clientes->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -268,8 +267,8 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="flex items-center">
                                             <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                                <img class="rounded-full" src="../images/user-40-01.jpg"
-                                                    width="40" height="40" alt="User 01" />
+                                                <img class="rounded-full" src="../images/logo.png" width="40"
+                                                    height="40" alt="User 01" />
                                             </div>
                                             <div class="font-medium text-slate-800">{{ $cliente->razon_social }}
                                             </div>

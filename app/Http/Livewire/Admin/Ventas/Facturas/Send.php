@@ -20,14 +20,14 @@ class Send extends Component
         'modalOpenSend' => 'openModal'
     ];
 
-    public function resetPropiedades(){
+    public function resetPropiedades()
+    {
 
         $this->reset('from');
         $this->reset('to');
         $this->reset('asunto');
         $this->reset('body');
         $this->reset('factura');
-
     }
 
 
@@ -37,24 +37,24 @@ class Send extends Component
     }
 
 
-    public function openModal(Facturas $factura){
-       // dd($factura);
+    public function openModal(Facturas $factura)
+    {
+        // dd($factura);
         $this->modalOpenSend = true;
         $this->factura = $factura;
-        $this->to = $factura->clientes->email." | ".$factura->clientes->razon_social;
-        $this->asunto = "TALENTUS - FACTURA ".$factura->serie."-".$factura->numero;
-
+        $this->to = $factura->clientes->email . " | " . $factura->clientes->razon_social;
+        $this->asunto = "TALENTUS - FACTURA " . $factura->serie_numero;
     }
 
     public function closeModal()
     {
         $this->modalOpenSend = false;
         $this->resetPropiedades();
-
     }
 
 
-    public function sendFactura(){
+    public function sendFactura()
+    {
 
 
         $data = array(
@@ -67,19 +67,14 @@ class Send extends Component
 
             $pdfFactura = new FacturaPdfController();
             $pdfFactura->sendToMail($this->factura, $data);
-
-
         } catch (Exception $e) {
             dd($e);
             $e->getMessage();
-
-        }finally{
+        } finally {
 
             $this->modalOpenSend = false;
             $this->dispatchBrowserEvent('factura-send', ['factura' => $this->factura]);
             $this->resetPropiedades();
-
         }
-
     }
 }

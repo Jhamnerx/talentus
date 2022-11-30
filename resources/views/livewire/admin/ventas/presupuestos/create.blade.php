@@ -27,12 +27,10 @@
                     </div>
                     <span>Active</span>
                 </li>
-
             </ul>
         </div>
     </div>
     <!-- Code block ends -->
-
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
 
@@ -41,19 +39,14 @@
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2">
-
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                             <div>Cliente <span class="text-sm text-red-500"> * </span></div>
                         </label>
-
-
                         <div class="flex" wire:ignore>
                             <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
                                 required>
-
                             </select>
-
 
                             @livewire('admin.clientes.button-open-modal')
 
@@ -72,7 +65,6 @@
                             <div>Número de Presupuesto <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="relative">
-
                             <input required wire:model="numero" name="numero" id="numero"
                                 class="form-input w-full md:w-2/4" type="text" />
 
@@ -90,7 +82,6 @@
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                             <div>Fecha presupuesto <span class="text-sm text-red-500"> * </span></div>
-                            <!---->
                         </label>
                         <div class="relative">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -120,7 +111,6 @@
                             <div>Fecha de caducidad <span class="text-sm text-red-500" style="display: none;"> *
                                 </span>
                             </div>
-                            <!---->
                         </label>
                         <div class="relative">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -134,8 +124,6 @@
                             <input name="fecha_caducidad" type="text" wire:model="fecha_caducidad"
                                 class="form-input fechaFinPresupuesto font-base pl-8 py-2  block w-full sm:text-sm border-gray-200 rounded-md text-black input"
                                 placeholder="Selecciona la fecha">
-
-
                         </div>
                         @error('fecha_caducidad')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -143,7 +131,6 @@
                             </p>
                         @enderror
                     </div>
-
                 </div>
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6 gap-2">
@@ -153,8 +140,6 @@
                             <span class="text-rose-500">*</span> </label>
 
                         <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
-
-
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -183,7 +168,6 @@
                 </div>
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
-
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
                         <div class="col-span-2 sm:col-span-1">
                             <div class="flex btnAddProducto" wire:ignore>
@@ -207,10 +191,7 @@
 
                         </div>
                     </div>
-
-
                     {{-- LISTA DE PRODUCTOS --}}
-
                     <div class="overflow-x-auto">
                         <table class="w-full">
                             <!-- Table header -->
@@ -243,9 +224,6 @@
                             <!-- Table body -->
                             <tbody class="text-sm divide-y divide-slate-200 listaItems">
                                 <!-- Row -->
-                                {{ json_encode($items) }}
-                                {{ json_encode($errors->all()) }}
-
                                 <tr class="main bg-slate-50">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <textarea wire:model="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
@@ -313,13 +291,8 @@
                                     </p>
                                 </tr>
 
-
-
                                 {{-- fila para añadir --}}
-
                                 @if ($items->count() > 0)
-
-
                                     @foreach ($items->all() as $clave => $item)
                                         <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -334,7 +307,6 @@
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
-                                                    
                                                 </textarea>
 
                                             </td>
@@ -391,7 +363,6 @@
                         </table>
                     </div>
 
-
                     <div class="flex">
                         <div
                             class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2 {{ $ConvertirSoles ? '' : 'hidden' }}">
@@ -443,10 +414,8 @@
                                     <div class="text-gray-800 text-sm">{{ $simbolo }}
                                         <span>{{ number_format($impuesto, 2) }}</span>
                                     </div>
-
                                 </div>
                             </div>
-
                             <div class="py-2 border-t border-b">
                                 <div class="flex justify-between">
                                     <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total
@@ -462,7 +431,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="px-4 py-3 text-right sm:px-6">
                 <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
                     wire:click.prevent="save">Guardar</button>
@@ -480,13 +448,6 @@
         $("#money").maskMoney({
             'thousands': '.'
         });
-
-        // FUNCION PARA CAMBIAR DATOS Y DIVISA
-        function cambiarDivisa(e) {
-
-            calculate_totales(e)
-
-        };
 
         $(document).ready(function() {
 
@@ -512,7 +473,6 @@
             });
         })
 
-
         $('.clientes_id').select2({
             placeholder: 'Buscar Cliente',
             language: "es",
@@ -534,12 +494,10 @@
                         obj.id = obj.id || obj.value;
                         obj.text = obj.data;
                         return obj;
-
                     });
                     return {
                         results: suggestions,
                     };
-
                 },
             }
         });
@@ -558,28 +516,24 @@
             placeholder: 'Añadir Artículo',
             language: "es",
             width: '100%',
-
             ajax: {
                 url: '{{ route('search.productos') }}',
                 dataType: 'json',
                 delay: 250,
                 cache: true,
                 data: function(params) {
-
                     var query = {
                         term: params.term,
                     }
                     return query;
                 },
                 processResults: function(data, params) {
-
                     var suggestions = $.map(data.suggestions, function(obj) {
 
                         obj.id = obj.id || obj.data;
                         obj.text = obj.value;
 
                         return obj;
-
                     });
                     return {
                         results: suggestions,
@@ -591,16 +545,6 @@
             }
         });
 
-
-        function eliminarDetalle(indice) {
-            detalles = detalles - 1;
-            let divisa = $(".divisa option:selected").val();
-            $("#fila" + indice).remove();
-            calculate_total(divisa);
-        }
-
-
-
         function addAlert() {
             iziToast.success({
                 position: 'topRight',
@@ -608,5 +552,12 @@
                 message: 'Se añadio un producto al presupuesto',
             });
         }
+    </script>
+
+    <script>
+        window.addEventListener('add-producto', event => {
+            addAlert();
+            $('.productoSelect').val(null).trigger('change');
+        })
     </script>
 @endsection

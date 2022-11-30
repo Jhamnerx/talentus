@@ -17,29 +17,27 @@ class EnviarMensaje extends Notification implements ShouldQueue
 
     public function __construct($mensaje)
     {
-  
+
         $this->mensaje = $mensaje;
     }
 
 
     public function via($notifiable)
     {
-        return ['mail', 'database', 'broadcast'];
-
+        return ['database', 'broadcast'];
     }
 
     public function toMail($notifiable)
     {
 
         return (new MailMessage)
-                ->subject('TALENTUS NOTIFICACION')
-                ->view('mail.notificacion', ['mensaje' => $this->mensaje]);
-   
+            ->subject('TALENTUS NOTIFICACION')
+            ->view('mail.notificacion', ['mensaje' => $this->mensaje]);
     }
 
     public function toDatabase($notifiable)
     {
-     
+
         return [
             'url' => route($this->mensaje["url"], $this->mensaje["id_certificado"]),
             'asunto' => $this->mensaje["asunto"],
@@ -50,10 +48,10 @@ class EnviarMensaje extends Notification implements ShouldQueue
     }
 
 
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
 
         return new BroadcastMessage([]);
-
     }
 
     // public function withDelay($notifiable)

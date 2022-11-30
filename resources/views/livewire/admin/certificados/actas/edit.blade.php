@@ -218,12 +218,8 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="">
-                                        {{-- <option value="">Selecciona una Ciudad:</option>
-                                        @foreach ($ciudades as $ciudad)
-                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{-- @endforeach --}}
+                                    <select class="form-input w-full pl-9 ciudadesEdit" name="ciudades_id"
+                                        id="ciudades_edit">
                                     </select>
 
 
@@ -257,6 +253,29 @@
                                         {{ $message }}
                                     </p>
                                 @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="plataforma">Plataforma: <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="flex flex-wrap items-center">
+
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model="plataforma" value="basica" />
+                                            <span class="text-sm ml-2">Basica</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model="plataforma" value="premium" />
+                                            <span class="text-sm ml-2">Premium</span>
+                                        </label>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 
@@ -351,7 +370,7 @@
 
                 }
             });
-            $('.ciudades').select2({
+            $('.ciudadesEdit').select2({
                 placeholder: '    Selecciona una ciudad',
                 language: "es",
                 width: '100%',
@@ -403,7 +422,7 @@
             });
 
 
-            $('.ciudades').on('select2:select', function(e) {
+            $('.ciudadesEdit').on('select2:select', function(e) {
                 var data = e.params.data;
                 //console.log(data.id);
                 @this.set('ciudades_id', data.id)
@@ -423,7 +442,7 @@
                 // ESTABLECER LA CIUDAD EN EDITAR
                 var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
 
-                $('.ciudades').append(ciudad).trigger('change');
+                $('.ciudadesEdit').append(ciudad).trigger('change');
                 // $('.ciudades').append(ciudad).trigger('change');
             })
         </script>

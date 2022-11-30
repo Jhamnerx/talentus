@@ -7,70 +7,93 @@ use Illuminate\Validation\Rule;
 
 class FacturasRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
+
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+
+    public function rules($factura = null)
     {
-        //dd(Rule::unique('facturas', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))));
-        $factura = $this->route()->parameter('factura');
-       // dd($factura);
         $rules = [
             'clientes_id' => 'required',
-            'numero' => ['required', Rule::unique('facturas', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))],
-            'fecha_emision' => 'required',
-            'fecha_vencimiento' => 'required',
+            'serie_numero' => [
+                'required', Rule::unique('facturas', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+            ],
+            'serie' => 'required',
+            'numero' => 'required',
+            'fecha_emision' => 'required|date',
+            'fecha_vencimiento' => 'required|date',
             'divisa' => 'required',
-            'tipo_pago' => 'required',
-            'subtotal' => 'required',
+            'forma_pago' => 'required',
+            'sub_total' => 'required',
             'impuesto' => 'required',
             'total' => 'required',
+            'tipo_venta' => 'required',
+            'numero_cuotas' => 'exclude_unless:tipo_venta,CREDITO|integer|required_if:tipo_venta,CREDITO|min:1',
+            'detalle_cuotas.*' => 'array|between:1,100|required_if:tipo_venta,CREDITO',
+            'vence_cuotas' => 'exclude_unless:tipo_venta,CREDITO|integer|required_if:tipo_venta,CREDITO|min:1',
+            'adelanto' => 'exclude_unless:tipo_venta,CREDITO|required_if:tipo_venta,CREDITO',
+            'nota' => 'nullable',
+            'items' => 'array|between:1,100',
+            'items.*.producto_id' => 'required',
             'items.*.producto' => 'required',
-            'items.*.cantidad' => 'required',
+            'items.*.descripcion' => 'nullable',
+            'items.*.igv' => 'required',
+            'items.*.cantidad' => 'required|gte:1',
             'items.*.precio' => 'required',
-            'items.*.importe' => 'required',
+            'items.*.total' => 'required',
         ];
+
         if ($factura) {
 
+            $rules['serie_numero'] = [
+                'required',
+                Rule::unique('facturas', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                    ->ignore($factura->id),
 
-            //$rules['numero'] = 'required|unique:facturas,numero,' . $factura->id;
-            $rules['numero'] = ['required', Rule::unique('facturas', 'numero')->ignore($factura->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))];
-
+            ];
         }
 
         return $rules;
     }
 
-        public function messages()
+    public function messages()
     {
 
         $messages = [
-
             'clientes_id.required' => 'Debes Seleccionar un Cliente',
-            'numero.required' => 'Debes Ingresar un numero',
-            'numero.unique' => 'Este número ya esta registrado',
+            'serie_numero.required' => 'La serie y numero son requeridos',
+            'serie_numero.unique' => 'Esta serie y numero ya existe',
+            'serie.required' => 'Ingresa la serie',
+            'numero.required' => 'Ingresa el numero',
             'fecha_emision.required' => 'Selecciona una fecha',
-            'fecha_vencimiento.required' => 'Selecciona una fecha',
+            'fecha.date' => 'El campo debe ser una fecha',
+            'fecha_vencimiento.required' => 'Selecciona una fecha de vencimiento',
+            'fecha_vencimiento.date' => 'El campo debe ser una fecha',
             'divisa.required' => 'Debe seleccionar una divisa',
-            'tipo_pago.required' => 'Debe seleccionar una divisa',
-            'subtotal.required' => 'No se encontro el subtotal',
-            'impuesto.required' => 'No se encontro el impuesto',
-            'total.required' => 'No se encontro el total',
+            'forma_pago.required' => 'Selecciona una forma de pago',
+            'sub_total.required' => 'Error al calcular el sub total',
+            'impuesto.required' => 'Error al calcular el impuesto',
+            'total.required' => 'Error al calcular el total',
+            'tipo_venta.required' => 'Selecciona una opción',
+            'numero_cuotas.integer' => 'Ingresa un valor numerico',
+            'numero_cuotas.min' => 'Ingresa un valor mayor a 0 de cuotas',
+            'numero_cuotas.required_if' => 'Ingresa el numero de cuotas',
+            'detalle_cuotas.*.required_if' => 'No se pudo obtener el detalle de cuotas',
+            'detalle_cuotas.between' => 'Ingresa como minimo 1 cuota',
+            'vence_cuotas.required_if' => 'Ingresa el periodo de dias',
+            'vence_cuotas.integer' => 'Ingresa un valor numerico',
+            'vence_cuotas.min' => 'Ingresa un valor mayor a 0',
+
             'items.*.producto.required' => 'Ingresa el producto',
             'items.*.cantidad.required' => 'Ingresa la cantidad',
+            'items.*.cantidad.gte' => 'Ingresa como minimo 1',
             'items.*.precio.required' => 'Ingresa un precio',
+            'items.*.total.required' => 'Ingresa un precio',
+            'items.array' => 'Ingresa como minimo un producto',
+            'items.between' => 'Ingresa como minimo un producto'
         ];
 
         return $messages;

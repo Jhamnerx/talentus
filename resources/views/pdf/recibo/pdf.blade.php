@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>RECIBO #{{ $recibo->serie . '-' . $recibo->numero }}</title>
+    <title>RECIBO #{{ $recibo->serie_numero }}</title>
 
 
     {{-- <link rel="stylesheet" href="{{ ltrim(public_path('factura/normalize.css'), '/') }}" />
@@ -132,11 +132,11 @@
                             </td>
                             <td>
                                 Fecha Emisión:<br>
-                                <strong>{{ $recibo->fecha->format('d/m/Y') }}</strong>
+                                <strong>{{ $recibo->fecha_emision->format('d/m/Y') }}</strong>
                             </td>
                             <td>
                                 Recibo #:<br>
-                                <strong>{{ $recibo->serie . '-' . $recibo->numero }}</strong>
+                                <strong>{{ $recibo->serie_numero }}</strong>
                             </td>
                         </tr>
                     </tbody>
@@ -186,27 +186,36 @@
                 <table>
                     <thead>
                         <tr>
-                            <th><strong>Metodos de Pago:</strong> Cheque,<br>
-                                BCP, Continental...</th>
+                            <th><strong>Metodos de Pago:</strong> </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <p><strong>administracion@talentustechnology.com</strong></p>
+                                <p><strong>SCOTIABANK SOLES: </strong>7070011536</p>
                             </td>
                         </tr>
                         <tr>
+
                             <td>
-                                <p>
-                                    <br>
-                                    Calle Santa María Nº 209.
-                                    <br>
-                                    Cajamarca,<br>
-                                    Perú
-                                </p>
+                                <p><strong>CONTINENTAL: </strong>001102490201872132</p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p><strong>CONTINENTAL USD: </strong>001102490201872140</p>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p><strong>INTERBANK: </strong>7673256919822</p>
                             </td>
                         </tr>
+                    </tbody>
 
                     </tbody>
                 </table>

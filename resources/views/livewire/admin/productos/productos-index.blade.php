@@ -22,12 +22,12 @@
             </div>
 
             <!-- Search form -->
-            <form class="relative">
+            <form class="relative" autocomplete="off">
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model='search' class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Productos" />
 
-                <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
+                <button class="absolute inset-0 right-auto group" type="button" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -72,7 +72,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total Productos.
-                <span class="text-slate-400 font-medium">{{ $productos->count() }}</span>
+                <span class="text-slate-400 font-medium">{{ $productos->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -92,19 +92,22 @@
                                     </label>
                                 </div>
                             </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <span class="sr-only">Favorito</span>
                             </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Codigo</div>
                             </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Unidad Medida</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Nombre</div>
                             </th>
-                            <th></th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Categoria</div>
                             </th>
@@ -142,6 +145,7 @@
                                             </label>
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="flex items-center relative">
                                             <button>
@@ -157,10 +161,12 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left font-medium text-sky-500">#{{ $producto->codigo }}</div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left font-medium text-slate-900">{{ $producto->unit->name }}
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="flex items-center">
                                             @if ($producto->image)
@@ -183,10 +189,12 @@
                                             </a>
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left font-medium text-emerald-500">${{ $producto->precio }}
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         @php
                                             $pr = ' Unidades';
@@ -197,9 +205,11 @@
                                             {{ $producto->tipo == 'producto' ? $producto->stock . $pr : $serv }}
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                                         <div class="text-left">{{ $producto->descripcion }}</div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>
                                             <div class="m-3 ">
@@ -210,6 +220,7 @@
                                             </div>
                                         </div>
                                     </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="space-x-1">
 

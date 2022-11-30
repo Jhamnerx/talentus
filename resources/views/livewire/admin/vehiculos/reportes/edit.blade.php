@@ -1,11 +1,6 @@
 <div>
-
-    <!-- Basic Modal -->
-    <!-- Start -->
     <div x-data="{ modalEdit: @entangle('openModalEdit') }">
 
-
-        <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
@@ -177,7 +172,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
+                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="5"
                                         placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

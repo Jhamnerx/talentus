@@ -27,38 +27,6 @@
                 </button>
             </form>
 
-
-
-
-            <!-- Add  button -->
-            {{-- <a href="{{route('admin.almacen.lineas.create')}}">
-                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Añadir Linea</span>
-                </button>
-            </a> --}}
-
-
-
-
-
-            {{-- @livewire('admin.lineas.asign-lineas') --}}
-            {{-- <a href="{{route('admin.asign.lineas')}}">
-                <button
-                    class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
-                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Asignar Linea</span>
-                </button>
-            </a> --}}
-
-
-
         </div>
 
     </div>
@@ -196,7 +164,7 @@
             </div>
         </div>
         <!-- Left side -->
-        {{ $operador }}
+
         <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
@@ -205,7 +173,7 @@
                         @click="clickeado = 0"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
                         Todas
-                        <span class="ml-1 text-indigo-200">0</span></button>
+                    </button>
                 </li>
                 <li class="m-1">
                     <button wire:click="operador('claro')"
@@ -213,7 +181,7 @@
                         @click="clickeado = 1"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
                         Claro
-                        <span class="ml-1 text-slate-400">0</span></button>
+                    </button>
                 </li>
                 <li class="m-1">
                     <button wire:click="operador('entel')"
@@ -221,7 +189,7 @@
                         @click="clickeado = 2"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
                         Entel
-                        <span class="ml-1 text-slate-400">0</span></button>
+                    </button>
                 </li>
                 <li class="m-1">
                     <button wire:click="operador('movistar')"
@@ -229,7 +197,7 @@
                         @click="clickeado = 3"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
                         Movistar
-                        <span class="ml-1 text-slate-400">0</span></button>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -239,13 +207,13 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total lineas <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $lineas->total() }}</span>
             </h2>
 
         </header>
         <div x-data="handleSelect">
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
@@ -351,7 +319,7 @@
                                         @if (!empty($linea->sim_card))
                                             <div class="text-left font-medium text-slate-800">
                                                 @if (!empty($linea->sim_card->vehiculos))
-                                                    {{ $linea->sim_card->vehiculos->flotas->clientes->razon_social }}
+                                                    {{ $linea->sim_card->vehiculos->cliente->razon_social }}
                                                 @endif
                                             </div>
                                         @else
@@ -377,13 +345,13 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if ($linea->date_to_suspend)
+
+                                        @if ($linea->estado->name == 'SUSPENDIDA')
                                             <div class="font-medium text-red-500">
                                                 @php
-                                                    
                                                     $dias = $linea->now->diffInDays($linea->date_to_suspend);
-                                                    
                                                 @endphp
+
                                                 Suspendido <br>
 
                                                 @if ($dias > 0)
@@ -392,19 +360,18 @@
                                                     -
                                                 @endif
 
-
                                             </div>
                                         @else
                                             <div class="font-medium text-emerald-500">
-                                                Activa
+                                                {{ $linea->estado->name }}
                                             </div>
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                        <div class="text-left font-medium text-slate-800">{{ $linea->old_sim_card }}
+                                        <div class="text-left font-medium text-slate-800">
+                                            {{ $linea->old_sim_card }}
                                         </div>
-
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
@@ -506,10 +473,6 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-
-
-
-
                                                     </ul>
 
 
@@ -520,18 +483,13 @@
 
                                     </td>
 
-
-
                                 </tr>
                             @endforeach
                         @else
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         @endif
-
-
-
 
                     </tbody>
                 </table>
@@ -539,11 +497,9 @@
             </div>
         </div>
     </div>
-
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $lineas->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
 
     </div>
 </div>

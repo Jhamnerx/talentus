@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\Certificados\EnviarCertificadoVelocimetroCliente;
 use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
 use Database\Factories\CertificadosVelocimetrosFactory;
@@ -19,9 +20,9 @@ class CertificadosVelocimetros extends Model
         return CertificadosVelocimetrosFactory::new();
     }
 
-
     use HasFactory;
     use SoftDeletes;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados_velocimetros';
 
@@ -32,12 +33,11 @@ class CertificadosVelocimetros extends Model
     ];
 
     //Relacion uno a muchos inversa
-
-
-    public function vehiculos()
+    public function vehiculo()
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
     }
+
     public function ciudades()
     {
         return $this->belongsTo(Ciudades::class, 'ciudades_id')->withoutGlobalScope(EliminadoScope::class);
@@ -66,10 +66,25 @@ class CertificadosVelocimetros extends Model
 
         $pdf = PDF::loadView('pdf.certificado-velocimetro');
 
-        return $pdf->stream('CERTIFICADO VELOCIMETRO-' . $this->vehiculos->placa . ' ' . $this->codigo . '.pdf');
+        return $pdf->stream('CERTIFICADO VELOCIMETRO-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
+    }
+
+    public function getPDFDataToMail($data)
+    {
+        $plantilla = plantilla::first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+
+        view()->share([
+            'certificado' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'sello' => $sello,
+        ]);
 
 
-        //return $pdf;
-        //return view('pdf.acta');
+        $pdf = PDF::loadView('pdf.certificado-velocimetro');
+
+        $this->vehiculo->cliente->notify(new EnviarCertificadoVelocimetroCliente($this, $pdf, $data));
     }
 }

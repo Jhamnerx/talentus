@@ -20,7 +20,7 @@ class CreateFacturasTable extends Migration
             $table->date('fecha_emision');
             $table->string('divisa');
             $table->decimal('subtotal', 10, 2);
-            $table->decimal('impuesto', 10, 2);
+            $table->decimal('impuesto', 10, 2)->nullable();
             $table->decimal('total', 10, 2);
             $table->string('nota')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();

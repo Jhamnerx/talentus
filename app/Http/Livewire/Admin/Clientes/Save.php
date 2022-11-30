@@ -39,8 +39,12 @@ class Save extends Component
             'razon_social' => 'required',
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable',
-            'numero_documento' => Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
-            'numero_documento' => 'required|digits_between:8,11|numeric',
+            'numero_documento' => [
+                'required',
+                'digits_between:8,11',
+                'numeric',
+                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+            ],
         ];
     }
 
@@ -97,12 +101,13 @@ class Save extends Component
 
     public function updated($value)
     {
-        $this->validateOnly($value);
+        $this->validateOnly($value, $this->rules());
     }
 
     public function closeModal()
     {
         $this->modalSave = false;
+        $this->reset('numero_documento', 'razon_social', 'telefono', 'direccion', 'web_site');
     }
 
     public function openModalSaveCliente()

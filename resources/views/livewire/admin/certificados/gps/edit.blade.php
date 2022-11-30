@@ -218,13 +218,9 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="">
-                                        {{-- <option value="">Selecciona una Ciudad:</option>
-                                        @foreach ($ciudades as $ciudad)
-                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{--
-                                        @endforeach --}}
+                                    <select class="form-input w-full pl-9 ciudadesEdit" name="ciudades_id"
+                                        id="ciudades_edit">
+
                                     </select>
 
 
@@ -386,8 +382,8 @@
 
                 }
             });
-            $('.ciudades').select2({
-                placeholder: '    Selecciona una ciudad',
+            $('.ciudadesEdit').select2({
+                placeholder: 'Selecciona una ciudad',
                 language: "es",
                 selectionCssClass: 'pl-9',
                 width: '100%',
@@ -438,7 +434,7 @@
             });
 
 
-            $('.ciudades').on('select2:select', function(e) {
+            $('.ciudadesEdit').on('select2:select', function(e) {
                 var data = e.params.data;
                 //console.log(data.id);
                 @this.set('ciudades_id', data.id)
@@ -458,8 +454,7 @@
                 // ESTABLECER LA CIUDAD EN EDITAR
                 var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
 
-                $('.ciudades').append(ciudad).trigger('change');
-                // $('.ciudades').append(ciudad).trigger('change');
+                $('.ciudadesEdit').append(ciudad).trigger('change');
             })
         </script>
     @endpush

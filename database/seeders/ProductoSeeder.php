@@ -51,7 +51,7 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-            'unit_code' => 'ZZ'
+            'unit_code' => 'NIU'
         ], [
             'codigo' => 'PROD-002',
             'nombre' => 'EQUIPO GPS FMU130',
@@ -61,7 +61,7 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-            'unit_code' => 'ZZ'
+            'unit_code' => 'NIU'
         ], [
             'codigo' => 'PROD-003',
             'nombre' => 'EQUIPO GPS FMC130',
@@ -71,7 +71,7 @@ class ProductoSeeder extends Seeder
             'tipo' => 'producto',
             'categoria_id' => '1',
             'empresa_id' => '1',
-            'unit_code' => 'ZZ'
+            'unit_code' => 'NIU'
         ], [
             'codigo' => 'PROD-004',
             'nombre' => 'INSTALACION EQUIPO GPS',
