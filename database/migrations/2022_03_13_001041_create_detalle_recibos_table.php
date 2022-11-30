@@ -19,6 +19,8 @@ class CreateDetalleRecibosTable extends Migration
             $table->string('producto');
             $table->string('descripcion')->nullable();
             $table->string('descuento_type')->nullable();
+            $table->decimal('descuento', 15, 2)->nullable();
+            $table->decimal('descuento_val', 15, 2)->unsigned()->nullable();
             $table->decimal('cantidad', 15, 2);
             $table->decimal('precio', 15, 2);
             $table->decimal('total', 10, 2);

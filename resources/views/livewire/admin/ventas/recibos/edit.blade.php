@@ -13,7 +13,7 @@
             </button>
         </a>
         <div class="mt-2 md:mt-0">
-            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">EDITAR FACTURA</h4>
+            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">EDITAR RECIBO</h4>
             <ul aria-label="current Status"
                 class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
                 <li class="flex items-center mr-4">
@@ -48,8 +48,8 @@
                         <div class="flex" wire:ignore>
                             <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
                                 required>
-                                <option selected value="{{ $factura->clientes_id }}">
-                                    {{ $factura->clientes->razon_social }}
+                                <option selected value="{{ $recibo->clientes_id }}">
+                                    {{ $recibo->clientes->razon_social }}
                                 </option>
                             </select>
 
@@ -73,7 +73,7 @@
                     <div class="col-span-12 xs:col-span-6 mb-2">
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Serie Factura <span class="text-sm text-red-500"> * </span></div>
+                            <div>Serie Recibo <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="relative">
 
@@ -91,7 +91,7 @@
                     <div class="col-span-12 xs:col-span-6 mb-2">
                         <label
                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Número Factura <span class="text-sm text-red-500"> * </span></div>
+                            <div>Número Recibo <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="relative">
 
@@ -149,11 +149,11 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_vencimiento" wire:model="fecha_vencimiento" type="text"
+                            <input name="fecha_pago" wire:model="fecha_pago" type="text"
                                 class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
                                 placeholder="Selecciona la fecha">
                         </div>
-                        @error('fecha_vencimiento')
+                        @error('fecha_pago')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                 {{ $message }}
                             </p>
@@ -245,12 +245,6 @@
 
                 </div>
 
-                {{-- componente venta al credito --}}
-                <div class="grid grid-cols-12 col-span-12">
-
-                    <x-admin.ventas.facturas.table-credito :cuotas="$detalle_cuotas"></x-admin.ventas.facturas.table-credito>
-                </div>
-
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
@@ -285,23 +279,6 @@
                     <div class="flex">
                         {{-- DIV PARA SUB Y TOTALES --}}
                         <div class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2">
-                            <div class="flex justify-between mb-3">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Sub Total</div>
-                                <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ number_format($sub_total, 2) }}</span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="flex justify-between mb-4">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
-                                <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ number_format($impuesto, 2) }}</span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="py-2 border-t border-b">
                                 <div class="flex justify-between">
                                     <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total
@@ -313,19 +290,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @if ($showCredit)
-                                <div class="py-2 border-t border-b">
-                                    <div class="flex justify-between">
-                                        <div class="text-gray-900 text-right flex-1 font-medium text-sm">
-                                            Adelanto
-                                        </div>
-                                        <div class="text-right w-40 px-3">
-                                            <input type="text" class="form-input w-full" wire:model='adelanto'>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
-
                         </div>
                     </div>
 
@@ -333,7 +297,7 @@
             </div>
             <div class="px-4 py-3 text-right sm:px-6">
                 <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
-                    wire:click.prevent="actualizarFactura">Actualizar</button>
+                    wire:click.prevent="actualizarRecibo">Actualizar</button>
             </div>
 
         </div>
@@ -442,7 +406,7 @@
             iziToast.success({
                 position: 'topRight',
                 title: 'AGREGADO',
-                message: 'Se añadio un producto a la factura',
+                message: 'Se añadio un producto al recibo',
             });
         }
     </script>
@@ -452,6 +416,7 @@
             $('.clientes_id').val(null).trigger('change');
 
         })
+
         window.addEventListener('add-producto', event => {
 
             addAlert();

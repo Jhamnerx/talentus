@@ -25,7 +25,7 @@ class RecibosController extends Controller
     public static function setNextSequenceNumber()
     {
         $plantilla = plantilla::first();
-        $id = IdGenerator::generate(['table' => 'recibos', 'field' => 'numero', 'length' => 9, 'prefix' => $plantilla->series["recibo"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
+        $id = IdGenerator::generate(['table' => 'recibos', 'field' => 'serie_numero', 'length' => 9, 'prefix' => $plantilla->series["recibo"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => false]);
         return $id;
     }
 

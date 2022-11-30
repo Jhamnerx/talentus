@@ -6,6 +6,7 @@ use App\Models\Recibos;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class RecibosIndex extends Component
 {
     use WithPagination;
@@ -21,7 +22,7 @@ class RecibosIndex extends Component
     protected $listeners = [
         'render'
     ];
-    
+
     public function render()
     {
 
@@ -31,8 +32,10 @@ class RecibosIndex extends Component
         $recibos = Recibos::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
         })->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
+            ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+            ->orWhere('serie', 'like', '%' . $this->search . '%')
+            ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+            ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
             ->orWhere('divisa', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
@@ -41,7 +44,7 @@ class RecibosIndex extends Component
 
         $pagadas = Recibos::where('pago_estado', 'PAID')->count();
         $vencidas = Recibos::where('pago_estado', 'UNPAID')->count();
-    
+
         $total = Recibos::all()->count();
 
         $totales = [
@@ -52,7 +55,7 @@ class RecibosIndex extends Component
 
         $estado = $this->status;
 
-        if($estado != null){
+        if ($estado != null) {
 
             $recibos = Recibos::Where('pago_estado', $estado)->paginate(10);
         }
@@ -113,13 +116,14 @@ class RecibosIndex extends Component
     {
         $this->status = $status;
         // $this->render();
-        
+
     }
     public function updatingSearch()
     {
         $this->resetPage();
     }
-    public function markPaid(Recibos $recibo){
+    public function markPaid(Recibos $recibo)
+    {
 
         $recibo->update([
             'estado' => 'COMPLETADO',
@@ -129,7 +133,8 @@ class RecibosIndex extends Component
 
         $this->render();
     }
-    public function markUnPaid(Recibos $recibo){
+    public function markUnPaid(Recibos $recibo)
+    {
 
         $recibo->update([
             'pago_estado' => 'UNPAID',
@@ -138,23 +143,23 @@ class RecibosIndex extends Component
         $this->render();
     }
 
-    public function OpenModalReporte(){
+    public function OpenModalReporte()
+    {
 
         $this->openModalReporte = true;
         $this->emit('openModalReporte');
-
     }
 
-    public function modalOpenSend(Recibos $recibo){
+    public function modalOpenSend(Recibos $recibo)
+    {
 
 
         $this->emit('modalOpenSend', $recibo);
-
     }
-    public function openModalDelete(Recibos $recibo){
+    public function openModalDelete(Recibos $recibo)
+    {
         //dd($presupuesto);
         $this->emit('openModalDelete', $recibo);
         $this->openModalDelete = true;
-
     }
 }

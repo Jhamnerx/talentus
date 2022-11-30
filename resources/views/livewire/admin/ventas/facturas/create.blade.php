@@ -281,9 +281,6 @@
                         </div>
                     </div>
 
-                    {{ json_encode($errors->all()) }}
-                    <br>
-                    {{ json_encode($items->all()) }}
                     {{-- LISTA DE PRODUCTOS --}}
                     <x-admin.ventas.tabla-detalle-venta :items="$items">
 
@@ -452,7 +449,7 @@
             iziToast.success({
                 position: 'topRight',
                 title: 'AGREGADO',
-                message: 'Se añadio un producto al presupuesto',
+                message: 'Se añadio un producto a la factura',
             });
         }
     </script>
@@ -460,6 +457,11 @@
         window.addEventListener('unselect-cliente', event => {
 
             $('.clientes_id').val(null).trigger('change');
+
+        })
+        window.addEventListener('add-producto', event => {
+
+            addAlert();
 
         })
     </script>

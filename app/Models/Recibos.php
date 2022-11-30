@@ -28,7 +28,7 @@ class Recibos extends Model
     protected $casts = [
         'numero' => 'string',
         'sequence_number' => 'integer',
-        'fecha' => 'date:Y/m/d',
+        'fecha_emision' => 'date:Y/m/d',
         'fecha_pago' => 'date:Y/m/d',
     ];
     protected $guarded = ['id', 'created_at', 'updated_at'];
