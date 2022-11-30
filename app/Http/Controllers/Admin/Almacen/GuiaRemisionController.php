@@ -19,8 +19,8 @@ class GuiaRemisionController extends Controller
 
     public function create()
     {
-        $motivos = MotivosTraslado::pluck('descripcion', 'codigo');
-        return view('admin.almacen.guias.create', compact('motivos'));
+
+        return view('admin.almacen.guias.create');
     }
 
 

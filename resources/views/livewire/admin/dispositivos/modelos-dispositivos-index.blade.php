@@ -217,7 +217,20 @@
             });
         </script>
     @endif
+    <script>
+        window.addEventListener('update-modelo', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: 'Datos actualizados',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        })
+    </script>
     <script>
         $('#modelo').caseEnforcer('uppercase');
         $('#marca').caseEnforcer('uppercase');

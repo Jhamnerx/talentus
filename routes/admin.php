@@ -73,7 +73,7 @@ Route::controller(LineasController::class)->group(function () {
     Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
     Route::get('disponibles/lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
     Route::get('asign/lineas', 'asignLinea')->name('admin.asign.lineas');
-    Route::get('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+    Route::post('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
 });
 
 
@@ -83,6 +83,9 @@ Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
+
+
+
 Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
