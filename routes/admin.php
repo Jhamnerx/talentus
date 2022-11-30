@@ -47,17 +47,24 @@ Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
 // ALMACEN
 
-Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
-
-
 Route::controller(CategoriaController::class)->group(function () {
 
     Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
-    Route::get('categorias/crear', 'crear')->name('admin.almacen.categorias.create');
-    Route::get('categorias', 'store')->name('admin.almacen.categorias.store');
-    Route::put('categorias/{categoria}')->name('admin.almacen.categorias.update');
+    Route::get('categorias/create', 'create')->name('admin.almacen.categorias.create');
+    Route::post('categorias', 'store')->name('admin.almacen.categorias.store');
+    Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
+    Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
 });
 
+
+Route::controller(ProductosController::class)->group(function () {
+
+    Route::get('productos', 'index')->name('admin.almacen.productos.index');
+    Route::get('productos/create', 'create')->name('admin.almacen.productos.create');
+    Route::post('productos', 'store')->name('admin.almacen.productos.store');
+    Route::get('productos/{producto}/editar', 'edit')->name('admin.almacen.productos.edit');
+    Route::put('productos/{producto}', 'update')->name('admin.almacen.productos.update');
+});
 
 
 Route::controller(LineasController::class)->group(function () {

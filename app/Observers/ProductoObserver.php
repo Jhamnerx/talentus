@@ -73,7 +73,6 @@ class ProductoObserver
      */
     public function deleted(Productos $producto)
     {
-        dd($producto);
         ChangesModels::create([
             'change_id' => $producto->getKey(),
             'change_type' => Productos::class,

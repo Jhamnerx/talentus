@@ -44,12 +44,6 @@ class ProductosController extends Controller
     }
 
 
-    public function show(Productos $productos)
-    {
-        return view('admin.almacen.productos.show');
-    }
-
-
     public function edit(Productos $producto)
     {
         $categorias = Categoria::active(true)->pluck('nombre', 'id');
