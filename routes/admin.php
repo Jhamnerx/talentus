@@ -44,11 +44,20 @@ use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Row;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
+
 // ALMACEN
 
-
-Route::resource('categorias', CategoriaController::class)->names('admin.almacen.categorias');
 Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
+
+
+Route::controller(CategoriaController::class)->group(function () {
+
+    Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
+    Route::get('categorias/crear', 'crear')->name('admin.almacen.categorias.create');
+    Route::get('categorias', 'store')->name('admin.almacen.categorias.store');
+    Route::put('categorias/{categoria}')->name('admin.almacen.categorias.update');
+});
+
 
 
 Route::controller(LineasController::class)->group(function () {

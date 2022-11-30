@@ -6,6 +6,7 @@ use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Vehiculos extends Model
 {
@@ -20,6 +21,13 @@ class Vehiculos extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
+    protected function placa(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => strtoupper($value),
+            set: fn ($value) => strtoupper($value),
+        );
+    }
     // Scope local de activo
     public function scopeActive($query, $status)
     {
