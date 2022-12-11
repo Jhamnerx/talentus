@@ -128,6 +128,13 @@
                             {{ $message }}
                         </p>
                     @enderror
+
+                    @foreach ($errorInfo as $error)
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $error['errores'] }} => {{ $error['values'] }}
+                        </p>
+                    @endforeach
+
                 </div>
 
                 <!-- Modal footer -->

@@ -13,7 +13,6 @@
         </button>
         @if ($payment)
 
-
             <div class="py-8 px-4 lg:px-8">
                 <div class="max-w-sm mx-auto lg:max-w-none">
 

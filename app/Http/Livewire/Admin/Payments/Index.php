@@ -23,12 +23,8 @@ class Index extends Component
         })->orWhere('numero', 'like', '%' . $this->search . '%')->paginate(10);
 
         $total = Payments::all()->sum('monto');
-        //$total = money_format('%(#10n', $montoTotal);
-
         return view('livewire.admin.payments.index', compact('payments', 'total'));
     }
-
-
 
 
     public function openPaymentPanel(Payments $payment)
@@ -43,6 +39,7 @@ class Index extends Component
     {
         $this->PaymentOpen = true;
     }
+
     public function setPaymentClose()
     {
         $this->PaymentOpen = false;

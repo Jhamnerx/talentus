@@ -7,6 +7,7 @@ use App\Models\GuiaRemision;
 use App\Http\Requests\StoreGuiaRemisionRequest;
 use App\Http\Requests\UpdateGuiaRemisionRequest;
 use App\Models\MotivosTraslado;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class GuiaRemisionController extends Controller
 {
@@ -16,18 +17,18 @@ class GuiaRemisionController extends Controller
         return view('admin.almacen.guias.index');
     }
 
+    public function setNextSequenceNumber()
+    {
 
+        $id = IdGenerator::generate(['table' => 'guia_remision', 'field' => 'serie_numero', 'length' => 5, 'prefix' => 'T', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
+        return trim($id);
+    }
     public function create()
     {
 
         return view('admin.almacen.guias.create');
     }
 
-
-    public function store(StoreGuiaRemisionRequest $request)
-    {
-        //
-    }
 
     public function show(GuiaRemision $guiaRemision)
     {
@@ -37,17 +38,5 @@ class GuiaRemisionController extends Controller
     public function edit(GuiaRemision $guiaRemision)
     {
         return view('admin.almacen.guias.edit');
-    }
-
-
-    public function update(UpdateGuiaRemisionRequest $request, GuiaRemision $guiaRemision)
-    {
-        //
-    }
-
-
-    public function destroy(GuiaRemision $guiaRemision)
-    {
-        //
     }
 }

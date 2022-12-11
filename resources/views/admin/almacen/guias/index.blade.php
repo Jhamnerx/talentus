@@ -7,6 +7,7 @@
     @livewire('admin.guias-remision.index')
 
 
+
 @stop
 
 @section('js')
@@ -42,12 +43,12 @@
 
 
     <script>
-        window.addEventListener('factura-delete', event => {
+        window.addEventListener('guia-delete', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Eliminado',
-                    text: 'Factura Eliminada',
+                    text: 'Guia Eliminada',
                     showConfirmButton: true,
                     confirmButtonText: "Cerrar"
 
@@ -56,20 +57,6 @@
         })
     </script>
 
-    <script>
-        window.addEventListener('factura-send', event => {
-            iziToast.show({
-                theme: 'dark',
-                icon: 'far fa-envelope-open',
-                title: 'CORREO ENVIADO',
-                timeout: 1500,
-                message: 'Se ha enviado la cotización ' + event.detail.factura.numero + '-' + event.detail
-                    .factura + '!',
-                position: 'center', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-                progressBarColor: 'rgb(5, 44, 82)'
-            });
-        })
-    </script>
 
     <script>
         // A basic demo function to handle "select all" functionality

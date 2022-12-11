@@ -228,6 +228,8 @@ Route::controller(SearchController::class)->prefix('search')->group(function () 
     Route::get('ciudades', 'ciudades')->name('search.ciudades');
     Route::get('productos', 'productos')->name('search.productos');
     Route::get('facturas', 'facturas')->name('search.facturas');
+    Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
+    Route::get('users', 'users')->name('search.users');
 });
 
 

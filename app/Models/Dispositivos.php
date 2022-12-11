@@ -47,6 +47,15 @@ class Dispositivos extends Model
     }
 
 
+    public static function asignarDispositivos(User $user, $items, GuiaRemision $guia)
+    {
+
+        $user->dispositivos()->attach($items, ['guia_remision_id' => $guia->id]);
+    }
+
+
+
+
     //Relacion uno a muchos inversa
 
     public function modelo()
@@ -60,5 +69,18 @@ class Dispositivos extends Model
     public function certificados()
     {
         return $this->hasMany(Certificados::class, 'dispositivos_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    //relacion many to many dipositivos
+    public function users()
+    {
+        //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
+        return $this->hasOne(DispositivosUsers::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    //relacion many to many guia
+    public function guia()
+    {
+        return $this->belongsToMany(User::class, 'dispositivos_users', 'guia_remision_id', 'imei')->using(DispositivosUsers::class);
     }
 }

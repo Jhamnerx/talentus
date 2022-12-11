@@ -2,12 +2,15 @@
 
 namespace App\Http\Livewire\Admin\Dispositivos;
 
-use App\Imports\DispositivosImport;
-use App\Models\ModelosDispositivo;
 use Exception;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Models\ModelosDispositivo;
+use App\Imports\DispositivosImport;
+use Collator;
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class Import extends Component
 {
@@ -15,7 +18,7 @@ class Import extends Component
     public $file;
     public $modelo;
     public $modalOpen = false;
-    public $errorInfo = null;
+    public Collection $errorInfo;
 
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
@@ -28,6 +31,11 @@ class Import extends Component
         'file.mimes' => 'Debe ser un archivo de Excel',
         'modelo.required' => 'Debe Seleccionar un modelo'
     ];
+
+    public function mount()
+    {
+        $this->errorInfo = collect();
+    }
 
     public function updated($propertyName)
     {
@@ -45,16 +53,42 @@ class Import extends Component
     public function importExcel()
     {
         $this->validate();
-        $this->errorInfo = null;
-
+        //$this->errorInfo = [];
 
         try {
-            Excel::import(new DispositivosImport($this->modelo), $this->file);
+
+            $excel = Excel::import(new DispositivosImport($this->modelo), $this->file);
             $this->modalOpen = false;
             $this->emit('render');
-        } catch (Exception $e) {
+        } catch (ValidationException $e) {;
+            $failures = $e->failures();
+            foreach ($failures as $failure) {
 
-            $this->errorInfo = $e->errorInfo["2"];
+                // $this->errorInfo->push(
+                //     [
+                //         'row' => $failure->row(),
+                //         'attribute' => $failure->attribute(),
+                //         'errors' => $failure->errors(),
+                //         'values' => $failure->values(),
+                //     ]
+                // );
+                $errores = $failure->errors();
+                $values = $failure->values();
+                foreach ($errores as $key => $error) {
+                    foreach ($values as $value) {
+                        $this->errorInfo->push([
+                            'errores' => $error,
+                            'values' => $value,
+                        ]);
+                    }
+                }
+
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values(); // The values of the row that has failed.
+            }
+            ///dd($this->errorInfo);
         }
     }
 }

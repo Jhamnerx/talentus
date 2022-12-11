@@ -100,4 +100,9 @@ class User extends Authenticatable
 
         return $this->hasMany(Payments::class, 'user_id');
     }
+
+    public function dispositivos()
+    {
+        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'user_id', 'imei', null, 'imei');
+    }
 }

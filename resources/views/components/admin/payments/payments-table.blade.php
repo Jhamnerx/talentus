@@ -2,7 +2,7 @@
     <div x-data="handleSelect">
 
         <!-- Table -->
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto min-h-screen">
             <table class="table-auto w-full" @click.stop="$dispatch('transactionOpen', true)">
                 <!-- Table header -->
                 <thead class="text-xs font-semibold uppercase text-slate-500 border-t border-b border-slate-200">

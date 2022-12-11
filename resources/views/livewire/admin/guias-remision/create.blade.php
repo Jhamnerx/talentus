@@ -1,7 +1,7 @@
 <div class="p-6 shadow overflow-hidden sm:rounded-md">
     {!! Form::open([
         'class' => 'formularioGuia',
-        'autocomplete' => 'off',
+        'autocomplete' => 'on',
     ]) !!}
     <div class="px-4 py-2 bg-gray-100 sm:p-6">
 
@@ -48,7 +48,7 @@
                     <div>Fecha Emisión <span class="text-sm text-red-500"> * </span></div>
                 </label>
                 <div class="relative">
-                    <input name="fecha_emision" id="fecha_emision" wire:model='fecha_emision'
+                    <input name="fecha_emision" autocomplete="nope" id="fecha_emision" wire:model='fecha_emision'
                         class="form-input w-full pl-9 py-2 outline-none focus:outline-none rounded-md text-black text-sm fecha_emision"
                         type="text" placeholder="2022-09-28" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -96,11 +96,6 @@
                 </label>
                 <div class="relative">
 
-                    {{-- {!! Form::select('tipo_documento', ['RUC' => 'RUC', 'DNI' => 'DNI'], null, [
-                        'class' => 'form-select w-full pl-9 py-2 text-black text-sm',
-                        '@change' => 'cambiarTipoDocumento($event.target.value)',
-                    ]) !!} --}}
-
                     <select name="tipo_documento" id="tipo_documento" wire:model='tipo_documento'
                         @change="cambiarTipoDocumento($event.target.value)"
                         class="form-select w-full pl-9 py-2 text-black text-sm">
@@ -141,7 +136,8 @@
                 <div class="relative">
                     <input type="text" name="numero_documento" wire:model='numero_documento'
                         class="form-input w-full pl-2 pr-9" placeholder="Ingresa número documento">
-                    <button class="absolute inset-0 left-auto group" type="button" aria-label="Search">
+                    <button class="absolute inset-0 left-auto group" type="button"
+                        wire:click.prevent="searchCliente" aria-label="Search">
                         <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                             viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -151,6 +147,11 @@
                         </svg>
                     </button>
                 </div>
+                @if ($error_msg)
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $error_msg }}
+                    </p>
+                @endif
 
                 @error('numero_documento')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -396,8 +397,8 @@
                         <div>Direccion <span class="text-sm text-red-500"> * </span></div>
                     </label>
 
-                    <input type="text" name="direccion_partida" autocomplete="nope"
-                        wire:model="direccion_partida" class="form-input w-full" placeholder="Direccion de partida">
+                    <input type="text" name="direccion_partida" wire:model="direccion_partida"
+                        class="form-input w-full" placeholder="Direccion de partida">
                     @error('direccion_partida')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}
@@ -410,8 +411,24 @@
                         class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                         <div>Ubigeo <span class="text-sm text-red-500"> * </span></div>
                     </label>
-                    <input type="text" name="ubigeo_partida" autocomplete="nope" wire:model="ubigeo_partida"
-                        class="form-input w-full" placeholder="">
+                    <div class="relative" wire:ignore>
+                        <select name="ubigeo_partida"
+                            class="form-select w-full pl-9 py-2 text-black text-sm ubigeoPartida" id="ubigeo_partida">
+
+                        </select>
+                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+
+                            <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 12 12">
+                                <g fill="currentColor" class="nc-icon-wrapper">
+                                    <path
+                                        d="M11.854.146A.5.5,0,0,0,11.329.03l-11,4a.5.5,0,0,0-.015.934l4.8,1.921,1.921,4.8A.5.5,0,0,0,7.5,12h.008a.5.5,0,0,0,.462-.329l4-11A.5.5,0,0,0,11.854.146Z">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+
 
                     @error('ubigeo_partida')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -450,9 +467,23 @@
                         class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                         <div>Ubigeo <span class="text-sm text-red-500"> * </span></div>
                     </label>
+                    <div class="relative" wire:ignore>
+                        <select name="ubigeo_llegada" autocomplete="nope"
+                            class="form-select w-full pl-9 py-2 text-black text-sm ubigeoLlegada" id="ubigeo_llegada">
 
-                    <input type="text" name="ubigeo_llegada" autocomplete="nope" wire:model="ubigeo_llegada"
-                        class="form-input w-full" placeholder="">
+                        </select>
+                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+
+                            <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 12 12">
+                                <g fill="currentColor" class="nc-icon-wrapper">
+                                    <path
+                                        d="M11.854.146A.5.5,0,0,0,11.329.03l-11,4a.5.5,0,0,0-.015.934l4.8,1.921,1.921,4.8A.5.5,0,0,0,7.5,12h.008a.5.5,0,0,0,.462-.329l4-11A.5.5,0,0,0,11.854.146Z">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
                     @error('ubigeo_llegada')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}
@@ -471,12 +502,12 @@
         </div>
 
         <div class="grid grid-cols-12 gap-4 mb-3">
-            <div class="col-span-12 sm:col-span-4 mb-2">
+            <div class="col-span-12 sm:col-span-6 mb-2">
                 <label
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Serie Correlativo <span class="text-sm text-red-500"> * </span></div>
                 </label>
-                <div class="relative">
+                <div class="relative" wire:ignore>
 
                     <select name="factura_id" wire:model='factura_id'
                         class="form-select w-full pl-9 py-2 text-black text-sm facturasSelect" id="factura_id">
@@ -504,7 +535,7 @@
                     </p>
                 @enderror
             </div>
-            <div class="col-span-12 sm:col-span-4 mb-2">
+            <div class="col-span-12  {{ $asignarTecnico ? 'sm:col-span-3' : 'sm:col-span-6' }} mb-2">
                 <label
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Asignar a Tecnico Instalador? </div>
@@ -528,11 +559,45 @@
 
             </div>
 
+            @if ($asignarTecnico)
+                <div class="col-span-12 sm:col-span-3 mb-2">
+                    <label
+                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                        <div>Tecnico <span class="text-sm text-red-500"> * </span></div>
+                    </label>
+                    <div class="relative" wire:ignore>
+
+                        <select name="user_id" class="form-select w-full pl-9 py-2 text-black text-sm userSelect"
+                            id="user_id">
+
+                        </select>
+                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                            <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 48 48">
+                                <g class="nc-icon-wrapper">
+                                    <path
+                                        d="M45.521,39.04,27.527,5.134a3.982,3.982,0,0,0-7.054,0L2.479,39.04a4.056,4.056,0,0,0,.108,4.017A3.967,3.967,0,0,0,6.007,45H41.993a3.967,3.967,0,0,0,3.42-1.943A4.056,4.056,0,0,0,45.521,39.04Z"
+                                        fill="#f7bf26"></path>
+                                    <polygon points="26.286 16 25.143 32.571 22.857 32.571 21.714 16 26.286 16"
+                                        fill="#363636"></polygon>
+                                    <circle cx="24" cy="38" r="3" fill="#363636"></circle>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                    @error('user')
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
+                    @enderror
+                </div>
+            @endif
+
+
         </div>
 
-        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
-
-            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-2 py-2">
+            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2" wire:ignore>
                 <div class="col-span-2 sm:col-span-1">
                     <div class="flex">
                         <button id="productos-button"
@@ -555,227 +620,33 @@
 
                 </div>
             </div>
-
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <!-- Table header -->
-                    <thead
-                        class="text-xs font-semibold uppercase text-white bg-slate-800  border-t border-b border-slate-200">
-                        <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">CODIGO</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">CANTIDAD</div>
-                            </th>
-
-
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">UNI/MEDIDA</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">DESCRIPCION</div>
-                            </th>
-
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Acciones</div>
-                            </th>
-
-                        </tr>
-                    </thead>
-                    <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200 listaItems">
-                        <!-- Row -->
-                        <tr class="main bg-slate-50">
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                <input type="text" class="form-input" placeholder="codigo">
-
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <input type="number" min="1" step="1" class="form-input cantidad"
-                                    placeholder="Cantidad">
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <input type="text" class="form-input unidad_medida"
-                                    placeholder="unidad de medida">
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <textarea rows="4" class="form-input descripcion" placeholder="Descripción"></textarea>
-                                <p class="mt-2 hidden text-pink-600 text-sm errorDescripcion">
-                                    Rellena todos los campos
-                                </p>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-
-                                    <button type="button" onclick="add_item_to_table(); return false;"
-                                        class="text-white btn bg-cyan-500 hover:text-slate-500 ">
-                                        <span class="sr-only">Añadir</span>
-
-
-                                        <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24">
-                                            <g fill="none" class="nc-icon-wrapper">
-                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                                                    fill="currentColor">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                            <p class="mt-2 hidden text-pink-600 text-sm vacio">
-                                Debes añadir al menos 1 item
-                            </p>
-                        </tr>
-
-                    </tbody>
-                    <tfoot>
-                        @error('items')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
-                    </tfoot>
-                </table>
-            </div>
-
+            {{-- tabla de items --}}
+            <x-admin.guias-remision.tabla-detalle :items="$items"></x-admin.guias-remision.tabla-detalle>
+            @error('items')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+            @enderror
         </div>
+        {{-- asignacion de imeis --}}
 
+        @if ($asignarTecnico)
+            <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
 
-        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
+                <h4>ARRASTRA AL PANEL EN BLACO LOS IMEIS A ASIGNAR</h4>
+                {{-- <input class="form-input" type="text" wire:model='search'> --}}
 
-            <div class="grid grid-cols-12 gap-2 mt-4 pt-4 pb-4px-3 mb-2 bg-slate-100 ">
+                <x-admin.guias-remision.lista-imei :imeis="$imei_list" :imeisadd="$imeis_add">
+                </x-admin.guias-remision.lista-imei>
 
-                {{-- left imeis --}}
-                <div class="col-span-12 sm:col-span-6 mb-2 shadow-lg border border-slate-200 mx-2 containerList">
-                    <!-- Task -->
-                    <div class="bg-white shadow-lg mx-3 my-2 rounded-md border-2 border-slate-200 p-4 itemList"
-                        draggable="true">
-                        <div class="sm:flex sm:justify-between sm:items-start">
-                            <!-- Left side -->
-                            <div class="grow mt-0.5 mb-3 sm:mb-0 space-y-3">
-                                <div class="flex items-center">
-                                    <!-- Drag button -->
-                                    <button class="cursor-move mr-2">
-                                        <span class="sr-only">Drag</span>
-                                        <svg class="w-3 h-3 fill-slate-500" viexBox="0 0 12 12"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0 1h12v2H0V1Zm0 4h12v2H0V5Zm0 4h12v2H0V9Z" fill="#CBD5E1"
-                                                fill-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                    <!-- Checkbox button -->
-                                    <label class="flex items-center">
-                                        <input type="checkbox"
-                                            class="peer focus:ring-0 focus-visible:ring w-5 h-5 bg-white border border-slate-200 text-indigo-500 rounded-full" />
-                                        <span class="font-medium text-slate-800 peer-checked:line-through ml-2">
-                                            01215415421542154201545154
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="bg-white shadow-lg mx-3 my-2 rounded-md border-2 border-slate-200 p-4 itemList"
-                        draggable="true">
-                        <div class="sm:flex sm:justify-between sm:items-start">
-                            <!-- Left side -->
-                            <div class="grow mt-0.5 mb-3 sm:mb-0 space-y-3">
-                                <div class="flex items-center">
-                                    <!-- Drag button -->
-                                    <button class="cursor-move mr-2">
-                                        <span class="sr-only">Drag</span>
-                                        <svg class="w-3 h-3 fill-slate-500" viexBox="0 0 12 12"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0 1h12v2H0V1Zm0 4h12v2H0V5Zm0 4h12v2H0V9Z" fill="#CBD5E1"
-                                                fill-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                    <!-- Checkbox button -->
-                                    <label class="flex items-center">
-                                        <input type="checkbox"
-                                            class="peer focus:ring-0 focus-visible:ring w-5 h-5 bg-white border border-slate-200 text-indigo-500 rounded-full" />
-                                        <span class="font-medium text-slate-800 peer-checked:line-through ml-2">
-                                            01215415421542154201545154
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                {{-- items para asignar --}}
-                <div class="col-span-12 sm:col-span-6 mb-2 shadow-lg border border-slate-200 mx-2">
-
-
-                    <div class="bg-white shadow-lg mx-3 my-2 rounded-md border border-slate-200 p-4" draggable="true">
-                        <div class="sm:flex sm:justify-between sm:items-start">
-                            <!-- Left side -->
-                            <div class="grow mt-0.5 mb-3 sm:mb-0 space-y-3">
-                                <div class="flex items-center">
-                                    <!-- Drag button -->
-                                    <button class="cursor-move mr-2">
-                                        <span class="sr-only">Drag</span>
-                                        <svg class="w-3 h-3 fill-slate-500" viexBox="0 0 12 12"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0 1h12v2H0V1Zm0 4h12v2H0V5Zm0 4h12v2H0V9Z" fill="#CBD5E1"
-                                                fill-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                    <!-- Checkbox button -->
-                                    <label class="flex items-center">
-                                        <input type="checkbox"
-                                            class="peer focus:ring-0 focus-visible:ring w-5 h-5 bg-white border border-slate-200 text-indigo-500 rounded-full" />
-                                        <span class="font-medium text-slate-800 peer-checked:line-through ml-2">
-                                            01215415421542154201545154
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="bg-white shadow-lg mx-3 my-2 rounded-md border border-slate-200 p-4" draggable="true">
-                        <div class="sm:flex sm:justify-between sm:items-start">
-                            <!-- Left side -->
-                            <div class="grow mt-0.5 mb-3 sm:mb-0 space-y-3">
-                                <div class="flex items-center">
-                                    <!-- Drag button -->
-                                    <button class="cursor-move mr-2">
-                                        <span class="sr-only">Drag</span>
-                                        <svg class="w-3 h-3 fill-slate-500" viexBox="0 0 12 12"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M0 1h12v2H0V1Zm0 4h12v2H0V5Zm0 4h12v2H0V9Z" fill="#CBD5E1"
-                                                fill-rule="evenodd" />
-                                        </svg>
-                                    </button>
-                                    <!-- Checkbox button -->
-                                    <label class="flex items-center">
-                                        <input type="checkbox"
-                                            class="peer focus:ring-0 focus-visible:ring w-5 h-5 bg-white border border-slate-200 text-indigo-500 rounded-full" />
-                                        <span class="font-medium text-slate-800 peer-checked:line-through ml-2">
-                                            01215415421542154201545154
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
             </div>
-        </div>
-        <div class="px-4 py-3 text-right sm:px-6 col-span-12 mb-2 gap-2">
+        @endif
 
-            <button type="button" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">GUARDAR</button>
+
+        <div class="px-4 py-3 text-right sm:px-6 col-span-12 mb-2 gap-2 ">
+
+            <button type="button" wire:click.prevent="save"
+                class="btn bg-emerald-500 hover:bg-emerald-600 text-white">GUARDAR</button>
 
         </div>
     </div>
@@ -786,28 +657,116 @@
 </div>
 
 @section('js')
+    <x-laravel-blade-sortable::scripts />
+    {{-- <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('laravelBladeSortable', () => ({
+                name: '',
+                sortOrder: [],
+                animation: 150,
+                ghostClass: '',
+                dragHandle: null,
+                group: null,
+                allowSort: true,
+                allowDrop: true,
+
+                wireComponent: null,
+                wireOnSortOrderChange: null,
+                init() {
+                    this.sortOrder = this.computeSortOrderFromChildren()
+                    window.Sortable.create(this.$refs.root, {
+                        handle: this.dragHandle,
+                        animation: this.animation,
+                        ghostClass: this.ghostClass,
+                        group: {
+                            name: this.group,
+                            put: this.allowDrop,
+                        },
+                        sort: this.allowSort,
+                        onSort: evt => {
+                            const previousSortOrder = [...this.sortOrder]
+                            this.sortOrder = this.computeSortOrderFromChildren()
+
+                            if (!this.wireComponent) {
+                                return
+                            }
+
+                            const from = evt?.from?.dataset?.name
+                            const to = evt?.to?.dataset?.name
+
+                            this.$wire.call(
+                                this.wireOnSortOrderChange,
+                                this.sortOrder,
+                                previousSortOrder,
+                                this.name,
+                                from,
+                                to,
+                            )
+                        },
+                    });
+                },
+
+                computeSortOrderFromChildren() {
+                    return [].slice.call(this.$refs.root.children)
+                        .map(child => child.dataset.sortKey)
+                        .filter(sortKey => sortKey)
+                }
+            }))
+        })
+    </script> --}}
+
     <script>
-        function handleDragStart(e) {
-            this.style.opacity = '0.4';
-        }
+        window.addEventListener('asignar-tecnico', event => {
+            $('.userSelect').select2({
+                placeholder: 'Seleccionar Tecnico',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.users') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
 
-        function handleDragEnd(e) {
-            this.style.opacity = '1';
-        }
+                        var query = {
+                            term: params.term,
+                        }
 
-        let items = document.querySelectorAll('.containerList .itemList');
-        items.forEach(function(item) {
-            item.addEventListener('dragstart', handleDragStart);
-            item.addEventListener('dragend', handleDragEnd);
-        });
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.data;
+                            obj.text = obj.value;
+                            return obj;
+
+                        });
+                        return {
+                            results: suggestions,
+                        };
+                    },
+
+                }
+            });
+
+            $('.userSelect').on('select2:select', function(e) {
+
+                console.log(this.value);
+                @this.set('user', this.value)
+
+            });
+        })
     </script>
-
     <script>
         $('.facturasSelect').select2({
             placeholder: 'Buscar Factura',
             language: "es",
             selectionCssClass: 'pl-9',
             width: '100%',
+            templateResult: formatFactura,
             ajax: {
                 url: '{{ route('search.facturas') }}',
                 dataType: 'json',
@@ -838,6 +797,145 @@
             }
         });
 
+        function formatFactura(factura) {
+            if (factura.loading) {
+                return factura.text;
+            }
+
+            var $container = $(
+
+                "<div class='select2-result-facturas clearfix'>" +
+                "<div class='select2-result-facturas__meta'>" +
+                "<div class='select2-result-facturas__title border-b text-base font-bold'></div>" +
+                "<div class='select2-result-facturas__description text-xs '></div>" +
+                "<div class='select2-result-repository__statistics'>" +
+                "<div class='select2-result-repository__forks text-xs'><i class='fal fa-money-bill'></i> </div>" +
+                "</div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-facturas__title").text(factura.serie_numero);
+            $container.find(".select2-result-facturas__description").text(factura.cliente);
+            $container.find(".select2-result-repository__forks").append("S/. " + factura.total);
+
+
+            return $container;
+        }
+
+
+        // UBIGEOS
+        $('.ubigeoPartida').select2({
+            placeholder: 'SELECCIONA UN UBIGEO',
+            language: "es",
+            selectionCssClass: 'pl-9',
+            minimumInputLength: 2,
+            width: '100%',
+            templateResult: formatUbigeo,
+            ajax: {
+                url: '{{ route('search.ubigeos') }}',
+                dataType: 'json',
+                delay: 250,
+                cache: true,
+                data: function(params) {
+
+                    var query = {
+                        term: params.term,
+                    }
+
+                    return query;
+                },
+                processResults: function(data, params) {
+
+                    var suggestions = $.map(data.suggestions, function(obj) {
+
+                        obj.id = obj.id || obj.data;
+                        obj.text = obj.value;
+                        return obj;
+
+                    });
+                    return {
+                        results: suggestions,
+                    };
+                },
+
+            }
+        });
+        $('.ubigeoPartida').on('select2:select', function(e) {
+
+            @this.set('ubigeo_partida', this.value)
+
+        });
+
+        $('.ubigeoLlegada').select2({
+            placeholder: 'SELECCIONA UN UBIGEO',
+            language: "es",
+            selectionCssClass: 'pl-9',
+            minimumInputLength: 2,
+            width: '100%',
+            templateResult: formatUbigeo,
+            ajax: {
+                url: '{{ route('search.ubigeos') }}',
+                dataType: 'json',
+                delay: 250,
+                cache: true,
+                data: function(params) {
+
+                    var query = {
+                        term: params.term,
+                    }
+
+                    return query;
+                },
+                processResults: function(data, params) {
+
+                    var suggestions = $.map(data.suggestions, function(obj) {
+
+                        obj.id = obj.id || obj.data;
+                        obj.text = obj.value;
+                        return obj;
+
+                    });
+                    return {
+                        results: suggestions,
+                    };
+                },
+
+            }
+        });
+        $('.ubigeoLlegada').on('select2:select', function(e) {
+
+            @this.set('ubigeo_llegada', this.value)
+
+        });
+
+
+        function formatUbigeo(ubigeo) {
+            if (ubigeo.loading) {
+                return ubigeo.text;
+            }
+
+            var $container = $(
+
+                "<div class='select2-result-ubigeos clearfix'>" +
+                "<div class='select2-result-ubigeos__meta'>" +
+                "<div class='select2-result-ubigeos__title border-b text-base font-bold'></div>" +
+                "<div class='select2-result-ubigeos__description text-xs '></div>" +
+                "<div class='select2-result-repository__statistics'>" +
+                "<div class='select2-result-repository__forks text-xs'></i> </div>" +
+                "</div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-ubigeos__title").text(ubigeo.value);
+            $container.find(".select2-result-ubigeos__description").text(ubigeo.departamento + " - " + ubigeo.provincia +
+                " - " + ubigeo.distrito);
+            $container.find(".select2-result-repository__forks").append(ubigeo.value);
+
+
+            return $container;
+        }
         $('.productoSelect').select2({
             placeholder: 'Añadir Artículo',
             language: "es",
@@ -872,6 +970,13 @@
 
 
             }
+        });
+
+
+        $('.productoSelect').on('select2:select', function(e) {
+
+            @this.call('selectProduct', this.value)
+
         });
 
         function cambiarMotivo(value) {
