@@ -13,6 +13,8 @@ use App\Models\Lineas;
 use App\Models\Productos;
 use App\Models\Proveedores;
 use App\Models\SimCard;
+use App\Models\Ubigeos;
+use App\Models\User;
 use App\Models\Vehiculos;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Support\Arr;
@@ -392,19 +394,68 @@ class SearchController extends Controller
     {
 
         $term = $request->get('term');
-        $querys = Facturas::where('numero', 'LIKE', '%' . $term . '%')->orderBy('id', 'desc')->get();
+        $querys = Facturas::where('serie_numero', 'LIKE', '%' . $term . '%')
+            ->orderBy('id', 'desc')->get();
 
         $data = [];
 
         foreach ($querys as $query) {
             $data[] = [
-                'value' => $query->numero,
+                'value' => $query->serie_numero,
+                'serie_numero' => $query->serie_numero,
+                'total' => $query->total,
+                'cliente' => $query->clientes->razon_social,
                 'data' => $query->id,
 
             ];
         }
 
         // return array("suggestions" => $data);
+        return array("suggestions" => $data);
+    }
+
+    public function ubigeos(Request $request)
+    {
+
+        $term = $request->get('term');
+        $querys = Ubigeos::where('ubigeo_inei', 'LIKE', '%' . $term . '%')
+            ->orwhere('departamento', 'LIKE', '%' . $term . '%')
+            ->orwhere('provincia', 'LIKE', '%' . $term . '%')
+            ->orwhere('distrito', 'LIKE', '%' . $term . '%')
+            ->orderBy('id', 'desc')->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->ubigeo_inei,
+                'departamento' => $query->departamento,
+                'provincia' => $query->provincia,
+                'distrito' => $query->distrito,
+                'data' => $query->ubigeo_inei,
+
+            ];
+        }
+        return array("suggestions" => $data);
+    }
+
+
+    public function users(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $querys = User::where('name', 'LIKE', '%' . $term . '%')->role('tecnico')->get();
+
+        $data = [];
+
+        foreach ($querys as $query) {
+            $data[] = [
+                'value' => $query->name,
+                'data' => $query->id,
+
+            ];
+        }
         return array("suggestions" => $data);
     }
 }

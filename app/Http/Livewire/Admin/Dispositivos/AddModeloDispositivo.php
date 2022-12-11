@@ -50,7 +50,7 @@ class AddModeloDispositivo extends Component
 
         return redirect()->route('admin.almacen.modelos-dispositivos')->with('store-modelo', 'El modelo se guardo con exito');
 
-        // CODIGO PARA GUARDAR LINEA
+        // CODIGO PARA GUARDAR
     }
     public function render()
     {
@@ -80,6 +80,7 @@ class AddModeloDispositivo extends Component
             'text' => "",
         ]);
     }
+
     public function eliminarCaracteristica($key)
     {
         unset($this->caracteristicas[$key]);

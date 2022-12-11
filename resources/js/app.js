@@ -13,6 +13,14 @@ Alpine.plugin(mask);
 
 Alpine.start();
 
+// import Sortable from "sortablejs";
+
+// window.Sortable = Sortable;
+
+//Sortable.start();
+
+//import Sortable from "sortablejs";
+
 import Swal from "sweetalert2";
 
 window.Swal = Swal;
@@ -20,4 +28,5 @@ import iziToast from "izitoast";
 window.iziToast = iziToast;
 
 import DataTable from "datatables.net-dt";
+import Sortable from "sortablejs";
 window.DataTable = DataTable;

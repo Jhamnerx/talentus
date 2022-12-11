@@ -16,7 +16,7 @@ class CreateDispositivosTable extends Migration
         Schema::create('dispositivos', function (Blueprint $table) {
 
             $table->id();
-            $table->string('imei');
+            $table->string('imei')->unique();
             $table->unsignedBigInteger('modelo_id')->nullable();
             $table->boolean('of_client')->default(false);
             $table->unsignedBigInteger('empresa_id');

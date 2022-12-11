@@ -235,7 +235,7 @@
     <div class="subtitulo">
         <span>
             <b>
-                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo VEL4D-G, implementado con
+                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo VEL3D-G, implementado con
                 alerta de Exceso de Velocidad Mayor A 90KM/H
             </b>
         </span>

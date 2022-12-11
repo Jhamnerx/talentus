@@ -6,6 +6,7 @@ use App\Models\Facturas;
 use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class Index extends Component
 {
     use WithPagination;
@@ -28,6 +29,7 @@ class Index extends Component
         $facturas = Facturas::whereHas('clientes', function ($query) {
             $query->where('razon_social', 'like', '%' . $this->search . '%');
         })
+            ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
@@ -38,7 +40,7 @@ class Index extends Component
 
         $pagadas = Facturas::where('pago_estado', 'PAID')->count();
         $vencidas = Facturas::where('pago_estado', 'UNPAID')->count();
-    
+
         $total = Facturas::all()->count();
 
         $totales = [
@@ -49,7 +51,7 @@ class Index extends Component
 
         $estado = $this->status;
 
-        if($estado != null){
+        if ($estado != null) {
 
             $facturas = Facturas::Where('pago_estado', $estado)->paginate(10);
         }
@@ -110,14 +112,15 @@ class Index extends Component
     {
         $this->status = $status;
         //$this->render();
-        
+
     }
     public function updatingSearch()
     {
         $this->resetPage();
-    }    
+    }
 
-    public function markPaid(Facturas $factura){
+    public function markPaid(Facturas $factura)
+    {
 
         $factura->update([
             'pago_estado' => 'PAID',
@@ -126,25 +129,25 @@ class Index extends Component
         ]);
         $this->render();
     }
-    public function markUnPaid(Facturas $factura){
+    public function markUnPaid(Facturas $factura)
+    {
 
         $factura->update([
             'pago_estado' => 'UNPAID',
             'fecha_pago' => NULL,
         ]);
         $this->render();
-    }    
-    public function openModalDelete(Facturas $factura){
+    }
+    public function openModalDelete(Facturas $factura)
+    {
         //dd($factura);
         $this->emit('openModalDelete', $factura);
         $this->openModalDelete = true;
-
     }
 
-    public function modalOpenSend(Facturas $factura){
+    public function modalOpenSend(Facturas $factura)
+    {
 
         $this->emit('modalOpenSend', $factura);
-
     }
-
 }

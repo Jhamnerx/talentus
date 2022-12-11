@@ -112,7 +112,6 @@ class Facturas extends Model
 
     public function getSerie()
     {
-
         return plantilla::get('serie')->where('empresa_id', session('empresa'));
     }
 

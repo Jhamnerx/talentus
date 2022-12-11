@@ -44,11 +44,27 @@ use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Row;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
+
 // ALMACEN
 
+Route::controller(CategoriaController::class)->group(function () {
 
-Route::resource('categorias', CategoriaController::class)->names('admin.almacen.categorias');
-Route::resource('productos', ProductosController::class)->names('admin.almacen.productos');
+    Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
+    Route::get('categorias/create', 'create')->name('admin.almacen.categorias.create');
+    Route::post('categorias', 'store')->name('admin.almacen.categorias.store');
+    Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
+    Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
+});
+
+
+Route::controller(ProductosController::class)->group(function () {
+
+    Route::get('productos', 'index')->name('admin.almacen.productos.index');
+    Route::get('productos/create', 'create')->name('admin.almacen.productos.create');
+    Route::post('productos', 'store')->name('admin.almacen.productos.store');
+    Route::get('productos/{producto}/editar', 'edit')->name('admin.almacen.productos.edit');
+    Route::put('productos/{producto}', 'update')->name('admin.almacen.productos.update');
+});
 
 
 Route::controller(LineasController::class)->group(function () {
@@ -57,7 +73,7 @@ Route::controller(LineasController::class)->group(function () {
     Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
     Route::get('disponibles/lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
     Route::get('asign/lineas', 'asignLinea')->name('admin.asign.lineas');
-    Route::get('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+    Route::post('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
 });
 
 
@@ -67,6 +83,9 @@ Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('
 Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
     'dispositivos' => 'dispositivo'
 ]);
+
+
+
 Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
@@ -209,6 +228,8 @@ Route::controller(SearchController::class)->prefix('search')->group(function () 
     Route::get('ciudades', 'ciudades')->name('search.ciudades');
     Route::get('productos', 'productos')->name('search.productos');
     Route::get('facturas', 'facturas')->name('search.facturas');
+    Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
+    Route::get('users', 'users')->name('search.users');
 });
 
 

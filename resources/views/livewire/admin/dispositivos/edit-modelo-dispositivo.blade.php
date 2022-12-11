@@ -68,11 +68,27 @@
 
                         </div>
 
+                        <div class="col-span-12">
+                            <div class="flex">
+                                <div class="flex-auto w-full"></div>
+                                <div class="flex-auto w-full">
+                                    <a wire:click.debounce.250ms="addCaracteristica()"
+                                        class="btn bg-indigo-500 hover:bg-indigo-600 text-white hover:cursor-pointer float-right">
+                                        <svg class="w-4 h-4 fill-current shrink-0 text-white" viewBox="0 0 16 16">
+                                            <path
+                                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                                        </svg>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="col-span-12 shadow-lg px-2">
                             <label class="block text-sm font-medium mb-1">Caracteristicas:
                             </label>
-                            {{ json_encode($caracteristicas) }}
-                            {{-- @if ($caracteristicas->isEmpty())
+
+                            @if ($caracteristicas->isEmpty())
                                 <div class="col-span-12">
                                     <span class="w-full text-red-500">Agregar caracteristicas</span>
                                 </div>
@@ -81,7 +97,7 @@
                                     <div class="col-span-12 py-2">
                                         <div class="flex gap-2">
 
-                                            <textarea class="form-textarea w-full" wire:model="caracteristicas.{{ $clave }}.text" rows="2">
+                                            <textarea class="form-textarea w-full" wire:model="caracteristicas.{{ $clave }}.text">
 
                                             </textarea>
 
@@ -105,7 +121,7 @@
 
                                     </div>
                                 @endforeach
-                            @endif --}}
+                            @endif
 
                         </div>
                     </div>

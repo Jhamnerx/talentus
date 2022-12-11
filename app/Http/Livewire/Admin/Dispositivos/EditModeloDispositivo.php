@@ -19,7 +19,13 @@ class EditModeloDispositivo extends Component
 
     protected $listeners = ['abrirModal' => 'abrirModal'];
 
+    public function mount()
+    {
 
+        $this->caracteristicas = collect(
+            []
+        );
+    }
 
     public function render()
     {
@@ -36,11 +42,13 @@ class EditModeloDispositivo extends Component
             'modelo' => $this->modelo,
             'marca' => $this->marca,
             'certificado' => $this->certificado,
+            'caracteristicas' => $this->caracteristicas,
         ]);
 
         $this->modalEditOpen = false;
 
         $this->emit('ActualizarTabla');
+        $this->dispatchBrowserEvent('update-modelo');
     }
 
     public function abrirModal(ModelosDispositivo $model)
@@ -49,20 +57,20 @@ class EditModeloDispositivo extends Component
         $this->modelo = $model->modelo;
         $this->marca = $model->marca;
         $this->certificado = $model->certificado;
-        $this->caracteristicas = $model->caracteristicas;
+        $this->caracteristicas = collect($model->caracteristicas);
         $this->modalEditOpen = true;
     }
 
-    // public function addCaracteristica()
-    // {
-    //     $this->caracteristicas->push([
-    //         'text' => "",
-    //     ]);
-    // }
-    // public function eliminarCaracteristica($key)
-    // {
-    //     unset($this->caracteristicas[$key]);
-    // }
+    public function addCaracteristica()
+    {
+        $this->caracteristicas->push([
+            'text' => "",
+        ]);
+    }
+    public function eliminarCaracteristica($key)
+    {
+        unset($this->caracteristicas[$key]);
+    }
 
     public function updated($label)
     {

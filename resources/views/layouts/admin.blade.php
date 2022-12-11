@@ -10,6 +10,7 @@
     <!-- Styles -->
 
 
+
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
@@ -23,6 +24,7 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     <script src="{{asset('plugins/tw-elements/index.min.js')}}"></script> --}}
     <script src="{{ mix('js/app.js') }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     {{-- dataTables --}}
@@ -89,6 +91,7 @@
     @stack('scripts')
 
 
+    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
 </body>
 <script>
     $(document).ready(function() {
@@ -117,6 +120,5 @@
 
     })
 </script>
-
 
 </html>
