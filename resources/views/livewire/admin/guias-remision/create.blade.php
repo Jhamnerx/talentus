@@ -657,8 +657,8 @@
 </div>
 
 @section('js')
-    <x-laravel-blade-sortable::scripts />
-    {{-- <script>
+    {{-- <x-laravel-blade-sortable::scripts /> --}}
+    <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('laravelBladeSortable', () => ({
                 name: '',
@@ -713,7 +713,7 @@
                 }
             }))
         })
-    </script> --}}
+    </script>
 
     <script>
         window.addEventListener('asignar-tecnico', event => {
@@ -755,7 +755,7 @@
             $('.userSelect').on('select2:select', function(e) {
 
                 console.log(this.value);
-                @this.set('user', this.value)
+                @this.set('users_id', this.value)
 
             });
         })

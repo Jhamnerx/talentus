@@ -96,8 +96,6 @@ class Facturas extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
-
-
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -122,7 +120,10 @@ class Facturas extends Model
         return $this->hasMany(DetalleFacturas::class, 'facturas_id');
     }
 
-
+    public function guia()
+    {
+        return $this->hasMany(GuiaRemision::class, 'factura_id');
+    }
     public function payments()
     {
 

@@ -11,8 +11,12 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-
+    public $openModalDelete = false;
     public $detallePanelOpen = false;
+
+    protected $listeners = [
+        'updateTable' => 'render',
+    ];
 
     public function render()
     {
@@ -51,5 +55,11 @@ class Index extends Component
     {
         $this->detallePanelOpen = false;
         sleep(5);
+    }
+
+    public function openModalDelete(GuiaRemision $guia)
+    {
+        $this->emit('EliminarGuia', $guia);
+        $this->openModalDelete = true;
     }
 }

@@ -94,6 +94,7 @@
 
                                 <span class="font-medium text-slate-700 text-center">IMEI</span>
                                 <span class="font-medium text-slate-700 text-center">MODELO</span>
+                                <span class="font-medium text-slate-700 text-center">TECNICO</span>
                             </div>
 
                             @if ($guia->dispositivos->count())
@@ -101,13 +102,20 @@
                                     <tbody class="text-sm divide-y divide-slate-200">
                                         @foreach ($guia->dispositivos as $dispositivo)
                                             <tr>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                                     <span
                                                         class="font-medium text-slate-700 text-right">{{ $dispositivo->imei }}</span>
                                                 </td>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                                     <span
                                                         class="font-medium text-slate-700 text-right">{{ $dispositivo->modelo->modelo }}</span>
+                                                </td>
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                                    <span
+                                                        class="font-medium text-slate-700 text-right">{{ $guia->user->name }}</span>
                                                 </td>
                                             </tr>
                                         @endforeach

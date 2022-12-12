@@ -30,7 +30,7 @@
 
             <div class="col-span-12 sm:col-span-4">
 
-                <label class="block text-sm font-medium mb-1" for="fecha">Fecha:
+                <label class="block text-sm font-medium mb-1" for="fecha">Fecha Fin Contrato:
                     <span class="text-rose-500">*</span></label>
                 <div class="relative">
 

@@ -86,7 +86,13 @@ Route::resource('dispositivos', GpsController::class)->names('admin.almacen.disp
 
 
 
-Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
+// Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
+Route::controller(GuiaRemisionController::class)->group(function () {
+    Route::get('guias', 'index')->name('admin.almacen.guias.index');
+    Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');
+    Route::get('guias/{guia}', 'show')->name('admin.almacen.guias.show');
+    Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
+});
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 

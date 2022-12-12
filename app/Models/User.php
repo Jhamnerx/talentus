@@ -105,4 +105,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'user_id', 'imei', null, 'imei');
     }
+
+    //relacion uno a muchos
+
+    public function guia()
+    {
+        return $this->hasMany(GuiaRemision::class, 'users_id');
+    }
 }

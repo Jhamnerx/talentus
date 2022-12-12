@@ -53,6 +53,12 @@ class Dispositivos extends Model
         $user->dispositivos()->attach($items, ['guia_remision_id' => $guia->id]);
     }
 
+    public static function updateAsignarDispositivos(User $user, $items, GuiaRemision $guia)
+    {
+
+        //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
+        $guia->dispositivos()->syncWithPivotValues($items, ['guia_remision_id' => $guia->id, 'user_id' => $user->id]);
+    }
 
 
 

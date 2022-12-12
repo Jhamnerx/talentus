@@ -5,6 +5,7 @@
 
     <!-- Table -->
     @livewire('admin.guias-remision.index')
+    @livewire('admin.guias-remision.delete')
 
 
 

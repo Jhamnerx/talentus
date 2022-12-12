@@ -31,7 +31,7 @@ class Create extends Component
     public $motivo_traslado = "01", $modalidad_traslado = "02", $fecha_inicio_traslado, $peso, $cantidad_items, $numero_contenedor, $code_puerto;
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
     public $factura_id, $asignarTecnico = false;
-    public $user;
+    public $users_id;
     public Collection $items;
 
     public Collection $selected;
@@ -49,7 +49,6 @@ class Create extends Component
         $this->lista_imei2 = Dispositivos::stock()->pluck('imei')->toArray();
 
         $this->items = collect();
-        $this->detalle_cuotas = collect();
         $this->selected = collect([
             'producto_id' => "",
             'codigo' => "",
@@ -80,7 +79,6 @@ class Create extends Component
 
     public function render()
     {
-        //$this->imei_list = Dispositivos::where('razon_social', 'like', '%' . $this->search . '%')->stock()->pluck('imei')->toArray();
         $motivos = MotivosTraslado::pluck('descripcion', 'codigo');
         return view('livewire.admin.guias-remision.create', compact('motivos'));
     }
@@ -113,8 +111,6 @@ class Create extends Component
             ]);
 
             $this->selected = collect();
-
-            //$this->calcularTotalSoles();
             $this->dispatchBrowserEvent('add-producto');
         } catch (\Exception $e) {
             throw $e;
@@ -133,7 +129,6 @@ class Create extends Component
     }
     public function handleOnSortOrderChanged($sortOrder, $previousSortOrder, $name, $from, $to)
     {
-        // unset($this->lista_imei2[$this->$name]);
 
         if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
             unset($arr[$key]);
@@ -153,7 +148,6 @@ class Create extends Component
             $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
             $this->razon_social = $cliente->razon_social;
             $this->numero_documento = $cliente->numero_documento;
-            //  $this->error_msg->reset();
         } catch (Exception $e) {
 
             $this->error_msg = $e->getMessage();
@@ -181,9 +175,8 @@ class Create extends Component
         $request = new GuiaRemisionRequest();
         $error = $this->validateOnly($name, $request->rules(), $request->messages());
     }
-    public function updatedUser($value)
+    public function updatedUsersId($value)
     {
-        $this->user = User::find($value);
     }
 
     public function save()
@@ -198,9 +191,9 @@ class Create extends Component
 
         if ($this->asignarTecnico) {
 
-            $respuesta = Dispositivos::asignarDispositivos($this->user, $data["imeis_add"], $guia);
+            $respuesta = Dispositivos::asignarDispositivos(User::find($this->users_id), $data["imeis_add"], $guia);
         }
 
-        //return redirect()->route('admin.almacen.guias.index')->with('store', 'La guia se registro con exito');
+        return redirect()->route('admin.almacen.guias.index')->with('store', 'La guia se registro con exito');
     }
 }

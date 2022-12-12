@@ -517,8 +517,13 @@
                 <p>
                     <b>4.1.-</b> Ambas partes convienen en que la vigencia del presente contrato tendrá un plazo de
                     duración
-                    de ___(x)___ (___(x)___), que se contabilizarán desde el <b>(X) de (X) del 2022 al (X) de (X) del
-                        (X)</b>; así mismo cualquiera de las partes se reservan el derecho de dejar sin efecto el
+                    de {{ $contrato->periodo() }} Meses, que se contabilizarán desde el
+                    <b>{{ $contrato->created_at->format('d') }} de {{ ucfirst($contrato->created_at->monthName) }} del
+                        {{ $contrato->created_at->format('Y') }} al {{ $contrato->fecha->format('d') }} de
+                        {{ ucfirst($contrato->fecha->monthName) }}
+                        del
+                        {{ $contrato->fecha->format('Y') }}</b>; así mismo cualquiera de las partes se reservan
+                    el derecho de dejar sin efecto el
                     presente
                     contrato mediante simple aviso escrito u electrónico con previo aviso de 05 días naturales de
                     anticipación sin expresión de causa. Del mismo modo, si <b>EL CLIENTE</b> desea renovar el presente
@@ -926,8 +931,8 @@
                 </p>
             </div>
         </div>
-        <div class="row  padding-2">
-            <div class="medium-12 columns" style="margin-top: 40px;">
+        <div class="row padding-2">
+            <div class="medium-12 columns">
                 <h2 class="sutitulo"><b><u>Cláusula novena: </u></b><u><b>Domicilio</b></u><b>.<u></u></b>
                 </h2>
                 <p class=" padding-2"> Para la validez de todas las comunicaciones y notificaciones a las partes, con
@@ -962,12 +967,21 @@
                 </p>
             </div>
         </div>
+        <div class="row" style="padding-top: -20px">
+
+
+            <p>
+                {{ $contrato->ciudades->nombre }}, {{ $contrato->created_at->format('d') }} de
+                {{ $contrato->created_at->monthName }} del {{ $contrato->created_at->format('Y') }}
+            </p>
+
+        </div>
 
 </body>
 
 
 
-{{-- 
+{{--
     <div class="hash">
         {{ $contrato->unique_hash }}
     </div> --}}
