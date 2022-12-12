@@ -9,10 +9,13 @@ class DetalleRecibos extends Model
 {
     use HasFactory;
     use HasFactory;
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'detalle_recibos';
-
-        //Relacion uno a muchos inversa
+    protected $casts = [
+        'cantidad' => 'float',
+    ];
+    //Relacion uno a muchos inversa
 
     public function recibos()
     {

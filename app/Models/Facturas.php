@@ -75,7 +75,10 @@ class Facturas extends Model
     {
         return $query->where('pago_estado', '=', Facturas::PAID);
     }
-
+    public function scopeStatusPaid($query, $estado)
+    {
+        return $query->where('pago_estado', '=', $estado);
+    }
     public function scopeUnPaid($query)
     {
         return $query->where('pago_estado', '=', $this::UNPAID);

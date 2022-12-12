@@ -13,9 +13,8 @@ class DetallePresupuestos extends Model
     protected $table = 'detalle_presupuestos';
 
     protected $casts = [
-        'cantidad' => 'integer',
+        'cantidad' => 'float',
     ];
-
 
     //Relacion uno a muchos inversa
 
