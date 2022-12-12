@@ -135,11 +135,9 @@ Route::controller(PresupuestoController::class)->group(function () {
 Route::controller(VentasFacturasController::class)->group(function () {
 
     Route::get('ventas-facturas', 'index')->name('admin.ventas.facturas.index');
-    Route::post('ventas-facturas', 'store')->name('admin.ventas.facturas.store');
     Route::get('ventas-facturas/crear', 'create')->name('admin.ventas.facturas.create');
     Route::get('ventas-facturas/{factura}', 'show')->name('admin.ventas.facturas.show');
-    Route::get('ventas-facturas/{factura}', 'update')->name('admin.ventas.facturas.update');
-    Route::get('clientes/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
+    Route::get('ventas-facturas/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
 });
 
 

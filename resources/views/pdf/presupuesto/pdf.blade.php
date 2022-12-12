@@ -221,18 +221,18 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>S/. {{ $presupuesto->sub_total_soles }}</td>
+                                <td>S/. {{ number_format($presupuesto->sub_total_soles, 2) }}</td>
                             </tr>
                             <tr>
                                 <td>IGV: 18%</td>
-                                <td>S/. {{ $presupuesto->impuesto_soles }}</td>
+                                <td>S/. {{ number_format($presupuesto->impuesto_soles, 2) }}</td>
                             </tr>
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>S/. {{ $presupuesto->total_soles }}</td>
+                                <td>S/. {{ number_format($presupuesto->total_soles, 2) }}</td>
                             </tr>
                         </tfoot>
                     </table>
@@ -242,12 +242,12 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->sub_total }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>IGV: 18%</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->impuesto }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->impuesto, 2) }}
                                 </td>
                             </tr>
 
@@ -255,7 +255,8 @@
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->total }}</td>
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
+                                </td>
                             </tr>
                         </tfoot>
                     </table>
@@ -295,12 +296,12 @@
                         <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->sub_total }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
                                 </td>
                             </tr>
                             <tr>
                                 <td>IGV: 18%</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->impuesto }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->impuesto, 2) }}
                                 </td>
                             </tr>
 
@@ -308,7 +309,8 @@
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->total }}</td>
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
+                                </td>
                             </tr>
                         </tfoot>
                     </table>
