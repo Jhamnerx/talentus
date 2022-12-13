@@ -1,15 +1,12 @@
 <div>
-    <!-- Sidebar backdrop (mobile only) -->
     <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-40 lg:hidden lg:z-auto transition-opacity duration-200"
         :class="sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'" aria-hidden="true" x-cloak></div>
 
-    <!-- Sidebar -->
     <div id="sidebar"
         class="flex flex-col absolute z-40 left-0 top-0 lg:static lg:left-auto lg:top-auto lg:translate-x-0 transform h-screen overflow-y-scroll lg:overflow-y-auto no-scrollbar w-64 lg:w-20 lg:sidebar-expanded:!w-64 2xl:!w-64 shrink-0 bg-slate-800 p-4 transition-all duration-200 ease-in-out"
         :class="sidebarOpen ? 'translate-x-0' : '-translate-x-64'" @click.outside="sidebarOpen = false"
         @keydown.escape.window="sidebarOpen = false" x-cloak="lg">
 
-        <!-- Sidebar header -->
         <div class="flex justify-between mb-10 pr-3 sm:px-2">
             <!-- Close button -->
             <button class="lg:hidden text-slate-500 hover:text-slate-400" @click.stop="sidebarOpen = !sidebarOpen"
@@ -24,11 +21,9 @@
 
                 <img width="56" height="56" src="{{ asset('images/logo.png') }}" alt="">
 
-
             </a>
         </div>
 
-        <!-- Links -->
         <div class="space-y-8">
             <!-- Pages group -->
             <div>
@@ -618,13 +613,15 @@
                 <h3 class="text-xs uppercase text-slate-500 font-semibold pl-3">
                     <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
                         aria-hidden="true">•••</span>
-                    <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Servicio Tecnico</span>
+                    <span class="lg:hidden lg:sidebar-expanded:block 2xl:block">Area Servicio Tecnico</span>
                 </h3>
                 <ul class="mt-3">
-                    <!-- Authentication -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" x-data="{ open: false }">
+                    <!-- tecnico -->
+                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
+                        :class="{ 'bg-slate-900': page.startsWith('tecnico-') }" x-data="{ open: false }"
+                        x-init="$nextTick(() => open = page.startsWith('tecnico-'))">
                         <a class="sidebar-expander-link block text-slate-200 hover:text-white transition duration-150"
-                            :class="open && 'hover:text-slate-200'" href="#0"
+                            :class="page.startsWith('tecnico-') && 'hover:text-slate-200'" href="#0"
                             @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
@@ -644,7 +641,9 @@
                                             width="8" height="4" rx="1" />
                                     </svg>
                                     <span
-                                        class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas</span>
+                                        class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                        Tareas
+                                    </span>
                                 </div>
                                 <!-- Icon -->
                                 <div
@@ -660,27 +659,31 @@
                             <ul class="pl-9 mt-1" :class="{ 'hidden': !open }" x-cloak>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.tareas.pendientes') }}">
+                                        href="{{ route('admin.tecnico.tareas.index') }}"
+                                        :class="page === 'tecnico-tareas-index' && '!text-indigo-500'">
                                         <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas
-                                            Pendientes</span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.tareas.completadas') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Tareas
-                                            Completadas
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Modulo Tareas
                                         </span>
                                     </a>
                                 </li>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.servicio.tecnico.index') }}">
+                                        href="{{ route('admin.tecnico.tareas.tipo') }}"
+                                        :class="page === 'tecnico-tareas-tipo' && '!text-indigo-500'">
                                         <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Registrar
-                                            Tareas
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Tipo Tareas
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        href="{{ route('admin.tecnico.index') }}"
+                                        :class="page === 'tecnico-index' && '!text-indigo-500'">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Administrar Tecnicos
                                         </span>
                                     </a>
                                 </li>

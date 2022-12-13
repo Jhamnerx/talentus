@@ -210,10 +210,13 @@ Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('
 Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
 
 
-Route::get('tecnico/tareas-pendientes', [ServicioTecnicoController::class, 'pendientes'])->name('admin.tecnico.tareas.pendientes');
-Route::get('tecnico/tareas-completadas', [ServicioTecnicoController::class, 'completadas'])->name('admin.tecnico.tareas.completadas');
+Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
-Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('admin.servicio.tecnico');
+    Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
+    Route::get('tipo/tareas', 'tipo')->name('admin.tecnico.tareas.tipo');
+    Route::get('/', 'tecnicos')->name('admin.tecnico.index');
+});
+
 
 
 Route::controller(SearchController::class)->prefix('search')->group(function () {
