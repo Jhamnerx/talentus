@@ -69,11 +69,9 @@
                                     </div>
                                 </div>
                                 @error('numero')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
 
                             </div>
@@ -108,25 +106,27 @@
                                                 <path
                                                     d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
                                                     fill="#78d478"></path>
-                                                <circle cx="40" cy="27" r="3" fill="#fff"></circle>
-                                                <circle cx="8" cy="27" r="3" fill="#fff"></circle>
+                                                <circle cx="40" cy="27" r="3" fill="#fff">
+                                                </circle>
+                                                <circle cx="8" cy="27" r="3" fill="#fff">
+                                                </circle>
                                                 <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
                                                 </path>
                                                 <path
                                                     d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
                                                     fill="#49c549"></path>
-                                                <circle cx="8" cy="34" r="2" fill="#f7bf26"></circle>
-                                                <circle cx="40" cy="34" r="2" fill="#f7bf26"></circle>
+                                                <circle cx="8" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
+                                                <circle cx="40" cy="34" r="2" fill="#f7bf26">
+                                                </circle>
                                             </g>
                                         </svg>
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -137,15 +137,10 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
-                                        {{-- <option value="">Selecciona una Ciudad:</option>
-                                        @foreach ($ciudades as $ciudad)
-                                        <option value="{{$ciudad->id}}">{{$ciudad->nombre}}</option> --}}
-                                        {{--
-                                        @endforeach --}}
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
+                                        id="">
+
                                     </select>
-
-
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -172,11 +167,40 @@
                                     </div>
                                 </div>
                                 @error('ciudades_id')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-6">
+                                <label class="block text-sm font-medium mb-1" for="velocimetro_modelo">Modelo
+                                    Velocimetro: <span class="text-rose-500">*</span></label>
+                                <div class="relative">
 
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
+                                    <select class="form-select w-full pl-9" wire:model="velocimetro_modelo">
+                                        <option selected>Selecciona un modelo</option>
+                                        @foreach ($velocimetros as $velocimetro)
+                                            <option value="{{ $velocimetro->nombre }}">
+                                                {{ $velocimetro->codigo }} {{ $velocimetro->nombre }}</option>
+                                        @endforeach
 
+                                    </select>
+
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M13 7h-2v2h2V7zm0 4h-2v6h2v-6zm4-9.99L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"
+                                                    fill="currentColor"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('velocimetro_modelo')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                         </div>
@@ -202,134 +226,130 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            $('.vehiculos_id').select2({
+                placeholder: '    Buscar un Vehiculo',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                minimumInputLength: 2,
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.vehiculos') }}',
+                    dataType: 'json',
+                    delay: 250,
+                    cache: true,
+                    data: function(params) {
+
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
+
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
+
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
+
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-
-<script>
-    $('.vehiculos_id').select2({
-       placeholder: '    Buscar un Vehiculo',
-        language: "es",
-        selectionCssClass: 'pl-9',
-        minimumInputLength: 2,
-        width: '100%',
-        ajax: {
-            url: '{{route("search.vehiculos")}}',
-            dataType: 'json',
-            delay: 250,
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
                 }
+            });
+            $('.ciudades').select2({
+                placeholder: '    Selecciona una ciudad',
+                language: "es",
+                selectionCssClass: 'pl-9',
+                width: '100%',
+                ajax: {
+                    url: '{{ route('search.ciudades') }}',
+                    dataType: 'json',
 
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
+                    cache: true,
+                    data: function(params) {
 
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
+                        var query = {
+                            term: params.term,
+                            //type: 'public'
+                        }
 
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function(data, params) {
 
-                    return obj;
+                        // console.log(data.suggestions);
+                        var suggestions = $.map(data.suggestions, function(obj) {
 
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
+                            obj.id = obj.id || obj.value; // replace pk with your identifier
+                            obj.text = obj.data; // replace pk with your identifier
 
-                    results: suggestions,
-    
-                };
-                
-            },
+                            return obj;
+
+                        });
+                        //console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+
+                            results: suggestions,
+
+                        };
+
+                    },
 
 
-        }
-    });
-    $('.ciudades').select2({
-       placeholder: '    Selecciona una ciudad',
-        language: "es",
-        selectionCssClass: 'pl-9',
-        width: '100%',
-        ajax: {
-            url: '{{route("search.ciudades")}}',
-            dataType: 'json',
-
-            cache: true,
-            data: function (params) {
-
-                var query = {
-                    term: params.term,
-                    //type: 'public'
                 }
+            });
 
-                // Query parameters will be ?search=[term]&type=public
-                return query;
-            },
-            processResults: function (data, params) {
-
-               // console.log(data.suggestions);
-                var suggestions = $.map(data.suggestions, function (obj) {
-
-                    obj.id = obj.id || obj.value; // replace pk with your identifier
-                    obj.text = obj.data; // replace pk with your identifier
-
-                    return obj;
-
-                });
-                //console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
-
-                    results: suggestions,
-    
-                };
-                
-            },
+            $('.vehiculos_id').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('vehiculos_id', data.id)
+            });
 
 
-        }
-    });
-
-$('.vehiculos_id').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('vehiculos_id',data.id)
-});
+            $('.ciudades').on('select2:select', function(e) {
+                var data = e.params.data;
+                //console.log(data.id);
+                @this.set('ciudades_id', data.id)
+            });
+        </script>
 
 
-$('.ciudades').on('select2:select', function (e) {
-    var data = e.params.data;
-    //console.log(data.id);
-    @this.set('ciudades_id',data.id)
-});
+        <script>
+            window.addEventListener('set-vehiculo', event => {
+                //ESTABLECER EL VEHICULO PARA EDITAR ACTA
 
-</script>
-
-
-<script>
-    window.addEventListener('set-vehiculo', event => {
-        //ESTABLECER EL VEHICULO PARA EDITAR ACTA
-        var placa = event.detail.vehiculo.placa;
-        var id = event.detail.vehiculo.id
-        var vehiculo = new Option(placa, id, true, true);
-        $('.vehiculosEdit').append(vehiculo).trigger('change');
+                console.log(event.detail);
+                var placa = event.detail.vehiculo.placa;
+                var id = event.detail.vehiculo.id
+                var vehiculo = new Option(placa, id, true, true);
+                $('.vehiculosEdit').append(vehiculo).trigger('change');
 
 
-        // ESTABLECER LA CIUDAD EN EDITAR
-        var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
+                // ESTABLECER LA CIUDAD EN EDITAR
+                var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
 
-        $('.ciudades').append(ciudad).trigger('change');
-       // $('.ciudades').append(ciudad).trigger('change');
-    })
-    
-</script>
-
-@endpush
+                $('.ciudades').append(ciudad).trigger('change');
+                // $('.ciudades').append(ciudad).trigger('change');
+            })
+        </script>
+    @endpush
 @endonce

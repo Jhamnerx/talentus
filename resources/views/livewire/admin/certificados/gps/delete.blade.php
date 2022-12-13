@@ -27,13 +27,13 @@
                     <div>
                         <!-- Modal header -->
                         <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800 uppercase">ELIMINAR ACTA</div>
+                            <div class="text-lg font-semibold text-slate-800 uppercase">ELIMINAR CERTIFICADO</div>
 
                         </div>
                         <!-- Modal content -->
                         <div class="text-sm mb-10">
                             <div class="space-y-2">
-                                <p> Estás seguro de eliminar este acta?. </p>
+                                <p> Estás seguro de eliminar este certificado?. </p>
                             </div>
                         </div>
                         <!-- Modal footer -->

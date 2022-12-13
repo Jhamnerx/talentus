@@ -1,13 +1,10 @@
 <div>
     <div x-data="{ modalOpen: @entangle('modalOpen') }">
-
-        <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
         </div>
-        <!-- Modal dialog -->
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
             role="dialog" aria-modal="true" x-show="modalOpen" x-transition:enter="transition ease-in-out duration-200"
@@ -18,7 +15,6 @@
 
             <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-6/12 max-h-full"
                 @keydown.escape.window="modalOpen = false">
-                <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold text-slate-800">CREAR VEHICULO</div>
@@ -32,8 +28,6 @@
                     </div>
                 </div>
 
-
-                <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
 
                     <div class="grid grid-cols-12 gap-6">
@@ -43,12 +37,10 @@
                             <label class="block text-sm font-medium mb-1" for="placa">Placa: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
-
                                 <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" required />
-
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                     <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -254,7 +246,6 @@
                             <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
                                 class="clientes_id w-full" required></select>
 
-
                         </div>
                         <div class="col-span-12">
 
@@ -267,16 +258,16 @@
                         @if ($flotas)
                             <div class="col-span-12 sm:col-span-12">
                                 <label class="block text-sm font-medium mb-1" for="clientes_id">Flotas:</label>
-
-                                @foreach ($flotas as $flota)
-                                    <div class="m-3">
+                                <div class="m-3 flex gap-2">
+                                    @foreach ($flotas as $flota)
                                         <label class="flex items-center">
-                                            <span class="text-sm mr-2">{{ $flota->nombre }} </span>
-                                            {!! Form::checkbox('flotas[]', $flota->id, null, ['class' => 'form-checkbox']) !!}
+                                            <span class="text-sm mr-2 uppercase">{{ $flota->nombre }} </span>
 
+                                            <input type="checkbox" value="{{ $flota->id }}"
+                                                wire:model="flotas_selected" class="form-checkbox">
                                         </label>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
 
                                 @error('flotas')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -286,208 +277,9 @@
                             </div>
                         @endif
 
-
-                        <div class="col-span-6 sm:col-span-6">
-                            <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
-                                    class="text-rose-500">*</span></label>
-                            <div class="relative">
-
-                                <input id="numero" name="numero" placeholder="947147524"
-                                    class="form-input w-full pl-9 valid:border-emerald-300
-                                                                                            required:border-rose-300 invalid:border-rose-300 peer numero"
-                                    type="text" required />
-
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                        <g class="nc-icon-wrapper">
-                                            <path
-                                                d="M46,21a1,1,0,0,1-1-1A17.018,17.018,0,0,0,28,3a1,1,0,0,1,0-2A19.021,19.021,0,0,1,47,20,1,1,0,0,1,46,21Z"
-                                                fill="#49c549"></path>
-                                            <path
-                                                d="M38,21a1,1,0,0,1-1-1,9.011,9.011,0,0,0-9-9,1,1,0,0,1,0-2A11.013,11.013,0,0,1,39,20,1,1,0,0,1,38,21Z"
-                                                fill="#9ee09e"></path>
-                                            <path
-                                                d="M31.376,29.175,27.79,33.658A37.835,37.835,0,0,1,14.343,20.212l4.483-3.586a3.047,3.047,0,0,0,.88-3.614l-4.087-9.2A3.045,3.045,0,0,0,12.068,2.1L4.29,4.115A3.066,3.066,0,0,0,2.029,7.5,45.2,45.2,0,0,0,40.5,45.971a3.062,3.062,0,0,0,3.383-2.26L45.9,35.932a3.047,3.047,0,0,0-1.712-3.551L34.99,28.3A3.046,3.046,0,0,0,31.376,29.175Z"
-                                                fill="#3d6c7b"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                            @error('numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="operador">Operador:</label>
-                            <div class="relative">
-
-                                <input wire:model="operador" id="operador" name="operador" placeholder="Claro"
-                                    class="form-input w-full pl-9" type="text" disabled />
-
-                                {{-- <input type="text" class="form-input w-full pl-9 operador" name="operador"
-                                    value="{{old('operador')}}"> --}}
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                        <g class="nc-icon-wrapper">
-                                            <path
-                                                d="M45.5,32.131l-21-12a1,1,0,0,0-.992,0l-21,12A1,1,0,0,0,2.137,33.5a.986.986,0,0,0,.371.371l21,12a1,1,0,0,0,.992,0l21-12a1,1,0,0,0,0-1.736Z"
-                                                fill="#2a4b55"></path>
-                                            <path
-                                                d="M45.5,23.132l-21-12a1,1,0,0,0-.992,0l-21,12a1,1,0,0,0,0,1.736l21,12a1,1,0,0,0,.992,0l21-12a1,1,0,0,0,.371-1.365A.986.986,0,0,0,45.5,23.132Z"
-                                                fill="#4d8b9d"></path>
-                                            <path
-                                                d="M45.5,14.132l-21-12a1,1,0,0,0-.992,0l-21,12a1,1,0,0,0,0,1.736l21,12a1,1,0,0,0,.992,0l21-12a1,1,0,0,0,0-1.736Z"
-                                                fill="#8ebac7"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="sim_card">Sim Card:</label>
-                            <div class="relative">
-                                <input wire:model="sim_card" id="sim_card" name="sim_card"
-                                    placeholder="3189219220212" class="form-input w-full pl-9" type="text"
-                                    disabled />
-
-
-                                <input type="hidden" name="sim_card_id" class="sim_card_id">
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <g fill="none" class="nc-icon-wrapper">
-                                            <g clip-path="url(#clip0)">
-                                                <path
-                                                    d="M18.99 5c0-1.1-.89-2-1.99-2h-7L7.66 5.34 19 16.68 18.99 5zM3.65 3.88L2.38 5.15 5 7.77V19c0 1.1.9 2 2 2h10.01c.35 0 .67-.1.96-.26l1.88 1.88 1.27-1.27L3.65 3.88z"
-                                                    fill="#666"></path>
-                                            </g>
-                                            <defs>
-                                                <clipPath id="clip0">
-                                                    <path fill="#666" d="M0 0h24v24H0z"></path>
-                                                </clipPath>
-                                            </defs>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                            @error('sim_card_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS: <span
-                                    class="text-rose-500">*</span></label>
-                            <div class="relative">
-                                <input id="dispositivo_imei" name="dispositivo_imei" placeholder="357073292893290"
-                                    class="form-input w-full pl-9 valid:border-emerald-300
-                                                                                            required:border-rose-300 invalid:border-rose-300 peer dispositivo"
-                                    type="text" required />
-
-
-                                <input wire:model="dispositivos_id" type="hidden" name="dispositivos_id"
-                                    class="dispositivos_id">
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                        <g class="nc-icon-wrapper">
-                                            <circle cx="24" cy="24" r="23" fill="#cbeafb">
-                                            </circle>
-                                            <path
-                                                d="M1,24A22.94,22.94,0,0,0,8.768,41.227L10.8,38.18s1.452-.419,1.765-.981c.98-1.764-.76-4.835-.76-4.835a9.974,9.974,0,0,0-.35-2.176c-.262-.653-2.091-1.548-2.091-1.548S7.6,25.765,7.6,24a2.63,2.63,0,0,1,2.483-2.743,4.288,4.288,0,0,0,2.81-2.026s2.222-.589,2.744-1.5-.587-4.175-.587-4.175a5.46,5.46,0,0,0-.022-2.62,4.955,4.955,0,0,0-1.646-1.981,10.868,10.868,0,0,0-2.56-3.8A22.967,22.967,0,0,0,1,24Z"
-                                                fill="#78d478"></path>
-                                            <path
-                                                d="M24,1c-.62,0-1.232.032-1.839.08-.2.619-1.231,2.208-.971,2.925s2.395,1.384,2.395,1.384S23.019,7.6,24,8.383s2.549-.261,3.136-.065.457,4.05.457,4.05,1.895,2.091,3.758,2.353,4.7-2.9,4.7-2.9a37.386,37.386,0,0,0,6.1-1.95A22.954,22.954,0,0,0,24,1Z"
-                                                fill="#78d478"></path>
-                                            <path
-                                                d="M40.858,25.5c.523,1.242-.982,4.412-2.222,5.031a8.421,8.421,0,0,0-3.22,2.568c-.458.719-1.059,3.684-2.561,4.272s-5.065,3.942-6.96,3.419S24,35.761,25.307,33.735c.78-1.209-.131-3.855-.2-4.769S22.3,26.352,22.3,25.438c0-1.438,3.136-5.228,3.136-5.228s2.57-.849,3.354-.653a11.848,11.848,0,0,1,2.266,1.11,15.713,15.713,0,0,1,4.051.849l1.5,1.372S40.335,24.261,40.858,25.5Z"
-                                                fill="#78d478"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                            @error('dispositivos_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="modelo_id">MODELO GPS:</label>
-                            <div class="relative">
-                                <input wire:model="modelo_gps" id="modelo_id" name="modelo_id" placeholder="FMB920"
-                                    class="form-input w-full pl-9" type="text" disabled />
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                        <g fill="none" class="nc-icon-wrapper">
-                                            <path opacity=".3" d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"
-                                                fill="currentColor"></path>
-                                            <path
-                                                d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm8.94-3A8.994 8.994 0 0 0 13 3.06V1h-2v2.06A8.994 8.994 0 0 0 3.06 11H1v2h2.06A8.994 8.994 0 0 0 11 20.94V23h2v-2.06A8.994 8.994 0 0 0 20.94 13H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"
-                                                fill="currentColor"></path>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                            @error('modelo_gps')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                        </div>
-                        <div class="col-span-6 sm:col-span-6">
-
-                            <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
-                            <div class="relative">
-                                <textarea wire:model="descripcion" class="form-input w-full pl-9" name="descripcion" id="descripcion"
-                                    rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
-                                <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                    <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                        <g class="nc-icon-wrapper">
-                                            <path
-                                                d="M15,33,6.293,30.274a1,1,0,0,0-.255.433l-4,14a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l14-4a.994.994,0,0,0,.433-.255Z"
-                                                fill="#fbe5d5"></path>
-                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z"
-                                                fill="#ff7163">
-                                            </path>
-                                            <path
-                                                d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
-                                                fill="#4c4c4c"></path>
-                                            <path d="M34.3,13.7,12.01,35.99l5.7,5.7L40,19.4Z" fill="#f74b3b">
-                                            </path>
-                                            <path
-                                                d="M44.828,8.91,39.07,3.153a4.093,4.093,0,0,0-5.656,0l-4.63,4.631L40.2,19.2l4.63-4.631a4,4,0,0,0,0-5.657Z"
-                                                fill="#3d6c7b"></path>
-                                            <rect x="33.294" y="5.618" width="2" height="16.142"
-                                                transform="translate(0.365 28.258) rotate(-45)" fill="#2a4b55">
-                                            </rect>
-                                        </g>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-
-
                     </div>
 
                 </div>
-
                 <!-- Modal footer -->
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
@@ -502,7 +294,6 @@
 
         </div>
     </div>
-    <!-- End -->
 
 </div>
 
@@ -516,7 +307,6 @@
             $('.clientes_id').select2({
                 placeholder: 'Selecciona cliente',
                 language: "es",
-                //tags: true,
                 width: '100%',
                 ajax: {
                     url: '{{ route('search.clientes') }}',
@@ -527,10 +317,7 @@
 
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
-
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
@@ -539,7 +326,6 @@
 
                             obj.id = obj.id || obj.value;
                             obj.text = obj.data;
-
                             return obj;
 
                         });
@@ -552,7 +338,6 @@
                 },
                 minimumInputLength: 1,
                 templateResult: formatCliente,
-                // templateSelection: formatSelectioncliente,
             });
 
 
@@ -562,6 +347,7 @@
             })
 
             function formatCliente(cliente) {
+
                 if (cliente.loading) {
                     return cliente.text;
                 }
@@ -578,106 +364,9 @@
 
                 $container.find(".select2-result-clientes__title").text(cliente.text);
                 $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
-                // $container.find(".select2-result-clientes__stargazers").append(repo.stargazers_count + " Stars");
 
                 return $container;
             }
-        </script>
-
-
-        <script>
-            $('.numero').devbridgeAutocomplete({
-                lookup: function(query, done) {
-                    $.ajax({
-                        url: "{{ route('search.lineas') }}",
-                        dataType: 'json',
-                        data: {
-                            term: query
-                        },
-                        success: function(data) {
-
-                            done(data);
-
-                        }
-                    })
-
-                },
-                minChars: 2,
-                autoSelectFirst: false,
-                deferRequestBy: 5,
-                onSelect: function(suggestion) {
-
-                    //console.log(suggestion.operador);
-
-                    $('.operador').val(suggestion.operador);
-                    @this.set('operador', suggestion.operador)
-                    @this.set('numero', suggestion.value)
-                    $('.sim_card').val(suggestion.sim_card);
-                    @this.set('sim_card', suggestion.sim_card)
-                    $('.sim_card_id').val(suggestion.sim_card_id);
-                    @this.set('sim_card_id', suggestion.sim_card_id)
-
-                },
-                onHint: function(hint) {
-                    //$('#numero').val(hint);
-                    //console.log(hint);
-                },
-                onSearchComplete: function(query, suggestions) {
-
-                },
-                onInvalidateSelection: function() {
-                    $('#selction-ajax').html('You selected: none');
-                },
-
-            });
-        </script>
-
-
-        <script>
-            $('.dispositivo').devbridgeAutocomplete({
-                lookup: function(query, done) {
-                    $.ajax({
-                        url: "{{ route('search.dispositivos') }}",
-                        dataType: 'json',
-                        data: {
-                            term: query
-                        },
-                        success: function(data) {
-
-                            done(data);
-
-                        }
-                    })
-
-                },
-                minChars: 2,
-                autoSelectFirst: false,
-                deferRequestBy: 5,
-                onSelect: function(suggestion) {
-                    //console.log(suggestion.operador);
-                    $('.modelo').val(suggestion.modelo);
-                    @this.set('modelo_gps', suggestion.modelo)
-                    $('.dispositivos_id').val(suggestion.data);
-                    @this.set('dispositivos_id', suggestion.data)
-                    @this.set('dispositivo_imei', suggestion.value)
-                    //console.log(suggestion.value);
-                    // $('.sim_card').val(suggestion.sim_card);
-
-                },
-                onHint: function(hint) {
-                    //$('#numero').val(hint);
-                    // console.log(hint);
-
-                },
-                onSearchComplete: function(query, suggestions) {
-                    // console.log(query);
-
-                },
-                onInvalidateSelection: function() {
-                    $('#selction-ajax').html('You selected: none');
-                },
-
-            });
         </script>
     @endpush
 @endonce

@@ -4,28 +4,74 @@ namespace App\Http\Livewire\Admin\Vehiculos\Reportes;
 
 use App\Http\Requests\ReportesRequest;
 use App\Models\Reportes;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Save extends Component
 {
 
-    public $vehiculos_id, $hora_t, $fecha_t, $detalle;
+    public $vehiculos_id, $hora_t, $fecha_t, $detalle, $text_add;
     public $openModalSave = false;
 
     protected $listeners = [
         'guardarReporte' => 'openModal'
     ];
 
+    public Collection $info;
+    public Collection $acciones;
+    public $accion;
+
+    public function mount()
+    {
+        $this->info = collect([
+            [
+                'detalle' => 'Unidad en cochera',
+                'descripcion' =>  'Unidad en cochera hasta el dia %dia%'
+            ],
+            [
+                'detalle' => 'Unidad en mantenimiento',
+                'descripcion' => 'Unidad en mantenimiento hasta el dia %dia%'
+            ],
+            [
+                'detalle' => 'Unidad sin cobertura',
+                'descripcion' => 'Unidad sin cobertura...'
+            ],
+        ]);
+        $this->acciones = collect([
+            [
+                'detalle' => 'Espera de confirmación',
+                'descripcion' =>  'Se espera la confirmacion del cliente'
+            ],
+            [
+                'detalle' => 'Verificar actualización',
+                'descripcion' => 'Verificar Actualización el dia %dia%'
+            ],
+            [
+                'detalle' => 'Crear recordatorio',
+                'descripcion' => 'Se creó un recordatorio para el dia %dia%'
+            ],
+        ]);
+    }
 
     public function render()
     {
-
         return view('livewire.admin.vehiculos.reportes.save');
+    }
+
+    public function updatedTextAdd($value)
+    {
+        $this->detalle = $value;
+    }
+
+    public function updatedAccion($value)
+    {
+
+        $this->detalle = $this->detalle . " " . $value;
     }
     public function closeModal()
     {
         $this->openModalSave = false;
-        $this->reset();
+        $this->reset('vehiculos_id', 'hora_t', 'fecha_t', 'detalle', 'text_add');
         $this->resetErrorBag();
         $this->dispatchBrowserEvent('close-modal');
     }
@@ -39,7 +85,6 @@ class Save extends Component
 
     public function GuardarReporte()
     {
-
         $reporteRequest = new ReportesRequest();
         $values = $this->validate($reporteRequest->rules(), $reporteRequest->messages());
 
@@ -56,7 +101,7 @@ class Save extends Component
         $this->openModalSave = false;
         $this->dispatchBrowserEvent('reporte-save', ['vehiculo' => $reporte->vehiculos->placa]);
         $this->emit('updateTable');
-        $this->reset();
+        $this->closeModal();
     }
 
     public function updated($label)

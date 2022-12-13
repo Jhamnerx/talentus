@@ -27,6 +27,7 @@ class CertificadosVelocimetrosRequest extends FormRequest
             $rules = [
                 'numero' => 'required|unique:certificados_velocimetros,numero,' . $certificado->id,
                 'vehiculos_id' => 'required',
+                'velocimetro_modelo' => 'required',
                 "ciudades_id" => 'required',
 
             ];
@@ -34,6 +35,7 @@ class CertificadosVelocimetrosRequest extends FormRequest
             $rules = [
                 'numero' => 'required|unique:certificados_velocimetros',
                 'vehiculos_id' => 'required',
+                'velocimetro_modelo' => 'required',
                 "ciudades_id" => 'required',
                 "fondo" => 'nullable',
                 "sello" => 'nullable',
@@ -44,11 +46,10 @@ class CertificadosVelocimetrosRequest extends FormRequest
 
     public function messages()
     {
-
         $messages = [
-
             'numero.required' => 'El número es obligatorio',
             'numero.unique' => 'Este numero ya esta registrado',
+            'velocimetro_modelo.required' => 'Selecciona un modelo de velocimetro',
             'vehiculos_id.required' => 'Debe seleccionar un vehiculo',
             'ciudades_id.required' => 'Debe seleccionar una ciudad',
 

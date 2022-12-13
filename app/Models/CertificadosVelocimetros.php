@@ -35,7 +35,7 @@ class CertificadosVelocimetros extends Model
     //Relacion uno a muchos inversa
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class);
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EliminadoScope::class)->withTrashed();
     }
 
     public function ciudades()

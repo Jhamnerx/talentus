@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Requests\CertificadosVelocimetrosRequest;
 use App\Models\CertificadosVelocimetros;
 use App\Models\Ciudades;
+use App\Models\Productos;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class Save extends Component
 {
 
     public $openModalSave = false;
-    public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1;
+    public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1, $velocimetro_modelo;
 
     protected $listeners = [
         'guardarCertificado' => 'openModal'
@@ -21,7 +22,8 @@ class Save extends Component
 
     public function render()
     {
-        return view('livewire.admin.certificados.velocimetros.save');
+        $velocimetros = Productos::velocimetro()->get();
+        return view('livewire.admin.certificados.velocimetros.save', compact('velocimetros'));
     }
 
     public function openModal()
@@ -51,6 +53,7 @@ class Save extends Component
         $certificado = new CertificadosVelocimetros();
         $certificado->vehiculos_id = $values["vehiculos_id"];
         $certificado->numero = $values["numero"];
+        $certificado->velocimetro_modelo = $values["velocimetro_modelo"];
         $certificado->ciudades_id = $values["ciudades_id"];
         $certificado->fondo = $values["fondo"];
         $certificado->sello = $values["sello"];

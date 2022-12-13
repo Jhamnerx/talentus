@@ -18,6 +18,7 @@ class CertificadosVelocimetros extends Migration
             $table->unsignedBigInteger('vehiculos_id')->nullable();
             $table->string('numero');
             $table->string('fecha')->nullable();
+            $table->string('velocimetro_modelo')->nullable();
             $table->year('year')->nullable();
             $table->boolean('sello')->default(1);
             $table->boolean('fondo')->default(1);

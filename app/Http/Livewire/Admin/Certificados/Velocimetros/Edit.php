@@ -5,6 +5,7 @@ namespace App\Http\Livewire\Admin\Certificados\Velocimetros;
 use App\Http\Requests\CertificadosVelocimetrosRequest;
 use App\Models\CertificadosVelocimetros;
 use App\Models\Ciudades;
+use App\Models\Productos;
 use Livewire\Component;
 use Illuminate\Support\Str;
 
@@ -13,7 +14,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $certificado;
-    public $numero, $vehiculos_id, $ciudades_id, $fondo, $sello;
+    public $numero, $vehiculos_id, $ciudades_id, $fondo, $sello, $velocimetro_modelo;
 
 
     protected $listeners = [
@@ -22,7 +23,8 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.admin.certificados.velocimetros.edit');
+        $velocimetros = Productos::velocimetro()->get();
+        return view('livewire.admin.certificados.velocimetros.edit', compact('velocimetros'));
     }
 
     public function closeModal()
@@ -40,7 +42,8 @@ class Edit extends Component
         $this->numero = $certificado->numero;
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
-        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $certificado->vehiculos, 'ciudad' => $certificado->ciudades]);
+        $this->velocimetro_modelo = $certificado->velocimetro_modelo;
+        $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $certificado->vehiculo, 'ciudad' => $certificado->ciudades]);
     }
 
     public function actualizarCertificado()
@@ -53,6 +56,7 @@ class Edit extends Component
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
         $update->numero = $values["numero"];
+        $update->velocimetro_modelo = $values["velocimetro_modelo"];
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->ciudades_id = $values["ciudades_id"];
         $update->fecha = $fecha;

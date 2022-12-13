@@ -1,6 +1,4 @@
 <div>
-
-    <!-- Basic Modal -->
     <div class="mb-4">
         <button class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white" wire:click.prevent="openModal">
             Pagar - ${{ $cobro->monto_unidad }}
@@ -299,7 +297,7 @@
         window.addEventListener('dataDocumentos', event => {
 
             // $('.vehiculos_id').select2('destroy');
-            console.log(event.detail.data);
+            // console.log(event.detail.data);
             data = []
             data = event.detail.data;
             //  $('.vehiculos_id').innerHTML = "";
@@ -312,6 +310,7 @@
                 selectionCssClass: 'pl-9',
                 width: '100%',
                 // minimumInputLength: 2,
+                templateResult: formatDocumento,
                 data: data,
                 "language": {
                     "noResults": function() {
@@ -326,6 +325,33 @@
             $('.documentos').val(null).trigger('change');
 
         })
+
+        function formatDocumento(documentos) {
+            console.log(documentos);
+            if (documentos.loading) {
+                return documentos.text;
+            }
+
+            var $container = $(
+
+                "<div class='select2-result-documentos clearfix'>" +
+                "<div class='select2-result-documentos__meta'>" +
+                "<div class='select2-result-documentos__title border-b text-sm font-semibold'></div>" +
+                "<div class='select2-result-repository__statistics'>" +
+                "<div class='select2-result-repository__forks text-xs'><i class='fal fa-money-bill'></i> </div>" +
+                "</div>" +
+                "</div>" +
+                "</div>"
+            );
+
+            $container.find(".select2-result-documentos__title").text(documentos.text);
+            $container.find(".select2-result-repository__forks").append(documentos
+                .divisa + " " + documentos.monto);
+
+
+            return $container;
+        }
+
 
 
         $('.documentos').on('select2:select', function(e) {

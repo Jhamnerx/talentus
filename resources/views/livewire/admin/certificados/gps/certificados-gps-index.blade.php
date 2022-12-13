@@ -279,7 +279,12 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
-                                            {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
+                                            @if ($certificado->vehiculo->dispositivos)
+                                                {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
+                                            @else
+                                                Registrar dispositivo
+                                            @endif
+
                                         </div>
                                     </td>
 
@@ -288,7 +293,7 @@
                                             {{ $certificado->fin_cobertura->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $certificado->fecha_instalacion }}</div>
+                                        <div>{{ $certificado->fecha_instalacion->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -434,26 +439,20 @@
                                                             </a>
                                                         </li>
                                                         <li>
-                                                            <form class="inline-flex formularioEliminar"
-                                                                action="{{ route('admin.certificados.gps.destroy', $certificado) }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                @method('delete')
-                                                                <button type="submit"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Eliminar
-                                                                </button>
-                                                            </form>
 
+                                                            <button type="button"
+                                                                wire:click.prevent="openModalDelete({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Eliminar
+                                                            </button>
 
                                                         </li>
                                                         <li>

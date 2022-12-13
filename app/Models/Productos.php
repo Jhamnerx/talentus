@@ -25,6 +25,13 @@ class Productos extends Model
         return $query->where('is_active', $status);
     }
 
+    public function scopeVelocimetro($query)
+    {
+        return $query->whereHas('categoria', function ($query) {
+            $query->where('nombre', 'like', '%VELOCIMETROS DIGITALES%');
+        });
+    }
+
     // GLOBAL SCOPE EMPRESA
     protected static function booted()
     {

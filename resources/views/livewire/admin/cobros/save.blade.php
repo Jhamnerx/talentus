@@ -171,7 +171,6 @@
                         <div>
                             Divisa:
                         </div>
-                        <!---->
                     </label>
                     <div class="relative">
                         <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
@@ -185,7 +184,8 @@
                                 </g>
                             </svg>
                         </div>
-                        <select name="divisa" id="divisa" class="form-select pl-9 py-2 w-full">
+                        <select name="divisa" wire:model="divisa" id="divisa"
+                            class="form-select pl-9 py-2 w-full">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>

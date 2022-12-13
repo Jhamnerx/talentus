@@ -308,7 +308,7 @@
                                         <div class="font-medium text-sky-500">{{ $reporte->fecha->format('d-m-Y') }}
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                                         <div class="font-medium text-slate-800">{{ $reporte->detalle }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
@@ -346,7 +346,7 @@
                                                     <ul>
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                wire:click.prevent="openModalEdit({{ $reporte->id }})"
+                                                                wire:click.prevent="openModalRecordatorio({{ $reporte->id }})"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-27"
                                                                 role="menuitem" tabindex="-1">

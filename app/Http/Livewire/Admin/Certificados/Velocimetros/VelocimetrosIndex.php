@@ -16,6 +16,7 @@ class VelocimetrosIndex extends Component
     public $openModalSave = false;
     public $openModalEdit = false;
     public $openModalDelete = false;
+    public $openModalAddVehiculo = false;
 
     protected $listeners = [
         'updateTable' => 'render',
@@ -109,6 +110,13 @@ class VelocimetrosIndex extends Component
     {
         $this->emit('verDetalleCertificado', $certificado);
         $this->openModalDetalle = true;
+    }
+
+    public function openModalAddVehiculo()
+    {
+
+        $this->emit('openModalAddVehiculo');
+        $this->openModalAddVehiculo = true;
     }
 
     public function cambiarEstado(CertificadosVelocimetros $certificado, $field, $value)

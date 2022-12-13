@@ -223,7 +223,6 @@
         </div>
     </div>
     <!-- End -->
-
 </div>
 
 @once
@@ -244,25 +243,21 @@
 
                         var query = {
                             term: params.term,
-                            //type: 'public'
                         }
 
-                        // Query parameters will be ?search=[term]&type=public
                         return query;
                     },
                     processResults: function(data, params) {
 
-                        // console.log(data.suggestions);
                         var suggestions = $.map(data.suggestions, function(obj) {
 
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
+                            obj.id = obj.id || obj.value;
+                            obj.text = obj.data;
 
                             return obj;
 
                         });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
+
                         return {
 
                             results: suggestions,
@@ -276,7 +271,6 @@
             });
             $('.vehiculos_id').on('select2:select', function(e) {
                 var data = e.params.data;
-                console.log(data.id);
                 @this.set('vehiculos_id', data.id)
             });
         </script>

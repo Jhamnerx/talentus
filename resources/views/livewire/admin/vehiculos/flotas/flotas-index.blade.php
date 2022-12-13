@@ -130,6 +130,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left font-medium text-red-800">
+
                                             {{ $flota->vehiculos->count() > 1
                                                 ? $flota->vehiculos->count() . ' Vehiculos'
                                                 : $flota->vehiculos->count() . ' Vehiculo' }}

@@ -147,6 +147,32 @@
                                     </p>
                                 @enderror
                             </div>
+                            <div class="col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="clientes_id">Selecciona:</label>
+                                <div class="m-3 flex">
+                                    @foreach ($info->all() as $key => $i)
+                                        <label class="flex-auto items-center">
+                                            <span class="text-sm mr-2">{{ $i['detalle'] }} </span>
+
+                                            <input name="text_add" wire:model="text_add" class="form-checkbox"
+                                                type="radio" value="{{ $i['descripcion'] }}">
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="clientes_id">Acciones:</label>
+                                <div class="m-3 flex">
+                                    @foreach ($acciones->all() as $key => $accion)
+                                        <label class="flex-auto items-center">
+                                            <span class="text-sm mr-2">{{ $accion['detalle'] }} </span>
+
+                                            <input name="accion" wire:model="accion" class="form-checkbox"
+                                                type="radio" value="{{ $accion['descripcion'] }}">
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
                             <div class="col-span-12 sm:col-span-12">
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>

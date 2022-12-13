@@ -8,10 +8,12 @@ use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Recibos extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     public const COMPLETADO = 'COMPLETADO';
     public const BORRADOR = 'BORRADOR';

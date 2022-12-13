@@ -29,13 +29,6 @@ class CertificadosGpsController extends Controller
     }
 
 
-
-    public function update(Request $request, Certificados $certificado)
-    {
-        //
-    }
-
-
     public function destroy(Certificados $certificado)
     {
         $certificado->delete();

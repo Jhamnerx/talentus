@@ -12,6 +12,8 @@
     @livewire('admin.certificados.velocimetros.save')
     @livewire('admin.certificados.velocimetros.edit')
     @livewire('admin.certificados.velocimetros.send')
+    @livewire('admin.certificados.velocimetros.delete')
+    @livewire('admin.vehiculos.save-quick')
 @endpush
 
 
@@ -43,7 +45,32 @@
             $('.formVelocimetroSave .ciudades').val(null).trigger('change');
         })
     </script>
+    <script>
+        window.addEventListener('certificado-delete', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: 'Certificado Eliminado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        })
+    </script>
+
+    <script>
+        window.addEventListener('save-quick-vehiculo', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: 'VEHICULO GUARDO',
+                message: 'Se creo el vehiculo' + event.detail.placa + '!',
+            });
+            $('.clientes_id').val(null).trigger('change');
+
+        })
+    </script>
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
