@@ -11,7 +11,7 @@
                     <path
                         d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
                 </svg>
-                <span class="hidden xs:block ml-2">Reportes</span>
+                <span class="hidden xs:block ml-2">Reportes de tareas</span>
             </button>
         </div>
 

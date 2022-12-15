@@ -44,8 +44,7 @@
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
 
-                                <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa"
-                                    class="form-input w-full pl-9 valid:border-emerald-300
+                                <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa" class="form-input w-full pl-9 valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" required />
 
@@ -54,8 +53,7 @@
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                                         <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
                                             stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper">
-                                            <line data-cap="butt" x1="32" y1="29" x2="41"
-                                                y2="19" stroke-linecap="butt">
+                                            <line data-cap="butt" x1="32" y1="29" x2="41" y2="19" stroke-linecap="butt">
                                             </line>
                                             <path data-cap="butt"
                                                 d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29"
@@ -73,9 +71,9 @@
                                 </div>
                             </div>
                             @error('placa')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
@@ -171,22 +169,19 @@
 
                             <label class="block text-sm font-medium mb-1" for="color">Color:</label>
                             <div class="relative">
-                                <input wire:model="color" id="color" name="color"
-                                    placeholder="BLANCO ROJO AZUL" class="form-input w-full pl-9" type="text" />
+                                <input wire:model="color" id="color" name="color" placeholder="BLANCO ROJO AZUL"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
-                                            <rect x="3" y="3" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="3" y="3" width="17" height="17" rx="3" fill="#6cc4f5"></rect>
                                             <path
                                                 d="M46.138,9.419,38.581,1.862a2.945,2.945,0,0,0-4.162,0L26.862,9.419a2.943,2.943,0,0,0,0,4.162l7.557,7.557a2.948,2.948,0,0,0,4.162,0l7.557-7.557a2.943,2.943,0,0,0,0-4.162Z"
                                                 fill="#c456eb"></path>
-                                            <rect x="28" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
-                                            <rect x="3" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="28" y="28" width="17" height="17" rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="3" y="28" width="17" height="17" rx="3" fill="#6cc4f5"></rect>
                                         </g>
                                     </svg>
                                 </div>
@@ -200,10 +195,8 @@
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
-                                    <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2"
-                                        xmlns="
-                                        http://www.w3.org/2000/svg"
-                                        viewBox="0 0 48 48">
+                                    <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2" xmlns="
+                                        http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
                                             <path
                                                 d="M43.989,35.373,30.167,23.437,23,30.389l12.373,13.6q.1.115.213.225a6.1,6.1,0,0,0,8.627,0h0c.073-.073.144-.148.213-.224A6.1,6.1,0,0,0,43.989,35.373Z"
@@ -226,8 +219,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="serie">Serie:</label>
                             <div class="relative">
-                                <input wire:model="serie" id="serie" name="serie"
-                                    placeholder="8AJHA8CD9K2629775" class="form-input w-full pl-9" type="text" />
+                                <input wire:model="serie" id="serie" name="serie" placeholder="8AJHA8CD9K2629775"
+                                    class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -259,31 +252,31 @@
                         <div class="col-span-12">
 
                             @error('clientes_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         @if ($flotas)
-                            <div class="col-span-12 sm:col-span-12">
-                                <label class="block text-sm font-medium mb-1" for="clientes_id">Flotas:</label>
+                        <div class="col-span-12 sm:col-span-12">
+                            <label class="block text-sm font-medium mb-1" for="clientes_id">Flotas:</label>
 
-                                @foreach ($flotas as $flota)
-                                    <div class="m-3">
-                                        <label class="flex items-center">
-                                            <span class="text-sm mr-2">{{ $flota->nombre }} </span>
-                                            {!! Form::checkbox('flotas[]', $flota->id, null, ['class' => 'form-checkbox']) !!}
+                            @foreach ($flotas as $flota)
+                            <div class="m-3">
+                                <label class="flex items-center">
+                                    <span class="text-sm mr-2">{{ $flota->nombre }} </span>
+                                    {!! Form::checkbox('flotas[]', $flota->id, null, ['class' => 'form-checkbox']) !!}
 
-                                        </label>
-                                    </div>
-                                @endforeach
-
-                                @error('flotas')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                                </label>
                             </div>
+                            @endforeach
+
+                            @error('flotas')
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
+                            @enderror
+                        </div>
                         @endif
 
 
@@ -294,8 +287,8 @@
 
                                 <input id="numero" name="numero" placeholder="947147524"
                                     class="form-input w-full pl-9 valid:border-emerald-300
-                                                                                            required:border-rose-300 invalid:border-rose-300 peer numero"
-                                    type="text" required />
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer numero" type="text"
+                                    required />
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -316,9 +309,9 @@
                                 </div>
                             </div>
                             @error('numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
@@ -354,9 +347,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="sim_card">Sim Card:</label>
                             <div class="relative">
-                                <input wire:model="sim_card" id="sim_card" name="sim_card"
-                                    placeholder="3189219220212" class="form-input w-full pl-9" type="text"
-                                    disabled />
+                                <input wire:model="sim_card" id="sim_card" name="sim_card" placeholder="3189219220212"
+                                    class="form-input w-full pl-9" type="text" disabled />
 
 
                                 <input type="hidden" name="sim_card_id" class="sim_card_id">
@@ -379,9 +371,9 @@
                                 </div>
                             </div>
                             @error('sim_card_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
@@ -418,9 +410,9 @@
                                 </div>
                             </div>
                             @error('dispositivos_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
@@ -444,17 +436,17 @@
                                 </div>
                             </div>
                             @error('modelo_gps')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea wire:model="descripcion" class="form-input w-full pl-9" name="descripcion" id="descripcion"
-                                    rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
+                                <textarea wire:model="descripcion" class="form-input w-full pl-9" name="descripcion"
+                                    id="descripcion" rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -463,8 +455,7 @@
                                             <path
                                                 d="M15,33,6.293,30.274a1,1,0,0,0-.255.433l-4,14a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l14-4a.994.994,0,0,0,.433-.255Z"
                                                 fill="#fbe5d5"></path>
-                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z"
-                                                fill="#ff7163">
+                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z" fill="#ff7163">
                                             </path>
                                             <path
                                                 d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
@@ -507,13 +498,13 @@
 </div>
 
 @once
-    @push('scripts')
-        <script>
-            $('#placa').caseEnforcer('uppercase');
-        </script>
+@push('scripts')
+<script>
+    $('#placa').caseEnforcer('uppercase');
+</script>
 
-        <script>
-            $('.clientes_id').select2({
+<script>
+    $('.clientes_id').select2({
                 placeholder: 'Selecciona cliente',
                 language: "es",
                 //tags: true,
@@ -582,11 +573,11 @@
 
                 return $container;
             }
-        </script>
+</script>
 
 
-        <script>
-            $('.numero').devbridgeAutocomplete({
+<script>
+    $('.numero').devbridgeAutocomplete({
                 lookup: function(query, done) {
                     $.ajax({
                         url: "{{ route('search.lineas') }}",
@@ -630,11 +621,11 @@
                 },
 
             });
-        </script>
+</script>
 
 
-        <script>
-            $('.dispositivo').devbridgeAutocomplete({
+<script>
+    $('.dispositivo').devbridgeAutocomplete({
                 lookup: function(query, done) {
                     $.ajax({
                         url: "{{ route('search.dispositivos') }}",
@@ -678,6 +669,6 @@
                 },
 
             });
-        </script>
-    @endpush
+</script>
+@endpush
 @endonce

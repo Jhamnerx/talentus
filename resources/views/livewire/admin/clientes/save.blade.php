@@ -17,7 +17,7 @@
             x-cloak>
 
             <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-1/3 max-h-full"
-                @keydown.escape.window="modalOpen = false">
+                @keydown.escape.window="modalSave = false">
 
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
@@ -51,9 +51,9 @@
                                     maxlength="11">
 
                                 @error('numero_documento')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -63,21 +63,21 @@
                                     required type="text" wire:model.defer="razon_social">
 
                                 @error('razon_social')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="telefono">Telefono: </label>
 
-                                <input x-mask="999999999" type="tel" placeholder="987654321"
-                                    class="form-input w-full" type="text" wire:model="telefono" maxlength="9">
+                                <input x-mask="999999999" type="tel" placeholder="987654321" class="form-input w-full"
+                                    type="text" wire:model="telefono" maxlength="9">
 
                                 @error('telefono')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -87,9 +87,9 @@
                                     type="email" wire:model="email">
 
                                 @error('email')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
 
@@ -100,9 +100,9 @@
                                     type="email" wire:model="direccion">
 
                                 @error('direccion')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                         </div>
@@ -130,15 +130,15 @@
 </div>
 
 @once
-    @push('scripts')
-        <script>
-            $('#razon_social').caseEnforcer('uppercase');
+@push('scripts')
+<script>
+    $('#razon_social').caseEnforcer('uppercase');
             $('#direccion').caseEnforcer('uppercase');
             $('#email').caseEnforcer('lowercase');
-        </script>
+</script>
 
-        <script>
-            window.addEventListener('save-cliente', event => {
+<script>
+    window.addEventListener('save-cliente', event => {
                 $(document).ready(function() {
                     iziToast.success({
                         position: 'topRight',
@@ -147,6 +147,6 @@
                     });
                 });
             })
-        </script>
-    @endpush
+</script>
+@endpush
 @endonce

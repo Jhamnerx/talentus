@@ -25,9 +25,12 @@ option:before {
     color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
-option:hover:before {
+option:hover {
     display: inline;
-    background-color: #3c30c5;
+    --tw-bg-opacity: 1;
+    background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+    --tw-text-opacity: 1;
+    color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .select2-results__option--highlighted .select2-result-flotas__title {
@@ -143,7 +146,7 @@ option:hover:before {
     padding: 6px;
     user-select: none;
     -webkit-user-select: none;
-    @apply relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 border border-gray-300 border-b-gray-100 dark:border-b-gray-700;
+    @apply relative py-2 pl-3 text-gray-900 cursor-default select-none pr-9 border border-gray-300 border-b-gray-400 dark:border-b-gray-700;
 }
 .select2-results__option--selectable {
     cursor: pointer;
@@ -429,6 +432,7 @@ option:hover:before {
 .select2-container--default .select2-results > .select2-results__options {
     max-height: 200px;
     overflow-y: auto;
+    @apply border-gray-200 border shadow-md shadow-talentus-200;
 }
 .select2-container--default .select2-results__option .select2-results__option {
     padding-left: 1em;

@@ -152,6 +152,16 @@ class ProductoSeeder extends Seeder
             'categoria_id' => $velocimetro->id,
             'empresa_id' => '1',
             'unit_code' => 'NIU'
+        ], [
+            'codigo' => 'PROD-011',
+            'nombre' => 'VELOCIMETRO VEL3D-G',
+            'stock' => '0',
+            'precio' => '540',
+            'divisa' => 'PEN',
+            'tipo' => 'producto',
+            'categoria_id' => $velocimetro->id,
+            'empresa_id' => '1',
+            'unit_code' => 'NIU'
         ]];
 
         foreach ($productos as $producto) {

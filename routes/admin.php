@@ -231,6 +231,7 @@ Route::controller(SearchController::class)->prefix('search')->group(function () 
     Route::get('sim_card', 'sim_card')->name('search.sim_card');
     Route::get('lineas', 'lineas')->name('search.lineas');
     Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
     Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
     Route::get('ciudades', 'ciudades')->name('search.ciudades');
     Route::get('productos', 'productos')->name('search.productos');

@@ -10,4 +10,21 @@ class Cards extends Component
     {
         return view('livewire.admin.tecnico.tareas.cards');
     }
+
+    public function openWithoutReading()
+    {
+        $this->emit('openModal');
+    }
+    public function openTaskComplete()
+    {
+        $this->emit('openModal');
+    }
+    public function openTaskPending()
+    {
+        $this->emit('openModal');
+    }
+    public function openTaskCanceled()
+    {
+        $this->emit('openModal');
+    }
 }
