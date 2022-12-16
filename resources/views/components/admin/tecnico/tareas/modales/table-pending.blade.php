@@ -1,9 +1,31 @@
 <div class="bg-white shadow-lg rounded-sm border  border-slate-200 mt-6 ">
-    <header class="px-5 py-4">
-        <h2 class="font-semibold text-slate-800">Total Tareas: <span
-                class="text-slate-400 font-medium">{{$tareas->total()}}</span>
+    <header class="px-5 py-4 block md:flex">
+        <h2 class="font-semibold text-slate-800 flex-auto">Total Tareas: <span class="text-slate-400 font-medium">
+                {{$tareas->total()}}
+            </span>
         </h2>
+        <div class="">
+
+            <div class="relative">
+                <label for="action-search" class="sr-only">Buscar</label>
+                <input wire:model="search" class="form-input pl-9 w-full focus:border-slate-300" type="search"
+                    placeholder="Buscar tarea" />
+
+                <button type="button" class="absolute inset-0 right-auto group" type="button" aria-label="Search">
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                        viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
+                        <path
+                            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+
     </header>
+
     <div x-data="handleSelect">
 
         <!-- Table -->
@@ -13,17 +35,14 @@
                 <thead
                     class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                     <tr>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                            <div class="flex items-center">
-                                <label class="inline-flex">
-                                    <span class="sr-only">Select all</span>
-                                    <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                        @click="toggleAll" />
-                                </label>
-                            </div>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="font-semibold text-center">#</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3">
-                            <div class="font-semibold text-left">#</div>
+                            <div class="font-semibold text-center">Tarea</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="font-semibold text-center">Asignada por</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="font-semibold text-center">Descripción</div>
@@ -32,16 +51,11 @@
                             <div class="font-semibold text-center">Vehiculo</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Estado</div>
+                            <div class="font-semibold text-center">Estado</div>
                         </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-center">Costo</div>
-                        </th>
+
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-center">Notificar</div>
                         </th>
                     </tr>
                 </thead>
@@ -51,19 +65,19 @@
                     @if ($tareas->count())
                     @foreach ($tareas as $tarea)
                     <tr>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                            <div class="flex items-center">
-                                <label class="inline-flex">
-                                    <span class="sr-only">Select</span>
-                                    <input class="table-item form-checkbox" id-tarea="{{$tarea->id}}" type="checkbox"
-                                        @click="uncheckParent" />
-                                </label>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
+                                {{$tarea->token}}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div wire:click.prevent="infoTask"
-                                class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
-                                {{$tarea->token}}
+                            <div class="text-center">
+                                {{$tarea->tipo_tarea->nombre}}
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center">
+                                {{$tarea->user->name}}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
@@ -105,11 +119,13 @@
                                 @endswitch
                             </div>
                         </td>
+
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-center">
                                 {{$tarea->vehiculo->placa}}
                             </div>
                         </td>
+
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-left">
 
@@ -119,27 +135,9 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-center">
-                                {{$tarea->tipo_tarea->costo}}
-                            </div>
-                        </td>
+
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
-                                <button type="button" wire:click.prevent="EditTask({{$tarea->id}})"
-                                    class="btn bg-orange-600 hover:bg-orange-700 text-white">
-
-                                    <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 48 48">
-                                        <g stroke-linecap="square" stroke-width="2" fill="none" stroke="currentColor"
-                                            stroke-linejoin="miter" class="nc-icon-wrapper" stroke-miterlimit="10">
-                                            <line x1="29" y1="9" x2="39" y2="19"></line>
-                                            <path
-                                                d="M17,41,3,45,7,31,34.121,3.879a3,3,0,0,1,4.243,0l5.757,5.757a3,3,0,0,1,0,4.243Z">
-                                            </path>
-                                        </g>
-                                    </svg>
-                                </button>
                                 <button type="button" wire:click.prevent="DeleteTask({{$tarea->id}})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
@@ -150,22 +148,6 @@
                                 </button>
                             </div>
                         </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                            <div class="flex gap-2 justify-center">
-                                <button type="button" class="rounded-full bg-emerald-600 hover:bg-emerald-700">
-                                    <svg class="w-10 h-10 shrink-0" xmlns="http://www.w3.org/2000/svg"
-                                        aria-label="WhatsApp" role="img" viewBox="0 0 512 512">
-                                        <rect width="512" height="512" rx="15%" fill="#25d366" />
-                                        <path fill="#25d366" stroke="#fff" stroke-width="26"
-                                            d="M123 393l14-65a138 138 0 1150 47z" />
-                                        <path fill="#fff"
-                                            d="M308 273c-3-2-6-3-9 1l-12 16c-3 2-5 3-9 1-15-8-36-17-54-47-1-4 1-6 3-8l9-14c2-2 1-4 0-6l-12-29c-3-8-6-7-9-7h-8c-2 0-6 1-10 5-22 22-13 53 3 73 3 4 23 40 66 59 32 14 39 12 48 10 11-1 22-10 27-19 1-3 6-16 2-18" />
-                                    </svg>
-
-                                </button>
-                            </div>
-                        </td>
-
                     </tr>
                     @endforeach
                     @else

@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Tecnico\Tareas;
+namespace App\Http\Livewire\Admin\Tecnico\Tareas\Modales;
 
 use App\Models\Tareas;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class TablaHistorial extends Component
+class Canceled extends Component
 {
     use WithPagination;
+
+    public $openModal = false;
     public $search = '';
-    public $pages = 10;
 
     protected $listeners = [
-        'updateIndex' => 'render'
+        'openModalCanceled' => 'openModal',
     ];
-
     public function render()
     {
-
         $tareas = Tareas::whereHas('vehiculo', function ($vehiculo) {
             $vehiculo->where('placa', 'LIKE', '%' . $this->search . '%');
         })->orWhereHas('cliente', function ($cliente) {
@@ -30,24 +29,16 @@ class TablaHistorial extends Component
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
             ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
-            ->orderBy('id', 'desc')
-            ->paginate();
-
-        return view('livewire.admin.tecnico.tareas.tabla-historial', compact('tareas'));
+            ->estado('CANCELED')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->paginate(5, ['*'], 'canceledPage');
+        return view('livewire.admin.tecnico.tareas.modales.canceled', compact('tareas'));
     }
-
-    public function addTask()
-    {
-        $this->emit('addTask');
-    }
-
     public function updatingSearch()
     {
-        $this->resetPage();
+        $this->resetPage('canceledPage');
     }
-
-    public function pagination($pages)
+    public function openModal()
     {
-        $this->pages = $pages;
+        $this->openModal = true;
     }
 }

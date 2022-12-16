@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\ServicioTecnico;
 use Illuminate\Http\Request;
+use App\Models\ServicioTecnico;
+use App\Http\Controllers\Controller;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class ServicioTecnicoController extends Controller
 {
@@ -22,5 +23,12 @@ class ServicioTecnicoController extends Controller
     public function tecnicos()
     {
         return view('admin.tecnico.index');
+    }
+
+    public static function setNextSequenceNumber()
+    {
+
+        $id = IdGenerator::generate(['table' => 'tareas', 'field' => 'token', 'length' => 12, 'prefix' => 'TASK' . date('y') . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => true]);
+        return $id;
     }
 }

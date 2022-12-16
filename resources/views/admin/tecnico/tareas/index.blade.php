@@ -23,14 +23,34 @@
 
 @push('modals')
 @livewire('admin.tecnico.tareas.create-task')
+@livewire('admin.tecnico.tareas.modales.w-reading')
+@livewire('admin.tecnico.tareas.modales.complete')
+@livewire('admin.tecnico.tareas.modales.pending')
+@livewire('admin.tecnico.tareas.modales.canceled')
 @endpush
 
 @section('js')
+<script>
+    window.addEventListener('save-task', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'TAREA CREADA',
+            timeout: 2500,
+            message: 'Se ha creado la tarea <b>'+event.detail.tarea.token+'</b>',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(5, 44, 82)'
+        });
+    })
+
+</script>
+
 <script>
     // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
+                selected: [],
                 selectAction() {
                     countEl = document.querySelector('.table-items-action');
                     if (!countEl) return;
@@ -41,6 +61,7 @@
                     } else {
                         countEl.classList.add('hidden');
                     }
+                    //console.log(this.selected);
                 },
                 toggleAll() {
                     this.selectall = !this.selectall;
@@ -48,11 +69,26 @@
                     [...checkboxes].map((el) => {
                         el.checked = this.selectall;
                     });
+                    ids = countEl = document.querySelectorAll('input.table-item');
+                    [...ids].map((el) => {
+                        if(el.checked){
+                            selects.push(el.getAttribute('id-tarea'));
+                        };
+                    });
+                    this.selected = selects;
                     this.selectAction();
                 },
                 uncheckParent() {
                     this.selectall = false;
+                    selects = [];
                     document.getElementById('parent-checkbox').checked = false;
+                    ids = countEl = document.querySelectorAll('input.table-item');
+                    [...ids].map((el) => {
+                        if(el.checked){
+                            selects.push(el.getAttribute('id-tarea'));
+                        };
+                    });
+                    this.selected = selects;
                     this.selectAction();
                 }
             }))

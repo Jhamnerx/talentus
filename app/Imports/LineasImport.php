@@ -22,10 +22,9 @@ class LineasImport implements ToCollection, WithChunkReading, WithEvents, Should
 
     public function collection(Collection $rows)
     {
-        foreach ($rows as $row) 
-        {
+        foreach ($rows as $row) {
 
-        
+
             $linea = Lineas::create([
                 'numero'    => $row[0],
                 'operador'    => $row[2],
@@ -38,12 +37,9 @@ class LineasImport implements ToCollection, WithChunkReading, WithEvents, Should
                     'sim_card'    => $row[1],
                     'operador'    => $row[2],
                     'lineas_id' => $linea->id,
-                    'empresa_id'    => 1 ,
+                    'empresa_id'    => 1,
                 ]);
             }
-
-
-
         }
     }
 
@@ -64,13 +60,11 @@ class LineasImport implements ToCollection, WithChunkReading, WithEvents, Should
 
     public static function afterImport(AfterImport $event)
     {
-        
-        SimCardImportUpdated::dispatch();
 
+        SimCardImportUpdated::dispatch();
     }
 
-    public static function importFailed(ImportFailed $event){
-
-        dd("fallo");
+    public static function importFailed(ImportFailed $event)
+    {
     }
 }

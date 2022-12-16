@@ -112,4 +112,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(GuiaRemision::class, 'users_id');
     }
+
+    public function tareas()
+    {
+        return $this->hasMany(Tareas::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }

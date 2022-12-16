@@ -144,6 +144,11 @@
                                     {{ $message }}
                                 </p>
                                 @enderror
+                                @if ($ErrorMsgVehiculo)
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $ErrorMsgVehiculo }}
+                                </p>
+                                @endif
                             </div>
 
                             {{-- dispositivo --}}
@@ -226,6 +231,11 @@
                                         </svg>
                                     </div>
                                 </div>
+                                @error('modelo_velocimetro')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                                @enderror
                             </div>
                             {{-- numero --}}
                             <div
@@ -234,7 +244,7 @@
                                     Número:
                                 </label>
                                 <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full numero" wire:model="numero"
+                                    <input type="text" class="form-input pl-9 w-full numero" wire:model.defer="numero"
                                         placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -254,6 +264,47 @@
                                     </div>
                                 </div>
                                 @error('numero')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                                @enderror
+                            </div>
+                            {{-- sim card --}}
+                            <div
+                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5  ? 'hidden' : 'velo'}}">
+                                <label class="block text-sm font-medium mb-1" for="sim_card">
+                                    Sim Card:
+                                </label>
+                                <div class="relative">
+                                    <input type="text" class="form-input pl-9 w-full sim_card"
+                                        placeholder="Ingresa o busca un sim card" wire:model="sim_card">
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 48 48">
+                                            <g class="nc-icon-wrapper">
+                                                <path
+                                                    d="M44.539,41.4,36.861,28.489A1,1,0,0,0,36,28H12a1,1,0,0,0-.86.489l-7.671,12.9Z"
+                                                    fill="#636363"></path>
+                                                <path d="M6,46a3,3,0,0,1,0-6H42a3,3,0,0,1,0,6" fill="#363636"></path>
+                                                <polygon points="39.594 37 35.432 30 12.568 30 8.406 37 39.594 37"
+                                                    fill="#c2eff4"></polygon>
+                                                <path
+                                                    d="M32.887,6.556a1,1,0,0,0-.44-.451l-8-4a1,1,0,0,0-.894,0l-8,4a1,1,0,0,0-.44.451L24,11Z"
+                                                    fill="#c2eff4">
+                                                </path>
+                                                <path
+                                                    d="M24,11V22a1,1,0,0,0,.447-.105l8-4A1,1,0,0,0,33,17V7a1,1,0,0,0-.113-.444Z"
+                                                    fill="#7ed3dd">
+                                                </path>
+                                                <path
+                                                    d="M15.113,6.556A1,1,0,0,0,15,7V17a1,1,0,0,0,.553.895l8,4A1,1,0,0,0,24,22V11Z"
+                                                    fill="#a0e6ee">
+                                                </path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+                                @error('sim_card')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
                                 </p>
@@ -327,48 +378,18 @@
                                         </svg>
                                     </div>
                                 </div>
+                                @error('nuevo_sim_card')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                                @enderror
                             </div>
 
-                            {{-- sim card --}}
-                            <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5  ? 'hidden' : 'velo'}}">
-                                <label class="block text-sm font-medium mb-1" for="sim_card">
-                                    Sim Card:
-                                </label>
-                                <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full sim_card"
-                                        placeholder="Ingresa o busca un sim card" wire:model="sim_card">
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path
-                                                    d="M44.539,41.4,36.861,28.489A1,1,0,0,0,36,28H12a1,1,0,0,0-.86.489l-7.671,12.9Z"
-                                                    fill="#636363"></path>
-                                                <path d="M6,46a3,3,0,0,1,0-6H42a3,3,0,0,1,0,6" fill="#363636"></path>
-                                                <polygon points="39.594 37 35.432 30 12.568 30 8.406 37 39.594 37"
-                                                    fill="#c2eff4"></polygon>
-                                                <path
-                                                    d="M32.887,6.556a1,1,0,0,0-.44-.451l-8-4a1,1,0,0,0-.894,0l-8,4a1,1,0,0,0-.44.451L24,11Z"
-                                                    fill="#c2eff4">
-                                                </path>
-                                                <path
-                                                    d="M24,11V22a1,1,0,0,0,.447-.105l8-4A1,1,0,0,0,33,17V7a1,1,0,0,0-.113-.444Z"
-                                                    fill="#7ed3dd">
-                                                </path>
-                                                <path
-                                                    d="M15.113,6.556A1,1,0,0,0,15,7V17a1,1,0,0,0,.553.895l8,4A1,1,0,0,0,24,22V11Z"
-                                                    fill="#a0e6ee">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
+
 
                             {{-- fecha --}}
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
+                                <label class="block text-sm font-medium mb-1" for="fecha_hora">
                                     Fecha y Hora de la Tarea:
                                 </label>
                                 <div class="relative">
@@ -398,6 +419,11 @@
                                         </svg>
                                     </div>
                                 </div>
+                                @error('fecha_hora')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                                @enderror
                             </div>
 
                             @if ($tipo_tarea_id == "0")

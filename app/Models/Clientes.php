@@ -99,4 +99,10 @@ class Clientes extends Model
     {
         return $this->hasMany(Cobros::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
+
+    public function tareas()
+    {
+
+        return $this->hasMany(Tareas::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }

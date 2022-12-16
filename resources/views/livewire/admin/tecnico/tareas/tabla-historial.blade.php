@@ -9,12 +9,12 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
-            <form class="relative">
+            <div class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar tarea" />
 
-                <button class="absolute inset-0 right-auto group" type="button" aria-label="Search">
+                <button type="button" class="absolute inset-0 right-auto group" type="button" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -23,7 +23,7 @@
                             d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
                     </svg>
                 </button>
-            </form>
+            </div>
             {{-- button save --}}
             <button type="button" wire:click.prevent="addTask" class="btn bg-teal-600 hover:bg-teal-700 text-white">
                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
@@ -53,7 +53,7 @@
             </div>
 
             <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 0 }">
+            <div class="relative float-right" x-data="{ open: false, selected: 1 }">
                 <button
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
@@ -65,8 +65,7 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -100,7 +99,7 @@
                             </svg>
                             <span>Mostrar 10</span>
                         </button>
-                        <button wire:click="filter(15)" tabindex="0"
+                        <button wire:click="pagination(15)" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -116,8 +115,7 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -128,8 +126,7 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -172,9 +169,9 @@
     <x-admin.tecnico.tareas.tabla-historial :tareas="$tareas">
     </x-admin.tecnico.tareas.tabla-historial>
 
-    {{--
-        <div class="mt-8 w-full">
-            {{ $clientes->links() }}
 
-        </div> --}}
+    <div class="mt-8 w-full">
+        {{ $tareas->links() }}
+
+    </div>
 </div>
