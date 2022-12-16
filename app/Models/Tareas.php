@@ -56,7 +56,7 @@ class Tareas extends Model
     }
 
     //Relacion uno A UNO POLIMORFICA IMAGEN
-    public function imagen()
+    public function image()
     {
         return $this->morphOne(Imagen::class, 'imageable');
     }

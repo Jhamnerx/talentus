@@ -88,7 +88,7 @@
                                 {{$tarea->user->name }}
                             </div>
                         </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-normal min-w-36">
                             <div class="text-left font-medium text-slate-800">
                                 @switch($tarea->tipo_tarea_id)
                                 @case(1)
@@ -145,16 +145,22 @@
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-center">
+                                @if ($tarea->fecha_termino)
                                 Terminada el {{$tarea->fecha_termino->format('d-m-Y')}} a las
                                 {{$tarea->fecha_termino->format('h:i A')}}
+                                @else
+                                error al obtener fecha
+
+                                @endif
+
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
                                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                     @mouseleave="open = false">
-                                    <button aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                                        @focusout="open = false" @click.prevent type="button"
+                                    <button wire:click="sendWhatsApp" aria-haspopup="true" :aria-expanded="open"
+                                        @focus="open = true" @focusout="open = false" @click.prevent type="button"
                                         class="rounded-full bg-emerald-600 hover:bg-emerald-700">
                                         <svg class="w-8 h-8 shrink-0" xmlns="http://www.w3.org/2000/svg"
                                             aria-label="WhatsApp" role="img" viewBox="0 0 512 512">
@@ -180,14 +186,34 @@
                                 </div>
                             </div>
                         </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3">
-                            <div class="flex gap-2 justify-center hover:cursor-pointer">
-                                <label class="block hover:cursor-pointer">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 max-w-xs" x-data="{ isUploading: false, progress: 0 }"
+                            x-on:livewire-upload-start="isUploading = true"
+                            x-on:livewire-upload-finish="isUploading = false"
+                            x-on:livewire-upload-error="isUploading = false"
+                            x-on:livewire-upload-progress="progress = $event.detail.progress">
 
-                                    <input type="file"
+                            @if ($tarea->image)
+                            {{-- <button wire:click="verImagen" class="btn bg-emerald-700 text-white">VER</button> --}}
+                            <a class="image-task btn bg-emerald-700 text-white" data-gall="gallery01"
+                                href="{{Storage::url($tarea->image->url)}}">VER</a>
+                            @else
+                            <div x-show="!isUploading" class="flex gap-2 justify-center hover:cursor-pointer">
+                                <label class="block hover:cursor-pointer">
+                                    <input type="file" wire:model="imagen.{{$tarea->id}}"
                                         class=" hover:cursor-pointer  text-sm font-normal text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                 </label>
                             </div>
+                            <div x-show="isUploading">
+                                {{-- <progress max="100" x-bind:value="progress"></progress> --}}
+                                <div class="w-full bg-gray-200 rounded-full h-2.5 mb-4 dark:bg-gray-700">
+                                    <div class="bg-emerald-600 h-2.5 rounded-full dark:bg-emerald-500"
+                                        :style="`width: ${progress}%`">
+                                    </div>
+                                </div>
+                            </div>
+
+                            @endif
+
 
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">

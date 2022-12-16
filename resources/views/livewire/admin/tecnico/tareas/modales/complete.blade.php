@@ -33,6 +33,8 @@
                 </div>
                 <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
+                    {{json_encode($imagen)}}
+                    {{json_encode($errors->all())}}
 
                     <x-admin.tecnico.tareas.modales.table-complete :tareas="$tareas">
                     </x-admin.tecnico.tareas.modales.table-complete>
@@ -47,8 +49,7 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click.prevent="closeModal">Cerrar</button>
-                        <button wire:click.prevent="save()"
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+
                     </div>
                 </div>
 
@@ -62,6 +63,13 @@
 
 @once
 @push('scripts')
+<script>
+    $(document).ready(function() {
 
+
+    })
+
+
+</script>
 @endpush
 @endonce

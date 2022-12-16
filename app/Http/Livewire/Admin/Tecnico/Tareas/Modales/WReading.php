@@ -42,4 +42,11 @@ class WReading extends Component
     {
         $this->openModal = true;
     }
+    public function closeModal()
+    {
+        $tareas = Tareas::estado('UNREAD')->update(array('estado' => 'PENDIENT'));
+
+        $this->openModal = false;
+        $this->emit('update-unread');
+    }
 }

@@ -47,8 +47,7 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click.prevent="closeModal">Cerrar</button>
-                        <button wire:click.prevent="save()"
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+
                     </div>
                 </div>
 

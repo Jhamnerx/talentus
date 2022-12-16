@@ -45,6 +45,24 @@
 
 </script>
 
+
+<script>
+    window.addEventListener('save-imagen', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'IMAGEN GUARDADA',
+            timeout: 2500,
+            message: 'Se guardo la imagen de la tarea <b>'+event.detail.tarea+'</b>',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(5, 44, 82)'
+        });
+    })
+
+</script>
+
+
+
 <script>
     // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {

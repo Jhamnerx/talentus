@@ -117,12 +117,9 @@ class UtilesController extends Controller
         return $json;
     }
 
-
     public static function getLabels($months = 1)
     {
-
         $labels = [];
-
         for ($i = 0; $i < $months; $i++) {
 
             array_push(
@@ -132,5 +129,71 @@ class UtilesController extends Controller
         }
 
         return $labels;
+    }
+
+    public static function whatsAppSendMessageInstalation($data)
+    {
+        $token = "EAAJ0miN9XeoBAMZC9RgTvuChpLkxTrtu5TKzpZBvSNoxRzA83BmSC35bd3YfgCFzFKqCynQ7MNSI4xraO1ZBxGd4BUjfMQDotmUV9wiDZAJyiZBt8DSPiDEK0n9lPw5rOoB3hEuITpO6qrCHRzTpD6tjfC7cTZBV82iZAev3dCnwgqu0U9QZCzNJoRLbmWBEqeWoZAQZAnDIxgblZA3aEa2SFcW";
+        $client = new Client();
+        $parameters = [];
+
+        $res = $client->request('POST', 'https://graph.facebook.com/v15.0/109743508654475/messages', [
+            'http_errors' => false,
+            'connect_timeout' => 5,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/json',
+                'User-Agent' => 'laravel/guzzle',
+                'Accept' => '*/*',
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'Connection' => 'keep-alive',
+            ],
+            'body' => '
+                    {
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    "to": "51987816560",
+                    "type": "template",
+                    "template": {
+                        "name": "confirmacion_servicio_tecnico",
+                        "language": {
+                        "code": "es"
+                        },
+                        "components": [
+                        {
+                            "type": "body",
+                            "parameters": [
+                            {
+                                "type": "TEXT",
+                                "text": "FMU-130"
+                            },
+                            {
+                                "type": "TEXT",
+                                "text": "ABC-780"
+                            },
+                            {
+                                "type": "TEXT",
+                                "text": "15-12-2022"
+                            }
+                            ]
+                        },
+                        {
+                            "type": "button",
+                            "sub_type": "url",
+                            "index": "0",
+                            "parameters": [
+                            {
+                                "type": "TEXT",
+                                "text": "TASK22-00001"
+                            }
+                            ]
+                        }
+                        ]
+                    }
+                }
+            '
+        ]);
+        $response = json_decode($res->getBody()->getContents(), true);
+        return $response;
     }
 }
