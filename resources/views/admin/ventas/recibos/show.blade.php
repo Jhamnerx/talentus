@@ -147,11 +147,11 @@
                                 <div class="space-y-2">
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> RECIBO# </p>
-                                        <p>{{ $recibo->serie . '-' . $recibo->numero }} </p>
+                                        <p>{{ $recibo->serie_numero }} </p>
                                     </div>
                                     <div>
                                         <p class="font-medium text-sm text-gray-400"> Fecha Emision </p>
-                                        <p> {{ $recibo->fecha->format('Y/m/d') }} </p>
+                                        <p> {{ $recibo->fecha_emision->format('Y/m/d') }} </p>
                                     </div>
                                     <div>
                                         <a href="{{ route('admin.pdf.recibo', $recibo) }}" target="_blank"

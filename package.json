@@ -65,6 +65,7 @@
         "sortablejs": "^1.15.0",
         "sweetalert2": "^11.4.13",
         "swiper": "^8.0.6",
-        "tw-elements": "^1.0.0-alpha12"
+        "tw-elements": "^1.0.0-alpha12",
+        "venobox": "^2.0.4"
     }
 }

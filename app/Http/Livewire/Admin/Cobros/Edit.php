@@ -11,7 +11,7 @@ use Symfony\Component\Mailer\Transport\Dsn;
 class Edit extends Component
 {
     public $cliente, $vehiculos_id, $comentario, $periodo, $monto_unidad;
-    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago, $observacion;
+    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago, $observacion, $divisa;
     public $dataVehiculos = [];
     public $nota;
     public $cobro;
@@ -21,9 +21,12 @@ class Edit extends Component
         $this->fecha_vencimiento = $this->cobro->fecha_vencimiento->format('Y-m-d');
         $this->periodo = $this->cobro->periodo;
         $this->tipo_pago = $this->cobro->tipo_pago;
+        $this->divisa = $this->cobro->divisa;
         $this->monto_unidad = $this->cobro->monto_unidad;
         $this->nota = $this->cobro->nota;
         $this->cliente = $this->cobro->clientes_id;
+        $this->observacion = $this->cobro->observacion;
+        $this->comentario = $this->cobro->comentario;
         $this->vehiculos_id = $this->cobro->vehiculos_id;
         $this->dataVehiculos = $this->LoadDataVehiculos($this->cobro->clientes_id);
     }
@@ -97,6 +100,7 @@ class Edit extends Component
             'fecha_vencimiento' => $this->fecha_vencimiento,
             'nota' => $this->nota,
             'tipo_pago' => $this->tipo_pago,
+            'divisa' => $this->divisa,
             'monto_unidad' => $this->monto_unidad,
 
         ]);

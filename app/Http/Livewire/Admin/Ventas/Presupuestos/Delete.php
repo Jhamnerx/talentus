@@ -10,7 +10,7 @@ class Delete extends Component
 {
     public Model $presupuesto;
     public $openModalDelete;
-    
+
     protected $listeners = [
         'openModalDelete'
     ];
@@ -22,7 +22,8 @@ class Delete extends Component
         $this->emit('render');
         //$flight->forceDelete();
     }
-    public function openModalDelete(Presupuestos $presupuesto){
+    public function openModalDelete(Presupuestos $presupuesto)
+    {
         $this->openModalDelete = true;
         $this->presupuesto = $presupuesto;
     }

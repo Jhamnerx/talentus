@@ -31,14 +31,14 @@ class VentasFacturasController extends Controller
         $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'serie_numero', 'length' => 9, 'prefix' => $plantilla->series["factura"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => false]);
         return $id;
     }
-    public function store(FacturasRequest $request)
-    {
+    // public function store(FacturasRequest $request)
+    // {
 
-        $factura = Facturas::create($request->all());
-        Facturas::createItems($factura, $request->items);
+    //     $factura = Facturas::create($request->all());
+    //     Facturas::createItems($factura, $request->items);
 
-        return redirect()->route('admin.ventas.facturas.index')->with('store', 'La Factura se guardo con exito');
-    }
+    //     return redirect()->route('admin.ventas.facturas.index')->with('store', 'La Factura se guardo con exito');
+    // }
 
     public function show(Facturas $factura)
     {

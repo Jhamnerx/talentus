@@ -10,6 +10,7 @@ use App\Models\Dispositivos;
 use App\Models\Facturas;
 use App\Models\Flotas;
 use App\Models\Lineas;
+use App\Models\ModelosDispositivo;
 use App\Models\Productos;
 use App\Models\Proveedores;
 use App\Models\SimCard;
@@ -69,7 +70,9 @@ class SearchController extends Controller
         // return $array;
 
         $term = $request->get('term');
-        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')->active(1)->orderBy('id', 'desc')->get();
+        $querys = Clientes::where('razon_social', 'LIKE', '%' . $term . '%')
+            ->orWhere('numero_documento', 'LIKE', '%' . $term . '%')
+            ->active(1)->orderBy('id', 'desc')->get();
 
         $data = [];
 
@@ -77,6 +80,7 @@ class SearchController extends Controller
             $data[] = [
                 'data' => $query->razon_social,
                 'value' => $query->id,
+                'numero_documento' => $query->numero_documento,
                 'flotas' => $query->flotas,
 
             ];
@@ -289,6 +293,33 @@ class SearchController extends Controller
 
         return array("suggestions" => $data);
     }
+    public function modelos(Request $request)
+    {
+
+        $term = $request->get('term');
+
+        $dipositivos = ModelosDispositivo::where('modelo', 'LIKE', '%' . $term . '%')
+
+            ->get();
+
+        $data = [];
+
+        foreach ($dipositivos as $dipositivo) {
+
+            $data[] = [
+                'value' => $dipositivo->modelo . " | " . $dipositivo->marca,
+                'data' => $dipositivo->id,
+                'modelo' => $dipositivo->modelo,
+                'marca' => $dipositivo->marca,
+            ];
+        }
+
+
+        return array("suggestions" => $data);
+    }
+
+
+
     public function vehiculos(Request $request)
     {
 

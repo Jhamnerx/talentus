@@ -68,5 +68,6 @@ class DatabaseSeeder extends Seeder
         $this->call(MotivosTrasladoSeeder::class);
         $this->call(PaymentMethodsSeeder::class);
         $this->call(UbigeosSeeder::class);
+        $this->call(TipoTareasSeeder::class);
     }
 }

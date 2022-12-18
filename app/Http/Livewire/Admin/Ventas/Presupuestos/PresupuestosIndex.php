@@ -161,8 +161,8 @@ class PresupuestosIndex extends Component
         if (!$presupuesto->factura) {
             $venta = $presupuesto->factura()->create([
                 'clientes_id' => $presupuesto->clientes_id,
-                'serie' => $plantilla->serie_factura,
                 'numero' => $facturasController->setNextSequenceNumber(),
+                'serie' => $plantilla->series["factura"],
                 'fecha_emision' => $date = Carbon::now(),
                 'fecha_vencimiento' => $date = Carbon::now(),
                 'divisa' => $presupuesto->divisa,
@@ -207,8 +207,10 @@ class PresupuestosIndex extends Component
 
             $recibo = $presupuesto->recibo()->create([
                 'clientes_id' => $presupuesto->clientes_id,
-                'serie' => $plantilla->serie_recibo,
                 'numero' => $recibosController->setNextSequenceNumber(),
+                'serie' => $plantilla->series["factura"],
+                'fecha_emision' => $date = Carbon::now(),
+                'fecha_pago' => $date = Carbon::now(),
                 'tipo_pago' => '',
                 'fecha' => $date = Carbon::now(),
                 'divisa' => $presupuesto->divisa,

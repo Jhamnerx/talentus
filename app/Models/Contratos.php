@@ -20,6 +20,7 @@ class Contratos extends Model
         'sello' => 'boolean',
         'fondo' => 'boolean',
         'estado' => 'boolean',
+        'fecha' => 'date:Y/m/d',
         'eliminado' => 'boolean',
     ];
 
@@ -64,8 +65,6 @@ class Contratos extends Model
 
     public static function createItems($contrato, $contratoItems)
     {
-
-
         foreach ($contratoItems as $contratoItem) {
 
             $contratoItem['contratos_id'] = $contrato->id;
@@ -74,6 +73,10 @@ class Contratos extends Model
         }
     }
 
+    public function periodo()
+    {
+        return $this->created_at->subDay()->diffInMonths($this->fecha);
+    }
 
     public function getPDFData()
     {

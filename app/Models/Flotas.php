@@ -40,7 +40,7 @@ class Flotas extends Model
     // }
     public function vehiculos()
     {
-        return $this->belongsToMany(Vehiculos::class, 'vehiculos_flotas', 'vehiculos_id', 'flotas_id');
+        return $this->belongsToMany(Vehiculos::class, 'vehiculos_flotas', 'flotas_id', 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 

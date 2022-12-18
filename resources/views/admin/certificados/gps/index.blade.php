@@ -12,6 +12,7 @@
     @livewire('admin.certificados.gps.save')
     @livewire('admin.certificados.gps.edit')
     @livewire('admin.certificados.gps.send')
+    @livewire('admin.certificados.gps.delete')
 @endpush
 
 @section('js')
@@ -39,7 +40,20 @@
 
         })
     </script>
+    <script>
+        window.addEventListener('certificado-delete', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: 'Certificado Eliminado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        })
+    </script>
     <script>
         window.addEventListener('certificado-save', event => {
             $(document).ready(function() {

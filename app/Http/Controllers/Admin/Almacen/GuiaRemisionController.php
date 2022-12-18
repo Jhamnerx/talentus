@@ -30,13 +30,13 @@ class GuiaRemisionController extends Controller
     }
 
 
-    public function show(GuiaRemision $guiaRemision)
+    public function show(GuiaRemision $guia)
     {
-        return view('admin.almacen.guias.show');
+        return view('admin.almacen.guias.show', compact('guia'));
     }
 
-    public function edit(GuiaRemision $guiaRemision)
+    public function edit(GuiaRemision $guia)
     {
-        return view('admin.almacen.guias.edit');
+        return view('admin.almacen.guias.edit', compact('guia'));
     }
 }

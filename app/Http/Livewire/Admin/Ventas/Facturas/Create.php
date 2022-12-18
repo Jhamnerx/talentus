@@ -95,8 +95,8 @@ class Create extends Component
             $this->selected = collect();
 
             //calcular los totales al añadir un producto
-            $this->sub_total = $this->calcularSubTotal();
-            $this->impuesto = $this->calcularImpuesto();
+            //$this->sub_total = $this->calcularSubTotal();
+            //$this->impuesto = $this->calcularImpuesto();
             $this->total = $this->calcularTotal();
 
             //$this->calcularTotalSoles();

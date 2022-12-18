@@ -26,16 +26,7 @@ class Index extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $facturas = Facturas::whereHas('clientes', function ($query) {
-            $query->where('razon_social', 'like', '%' . $this->search . '%');
-        })
-            ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
-            ->orWhere('numero', 'like', '%' . $this->search . '%')
-            ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('total', 'like', '%' . $this->search . '%')
-            ->Where('estado', $this->status)
-            ->orderBy('numero', 'DESC')
-            ->paginate(10);
+
 
 
         $pagadas = Facturas::where('pago_estado', 'PAID')->count();
@@ -53,7 +44,29 @@ class Index extends Component
 
         if ($estado != null) {
 
-            $facturas = Facturas::Where('pago_estado', $estado)->paginate(10);
+            $facturas = Facturas::whereHas('clientes', function ($query) {
+                $query->where('razon_social', 'like', '%' . $this->search . '%');
+            })
+                ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+                ->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
+                //->orWhere('fecha_emision', 'like', '%' . date('Y-m-d', strtotime($this->search))  . '%')
+                ->orWhere('total', 'like', '%' . $this->search . '%')
+                ->StatusPaid($estado)
+                ->orderBy('numero', 'DESC')
+                ->paginate(10);
+        } else {
+            $facturas = Facturas::whereHas('clientes', function ($query) {
+                $query->where('razon_social', 'like', '%' . $this->search . '%');
+            })
+                ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+                ->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('tipo_venta', 'like', '%' . $this->search . '%')
+                // ->orWhere('fecha_emision', 'like', '%' . date('Y-m-d', strtotime($this->search))  . '%')
+                ->orWhere('total', 'like', '%' . $this->search . '%')
+
+                ->orderBy('numero', 'DESC')
+                ->paginate(10);
         }
 
         if (!empty($desde)) {

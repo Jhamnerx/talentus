@@ -11,6 +11,7 @@
     @livewire('admin.certificados.actas.save')
     @livewire('admin.certificados.actas.edit')
     @livewire('admin.certificados.actas.send')
+    @livewire('admin.certificados.actas.delete')
 @endpush
 
 @section('js')
@@ -47,7 +48,20 @@
 
         })
     </script>
+    <script>
+        window.addEventListener('acta-delete', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Eliminado',
+                    text: 'Acta Eliminada',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+        })
+    </script>
     <script>
         window.addEventListener('acta-save', event => {
             $(document).ready(function() {

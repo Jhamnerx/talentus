@@ -19,7 +19,7 @@ class Index extends Component
     {
 
         $payments = Payments::whereHas('paymentable', function ($query) {
-            $query->where('numero', 'LIKE', '%' . $this->search . '%');
+            $query->where('serie_numero', 'LIKE', '%' . $this->search . '%');
         })->orWhere('numero', 'like', '%' . $this->search . '%')->paginate(10);
 
         $total = Payments::all()->sum('monto');

@@ -218,7 +218,9 @@
                                     <p class="text-gray-900 text-right flex-1 font-medium text-sm"> Subtotal </p>
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm total">{{ $presupuesto->subtotal }}</div>
+                                    <div class="text-gray-800 text-sm total">
+                                        {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
+                                    </div>
 
                                 </div>
 
@@ -229,7 +231,10 @@
                                 </div>
 
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm total">{{ $presupuesto->impuesto }}</div>
+                                    <div class="text-gray-800 text-sm total">
+                                        {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}
+                                        {{ number_format($presupuesto->impuesto, 2) }}
+                                    </div>
 
                                 </div>
                             </div>
@@ -238,7 +243,9 @@
                                     <p class="text-gray-900 text-right flex-1 font-medium text-sm"> Total </p>
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm total">{{ $presupuesto->total }}</div>
+                                    <div class="text-gray-800 text-sm total">
+                                        {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}
+                                        {{ number_format($presupuesto->total, 2) }}</div>
 
                                 </div>
                             </div>
@@ -250,7 +257,8 @@
                                 <div>
                                     <p class="font-bold text-black text-lg"> Monto Total </p>
                                 </div>
-                                <p class="font-bold text-black text-lg"> {{ $presupuesto->total }} </p>
+                                <p class="font-bold text-black text-lg"> {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}
+                                    {{ number_format($presupuesto->total, 2) }} </p>
                             </div>
                         </div>
                     </div>

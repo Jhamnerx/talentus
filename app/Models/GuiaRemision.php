@@ -17,6 +17,7 @@ class GuiaRemision extends Model
 
     protected $casts = [
         'fecha_emision' => 'date:Y/m/d',
+        'fecha_inicio_traslado' => 'date:Y/m/d',
         'modalidad_traslado' => ModalidadTraslado::class,
     ];
     //GLOBAL SCOPE EMPRESA
@@ -42,6 +43,17 @@ class GuiaRemision extends Model
         return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', null, 'imei')->withoutGlobalScope(EmpresaScope::class);
     }
 
+    //Relacion uno a muchos inversa
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'users_id');
+    }
+
+    public function factura()
+    {
+        return $this->belongsTo(Facturas::class, 'factura_id');
+    }
 
     public static function createItems($guia, $items)
     {

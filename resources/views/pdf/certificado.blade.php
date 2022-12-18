@@ -229,7 +229,8 @@
                     con el
                     sistema localizador vía
                     GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
-                    {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
+
+                    {{ $certificado->vehiculo->dispositivos ? $certificado->vehiculo->dispositivos->modelo->modelo : 'Registrar dispositivo' }}
                 </p>
 
             </span>
@@ -246,15 +247,20 @@
     <div class="descripcion">
         <span>Con las siguientes características:</span>
         <ul>
-            @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
-                @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
-                    <li>
-                        {{ $caracteristica['text'] }}
-                    </li>
-                @endforeach
+            @if ($certificado->vehiculo->dispositivos)
+                @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
+                    @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
+                        <li>
+                            {{ $caracteristica['text'] }}
+                        </li>
+                    @endforeach
+                @else
+                    <li>No existen caracteristicas</li>
+                @endif
             @else
-                <li>No existen caracteristicas</li>
+                <li style="color: red">Añadir Dispositivo</li>
             @endif
+
 
             <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
 

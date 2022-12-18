@@ -75,7 +75,10 @@ class Facturas extends Model
     {
         return $query->where('pago_estado', '=', Facturas::PAID);
     }
-
+    public function scopeStatusPaid($query, $estado)
+    {
+        return $query->where('pago_estado', '=', $estado);
+    }
     public function scopeUnPaid($query)
     {
         return $query->where('pago_estado', '=', $this::UNPAID);
@@ -95,8 +98,6 @@ class Facturas extends Model
     {
         static::addGlobalScope(new EmpresaScope);
     }
-
-
 
     //Relacion uno a muchos inversa
 
@@ -122,7 +123,10 @@ class Facturas extends Model
         return $this->hasMany(DetalleFacturas::class, 'facturas_id');
     }
 
-
+    public function guia()
+    {
+        return $this->hasMany(GuiaRemision::class, 'factura_id');
+    }
     public function payments()
     {
 

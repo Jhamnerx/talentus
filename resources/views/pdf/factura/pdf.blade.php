@@ -164,7 +164,7 @@
                                 </td>
                                 <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
                                 <td>{{ $detalle->cantidad }}</td>
-                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->importe }}</td>
+                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
                             </tr>
                         @endforeach
 
@@ -211,12 +211,12 @@
                     <tbody>
                         <tr>
                             <td>SUB TOTAL:</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $factura->subtotal }}
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->sub_total, 2) }}
                             </td>
                         </tr>
                         <tr>
                             <td>IGV: 18%</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $factura->impuesto }}
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->impuesto, 2) }}
                             </td>
                         </tr>
 
@@ -224,7 +224,8 @@
                     <tfoot>
                         <tr>
                             <td>Monto Total:</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $factura->total }}</td>
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->total, 2) }}
+                            </td>
                         </tr>
                     </tfoot>
                 </table>

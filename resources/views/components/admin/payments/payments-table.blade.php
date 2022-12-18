@@ -20,7 +20,7 @@
                             <div class="font-semibold text-left">Numero</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Documento</div>
+                            <div class="font-semibold text-left">Documento #</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Fecha Pago</div>
@@ -33,6 +33,9 @@
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-right">Monto</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-center">Usuario</div>
                         </th>
                     </tr>
                 </thead>
@@ -60,7 +63,7 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left">
-                                        {{ $payment->paymentable->numero }}
+                                        {{ $payment->paymentable->serie_numero }}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -91,6 +94,11 @@
                                             ${{ $payment->monto }}
                                         @endif
 
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-center">
+                                        {{ $payment->user->name }}
                                     </div>
                                 </td>
                             </tr>

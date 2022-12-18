@@ -1,53 +1,42 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    <title>{{ config('app.name', 'Laravel') }}</title>
-    <!-- Styles -->
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
-    <!-- Scripts -->
-    <script src="{{ mix('js/app.js') }}" defer></script>
+@extends('layouts.admin')
+@section('ruta', 'almacen-guias')
 
 
+@section('contenido')
 
-</head>
+    <div
+        class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
+        <a href="{{ route('admin.almacen.guias.index') }}">
+            <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+                </svg>
+                <span class="hidden xs:block ml-2">Atras</span>
+            </button>
+        </a>
+        <div>
+            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">EDITAR GUIA REMISION</h4>
+            <ul aria-label="current Status"
+                class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
+                <li class="flex items-center mr-4">
+                    <div class="mr-1">
+                        <img class="dark:hidden"
+                            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/simple_with_sub_text_and_border-svg1.svg"
+                            alt="Active">
+                        <img class="dark:block hidden"
+                            src="https://tuk-cdn.s3.amazonaws.com/can-uploader/simple_with_sub_text_and_border-svg1dark.svg"
+                            alt="Active">
+                    </div>
+                    <span>Active</span>
+                </li>
 
-<body class="font-inter antialiased bg-slate-100 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: 'dashboard-main', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }"
-    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
-
-    <script>
-        if (localStorage.getItem('sidebar-expanded') == 'true') {
-            document.querySelector('body').classList.add('sidebar-expanded');
-        } else {
-            document.querySelector('body').classList.remove('sidebar-expanded');
-        }
-    </script>
-
-    <!-- Page wrapper -->
-    <div class="flex h-screen overflow-hidden">
-
-        <!-- Sidebar -->
-        @livewire('admin.sidebar')
-
-        <!-- Content area -->
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-
-            <!-- Site header -->
-            @livewire('admin.header')
-
-            edit
-
-
+            </ul>
         </div>
-
     </div>
 
-</body>
+    @livewire('admin.guias-remision.edit', ['guia' => $guia])
 
-</html>
+@stop

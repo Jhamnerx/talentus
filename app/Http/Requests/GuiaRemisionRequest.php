@@ -44,7 +44,7 @@ class GuiaRemisionRequest extends FormRequest
             'items.*.descripcion' => 'required',
 
             'imeis_add' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"|min:1|array',
-            'user' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
+            'users_id' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
         ];
 
         if ($guia) {
@@ -71,7 +71,7 @@ class GuiaRemisionRequest extends FormRequest
             'items.*.descripcion.required' => 'Ingrese una descripción',
 
             'imeis_add.required_if' => 'Si asignar tecnico esta activado, debes ingresar los imei a asignar',
-            'user.required_if' => 'Debe seleccionar un usuario de rol Tecnico',
+            'users_id.required_if' => 'Debe seleccionar un usuario de rol Tecnico',
 
             'imeis_add.min' => 'Ingresa como minimo un imei',
         ];

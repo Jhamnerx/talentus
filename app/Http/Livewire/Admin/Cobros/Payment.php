@@ -76,8 +76,6 @@ class Payment extends Component
         //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
         // return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
 
-
-
         // return redirect()->route('admin.cobros.show', $this->cobro);
         // session()->flash('store', 'Se guardo con exito' . $payment->numero);
         return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.banner', 'Se guardo con exito el pago ' . $payment->numero);
@@ -141,7 +139,8 @@ class Payment extends Component
 
                 $data[] = [
                     'id' => $factura->id,
-                    'text' => $factura->numero,
+                    'text' => $factura->serie_numero,
+                    'fecha_emision' => $factura->fecha_emision->format('d-m-Y'),
                     'paymentable_type' => Facturas::class,
                     'paymentable_id' => $factura->id,
                     'monto' => $factura->total,
@@ -161,7 +160,8 @@ class Payment extends Component
 
             $data[] = [
                 'id' => $recibo->id,
-                'text' => $recibo->numero,
+                'text' => $recibo->serie_numero,
+                'fecha_emision' => $recibo->fecha_emision->format('d-m-Y'),
                 'paymentable_type' => Recibos::class,
                 'paymentable_id' => $recibo->id,
                 'monto' => $recibo->total,

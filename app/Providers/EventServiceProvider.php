@@ -35,6 +35,7 @@ use App\Models\Productos;
 use App\Models\Recibos;
 use App\Models\Reportes;
 use App\Models\SimCard;
+use App\Models\Tareas;
 use App\Models\Vehiculos;
 use App\Observers\ActaObserver;
 use App\Observers\CategoriasObserver;
@@ -57,6 +58,7 @@ use App\Observers\ProductoObserver;
 use App\Observers\ReciboObserver;
 use App\Observers\ReportesObserver;
 use App\Observers\SimCardObserver;
+use App\Observers\TareasObserver;
 use App\Observers\VehiculosObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -103,5 +105,6 @@ class EventServiceProvider extends ServiceProvider
         Payments::observe(PaymentsObserver::class);
         Cobros::observe(CobrosObserver::class);
         GuiaRemision::observe(GuiaRemisionObserver::class);
+        Tareas::observe(TareasObserver::class);
     }
 }

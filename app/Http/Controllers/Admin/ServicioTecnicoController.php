@@ -2,93 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\ServicioTecnico;
 use Illuminate\Http\Request;
+use App\Models\ServicioTecnico;
+use App\Http\Controllers\Controller;
+use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class ServicioTecnicoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        return view('admin.servicio-tecnico.index');
-    }
-    public function pendientes()
-    {
-        return view('admin.servicio-tecnico.tareas-pendientes');
-    }
-    public function completadas()
-    {
-        return view('admin.servicio-tecnico.tareas-completadas');
+        return view('admin.tecnico.tareas.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function tipo()
     {
-        return view('admin.servicio-tecnico.create');
+        return view('admin.tecnico.tareas.tipo');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function tecnicos()
     {
-        //
+        return view('admin.tecnico.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ServicioTecnico  $servicioTecnico
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ServicioTecnico $servicioTecnico)
+    public static function setNextSequenceNumber()
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ServicioTecnico  $servicioTecnico
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ServicioTecnico $servicioTecnico)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ServicioTecnico  $servicioTecnico
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ServicioTecnico $servicioTecnico)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ServicioTecnico  $servicioTecnico
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ServicioTecnico $servicioTecnico)
-    {
-        //
+        $id = IdGenerator::generate(['table' => 'tareas', 'field' => 'token', 'length' => 12, 'prefix' => 'TASK' . date('y') . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => true]);
+        return $id;
     }
 }

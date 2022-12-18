@@ -86,7 +86,13 @@ Route::resource('dispositivos', GpsController::class)->names('admin.almacen.disp
 
 
 
-Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
+// Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
+Route::controller(GuiaRemisionController::class)->group(function () {
+    Route::get('guias', 'index')->name('admin.almacen.guias.index');
+    Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');
+    Route::get('guias/{guia}', 'show')->name('admin.almacen.guias.show');
+    Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
+});
 
 Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 
@@ -129,11 +135,9 @@ Route::controller(PresupuestoController::class)->group(function () {
 Route::controller(VentasFacturasController::class)->group(function () {
 
     Route::get('ventas-facturas', 'index')->name('admin.ventas.facturas.index');
-    Route::post('ventas-facturas', 'store')->name('admin.ventas.facturas.store');
     Route::get('ventas-facturas/crear', 'create')->name('admin.ventas.facturas.create');
     Route::get('ventas-facturas/{factura}', 'show')->name('admin.ventas.facturas.show');
-    Route::get('ventas-facturas/{factura}', 'update')->name('admin.ventas.facturas.update');
-    Route::get('clientes/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
+    Route::get('ventas-facturas/{factura}/editar', 'edit')->name('admin.ventas.facturas.edit');
 });
 
 
@@ -206,10 +210,13 @@ Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('
 Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
 
 
-Route::get('tecnico/tareas-pendientes', [ServicioTecnicoController::class, 'pendientes'])->name('admin.tecnico.tareas.pendientes');
-Route::get('tecnico/tareas-completadas', [ServicioTecnicoController::class, 'completadas'])->name('admin.tecnico.tareas.completadas');
+Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
-Route::resource('servicio-tecnico', ServicioTecnicoController::class)->names('admin.servicio.tecnico');
+    Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
+    Route::get('tipo/tareas', 'tipo')->name('admin.tecnico.tareas.tipo');
+    Route::get('/', 'tecnicos')->name('admin.tecnico.index');
+});
+
 
 
 Route::controller(SearchController::class)->prefix('search')->group(function () {
@@ -224,6 +231,7 @@ Route::controller(SearchController::class)->prefix('search')->group(function () 
     Route::get('sim_card', 'sim_card')->name('search.sim_card');
     Route::get('lineas', 'lineas')->name('search.lineas');
     Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
     Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
     Route::get('ciudades', 'ciudades')->name('search.ciudades');
     Route::get('productos', 'productos')->name('search.productos');

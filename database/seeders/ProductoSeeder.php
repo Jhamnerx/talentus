@@ -36,7 +36,7 @@ class ProductoSeeder extends Seeder
             'empresa_id' => 1,
         ]);
 
-        Categoria::create([
+        $velocimetro = Categoria::create([
             'nombre' => 'VELOCIMETROS DIGITALES',
             'descripcion' => '',
             'empresa_id' => 1,
@@ -142,6 +142,26 @@ class ProductoSeeder extends Seeder
             'categoria_id' => '3',
             'empresa_id' => '1',
             'unit_code' => 'ZZ'
+        ], [
+            'codigo' => 'PROD-011',
+            'nombre' => 'VELOCIMETRO VEL4D-G',
+            'stock' => '0',
+            'precio' => '540',
+            'divisa' => 'PEN',
+            'tipo' => 'producto',
+            'categoria_id' => $velocimetro->id,
+            'empresa_id' => '1',
+            'unit_code' => 'NIU'
+        ], [
+            'codigo' => 'PROD-011',
+            'nombre' => 'VELOCIMETRO VEL3D-G',
+            'stock' => '0',
+            'precio' => '540',
+            'divisa' => 'PEN',
+            'tipo' => 'producto',
+            'categoria_id' => $velocimetro->id,
+            'empresa_id' => '1',
+            'unit_code' => 'NIU'
         ]];
 
         foreach ($productos as $producto) {

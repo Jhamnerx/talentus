@@ -1,8 +1,5 @@
 <div>
 
-    <!-- Basic Modal -->
-
-    <!-- Start -->
     <div x-data="{ modalOpen: @entangle('modalOpenImport') }">
 
         <!-- Modal backdrop -->

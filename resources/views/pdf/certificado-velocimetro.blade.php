@@ -6,7 +6,6 @@
     <title>CERTIFICADO VELOCIMETRO {{ $certificado->vehiculo->placa }}
         {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}</title>
 
-
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     {{ header('Content-type:application/pdf') }}
@@ -38,7 +37,7 @@
         }
 
         .certifica {
-            margin-top: 2rem;
+            margin-top: 1rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
@@ -235,7 +234,8 @@
     <div class="subtitulo">
         <span>
             <b>
-                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo VEL3D-G, implementado con
+                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo {{ $certificado->velocimetro_modelo }},
+                implementado con
                 alerta de Exceso de Velocidad Mayor A 90KM/H
             </b>
         </span>

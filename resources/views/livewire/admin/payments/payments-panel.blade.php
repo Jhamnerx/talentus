@@ -58,7 +58,7 @@
                             <div class="flex justify-between space-x-1">
                                 <span class="italic">DOCUMENTO PAGADO:</span>
                                 <span
-                                    class="font-medium text-slate-700 text-right">{{ $payment->paymentable->numero }}</span>
+                                    class="font-medium text-slate-700 text-right">{{ $payment->paymentable->serie_numero }}</span>
                             </div>
                             <div class="flex justify-between space-x-1">
                                 <span class="italic">METODO DE PAGO:</span>
@@ -86,8 +86,11 @@
                             @if ($payment->image)
                                 <img src="{{ Storage::url($payment->image->url) }}">
                             @else
-                                <form
-                                    class="rounded bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
+                                <div
+                                    class="rounded relative bg-slate-100 border border-dashed border-slate-300 text-center px-5 py-8">
+                                    <input
+                                        class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer"
+                                        id="upload" type="file" wire:model="file" />
                                     <svg class="inline-flex w-4 h-4 fill-slate-400 mb-3" viewBox="0 0 16 16"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path
@@ -96,9 +99,8 @@
                                     <label for="upload" class="block text-sm text-slate-500 italic cursor-pointer">
                                         Formatos PNG, JPEG.
                                     </label>
-                                    <input class="sr-only cursor-pointer" id="upload" type="file"
-                                        wire:model="file" />
-                                </form>
+
+                                </div>
                             @endif
 
                         @endif

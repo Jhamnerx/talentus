@@ -350,7 +350,7 @@
                                         {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">Trujillo</div>
+                                        <div class="font-medium text-slate-800">{{ $contrato->ciudades->nombre }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                         <div>
@@ -374,7 +374,7 @@
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $contrato->fecha }}</div>
+                                        <div>{{ $contrato->created_at->format('d-m-Y') }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">

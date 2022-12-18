@@ -13,6 +13,16 @@ Alpine.plugin(mask);
 
 Alpine.start();
 
+import VenoBox from "venobox";
+
+window.VenoBox = VenoBox;
+
+new VenoBox({
+    selector: ".image-task",
+    numeration: true,
+    infinigall: true,
+    spinner: "rotating-plane",
+});
 // import Sortable from "sortablejs";
 
 // window.Sortable = Sortable;
