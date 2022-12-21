@@ -126,7 +126,7 @@
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
-                                <button type="button" wire:click.prevent="EditTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="editTask({{$tarea->id}})"
                                     class="btn bg-orange-600 hover:bg-orange-700 text-white">
 
                                     <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@
                                         </g>
                                     </svg>
                                 </button>
-                                <button type="button" wire:click.prevent="DeleteTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="deleteTask({{$tarea->id}})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
                                         <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />

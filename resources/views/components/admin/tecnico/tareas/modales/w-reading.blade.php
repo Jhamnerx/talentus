@@ -131,7 +131,7 @@
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
-                                <button type="button" wire:click.prevent="DeleteTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="cancelTask({{$tarea->id}})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
                                         <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />

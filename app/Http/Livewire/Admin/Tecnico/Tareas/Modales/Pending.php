@@ -5,13 +5,19 @@ namespace App\Http\Livewire\Admin\Tecnico\Tareas\Modales;
 use App\Models\Tareas;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Admin\UtilesController;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class Pending extends Component
 {
+    use WithFileUploads;
     use WithPagination;
 
     public $openModal = false;
     public $search = '';
+    public $imagen = [];
 
     protected $listeners = [
         'openModalPending' => 'openModal',
@@ -41,5 +47,61 @@ class Pending extends Component
     public function openModal()
     {
         $this->openModal = true;
+    }
+
+    public function closeModal()
+    {
+        $this->openModal = false;
+    }
+
+    public function cancelTask(Tareas $task)
+    {
+        $task->estado = "CANCELED";
+        $task->save();
+        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
+        $this->render();
+    }
+    public function markComplete(Tareas $task)
+    {
+        $task->estado = "COMPLETE";
+        $task->save();
+        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA COMPLETADA', 'message' => 'Se marco como completada la tarea',  'token' => $task->token, 'color' => '#34d399', 'progressBarColor' => 'rgb(255,255,255)']);
+        $this->render();
+    }
+    public function updatedImagen($value, $key)
+    {
+
+        $this->validate([
+            'imagen.*' => 'image',
+        ]);
+
+        $tarea = Tareas::find($key);
+
+        $this->saveImagen($tarea, $value);
+    }
+
+    public function saveImagen(Tareas $tarea, $image)
+    {
+        $img = Image::make($image->getRealPath())->encode('jpg', 65)->fit(760, null, function ($c) {
+            $c->aspectRatio();
+            $c->upsize();
+        });
+
+        Storage::disk('local')->put('public/tareas' . '/' . $tarea->token . '.png', $img, 'public');
+
+        $tarea->image()->create([
+            'url' => 'tareas/' . $tarea->token . '.png',
+        ]);
+
+        $this->dispatchBrowserEvent('save-imagen', ['tarea' => $tarea->token]);
+    }
+
+
+    public function sendWhatsApp(Tareas $task)
+    {
+        $util = new UtilesController();
+        $respuesta = $util->whatsAppSendMessageInstalation($task);
+        $task->sent_message = true;
+        $task->save();
     }
 }

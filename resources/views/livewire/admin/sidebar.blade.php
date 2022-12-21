@@ -200,8 +200,8 @@
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul href="{{ route('admin.clientes.index') }}" class="pl-9 mt-1"
-                                :class="!open && 'hidden'" x-cloak>
+                            <ul href="{{ route('admin.clientes.index') }}" class="pl-9 mt-1" :class="!open && 'hidden'"
+                                x-cloak>
 
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
@@ -227,8 +227,7 @@
                     </li>
 
                     <!-- Proveedores -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
-                        :class="page === 'proveedores' && 'bg-slate-900'">
+                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" :class="page === 'proveedores' && 'bg-slate-900'">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
                             :class="page === 'proveedores' && 'hover:text-slate-200'"
                             href="{{ route('admin.proveedores.index') }}">
@@ -388,8 +387,8 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <svg class="shrink-0 h-6 w-6 icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" fill="none"
-                                        stroke-linecap="round" stroke-linejoin="round">
+                                        stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <circle cx="7" cy="17" r="2" />
                                         <circle cx="17" cy="17" r="2" />
@@ -632,13 +631,12 @@
                                         stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <line x1="6" y1="9" x2="12" y2="9" />
-                                        <line class="fill-current text-slate-600" x1="4" y1="5"
-                                            x2="8" y2="5" />
+                                        <line class="fill-current text-slate-600" x1="4" y1="5" x2="8" y2="5" />
                                         <path d="M6 5v11a1 1 0 0 0 1 1h5" />
-                                        <rect class="fill-current text-slate-400" x="12" y="7"
-                                            width="8" height="4" rx="1" />
-                                        <rect class="fill-current text-slate-400" x="12" y="15"
-                                            width="8" height="4" rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="7" width="8" height="4"
+                                            rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="15" width="8" height="4"
+                                            rx="1" />
                                     </svg>
                                     <span
                                         class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -664,26 +662,6 @@
                                         <span
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                             Modulo Tareas
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.tareas.tipo') }}"
-                                        :class="page === 'tecnico-tareas-tipo' && '!text-indigo-500'">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Tipo Tareas
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.index') }}"
-                                        :class="page === 'tecnico-index' && '!text-indigo-500'">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Administrar Tecnicos
                                         </span>
                                     </a>
                                 </li>

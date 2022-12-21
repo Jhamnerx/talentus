@@ -76,12 +76,11 @@ class Complete extends Component
         $this->dispatchBrowserEvent('save-imagen', ['tarea' => $tarea->token]);
     }
 
-    public function sendWhatsApp()
+    public function sendWhatsApp(Tareas $task)
     {
-
         $util = new UtilesController();
-
-        $respuesta = $util->whatsAppSendMessageInstalation('hola');
-        dd($respuesta);
+        $respuesta = $util->whatsAppSendMessageInstalation($task);
+        $task->sent_message = true;
+        $task->save();
     }
 }

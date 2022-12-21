@@ -81,10 +81,8 @@
                                 @enderror
                             </div>
 
-
                             {{-- titulo --}}
                             <div class="col-span-12">
-                                {{json_encode($errors->all())}}
                                 <div class="text-center font-semibold text-slate-800">
                                     SERVICIO: {{$titulo}}.
                                 </div>
@@ -159,8 +157,8 @@
                                 </label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-select w-full pl-9 select-model-dispositivo"
-                                        name="modelo_dispositivo_id" id="modelo_dispositivo_id">
+                                    <select class="form-select w-full pl-9 selectModelDispositivo">
+
                                     </select>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" version="1.1" id="Layer_1"
@@ -244,7 +242,7 @@
                                     Número:
                                 </label>
                                 <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full numero" wire:model.defer="numero"
+                                    <input type="text" class="form-input pl-9 w-full numero" wire:model="numero"
                                         placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -426,6 +424,30 @@
                                 @enderror
                             </div>
 
+                            <div class="col-span-12">
+                                <label class="block text-sm font-medium mb-1" for="plataforma">Selecciona El Tecnico:
+                                    <span class="text-rose-500">*</span></label>
+                                <div class="flex flex-wrap items-center">
+
+                                    @foreach ($tecnicos as $tecnico)
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model="tecnico_id" value="{{$tecnico->id}}" />
+                                            <span class="text-sm ml-2">{{$tecnico->name}}</span>
+                                        </label>
+                                    </div>
+                                    @endforeach
+
+                                </div>
+                                @error('tecnico_id')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                                @enderror
+                            </div>
+
+
                             @if ($tipo_tarea_id == "0")
                             <div class="col-span-12">
 
@@ -458,6 +480,15 @@
 
 @once
 @push('scripts')
+
+<script>
+    window.addEventListener('save-task', event => {
+        $('.selectVehiculo').val(null).trigger('change');
+        $('.selectModelDispositivo').val(null).trigger('change');
+    })
+
+</script>
+
 <script>
     $(document).ready(function() {
         selects();
@@ -518,7 +549,7 @@
 
         });
 
-        $('.select-model-dispositivo').select2({
+        $('.selectModelDispositivo').select2({
             placeholder: 'Buscar un Dispositivo',
             language: "es",
             selectionCssClass: 'pl-9',
@@ -552,7 +583,7 @@
             }
         });
 
-        $('.select-model-dispositivo').on('select2:select', function(e) {
+        $('.selectModelDispositivo').on('select2:select', function(e) {
 
             var data = e.params.data;
             @this.set('dispositivo', data.modelo)

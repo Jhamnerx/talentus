@@ -46,9 +46,8 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
     {
 
         return (new MailMessage)
-                ->subject($this->mensaje["asunto"])
-                ->view('mail.cobros', ['mensaje' => $this->mensaje, 'cobros' => $this->cobro]);
-   
+            ->subject($this->mensaje["asunto"])
+            ->view('mail.cobros', ['mensaje' => $this->mensaje, 'cobros' => $this->cobro]);
     }
 
     /**
@@ -68,10 +67,10 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
         ];
     }
 
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
 
         return new BroadcastMessage([]);
-
     }
 
     // public function withDelay($notifiable)
@@ -93,5 +92,4 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
     //         'broadcast' => 'broadcast',
     //     ];
     // }
-
 }

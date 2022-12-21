@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Models\Tareas;
+use App\Notifications\Tecnico\NotificacionTarea;
 use Illuminate\Support\Facades\Auth;
 
 class TareasObserver
@@ -18,7 +19,7 @@ class TareasObserver
 
     public function created(Tareas $tarea)
     {
-        //
+        $tarea->tecnico->notify(new NotificacionTarea($tarea));
     }
 
 

@@ -33,8 +33,6 @@
                 </div>
                 <!-- Modal content -->
                 <div class="px-8 py-5 bg-white sm:p-6">
-                    {{json_encode($imagen)}}
-                    {{json_encode($errors->all())}}
 
                     <x-admin.tecnico.tareas.modales.table-complete :tareas="$tareas">
                     </x-admin.tecnico.tareas.modales.table-complete>

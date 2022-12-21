@@ -31,7 +31,7 @@ class nuevaActaCreadaAdminsListener
     {
         $data = array(
             'id_certificado' => $event->acta->id,
-            'url' => "admin.certificados.actas.show",
+            'url' => "admin.certificados.actas.index",
             'asunto' => 'ACTA CREADA',
             'body' => 'El usuario ' . User::find($event->acta->user_id)->name . ' ha creado una nueva acta',
             'accion' => 'acta_created',

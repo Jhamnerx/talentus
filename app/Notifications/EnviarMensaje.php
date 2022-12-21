@@ -4,12 +4,13 @@ namespace App\Notifications;
 
 use App\Models\User;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
-class EnviarMensaje extends Notification implements ShouldQueue
+class EnviarMensaje extends Notification implements ShouldQueue, ShouldBroadcast
 {
     use Queueable;
 
@@ -39,7 +40,7 @@ class EnviarMensaje extends Notification implements ShouldQueue
     {
 
         return [
-            'url' => route($this->mensaje["url"], $this->mensaje["id_certificado"]),
+            'url' => route($this->mensaje["url"]),
             'asunto' => $this->mensaje["asunto"],
             'mensaje' => $this->mensaje["body"],
             'accion' => $this->mensaje["accion"],

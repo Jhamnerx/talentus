@@ -27,6 +27,7 @@ class CreateTareasTable extends Migration
             $table->boolean('leido')->default(false);
             $table->dateTime('fecha_hora');
             $table->boolean('respuesta')->default(false);
+            $table->boolean('sent_message')->default(false);
             $table->dateTime('fecha_termino')->nullable();
             $table->enum('estado', ['UNREAD', 'COMPLETE', 'PENDIENT', 'CANCELED'])->default('UNREAD');
             $table->unsignedBigInteger('tipo_tarea_id')->nullable();
