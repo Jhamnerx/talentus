@@ -65,7 +65,7 @@ class CreateTask extends Component
 
         $velocimetros = Productos::velocimetro()->get();
 
-        $tecnicos = User::role('tecnico')->get();;
+        $tecnicos = User::role('tecnico')->get();
 
         return view('livewire.admin.tecnico.tareas.create-task', compact('tipo_tareas', 'velocimetros', 'tecnicos'));
     }

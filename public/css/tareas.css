@@ -1,0 +1,28 @@
+body,
+div,
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td,
+p {
+    font-family: "Calibri";
+    font-size: x-small;
+}
+
+.cell {
+    background-color: #000000;
+    color: #ffffff;
+    vertical-align: center;
+    width: 10px;
+}
+
+tr td {
+    background-color: #ffffff;
+}
+
+tr > td {
+    border-bottom: 1px solid #000000;
+}

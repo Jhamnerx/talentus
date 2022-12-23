@@ -34,8 +34,8 @@ class Complete extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
-            ->estado('COMPLETE')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
+            ->estado('COMPLETE')
             ->paginate(5, ['*'], 'completePage');
 
         return view('livewire.admin.tecnico.tareas.modales.complete', compact('tareas'));

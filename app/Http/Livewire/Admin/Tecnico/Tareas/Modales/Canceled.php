@@ -28,7 +28,7 @@ class Canceled extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
             ->estado('CANCELED')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
             ->paginate(5, ['*'], 'canceledPage');
         return view('livewire.admin.tecnico.tareas.modales.canceled', compact('tareas'));

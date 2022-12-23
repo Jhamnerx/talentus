@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Tecnico\Tareas;
 
 use App\Models\Tareas;
 use Livewire\Component;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\UtilesController;
 
@@ -29,6 +30,7 @@ class TablaHistorial extends Component
         })->orWhereHas('tipo_tarea', function ($user) {
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
+            ->orWhere('token', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
             ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
             ->orderBy('id', 'desc')
@@ -77,5 +79,16 @@ class TablaHistorial extends Component
 
     public function infoTask(Tareas $tarea)
     {
+    }
+
+    public function exportTask(Tareas $tarea)
+    {
+        $pdfContent = PDF::loadView('pdf.reportes.tarea', ['tarea' => $tarea])
+            ->setPaper('Legal', 'landscape')->output();
+
+        return response()->streamDownload(
+            fn () => print($pdfContent),
+            "reporte_tarea-" . $tarea->token . ".pdf"
+        );
     }
 }

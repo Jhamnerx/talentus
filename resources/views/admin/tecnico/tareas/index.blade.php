@@ -9,8 +9,7 @@
     </x-admin.tecnico.tareas.header>
 
     <!-- More actions -->
-    <x-admin.tecnico.tareas.actions>
-    </x-admin.tecnico.tareas.actions>
+    @livewire('admin.tecnico.tareas.actions')
 
     @livewire('admin.tecnico.tareas.cards')
 
@@ -30,6 +29,7 @@
 
 @push('modals')
 @livewire('admin.tecnico.tareas.create-task')
+@livewire('admin.tecnico.tareas.reportes.reporte-principal')
 @livewire('admin.tecnico.tareas.create-tipo-tarea')
 @livewire('admin.tecnico.tareas.edit-task')
 @livewire('admin.tecnico.tareas.modales.w-reading')
@@ -42,6 +42,28 @@
 @endpush
 
 @section('js')
+<script>
+    // INICIALIZAR LOS INPUTS DE FECHA
+        $(document).ready(function() {
+            cont = 0;
+            detalles = 0;
+            flatpickr('.fechaInicio', {
+                mode: 'single',
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+            flatpickr('.fechaFin', {
+                mode: 'single',
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+        })
+</script>
+
 <script>
     window.addEventListener('save-task', event => {
         iziToast.show({

@@ -103,7 +103,7 @@ class Vehiculos extends Model
     //relacion uno a muchos
     public function cobros()
     {
-        return $this->hasMany(Cobros::class, 'vehiculos_id');
+        return $this->hasMany(Cobros::class, 'vehiculos_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function flotas()

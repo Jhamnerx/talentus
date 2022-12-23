@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
+use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class Pending extends Component
@@ -34,7 +35,7 @@ class Pending extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
             ->estado('PENDIENT')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
             ->paginate(5, ['*'], 'PendientPage');
         return view('livewire.admin.tecnico.tareas.modales.pending', compact('tareas'));
@@ -64,6 +65,7 @@ class Pending extends Component
     public function markComplete(Tareas $task)
     {
         $task->estado = "COMPLETE";
+        $task->fecha_termino = Carbon::now();
         $task->save();
         $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA COMPLETADA', 'message' => 'Se marco como completada la tarea',  'token' => $task->token, 'color' => '#34d399', 'progressBarColor' => 'rgb(255,255,255)']);
         $this->render();
