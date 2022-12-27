@@ -558,6 +558,26 @@
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'administracion-solicitudes' && '!text-indigo-500'"
+                                        href="{{ route('admin.solicitudes.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Solicitudes
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'administracion-reportes-gerenciales' && '!text-indigo-500'"
+                                        href="{{ route('admin.gerencia.reportes') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Reportes Gerenciales
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-usuarios' && '!text-indigo-500'"
                                         href="{{ route('admin.users.index') }}">
                                         <span

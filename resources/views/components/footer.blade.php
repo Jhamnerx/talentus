@@ -21,7 +21,7 @@
                         <ul class="list-unstyled footer-widget__links-list">
                             <li><a href="{{route('web.home')}}">Inicio</a></li>
                             <li><a href="#">Servicios</a></li>
-                            <li><a href="{{route('solicitudes.create')}}">Solicitudes</a></li>
+                            <li><a href="{{route('solicitudes', ['solicitud' => 'servicio'])}}">Solicitudes</a></li>
                             <li><a href="{{route('web.contacto')}}">Contactar</a></li>
 
                         </ul><!-- /.list-unstyled footer-widget__links-list -->

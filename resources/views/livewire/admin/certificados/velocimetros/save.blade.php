@@ -64,9 +64,9 @@
                                     </div>
                                 </div>
                                 @error('numero')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
 
                             </div>
@@ -118,9 +118,9 @@
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
 
@@ -129,8 +129,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="">
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
                                     </select>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -158,9 +157,9 @@
                                     </div>
                                 </div>
                                 @error('ciudades_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -171,8 +170,8 @@
                                     <select class="form-select w-full pl-9" wire:model="velocimetro_modelo">
                                         <option selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
-                                            <option value="{{ $velocimetro->nombre }}">
-                                                {{ $velocimetro->codigo }} {{ $velocimetro->nombre }}</option>
+                                        <option value="{{ $velocimetro->nombre }}">
+                                            {{ $velocimetro->codigo }} {{ $velocimetro->nombre }}</option>
                                         @endforeach
 
                                     </select>
@@ -189,9 +188,9 @@
                                     </div>
                                 </div>
                                 @error('velocimetro_modelo')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-12 mt-4">
@@ -204,8 +203,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1"
-                                                    class="sr-only" x-model="checked" />
+                                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only"
+                                                    x-model="checked" />
                                                 <label class="bg-slate-400" for="fondo-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">fondo switch</span>
@@ -221,8 +220,8 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1"
-                                                    class="sr-only" x-model="checked" />
+                                                <input wire:model="sello" type="checkbox" id="sello-1" class="sr-only"
+                                                    x-model="checked" />
                                                 <label class="bg-slate-400" for="sello-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                                     <span class="sr-only">sello switch</span>
@@ -264,9 +263,9 @@
 </div>
 
 @once
-    @push('scripts')
-        <script>
-            $('.vehiculos_id').select2({
+@push('scripts')
+<script>
+    $('.vehiculos_id').select2({
                 placeholder: '    Buscar un Vehiculo',
                 language: "es",
                 minimumInputLength: 2,
@@ -344,12 +343,12 @@
                 var data = e.params.data;
                 @this.set('ciudades_id', data.id)
             });
-        </script>
-        <script>
-            window.addEventListener('close-modal', event => {
+</script>
+<script>
+    window.addEventListener('close-modal', event => {
                 $('.vehiculos_id').val(null).trigger('change');
                 $('.ciudades').val(null).trigger('change');
             })
-        </script>
-    @endpush
+</script>
+@endpush
 @endonce

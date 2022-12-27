@@ -21,7 +21,9 @@
                             <li class="disabled">Acceso a reportes(Max 15 dias)</li>
                             <li class="disabled">Multilples opciones de reporte</li>
                         </ul><!-- /.list-unstyled pricing-one__list -->
-                        <a href="contact.html" class="thm-btn pricing-one__btn">Solicitar</a><!-- /.thm-btn -->
+                        <a href="{{route('solicitudes', ['solicitud' => 'servicio'])}}"
+                            class="thm-btn pricing-one__btn">Solicitar</a>
+                        <!-- /.thm-btn -->
                     </div><!-- /.pricing-one__inner -->
                 </div><!-- /.pricing-one__single -->
             </div><!-- /.col-lg-4 -->
@@ -40,9 +42,11 @@
                             <li class="">Acceso a reportes(Max 15 dias)</li>
                             <li class="disabled">Alertas</li>
                             <li class="disabled">Reportes Exportables</li>
-                            <li class="disabled">Multilples opciones de reporte</li>
+                            <li class="disabled">Multiples opciones de reporte</li>
                         </ul><!-- /.list-unstyled pricing-one__list -->
-                        <a href="contact.html" class="thm-btn pricing-one__btn">Solicitar</a><!-- /.thm-btn -->
+                        <a href="{{route('solicitudes', ['solicitud' => 'servicio'])}}"
+                            class="thm-btn pricing-one__btn">Solicitar</a>
+                        <!-- /.thm-btn -->
                     </div><!-- /.pricing-one__inner -->
                 </div><!-- /.pricing-one__single -->
             </div><!-- /.col-lg-4 -->
@@ -62,7 +66,9 @@
                             <li class="">Reportes Exportables</li>
                             <li class="">Multilples opciones de reporte</li>
                         </ul><!-- /.list-unstyled pricing-one__list -->
-                        <a href="contact.html" class="thm-btn pricing-one__btn">Solicitar</a><!-- /.thm-btn -->
+                        <a href="{{route('solicitudes', ['solicitud' => 'servicio'])}}"
+                            class="thm-btn pricing-one__btn">Solicitar</a>
+                        <!-- /.thm-btn -->
                     </div><!-- /.pricing-one__inner -->
                 </div><!-- /.pricing-one__single -->
             </div><!-- /.col-lg-4 -->
