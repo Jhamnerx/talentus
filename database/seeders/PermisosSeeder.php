@@ -48,7 +48,7 @@ class PermisosSeeder extends Seeder
             'exportar-sim_card',
 
 
-            
+
             'ver-dispositivo',
             'crear-dispositivo',
             'editar-dispositivo',
@@ -102,16 +102,19 @@ class PermisosSeeder extends Seeder
             'estados-ventas-facturas',
             'exportar-ventas-facturas',
 
-            'ver-recibo',
-            'crear-recibo',
-            'editar-recibo',
-            'eliminar-recibo',
+            'ver-recibos',
+            'crear-recibos',
+            'editar-recibos',
+            'eliminar-recibos',
+            'enviar-recibos',
+            'exportar-recibos',
 
 
             'ver-contrato',
             'crear-contrato',
             'editar-contrato',
             'descargar-contrato',
+            'enviar-contrato',
             'eliminar-contrato',
 
             'ver-vehiculos-flotas',
@@ -134,32 +137,90 @@ class PermisosSeeder extends Seeder
             'crear-certificados-actas',
             'editar-certificados-actas',
             'descargar-certificados-actas',
+            'enviar-certificados-actas',
             'eliminar-certificados-actas',
 
             'ver-certificados-gps',
             'crear-certificados-gps',
             'editar-certificados-gps',
             'descargar-certificados-gps',
+            'enviar-certificados-gps',
             'eliminar-certificados-gps',
 
             'ver-certificados-velocimetros',
             'crear-certificados-velocimetros',
             'editar-certificados-velocimetros',
             'descargar-certificados-velocimetros',
+            'enviar-certificados-velocimetros',
             'eliminar-certificados-velocimetros',
 
 
-            
+            'admin.solicitudes.index',
+            'admin.solicitudes.finalize',
+
+            'admin.reportes.index',
+            'admin.reportes.logs.index',
+            'admin.reportes.logs.actions',
+
+            'admin.usuarios.index',
+            'admin.usuarios.create',
+            'admin.usuarios.edit',
+            'admin.usuarios.delete',
+
+            'admin.cobros.index',
+            'admin.cobros.create',
+            'admin.cobros.edit',
+            'admin.cobros.delete',
+
+            'admin.payments.index',
+            'admin.payments.create',
+
+            'admin.settings.ciudades.index',
+            'admin.settings.ciudades.create',
+            'admin.settings.ciudades.edit',
+            'admin.settings.ciudades.delete',
+
+            'admin.settings.roles.index',
+            'admin.settings.roles.create',
+            'admin.settings.roles.edit',
+            'admin.settings.roles.delete',
+
+            'admin.settings.plantilla.index',
+            'admin.settings.plantilla.informacion.edit',
+            'admin.settings.plantilla.sunat.edit',
+            'admin.settings.plantilla.series.edit',
+            'admin.settings.plantilla.images.edit',
+
+
+            'tecnico.tareas.reportes',
+            'tecnico.tareas.index',
+            'tecnico.tareas.cards',
+            'tecnico.tareas.cards.sin-leer',
+            'tecnico.tareas.cards.complete.actions',
+            'tecnico.tareas.cards.pendient.actions',
+            'tecnico.tareas.cards.canceled.actions',
+            'tecnico.tareas.tecnicos.admin',
+            'tecnico.tareas.tabla-historial',
+            'tecnico.tareas.create',
+            'tecnico.tareas.edit',
+            'tecnico.tareas.delete',
+            'tecnico.tareas.action.pdf',
+            'tecnico.tareas.action.wsp',
+
+            'tecnico.tareas.tipo.index',
+            'tecnico.tareas.tipo.create',
+            'tecnico.tareas.tipo.edit',
+            'tecnico.tareas.tipo.delete',
+
         ];
 
 
-        foreach($permisos as $permiso){
+        foreach ($permisos as $permiso) {
             Permission::create(['name' => $permiso]);
         }
         $role->givePermissionTo('cliente.home');
         $admin->givePermissionTo('admin.home');
         $monitoreo->givePermissionTo('ver-vehiculos-vehiculos');
         $tecnico->givePermissionTo('ver-vehiculos-vehiculos');
-
     }
 }

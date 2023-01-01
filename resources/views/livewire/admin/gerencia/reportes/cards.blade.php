@@ -1,7 +1,7 @@
 <div class="grid grid-cols-12 gap-6">
 
     <x-admin.gerencia.reportes.cards color-initial="from-indigo-400" color-final="to-indigo-600" cantidad="1"
-        wire:click="openWithoutReading">
+        wire:click="openModalReporteProductos">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" stroke-linejoin="round"
@@ -18,7 +18,7 @@
     </x-admin.gerencia.reportes.cards>
 
     <x-admin.gerencia.reportes.cards color-initial="from-teal-400" color-final="to-teal-600" cantidad="1"
-        wire:click="openTaskComplete">
+        wire:click="openModalReporteLineas">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" stroke-linejoin="round"
@@ -35,7 +35,7 @@
     </x-admin.gerencia.reportes.cards>
 
     <x-admin.gerencia.reportes.cards color-initial="from-cyan-400" color-final="to-cyan-600" cantidad="1"
-        wire:click="openTaskPending">
+        wire:click="openModalReporteClientes">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-width="2" fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
@@ -50,8 +50,8 @@
             REPORTES CLIENTES
     </x-admin.gerencia.reportes.cards>
 
-    <x-admin.gerencia.reportes.cards color-initial="from-blue-400" color-final="to-blue-600" cantidad="1"
-        wire:click="openTaskCanceled">
+    {{-- <x-admin.gerencia.reportes.cards color-initial="from-blue-400" color-final="to-blue-600" cantidad="1"
+        wire:click="openModalReporteVehiculos">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" stroke-linejoin="round"
@@ -70,9 +70,9 @@
             </svg>
             </x-slot>
             REPORTES VEHICULOS
-    </x-admin.gerencia.reportes.cards>
-    <x-admin.gerencia.reportes.cards color-initial="from-lime-400" color-final="to-lime-600" cantidad="1"
-        wire:click="openTaskCanceled">
+    </x-admin.gerencia.reportes.cards> --}}
+    {{-- <x-admin.gerencia.reportes.cards color-initial="from-lime-400" color-final="to-lime-600" cantidad="1"
+        wire:click="openModalReporteDispositivos">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor" stroke-linejoin="round"
@@ -91,10 +91,10 @@
             </svg>
             </x-slot>
             REPORTES DISPOSITIVOS
-    </x-admin.gerencia.reportes.cards>
+    </x-admin.gerencia.reportes.cards> --}}
 
     <x-admin.gerencia.reportes.cards color-initial="from-orange-400" color-final="to-orange-600" cantidad="1"
-        wire:click="openTaskCanceled">
+        wire:click="openModalReporteGuias">
         <x-slot:icono>
 
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -112,7 +112,7 @@
             REPORTES GUIAS
     </x-admin.gerencia.reportes.cards>
     <x-admin.gerencia.reportes.cards color-initial="from-red-400" color-final="to-red-600" cantidad="1"
-        wire:click="openTaskCanceled">
+        wire:click="openModalReporteComprasVentas">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-width="2" fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
@@ -130,7 +130,7 @@
             COMPRAS VS VENTAS
     </x-admin.gerencia.reportes.cards>
     <x-admin.gerencia.reportes.cards color-initial="from-emerald-400" color-final="to-emerald-600" cantidad="1"
-        wire:click="openTaskCanceled">
+        wire:click="openModalReporteVentas">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-width="2" fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">

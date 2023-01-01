@@ -27,6 +27,7 @@ class PresupuestosRequest extends FormRequest
                 'required', Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'fecha' => 'required|date',
+            'tipoCambio' => 'required',
             'fecha_caducidad' => 'required|date',
             'divisa' => 'required',
             'sub_total' => 'required',

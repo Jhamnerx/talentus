@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Enums\TareasStatus;
 use App\Scopes\EmpresaScope;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +14,16 @@ class Tareas extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'tareas';

@@ -3,13 +3,15 @@
 namespace App\Models;
 
 use App;
-use App\Notifications\Certificados\EnviarActaCliente;
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
+use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\Certificados\EnviarActaCliente;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Actas extends Model
 {
@@ -18,7 +20,16 @@ class Actas extends Model
 
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     protected $table = 'actas';
 
     protected $casts = [

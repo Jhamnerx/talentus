@@ -3,18 +3,30 @@
 namespace App\Models;
 
 use App\Scopes\ActiveScope;
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Scopes\EliminadoScope;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Clientes extends Model
 {
     use HasFactory;
     use Notifiable;
     use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'clientes';

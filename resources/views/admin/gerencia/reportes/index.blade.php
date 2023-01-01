@@ -16,6 +16,9 @@
 
     @livewire('admin.gerencia.reportes.cards')
 
+    {{-- HISTORIAL --}}
+    @livewire('admin.gerencia.reportes.historial-models')
+
 
 
 
@@ -26,7 +29,10 @@
 @stop
 
 @push('modals')
-
+@livewire('admin.gerencia.reportes.modales.reporte-productos')
+@livewire('admin.gerencia.reportes.modales.reporte-lineas')
+@livewire('admin.gerencia.reportes.modales.reporte-clientes')
+@livewire('admin.gerencia.reportes.modales.reporte-vehiculos')
 @endpush
 
 @section('js')
