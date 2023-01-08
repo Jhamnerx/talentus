@@ -12,6 +12,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class GpsController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-dispositivo', ['only' => ['index']]);
+        $this->middleware('permission:crear-dispositivo', ['only' => ['create']]);
+        $this->middleware('permission:editar-dispositivo', ['only' => ['edit']]);
+        $this->middleware('permission:ver.modelos-dispositivo', ['only' => ['showModels']]);
+        $this->middleware('permission:exportar-dispositivo', ['only' => ['exportExcel']]);
+    }
 
     public function index()
     {
@@ -54,10 +62,6 @@ class GpsController extends Controller
         return redirect()->route('admin.almacen.dispositivos.index')->with('update', 'El dispositivo se actualizo con exito');
     }
 
-    public function destroy(Dispositivos $dispositivo)
-    {
-        //
-    }
     public function exportExcel()
     {
         return Excel::download(new DispositivosExport, 'dispositivos.xls');

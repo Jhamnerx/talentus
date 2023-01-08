@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ReportesGerenciales;
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\PlatBasicaController;
 use App\Http\Controllers\PlatPremiumController;
@@ -14,7 +15,12 @@ Route::get('plataforma-premium', [PlatPremiumController::class, 'index'])->name(
 
 
 
-Route::get('consulta/actas/{acta:codigo?}', [ConsultasController::class, 'consultaActas'])->name('consulta.actas');
+Route::get('consulta/actas/{acta:codigo?}', [ConsultasController::class, 'consultaActas'])
+    ->name('consulta.actas');
+Route::get('consulta/certificado/{certificados:codigo?}', [ConsultasController::class, 'consultaCertificado'])
+    ->name('consulta.certificado');
+Route::get('consulta/velocimetro/{certificado_velocimetros:codigo?}', [ConsultasController::class, 'consultaCertificadoVelocimetro'])
+    ->name('consulta.certificado.velocimetro');
 
 
 // Route::get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');
@@ -22,11 +28,12 @@ Route::get('consulta/actas/{acta:codigo?}', [ConsultasController::class, 'consul
 
 
 
-Route::resource('solicitudes', SolicitudesController::class)->names('solicitudes')->parameters([
-    'solicitudes' => 'solicitud'
-]);;
 
 
+Route::controller(SolicitudesController::class)->group(function () {
+
+    Route::get('solicitudes/{solicitud}', 'create')->name('solicitudes');
+});
 
 
 Route::get('faq', [WebController::class, 'faq'])->name('web.faq');

@@ -53,7 +53,7 @@
 
 
                 {!! Form::model($cliente, [
-                    'route' => ['admin.clientes.update', $cliente],
+                    'route' => ['admin.clientes.updated', $cliente],
                     'method' => 'put',
                     'autocomplete' => 'off',
                 ]) !!}

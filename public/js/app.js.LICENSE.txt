@@ -52,6 +52,12 @@
 /*! https://mths.be/cssesc v3.0.0 by @mathias */
 
 /**
+    * VenoBox 2.0.4
+    * Copyright 2013-2021 Nicola Franchini
+    * @license: https://github.com/nicolafranchini/VenoBox/blob/master/LICENSE
+    */
+
+/**
  * @license
  * Lodash <https://lodash.com/>
  * Copyright OpenJS Foundation and other contributors <https://openjsf.org/>

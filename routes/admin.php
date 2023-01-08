@@ -1,51 +1,58 @@
 <?php
 
-use App\Http\Controllers\Admin\ActasController;
-use App\Http\Controllers\Admin\AjustesController;
-use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
-use App\Http\Controllers\Admin\CategoriaController;
-use App\Http\Controllers\Admin\CertificadosGpsController;
-use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
-use App\Http\Controllers\Admin\CiudadesController;
-use App\Http\Controllers\Admin\ClientesController;
-use App\Http\Controllers\Admin\CobrosController;
-use App\Http\Controllers\Admin\ComprasFacturasController;
-use App\Http\Controllers\Admin\ContactosController;
-use App\Http\Controllers\Admin\ContratosController;
-use App\Http\Controllers\Admin\FlotasController;
-use App\Http\Controllers\Admin\GpsController;
-use App\Http\Controllers\Admin\GuiasController;
-use App\Http\Controllers\Admin\HomeController;
-use App\Http\Controllers\Admin\LineasController;
-use App\Http\Controllers\Admin\MensajeController;
-use App\Http\Controllers\Admin\NotificacionesController;
-use App\Http\Controllers\Admin\PaymentsController;
-use App\Http\Controllers\Admin\PDF\ActaPdfController;
-use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
-use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-use App\Http\Controllers\Admin\PDF\ContratoPdfController;
-use App\Http\Controllers\Admin\PDF\FacturaPdfController;
-use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
-use App\Http\Controllers\Admin\PDF\ReciboPdfController;
-use App\Http\Controllers\Admin\PresupuestoController;
-use App\Http\Controllers\Admin\ProductosController;
-use App\Http\Controllers\Admin\ProveedoresController;
-use App\Http\Controllers\Admin\RecibosController;
-use App\Http\Controllers\Admin\ReportesController;
-use App\Http\Controllers\Admin\RolController;
-use App\Http\Controllers\Admin\ServicioTecnicoController;
-use App\Http\Controllers\Admin\UserProfileController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Admin\VehiculosController;
-use App\Http\Controllers\Admin\VentasFacturasController;
-use App\Http\Controllers\SearchController;
+use Maatwebsite\Excel\Row;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\Route;
-use Maatwebsite\Excel\Row;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Admin\GpsController;
+use App\Http\Controllers\Admin\RolController;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\ActasController;
+use App\Http\Controllers\Admin\GuiasController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\CobrosController;
+use App\Http\Controllers\Admin\FlotasController;
+use App\Http\Controllers\Admin\LineasController;
+use App\Http\Controllers\Admin\AjustesController;
+use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\Admin\RecibosController;
+use App\Http\Controllers\Admin\CiudadesController;
+use App\Http\Controllers\Admin\ClientesController;
+use App\Http\Controllers\Admin\PaymentsController;
+use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\Admin\CategoriaController;
+use App\Http\Controllers\Admin\ContactosController;
+use App\Http\Controllers\Admin\ContratosController;
+use App\Http\Controllers\Admin\ProductosController;
+use App\Http\Controllers\Admin\ReportesGerenciales;
+use App\Http\Controllers\Admin\VehiculosController;
+use App\Http\Controllers\Admin\PDF\ActaPdfController;
+use App\Http\Controllers\Admin\PresupuestoController;
+use App\Http\Controllers\Admin\ProveedoresController;
+use App\Http\Controllers\Admin\SolicitudesController;
+use App\Http\Controllers\Admin\UserProfileController;
+use App\Http\Controllers\Admin\PDF\ReciboPdfController;
+use App\Http\Controllers\Admin\NotificacionesController;
+use App\Http\Controllers\Admin\PDF\FacturaPdfController;
+use App\Http\Controllers\Admin\VentasFacturasController;
+use App\Http\Controllers\Admin\CertificadosGpsController;
+use App\Http\Controllers\Admin\ComprasFacturasController;
+use App\Http\Controllers\Admin\PDF\ContratoPdfController;
+use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
+use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
+use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
+use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
+use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
+
+
 // ALMACEN
+
+
 
 Route::controller(CategoriaController::class)->group(function () {
 
@@ -55,6 +62,8 @@ Route::controller(CategoriaController::class)->group(function () {
     Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
     Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
 });
+
+
 
 
 Route::controller(ProductosController::class)->group(function () {
@@ -94,7 +103,7 @@ Route::controller(GuiaRemisionController::class)->group(function () {
     Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
 });
 
-Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+//Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 
 Route::controller(ClientesController::class)->group(function () {
 
@@ -102,7 +111,7 @@ Route::controller(ClientesController::class)->group(function () {
     Route::post('clientes', 'store')->name('admin.clientes.store');
     Route::get('clientes/crear', 'create')->name('admin.clientes.create');
     Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
-    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.update');
+    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.updated');
     Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
 });
 
@@ -213,8 +222,6 @@ Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin
 Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
     Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
-    Route::get('tipo/tareas', 'tipo')->name('admin.tecnico.tareas.tipo');
-    Route::get('/', 'tecnicos')->name('admin.tecnico.index');
 });
 
 
@@ -281,6 +288,12 @@ Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name
 
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
+route::get('solicitudes', [SolicitudesController::class, 'index'])->name('admin.solicitudes.index');
+
+Route::controller(ReportesGerenciales::class)->group(function () {
+
+    Route::get('gerencia/reportes', 'index')->name('admin.gerencia.reportes');
+});
 
 route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
 

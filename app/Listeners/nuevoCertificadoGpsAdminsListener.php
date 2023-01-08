@@ -21,7 +21,7 @@ class nuevoCertificadoGpsAdminsListener
     {
         $data = array(
             'id_certificado' => $event->certificado->id,
-            'url' => "admin.certificados.velocimetros.show",
+            'url' => "admin.certificados.velocimetros.index",
             'asunto' => 'CERTIFICADO DE VELOCIMETRO CREADO',
             'body' => 'El usuario ' . User::find($event->certificado->user_id)->name . ' ha creado un nuevo certificado',
             'accion' => 'certificado_velocimetro_created',

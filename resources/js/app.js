@@ -19,8 +19,7 @@ window.VenoBox = VenoBox;
 
 new VenoBox({
     selector: ".image-task",
-    numeration: true,
-    infinigall: true,
+    maxWidth: "75%",
     spinner: "rotating-plane",
 });
 // import Sortable from "sortablejs";

@@ -14,6 +14,14 @@ use Maatwebsite\Excel\Facades\Excel;
 class LineasController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:ver-sim_card', ['only' => ['index', 'disponibles']]);
+        $this->middleware('permission:crear-sim_card', ['only' => ['create']]);
+        $this->middleware('permission:editar-sim_card', ['only' => ['edit']]);
+    }
+
+
     public function index()
     {
         return view('admin.almacen.lineas.index');
@@ -62,7 +70,7 @@ class LineasController extends Controller
             ]);
         }
 
-        //verificar si enviamos el id de la linea                                         
+        //verificar si enviamos el id de la linea
         if ($request->lineas_id) {
 
             $sim_card_linea = SimCard::where('lineas_id', $request->lineas_id)->first();

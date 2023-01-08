@@ -21,6 +21,7 @@ class Payment extends Component
     public $tipo_pago = "FACTURA";
     public $documentos = [];
     public $titulo_documento = "Numero";
+    public $pay = false;
 
     public $paymentsMethods = [];
 
@@ -63,21 +64,19 @@ class Payment extends Component
             'monto' => $this->monto,
             'divisa' => $this->divisa,
             'paymentable_type' => $this->paymentable_type,
+            'documento' => $this->paymentable_type == 'App\Models\Facturas' ? 'FACTURA' : 'RECIBO',
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id
         ]);
 
-        $payment->paymentable->pago_estado = 'PAID';
-        $payment->paymentable->estado = 'COMPLETADO';
-        $payment->paymentable->save();
+        if ($this->pay == "true") {
+            $payment->paymentable->pago_estado = 'PAID';
+            $payment->paymentable->estado = 'COMPLETADO';
+            $payment->paymentable->save();
+        }
 
         $this->closeModal();
-        //$this->dispatchBrowserEvent('savePayment', ['payment' => $payment]);
-        // return redirect()->route('admin.cobros.show', $this->cobro)->with('store', 'Se guardo con exito' . $payment->numero);
-
-        // return redirect()->route('admin.cobros.show', $this->cobro);
-        // session()->flash('store', 'Se guardo con exito' . $payment->numero);
         return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.banner', 'Se guardo con exito el pago ' . $payment->numero);
         return redirect()->route('admin.cobros.show', $this->cobro)->with('flash.bannerStyle', 'success');
     }

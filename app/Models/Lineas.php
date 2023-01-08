@@ -2,17 +2,31 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use App\Enums\LineasStatus;
 use App\Scopes\EmpresaScope;
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lineas extends Model
 {
     use HasFactory;
-    // protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $guarded = array();
+    use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+    //protected $guarded = array();
 
 
     protected $casts = [

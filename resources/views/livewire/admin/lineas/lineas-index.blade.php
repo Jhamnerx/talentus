@@ -27,6 +27,7 @@
             </form>
 
             <!-- Add  button -->
+            @can('crear-sim_card')
             <a href="{{ route('admin.almacen.lineas.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -36,7 +37,10 @@
                     <span class="hidden xs:block ml-2">Añadir Linea</span>
                 </button>
             </a>
+            @endcan
 
+
+            @can('asignar.linea-sim_card')
             <a href="{{ route('admin.asign.lineas') }}">
                 <button
                     class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
@@ -47,8 +51,7 @@
                     <span class="hidden xs:block ml-2">Asignar Linea</span>
                 </button>
             </a>
-
-
+            @endcan
 
         </div>
 
@@ -83,8 +86,7 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -134,8 +136,7 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -146,8 +147,7 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -158,6 +158,7 @@
                 </div>
             </div>
             <!-- Export button -->
+            @can('exportar-sim_card')
             <div class="relative inline-flex">
                 <a href="{{ route('admin.export.lineas') }}">
                     <button
@@ -170,7 +171,11 @@
                     </button>
                 </a>
             </div>
+            @endcan
+
+
             <!-- Import button -->
+            @can('importar.sim_card')
             <div class="relative inline-flex">
                 <button wire:click="openModalImport()" aria-controls="basic-modal"
                     class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -185,14 +190,16 @@
                     <span class="hidden xs:block ml-2">Importar</span>
                 </button>
             </div>
+            @endcan
+
         </div>
 
     </div>
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total sim cards <span
-                    class="text-slate-400 font-medium">{{ $sim_cards->total() }}</span>
+            <h2 class="font-semibold text-slate-800">Total sim cards <span class="text-slate-400 font-medium">{{
+                    $sim_cards->total() }}</span>
             </h2>
 
         </header>
@@ -226,98 +233,113 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">VEHICULO</div>
                             </th>
+                            @can('eliminar.numero-sim_card')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">ASIGNACION</div>
                             </th>
+                            @endcan
+
+                            @can('ver.cambios-sim_card')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
                             </th>
+                            @endcan
+
+
                         </tr>
                     </thead>
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($sim_cards->count())
-                            @foreach ($sim_cards as $sim_card)
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
-
-                                                <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" width="20" height="20">
-                                                    <g fill="none" class="nc-icon-wrapper">
-                                                        <path
-                                                            d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
-                                                            fill="white"></path>
-                                                    </g>
-                                                </svg>
-                                            </div>
-                                            @if (!empty($sim_card->sim_card))
-                                                <div class="font-medium text-slate-800">{{ $sim_card->sim_card }}</div>
-                                            @else
-                                                <div class="font-medium text-slate-800"></div>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if (!empty($sim_card->linea))
-                                            <div class="text-left">{{ $sim_card->linea->numero }}</div>
-                                        @else
-                                            <div class="text-left"># -</div>
-                                        @endif
-
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $sim_card->operador }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if (!empty($sim_card->vehiculos))
-                                            <div class="font-medium text-sky-500">
-                                                <a
-                                                    href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{ $sim_card->vehiculos->placa }}</a>
-                                            </div>
-                                        @else
-                                            <div class="font-medium text-emerald-500">
-                                                Sin Vehiculo
-                                            </div>
-                                        @endif
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            @if (!empty($sim_card->linea))
-                                                @livewire('admin.lineas.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id))
-                                            @else
-                                                <div class="text-left">-</div>
-                                            @endif
-
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            @livewire('admin.lineas.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                        @foreach ($sim_cards as $sim_card)
+                        <tr>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center">
+                                    <label class="inline-flex">
+                                        <span class="sr-only">Select</span>
+                                        <input class="table-item form-checkbox" type="checkbox"
+                                            @click="uncheckParent" />
+                                    </label>
+                                </div>
                             </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+
+                                        <svg class="ml-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                                            width="20" height="20">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
+                                                    fill="white"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                    @if (!empty($sim_card->sim_card))
+                                    <div class="font-medium text-slate-800">{{ $sim_card->sim_card }}</div>
+                                    @else
+                                    <div class="font-medium text-slate-800"></div>
+                                    @endif
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @if (!empty($sim_card->linea))
+                                <div class="text-left">{{ $sim_card->linea->numero }}</div>
+                                @else
+                                <div class="text-left"># -</div>
+                                @endif
+
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $sim_card->operador }}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @if (!empty($sim_card->vehiculos))
+                                <div class="font-medium text-sky-500">
+                                    <a href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{
+                                        $sim_card->vehiculos->placa }}</a>
+                                </div>
+                                @else
+                                <div class="font-medium text-emerald-500">
+                                    Sin Vehiculo
+                                </div>
+                                @endif
+
+                            </td>
+                            @can('eliminar.numero-sim_card')
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+                                    @if (!empty($sim_card->linea))
+                                    @livewire('admin.lineas.un-asign', ['sim_card' => $sim_card], key('unasign' .
+                                    $sim_card->id))
+                                    @else
+                                    <div class="text-left">-</div>
+                                    @endif
+
+                                </div>
+                            </td>
+                            @endcan
+
+                            @can('ver.cambios-sim_card')
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+                                    @livewire('admin.lineas.ver-cambios', ['sim_card' => $sim_card], key('change' .
+                                    $sim_card->id))
+                                </div>
+                            </td>
+                            @endcan
+
+                        </tr>
+                        @endforeach
+                        @else
+                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                         @endif
 
                     </tbody>

@@ -53,6 +53,7 @@
             </div>
 
             <!-- Add customer button -->
+            @can('crear-contacto')
             <a href="{{ route('admin.clientes.contactos.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -62,6 +63,8 @@
                     <span class="hidden xs:block ml-2">Añadir Contacto</span>
                 </button>
             </a>
+            @endcan
+
 
         </div>
 
@@ -70,8 +73,8 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total contactos <span
-                    class="text-slate-400 font-medium">{{ $contactos->total() }}</span>
+            <h2 class="font-semibold text-slate-800">Total contactos <span class="text-slate-400 font-medium">{{
+                    $contactos->total() }}</span>
             </h2>
 
         </header>
@@ -125,70 +128,71 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($contactos->count())
-                            @foreach ($contactos as $contacto)
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center relative">
-                                            <button>
-                                                <svg class="w-4 h-4 shrink-0 fill-current {{ $contacto->is_gerente ? 'text-yellow-500' : 'text-slate-500' }}"
-                                                    viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="font-medium text-slate-800">
-                                                {{ strtoupper($contacto->nombre) }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $contacto->cargo }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                        <div class="text-left">{{ $contacto->clientes->razon_social }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $contacto->numero_documento }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $contacto->telefono }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $contacto->birthday }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $contacto->email }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            @livewire('admin.clientes.contactos.delete', ['contacto' => $contacto], key('delete' . $contacto->id))
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                        @foreach ($contactos as $contacto)
+                        <tr>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center">
+                                    <label class="inline-flex">
+                                        <span class="sr-only">Select</span>
+                                        <input class="table-item form-checkbox" type="checkbox"
+                                            @click="uncheckParent" />
+                                    </label>
+                                </div>
                             </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center relative">
+                                    <button>
+                                        <svg class="w-4 h-4 shrink-0 fill-current {{ $contacto->is_gerente ? 'text-yellow-500' : 'text-slate-500' }}"
+                                            viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="font-medium text-slate-800">
+                                        {{ strtoupper($contacto->nombre) }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $contacto->cargo }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="text-left">{{ $contacto->clientes->razon_social }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $contacto->numero_documento }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $contacto->telefono }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $contacto->birthday }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">{{ $contacto->email }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+                                    @livewire('admin.clientes.contactos.delete', ['contacto' => $contacto], key('delete'
+                                    . $contacto->id))
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                         @endif
 
 

@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class ComprasFacturasController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-compras_facturas', ['only' => ['index']]);
+        $this->middleware('permission:crear-compras_facturas', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-compras_facturas', ['only' => ['edit', 'update']]);
+    }
 
     public function index()
     {

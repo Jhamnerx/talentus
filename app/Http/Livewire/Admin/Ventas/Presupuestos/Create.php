@@ -188,12 +188,10 @@ class Create extends Component
     public function save()
     {
 
-
         $request = new PresupuestosRequest();
         $data = $this->validate($request->rules(), $request->messages());
 
         $presupuesto = Presupuestos::create($data);
-        $presupuesto->tipoCambio = $this->tipoCambio;
         $presupuesto->save();
 
         Presupuestos::createItems($presupuesto, $data["items"]);

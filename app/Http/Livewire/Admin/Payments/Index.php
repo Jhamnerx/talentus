@@ -26,7 +26,6 @@ class Index extends Component
         return view('livewire.admin.payments.index', compact('payments', 'total'));
     }
 
-
     public function openPaymentPanel(Payments $payment)
     {
 

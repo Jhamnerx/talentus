@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
+use App\Scopes\EliminadoScope;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\ContactosFlotasFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Contactos extends Model
 {
@@ -18,7 +20,16 @@ class Contactos extends Model
     }
 
     use HasFactory, SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $table = 'contactos';

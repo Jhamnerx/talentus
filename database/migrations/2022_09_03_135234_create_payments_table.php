@@ -19,6 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->string('numero_operacion');
             $table->date('fecha');
             $table->text('nota')->nullable();
+            $table->text('documento')->nullable();
             $table->text('divisa');
             $table->decimal('monto', 10, 2);
             $table->morphs('paymentable');
@@ -33,6 +34,7 @@ class CreatePaymentsTable extends Migration
             $table->foreign('cobros_id')->references('id')->on('cobros')->onDelete('cascade');
             $table->unsignedBigInteger('payment_method_id')->unsigned()->nullable();
             $table->foreign('payment_method_id')->references('id')->on('payment_methods')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

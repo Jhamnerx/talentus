@@ -34,8 +34,8 @@ class Complete extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
-            ->estado('COMPLETE')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
+            ->estado('COMPLETE')
             ->paginate(5, ['*'], 'completePage');
 
         return view('livewire.admin.tecnico.tareas.modales.complete', compact('tareas'));
@@ -47,6 +47,10 @@ class Complete extends Component
     public function openModal()
     {
         $this->openModal = true;
+    }
+    public function closeModal()
+    {
+        $this->openModal = false;
     }
     public function updatedImagen($value, $key)
     {
@@ -76,12 +80,11 @@ class Complete extends Component
         $this->dispatchBrowserEvent('save-imagen', ['tarea' => $tarea->token]);
     }
 
-    public function sendWhatsApp()
+    public function sendWhatsApp(Tareas $task)
     {
-
         $util = new UtilesController();
-
-        $respuesta = $util->whatsAppSendMessageInstalation('hola');
-        dd($respuesta);
+        $respuesta = $util->whatsAppSendMessageInstalation($task);
+        $task->sent_message = true;
+        $task->save();
     }
 }

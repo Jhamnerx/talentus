@@ -11,6 +11,14 @@ class ConsultasController extends Controller
     {
         return view('app.consulta.actas.index', compact('codigo'));
     }
+    public function consultaCertificado($codigo = null)
+    {
+        return view('app.consulta.certificados.gps', compact('codigo'));
+    }
+    public function consultaCertificadoVelocimetro($codigo = null)
+    {
+        return view('app.consulta.certificados.velocimetro', compact('codigo'));
+    }
     public function consultaVehiculos()
     {
         return view('app.consulta.vehiculos.index');

@@ -37,5 +37,11 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+
+        $this->renderable(function (\Spatie\Permission\Exceptions\UnauthorizedException $e, $request) {
+
+            // return view('admin.exceptions.permisos');
+            return response()->view('admin.exceptions.permisos');
+        });
     }
 }

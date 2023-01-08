@@ -2,14 +2,16 @@
 
 namespace App\Models;
 
-use App\Notifications\Certificados\EnviarCertificadoVelocimetroCliente;
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
-use Database\Factories\CertificadosVelocimetrosFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Activitylog\LogOptions;
+use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\CertificadosVelocimetrosFactory;
+use App\Notifications\Certificados\EnviarCertificadoVelocimetroCliente;
 
 class CertificadosVelocimetros extends Model
 {
@@ -22,6 +24,16 @@ class CertificadosVelocimetros extends Model
 
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'certificados_velocimetros';

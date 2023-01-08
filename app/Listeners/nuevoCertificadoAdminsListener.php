@@ -30,9 +30,9 @@ class nuevoCertificadoAdminsListener
     {
         $data = array(
             'id_certificado' => $event->certificado->id,
-            'url' => 'admin.certificados.gps.show',
+            'url' => 'admin.certificados.gps.index',
             'asunto' => 'CERTIFICADO CREADO',
-            'body' => 'El usuario '.User::find($event->certificado->user_id)->name.' ha creado un nuevo certificado',
+            'body' => 'El usuario ' . User::find($event->certificado->user_id)->name . ' ha creado un nuevo certificado',
             'accion' => 'certificado_created',
             'from_user_id' => auth()->id(),
         );

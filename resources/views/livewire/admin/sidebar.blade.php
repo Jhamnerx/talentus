@@ -82,6 +82,7 @@
                     </li>
 
                     <!-- Almacen -->
+                    @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo', 'ver-guias'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('almacen-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('almacen-'))">
@@ -116,6 +117,8 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
+
+                                @can('ver-categoria')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-categorias' && '!text-indigo-500'"
@@ -124,6 +127,9 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Categorias</span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-producto')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-productos' && '!text-indigo-500'"
@@ -132,6 +138,9 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Productos/Servicios</span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-sim_card')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-lineas' && '!text-indigo-500'"
@@ -141,6 +150,8 @@
                                             Cards</span>
                                     </a>
                                 </li>
+                                @endcan
+                                @can('ver-sim_card')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-disponibles-lineas' && '!text-indigo-500'"
@@ -149,6 +160,8 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Lineas</span>
                                     </a>
                                 </li>
+                                @endcan
+                                @can('ver-dispositivo')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-dispositivos' && '!text-indigo-500'"
@@ -157,6 +170,8 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dispositivos</span>
                                     </a>
                                 </li>
+                                @endcan
+                                @can('ver-guias')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'almacen-guias' && '!text-indigo-500'"
@@ -166,10 +181,19 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+                    @if(auth()->user()->can('*-categoria'))
+
+
+
+                    @endif
                     <!-- Clientes -->
+                    @canany(['ver-cliente', 'ver-contacto'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('clientes-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('clientes-'))">
@@ -200,9 +224,9 @@
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul href="{{ route('admin.clientes.index') }}" class="pl-9 mt-1"
-                                :class="!open && 'hidden'" x-cloak>
-
+                            <ul href="{{ route('admin.clientes.index') }}" class="pl-9 mt-1" :class="!open && 'hidden'"
+                                x-cloak>
+                                @can('ver-cliente')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'clientes-clientes' && '!text-indigo-500'"
@@ -212,6 +236,9 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-contacto')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'clientes-contactos' && '!text-indigo-500'"
@@ -221,14 +248,18 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+
                             </ul>
 
                         </div>
                     </li>
+                    @endcanany
+
 
                     <!-- Proveedores -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
-                        :class="page === 'proveedores' && 'bg-slate-900'">
+                    @can('ver-proveedor')
+                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" :class="page === 'proveedores' && 'bg-slate-900'">
                         <a class="block text-slate-200 hover:text-white truncate transition duration-150"
                             :class="page === 'proveedores' && 'hover:text-slate-200'"
                             href="{{ route('admin.proveedores.index') }}">
@@ -246,7 +277,10 @@
                             </div>
                         </a>
                     </li>
+                    @endcan
+
                     <!-- Compras -->
+                    @canany(['ver-compras_facturas', 'crear-compras_facturas'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('compras-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('compras-'))">
@@ -299,7 +333,10 @@
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+
                     <!-- VENTAS -->
+                    @canany(['ver-cotizaciones', 'ver-ventas-facturas', 'ver-recibos', 'ver-contrato'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('ventas-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('ventas-'))">
@@ -339,7 +376,9 @@
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
+                                @can('ver-cotizaciones')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-presupuestos' && '!text-indigo-500'"
@@ -349,6 +388,8 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+                                @can('ver-ventas-facturas')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-facturas' && '!text-indigo-500'"
@@ -358,6 +399,9 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-recibos')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-recibos' && '!text-indigo-500'"
@@ -366,6 +410,9 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Recibos</span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-contrato')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'ventas-contratos' && '!text-indigo-500'"
@@ -374,11 +421,15 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contratos</span>
                                     </a>
                                 </li>
+                                @endcan
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+
 
                     <!-- Vehiculos -->
+                    @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('vehiculos-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('vehiculos-'))">
@@ -388,8 +439,8 @@
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <svg class="shrink-0 h-6 w-6 icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
-                                        stroke-width="1.5" stroke="currentColor" fill="none"
-                                        stroke-linecap="round" stroke-linejoin="round">
+                                        stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <circle cx="7" cy="17" r="2" />
                                         <circle cx="17" cy="17" r="2" />
@@ -411,6 +462,7 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
+                                @can('ver-vehiculos-flotas')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-flotas' && '!text-indigo-500'"
@@ -420,15 +472,9 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'clientes-contactos' && '!text-indigo-500'"
-                                        href="{{ route('admin.clientes.contactos.index') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
-                                        </span>
-                                    </a>
-                                </li>
+                                @endcan
+
+                                @can('ver-vehiculos-vehiculos')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-vehiculos' && '!text-indigo-500'"
@@ -437,7 +483,19 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Vehiculos</span>
                                     </a>
                                 </li>
+                                @endcan
 
+                                {{-- <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'clientes-contactos' && '!text-indigo-500'"
+                                        href="{{ route('admin.clientes.contactos.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
+                                        </span>
+                                    </a>
+                                </li> --}}
+
+                                @can('ver-vehiculos-reportes')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'vehiculos-reportes' && '!text-indigo-500'"
@@ -447,11 +505,17 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
+
 
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+
                     <!-- Certificados -->
+
+                    @canany(['ver-certificados-actas', 'ver-certificados-gps', 'ver-certificados-velocimetros'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('certificados-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('certificados-'))">
@@ -489,6 +553,7 @@
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
 
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
+                                @can('ver-certificados-actas')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-actas' && '!text-indigo-500'"
@@ -497,6 +562,9 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Actas</span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('ver-certificados-gps')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-gps' && '!text-indigo-500'"
@@ -506,6 +574,8 @@
                                             Gps</span>
                                     </a>
                                 </li>
+                                @endcan
+                                @can('ver-certificados-velocimetros')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'certificados-velocimetro' && '!text-indigo-500'"
@@ -515,11 +585,16 @@
                                             Velocimetros</span>
                                     </a>
                                 </li>
-
+                                @endcan
                             </ul>
                         </div>
                     </li>
+                    @endcanany
+
                     <!-- administracion -->
+                    @canany(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',
+                    'admin.cobros.index', 'admin.payments.index', 'admin.settings.ciudades.index',
+                    'admin.settings.roles.index', 'admin.settings.plantilla.index'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0"
                         :class="{ 'bg-slate-900': page.startsWith('administracion-') }" x-data="{ open: false }"
                         x-init="$nextTick(() => open = page.startsWith('administracion-'))">
@@ -557,6 +632,32 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
                             <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
+                                @can('admin.solicitudes.index')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'administracion-solicitudes' && '!text-indigo-500'"
+                                        href="{{ route('admin.solicitudes.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Solicitudes
+                                        </span>
+                                    </a>
+                                </li>
+                                @endcan
+
+                                @can('admin.reportes.index')
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                        :class="page === 'administracion-reportes-gerenciales' && '!text-indigo-500'"
+                                        href="{{ route('admin.gerencia.reportes') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Reportes Gerenciales
+                                        </span>
+                                    </a>
+                                </li>
+                                @endcan
+                                @can('admin.usuarios.index')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-usuarios' && '!text-indigo-500'"
@@ -566,7 +667,9 @@
                                         </span>
                                     </a>
                                 </li>
+                                @endcan
 
+                                @can('admin.cobros.index')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-cobros' && '!text-indigo-500'"
@@ -576,6 +679,9 @@
                                             Registro de Cobros</span>
                                     </a>
                                 </li>
+                                @endcan
+
+                                @can('admin.payments.index')
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-paymentes' && '!text-indigo-500'"
@@ -585,6 +691,9 @@
                                             Pagos</span>
                                     </a>
                                 </li>
+                                @endcan
+                                @canany(['admin.settings.ciudades.index', 'admin.settings.roles.index',
+                                'admin.settings.plantilla.index'])
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
                                         :class="page === 'administracion-ajustes' && '!text-indigo-500'"
@@ -593,22 +702,37 @@
                                             class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ajustes</span>
                                     </a>
                                 </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'administracion-buzon' && '!text-indigo-500'"
-                                        href="feedback.html">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Buzon
-                                            Contacto</span>
-                                    </a>
-                                </li>
+                                @endcanany
+
                             </ul>
                         </div>
                     </li>
+                    @endcanany
 
                 </ul>
             </div>
             <!-- More group -->
+            @canany(['tecnico.tareas.reportes',
+            'tecnico.tareas.index',
+            'tecnico.tareas.cards',
+            'tecnico.tareas.cards.sin-leer.actions',
+            'tecnico.tareas.cards.complete.actions',
+            'tecnico.tareas.cards.pendient.actions',
+            'tecnico.tareas.cards.canceled.actions',
+            'tecnico.tareas.tecnicos.admin',
+            'tecnico.tareas.tabla-historial',
+            'tecnico.tareas.create',
+            'tecnico.tareas.edit',
+            'tecnico.tareas.delete',
+            'tecnico.tareas.action.pdf',
+            'tecnico.tareas.action.wsp',
+
+            'tecnico.tareas.tipo.index',
+            'tecnico.tareas.tipo.create',
+            'tecnico.tareas.tipo.edit',
+            'tecnico.tareas.tipo.delete'])
+
+
             <div>
                 <h3 class="text-xs uppercase text-slate-500 font-semibold pl-3">
                     <span class="hidden lg:block lg:sidebar-expanded:hidden 2xl:hidden text-center w-6"
@@ -632,13 +756,12 @@
                                         stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <line x1="6" y1="9" x2="12" y2="9" />
-                                        <line class="fill-current text-slate-600" x1="4" y1="5"
-                                            x2="8" y2="5" />
+                                        <line class="fill-current text-slate-600" x1="4" y1="5" x2="8" y2="5" />
                                         <path d="M6 5v11a1 1 0 0 0 1 1h5" />
-                                        <rect class="fill-current text-slate-400" x="12" y="7"
-                                            width="8" height="4" rx="1" />
-                                        <rect class="fill-current text-slate-400" x="12" y="15"
-                                            width="8" height="4" rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="7" width="8" height="4"
+                                            rx="1" />
+                                        <rect class="fill-current text-slate-400" x="12" y="15" width="8" height="4"
+                                            rx="1" />
                                     </svg>
                                     <span
                                         class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
@@ -667,32 +790,13 @@
                                         </span>
                                     </a>
                                 </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.tareas.tipo') }}"
-                                        :class="page === 'tecnico-tareas-tipo' && '!text-indigo-500'">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Tipo Tareas
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        href="{{ route('admin.tecnico.index') }}"
-                                        :class="page === 'tecnico-index' && '!text-indigo-500'">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Administrar Tecnicos
-                                        </span>
-                                    </a>
-                                </li>
                             </ul>
                         </div>
                     </li>
 
                 </ul>
             </div>
+            @endcanany
         </div>
 
         <!-- Expand / collapse button -->

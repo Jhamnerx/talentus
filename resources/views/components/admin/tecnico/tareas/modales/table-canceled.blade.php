@@ -51,12 +51,17 @@
                             <div class="font-semibold text-center">Vehiculo</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Fecha Cancelacion</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
                         </th>
-
+                        @can('tecnico.tareas.cards.canceled.actions')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
+                        @endcan
+
                     </tr>
                 </thead>
                 <!-- Table body -->
@@ -81,7 +86,7 @@
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
-                            <div class="text-left font-medium text-slate-800">
+                            <div class="text-left font-medium text-slate-800 whitespace-normal min-w-3">
                                 @switch($tarea->tipo_tarea_id)
                                 @case(1)
 
@@ -125,7 +130,18 @@
                                 {{$tarea->vehiculo->placa}}
                             </div>
                         </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center">
+                                @if ($tarea->fecha_termino)
+                                Cancelada el {{$tarea->fecha_termino->format('d-m-Y')}} a las
+                                {{$tarea->fecha_termino->format('h:i A')}}
+                                @else
+                                error al obtener fecha
 
+                                @endif
+
+                            </div>
+                        </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-left">
 
@@ -135,19 +151,39 @@
                                 </div>
                             </div>
                         </td>
-
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        @can('tecnico.tareas.cards.canceled.actions')
+                        <td class="px-8 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
-                                <button type="button" wire:click.prevent="DeleteTask({{$tarea->id}})"
-                                    class="btn bg-rose-600 hover:bg-rose-700 text-white">
-                                    <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
-                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                        <path
-                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                    </svg>
-                                </button>
+                                <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                    @mouseleave="open = false">
+                                    <button type="button" wire:click.prevent="deleteTask({{$tarea->id}})"
+                                        aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                        @focusout="open = false" @click.prevent type="button"
+                                        class="btn rounded-full bg-rose-600 hover:bg-rose-700 text-white">
+                                        <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
+                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                            <path
+                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                        </svg>
+                                    </button>
+                                    <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
+                                        <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2" x-show="open"
+                                            x-transition:enter="transition ease-out duration-200 transform"
+                                            x-transition:enter-start="opacity-0 translate-y-2"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            x-transition:leave="transition ease-out duration-200"
+                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                            x-cloak>
+                                            <div class="text-xs text-slate-200 whitespace-nowrap">
+                                                Eliminar Tarea
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </td>
+                        @endcan
                     </tr>
                     @endforeach
                     @else

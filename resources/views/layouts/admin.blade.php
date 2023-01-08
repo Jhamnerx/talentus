@@ -104,7 +104,7 @@
         Echo.private('App.Models.User.' + {{ Auth::user()->id }})
             .notification((notification) => {
                 Livewire.emit('notificaciones-update');
-                //console.log("evento");
+
             });
 
         // Echo.channel('clientes')

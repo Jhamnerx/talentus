@@ -40,7 +40,7 @@
             </form>
 
             <!-- crear button -->
-            <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">Crear Pago</button>
+            {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">Crear Pago</button> --}}
 
         </div>
 
@@ -73,7 +73,8 @@
     <!-- Tabla -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Pagos <span class="text-slate-400 font-medium">1</span>
+            <h2 class="font-semibold text-slate-800">Pagos <span
+                    class="text-slate-400 font-medium">{{$payments->total()}}</span>
             </h2>
         </header>
         <x-admin.payments.payments-table :payments="$payments"> </x-admin.payments.payments-table>

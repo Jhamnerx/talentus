@@ -24,6 +24,7 @@ class CreateDispositivosTable extends Migration
 
             $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

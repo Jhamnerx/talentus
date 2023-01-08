@@ -14,6 +14,13 @@ use Illuminate\Support\Str;
 class ProductosController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:crear-producto', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-producto', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:ver-producto', ['only' => ['index']]);
+    }
+
     public function index()
     {
         return view('admin.almacen.productos.index');

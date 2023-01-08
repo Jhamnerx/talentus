@@ -45,9 +45,8 @@ class CrearRecordatorio extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                ->subject('Tienes un nuevo Mensaje')
-                ->view('mail.recordatorio', ['recordatorio' => $this->recordatorio]);
-   
+            ->subject('Tienes un nuevo Mensaje')
+            ->view('mail.recordatorio', ['recordatorio' => $this->recordatorio]);
     }
 
     /**
@@ -60,36 +59,36 @@ class CrearRecordatorio extends Notification implements ShouldQueue
     {
         return [
             'url' => route('admin.vehiculos.reportes.show', $this->recordatorio->reporte->id),
-            'asunto' => 'RECORDATORIO - REPORTE VEHICULO '.$this->recordatorio->reporte->vehiculos->placa,
+            'asunto' => 'RECORDATORIO - REPORTE VEHICULO ' . $this->recordatorio->reporte->vehiculos->placa,
             'mensaje' => $this->recordatorio->data,
             'accion' => 'recordatorio_reporte',
             'tipo' => 'recordatorio',
         ];
     }
 
-    public function toBroadcast($notifiable){
+    public function toBroadcast($notifiable)
+    {
 
         return new BroadcastMessage([]);
-
     }
 
-    // public function withDelay($notifiable)
-    // {
-    //     return [
+    public function withDelay($notifiable)
+    {
+        return [
 
-    //         'mail' => now()->addSeconds(30),
-    //         'database' => now()->addSeconds(30),
-    //         'broadcast' => now()->addSeconds(30),
+            'mail' => now()->addSeconds(30),
+            'database' => now()->addSeconds(30),
+            'broadcast' => now()->addSeconds(30),
 
-    //     ];
-    // }
+        ];
+    }
 
-    // public function viaQueues()
-    // {
-    //     return [
-    //         'mail' => 'mail',
-    //         'database' => 'database',
-    //         'broadcast' => 'broadcast',
-    //     ];
-    // }
+    public function viaQueues()
+    {
+        return [
+            'mail' => 'mail',
+            'database' => 'database',
+            'broadcast' => 'broadcast',
+        ];
+    }
 }

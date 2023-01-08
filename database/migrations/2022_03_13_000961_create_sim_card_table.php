@@ -20,6 +20,7 @@ class CreateSimCardTable extends Migration
             $table->string('operador');
             $table->unsignedBigInteger('empresa_id');
             $table->enum('estado', [1, 2])->default(1);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('lineas_id')->references('id')->on('lineas')->onDelete('cascade');

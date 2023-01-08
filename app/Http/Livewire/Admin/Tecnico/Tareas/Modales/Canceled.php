@@ -28,7 +28,7 @@ class Canceled extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
-            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
             ->estado('CANCELED')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
             ->paginate(5, ['*'], 'canceledPage');
         return view('livewire.admin.tecnico.tareas.modales.canceled', compact('tareas'));
@@ -40,5 +40,17 @@ class Canceled extends Component
     public function openModal()
     {
         $this->openModal = true;
+    }
+    public function closeModal()
+    {
+        $this->openModal = false;
+    }
+
+    public function deleteTask(Tareas $task)
+    {
+
+        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA ELIMINADA', 'message' => 'Se elimino la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
+        $task->delete();
+        $this->render();
     }
 }

@@ -201,7 +201,7 @@
     @livewire('admin.inicio.charts.ventas-dolares')
     {{-- card disposivitos --}}
 
-    <div
+    {{-- <div
         class="flex flex-col col-span-full sm:col-span-6 xl:col-span-4 bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4 border-b border-slate-100">
             <h2 class="font-semibold text-slate-800">Top Ventas</h2>
@@ -215,11 +215,11 @@
                 <ul class="flex flex-wrap justify-center -m-1"></ul>
             </div>
         </div>
-    </div>
+    </div> --}}
 
 
     <!-- Card (Recent Activity) -->
-    <div class="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
+    {{-- <div class="col-span-full xl:col-span-6 bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4 border-b border-slate-100">
             <h2 class="font-semibold text-slate-800">Actividad Reciente</h2>
         </header>
@@ -247,8 +247,8 @@
                                         Smith</a>
                                     in a new post</div>
                                 <div class="shrink-0 self-end ml-2">
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="#0">View<span class="hidden sm:inline">
+                                    <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">View<span
+                                            class="hidden sm:inline">
                                             -&gt;</span></a>
                                 </div>
                             </div>
@@ -263,14 +263,13 @@
                         </div>
                         <div class="grow flex items-center border-b border-slate-100 text-sm py-2">
                             <div class="grow flex justify-between">
-                                <div class="self-center">The post <a class="font-medium text-slate-800"
-                                        href="#0">Post
+                                <div class="self-center">The post <a class="font-medium text-slate-800" href="#0">Post
                                         Name</a> was removed by <a
                                         class="font-medium text-slate-800 hover:text-slate-900" href="#0">Nick
                                         Mark</a></div>
                                 <div class="shrink-0 self-end ml-2">
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="#0">View<span class="hidden sm:inline">
+                                    <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">View<span
+                                            class="hidden sm:inline">
                                             -&gt;</span></a>
                                 </div>
                             </div>
@@ -280,8 +279,7 @@
                     <li class="flex px-2">
                         <div class="w-9 h-9 rounded-full shrink-0 bg-emerald-500 my-2 mr-3">
                             <svg class="w-9 h-9 fill-current text-emerald-50" viewBox="0 0 36 36">
-                                <path
-                                    d="M15 13v-3l-5 4 5 4v-3h8a1 1 0 000-2h-8zM21 21h-8a1 1 0 000 2h8v3l5-4-5-4v3z" />
+                                <path d="M15 13v-3l-5 4 5 4v-3h8a1 1 0 000-2h-8zM21 21h-8a1 1 0 000 2h8v3l5-4-5-4v3z" />
                             </svg>
                         </div>
                         <div class="grow flex items-center text-sm py-2">
@@ -290,8 +288,8 @@
                                         href="#0">Patrick Sullivan</a> published a new <a
                                         class="font-medium text-slate-800" href="#0">post</a></div>
                                 <div class="shrink-0 self-end ml-2">
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="#0">View<span class="hidden sm:inline">
+                                    <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">View<span
+                                            class="hidden sm:inline">
                                             -&gt;</span></a>
                                 </div>
                             </div>
@@ -319,8 +317,8 @@
                                         class="font-medium text-slate-800" href="#0">Newsletter
                                         #1</a></div>
                                 <div class="shrink-0 self-end ml-2">
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="#0">View<span class="hidden sm:inline">
+                                    <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">View<span
+                                            class="hidden sm:inline">
                                             -&gt;</span></a>
                                 </div>
                             </div>
@@ -336,14 +334,13 @@
                         </div>
                         <div class="grow flex items-center text-sm py-2">
                             <div class="grow flex justify-between">
-                                <div class="self-center">The post <a class="font-medium text-slate-800"
-                                        href="#0">Post
+                                <div class="self-center">The post <a class="font-medium text-slate-800" href="#0">Post
                                         Name</a> was suspended by <a
                                         class="font-medium text-slate-800 hover:text-slate-900" href="#0">Nick
                                         Mark</a></div>
                                 <div class="shrink-0 self-end ml-2">
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="#0">View<span class="hidden sm:inline">
+                                    <a class="font-medium text-indigo-500 hover:text-indigo-600" href="#0">View<span
+                                            class="hidden sm:inline">
                                             -&gt;</span></a>
                                 </div>
                             </div>
@@ -353,6 +350,6 @@
             </div>
 
         </div>
-    </div>
+    </div> --}}
 
 </div>

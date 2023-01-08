@@ -9,6 +9,13 @@ use Illuminate\Http\Request;
 
 class CobrosController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:admin.cobros.index', ['only' => ['index']]);
+        $this->middleware('permission:admin.cobros.create', ['only' => ['create']]);
+        $this->middleware('permission:admin.cobros.edit', ['only' => ['edit']]);
+    }
+
 
     public function index()
     {

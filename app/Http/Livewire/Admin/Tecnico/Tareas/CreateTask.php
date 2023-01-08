@@ -6,6 +6,7 @@ use App\Models\Lineas;
 use App\Models\Productos;
 use App\Models\Tareas;
 use App\Models\tipoTareas;
+use App\Models\User;
 use App\Models\Vehiculos;
 use Livewire\Component;
 
@@ -14,7 +15,6 @@ class CreateTask extends Component
 
     public $modalSave = false;
 
-
     protected $listeners = [
         'addTask',
     ];
@@ -22,13 +22,14 @@ class CreateTask extends Component
     public $titulo = '';
     public $ErrorMsgVehiculo;
 
-    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0;
+    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
 
     protected function rules()
     {
         return [
             'tipo_tarea_id' => 'required|gt:0',
             'vehiculos_id' => 'required',
+            'tecnico_id' => 'required',
             'cliente_id' => 'required',
             'dispositivo' => 'exclude_if:tipo_tarea_id,2|exclude_if:tipo_tarea_id,4|required',
             'numero' => 'exclude_if:tipo_tarea_id,4|required',
@@ -46,6 +47,7 @@ class CreateTask extends Component
             'tipo_tarea_id.required' => 'Selecciona un tarea',
             'tipo_tarea_id.gt' => 'Selecciona una tarea valida',
             'vehiculos_id.required' => 'Selecciona un vehículo',
+            'tecnico_id.required' => 'Selecciona un tecnico',
             'cliente_id.required' => 'Selecciona un vehículo que tenga asignado a un cliente',
             'dispositivo.required' => 'Selecciona un dispositivo',
             'numero.required' => 'Ingresa un número de linea',
@@ -63,7 +65,9 @@ class CreateTask extends Component
 
         $velocimetros = Productos::velocimetro()->get();
 
-        return view('livewire.admin.tecnico.tareas.create-task', compact('tipo_tareas', 'velocimetros'));
+        $tecnicos = User::role('tecnico')->get();
+
+        return view('livewire.admin.tecnico.tareas.create-task', compact('tipo_tareas', 'velocimetros', 'tecnicos'));
     }
 
     public function addTask()
@@ -110,7 +114,7 @@ class CreateTask extends Component
         $data = $this->validate();
         $tarea = Tareas::create($data);
         $this->dispatchBrowserEvent('save-task', ['tarea' => $tarea]);
-
+        $this->reset();
         $this->emit('updateIndex');
     }
 }

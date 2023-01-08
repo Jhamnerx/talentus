@@ -7,7 +7,7 @@ use Livewire\Component;
 class Notificaciones extends Component
 {
     public $notificaciones, $count;
-    
+
     protected $listeners = [
         'notificaciones-update' => 'update',
     ];
@@ -17,22 +17,27 @@ class Notificaciones extends Component
     {
 
         $this->update();
-
-
     }
 
-    public function update(){
+    public function update()
+    {
 
-        $this->notificaciones = auth()->user()->unreadNotifications ;
+        $this->notificaciones = auth()->user()->notifications;
         $this->count = auth()->user()->unreadNotifications->count();
     }
-    
+
     public function render()
     {
         return view('livewire.admin.header.notificaciones');
     }
 
-    public function resetNotificacion(){
-
+    public function resetNotificacion()
+    {
+    }
+    public function markRead($notification)
+    {
+        $notify = auth()->user()->notifications()->findOrFail($notification);
+        $notify->markAsRead();
+        $this->update();
     }
 }

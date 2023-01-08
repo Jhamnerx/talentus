@@ -23,7 +23,7 @@ class CreateLineasTable extends Migration
 
             $table->timestamp('fecha_suspencion')->nullable();
             $table->timestamp('date_to_suspend')->nullable();
-
+            $table->softDeletes();
             $table->timestamps();
         });
     }

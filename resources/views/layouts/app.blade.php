@@ -15,6 +15,7 @@
 
     <link rel="stylesheet" href="{{ mix('css/cliente/cliente.css') }}">
     <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
 
 
     <link rel="stylesheet" href="{{asset('css/fontawesome-all.min.css')}}">

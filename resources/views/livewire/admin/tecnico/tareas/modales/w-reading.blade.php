@@ -22,7 +22,8 @@
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold text-slate-800">TAREAS SIN LEER</div>
-                        <button class="text-slate-400 hover:text-slate-500" @click="openModal = false">
+                        <button wire:click.prevent="closeModal" class="text-slate-400 hover:text-slate-500"
+                            @click="openModal = false">
                             <div class="sr-only">Close</div>
                             <svg class="w-4 h-4 fill-current">
                                 <path

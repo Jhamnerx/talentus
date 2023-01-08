@@ -2,18 +2,29 @@
 
 namespace App\Models;
 
-use App\Scopes\EliminadoScope;
 use App\Scopes\EmpresaScope;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Scopes\EliminadoScope;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Productos extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use LogsActivity;
+    protected static $recordEvents = ['deleted', 'created', 'updated'];
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     protected $table = 'productos';
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -23,6 +34,10 @@ class Productos extends Model
     public function scopeActive($query, $status)
     {
         return $query->where('is_active', $status);
+    }
+    public function scopeTipo($query, $tipo)
+    {
+        return $query->where('tipo', $tipo);
     }
 
     public function scopeVelocimetro($query)
@@ -65,5 +80,17 @@ class Productos extends Model
     {
 
         return $this->morphOne(Imagen::class, 'imageable');
+    }
+
+
+    public function detalle_facturas()
+    {
+
+        return  $this->hasMany(DetalleFacturas::class, 'producto_id');
+    }
+    public function detalle_recibos()
+    {
+
+        return  $this->hasMany(DetalleRecibos::class, 'producto_id');
     }
 }

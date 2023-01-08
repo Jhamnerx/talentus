@@ -64,22 +64,21 @@
 
                             </div>
                             @error('name')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                             @enderror
                         </div>
                     </div>
-
                     <div class="flex justify-between">
                         <h6 class="text-sm not-italic font-medium text-gray-800 px-4 md:px-8 py-1.5">
                             Permisos
                             <span class="text-sm text-red-500"> *</span>
                         </h6>
                         @error('permission')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                         <div class="text-sm not-italic font-medium text-gray-300 px-4 md:px-8 py-1.5">
                             <a wire:click.prevent="checkAll" class="cursor-pointer text-indigo-400">Seleccionar todo</a>
@@ -89,6 +88,7 @@
                     </div>
                     <div class="border-t border-gray-200 py-3">
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-8 sm:px-8">
+                            {{--CATEGORIA--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('categoria')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -96,15 +96,14 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_i231t5ggs"
+                                            <input name="permission[]" wire:model="permission" id="ver-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="ver-categoria">
                                         </div>
                                         <div class="ml-3 text-sm">
 
-                                            <label for="check_i231t5ggs"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-categoria" class="font-medium text-gray-600 cursor-pointer">
                                                 ver categoria
                                             </label>
 
@@ -114,13 +113,13 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_7ae5vb3bz"
+                                            <input name="permission[]" wire:model="permission" id="crear-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="crear-categoria">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_7ae5vb3bz"
+                                            <label for="crear-categoria"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear categoria
                                             </label>
@@ -130,13 +129,13 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_jxfpqul1t"
+                                            <input name="permission[]" wire:model="permission" id="editar-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="editar-categoria">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_jxfpqul1t"
+                                            <label for="editar-categoria"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar categoria
                                             </label>
@@ -147,13 +146,30 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_9grgp7y5g"
+                                            <input name="permission[]" wire:model="permission"
+                                                id="cambiar.estado-categoria" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
+                                                value="cambiar.estado-categoria">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="cambiar.estado-categoria"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estado categoria
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" id="eliminar-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="eliminar-categoria">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_9grgp7y5g"
+                                            <label for="eliminar-categoria"
                                                 class="font-medium text-gray-600 cursor-pointer">eliminar
                                                 categoria</label>
 
@@ -171,12 +187,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-producto"
-                                                id="check_6f6h3lakd" variant="indigo" type="checkbox"
+                                                id="ver-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_6f6h3lakd"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-producto" class="font-medium text-gray-600 cursor-pointer">
                                                 ver producto
                                             </label>
 
@@ -187,11 +202,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-producto"
-                                                id="check_chrthkf7x" variant="indigo" type="checkbox"
+                                                id="crear-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_chrthkf7x"
+                                            <label for="crear-producto"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear producto
                                             </label>
@@ -202,13 +217,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="editar-producto" id="check_a5j55m769" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="editar-producto"
+                                                id="editar-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_a5j55m769"
+                                            <label for="editar-producto"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar producto
                                             </label>
@@ -220,12 +234,28 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-producto" id="check_lj2i8ysx6" variant="indigo"
-                                                type="checkbox"
+                                                value="cambiar.estado-producto" id="cambiar.estado-producto"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_lj2i8ysx6"
+                                            <label for="cambiar.estado-producto"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estado producto
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="eliminar-producto"
+                                                id="eliminar-producto" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar-producto"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar item
                                             </label>
@@ -235,7 +265,7 @@
                                 </div>
                             </div>
 
-
+                            {{--SIM CARD Y LINEAS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('sim_card')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">Sim
@@ -245,12 +275,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-sim_card"
-                                                id="check_cndx5pjaq" variant="indigo" type="checkbox"
+                                                id="ver-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cndx5pjaq"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-sim_card" class="font-medium text-gray-600 cursor-pointer">
                                                 ver sim y lineas
                                             </label>
 
@@ -261,11 +290,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-sim_card"
-                                                id="check_7a25umedy" variant="indigo" type="checkbox"
+                                                id="crear-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_7a25umedy"
+                                            <label for="crear-sim_card"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear sim y lineas
                                             </label>
@@ -276,13 +305,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="editar-sim_card" id="check_dmjh1npj4" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="editar-sim_card"
+                                                id="editar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_dmjh1npj4"
+                                            <label for="editar-sim_card"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar sim y lineas
                                             </label>
@@ -294,12 +322,45 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-sim_card" id="check_am4865hz2" variant="indigo"
-                                                type="checkbox"
+                                                value="eliminar.numero-sim_card" id="asignar.linea-sim_card"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_am4865hz2"
+                                            <label for="asignar.linea-sim_card"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                asignar linea
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="asignar.linea-sim_card" id="eliminar.numero-sim_card"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar.numero-sim_card"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                eliminar numero de sim card
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="eliminar-sim_card"
+                                                id="eliminar-sim_card" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar-sim_card"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar
                                             </label>
@@ -311,12 +372,28 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="importar-sim_card" id="check_am4865hz2" variant="indigo"
+                                                value="ver.cambios-sim_card" id="ver.cambios-sim_card" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_am4865hz2"
+                                            <label for="ver.cambios-sim_card"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver cambios sim card
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="importar-sim_card"
+                                                id="importar-sim_card" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="importar-sim_card"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 importar sim card
                                             </label>
@@ -327,13 +404,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="exportar-sim_card" id="check_am4865hz2" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="exportar-sim_card"
+                                                id="exportar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_am4865hz2"
+                                            <label for="exportar-sim_card"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 exportar sim card
                                             </label>
@@ -346,17 +422,17 @@
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('dispositivo')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
-                                    Dispositivos</p>
+                                    Dispositivos
+                                </p>
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="ver-dispositivo" id="check_0zxpd3hn1" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="ver-dispositivo"
+                                                id="ver-dispositivo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0zxpd3hn1"
+                                            <label for="ver-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver dispositivos
                                             </label>
@@ -368,12 +444,28 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-dispositivo" id="check_4j0jyvnot" variant="indigo"
-                                                type="checkbox"
+                                                value="ver.modelos-dispositivo" id="ver.modelos-dispositivo"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_4j0jyvnot"
+                                            <label for="ver.modelos-dispositivo"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver modelos dispositivos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="crear-dispositivo"
+                                                id="crear-dispositivo" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="crear-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear dispositivos
                                             </label>
@@ -385,12 +477,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-dispositivo" id="check_5lobzv2d9" variant="indigo"
+                                                value="editar-dispositivo" id="editar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_5lobzv2d9"
+                                            <label for="editar-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar dispositivo
                                             </label>
@@ -402,12 +494,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-dispositivo" id="check_d65ryptb0" variant="indigo"
+                                                value="eliminar-dispositivo" id="eliminar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_d65ryptb0"
+                                            <label for="eliminar-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar dispositivo
                                             </label>
@@ -419,12 +511,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="importar-dispositivo" id="check_ja2g4n9ij" variant="indigo"
+                                                value="importar-dispositivo" id="importar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_ja2g4n9ij"
+                                            <label for="importar-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 importar dispositivos
                                             </label>
@@ -436,12 +528,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="exportar-dispositivo" id="check_ja2g4n9ij" variant="indigo"
+                                                value="exportar-dispositivo" id="exportar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_ja2g4n9ij"
+                                            <label for="exportar-dispositivo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 exportar dispositivos
                                             </label>
@@ -451,7 +543,7 @@
                                 </div>
                             </div>
 
-
+                            {{--GUIAS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('guias')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -460,12 +552,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-guias"
-                                                id="check_94lbtu5o4" variant="indigo" type="checkbox"
+                                                id="ver-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_94lbtu5o4"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-guias" class="font-medium text-gray-600 cursor-pointer">
                                                 ver guias
                                             </label>
 
@@ -476,12 +567,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-guias"
-                                                id="check_i0ziweh6i" variant="indigo" type="checkbox"
+                                                id="crear-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_i0ziweh6i"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="crear-guias" class="font-medium text-gray-600 cursor-pointer">
                                                 crear guias
                                             </label>
 
@@ -492,13 +582,27 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="editar-guias"
-                                                id="check_ydvr36aty" variant="indigo" type="checkbox"
+                                                id="editar-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_ydvr36aty"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="editar-guias" class="font-medium text-gray-600 cursor-pointer">
                                                 editar guias
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="detalle-guias"
+                                                id="detalle-guias" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="detalle-guias" class="font-medium text-gray-600 cursor-pointer">
+                                                ver detalle guias
                                             </label>
 
                                         </div>
@@ -509,11 +613,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="eliminar-guias"
-                                                id="check_nev2sv7dd" variant="indigo" type="checkbox"
+                                                id="eliminar-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_nev2sv7dd"
+                                            <label for="eliminar-guias"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar guias
                                             </label>
@@ -524,6 +628,8 @@
 
 
                             </div>
+
+                            {{--CLIENTES--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('cliente')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -533,11 +639,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-cliente"
-                                                id="check_5oiwxpq2f" variant="indigo" type="checkbox"
+                                                id="ver-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_5oiwxpq2f"
+                                            <label for="ver-cliente"
                                                 class="font-medium text-gray-600 cursor-pointer">ver clientes
                                             </label>
 
@@ -548,11 +654,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-cliente"
-                                                id="check_thpdn4bjs" variant="indigo" type="checkbox"
+                                                id="crear-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_thpdn4bjs"
+                                            <label for="crear-cliente"
                                                 class="font-medium text-gray-600 cursor-pointer">crear clientes
                                             </label>
 
@@ -563,11 +669,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="editar-cliente"
-                                                id="check_n9ur6r4r3" variant="indigo" type="checkbox"
+                                                id="editar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_n9ur6r4r3"
+                                            <label for="editar-cliente"
                                                 class="font-medium text-gray-600 cursor-pointer">editar
                                                 clientes
                                             </label>
@@ -579,14 +685,14 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-cliente" id="check_zbm4gt3e8" variant="indigo"
-                                                type="checkbox"
+                                                value="cambiar.estado-cliente" id="cambiar.estado-cliente"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_zbm4gt3e8"
-                                                class="font-medium text-gray-600 cursor-pointer">eliminar
-                                                clientes
+                                            <label for="cambiar.estado-cliente"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estados clientes
                                             </label>
 
                                         </div>
@@ -595,15 +701,14 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="exportar-cliente" id="check_zbm4gt3e8" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="eliminar-cliente"
+                                                id="eliminar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_zbm4gt3e8"
-                                                class="font-medium text-gray-600 cursor-pointer">exportar
-                                                clientes
+                                            <label for="eliminar-cliente"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                eliminar clientes
                                             </label>
 
                                         </div>
@@ -612,21 +717,37 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="importar-cliente" id="check_zbm4gt3e8" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="exportar-cliente"
+                                                id="xportar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_zbm4gt3e8"
-                                                class="font-medium text-gray-600 cursor-pointer">importar
-                                                clientes
+                                            <label for="xportar-cliente"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                exportar clientes
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="importar-cliente"
+                                                id="importar-cliente" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="importar-cliente"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                importar clientes
                                             </label>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {{--CONTACTOS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('contacto')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -635,11 +756,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-contacto"
-                                                id="check_vbvrk364m" variant="indigo" type="checkbox"
+                                                id="ver-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_vbvrk364m"
+                                            <label for="ver-contacto"
                                                 class="font-medium text-gray-600 cursor-pointer">ver contacto
                                             </label>
 
@@ -650,11 +771,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-contacto"
-                                                id="check_t4lxd556n" variant="indigo" type="checkbox"
+                                                id="crear-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_t4lxd556n"
+                                            <label for="crear-contacto"
                                                 class="font-medium text-gray-600 cursor-pointer">crear contacto
                                             </label>
 
@@ -664,13 +785,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="editar-contacto" id="check_96wwrpj9m" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="editar-contacto"
+                                                id="editar-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_96wwrpj9m"
+                                            <label for="editar-contacto"
                                                 class="font-medium text-gray-600 cursor-pointer">editar
                                                 contacto
                                             </label>
@@ -681,13 +801,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="eliminar-contacto" id="check_01pp7scx8" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="eliminar-contacto"
+                                                id="eliminar-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_01pp7scx8"
+                                            <label for="eliminar-contacto"
                                                 class="font-medium text-gray-600 cursor-pointer">eliminar
                                                 contacto
                                             </label>
@@ -696,6 +815,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--PROVEEDORES--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('proveedor')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -704,11 +824,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-proveedor"
-                                                id="check_uuqc24435" variant="indigo" type="checkbox"
+                                                id="ver-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_uuqc24435"
+                                            <label for="ver-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">ver proveedor
                                             </label>
 
@@ -718,13 +838,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="crear-proveedor" id="check_umo2pdi18" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="crear-proveedor"
+                                                id="crear-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_umo2pdi18"
+                                            <label for="crear-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">crear proveedor
                                             </label>
 
@@ -734,12 +853,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_uc05dofu0"
+                                            <input name="permission[]" wire:model="permission" id="editar-proveedor"
                                                 value="editar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_uc05dofu0"
+                                            <label for="editar-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">editar proveedor
                                             </label>
 
@@ -749,12 +868,29 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_uc05dofu0"
+                                            <input name="permission[]" wire:model="permission"
+                                                id="cambiar.estado-proveedor" value="cambiar.estado-proveedor"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="cambiar.estado-proveedor"
+                                                class="font-medium text-gray-600 cursor-pointer">cambiar estado
+                                                proveedor
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" id="exportar-proveedor"
                                                 value="exportar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_uc05dofu0"
+                                            <label for="exportar-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 exportar proveedor
                                             </label>
@@ -765,12 +901,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="check_uc05dofu0"
+                                            <input name="permission[]" wire:model="permission" id="importar-proveedor"
                                                 value="importar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_uc05dofu0"
+                                            <label for="importar-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 importar proveedor
                                             </label>
@@ -782,12 +918,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-proveedor" id="check_xqe739weu" variant="indigo"
+                                                value="eliminar-proveedor" id="eliminar-proveedor" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_xqe739weu"
+                                            <label for="eliminar-proveedor"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar proveedor
                                             </label>
@@ -797,6 +933,7 @@
                                 </div>
                             </div>
 
+                            {{--FACTURAS COMPRA--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('compras_facturas')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -806,12 +943,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-compras_facturas" id="check_o2lz08j44" variant="indigo"
+                                                value="ver-compras_facturas" id="ver-compras_facturas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_o2lz08j44"
+                                            <label for="ver-compras_facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver facturas
                                             </label>
@@ -823,12 +960,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-compras_facturas" id="check_nq6tpgohl" variant="indigo"
-                                                type="checkbox"
+                                                value="crear-compras_facturas" id="crear-compras_facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_nq6tpgohl"
+                                            <label for="crear-compras_facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear facturas
                                             </label>
@@ -840,12 +977,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-compras_facturas" id="check_wzuti6q5s" variant="indigo"
-                                                type="checkbox"
+                                                value="editar-compras_facturas" id="editar-compras_facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_wzuti6q5s"
+                                            <label for="editar-compras_facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar facturas</label>
 
@@ -856,12 +993,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-compras_facturas" id="check_sinhldree"
+                                                value="eliminar-compras_facturas" id="eliminar-compras_facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_sinhldree"
+                                            <label for="eliminar-compras_facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar facturas</label>
 
@@ -869,6 +1006,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--COTIZACIONES--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('cotizaciones')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -876,13 +1014,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="ver-cotizaciones" id="check_uuvy0f68w" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="ver-cotizaciones"
+                                                id="ver-cotizaciones" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_uuvy0f68w"
+                                            <label for="ver-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver cotizaciones
                                             </label>
@@ -894,12 +1031,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-cotizaciones" id="check_cmscfk54p" variant="indigo"
+                                                value="crear-cotizaciones" id="crear-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="crear-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear cotizaciones
                                             </label>
@@ -911,12 +1048,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-cotizaciones" id="check_cmscfk54p" variant="indigo"
+                                                value="editar-cotizaciones" id="editar-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="editar-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar cotizaciones
                                             </label>
@@ -928,12 +1065,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-cotizaciones" id="check_cmscfk54p" variant="indigo"
-                                                type="checkbox"
+                                                value="eliminar-cotizaciones" id="eliminar-cotizaciones"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="eliminar-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar cotizaciones
                                             </label>
@@ -945,12 +1082,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="convertir-cotizaciones" id="check_cmscfk54p" variant="indigo"
-                                                type="checkbox"
+                                                value="convertir-cotizaciones" id="convertir-cotizaciones"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="convertir-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 convertir cotizaciones
                                             </label>
@@ -962,12 +1099,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="enviar-cotizaciones" id="check_cmscfk54p" variant="indigo"
+                                                value="enviar-cotizaciones" id="enviar-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="enviar-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 enviar cotizaciones
                                             </label>
@@ -979,12 +1116,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="estados-cotizaciones" id="check_cmscfk54p" variant="indigo"
+                                                value="estados-cotizaciones" id="estados-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_cmscfk54p"
+                                            <label for="estados-cotizaciones"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 cambiar estados
                                             </label>
@@ -992,7 +1129,26 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="descargar-cotizaciones" id="descargar-cotizaciones"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="descargar-cotizaciones"
+                                                class="font-medium text-gray-600 cursor-pointer">
+
+                                                Descargar cotizacion
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            {{--FACTURAS VENTA--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('ventas-facturas')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -1002,12 +1158,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-ventas-facturas" id="check_o2lz08j44" variant="indigo"
+                                                value="ver-ventas-facturas" id="ver-ventas-facturas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_o2lz08j44"
+                                            <label for="ver-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver facturas
                                             </label>
@@ -1019,12 +1175,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-ventas-facturas" id="check_nq6tpgohl" variant="indigo"
-                                                type="checkbox"
+                                                value="crear-ventas-facturas" id="crear-ventas-facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_nq6tpgohl"
+                                            <label for="crear-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear facturas
                                             </label>
@@ -1036,12 +1192,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-ventas-facturas" id="check_wzuti6q5s" variant="indigo"
-                                                type="checkbox"
+                                                value="editar-ventas-facturas" id="editar-ventas-facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_wzuti6q5s"
+                                            <label for="editar-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar facturas</label>
 
@@ -1052,12 +1208,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-ventas-facturas" id="check_sinhldree"
+                                                value="eliminar-ventas-facturas" id="eliminar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_sinhldree"
+                                            <label for="eliminar-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar facturas</label>
 
@@ -1068,12 +1224,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="exportar-ventas-facturas" id="check_sinhldree"
+                                                value="exportar-ventas-facturas" id="exportar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_sinhldree"
+                                            <label for="exportar-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 exportar facturas</label>
 
@@ -1084,12 +1240,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="enviar-ventas-facturas" id="check_sinhldree" variant="indigo"
-                                                type="checkbox"
+                                                value="enviar-ventas-facturas" id="enviar-ventas-facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_sinhldree"
+                                            <label for="enviar-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 enviar facturas</label>
 
@@ -1100,33 +1256,53 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="enviar-ventas-facturas" id="check_sinhldree" variant="indigo"
-                                                type="checkbox"
+                                                value="enviar-ventas-facturas" id="enviar-ventas-facturas"
+                                                variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_sinhldree"
+                                            <label for="enviar-ventas-facturas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 cambiar estados facturas</label>
 
                                         </div>
                                     </div>
                                 </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="descargar-ventas-facturas" id="descargar-ventas-facturas"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="descargar-ventas-facturas"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                descargar facturas</label>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            {{--RECIBOS--}}
                             <div class="flex flex-col space-y-1">
+
                                 <p wire:click="checkCategory('recibo')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
-                                    Recibos</p>
+                                    Recibos
+                                </p>
+
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-recibo"
-                                                id="check_p9sap54rz" variant="indigo" type="checkbox"
+                                                id="ver-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_p9sap54rz"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-recibo" class="font-medium text-gray-600 cursor-pointer">
                                                 ver recibos
                                             </label>
 
@@ -1137,12 +1313,11 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="crear-recibo"
-                                                id="check_7l1jotctl" variant="indigo" type="checkbox"
+                                                id="crear-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_7l1jotctl"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="crear-recibo" class="font-medium text-gray-600 cursor-pointer">
                                                 crear recibo
                                             </label>
 
@@ -1153,15 +1328,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="editar-recibo"
-                                                id="check_1nwbv5dp9" variant="indigo" type="checkbox"
+                                                id="editar-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_1nwbv5dp9"
-                                                class="font-medium text-gray-600 cursor-pointer">
-                                                editar exchange
-                                                rate
-                                                provider
+                                            <label for="editar-recibo" class="font-medium text-gray-600 cursor-pointer">
+                                                editar recibo
                                             </label>
 
                                         </div>
@@ -1170,13 +1342,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="eliminar-recibo" id="check_x470mqtbr" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="eliminar-recibo"
+                                                id="eliminar-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_x470mqtbr"
+                                            <label for="eliminar-recibo"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar recibo
                                             </label>
@@ -1184,21 +1355,71 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="enviar-recibos"
+                                                id="enviar-recibos" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="enviar-recibos"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                enviar recibos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="reportes-recibos"
+                                                id="estados-recibos" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="estados-recibos"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estado recibos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" value="reportes-recibos"
+                                                id="reportes-recibos" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="reportes-recibos"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                reportes de recibos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
+                            {{--CONTRATOS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('contrato')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
-                                    Contratos</p>
+                                    Contratos
+                                </p>
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission" value="ver-contrato"
-                                                id="check_0e64w1pnw" variant="indigo" type="checkbox"
+                                                variant="indigo" type="checkbox" id="ver-contrato"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
-                                                class="font-medium text-gray-600 cursor-pointer">
+                                            <label for="ver-contrato" class="font-medium text-gray-600 cursor-pointer">
                                                 ver contrato
                                             </label>
 
@@ -1208,12 +1429,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-contrato"
-                                                id="check_0e64w1pnw" variant="indigo" type="checkbox"
+                                            <input name="permission[]" id="crear-contrato" wire:model="permission"
+                                                value="crear-contrato" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-contrato"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear contrato
                                             </label>
@@ -1224,13 +1445,12 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="editar-contrato" id="check_0e64w1pnw" variant="indigo"
-                                                type="checkbox"
+                                            <input name="permission[]" wire:model="permission" value="editar-contrato"
+                                                id="editar-contrato" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-contrato"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar contrato
                                             </label>
@@ -1242,12 +1462,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="descargar-contrato" id="check_0e64w1pnw" variant="indigo"
+                                                value="descargar-contrato" id="descargar-contrato" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="descargar-contrato"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 descargar contrato
                                             </label>
@@ -1259,20 +1479,71 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-contrato" id="check_0e64w1pnw" variant="indigo"
+                                                value="caracteristicas-contrato" id="caracteristicas-contrato"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="caracteristicas-contrato"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar caracteristicas
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="cambiar.estado-contrato" id="cambiar.estado-contrato"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="cambiar.estado-contrato"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estado contrato
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" id="enviar-contrato" wire:model="permission"
+                                                value="enviar-contrato" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="enviar-contrato"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                enviar contrato
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" id="crear-registro-contrato"
+                                                wire:model="permission" value="crear-registro-contrato" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-registro-contrato"
                                                 class="font-medium text-gray-600 cursor-pointer">
-                                                eliminar contrato
+                                                convertir a registro cobro
                                             </label>
 
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {{--VEHICULOS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('vehiculos-vehiculos')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -1280,13 +1551,13 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="ver-vehiculos-vehiculos" id="check_0e64w1pnw"
-                                                variant="indigo" type="checkbox"
+                                            <input name="permission[]" id="ver-vehiculos-vehiculos"
+                                                wire:model="permission" value="ver-vehiculos-vehiculos" variant="indigo"
+                                                type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-vehiculos-vehiculos"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver vehiculos
                                             </label>
@@ -1297,13 +1568,13 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
-                                                value="crear-vehiculos-vehiculos" id="check_0e64w1pnw"
+                                            <input name="permission[]" id="crear-vehiculos-vehiculos"
+                                                wire:model="permission" value="crear-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-vehiculos-vehiculos"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear vehiculos
                                             </label>
@@ -1315,12 +1586,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-vehiculos-vehiculos" id="check_0e64w1pnw"
+                                                value="editar-vehiculos-vehiculos" id="editar-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-vehiculos-vehiculos"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar vehiculos
                                             </label>
@@ -1333,12 +1604,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-vehiculos-vehiculos" id="check_0e64w1pnw"
+                                                value="eliminar-vehiculos-vehiculos" id="eliminar-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="eliminar-vehiculos-vehiculos"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar vehiculos
                                             </label>
@@ -1356,12 +1627,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-vehiculos-flotas" id="check_0e64w1pnw" variant="indigo"
+                                                value="ver-vehiculos-flotas" id="ver-vehiculos-flotas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-vehiculos-flotas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver flotas
                                             </label>
@@ -1373,12 +1644,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-vehiculos-flotas" id="check_0e64w1pnw"
+                                                value="crear-vehiculos-flotas" id="crear-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-vehiculos-flotas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear flotas
                                             </label>
@@ -1390,12 +1661,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-vehiculos-flotas" id="check_0e64w1pnw"
+                                                value="editar-vehiculos-flotas" id="editar-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-vehiculos-flotas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar flotas
                                             </label>
@@ -1408,12 +1679,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-vehiculos-flotas" id="check_0e64w1pnw"
+                                                value="eliminar-vehiculos-flotas" id="eliminar-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="eliminar-vehiculos-flotas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar flotas
                                             </label>
@@ -1422,6 +1693,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--REPORTES--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('vehiculos-reportes')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -1430,12 +1702,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-vehiculos-reportes" id="check_0e64w1pnw"
+                                                value="ver-vehiculos-reportes" id="ver-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-vehiculos-reportes"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver reportes
                                             </label>
@@ -1447,12 +1719,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-vehiculos-reportes" id="check_0e64w1pnw"
+                                                value="crear-vehiculos-reportes" id="crear-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-vehiculos-reportes"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear reportes
                                             </label>
@@ -1464,12 +1736,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-vehiculos-reportes" id="check_0e64w1pnw"
+                                                value="editar-vehiculos-reportes" id="editar-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-vehiculos-reportes"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar reportes
                                             </label>
@@ -1482,12 +1754,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-vehiculos-reportes" id="check_0e64w1pnw"
+                                                value="eliminar-vehiculos-reportes" id="eliminar-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="eliminar-vehiculos-reportes"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar reportes
                                             </label>
@@ -1496,20 +1768,24 @@
                                     </div>
                                 </div>
                             </div>
+
+
+                            {{--ACTAS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('certificados-actas')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
-                                    Actas</p>
+                                    Actas
+                                </p>
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-certificados-actas" id="check_0e64w1pnw"
+                                                value="ver-certificados-actas" id="ver-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-certificados-actas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver actas
                                             </label>
@@ -1521,12 +1797,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-certificados-actas" id="check_0e64w1pnw"
+                                                value="crear-certificados-actas" id="crear-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-certificados-actas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear actas
                                             </label>
@@ -1538,12 +1814,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-certificados-actas" id="check_0e64w1pnw"
+                                                value="editar-certificados-actas" id="editar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-certificados-actas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar acta
                                             </label>
@@ -1555,12 +1831,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="descargar-certificados-actas" id="check_0e64w1pnw"
+                                                value="descargar-certificados-actas" id="descargar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="descargar-certificados-actas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 descargar acta
                                             </label>
@@ -1572,12 +1848,29 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-certificados-actas" id="check_0e64w1pnw"
+                                                value="enviar-certificados-actas" id="enviar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="enviar-certificados-actas"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                enviar acta
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="eliminar-certificados-actas" id="eliminar-certificados-actas"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar-certificados-actas"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar actas
                                             </label>
@@ -1586,6 +1879,8 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{--CERTIFICADOS--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('certificados-gps')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
@@ -1594,12 +1889,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-certificados-gps" id="check_0e64w1pnw" variant="indigo"
+                                                value="ver-certificados-gps" id="ver-certificados-gps" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-certificados-gps"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver certificado
                                             </label>
@@ -1611,12 +1906,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-certificados-gps" id="check_0e64w1pnw"
+                                                value="crear-certificados-gps" id="crear-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-certificados-gps"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear certificado
                                             </label>
@@ -1628,12 +1923,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-certificados-gps" id="check_0e64w1pnw"
+                                                value="editar-certificados-gps" id="editar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-certificados-gps"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar certificado
                                             </label>
@@ -1645,12 +1940,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="descargar-certificados-gps" id="check_0e64w1pnw"
+                                                value="descargar-certificados-gps" id="descargar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="descargar-certificados-gps"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 descargar certificado
                                             </label>
@@ -1662,12 +1957,29 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-certificados-gps" id="check_0e64w1pnw"
+                                                value="enviar-certificados-gps" id="enviar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="enviar-certificados-gps"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                enviar certificado
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="eliminar-certificados-gps" id="eliminar-certificados-gps"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar-certificados-gps"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar certificado
                                             </label>
@@ -1676,21 +1988,22 @@
                                     </div>
                                 </div>
                             </div>
+                            {{--CERTIFICADOS VELO--}}
                             <div class="flex flex-col space-y-1">
                                 <p wire:click="checkCategory('certificados-velocimetros')"
                                     class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
-                                    Certificado
-                                    Velocimetros</p>
+                                    Certificado Velocimetros
+                                </p>
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="ver-certificados-velocimetros" id="check_0e64w1pnw"
+                                                value="ver-certificados-velocimetros" id="ver-certificados-velocimetros"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="ver-certificados-velocimetros"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 ver cert. velocimetro
                                             </label>
@@ -1702,12 +2015,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="crear-certificados-velocimetros" id="check_0e64w1pnw"
-                                                variant="indigo" type="checkbox"
+                                                value="crear-certificados-velocimetros"
+                                                id="crear-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="crear-certificados-velocimetros"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 crear cert. velocimetro
                                             </label>
@@ -1719,12 +2032,12 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="editar-certificados-velocimetros" id="check_0e64w1pnw"
-                                                variant="indigo" type="checkbox"
+                                                value="editar-certificados-velocimetros"
+                                                id="editar-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="editar-certificados-velocimetros"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 editar cert. velocimetro
                                             </label>
@@ -1736,12 +2049,13 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="descargar-certificados-velocimetros" id="check_0e64w1pnw"
-                                                variant="indigo" type="checkbox"
+                                                value="descargar-certificados-velocimetros"
+                                                id="descargar-certificados-velocimetros" variant="indigo"
+                                                type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="descargar-certificados-velocimetros"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 descargar cert. velocimetro
                                             </label>
@@ -1753,12 +2067,29 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" wire:model="permission"
-                                                value="eliminar-certificados-velocimetros" id="check_0e64w1pnw"
-                                                variant="indigo" type="checkbox"
+                                                value="enviar-certificados-velocimetros"
+                                                id="enviar-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
                                         <div class="ml-3 text-sm">
-                                            <label for="check_0e64w1pnw"
+                                            <label for="enviar-certificados-velocimetros"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                enviar cert. velocimetro
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="eliminar-certificados-velocimetros"
+                                                id="eliminar-certificados-velocimetros" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="eliminar-certificados-velocimetros"
                                                 class="font-medium text-gray-600 cursor-pointer">
                                                 eliminar cert. velocimetro
                                             </label>
@@ -1767,8 +2098,894 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- ADMIN PERMISOS --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('solicitudes')"
+                                    class="text-sm text-gray-700 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Solicitudes
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.solicitudes.index" id="admin.solicitudes.index"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.solicitudes.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver solicitudes
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.solicitudes.finalize" id="admin.solicitudes.finalize"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.solicitudes.finalize"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Finalizar solicitud
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.reportes.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Reportes Gerenciales
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.reportes.index" id="admin.reportes.index" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.reportes.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver reportes y descargar
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.reportes.logs.index" id="admin.reportes.logs.index"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.reportes.logs.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Ver logs y cambios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.reportes.logs.actions" id="admin.reportes.logs.actions"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.reportes.logs.actions"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Modificar logs y recuperar
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- USUARIOS --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.usuarios.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Usuarios sistema
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.usuarios.index" id="admin.usuarios.index" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.usuarios.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver usuarios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.usuarios.create" id="admin.usuarios.create"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.usuarios.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                crear usuarios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.usuarios.edit" id="admin.usuarios.edit" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.usuarios.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar usuarios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.usuarios.status" id="admin.usuarios.status"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.usuarios.status"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                cambiar estado usuarios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.usuarios.delete" id="admin.usuarios.delete"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.usuarios.delete"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                eliminar usuarios
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- cobros --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.cobros.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Cobros
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.cobros.index" id="admin.cobros.index" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.cobros.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver cobros
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.cobros.create" id="admin.cobros.create" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.cobros.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                crear cobros
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission" id="admin.cobros.edit"
+                                                value="admin.cobros.edit" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.cobros.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar cobros
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.cobros.delete" id="admin.cobros.delete" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.cobros.delete"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                eliminar cobros
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- payments --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.payments.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Pagos
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.payments.index" id="admin.payments.index" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.payments.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver pagos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.payments.create" id="admin.payments.create"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.payments.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                crear pagos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- ciudades --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.settings.ciudades.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Ciudades
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.ciudades.index" id="admin.settings.ciudades.index"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.ciudades.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver ciudades
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.ciudades.create"
+                                                id="admin.settings.ciudades.create" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.ciudades.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                crear ciudades
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.ciudades.edit" id="admin.settings.ciudades.edit"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.ciudades.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar ciudades
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.ciudades.delete"
+                                                id="admin.settings.ciudades.delete" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.ciudades.delete"
+                                                class="font-medium text-gray-600 cursor-pointer">
+
+                                                eliminar ciudades
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- roles --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('settings.roles')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Roles
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.roles.index" id="admin.settings.roles.index"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.roles.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver roles
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.roles.create" id="admin.settings.roles.create"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.roles.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                crear roles
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.roles.edit" id="admin.settings.roles.edit"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.roles.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar roles
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.roles.delete" id="admin.settings.roles.delete"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.roles.delete"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar eliminar
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- plantilla --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('.settings.plantilla.')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Administración Plantilla
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                id="admin.settings.plantilla.index"
+                                                value="admin.settings.plantilla.index" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.plantilla.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver informacion
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.plantilla.informacion.edit"
+                                                id="admin.settings.plantilla.informacion.edit" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.plantilla.informacion.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                editar informacion
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.plantilla.sunat.edit"
+                                                id="admin.settings.plantilla.sunat.edit" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.plantilla.sunat.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Actualizar Accesos Sunat
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.plantilla.series.edit"
+                                                id="admin.settings.plantilla.series.edit" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.plantilla.series.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Actualizar series
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="admin.settings.plantilla.images.edit"
+                                                id="admin.settings.plantilla.images.edi" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="admin.settings.plantilla.images.edi"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Actualizar imagenes
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            {{-- servicio tecnico --}}
+                            <div class="flex flex-col space-y-1">
+                                <p wire:click="checkCategory('tareas')"
+                                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                                    Servicio Tecnico
+                                </p>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.index" id="tecnico.tareas.index" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                ver modulo
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.reportes" id="tecnico.tareas.reportes"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.reportes"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                descargar reportes
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.cards" id="tecnico.tareas.cards" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.cards"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Ver resumenes tabla
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.cards.sin-leer.actions"
+                                                id="tecnico.tareas.cards.sin-leer" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.cards.sin-leer"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Acciones: Tabla Sin Leer
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.cards.complete.actions"
+                                                id="tecnico.tareas.cards.complete.actions" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.cards.complete.actions"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Acciones: Tabla Completados
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.cards.pendient.actions"
+                                                id="tecnico.tareas.cards.pendient.actions" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.cards.pendient.actions"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Acciones: Tabla Pendientes
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.cards.canceled.actions"
+                                                id="tecnico.tareas.cards.canceled.actions" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.cards.canceled.actions"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Acciones: Tabla Cancelados
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tecnicos.admin" id="tecnico.tareas.tecnicos.admin"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tecnicos.admin"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Administrar Tecnicos
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tabla-historial"
+                                                id="tecnico.tareas.tabla-historial" variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tabla-historial"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Ver Tabla Historial
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.create" id="tecnico.tareas.create"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.create"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Crear Tarea
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.edit" id="tecnico.tareas.edit" variant="indigo"
+                                                type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.edit"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Editar Tarea
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.delete" id="tecnico.tareas.delete"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.delete"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Eliminar Tarea
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.action.pdf" id="tecnico.tareas.action.pdf"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.action.pdf"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Accion: Descargar PDF
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.action.wsp" id="tecnico.tareas.action.wsp"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.action.wsp"
+                                                class="font-medium text-gray-800 cursor-pointer">
+                                                Accion: Enviar WhatsApp
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tipo.index" id="tecnico.tareas.tipo.index"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tipo.index"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Tipo Tarea: Ver
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tipo.create" id="tecnico.tareas.tipo.create"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tipo.create"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Tipo Tarea: Crear
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tipo.edit" id="tecnico.tareas.tipo.edit"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tipo.edit"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Tipo Tarea: Editar
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex">
+                                    <div class="relative flex items-start" variant="indigo">
+                                        <div class="flex items-center h-5">
+                                            <input name="permission[]" wire:model="permission"
+                                                value="tecnico.tareas.tipo.delete" id="tecnico.tareas.tipo.delete"
+                                                variant="indigo" type="checkbox"
+                                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                                        </div>
+                                        <div class="ml-3 text-sm">
+                                            <label for="tecnico.tareas.tipo.delete"
+                                                class="font-medium text-gray-600 cursor-pointer">
+                                                Tipo Tarea: Eliminar
+                                            </label>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
-                        <!---->
                     </div>
                 </div>
                 <div class="z-0 flex justify-end p-4 border-t border-solid border--200 border-modal-bg">

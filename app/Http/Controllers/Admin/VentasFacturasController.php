@@ -12,6 +12,14 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 class VentasFacturasController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:ver-ventas-facturas', ['only' => ['index', 'show']]);
+        $this->middleware('permission:crear-ventas-facturas', ['only' => ['create']]);
+        $this->middleware('permission:editar-ventas-facturas', ['only' => ['edit']]);
+    }
+
+
     public function index()
     {
         return view('admin.ventas.facturas.index');
@@ -31,21 +39,12 @@ class VentasFacturasController extends Controller
         $id = IdGenerator::generate(['table' => 'facturas', 'field' => 'serie_numero', 'length' => 9, 'prefix' => $plantilla->series["factura"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true, 'show_prefix' => false]);
         return $id;
     }
-    // public function store(FacturasRequest $request)
-    // {
-
-    //     $factura = Facturas::create($request->all());
-    //     Facturas::createItems($factura, $request->items);
-
-    //     return redirect()->route('admin.ventas.facturas.index')->with('store', 'La Factura se guardo con exito');
-    // }
 
     public function show(Facturas $factura)
     {
         $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
         return view('admin.ventas.facturas.show', compact('factura', 'plantilla'));
     }
-
 
     public function edit(Facturas $factura)
     {

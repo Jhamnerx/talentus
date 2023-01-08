@@ -19,6 +19,7 @@ class CreateModelosDispositivosTable extends Migration
             $table->string('marca')->nullable();
             $table->string('certificado')->nullable();
             $table->text('caracteristicas')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -2,14 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
+use Faker\Generator;
 use GuzzleHttp\Client;
+use App\Models\Clientes;
+use Illuminate\Http\Request;
+use Illuminate\Container\Container;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class UtilesController extends Controller
 {
+    /**
+     * The current Faker instance.
+     *
+     * @var \Faker\Generator
+     */
+    public $faker;
+
     public static function tipoCambio()
     {
 
@@ -195,5 +205,25 @@ class UtilesController extends Controller
         ]);
         $response = json_decode($res->getBody()->getContents(), true);
         return $response;
+    }
+    public function __construct()
+    {
+
+        $this->faker = $this->withFaker();
+    }
+    protected function withFaker()
+    {
+        return Container::getInstance()->make(Generator::class);
+    }
+    public function test()
+    {
+        $values = array();
+        $ids = Clientes::select('id')->get()->pluck('id');
+
+
+        $values[] =  $this->faker->unique()->randomElement($ids);
+
+
+        dd($ids);
     }
 }

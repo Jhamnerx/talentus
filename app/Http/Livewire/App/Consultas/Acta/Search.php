@@ -11,7 +11,7 @@ class Search extends Component
     public $codigo = null, $acta;
 
     protected $rules = [
-        'codigo' => 'required',
+        'codigo' => 'required|exists:certificados,codigo',
 
     ];
     protected $messages = [

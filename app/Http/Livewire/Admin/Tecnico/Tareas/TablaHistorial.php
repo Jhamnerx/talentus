@@ -4,7 +4,9 @@ namespace App\Http\Livewire\Admin\Tecnico\Tareas;
 
 use App\Models\Tareas;
 use Livewire\Component;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithPagination;
+use App\Http\Controllers\Admin\UtilesController;
 
 class TablaHistorial extends Component
 {
@@ -28,10 +30,11 @@ class TablaHistorial extends Component
         })->orWhereHas('tipo_tarea', function ($user) {
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
+            ->orWhere('token', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
             ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
             ->orderBy('id', 'desc')
-            ->paginate();
+            ->paginate($this->pages);
 
         return view('livewire.admin.tecnico.tareas.tabla-historial', compact('tareas'));
     }
@@ -39,6 +42,16 @@ class TablaHistorial extends Component
     public function addTask()
     {
         $this->emit('addTask');
+    }
+
+    public function editTask(Tareas $task)
+    {
+        $this->emit('openModalEdit', $task);
+    }
+
+    public function showTecnicos()
+    {
+        $this->emit('openModalTecnicos');
     }
 
     public function updatingSearch()
@@ -49,5 +62,33 @@ class TablaHistorial extends Component
     public function pagination($pages)
     {
         $this->pages = $pages;
+    }
+    public function deleteTask(Tareas $task)
+    {
+
+        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA ELIMINADA', 'message' => 'Se elimino la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
+        $task->delete();
+        $this->render();
+    }
+
+    public function sendGroupWhatsApp(Tareas $task)
+    {
+        $util = new UtilesController();
+        $respuesta = $util->whatsAppSendMessageInstalationGroup($task);
+    }
+
+    public function infoTask(Tareas $tarea)
+    {
+    }
+
+    public function exportTask(Tareas $tarea)
+    {
+        $pdfContent = PDF::loadView('pdf.reportes.tarea', ['tarea' => $tarea])
+            ->setPaper('Legal', 'landscape')->output();
+
+        return response()->streamDownload(
+            fn () => print($pdfContent),
+            "reporte_tarea-" . $tarea->token . ".pdf"
+        );
     }
 }
