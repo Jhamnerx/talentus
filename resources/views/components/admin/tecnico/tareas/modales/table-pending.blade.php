@@ -53,9 +53,12 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
                         </th>
+                        @can('tecnico.tareas.cards.pendient.actions')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
+                        @endcan
+
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Subir Imagen</div>
                         </th>
@@ -137,6 +140,7 @@
                                 </div>
                             </div>
                         </td>
+                        @can('tecnico.tareas.cards.pendient.actions')
                         <td class="px-8 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
                                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
@@ -224,6 +228,7 @@
 
                             </div>
                         </td>
+                        @endcan
                         <td class="px-2 first:pl-5 last:pr-2 py-3 max-w-xs" x-data="{ isUploading: false, progress: 0 }"
                             x-on:livewire-upload-start="isUploading = true"
                             x-on:livewire-upload-finish="isUploading = false"

@@ -10,6 +10,12 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 class ServicioTecnicoController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:tecnico.tareas.index', ['only' => ['index']]);
+    }
+
+
     public function index()
     {
         return view('admin.tecnico.tareas.index');

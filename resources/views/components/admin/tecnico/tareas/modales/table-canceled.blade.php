@@ -56,10 +56,12 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
                         </th>
-
+                        @can('tecnico.tareas.cards.canceled.actions')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
+                        @endcan
+
                     </tr>
                 </thead>
                 <!-- Table body -->
@@ -149,6 +151,7 @@
                                 </div>
                             </div>
                         </td>
+                        @can('tecnico.tareas.cards.canceled.actions')
                         <td class="px-8 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
                                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
@@ -180,6 +183,7 @@
 
                             </div>
                         </td>
+                        @endcan
                     </tr>
                     @endforeach
                     @else

@@ -31,7 +31,7 @@ class ProveedoresRequest extends FormRequest
             'razon_social' => 'required',
             'numero_documento' => 'required|digits_between:8,11|numeric',
             'telefono' => 'nullable|digits_between:6,9|numeric',
-            'email' => 'email:rfc,dns'
+            'email' => 'nullable|email:rfc,dns'
         ];
 
 

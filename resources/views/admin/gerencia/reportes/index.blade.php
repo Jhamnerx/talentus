@@ -17,7 +17,10 @@
     @livewire('admin.gerencia.reportes.cards')
 
     {{-- HISTORIAL --}}
+    @can('admin.reportes.logs.index')
     @livewire('admin.gerencia.reportes.historial-models')
+    @endcan
+
 
 
 
@@ -68,6 +71,36 @@
             message: 'Se ha creado la tarea <b>'+event.detail.tarea.token+'</b>',
             position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
             progressBarColor: 'rgb(5, 44, 82)'
+        });
+    })
+
+</script>
+
+<script>
+    window.addEventListener('restore-model', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'MODELO RESTAURADO',
+            timeout: 2500,
+            message: 'Se ha restaurado el modelo',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(5, 44, 82)'
+        });
+    })
+
+</script>
+
+<script>
+    window.addEventListener('delete-model', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'MODELO ELIMINADO',
+            timeout: 2500,
+            message: 'Se ha eliminado el modelo',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(210, 44, 82)'
         });
     })
 

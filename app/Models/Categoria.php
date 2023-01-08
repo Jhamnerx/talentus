@@ -24,7 +24,8 @@ class Categoria extends Model
     {
         return LogOptions::defaults()
             ->logUnguarded()
-            ->logOnlyDirty();
+            ->logOnlyDirty()
+            ->dontLogIfAttributesChangedOnly(['deleted_at']);
         // Chain fluent methods for configuration options
     }
 

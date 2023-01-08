@@ -53,6 +53,7 @@
             </div>
 
             <!-- Add customer button -->
+            @can('crear-producto')
             <a href="{{ route('admin.almacen.productos.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -62,6 +63,8 @@
                     <span class="hidden xs:block ml-2">Añadir Producto</span>
                 </button>
             </a>
+            @endcan
+
 
         </div>
 
@@ -121,9 +124,11 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Descripcion</div>
                             </th>
+                            @can('cambiar.estado-productos')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
+                            @endcan
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
                             </th>
@@ -133,111 +138,116 @@
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         @if ($productos->count())
-                            @foreach ($productos as $producto)
-                                <!-- Row -->
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center relative">
-                                            <button>
-                                                <svg class="w-4 h-4 shrink-0 fill-current text-slate-300"
-                                                    viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-sky-500">#{{ $producto->codigo }}</div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-slate-900">{{ $producto->unit->name }}
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            @if ($producto->image)
-                                                <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                                    <img class="rounded-full"
-                                                        src="{{ Storage::url($producto->image->url) }}" width="40"
-                                                        height="40" />
-                                                </div>
-                                            @endif
-
-                                            <div class="font-medium text-slate-800">{{ $producto->nombre }}</div>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">
-                                            <a target="_blank"
-                                                href="{{ route('admin.almacen.categorias.edit', $producto->categoria) }}">
-                                                {{ $producto->categoria->nombre }}
-                                            </a>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-emerald-500">${{ $producto->precio }}
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @php
-                                            $pr = ' Unidades';
-                                            $serv = 'servicio';
-                                        @endphp
-
-                                        <div class="text-left">
-                                            {{ $producto->tipo == 'producto' ? $producto->stock . $pr : $serv }}
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                        <div class="text-left">{{ $producto->descripcion }}</div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
-
-
-                                                @livewire('admin.productos.change-status', ['model' => $producto, 'field' => 'is_active'], key('active' . $producto->id))
-                                                <!-- End -->
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-
-
-
-                                            @livewire('admin.productos.delete', ['model' => $producto], key('delete' . $producto->id))
-
-
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                        @foreach ($productos as $producto)
+                        <!-- Row -->
+                        <tr>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center">
+                                    <label class="inline-flex">
+                                        <span class="sr-only">Select</span>
+                                        <input class="table-item form-checkbox" type="checkbox"
+                                            @click="uncheckParent" />
+                                    </label>
+                                </div>
                             </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center relative">
+                                    <button>
+                                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-300" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left font-medium text-sky-500">#{{ $producto->codigo }}</div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left font-medium text-slate-900">{{ $producto->unit->name }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    @if ($producto->image)
+                                    <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
+                                        <img class="rounded-full" src="{{ Storage::url($producto->image->url) }}"
+                                            width="40" height="40" />
+                                    </div>
+                                    @endif
+
+                                    <div class="font-medium text-slate-800">{{ $producto->nombre }}</div>
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">
+                                    <a target="_blank"
+                                        href="{{ route('admin.almacen.categorias.edit', $producto->categoria) }}">
+                                        {{ $producto->categoria->nombre }}
+                                    </a>
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left font-medium text-emerald-500">${{ $producto->precio }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @php
+                                $pr = ' Unidades';
+                                $serv = 'servicio';
+                                @endphp
+
+                                <div class="text-left">
+                                    {{ $producto->tipo == 'producto' ? $producto->stock . $pr : $serv }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 ">
+                                <div class="text-left">{{ $producto->descripcion }}</div>
+                            </td>
+                            @can('cambiar.estado-productos')
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div>
+                                    <div class="m-3 ">
+
+
+                                        @livewire('admin.productos.change-status', ['model' => $producto, 'field' =>
+                                        'is_active'], key('active' . $producto->id))
+
+
+
+
+
+                                    </div>
+                                </div>
+                            </td>
+                            @endcan
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+
+
+
+                                    @livewire('admin.productos.delete', ['model' => $producto], key('delete' .
+                                    $producto->id))
+
+
+
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                         @endif
                     </tbody>
                 </table>

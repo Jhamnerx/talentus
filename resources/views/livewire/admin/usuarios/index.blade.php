@@ -29,6 +29,7 @@
 
 
             {{-- BOTON Y MODAL PARA CREAR --}}
+            @can('admin.usuarios.create')
             <a href="{{ route('admin.users.create') }}">
                 <button aria-controls="basic-modal" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -38,8 +39,7 @@
                     <span class="hidden xs:block ml-2">Añadir usuario</span>
                 </button>
             </a>
-
-
+            @endcan
 
         </div>
 
@@ -206,12 +206,16 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Roles</div>
                             </th>
+                            @can('admin.usuarios.status')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
+                            @endcan
+                            @canany(['admin.usuarios.edit', 'admin.usuarios.delete'])
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
                             </th>
+                            @endcanany
                         </tr>
                     </thead>
                     <!-- Table body -->
@@ -245,6 +249,7 @@
                                     @endif
                                 </div>
                             </td>
+                            @can('admin.usuarios.status')
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>
                                     <div class="m-3 ">
@@ -255,9 +260,12 @@
                                     </div>
                                 </div>
                             </td>
+                            @endcan
+
+                            @canany(['admin.usuarios.edit', 'admin.usuarios.delete'])
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
-
+                                    @can('admin.usuarios.edit')
                                     <a href="{{ route('admin.users.edit', $usuario) }}">
                                         <button class="text-slate-400 hover:text-slate-500 rounded-full">
                                             <span class="sr-only">Editar</span>
@@ -267,6 +275,9 @@
                                             </svg>
                                         </button>
                                     </a>
+                                    @endcan
+
+                                    @can('admin.usuarios.delete')
                                     <button @click.prevent="modalDelete = true" aria-controls="danger-modal"
                                         class="text-rose-500 hover:text-rose-600 rounded-full">
                                         <span class="sr-only">Eliminar</span>
@@ -276,15 +287,12 @@
                                                 d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
                                         </svg>
                                     </button>
-
-
-
-
-
-
+                                    @endcan
 
                                 </div>
                             </td>
+                            @endcanany
+
                         </tr>
                         @endif
                         @endforeach

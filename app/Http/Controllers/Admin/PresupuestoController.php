@@ -10,6 +10,13 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class PresupuestoController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-cotizaciones', ['only' => ['index', 'show']]);
+        $this->middleware('permission:crear-cotizaciones', ['only' => ['create']]);
+        $this->middleware('permission:editar-cotizaciones', ['only' => ['edit']]);
+    }
+
     public function index()
     {
 

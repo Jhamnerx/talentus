@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Ajustes\Roles;
 
+use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Requests\RolesRequest;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -34,10 +35,13 @@ class Save extends Component
     {
         return view('livewire.admin.ajustes.roles.save');
     }
+
     public function openModal()
     {
+
         $this->openModalSave = true;
     }
+
     public function closeModal()
     {
         $this->openModalSave = false;
@@ -53,7 +57,6 @@ class Save extends Component
 
     public function save()
     {
-
         $rolRequest = new RolesRequest();
         $values = $this->validate($rolRequest->rules(), $rolRequest->messages());
 
@@ -66,15 +69,11 @@ class Save extends Component
     {
 
         $permisos = Permission::get();
-        //dd($permisos);
         foreach ($permisos as $permiso) {
-
 
             if (array_search($permiso->name, $this->permission) === false) {
 
                 array_push($this->permission, $permiso->name);
-                //dd($permiso->name);
-
             }
         }
     }

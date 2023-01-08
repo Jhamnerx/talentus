@@ -30,6 +30,7 @@
             </form>
 
             <!-- Create invoice button -->
+            @can('crear-guias')
             <a href="{{ route('admin.almacen.guias.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -39,6 +40,8 @@
                     <span class="hidden xs:block ml-2">Registrar Guia</span>
                 </button>
             </a>
+            @endcan
+
 
         </div>
 
@@ -312,6 +315,7 @@
                                             x-cloak>
 
                                             <ul>
+                                                @can('editar-guias')
                                                 <li>
 
                                                     <a href="{{ route('admin.almacen.guias.edit', $guia) }}"
@@ -329,6 +333,9 @@
 
                                                     </a>
                                                 </li>
+                                                @endcan
+
+                                                @can('eliminar-guias')
                                                 <li>
                                                     <a href="javascript: void(0)"
                                                         wire:click.prevent="openModalDelete({{ $guia->id }})"
@@ -346,6 +353,9 @@
                                                         Eliminar
                                                     </a>
                                                 </li>
+                                                @endcan
+
+                                                @can('detalle-guias')
                                                 <li>
                                                     <a href="{{ route('admin.almacen.guias.show', $guia) }}"
                                                         class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
@@ -363,6 +373,8 @@
                                                         </svg> Ver
                                                     </a>
                                                 </li>
+                                                @endcan
+
 
                                             </ul>
 

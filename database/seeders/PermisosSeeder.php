@@ -17,10 +17,10 @@ class PermisosSeeder extends Seeder
      */
     public function run()
     {
-        $role = Role::create(['name' => 'cliente']);
-        $admin = Role::create(['name' => 'admin']);
-        $monitoreo = Role::create(['name' => 'monitoreo']);
-        $tecnico = Role::create(['name' => 'tecnico']);
+        $role = Role::create(['name' => 'cliente', 'route_redirect' => 'web.home']);
+        $admin = Role::create(['name' => 'admin', 'route_redirect' => 'admin.home']);
+        $monitoreo = Role::create(['name' => 'monitoreo', 'route_redirect' => 'admin.vehiculos.reportes.index']);
+        $tecnico = Role::create(['name' => 'tecnico', 'route_redirect' => 'admin.tecnico.tareas.index']);
 
         $permisos = [
             'admin.home',
@@ -33,16 +33,21 @@ class PermisosSeeder extends Seeder
             'ver-categoria',
             'crear-categoria',
             'editar-categoria',
+            'cambiar.estado-categoria',
             'eliminar-categoria',
 
             'ver-producto',
             'crear-producto',
             'editar-producto',
+            'cambiar.estado-producto',
             'eliminar-producto',
 
             'ver-sim_card',
             'crear-sim_card',
             'editar-sim_card',
+            'asignar.linea-sim_card',
+            'eliminar.numero-sim_card',
+            'ver.cambios-sim_card',
             'eliminar-sim_card',
             'importar-sim_card',
             'exportar-sim_card',
@@ -50,6 +55,7 @@ class PermisosSeeder extends Seeder
 
 
             'ver-dispositivo',
+            'ver.modelos-dispositivo',
             'crear-dispositivo',
             'editar-dispositivo',
             'eliminar-dispositivo',
@@ -59,11 +65,13 @@ class PermisosSeeder extends Seeder
             'ver-guias',
             'crear-guias',
             'editar-guias',
+            'detalle-guias',
             'eliminar-guias',
 
             'ver-cliente',
             'crear-cliente',
             'editar-cliente',
+            'cambiar.estado-cliente',
             'eliminar-cliente',
             'exportar-cliente',
             'importar-cliente',
@@ -76,6 +84,7 @@ class PermisosSeeder extends Seeder
             'ver-proveedor',
             'crear-proveedor',
             'editar-proveedor',
+            'cambiar.estado-proveedor',
             'eliminar-proveedor',
             'exportar-proveedor',
             'importar-proveedor',
@@ -89,6 +98,7 @@ class PermisosSeeder extends Seeder
             'ver-cotizaciones',
             'crear-cotizaciones',
             'editar-cotizaciones',
+            'descargar-cotizaciones',
             'eliminar-cotizaciones',
             'convertir-cotizaciones',
             'enviar-cotizaciones',
@@ -97,6 +107,7 @@ class PermisosSeeder extends Seeder
             'ver-ventas-facturas',
             'crear-ventas-facturas',
             'editar-ventas-facturas',
+            'descargar-ventas-facturas',
             'eliminar-ventas-facturas',
             'enviar-ventas-facturas',
             'estados-ventas-facturas',
@@ -105,16 +116,21 @@ class PermisosSeeder extends Seeder
             'ver-recibos',
             'crear-recibos',
             'editar-recibos',
+            'descargar-recibos',
             'eliminar-recibos',
             'enviar-recibos',
-            'exportar-recibos',
+            'estados-recibos',
+            'reportes-recibos',
 
 
             'ver-contrato',
             'crear-contrato',
             'editar-contrato',
             'descargar-contrato',
+            'caracteristicas-contrato',
+            'cambiar.estado-contrato',
             'enviar-contrato',
+            'crear-registro-contrato',
             'eliminar-contrato',
 
             'ver-vehiculos-flotas',
@@ -154,7 +170,6 @@ class PermisosSeeder extends Seeder
             'enviar-certificados-velocimetros',
             'eliminar-certificados-velocimetros',
 
-
             'admin.solicitudes.index',
             'admin.solicitudes.finalize',
 
@@ -164,6 +179,7 @@ class PermisosSeeder extends Seeder
 
             'admin.usuarios.index',
             'admin.usuarios.create',
+            'admin.usuarios.status',
             'admin.usuarios.edit',
             'admin.usuarios.delete',
 
@@ -191,11 +207,10 @@ class PermisosSeeder extends Seeder
             'admin.settings.plantilla.series.edit',
             'admin.settings.plantilla.images.edit',
 
-
             'tecnico.tareas.reportes',
             'tecnico.tareas.index',
             'tecnico.tareas.cards',
-            'tecnico.tareas.cards.sin-leer',
+            'tecnico.tareas.cards.sin-leer.actions',
             'tecnico.tareas.cards.complete.actions',
             'tecnico.tareas.cards.pendient.actions',
             'tecnico.tareas.cards.canceled.actions',
@@ -221,6 +236,8 @@ class PermisosSeeder extends Seeder
         $role->givePermissionTo('cliente.home');
         $admin->givePermissionTo('admin.home');
         $monitoreo->givePermissionTo('ver-vehiculos-vehiculos');
+        $monitoreo->givePermissionTo('admin.home');
         $tecnico->givePermissionTo('ver-vehiculos-vehiculos');
+        $tecnico->givePermissionTo('admin.home');
     }
 }

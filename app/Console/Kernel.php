@@ -19,16 +19,16 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        
-      //  $schedule->call(new CheckRecordatorios)->daily();
-       // $schedule->job(new JobsCheckRecordatorios)->everyFiveMinutes();
+
+        //  $schedule->call(new CheckRecordatorios)->daily();
+        // $schedule->job(new JobsCheckRecordatorios)->everyFiveMinutes();
         //$schedule->job(new JobsCheckRecordatorios)->everyMinute();
         $schedule->job(new JobsCheckRecordatorios)->dailyAt('08:40');
-       // $schedule->job(new checkCobros)->daily();
+        // $schedule->job(new checkCobros)->daily();
         //$schedule->job(new checkCobros)->everyMinute(1);
-       // $schedule->job(new checkCobros)->everyFiveMinutes();
+        // $schedule->job(new checkCobros)->everyFiveMinutes();
         $schedule->job(new checkCobros)->dailyAt('08:50');
-
+        $schedule->command('activitylog:clean')->weekly();
     }
 
     /**
@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

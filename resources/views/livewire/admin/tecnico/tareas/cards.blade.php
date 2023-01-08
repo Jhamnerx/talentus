@@ -1,9 +1,12 @@
 <div class="grid grid-cols-12 gap-6">
     {{-- SIN LEER --}}
+
     <x-admin.tecnico.tareas.card color-initial="from-sky-400" color-final="to-sky-600" cantidad="{{$totales['unread']}}"
         wire:click="openWithoutReading">
         VER TAREAS SIN LEER
     </x-admin.tecnico.tareas.card>
+
+
     {{-- TERMINADAS --}}
     <x-admin.tecnico.tareas.card color-initial="from-emerald-400" color-final="to-emerald-600"
         cantidad="{{$totales['complete']}}" wire:click="openTaskComplete">

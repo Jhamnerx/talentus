@@ -173,6 +173,9 @@
                                         {{$solicitud->email_envio}}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @can('admin.solicitudes.finalize')
+
+
                                     @if (!$solicitud->estado)
                                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                         @mouseleave="open = false">
@@ -203,6 +206,7 @@
                                         </div>
                                     </div>
                                     @endif
+                                    @endcan
 
                                 </td>
                             </tr>

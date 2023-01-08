@@ -15,11 +15,14 @@ use Spatie\Permission\Models\Permission;
 
 class UsersController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    function __construct()
+    {
+        $this->middleware('permission:admin.usuarios.index', ['only' => ['index']]);
+        $this->middleware('permission:admin.usuarios.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:admin.usuarios.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:admin.usuarios.delete', ['only' => ['destroy']]);
+    }
+
     public function index()
     {
         $usuarios = User::paginate(10);
@@ -27,28 +30,19 @@ class UsersController extends Controller
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function create()
     {
         $roles = Role::pluck('name', 'name')->all();
         return view('admin.usuarios.create', compact('roles'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
     public function store(Request $request)
     {
 
         $this->validate($request, [
-            'name' => 'required', 
+            'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|confirmed',
             // 'roles' => 'required',
@@ -67,15 +61,8 @@ class UsersController extends Controller
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('admin.users.index');
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function edit(User $user)
     {
         $roles = Role::pluck('name', 'name')->all();
@@ -84,19 +71,13 @@ class UsersController extends Controller
         return view('admin.usuarios.edit', compact('user', 'roles', 'userRoles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, User $user)
     {
 
 
         $this->validate($request, [
-            'name' => 'required', 
+            'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'confirmed',
             // 'roles' => 'required',
@@ -110,7 +91,7 @@ class UsersController extends Controller
         } else {
             $input = Arr::except($input, array('password'));
         }
-        
+
         $user->update($input);
         DB::table('model_has_roles')->where('model_id', $user->id)->delete();
 
@@ -118,12 +99,6 @@ class UsersController extends Controller
         return redirect()->route('admin.users.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(User $user)
     {
         $user->delete();

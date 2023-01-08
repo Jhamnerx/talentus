@@ -8,6 +8,11 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class SolicitudesController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:admin.solicitudes.index', ['only' => ['index']]);
+    }
+
     public function index()
     {
         return view('admin.solicitudes.index');

@@ -265,9 +265,6 @@
                     <div class="font-semibold text-center">Fecha Termino</div>
                 </td>
                 <td>
-                    <div class="font-semibold text-center"> Costo</div>
-                </td>
-                <td>
                     <div class="font-semibold text-center"> Validacion Cliente</div>
                 </td>
             </tr>
@@ -345,12 +342,6 @@
 
                         {{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-'}}
                     </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center">
-                        {{$tarea->tipo_tarea->costo}}
-                    </div>
-
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3">
                     <div class="text-center">

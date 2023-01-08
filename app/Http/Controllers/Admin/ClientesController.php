@@ -12,6 +12,14 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ClientesController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-cliente', ['only' => ['index']]);
+        $this->middleware('permission:crear-cliente', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-cliente', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:exportar-cliente', ['only' => ['exportExcel']]);
+    }
+
     public function index()
     {
         return view('admin.clientes.index');

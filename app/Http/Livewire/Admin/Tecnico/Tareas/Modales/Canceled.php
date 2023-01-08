@@ -41,6 +41,10 @@ class Canceled extends Component
     {
         $this->openModal = true;
     }
+    public function closeModal()
+    {
+        $this->openModal = false;
+    }
 
     public function deleteTask(Tareas $task)
     {

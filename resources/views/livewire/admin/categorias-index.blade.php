@@ -1,5 +1,6 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: 'almacen-categorias', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+    x-data="{ page: 'almacen-categorias', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }"
+    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <!-- Page header -->
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
@@ -56,15 +57,15 @@
 
                 <!-- Add customer button -->
                 @can('crear-categoria')
-                    <a href="{{ route('admin.almacen.categorias.create') }}">
-                        <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                            <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                                <path
-                                    d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                            </svg>
-                            <span class="hidden xs:block ml-2">Añadir Categoria</span>
-                        </button>
-                    </a>
+                <a href="{{ route('admin.almacen.categorias.create') }}">
+                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                            <path
+                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                        </svg>
+                        <span class="hidden xs:block ml-2">Añadir Categoria</span>
+                    </button>
+                </a>
                 @endcan
 
 
@@ -75,8 +76,8 @@
         <!-- Table -->
         <div class="bg-white shadow-lg rounded-sm border border-slate-200">
             <header class="px-5 py-4">
-                <h2 class="font-semibold text-slate-800">Total Categorias <span
-                        class="text-slate-400 font-medium">{{ $categorias->total() }}</span>
+                <h2 class="font-semibold text-slate-800">Total Categorias <span class="text-slate-400 font-medium">{{
+                        $categorias->total() }}</span>
                 </h2>
 
             </header>
@@ -106,9 +107,11 @@
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Descripcion</div>
                                 </th>
+                                @can('cambiar.estado-categoria')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Estado</div>
                                 </th>
+                                @endcan
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Accioness</div>
                                 </th>
@@ -118,71 +121,76 @@
                         <tbody class="text-sm divide-y divide-slate-200">
                             <!-- Row -->
                             @if ($categorias->count())
-                                @foreach ($categorias as $categoria)
-                                    <tr>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="flex items-center">
-                                                <label class="inline-flex">
-                                                    <span class="sr-only">Select</span>
-                                                    <input class="table-item form-checkbox" type="checkbox"
-                                                        @click="uncheckParent" />
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="flex items-center relative">
-                                                <button>
-                                                    <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500"
-                                                        viewBox="0 0 16 16">
-                                                        <path
-                                                            d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="flex items-center">
-                                                <div
-                                                    class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
-                                                    <img class="ml-1" src="../images/icon-01.svg" width="20"
-                                                        height="20" alt="Icon 01" />
-                                                </div>
-                                                <div class="font-medium text-slate-800">
-                                                    {{ strtoupper($categoria->nombre) }}</div>
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left">{{ $categoria->descripcion }}</div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div>
-                                                <div class="m-3 ">
-
-
-                                                    @livewire('admin.categorias.change-status', ['model' => $categoria, 'field' => 'is_active'], key('active' . $categoria->id))
-                                                    <!-- End -->
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="space-x-1">
-
-
-
-                                                @livewire('admin.categorias.delete', ['model' => $categoria], key('delete' . $categoria->id))
-
-
-
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <td colspan="6"
-                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
+                            @foreach ($categorias as $categoria)
+                            <tr>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input class="table-item form-checkbox" type="checkbox"
+                                                @click="uncheckParent" />
+                                        </label>
+                                    </div>
                                 </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center relative">
+                                        <button>
+                                            <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500"
+                                                viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
+                                            <img class="ml-1" src="../images/icon-01.svg" width="20" height="20"
+                                                alt="Icon 01" />
+                                        </div>
+                                        <div class="font-medium text-slate-800">
+                                            {{ strtoupper($categoria->nombre) }}</div>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">{{ $categoria->descripcion }}</div>
+                                </td>
+                                @can('cambiar.estado-categoria')
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                    <div>
+                                        <div class="m-3 ">
+
+
+                                            @livewire('admin.categorias.change-status', ['model' => $categoria, 'field'
+                                            => 'is_active'], key('active' . $categoria->id))
+                                            <!-- End -->
+                                        </div>
+                                    </div>
+
+                                </td>
+                                @endcan
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="space-x-1">
+
+
+
+                                        @livewire('admin.categorias.delete', ['model' => $categoria], key('delete' .
+                                        $categoria->id))
+
+
+
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                            @else
+                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                             @endif
 
 

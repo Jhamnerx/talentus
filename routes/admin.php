@@ -45,9 +45,14 @@ use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 
+
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
+
+
 // ALMACEN
+
+
 
 Route::controller(CategoriaController::class)->group(function () {
 
@@ -57,6 +62,8 @@ Route::controller(CategoriaController::class)->group(function () {
     Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
     Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
 });
+
+
 
 
 Route::controller(ProductosController::class)->group(function () {
@@ -96,7 +103,7 @@ Route::controller(GuiaRemisionController::class)->group(function () {
     Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
 });
 
-Route::resource('clientes', ClientesController::class)->names('admin.clientes');
+//Route::resource('clientes', ClientesController::class)->names('admin.clientes');
 
 Route::controller(ClientesController::class)->group(function () {
 
@@ -104,7 +111,7 @@ Route::controller(ClientesController::class)->group(function () {
     Route::post('clientes', 'store')->name('admin.clientes.store');
     Route::get('clientes/crear', 'create')->name('admin.clientes.create');
     Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
-    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.update');
+    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.updated');
     Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
 });
 

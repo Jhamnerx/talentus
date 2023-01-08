@@ -25,6 +25,7 @@
                 </button>
             </div>
             {{-- button save --}}
+            @can('tecnico.tareas.tipo.create')
             <button type="button" wire:click.prevent="addTipoTask" class="btn bg-teal-600 hover:bg-teal-700 text-white">
                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                     <path
@@ -32,6 +33,8 @@
                 </svg>
                 <span class="hidden xs:block ml-2">Crear Tipo Tarea</span>
             </button>
+            @endcan
+
 
         </div>
 
@@ -176,9 +179,11 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Total Tareas</div>
                             </th>
+                            @canany(['tecnico.tareas.tipo.edit', 'tecnico.tareas.tipo.delete'])
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Acciones</div>
                             </th>
+                            @endcanany
                         </tr>
                     </thead>
                     <!-- Table body -->
@@ -217,8 +222,10 @@
                                     {{$tarea->tareas->count()}}
                                 </div>
                             </td>
+                            @canany(['tecnico.tareas.tipo.edit', 'tecnico.tareas.tipo.delete'])
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex gap-2 justify-center">
+                                    @can('tecnico.tareas.tipo.edit')
                                     <button type="button" wire:click.prevent="editTipoTask({{$tarea->id}})"
                                         class="btn bg-emerald-600 hover:bg-emerald-700 text-white">
 
@@ -234,6 +241,9 @@
                                             </g>
                                         </svg>
                                     </button>
+                                    @endcan
+
+                                    @can('tecnico.tareas.tipo.delete')
                                     <button type="button" wire:click.prevent="deleteTipoTask({{$tarea->id}})"
                                         class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                         <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
@@ -242,8 +252,12 @@
                                                 d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
                                         </svg>
                                     </button>
+                                    @endcan
+
                                 </div>
                             </td>
+                            @endcanany
+
                         </tr>
                         @endforeach
                         @else

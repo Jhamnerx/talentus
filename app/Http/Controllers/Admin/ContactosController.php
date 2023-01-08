@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class ContactosController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-contacto', ['only' => ['index']]);
+        $this->middleware('permission:crear-contacto', ['only' => ['create', 'store']]);
+        $this->middleware('permission:editar-contacto', ['only' => ['edit', 'update']]);
+    }
 
     public function index()
     {
@@ -29,54 +35,22 @@ class ContactosController extends Controller
     public function store(ContactosRequest $request)
     {
 
-
         Contactos::create($request->all());
         return redirect()->route('admin.clientes.contactos.index')->with('store', 'El contacto se guardo con exito');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return \Illuminate\Http\Response
-     */
     public function show(Contactos $contactos)
     {
         return view('admin.clientes.contactos.show');
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Contactos $contacto)
     {
         return view('admin.clientes.contactos.edit', compact('contacto'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Contactos  $contactos
-     * @return \Illuminate\Http\Response
-     */
     public function update(ContactosRequest $request, Contactos $contacto)
     {
         $contacto->update($request->all());
         return redirect()->route('admin.clientes.contactos.index')->with('update', 'El contacto se actualizo con exito');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Contactos  $contactos
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Contactos $contactos)
-    {
-        //
     }
 }

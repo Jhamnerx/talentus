@@ -15,6 +15,8 @@ class EmpresasSeeder extends Seeder
      */
     public function run()
     {
+
+
         Empresa::create([
             'nombre' => 'talentus',
         ]);

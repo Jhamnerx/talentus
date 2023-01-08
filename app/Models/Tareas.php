@@ -46,7 +46,7 @@ class Tareas extends Model
 
     public function tipo_tarea()
     {
-        return $this->belongsTo(tipoTareas::class, 'tipo_tarea_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsTo(tipoTareas::class, 'tipo_tarea_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function vehiculo()

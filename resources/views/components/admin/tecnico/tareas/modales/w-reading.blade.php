@@ -50,10 +50,12 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
                         </th>
-
+                        @can('tecnico.tareas.cards.sin-leer.actions')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
+                        @endcan
+
                     </tr>
                 </thead>
                 <!-- Table body -->
@@ -128,7 +130,7 @@
                                 </div>
                             </div>
                         </td>
-
+                        @can('tecnico.tareas.cards.sin-leer.actions')
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
                                 <button type="button" wire:click.prevent="cancelTask({{$tarea->id}})"
@@ -141,6 +143,7 @@
                                 </button>
                             </div>
                         </td>
+                        @endcan
                     </tr>
                     @endforeach
                     @else

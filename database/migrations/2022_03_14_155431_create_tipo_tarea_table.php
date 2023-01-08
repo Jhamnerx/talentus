@@ -18,6 +18,7 @@ class CreateTipoTareaTable extends Migration
             $table->string('nombre');
             $table->decimal('costo', 10, 2);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -4,6 +4,7 @@
     <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
         <!-- Export button -->
+        @can('tecnico.tareas.reportes')
         <div class="relative inline-flex">
             <button wire:click.prevent="openModalReporte"
                 class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -14,6 +15,8 @@
                 <span class="hidden xs:block ml-2">Reportes de tareas</span>
             </button>
         </div>
+        @endcan
+
 
     </div>
 

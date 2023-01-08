@@ -19,6 +19,7 @@ class CreatePaymentsTable extends Migration
             $table->string('numero_operacion');
             $table->date('fecha');
             $table->text('nota')->nullable();
+            $table->text('documento')->nullable();
             $table->text('divisa');
             $table->decimal('monto', 10, 2);
             $table->morphs('paymentable');

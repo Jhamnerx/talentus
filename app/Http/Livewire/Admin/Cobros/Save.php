@@ -47,7 +47,6 @@ class Save extends Component
             }
         }
 
-
         $this->dispatchBrowserEvent('dataVehiculos', ['data' => $data]);
         $this->dataVehiculos = $data;
     }

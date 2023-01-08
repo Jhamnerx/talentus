@@ -2,8 +2,8 @@
 
 namespace App\Http\Livewire\Admin\Categorias;
 
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Illuminate\Database\Eloquent\Model;
 
 class ChangeStatus extends Component
 {
@@ -20,6 +20,7 @@ class ChangeStatus extends Component
 
     public function updating($field, $value)
     {
+
         $this->model->setAttribute($this->field, $value)->save();
     }
 

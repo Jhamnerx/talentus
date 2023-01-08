@@ -48,6 +48,10 @@ class Complete extends Component
     {
         $this->openModal = true;
     }
+    public function closeModal()
+    {
+        $this->openModal = false;
+    }
     public function updatedImagen($value, $key)
     {
 

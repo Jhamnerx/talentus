@@ -9,9 +9,10 @@
     </x-admin.tecnico.tareas.header>
 
     <!-- More actions -->
-    @livewire('admin.tecnico.tareas.actions')
 
     @livewire('admin.tecnico.tareas.cards')
+
+
 
     {{-- tabla historial tareas --}}
     @livewire('admin.tecnico.tareas.tabla-historial')
@@ -21,7 +22,10 @@
         </div>
 
     </div>
+    @can('tecnico.tareas.tipo.index')
     @livewire('admin.tecnico.tareas.tabla-tipo-tarea')
+    @endcan
+
 
 </div>
 

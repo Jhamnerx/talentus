@@ -37,12 +37,17 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Costo</div>
                         </th>
+                        @canany(['tecnico.tareas.edit', 'tecnico.tareas.delete', 'tecnico.tareas.action.pdf'])
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
+                        @endcanany
+
+                        @can('tecnico.tareas.action.wsp')
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Notificar</div>
                         </th>
+                        @endcan
                     </tr>
                 </thead>
                 <!-- Table body -->
@@ -124,8 +129,10 @@
                                 {{$tarea->tipo_tarea->costo}}
                             </div>
                         </td>
+                        @canany(['tecnico.tareas.edit', 'tecnico.tareas.delete', 'tecnico.tareas.action.pdf'])
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
+                                @can('tecnico.tareas.action.pdf')
                                 <button type="button" wire:click.prevent="exportTask({{$tarea->id}})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
@@ -137,6 +144,8 @@
                                         </g>
                                     </svg>
                                 </button>
+                                @endcan
+                                @can('tecnico.tareas.edit')
                                 <button type="button" wire:click.prevent="editTask({{$tarea->id}})"
                                     class="btn bg-orange-600 hover:bg-orange-700 text-white">
 
@@ -151,6 +160,8 @@
                                         </g>
                                     </svg>
                                 </button>
+                                @endcan
+                                @can('tecnico.tareas.delete')
                                 <button type="button" wire:click.prevent="deleteTask({{$tarea->id}})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
@@ -159,8 +170,11 @@
                                             d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
                                     </svg>
                                 </button>
+                                @endcan
                             </div>
                         </td>
+                        @endcanany
+                        @can('tecnico.tareas.action.wsp')
                         <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
                                 <button type="button" class="rounded-full bg-emerald-600 hover:bg-emerald-700">
@@ -176,6 +190,8 @@
                                 </button>
                             </div>
                         </td>
+                        @endcan
+
 
                     </tr>
                     @endforeach

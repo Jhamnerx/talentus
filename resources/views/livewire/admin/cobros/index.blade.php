@@ -28,6 +28,7 @@
             </form>
 
             <!-- Create invoice button -->
+            @can('admin.cobros.create')
             <a href="{{ route('admin.cobros.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -37,6 +38,8 @@
                     <span class="hidden xs:block ml-2">Registrar</span>
                 </button>
             </a>
+            @endcan
+
 
         </div>
 
@@ -44,33 +47,6 @@
 
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
-
-        <!-- Left side -->
-        {{-- <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button wire:click="status()"
-                        :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
-                </li>
-                <li class="m-1">
-                    <button wire:click="status('PAID')"
-                        :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Pagadas
-                        <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
-                </li>
-                <li class="m-1">
-                    <button wire:click="status('UNPAID')"
-                        :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Vencidas
-                        <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
-                </li>
-            </ul>
-        </div> --}}
 
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
@@ -99,8 +75,7 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -230,231 +205,227 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($cobros->count())
-                            @foreach ($cobros as $cobro)
-                                <tr wire:key='cobro-{{ $cobro->id }}'>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-sky-600">
-                                            <a
-                                                href="{{ route('admin.cobros.list.clientes', ['cliente' => $cobro->clientes]) }}">{{ $cobro->clientes->razon_social }}</a>
-
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            @if (count($cobro->clientes->contactos) >= 1)
-                                                @foreach ($cobro->clientes->contactos as $contacto)
-                                                    <ul>
-                                                        <li>
-                                                            {{ $contacto->nombre }}
-                                                        </li>
-                                                    </ul>
-                                                @endforeach
-                                            @else
-                                                #añadir
-                                            @endif
-
-                                        </div>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            {{ $cobro->vehiculo->placa }}
-                                        </div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-
-
-                                        @if ($cobro->suspendido)
-                                            <div
-                                                class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
-                                                Suspendido</div>
-                                        @else
-                                            @switch($cobro->estado)
-                                                @case(0)
-                                                    <div class="font-medium text-emerald-500">
-                                                        ACTIVO
-
-                                                    </div>
-                                                @break
-
-                                                @case(1)
-                                                    <div class="font-medium text-orange-400">
-                                                        POR VENCER
-
-                                                    </div>
-                                                @break
-
-                                                @case(2)
-                                                    <div class="font-medium text-rose-500">
-                                                        VENCIDO
-
-                                                    </div>
-                                                @break
-
-                                                @default
-                                            @endswitch
-                                        @endif
-
-
-
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div>{{ $cobro->comentario }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div>{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            {{ $cobro->periodo }}
-                                        </div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            {{ $cobro->tipo_pago }}
-                                        </div>
-
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            @if ($cobro->divisa == 'PEN')
-                                                S/. {{ $cobro->monto_unidad }}
-                                            @else
-                                                ${{ $cobro->monto_unidad }}
-                                            @endif
-
-
-                                        </div>
-
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="font-medium text-slate-800">
-                                            {{ $cobro->observacion }}
-                                        </div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="relative inline-flex" x-data="{ open: false }">
-                                            <div class="relative inline-block h-full text-left">
-                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
-                                                    aria-haspopup="true" @click.prevent="open = !open"
-                                                    :aria-expanded="open">
-                                                    <span class="sr-only">Menu</span>
-                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                        <circle cx="16" cy="16" r="2" />
-                                                        <circle cx="10" cy="16" r="2" />
-                                                        <circle cx="22" cy="16" r="2" />
-                                                    </svg>
-                                                </button>
-                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                                                    @click.outside="open = false"
-                                                    @keydown.escape.window="open = false" x-show="open"
-                                                    x-transition:enter="transition ease-out duration-200 transform"
-                                                    x-transition:enter-start="opacity-0 -translate-y-2"
-                                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                                    x-transition:leave="transition ease-out duration-200"
-                                                    x-transition:leave-start="opacity-100"
-                                                    x-transition:leave-end="opacity-0" x-cloak>
-
-                                                    <ul>
-                                                        <li>
-
-                                                            <a href="{{ route('admin.cobros.edit', $cobro) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-27"
-                                                                role="menuitem" tabindex="-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                                                    </path>
-                                                                </svg> Editar
-
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript: void(0)"
-                                                                wire:click.prevent="openModalDelete({{ $cobro->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-28"
-                                                                role="menuitem" tabindex="-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                                    </path>
-                                                                </svg>
-                                                                Eliminar
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="{{ route('admin.cobros.show', $cobro) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-29"
-                                                                role="menuitem" tabindex="-1"><svg
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-                                                                    </path>
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                                                    </path>
-                                                                </svg> Ver
-                                                            </a>
-                                                        </li>
-
-
-
-
-                                                    </ul>
-
-
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                        @foreach ($cobros as $cobro)
+                        <tr wire:key='cobro-{{ $cobro->id }}'>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center">
+                                    <label class="inline-flex">
+                                        <span class="sr-only">Select</span>
+                                        <input class="table-item form-checkbox" type="checkbox"
+                                            @click="uncheckParent" />
+                                    </label>
+                                </div>
                             </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-sky-600">
+                                    <a
+                                        href="{{ route('admin.cobros.list.clientes', ['cliente' => $cobro->clientes]) }}">{{
+                                        $cobro->clientes->razon_social }}</a>
+
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    @if (count($cobro->clientes->contactos) >= 1)
+                                    @foreach ($cobro->clientes->contactos as $contacto)
+                                    <ul>
+                                        <li>
+                                            {{ $contacto->nombre }}
+                                        </li>
+                                    </ul>
+                                    @endforeach
+                                    @else
+                                    #añadir
+                                    @endif
+
+                                </div>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    {{ $cobro->vehiculo->placa }}
+                                </div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+
+
+                                @if ($cobro->suspendido)
+                                <div
+                                    class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
+                                    Suspendido</div>
+                                @else
+                                @switch($cobro->estado)
+                                @case(0)
+                                <div class="font-medium text-emerald-500">
+                                    ACTIVO
+
+                                </div>
+                                @break
+
+                                @case(1)
+                                <div class="font-medium text-orange-400">
+                                    POR VENCER
+
+                                </div>
+                                @break
+
+                                @case(2)
+                                <div class="font-medium text-rose-500">
+                                    VENCIDO
+
+                                </div>
+                                @break
+
+                                @default
+                                @endswitch
+                                @endif
+
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div>{{ $cobro->comentario }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div>{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    {{ $cobro->periodo }}
+                                </div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    {{ $cobro->tipo_pago }}
+                                </div>
+
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    @if ($cobro->divisa == 'PEN')
+                                    S/. {{ $cobro->monto_unidad }}
+                                    @else
+                                    ${{ $cobro->monto_unidad }}
+                                    @endif
+
+                                </div>
+
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                                <div class="font-medium text-slate-800">
+                                    {{ $cobro->observacion }}
+                                </div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="relative inline-flex" x-data="{ open: false }">
+                                    <div class="relative inline-block h-full text-left">
+                                        <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                            :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
+                                            @click.prevent="open = !open" :aria-expanded="open">
+                                            <span class="sr-only">Menu</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <circle cx="16" cy="16" r="2" />
+                                                <circle cx="10" cy="16" r="2" />
+                                                <circle cx="22" cy="16" r="2" />
+                                            </svg>
+                                        </button>
+                                        <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            @click.outside="open = false" @keydown.escape.window="open = false"
+                                            x-show="open"
+                                            x-transition:enter="transition ease-out duration-200 transform"
+                                            x-transition:enter-start="opacity-0 -translate-y-2"
+                                            x-transition:enter-end="opacity-100 translate-y-0"
+                                            x-transition:leave="transition ease-out duration-200"
+                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+                                            x-cloak>
+
+                                            <ul>
+                                                @can('admin.cobros.edit')
+                                                <li>
+                                                    <a href="{{ route('admin.cobros.edit', $cobro) }}"
+                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        disabled="false" id="headlessui-menu-item-27" role="menuitem"
+                                                        tabindex="-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                            </path>
+                                                        </svg> Editar
+
+                                                    </a>
+                                                </li>
+                                                @endcan
+                                                @can('admin.cobros.delete')
+                                                <li>
+                                                    <a href="javascript: void(0)"
+                                                        wire:click.prevent="openModalDelete({{ $cobro->id }})"
+                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        disabled="false" id="headlessui-menu-item-28" role="menuitem"
+                                                        tabindex="-1">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                            </path>
+                                                        </svg>
+                                                        Eliminar
+                                                    </a>
+                                                </li>
+                                                @endcan
+
+                                                <li>
+                                                    <a href="{{ route('admin.cobros.show', $cobro) }}"
+                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        disabled="false" id="headlessui-menu-item-29" role="menuitem"
+                                                        tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                                            </path>
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                            </path>
+                                                        </svg> Ver
+                                                    </a>
+                                                </li>
+
+                                            </ul>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </td>
+                        </tr>
+                        @endforeach
+                        @else
+                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                         @endif
 
 

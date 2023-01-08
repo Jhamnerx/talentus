@@ -12,6 +12,14 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 class GuiaRemisionController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:ver-guias', ['only' => ['index']]);
+        $this->middleware('permission:crear-guias', ['only' => ['create']]);
+        $this->middleware('permission:editar-guias', ['only' => ['edit']]);
+        $this->middleware('permission:detalle-guias', ['only' => ['show']]);
+    }
+
     public function index()
     {
         return view('admin.almacen.guias.index');

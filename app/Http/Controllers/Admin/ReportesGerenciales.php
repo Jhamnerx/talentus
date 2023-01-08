@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 
 class ReportesGerenciales extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:admin.reportes.index', ['only' => ['index']]);
+    }
 
     public function index()
     {
