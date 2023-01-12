@@ -13,7 +13,6 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "bensampo/laravel-enum": "^6.1",
         "fruitcake/laravel-cors": "^2.0",
-        "greenter/lite": "*",
         "guzzlehttp/guzzle": "^7.4",
         "illuminate/support": "^9.42",
         "intervention/image": "^2.7",
