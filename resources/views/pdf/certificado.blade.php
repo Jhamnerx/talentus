@@ -178,154 +178,158 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
+<body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
-        <body>
-@endif
+    <body>
+        @endif
 
 
-<div class="certificado">
+        <div class="certificado">
 
-    <div class="header">
+            <div class="header">
 
-        <div class="numero">
-            {{ $certificado->codigo }}
-        </div>
+                <div class="numero">
+                    {{ $certificado->codigo }}
+                </div>
 
-    </div>
-    <div class="titulo">
-        <div class="title">
-            <span>CERTIFICADO DE INSTALACION</span>
-        </div>
+            </div>
+            <div class="titulo">
+                <div class="title">
+                    <span>CERTIFICADO DE INSTALACION</span>
+                </div>
 
-        @php
-            // $qr = base64_encode(
-            //     QrCode::format('png')
-            //         ->size(120)
-            //         ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
-            //         ->style('square')
-            //         ->eye('circle')
-            //         ->encoding('UTF-8')
-            //         ->generate(' VEHICULO: ' . $certificado->vehiculo->placa . '|' . " \nVALIDO HASTA: " . $certificado->fin_cobertura . '|' . "\nEXPEDIDO A: " . $certificado->vehiculo->cliente->razon_social),
-            // );
-        @endphp
+                @php
+                $qr = base64_encode(
+                QrCode::format('png')
+                ->size(120)
+                ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+                ->style('square')
+                ->eye('circle')
+                ->encoding('UTF-8')
+                ->generate(' VEHICULO: ' . $certificado->vehiculo->placa . '|' . " \nVALIDO HASTA: " .
+                $certificado->fin_cobertura . '|' . "\nEXPEDIDO A: " . $certificado->vehiculo->cliente->razon_social),
+                );
+                @endphp
 
-        <div class="qr">
-            {{-- <img src="data:image/jpeg;base64, {{ $qr }}"> --}}
+                <div class="qr">
+                    <img src="data:image/jpeg;base64, {{ $qr }}">
 
-        </div>
+                </div>
 
-    </div>
+            </div>
 
 
-    <div class="certifica">
-        <div>
-            <span>TALENTUS TECHNOLOGY EIRL con RUC: 20496172168, registro N° 6260 autorizada y Homologa por el MTC como
-                empresa Prestadora de servicios de Valor añadido.</span>
-            <span>
-                <p>
-                    <b>CERTIFICA</b> que la empresa: <b>{{ $certificado->vehiculo->cliente->razon_social }}</b> cuenta
-                    con el
-                    sistema localizador vía
-                    GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
+            <div class="certifica">
+                <div>
+                    <span>TALENTUS TECHNOLOGY EIRL con RUC: 20496172168, registro N° 6260 autorizada y Homologa por el
+                        MTC como
+                        empresa Prestadora de servicios de Valor añadido.</span>
+                    <span>
+                        <p>
+                            <b>CERTIFICA</b> que la empresa: <b>{{ $certificado->vehiculo->cliente->razon_social }}</b>
+                            cuenta
+                            con el
+                            sistema localizador vía
+                            GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
 
-                    {{ $certificado->vehiculo->dispositivos ? $certificado->vehiculo->dispositivos->modelo->modelo : 'Registrar dispositivo' }}
-                </p>
+                            {{ $certificado->vehiculo->dispositivos ?
+                            $certificado->vehiculo->dispositivos->modelo->modelo : 'Registrar dispositivo' }}
+                        </p>
 
-            </span>
-            <span class="acredita">
-                <b>
-                    Acreditamos satisfactoriamente la evaluación técnica del sistema, del equipo y del
+                    </span>
+                    <span class="acredita">
+                        <b>
+                            Acreditamos satisfactoriamente la evaluación técnica del sistema, del equipo y del
 
-                    funcionamiento.
-                </b>
-            </span>
-        </div>
-    </div>
+                            funcionamiento.
+                        </b>
+                    </span>
+                </div>
+            </div>
 
-    <div class="descripcion">
-        <span>Con las siguientes características:</span>
-        <ul>
-            @if ($certificado->vehiculo->dispositivos)
-                @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
+            <div class="descripcion">
+                <span>Con las siguientes características:</span>
+                <ul>
+                    @if ($certificado->vehiculo->dispositivos)
+                    @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
                     @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
-                        <li>
-                            {{ $caracteristica['text'] }}
-                        </li>
+                    <li>
+                        {{ $caracteristica['text'] }}
+                    </li>
                     @endforeach
-                @else
+                    @else
                     <li>No existen caracteristicas</li>
-                @endif
-            @else
-                <li style="color: red">Añadir Dispositivo</li>
-            @endif
+                    @endif
+                    @else
+                    <li style="color: red">Añadir Dispositivo</li>
+                    @endif
 
 
-            <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
+                    <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
 
-            <li style="padding-top: 10px">
-                <b>Placa de la unidad: {{ $certificado->vehiculo->placa }}</b>
-            </li>
-        </ul>
+                    <li style="padding-top: 10px">
+                        <b>Placa de la unidad: {{ $certificado->vehiculo->placa }}</b>
+                    </li>
+                </ul>
 
-    </div>
+            </div>
 
-    <div class="data">
+            <div class="data">
 
-        <div class="vehiculo">
-            <table style="border: 1px solid">
-                <tr style="border: 1px solid">
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            Fecha de Instalación
-                        </span>
-                    </td>
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            {{ $certificado->fecha_instalacion->format('d-m-Y') }}
-                        </span>
-                    </td>
-                </tr>
-                <tr style="border: 1px solid">
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            Fecha de Vencimiento
-                        </span>
-                    </td>
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            {{ $certificado->fin_cobertura->format('d-m-Y') }}
-                        </span>
+                <div class="vehiculo">
+                    <table style="border: 1px solid">
+                        <tr style="border: 1px solid">
+                            <td style="border: 1px solid">
+                                <span style="padding-left: 2px; padding-right: 4px">
+                                    Fecha de Instalación
+                                </span>
+                            </td>
+                            <td style="border: 1px solid">
+                                <span style="padding-left: 2px; padding-right: 4px">
+                                    {{ $certificado->fecha_instalacion->format('d-m-Y') }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr style="border: 1px solid">
+                            <td style="border: 1px solid">
+                                <span style="padding-left: 2px; padding-right: 4px">
+                                    Fecha de Vencimiento
+                                </span>
+                            </td>
+                            <td style="border: 1px solid">
+                                <span style="padding-left: 2px; padding-right: 4px">
+                                    {{ $certificado->fin_cobertura->format('d-m-Y') }}
+                                </span>
 
-                    </td>
-                </tr>
-            </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="footer">
+                <div class="sello">
+                    @if ($certificado->sello)
+                    <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
+                        alt="">
+                    @endif
+
+                </div>
+                <div class="fecha">
+                    <p>{{ $certificado->fecha }}</p>
+                </div>
+            </div>
+
+            <div class="hash">
+                {{ $certificado->unique_hash }}
+            </div>
+
         </div>
 
-    </div>
-
-    <div class="footer">
-        <div class="sello">
-            @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                    alt="">
-            @endif
-
-        </div>
-        <div class="fecha">
-            <p>{{ $certificado->fecha }}</p>
-        </div>
-    </div>
-
-    <div class="hash">
-        {{ $certificado->unique_hash }}
-    </div>
-
-</div>
 
 
-
-</body>
+    </body>
 
 </html>

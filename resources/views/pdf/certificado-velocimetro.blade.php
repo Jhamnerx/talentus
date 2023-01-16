@@ -180,128 +180,127 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
+<body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
     @else
 
-        <body>
-@endif
+    <body>
+        @endif
 
 
-<div class="certificado">
+        <div class="certificado">
 
-    <div class="header">
+            <div class="header">
 
 
 
-        <div class="numero">
-            {{ $certificado->codigo }}
-        </div>
+                <div class="numero">
+                    {{ $certificado->codigo }}
+                </div>
 
-    </div>
-    <div class="titulo">
-        <div class=" title">
-            <span>CERTIFICADO DE INSTALACIÓN DE
-                LIMITADOR DE VELOCIDAD</span>
-        </div>
-        <div class="qr">
-            {{-- <img
-                src="data:image/jpeg;base64, {{ base64_encode(
+            </div>
+            <div class="titulo">
+                <div class=" title">
+                    <span>CERTIFICADO DE INSTALACIÓN DE
+                        LIMITADOR DE VELOCIDAD</span>
+                </div>
+                <div class="qr">
+                    <img src="data:image/jpeg;base64, {{ base64_encode(
                     QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
                             ' VEHICULO: ' .
                                 $certificado->vehiculo->placa .
-                                " \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD
-                                                                                                        \nEXPEDIDO A: " .
+                                " \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD \nEXPEDIDO A: " .
                                 $certificado->vehiculo->cliente->razon_social,
                         ),
-                ) }}"> --}}
+                ) }}">
+
+                </div>
+
+            </div>
+
+
+            <div class="certifica">
+                <div>
+                    <span>
+                        <b>{{ $plantilla->razon_social }}</b>, Certifica que la EMPRESA
+                        {{ $certificado->vehiculo->cliente->razon_social }}, con DNI/RUC:
+                        {{ $certificado->vehiculo->cliente->numero_documento }}
+                    </span>
+
+                </div>
+
+            </div>
+            <div class="subtitulo">
+                <span>
+                    <b>
+                        Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo {{
+                        $certificado->velocimetro_modelo }},
+                        implementado con
+                        alerta de Exceso de Velocidad Mayor A 90KM/H
+                    </b>
+                </span>
+            </div>
+
+            <div class="descripcion">
+                <span>El mismo que se encuentra instalado en el vehículo con:</span>
+
+                <table class="table">
+                    <tr>
+                        <td height="20">Placa: </td>
+                        <td height="20"> <b>{{ $certificado->vehiculo->placa }}</b></td>
+                    </tr>
+
+                </table>
+                <table class="tabla">
+                    <tr>
+                        <td height="20">Color de Led</td>
+                        <td height="20">:Rojo Intenso</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Velocidad</td>
+                        <td height="20">:KM/H</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Potencia</td>
+                        <td height="20">:3 Watts.</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Tipo de Visualizacion</td>
+                        <td height="20">:Digital</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Rango del Factor de Velocidad</td>
+                        <td height="20">:2000-4000 Pulson/Km, adicional reloj satelital</td>
+                    </tr>
+                    <tr>
+                        <td height="20">Peso</td>
+                        <td height="20">:370gr</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+            <div class="footer">
+                <div class="sello">
+                    @if ($certificado->sello)
+                    <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
+                        alt="">
+                    @endif
+
+                </div>
+                <div class="fecha">
+                    <p>{{ $certificado->fecha }}</p>
+                </div>
+            </div>
+
+            <div class="hash">
+                {{ $certificado->unique_hash }}
+            </div>
 
         </div>
 
-    </div>
 
 
-    <div class="certifica">
-        <div>
-            <span>
-                <b>{{ $plantilla->razon_social }}</b>, Certifica que la EMPRESA
-                {{ $certificado->vehiculo->cliente->razon_social }}, con DNI/RUC:
-                {{ $certificado->vehiculo->cliente->numero_documento }}
-            </span>
-
-        </div>
-
-    </div>
-    <div class="subtitulo">
-        <span>
-            <b>
-                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo {{ $certificado->velocimetro_modelo }},
-                implementado con
-                alerta de Exceso de Velocidad Mayor A 90KM/H
-            </b>
-        </span>
-    </div>
-
-    <div class="descripcion">
-        <span>El mismo que se encuentra instalado en el vehículo con:</span>
-
-        <table class="table">
-            <tr>
-                <td height="20">Placa: </td>
-                <td height="20"> <b>{{ $certificado->vehiculo->placa }}</b></td>
-            </tr>
-
-        </table>
-        <table class="tabla">
-            <tr>
-                <td height="20">Color de Led</td>
-                <td height="20">:Rojo Intenso</td>
-            </tr>
-            <tr>
-                <td height="20">Velocidad</td>
-                <td height="20">:KM/H</td>
-            </tr>
-            <tr>
-                <td height="20">Potencia</td>
-                <td height="20">:3 Watts.</td>
-            </tr>
-            <tr>
-                <td height="20">Tipo de Visualizacion</td>
-                <td height="20">:Digital</td>
-            </tr>
-            <tr>
-                <td height="20">Rango del Factor de Velocidad</td>
-                <td height="20">:2000-4000 Pulson/Km, adicional reloj satelital</td>
-            </tr>
-            <tr>
-                <td height="20">Peso</td>
-                <td height="20">:370gr</td>
-            </tr>
-
-        </table>
-
-    </div>
-
-    <div class="footer">
-        <div class="sello">
-            @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                    alt="">
-            @endif
-
-        </div>
-        <div class="fecha">
-            <p>{{ $certificado->fecha }}</p>
-        </div>
-    </div>
-
-    <div class="hash">
-        {{ $certificado->unique_hash }}
-    </div>
-
-</div>
-
-
-
-</body>
+    </body>
 
 </html>
