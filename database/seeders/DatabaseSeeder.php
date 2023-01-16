@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
         // SimCard::factory(100)->create();
         $this->call(ProductoSeeder::class);
         $this->call(ModelosDispositivoSeeder::class);
-        Clientes::factory(5000)->create();
+        //Clientes::factory(5000)->create();
         //  Proveedores::factory(20)->create();
         // Dispositivos::factory(100)->create();
         // ComprasFacturas::factory(50)->create();
