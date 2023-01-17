@@ -26,8 +26,8 @@ class UserSeeder extends Seeder
             'password' => bcrypt('12345678'),
         ]);
 
-        $laury = User::create([
-            'name' => 'Laury',
+        $sandra1 = User::create([
+            'name' => 'Sandra',
             'email' => 'monitoreo@talentustechnology.com',
             'tipo_documento' => 'DNI',
             'numero_documento' => '',
@@ -91,7 +91,7 @@ class UserSeeder extends Seeder
         $jhovana->assignRole('admin');
         $admin->assignRole('admin');
         $jhamner->assignRole('admin');
-        $laury->assignRole('monitoreo');
+        $sandra1->assignRole('monitoreo');
         $hugo->assignRole('tecnico');
 
         // User::factory(8)->create();

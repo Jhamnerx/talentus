@@ -38,14 +38,13 @@ class Lineas implements ToModel, WithChunkReading, WithEvents, ShouldQueue
 
     public static function afterImport(AfterImport $event)
     {
-        
-        LineasImportUpdated::dispatch();
 
+        LineasImportUpdated::dispatch();
     }
 
-    public static function importFailed(ImportFailed $event){
+    public static function importFailed(ImportFailed $event)
+    {
 
         dd("fallo");
     }
-
 }

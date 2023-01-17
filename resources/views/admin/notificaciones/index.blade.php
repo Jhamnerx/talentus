@@ -6,8 +6,8 @@
 
 @section('contenido')
 
-    <!-- Table -->
-    {{ $user->notifications }}
+<!-- Table -->
+{{ $user->notifications }}
 
 @stop
 

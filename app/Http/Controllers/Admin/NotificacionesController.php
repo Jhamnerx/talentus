@@ -14,4 +14,11 @@ class NotificacionesController extends Controller
         $user = auth()->user();
         return view('admin.notificaciones.index', compact('user'));
     }
+
+    public function importes()
+    {
+
+
+        return view('admin.notificaciones.importes');
+    }
 }

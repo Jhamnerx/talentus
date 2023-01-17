@@ -23,7 +23,6 @@ class VehiculosIndex extends Component
 
     public function updateVehiculos()
     {
-
         $this->render();
         $this->dispatchBrowserEvent('vehiculos-import');
     }

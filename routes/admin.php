@@ -296,6 +296,7 @@ Route::controller(ReportesGerenciales::class)->group(function () {
 });
 
 route::get('notificaciones', [NotificacionesController::class, 'index'])->name('notificaciones.index');
+route::get('notificaciones/importes-fallidos', [NotificacionesController::class, 'importes'])->name('notificaciones.importes');
 
 Route::group(['middleware' => ['role:super-admin']], function () {
     //

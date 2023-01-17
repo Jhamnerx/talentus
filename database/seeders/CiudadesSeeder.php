@@ -30,5 +30,9 @@ class CiudadesSeeder extends Seeder
             'nombre' => 'Piura',
             'prefijo' => 'P'
         ]);
+        Ciudades::create([
+            'nombre' => 'Moquegua',
+            'prefijo' => 'MQ'
+        ]);
     }
 }

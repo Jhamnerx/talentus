@@ -38,7 +38,7 @@ class ActasIndex extends Component
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
-            ->orderBy('numero', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         $total = Actas::all()->count();
@@ -58,7 +58,7 @@ class ActasIndex extends Component
                     '%' . $this->search . '%',
                 ]
             )
-                ->orderBy('numero', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(10);
         }
 
@@ -114,7 +114,7 @@ class ActasIndex extends Component
     public function openModalShow(Actas $acta)
     {
         $this->emit('verDetalleActa', $acta);
-        $this->openModalDetalle = true;
+        //$this->openModalDetalle = true;
     }
 
     public function cambiarEstado(Actas $acta, $field, $value)
@@ -125,5 +125,11 @@ class ActasIndex extends Component
     {
 
         $this->emit('modalOpenSend', $acta);
+    }
+
+    public function openModalImport()
+    {
+
+        $this->emit('openModalImport');
     }
 }

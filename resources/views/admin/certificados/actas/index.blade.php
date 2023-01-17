@@ -2,22 +2,23 @@
 @section('ruta', 'certificados-actas')
 @section('contenido')
 
-    <!-- Table -->
-    @livewire('admin.certificados.actas.actas-index')
+<!-- Table -->
+@livewire('admin.certificados.actas.actas-index')
 
 @stop
 
 @push('modals')
-    @livewire('admin.certificados.actas.save')
-    @livewire('admin.certificados.actas.edit')
-    @livewire('admin.certificados.actas.send')
-    @livewire('admin.certificados.actas.delete')
+@livewire('admin.certificados.actas.save')
+@livewire('admin.certificados.actas.edit')
+@livewire('admin.certificados.actas.send')
+@livewire('admin.certificados.actas.delete')
+@livewire('admin.certificados.actas.import')
 @endpush
 
 @section('js')
 
-    <script>
-        // INICIALIZAR LOS INPUTS DE FECHA
+<script>
+    // INICIALIZAR LOS INPUTS DE FECHA
         $(document).ready(function() {
 
             flatpickr('.inputDateActaInicio', {
@@ -37,9 +38,9 @@
                 nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
             });
         })
-    </script>
-    <script>
-        window.addEventListener('acta-edit', event => {
+</script>
+<script>
+    window.addEventListener('acta-edit', event => {
             iziToast.success({
                 position: 'topRight',
                 title: 'ACTUALIZADO',
@@ -47,9 +48,9 @@
             });
 
         })
-    </script>
-    <script>
-        window.addEventListener('acta-delete', event => {
+</script>
+<script>
+    window.addEventListener('acta-delete', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
@@ -61,9 +62,9 @@
                 })
             });
         })
-    </script>
-    <script>
-        window.addEventListener('acta-save', event => {
+</script>
+<script>
+    window.addEventListener('acta-save', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'success',
@@ -82,12 +83,12 @@
 
 
         })
-    </script>
+</script>
 
 
 
-    <script>
-        // A basic demo function to handle "select all" functionality
+<script>
+    // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -117,5 +118,5 @@
                 }
             }))
         })
-    </script>
+</script>
 @stop
