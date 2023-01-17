@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos;
 
-use App\Imports\VehiculosImport;
 use Exception;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Imports\VehiculosImport;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class Import extends Component
 {
@@ -15,8 +18,10 @@ class Import extends Component
     public $file;
     public $modalOpenImport = false;
 
+    public Collection $errorInfo;
+
     protected $listeners = [
-        
+
         'openModalImport' => 'openModal',
     ];
 
@@ -30,6 +35,11 @@ class Import extends Component
         'file.mimes' => 'Debe ser un archivo de Excel',
     ];
 
+    public function mount()
+    {
+        $this->errorInfo = collect();
+    }
+
     public function updated($label)
     {
         $this->validateOnly($label);
@@ -40,39 +50,48 @@ class Import extends Component
         return view('livewire.admin.vehiculos.import');
     }
 
-    
+
     public function importExcel()
     {
         $this->validate();
 
         try {
 
-            $import = Excel::queueImport(new VehiculosImport, $this->file);
-            $this->reset();
+            $import = Excel::import(new VehiculosImport(Auth::user()), $this->file);
+            $this->modalOpenImport = false;
+            $this->reset('file');
+        } catch (ValidationException $e) {
+            $failures = $e->failures();
+            foreach ($failures as $failure) {
+                $errores = $failure->errors();
+                $values = $failure->values();
 
-
-        } catch (Exception $e) {
-            //dd($e);
-            $e->getMessage();
-
-        }finally{
-
-           $this->modalOpenImport = false;
-
+                foreach ($errores as $key => $error) {
+                    foreach ($values as $value) {
+                        $this->errorInfo->push([
+                            'errores' => $error,
+                            'values' => $value,
+                        ]);
+                    }
+                }
+                $failure->row();
+                $failure->attribute();
+                $failure->errors();
+                $failure->values();
+            }
         }
     }
 
-    public function openModal(){
+    public function openModal()
+    {
 
         $this->modalOpenImport = true;
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalOpenImport = false;
         $this->reset();
     }
-
-
 }

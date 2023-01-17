@@ -98,11 +98,15 @@
                         <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
-
+                    @foreach ($errorInfo as $error)
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $error['errores'] }} => {{ $error['values'] }}
+                    </p>
+                    @endforeach
                     <div>
                         <p class="mt-1 text-slate-500 text-sm">
                             Descargar archivo formato

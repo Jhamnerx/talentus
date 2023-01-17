@@ -2,14 +2,16 @@
 
 namespace App\Http\Livewire\Admin\Clientes;
 
-use App\Imports\ClientesImport;
-use App\Jobs\RedirectCompletedImportClientes;
-use App\Models\User;
 use Exception;
-use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use App\Imports\ClientesImport;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Jobs\RedirectCompletedImportClientes;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class Import extends Component
 {
@@ -17,7 +19,7 @@ class Import extends Component
     public $file;
 
     public $modalOpenImport = false;
-
+    public Collection $errorInfo;
     protected $listeners = [
 
         'openModalImport' => 'openModal',
@@ -32,6 +34,11 @@ class Import extends Component
         'file.max' => 'El tamaño maximo es de 10MB',
         'file.mimes' => 'Debe ser un archivo de Excel',
     ];
+
+    public function mount()
+    {
+        $this->errorInfo = collect();
+    }
 
     public function updated($propertyName)
     {
@@ -52,32 +59,44 @@ class Import extends Component
 
         try {
 
-            $import = Excel::queueImport(new ClientesImport, $this->file);
-            
-            $this->reset();
+            $import = Excel::queueImport(new ClientesImport(Auth::user()), $this->file);
 
-
-        } catch (Exception $e) {
+            $this->modalOpenImport = false;
+            $this->reset('file');
+        } catch (ValidationException $e) {
             //dd($e);
-            $e->getMessage();
+            $failures = $e->failures();
+            foreach ($failures as $failure) {
 
-        }finally{
+                $errores = $failure->errors();
+                $values = $failure->values();
+                foreach ($errores as $key => $error) {
+                    foreach ($values as $value) {
+                        $this->errorInfo->push([
+                            'errores' => $error,
+                            'values' => $value,
+                        ]);
+                    }
+                }
 
-           // $this->modalOpenImport = false;
-
+                $failure->row(); // row that went wrong
+                $failure->attribute(); // either heading key (if using heading row concern) or column index
+                $failure->errors(); // Actual error messages from Laravel validator
+                $failure->values();
+            }
         }
     }
 
-    public function openModal(){
+    public function openModal()
+    {
 
         $this->modalOpenImport = true;
-
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalOpenImport = false;
-        $this->reset();
+        $this->reset('file');
     }
 }

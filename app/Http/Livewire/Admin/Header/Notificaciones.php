@@ -22,7 +22,7 @@ class Notificaciones extends Component
     public function update()
     {
 
-        $this->notificaciones = auth()->user()->notifications;
+        $this->notificaciones = auth()->user()->notifications()->take(10)->get();
         $this->count = auth()->user()->unreadNotifications->count();
     }
 

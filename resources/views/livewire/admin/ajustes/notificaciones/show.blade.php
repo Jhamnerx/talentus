@@ -10,7 +10,7 @@
 
 
                 @foreach (auth()->user()->notifications as $notification)
-                    {{ $notification->data['asunto'] }}
+                {{ $notification->data['asunto'] }}
                 @endforeach
                 {{-- <div x-show="open" x-data="{ open: true }">
                     <div
