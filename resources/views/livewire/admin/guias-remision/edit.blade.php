@@ -754,7 +754,7 @@
             $('.userSelect').on('select2:select', function(e) {
 
                 console.log(this.value);
-                @this.set('user', this.value)
+                @this.set('users_id', this.value)
 
             });
         })
