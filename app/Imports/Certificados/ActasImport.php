@@ -24,16 +24,26 @@ use Maatwebsite\Excel\Concerns\WithGroupedHeadingRow;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use App\Notifications\Imports\ImportHasFailedNotification;
 
+
+use Faker\Generator;
+use Illuminate\Container\Container;
+
 class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, WithChunkReading, WithValidation, WithHeadingRow, WithGroupedHeadingRow, SkipsEmptyRows
 {
 
     use RegistersEventListeners, Importable, Queueable;
 
     protected $importedBy;
-
+    /**
+     * The current Faker instance.
+     *
+     * @var \Faker\Generator
+     */
+    public $faker;
     public function __construct(User $importedBy)
     {
         $this->importedBy = $importedBy;
+        $this->faker = $this->withFaker();
     }
 
 
@@ -56,18 +66,27 @@ class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, W
             'fondo' => $fila['fondo'],
             'codigo' => $fila['codigo'],
             'ciudades_id' => $ciudades_id,
-            'unique_hash' => Hashids::connection(Actas::class)->encode($this->generateUniqueCode()),
+            'unique_hash' => Hashids::connection(Actas::class)->encode($this->test()),
             'empresa_id' => 1,
         ]);
     }
-    public function generateUniqueCode()
-    {
-        do {
-            $code = random_int(1, 500);
-        } while (Actas::where("id", "=", $code)->first());
 
-        return $code;
+    protected function withFaker()
+    {
+        return Container::getInstance()->make(Generator::class);
     }
+    public function test()
+    {
+        $values = array();
+
+        for ($i = 1; $i < 493; $i++) {
+
+            $values[] = $i;
+        }
+
+        return $this->faker->unique()->randomElement($values);
+    }
+
     public function rules(): array
     {
         $rules = [
