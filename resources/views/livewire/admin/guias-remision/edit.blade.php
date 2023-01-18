@@ -630,7 +630,6 @@
 
         @if ($asignarTecnico)
         <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
-            {{ json_encode($imei_list) }}
             <h4>ARRASTRA AL PANEL EN BLACO LOS IMEIS A ASIGNAR</h4>
             {{-- <input class="form-input" type="text" wire:model='search'> --}}
 
