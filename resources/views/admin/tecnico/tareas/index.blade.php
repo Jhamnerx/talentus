@@ -10,6 +10,7 @@
 
     <!-- More actions -->
 
+    @livewire('admin.tecnico.tareas.actions')
     @livewire('admin.tecnico.tareas.cards')
 
 
