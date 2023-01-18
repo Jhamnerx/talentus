@@ -22,6 +22,7 @@ class CrearRecordatorio extends Notification implements ShouldQueue
      */
     public function __construct($recordatorio)
     {
+
         $this->recordatorio = $recordatorio;
     }
 
@@ -72,16 +73,16 @@ class CrearRecordatorio extends Notification implements ShouldQueue
         return new BroadcastMessage([]);
     }
 
-    public function withDelay($notifiable)
-    {
-        return [
+    // public function withDelay($notifiable)
+    // {
+    //     return [
 
-            'mail' => now()->addSeconds(30),
-            'database' => now()->addSeconds(30),
-            'broadcast' => now()->addSeconds(30),
+    //         'mail' => now()->addSeconds(30),
+    //         'database' => now()->addSeconds(30),
+    //         'broadcast' => now()->addSeconds(30),
 
-        ];
-    }
+    //     ];
+    // }
 
     public function viaQueues()
     {

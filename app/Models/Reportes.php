@@ -49,7 +49,7 @@ class Reportes extends Model
 
     public function vehiculos()
     {
-        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed();
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
 
