@@ -53,7 +53,10 @@
             </div>
 
             <!-- Add button -->
+            @can('crear-vehiculos-flotas')
             @livewire('admin.vehiculos.flotas.save')
+            @endcan
+
 
         </div>
 
@@ -62,8 +65,8 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total Flotas <span
-                    class="text-slate-400 font-medium">{{ $flotas->total() }}</span>
+            <h2 class="font-semibold text-slate-800">Total Flotas <span class="text-slate-400 font-medium">{{
+                    $flotas->total() }}</span>
             </h2>
 
         </header>
@@ -94,75 +97,85 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Cant/Unidades</div>
                             </th>
+                            @role('admin')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
+                            @endrole
+                            @canany(['editar-vehiculos-flotas', 'eliminar-vehiculos-flotas'])
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
                             </th>
+                            @endcanany
                         </tr>
                     </thead>
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($flotas->count())
-                            @foreach ($flotas as $flota)
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                        <div class="flex items-center">
-                                            <div class="font-medium text-slate-800">{{ strtoupper($flota->nombre) }}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                        <div class="text-left">{{ $flota->clientes->razon_social }}</div>
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-red-800">
-
-                                            {{ $flota->vehiculos->count() > 1
-                                                ? $flota->vehiculos->count() . ' Vehiculos'
-                                                : $flota->vehiculos->count() . ' Vehiculo' }}
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
-
-
-                                                @livewire('admin.vehiculos.flotas.change-status', ['model' => $flota, 'field' => 'is_active'], key('active' . $flota->id))
-                                                <!-- End -->
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-
-
-
-                                            @livewire('admin.vehiculos.flotas.delete', ['model' => $flota], key('delete' . $flota->id))
-
-
-
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                        @foreach ($flotas as $flota)
+                        <tr>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="flex items-center">
+                                    <label class="inline-flex">
+                                        <span class="sr-only">Select</span>
+                                        <input class="table-item form-checkbox" type="checkbox"
+                                            @click="uncheckParent" />
+                                    </label>
+                                </div>
                             </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 ">
+                                <div class="flex items-center">
+                                    <div class="font-medium text-slate-800">{{ strtoupper($flota->nombre) }}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="text-left">{{ $flota->clientes->razon_social }}</div>
+
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left font-medium text-red-800">
+
+                                    {{ $flota->vehiculos->count() > 1
+                                    ? $flota->vehiculos->count() . ' Vehiculos'
+                                    : $flota->vehiculos->count() . ' Vehiculo' }}
+                                </div>
+                            </td>
+                            @role('admin')
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div>
+                                    <div class="m-3 ">
+
+
+                                        @livewire('admin.vehiculos.flotas.change-status', ['model' => $flota, 'field' =>
+                                        'is_active'], key('active' . $flota->id))
+                                        <!-- End -->
+                                    </div>
+                                </div>
+                            </td>
+                            @endrole
+                            @canany(['editar-vehiculos-flotas', 'eliminar-vehiculos-flotas'])
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="space-x-1">
+
+
+
+                                    @livewire('admin.vehiculos.flotas.delete', ['model' => $flota], key('delete' .
+                                    $flota->id))
+
+
+
+                                </div>
+                            </td>
+                            @endcanany
+                        </tr>
+                        @endforeach
+                        @else
+                        <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                         @endif
 
 
