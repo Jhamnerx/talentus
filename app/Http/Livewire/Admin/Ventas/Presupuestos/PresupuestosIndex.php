@@ -208,7 +208,7 @@ class PresupuestosIndex extends Component
             $recibo = $presupuesto->recibo()->create([
                 'clientes_id' => $presupuesto->clientes_id,
                 'numero' => $recibosController->setNextSequenceNumber(),
-                'serie' => $plantilla->series["factura"],
+                'serie' => $plantilla->series["recibo"],
                 'fecha_emision' => $date = Carbon::now(),
                 'fecha_pago' => $date = Carbon::now(),
                 'tipo_pago' => '',
