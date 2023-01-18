@@ -90,7 +90,7 @@ class CreateTask extends Component
 
             $this->cliente_id = $vehiculo->cliente->id;
             $this->numero = $vehiculo->numero;
-            $this->sim_card = $vehiculo->sim_card->sim_card;
+            $this->sim_card = $vehiculo->sim_card ? $vehiculo->sim_card->sim_card : '';
             $this->reset('ErrorMsgVehiculo');
         } else {
             $this->ErrorMsgVehiculo = "No se encuentra el cliente";
