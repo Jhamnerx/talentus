@@ -45,7 +45,6 @@ class Edit extends Component
         }
         $this->nota = $this->presupuesto->nota;
 
-
         $this->items = collect($this->presupuesto->detalles);
 
         $this->selected = collect([
@@ -81,6 +80,7 @@ class Edit extends Component
         try {
             $this->items->push([
                 'id' => $this->selected["id"],
+                'producto_id' => $this->selected["producto_id"],
                 'producto' => $this->selected->get('producto'),
                 'descripcion' => $this->selected["descripcion"],
                 'cantidad' => $this->selected["cantidad"],
@@ -108,6 +108,7 @@ class Edit extends Component
     {
         $this->selected = collect([
             'id' => $producto->id,
+            'producto_id' => $producto->id,
             'producto' => $producto->nombre,
             'descripcion' => $producto->descripcion,
             'cantidad' => "1",
