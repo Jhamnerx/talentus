@@ -1,7 +1,7 @@
 <div class="p-6 shadow overflow-hidden sm:rounded-md">
     {!! Form::open([
-        'class' => 'formularioGuia',
-        'autocomplete' => 'on',
+    'class' => 'formularioGuia',
+    'autocomplete' => 'on',
     ]) !!}
     <div class="px-4 py-2 bg-gray-100 sm:p-6">
 
@@ -35,9 +35,9 @@
                     </div>
                 </div>
                 @error('serie_numero')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -72,9 +72,9 @@
                     </div>
                 </div>
                 @error('fecha_emision')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -122,9 +122,9 @@
                     </div>
                 </div>
                 @error('tipo_documento')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-4 mb-2">
@@ -136,8 +136,8 @@
                 <div class="relative">
                     <input type="text" name="numero_documento" wire:model='numero_documento'
                         class="form-input w-full pl-2 pr-9" placeholder="Ingresa número documento">
-                    <button class="absolute inset-0 left-auto group" type="button"
-                        wire:click.prevent="searchCliente" aria-label="Search">
+                    <button class="absolute inset-0 left-auto group" type="button" wire:click.prevent="searchCliente"
+                        aria-label="Search">
                         <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                             viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -148,15 +148,15 @@
                     </button>
                 </div>
                 @if ($error_msg)
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $error_msg }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $error_msg }}
+                </p>
                 @endif
 
                 @error('numero_documento')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -174,8 +174,7 @@
                         type="text" placeholder="Ingrese Nombre o Razon Social" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
-                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 32 32">
+                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
                             <g fill="currentColor" class="nc-icon-wrapper">
                                 <path
                                     d="M29,0H3A1,1,0,0,0,2,1V31a1,1,0,0,0,1,1H29a1,1,0,0,0,1-1V1A1,1,0,0,0,29,0ZM20,7a3,3,0,1,1-3,3A3,3,0,0,1,20,7Zm-8,3a3,3,0,1,1-3,3A3,3,0,0,1,12,10ZM6,24a6,6,0,0,1,12,0Zm13.411-3a8.046,8.046,0,0,0-3.77-4.115A5.995,5.995,0,0,1,26,21Z">
@@ -185,9 +184,9 @@
                     </div>
                 </div>
                 @error('razon_social')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -209,14 +208,13 @@
                 <div class="relative">
 
                     {!! Form::select('motivo_traslado', $motivos, null, [
-                        'class' => 'form-select w-full pl-9 py-2 text-black text-sm',
-                        '@change' => 'cambiarMotivo($event.target.value)',
-                        'wire:model' => 'motivo_traslado',
+                    'class' => 'form-select w-full pl-9 py-2 text-black text-sm',
+                    '@change' => 'cambiarMotivo($event.target.value)',
+                    'wire:model' => 'motivo_traslado',
                     ]) !!}
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
+                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
                                     d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"
@@ -226,9 +224,9 @@
                     </div>
                 </div>
                 @error('motivo_traslado')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -248,8 +246,7 @@
                     </select>
                     <button class="absolute inset-0 right-auto group" type="button" aria-label="Search">
 
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M11,45H5a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,11,45Z"
                                     fill="#363636"></path>
@@ -275,9 +272,9 @@
                 </div>
 
                 @error('modalidad_traslado')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -311,9 +308,9 @@
                     </div>
                 </div>
                 @error('fecha_inicio_traslado')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -325,9 +322,9 @@
                 </label>
                 <input type="text" name="peso" wire:model="peso" class="form-input w-full" placeholder="10">
                 @error('peso')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -340,9 +337,9 @@
                 <input type="text" name="cantidad_items" wire:model="cantidad_items" class="form-input w-full"
                     placeholder="20">
                 @error('cantidad_items')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -357,9 +354,9 @@
                     class="form-input w-full" placeholder="opcional">
 
                 @error('numero_contenedor')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -374,9 +371,9 @@
                     class="form-input w-full" placeholder="Codigo puerto | opcional">
 
                 @error('code_puerto')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
 
@@ -397,12 +394,12 @@
                         <div>Direccion <span class="text-sm text-red-500"> * </span></div>
                     </label>
 
-                    <input type="text" name="direccion_partida" wire:model="direccion_partida"
-                        class="form-input w-full" placeholder="Direccion de partida">
+                    <input type="text" name="direccion_partida" wire:model="direccion_partida" class="form-input w-full"
+                        placeholder="Direccion de partida">
                     @error('direccion_partida')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
 
                 </div>
@@ -431,9 +428,9 @@
 
 
                     @error('ubigeo_partida')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
 
                 </div>
@@ -453,12 +450,12 @@
                         <div>Direccion <span class="text-sm text-red-500"> * </span></div>
                     </label>
 
-                    <input type="text" name="direccion_llegada" autocomplete="nope"
-                        wire:model="direccion_llegada" class="form-input w-full" placeholder="Direccion de llegada">
+                    <input type="text" name="direccion_llegada" autocomplete="nope" wire:model="direccion_llegada"
+                        class="form-input w-full" placeholder="Direccion de llegada">
                     @error('direccion_llegada')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
 
                 </div>
@@ -485,9 +482,9 @@
                         </div>
                     </div>
                     @error('ubigeo_llegada')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
 
                 </div>
@@ -513,13 +510,12 @@
                     <select name="factura_id" wire:model='factura_id'
                         class="form-select w-full pl-9 py-2 text-black text-sm facturasSelect" id="factura_id">
                         @if ($guia->factura_id)
-                            <option value="{{ $guia->factura_id }}">{{ $guia->factura->serie_numero }}</option>
+                        <option value="{{ $guia->factura_id }}">{{ $guia->factura->serie_numero }}</option>
                         @endif
                     </select>
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 64 64">
+                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                             <g stroke-linecap="round" fill="none" stroke="currentColor" stroke-linejoin="round"
                                 class="nc-icon-wrapper">
                                 <polyline data-cap="butt" points="56 20 39 20 39 3"></polyline>
@@ -533,9 +529,9 @@
                     </div>
                 </div>
                 @error('factura_id')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
                 @enderror
             </div>
             <div class="col-span-12  {{ $asignarTecnico ? 'sm:col-span-3' : 'sm:col-span-6' }} mb-2">
@@ -547,8 +543,8 @@
 
                     <div class="flex items-center">
                         <div class="form-switch">
-                            <input value="true" wire:model='asignarTecnico' role="switch"
-                                @change="Asignar($data)" type="checkbox" id="switch-asign" class="sr-only" />
+                            <input value="true" wire:model='asignarTecnico' role="switch" @change="Asignar($data)"
+                                type="checkbox" id="switch-asign" class="sr-only" />
                             <label class="bg-slate-400" for="switch-asign">
                                 <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                 <span class="sr-only">Estado</span>
@@ -560,37 +556,39 @@
             </div>
 
             @if ($asignarTecnico)
-                <div class="col-span-12 sm:col-span-3 mb-2">
-                    <label
-                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>Tecnico <span class="text-sm text-red-500"> * </span></div>
-                    </label>
-                    <div class="relative" wire:ignore>
+            <div class="col-span-12 sm:col-span-3 mb-2">
+                <label
+                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                    <div>Tecnico <span class="text-sm text-red-500"> * </span></div>
+                </label>
+                <div class="relative" wire:ignore>
 
-                        <select name="user_id" class="form-select w-full pl-9 py-2 text-black text-sm userSelect"
-                            id="user_id">
-                            <option value="{{ $guia->users_id }}">{{ $guia->user->name }}</option>
-                        </select>
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 48 48">
-                                <g class="nc-icon-wrapper">
-                                    <path
-                                        d="M45.521,39.04,27.527,5.134a3.982,3.982,0,0,0-7.054,0L2.479,39.04a4.056,4.056,0,0,0,.108,4.017A3.967,3.967,0,0,0,6.007,45H41.993a3.967,3.967,0,0,0,3.42-1.943A4.056,4.056,0,0,0,45.521,39.04Z"
-                                        fill="#f7bf26"></path>
-                                    <polygon points="26.286 16 25.143 32.571 22.857 32.571 21.714 16 26.286 16"
-                                        fill="#363636"></polygon>
-                                    <circle cx="24" cy="38" r="3" fill="#363636"></circle>
-                                </g>
-                            </svg>
-                        </div>
+                    <select name="user_id" class="form-select w-full pl-9 py-2 text-black text-sm userSelect"
+                        id="user_id">
+                        @if ($guia->user)
+                        <option value="{{ $guia->users_id }}">{{ $guia->user->name }}</option>
+                        @endif
+
+                    </select>
+                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                        <svg class="w-4 h-4  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <g class="nc-icon-wrapper">
+                                <path
+                                    d="M45.521,39.04,27.527,5.134a3.982,3.982,0,0,0-7.054,0L2.479,39.04a4.056,4.056,0,0,0,.108,4.017A3.967,3.967,0,0,0,6.007,45H41.993a3.967,3.967,0,0,0,3.42-1.943A4.056,4.056,0,0,0,45.521,39.04Z"
+                                    fill="#f7bf26"></path>
+                                <polygon points="26.286 16 25.143 32.571 22.857 32.571 21.714 16 26.286 16"
+                                    fill="#363636"></polygon>
+                                <circle cx="24" cy="38" r="3" fill="#363636"></circle>
+                            </g>
+                        </svg>
                     </div>
-                    @error('user')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
+                @error('user')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+                @enderror
+            </div>
             @endif
 
 
@@ -623,23 +621,23 @@
             {{-- tabla de items --}}
             <x-admin.guias-remision.tabla-detalle :items="$items"></x-admin.guias-remision.tabla-detalle>
             @error('items')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
         </div>
         {{-- asignacion de imeis --}}
 
         @if ($asignarTecnico)
-            <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
-                {{ json_encode($imei_list) }}
-                <h4>ARRASTRA AL PANEL EN BLACO LOS IMEIS A ASIGNAR</h4>
-                {{-- <input class="form-input" type="text" wire:model='search'> --}}
+        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
+            {{ json_encode($imei_list) }}
+            <h4>ARRASTRA AL PANEL EN BLACO LOS IMEIS A ASIGNAR</h4>
+            {{-- <input class="form-input" type="text" wire:model='search'> --}}
 
-                <x-admin.guias-remision.lista-imei :imeis="$imei_list" :imeisadd="$imeis_add">
-                </x-admin.guias-remision.lista-imei>
+            <x-admin.guias-remision.lista-imei :imeis="$imei_list" :imeisadd="$imeis_add">
+            </x-admin.guias-remision.lista-imei>
 
-            </div>
+        </div>
         @endif
 
 
@@ -657,9 +655,10 @@
 </div>
 
 @section('js')
-    {{-- <x-laravel-blade-sortable::scripts /> --}}
-    <script>
-        document.addEventListener('alpine:init', () => {
+{{--
+<x-laravel-blade-sortable::scripts /> --}}
+<script>
+    document.addEventListener('alpine:init', () => {
             Alpine.data('laravelBladeSortable', () => ({
                 name: '',
                 sortOrder: [],
@@ -713,10 +712,10 @@
                 }
             }))
         })
-    </script>
+</script>
 
-    <script>
-        window.addEventListener('asignar-tecnico', event => {
+<script>
+    window.addEventListener('asignar-tecnico', event => {
             $('.userSelect').select2({
                 placeholder: 'Seleccionar Tecnico',
                 language: "es",
@@ -759,11 +758,11 @@
 
             });
         })
-    </script>
+</script>
 
-    @if ($asignarTecnico)
-        <script>
-            $('.userSelect').select2({
+@if ($asignarTecnico)
+<script>
+    $('.userSelect').select2({
                 placeholder: 'Seleccionar Tecnico',
                 language: "es",
                 selectionCssClass: 'pl-9',
@@ -804,14 +803,14 @@
                 @this.set('user', this.value)
 
             });
-        </script>
-    @endif
+</script>
+@endif
 
 
 
 
-    <script>
-        $('.facturasSelect').select2({
+<script>
+    $('.facturasSelect').select2({
             placeholder: 'Buscar Factura',
             language: "es",
             selectionCssClass: 'pl-9',
@@ -1069,5 +1068,5 @@
             });
 
         })
-    </script>
+</script>
 @endsection
