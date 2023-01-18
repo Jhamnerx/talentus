@@ -28,7 +28,11 @@ class ReporteProductos extends Component
 
         $this->modalReporte = true;
     }
+    public function closeModal()
+    {
 
+        $this->modalReporte = false;
+    }
 
     public function exportToPdf()
     {
