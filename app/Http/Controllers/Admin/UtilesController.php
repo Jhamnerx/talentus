@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Faker\Generator;
 use GuzzleHttp\Client;
 use App\Models\Clientes;
-use Illuminate\Http\Request;
 use Illuminate\Container\Container;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -218,12 +217,13 @@ class UtilesController extends Controller
     public function test()
     {
         $values = array();
-        $ids = Clientes::select('id')->get()->pluck('id');
 
+        for ($i = 1; $i < 493; $i++) {
 
-        $values[] =  $this->faker->unique()->randomElement($ids);
+            $values[] = $i;
+        }
 
-
-        dd($ids);
+        return $values;
+        //return $this->faker->unique()->randomElement($values);
     }
 }

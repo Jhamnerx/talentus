@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin\Lineas;
 
-use App\Imports\LineasImport;
 use Exception;
 use Livewire\Component;
+use App\Imports\LineasImport;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class Import extends Component
 {
@@ -53,29 +54,25 @@ class Import extends Component
 
         try {
 
-            $exit = Excel::queueImport(new LineasImport, $this->file);
-            $this->reset();
-            //$this->openModalImport = false;
+            $import = Excel::Import(new LineasImport(auth()->user()), $this->file);
 
-        } catch (Exception $e) {
-            // dd($e);
-            //dd($e->getMessage());
-            $this->errorInfo = $e->errorInfo["2"];
+            $this->modalOpenImport = false;
+        } catch (ValidationException $e) {;
         }
     }
 
 
-    public function openModal(){
+    public function openModal()
+    {
 
 
         $this->modalOpenImport = true;
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalOpenImport = false;
         $this->reset();
     }
-
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Actas;
 
+use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Actas;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -131,5 +132,12 @@ class ActasIndex extends Component
     {
 
         $this->emit('openModalImport');
+    }
+    public function test()
+    {
+        $ctr = new UtilesController();
+
+        $value = $ctr->test();
+        dd($value);
     }
 }

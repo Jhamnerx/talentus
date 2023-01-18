@@ -107,7 +107,7 @@
                     <div>
                         <p class="mt-1 text-slate-500 text-sm">
                             Descargar archivo formato
-                            <a class="text-blue-800" href="{{ Storage::url('excel/clientes.xlsx') }}" download>
+                            <a class="text-blue-800" href="{{ Storage::url('excel/actas.xlsx') }}" download>
                                 Haz click aqui
                             </a>
                         </p>
