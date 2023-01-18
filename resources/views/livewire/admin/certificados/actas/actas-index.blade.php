@@ -70,7 +70,7 @@
                 </div>
             </div>
             <!-- Import button -->
-
+            @can('admin.home')
             <div class="relative inline-flex">
                 <button wire:click="openModalImport()" aria-controls="basic-modal"
                     class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
@@ -85,6 +85,8 @@
                     <span class="hidden xs:block ml-2">Importar</span>
                 </button>
             </div>
+            @endcan
+
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
                 <button
