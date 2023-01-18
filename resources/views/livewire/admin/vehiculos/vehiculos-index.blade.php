@@ -30,6 +30,7 @@
 
             {{-- BOTON Y MODAL PARA CREAR VEHICULO --}}
             {{-- @livewire('admin.vehiculos.save-vehiculo') --}}
+            @can('crear-vehiculos-vehiculos')
             <div class="relative inline-flex">
 
                 <!-- Create button -->
@@ -43,7 +44,7 @@
                 </button>
 
             </div>
-
+            @endcan
 
         </div>
 
