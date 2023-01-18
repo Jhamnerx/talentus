@@ -38,6 +38,7 @@
 
 
                         <div class="grid grid-cols-12 gap-6">
+
                             <div class="col-span-12">
                                 <label class="block text-sm font-medium mb-1" for="tipo_tarea_id">Seleccionar Tipo de
                                     Tarea:</label>
@@ -86,6 +87,7 @@
                                 <div class="text-center font-semibold text-slate-800">
                                     SERVICIO: {{$titulo}}.
                                 </div>
+                                {{json_encode($errors->all())}}
                             </div>
 
                             {{-- vehiculo --}}
