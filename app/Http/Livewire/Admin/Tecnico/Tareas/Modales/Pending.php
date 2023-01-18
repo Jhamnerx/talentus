@@ -58,6 +58,7 @@ class Pending extends Component
     public function cancelTask(Tareas $task)
     {
         $task->estado = "CANCELED";
+        $task->fecha_termino = Carbon::now();
         $task->save();
         $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
         $this->render();

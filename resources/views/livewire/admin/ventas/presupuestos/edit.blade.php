@@ -46,8 +46,7 @@
                             <div>Cliente <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="flex" wire:ignore>
-                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
-                                required>
+                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
                                 <option selected value="{{ $presupuesto->clientes_id }}">
                                     {{ $presupuesto->clientes->razon_social }}
                                 </option>
@@ -58,9 +57,9 @@
                         </div>
 
                         @error('clientes_id')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
                     {{-- NUMERO --}}
@@ -75,9 +74,9 @@
 
                         </div>
                         @error('numero')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
 
@@ -103,9 +102,9 @@
                                 placeholder="Seleccion la fecha emisión">
                         </div>
                         @error('fecha')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
 
@@ -131,9 +130,9 @@
                                 placeholder="Selecciona la fecha">
                         </div>
                         @error('fecha_caducidad')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
                 </div>
@@ -150,9 +149,9 @@
                         </select>
 
                         @error('divisa')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
 
                     </div>
@@ -170,6 +169,7 @@
                         <textarea wire:model="nota" class="form-input w-full px-4 py-3" name="nota" id="" rows="4"
                             placeholder="Ingresar nota opcional"></textarea>
                     </div>
+
                 </div>
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
@@ -232,40 +232,41 @@
                                 <!-- Row -->
                                 <tr class="main bg-slate-50">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
+                                        <textarea wire:model="selected.producto" rows="5" class="form-input descripcion"
+                                            placeholder="Producto"></textarea>
                                         @if ($errors->has('selected.producto'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.producto') }}
-                                            </p>
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('selected.producto') }}
+                                        </p>
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
+                                        <textarea wire:model="selected.descripcion" rows="5"
+                                            class="form-input descripcion" placeholder="Descripción"></textarea>
                                         @if ($errors->has('selected.descripcion'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.descripcion') }}
-                                            </p>
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('selected.descripcion') }}
+                                        </p>
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                        <input wire:model="selected.cantidad" type="number" min="1"
-                                            value="1" step="1" class="form-input qyt"
-                                            placeholder="Cantidad">
+                                        <input wire:model="selected.cantidad" type="number" min="1" value="1" step="1"
+                                            class="form-input qyt" placeholder="Cantidad">
                                         @if ($errors->has('selected.cantidad'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.cantidad') }}
-                                            </p>
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('selected.cantidad') }}
+                                        </p>
                                         @endif
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input wire:model="selected.precio" type="number" min="0"
-                                            step="0.1" class="form-input importe" placeholder="Importe">
+                                        <input wire:model="selected.precio" type="number" min="0" step="0.1"
+                                            class="form-input importe" placeholder="Importe">
                                         @if ($errors->has('selected.precio'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.precio') }}
-                                            </p>
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('selected.precio') }}
+                                        </p>
                                         @endif
                                     </td>
 
@@ -298,74 +299,73 @@
                                 </tr>
                                 {{-- fila para añadir --}}
                                 @if ($items->count() > 0)
-                                    @foreach ($items->all() as $clave => $item)
-                                        <tr wire:key="item-{{ $clave }}-{{ $item['id'] }}">
+                                @foreach ($items->all() as $clave => $item)
+                                <tr wire:key="item-{{ $clave }}-{{ $item['id'] }}">
 
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <textarea required wire:model="items.{{ $clave }}.producto"
+                                            class="form-textarea" rows="4">
 
                                                 </textarea>
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
+                                        @if ($errors->has('items.' . $clave . '.cantidad'))
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                        </p>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <textarea required wire:model="items.{{ $clave }}.descripcion"
+                                            class="form-textarea" rows="4">
                                                 </textarea>
 
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input required type="number" x-mask="99999"
-                                                    wire:model="items.{{ $clave }}.cantidad" min="1"
-                                                    step="1" class="form-input cantidad" placeholder="Cantidad"
-                                                    value="2">
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input required type="number" required min="1" step="0.1"
-                                                    wire:model="items.{{ $clave }}.precio"
-                                                    class="form-input precio">
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input type="text" wire:model="items.{{ $clave }}.total"
-                                                    class="form-input importe subtotal" readonly>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                                <div class="space-x-1">
-                                                    <button type="button"
-                                                        wire:click.prevent="eliminarProducto('{{ $clave }}')"
-                                                        class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                        <span class="sr-only">Delete</span>
-                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                            <path
-                                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </td>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <input required type="number" x-mask="99999"
+                                            wire:model="items.{{ $clave }}.cantidad" min="1" step="1"
+                                            class="form-input cantidad" placeholder="Cantidad" value="2">
+                                        @if ($errors->has('items.' . $clave . '.cantidad'))
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                        </p>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <input required type="number" required min="1" step="0.1"
+                                            wire:model="items.{{ $clave }}.precio" class="form-input precio">
+                                        @if ($errors->has('items.' . $clave . '.cantidad'))
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('items.' . $clave . '.cantidad') }}
+                                        </p>
+                                        @endif
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <input type="text" wire:model="items.{{ $clave }}.total"
+                                            class="form-input importe subtotal" readonly>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+                                            <button type="button" wire:click.prevent="eliminarProducto('{{ $clave }}')"
+                                                class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                <span class="sr-only">Delete</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                    <path
+                                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
 
-                                        </tr>
-                                    @endforeach
+                                </tr>
+                                @endforeach
                                 @endif
                             </tbody>
                             <tfoot>
 
                                 @error('items')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </tfoot>
                         </table>
@@ -450,8 +450,8 @@
 </div>
 
 @section('js')
-    <script>
-        var tipoCambio = parseFloat($(".tipoCambio").text());
+<script>
+    var tipoCambio = parseFloat($(".tipoCambio").text());
 
         $("#money").maskMoney({
             'thousands': '.'
@@ -560,12 +560,12 @@
                 message: 'Se añadio un producto al presupuesto',
             });
         }
-    </script>
+</script>
 
-    <script>
-        window.addEventListener('add-producto', event => {
+<script>
+    window.addEventListener('add-producto', event => {
             addAlert();
             $('.productoSelect').val(null).trigger('change');
         })
-    </script>
+</script>
 @endsection
