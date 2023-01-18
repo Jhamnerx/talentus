@@ -11,11 +11,12 @@ class Search extends Component
     public $codigo = null, $acta;
 
     protected $rules = [
-        'codigo' => 'required|exists:certificados,codigo',
+        'codigo' => 'required|exists:actas,codigo',
 
     ];
     protected $messages = [
         'codigo.required' => 'Ingresa el codigo del Acta',
+        'codigo.exists' => 'No se encuentra el acta',
 
     ];
 
