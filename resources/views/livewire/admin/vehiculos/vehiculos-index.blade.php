@@ -242,12 +242,16 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Dispositivo#</div>
                             </th>
+                            @role('admin')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
+                            @endrole
+                            @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
                             </th>
+                            @endcanany
                         </tr>
                     </thead>
                     <!-- Table body -->
@@ -336,6 +340,7 @@
 
                                 </div>
                             </td>
+                            @role('admin')
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>
                                     <div class="m-3 ">
@@ -347,10 +352,12 @@
                                     </div>
                                 </div>
                             </td>
+                            @endrole
+                            @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="space-x-1">
 
-
+                                    @can('editar-vehiculos-vehiculos')
                                     <a href="{{ route('admin.vehiculos.edit', $vehiculo) }}">
                                         <button class="text-slate-400 hover:text-slate-500 rounded-full">
                                             <span class="sr-only">Editar</span>
@@ -360,7 +367,9 @@
                                             </svg>
                                         </button>
                                     </a>
+                                    @endcan
 
+                                    @can('eliminar-vehiculos-vehiculo')
                                     <button wire:click.prevent="deleteVehiculo({{ $vehiculo->id }})"
                                         aria-controls="danger-modal"
                                         class="text-rose-500 hover:text-rose-600 rounded-full">
@@ -371,9 +380,15 @@
                                                 d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
                                         </svg>
                                     </button>
+                                    @endcan
+
+
+
 
                                 </div>
                             </td>
+                            @endcanany
+
                         </tr>
                         @endforeach
                         @else
