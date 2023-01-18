@@ -25,7 +25,6 @@ class checkRecordatorios implements ShouldQueue
      */
     public function __construct()
     {
-        
     }
 
     /**
@@ -36,16 +35,15 @@ class checkRecordatorios implements ShouldQueue
     public function handle()
     {
         $recordatorios = Recordatorios::whereDate('fecha', Carbon::now()->format('Y-m-d'))->get();
-      
+
         foreach ($recordatorios as $recordatorio) {
-       
+
             // Log::alert('enviar notificacion');
-           // dd($recordatorio);
+            // dd($recordatorio);
             $recordatorio->user->notify(new CrearRecordatorio($recordatorio));
             // $recordatorio->delete();
-                //$recordatorio->user->notify(new CrearRecordatorio($recordatorio));
+            //$recordatorio->user->notify(new CrearRecordatorio($recordatorio));
 
         }
-
     }
 }
