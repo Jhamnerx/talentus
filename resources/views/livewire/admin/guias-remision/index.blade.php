@@ -287,7 +287,7 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>
-                                    {{ $guia->fecha_inicio_traslado }}
+                                    {{ $guia->fecha_inicio_traslado->format('d-m-Y') }}
 
                                 </div>
                             </td>
