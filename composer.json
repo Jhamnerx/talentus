@@ -12,6 +12,7 @@
         "asantibanez/laravel-blade-sortable": "dev-master",
         "barryvdh/laravel-dompdf": "^2.0",
         "bensampo/laravel-enum": "^6.1",
+        "doctrine/dbal": "^3.5",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.4",
         "illuminate/support": "^9.42",
