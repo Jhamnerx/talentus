@@ -56,6 +56,7 @@ class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, W
         $ciudades_id = Ciudades::where('prefijo', '=', $fila['prefijo_ciudad'])->first()->id;
 
         return new Actas([
+            'id' => $fila['id'],
             'vehiculos_id' => $vehiculos_id,
             'numero' => $fila['numero'],
             'inicio_cobertura' => $fila['inicio_cobertura'],
@@ -66,7 +67,7 @@ class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, W
             'fondo' => $fila['fondo'],
             'codigo' => $fila['codigo'],
             'ciudades_id' => $ciudades_id,
-            'unique_hash' => Hashids::connection(Actas::class)->encode($this->test()),
+            'unique_hash' => Hashids::connection(Actas::class)->encode($fila['id']),
             'empresa_id' => 1,
         ]);
     }

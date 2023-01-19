@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /vendor
-/storage/app/public/livewire-tmp
+/storage/app/public/livewire-tmp/
 .env
 .env.backup
 .phpunit.result.cache
