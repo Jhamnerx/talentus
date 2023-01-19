@@ -13,7 +13,8 @@ class Header extends Component
     {
 
         $empresas = Empresa::all();
-        return view('livewire.admin.header', compact('empresas'));
+        $empresa_actual = Empresa::where('id', session('empresa'))->first()->plantilla->razon_social;
+        return view('livewire.admin.header', compact('empresas', 'empresa_actual'));
     }
 
     public function mount($page)
