@@ -79,7 +79,7 @@ class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, W
     {
         $values = array();
 
-        for ($i = 1; $i < 493; $i++) {
+        for ($i = 2; $i < 494; $i++) {
 
             $values[] = $i;
         }
