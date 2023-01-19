@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
 
     <style>
         .styled-table {
@@ -198,48 +198,6 @@
 
 <body>
 
-
-    <header class="px-5 py-4 flex">
-
-        <div class="flex-auto">
-            <h2 class="font-semibold text-slate-800 ">REPORTE CLIENTES:
-
-            </h2>
-
-        </div>
-        <div class="flex-auto">
-
-            <div class="relative">
-                <div class="m-1.5">
-                    <!-- Start -->
-                    <table class="detalle">
-                        <tbody class="text-sm divide-y divide-slate-200">
-                            <tr>
-                                <td colspan="2">
-                                    <div class="text-center">
-                                        Resumen de clientes
-                                    </div>
-
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td>Total Clientes</td>
-                                <td>#{{$clientes->count()}}</td>
-                            </tr>
-
-                        </tbody>
-
-
-
-                    </table>
-                    <!-- End -->
-                </div>
-            </div>
-        </div>
-
-
-    </header>
 
     <table class="styled-table">
         <thead>

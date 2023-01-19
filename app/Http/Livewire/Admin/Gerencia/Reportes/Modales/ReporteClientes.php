@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Gerencia\Reportes\Modales;
 
+use App\Exports\Gerencia\ClientesExport;
 use Livewire\Component;
 use App\Models\Clientes;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteClientes extends Component
 {
@@ -48,5 +50,11 @@ class ReporteClientes extends Component
             fn () => print($pdfContent),
             "reporte_clientes.pdf"
         );
+    }
+
+    public function exportToExcel()
+    {
+
+        return Excel::download(new ClientesExport($this->is_active), 'reporte_clientes.xlsx');
     }
 }
