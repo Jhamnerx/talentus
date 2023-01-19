@@ -173,7 +173,7 @@
                             </td>
                             <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
                             <td>{{ $detalle->cantidad }}</td>
-                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->importe }}</td>
+                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
                         </tr>
                         @endforeach
 

@@ -124,7 +124,7 @@ class Recibos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.recibo.pdf');
+        $pdf = PDF::loadView('pdf.recibo.pdf')->setPaper('Legal');
 
         if ($action == 1) {
 
