@@ -124,7 +124,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Descripcion</div>
                             </th>
-                            @can('cambiar.estado-productos')
+                            @can('cambiar.estado-producto')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
@@ -212,7 +212,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                                 <div class="text-left">{{ $producto->descripcion }}</div>
                             </td>
-                            @can('cambiar.estado-productos')
+                            @can('cambiar.estado-producto')
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div>
                                     <div class="m-3 ">

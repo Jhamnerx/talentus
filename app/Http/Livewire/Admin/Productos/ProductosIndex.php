@@ -25,8 +25,6 @@ class ProductosIndex extends Component
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-        // $productos = Productos::paginate(10);
-
         return view('livewire.admin.productos.productos-index', compact('productos'));
     }
 }

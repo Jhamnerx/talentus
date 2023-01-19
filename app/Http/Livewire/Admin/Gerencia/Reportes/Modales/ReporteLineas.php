@@ -81,7 +81,7 @@ class ReporteLineas extends Component
     {
         $operadores =
             DB::table("lineas")
-            ->select(DB::raw("COUNT(*) as count_row, operador"))
+            ->select(DB::raw("COUNT(*) as count_row, operador, created_at"))
             ->orderBy("created_at")
             ->groupBy(DB::raw("operador"))
             ->get();;
