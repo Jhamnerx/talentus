@@ -44,7 +44,7 @@ use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-
+use App\Http\Controllers\Admin\UtilesController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -310,3 +310,4 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin
 // DATA CHARTS
 
 Route::get('/json-data-ventas', [HomeController::class, 'getDataVentas'])->name('json_data_feed');
+Route::get('/test/sunat', [UtilesController::class, 'sunatConsulta'])->name('sunat.consulta');

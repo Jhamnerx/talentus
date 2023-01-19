@@ -9,6 +9,7 @@ use App\Models\Clientes;
 use Illuminate\Container\Container;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class UtilesController extends Controller
 {
@@ -225,5 +226,92 @@ class UtilesController extends Controller
 
         return $values;
         //return $this->faker->unique()->randomElement($values);
+    }
+
+
+    public function sunatConsulta()
+    {
+        $token = "123456";
+        $client = new Client();
+
+        $res = $client->request('POST', 'http://18.228.170.95:8010/api/v1/invoice/pdf?token=123456', [
+            'http_errors' => false,
+            'connect_timeout' => 5,
+            'headers' => [
+                'Authorization' => 'Bearer ' . $token,
+                'Content-Type' => 'application/json',
+                'User-Agent' => 'laravel/guzzle',
+                'Accept' => 'application/pdf',
+                'Accept-Encoding' => 'gzip, deflate, br',
+                'Connection' => 'keep-alive',
+            ],
+            'body' => '
+                {
+                    "ublVersion": "2.1",
+                    "tipoOperacion": "0101",
+                    "tipoDoc": "03",
+                    "serie": "B001",
+                    "correlativo": "8",
+                    "fechaEmision": "2021-02-06T12:34:00-05:00",
+                    "formaPago": {
+                        "tipo": "Contado"
+                    },
+                    "client": {
+                        "tipoDoc": "1",
+                        "numDoc": "01016578",
+                        "rznSocial": "V\u00edctor Hugo Herera  Castillo"
+                    },
+                    "company": {
+                        "ruc": "20316643061",
+                        "razonSocial": "ASOCIACI\u00d3N PARA EL SERVICIO MORTUORIO DE LA TERCERA EDAD",
+                        "nombreComercial": "ASOMORTES",
+                        "address": {
+                            "ubigueo": "200606",
+                            "codigoPais": "PE",
+                            "departamento": "Piura",
+                            "provincia": "Sullana",
+                            "distrito": "Sullana",
+                            "urbanizacion": "-",
+                            "direccion": "Calle San Mart\u00edn N\u00b0 224 - 238"
+                        }
+                    },
+                    "tipoMoneda": "PEN",
+                    "mtoOperGravadas": "20",
+                    "mtoIGV": "0",
+                    "totalImpuestos": "0",
+                    "valorVenta": "20",
+                    "subTotal": "20",
+                    "mtoImpVenta": "20",
+                    "details": [
+                        {
+                            "unidad": "NIU",
+                            "cantidad": "1",
+                            "codProducto": "BGN",
+                            "descripcion": "Cuota del mes de Diciembre del 2022",
+                            "mtoValorUnitario": "20",
+                            "mtoBaseIgv": "0",
+                            "porcentajeIgv": "0",
+                            "igv": "0",
+                            "tipAfeIgv": "0",
+                            "totalImpuestos": "0",
+                            "mtoPrecioUnitario": "20",
+                            "mtoValorVenta": "20"
+                        }
+                    ],
+                    "legends": [
+                        {
+                            "code": "",
+                            "value": ""
+                        }
+                    ]
+                }
+            '
+        ]);
+
+        return response()->stream(function () use ($res) {
+            echo $res->getBody();
+        }, 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
     }
 }
