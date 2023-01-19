@@ -225,7 +225,11 @@ h6 {
 .products-table tbody p {
     margin: 0;
 }
-
+.products-table .descripcion {
+    margin: 0;
+    font-size: 18px;
+    color: #616262;
+}
 .totals table {
     padding-right: 10px;
     width: 100%;
