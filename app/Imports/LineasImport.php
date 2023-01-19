@@ -40,6 +40,7 @@ class LineasImport implements ToCollection, WithChunkReading, ShouldQueue, Skips
     {
 
         foreach ($rows as $row) {
+
             $linea = Lineas::create([
                 'numero'    => $row['numero'],
                 'operador'    => $row['operador'],
@@ -64,7 +65,7 @@ class LineasImport implements ToCollection, WithChunkReading, ShouldQueue, Skips
 
             'numero' => 'required|unique:lineas,numero',
             'operador' => 'required',
-            'sim_card' => 'nullable|unique:sim_card,sim_card',
+            'sim_card' => 'unique:sim_card,sim_card',
         ];
 
         return $rules;

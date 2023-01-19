@@ -26,7 +26,7 @@ class Lineas implements ToModel, WithChunkReading, WithEvents, ShouldQueue
         return new ModelsLineas([
             'numero'    => $row[0],
             'operador'    => $row[1],
-            'empresa_id'    => session('empresa'),
+            'empresa_id'    => 1,
         ]);
     }
 
