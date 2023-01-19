@@ -52,7 +52,7 @@
             <div class="medium-6 columns">
 
                 <img
-                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/logo.png')) }}">
+                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $plantilla->logo))) }}">
             </div>
 
             <div class="medium-3 columns">
@@ -167,8 +167,13 @@
                         @foreach ($recibo->detalles as $detalle)
                         <tr>
                             <td>
-                                {{-- <h6> {{ $detalle->producto }}</h6> --}}
+                                @if ($detalle->descripcion)
                                 <p class="descripcion">{{ $detalle->descripcion }}</p>
+                                @else
+                                <h6> {{ $detalle->producto }}
+                                    @endif
+
+
 
                             </td>
                             <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
@@ -193,6 +198,7 @@
                             <th><strong>Metodos de Pago:</strong> </th>
                         </tr>
                     </thead>
+                    @if ($plantilla->empresa_id == 1)
                     <tbody>
                         <tr>
                             <td>
@@ -220,8 +226,32 @@
                             </td>
                         </tr>
                     </tbody>
+                    @elseif ($plantilla->empresa_id == 2)
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>Sandra Centurion Torres</p>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p><strong>SCOTIABANK: </strong>722-8079419</p>
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td>
+                                <p><strong>BCP: </strong>245-92705922-0-70</p>
+                            </td>
+
+                        </tr>
+
 
                     </tbody>
+                    @endif
+
+
                 </table>
             </div>
             <div class="medium-6 large-offset-3 columns totals">

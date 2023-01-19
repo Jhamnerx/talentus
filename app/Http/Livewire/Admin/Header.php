@@ -13,7 +13,7 @@ class Header extends Component
     {
 
         $empresas = Empresa::all();
-        $empresa_actual = Empresa::first()->plantilla->razon_social;
+        $empresa_actual = Empresa::where('id', session('empresa'))->first()->plantilla->razon_social;
         return view('livewire.admin.header', compact('empresas', 'empresa_actual'));
     }
 
