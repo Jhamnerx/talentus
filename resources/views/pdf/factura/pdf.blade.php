@@ -87,10 +87,12 @@
                 </p>
 
                 <p style="margin-bottom:10px;"><img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{ $factura->clientes->email }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{
+                    $factura->clientes->email }}
                 </p>
                 <p><img class="icon-mobile"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{ $factura->clientes->telefono }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{
+                    $factura->clientes->telefono }}
                 </p>
 
             </div>
@@ -156,16 +158,16 @@
                     <tbody>
 
                         @foreach ($factura->detalles as $detalle)
-                            <tr>
-                                <td>
-                                    <p> {{ $detalle->producto }}</p>
-                                    <p>{{ $detalle->descripcion }}</p>
+                        <tr>
+                            <td>
+                                <p> {{ $detalle->producto }}</p>
+                                <p class="descripcion">{{ $detalle->descripcion }}</p>
 
-                                </td>
-                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                                <td>{{ $detalle->cantidad }}</td>
-                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
-                            </tr>
+                            </td>
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
+                            <td>{{ $detalle->cantidad }}</td>
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
+                        </tr>
                         @endforeach
 
 
@@ -211,7 +213,8 @@
                     <tbody>
                         <tr>
                             <td>SUB TOTAL:</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->sub_total, 2) }}
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->sub_total, 2)
+                                }}
                             </td>
                         </tr>
                         <tr>
@@ -235,9 +238,9 @@
         </div>
 
         @if (count($factura->detalles) > 2)
-            <div class="footer" style="margin-top: 180px;"></div>
+        <div class="footer" style="margin-top: 180px;"></div>
         @else
-            <div class="footer" style="margin-top: 120px;"></div>
+        <div class="footer" style="margin-top: 120px;"></div>
         @endif
 
         <div class="sub-footer row">

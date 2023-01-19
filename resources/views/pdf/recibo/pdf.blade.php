@@ -6,7 +6,8 @@
     <title>RECIBO #{{ $recibo->serie_numero }}</title>
 
 
-    {{-- <link rel="stylesheet" href="{{ ltrim(public_path('factura/normalize.css'), '/') }}" />
+    {{--
+    <link rel="stylesheet" href="{{ ltrim(public_path('factura/normalize.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('factura/foundation.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('factura/style.css'), '/') }}" /> --}}
 
@@ -92,10 +93,12 @@
                 </p>
 
                 <p style="margin-bottom:10px;"><img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{ $recibo->clientes->email }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{
+                    $recibo->clientes->email }}
                 </p>
                 <p><img class="icon-mobile"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{ $recibo->clientes->telefono }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{
+                    $recibo->clientes->telefono }}
                 </p>
 
             </div>
@@ -153,7 +156,7 @@
                 <table class="products-table">
                     <thead>
                         <tr>
-                            <th>Producto/Servicio</th>
+                            <th>Producto/Detalle</th>
                             <th>Precio</th>
                             <th>Cantidad</th>
                             <th>Total</th>
@@ -162,15 +165,16 @@
                     <tbody>
 
                         @foreach ($recibo->detalles as $detalle)
-                            <tr>
-                                <td>
-                                    <h3> {{ $detalle->producto }}</h3>
+                        <tr>
+                            <td>
+                                {{-- <h6> {{ $detalle->producto }}</h6> --}}
+                                <p class="descripcion">{{ $detalle->descripcion }}</p>
 
-                                </td>
-                                <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                                <td>{{ $detalle->cantidad }}</td>
-                                <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->importe }}</td>
-                            </tr>
+                            </td>
+                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
+                            <td>{{ $detalle->cantidad }}</td>
+                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->importe }}</td>
+                        </tr>
                         @endforeach
 
 
@@ -238,9 +242,9 @@
         </div>
 
         @if (count($recibo->detalles) > 2)
-            <div class="footer" style="margin-top: 180px;"></div>
+        <div class="footer" style="margin-top: 180px;"></div>
         @else
-            <div class="footer" style="margin-top: 120px;"></div>
+        <div class="footer" style="margin-top: 120px;"></div>
         @endif
 
         <div class="sub-footer row">

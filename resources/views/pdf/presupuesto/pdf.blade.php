@@ -6,7 +6,8 @@
     <title>COTIZACION #{{ $presupuesto->numero }}</title>
 
 
-    {{-- <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/normalize.css'), '/') }}" />
+    {{--
+    <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/normalize.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/foundation.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/style.css'), '/') }}" /> --}}
 
@@ -95,10 +96,12 @@
                 </p>
 
                 <p style="margin-bottom:10px;"><img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/mail.png')) }}"></i>{{ $presupuesto->clientes->email }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/mail.png')) }}"></i>{{
+                    $presupuesto->clientes->email }}
                 </p>
                 <p><img class="icon-mobile"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/mobile.png')) }}"></i>{{ $presupuesto->clientes->telefono }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/mobile.png')) }}"></i>{{
+                    $presupuesto->clientes->telefono }}
                 </p>
 
             </div>
@@ -131,7 +134,8 @@
                         <tr>
                             <td>
                                 Monto Total:<br>
-                                <strong>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->total }}</strong>
+                                <strong>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->total
+                                    }}</strong>
                             </td>
                             <td>
                                 Fecha Emisión:<br>
@@ -165,15 +169,15 @@
                     <tbody>
 
                         @foreach ($presupuesto->detalles as $detalle)
-                            <tr>
-                                <td>
-                                    <p>{{ $detalle->producto }}.</p>
-                                    <p>{{ $detalle->descripcion }}</p>
-                                </td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                                <td>{{ $detalle->cantidad }}</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
-                            </tr>
+                        <tr>
+                            <td>
+                                {{-- <p>{{ $detalle->producto }}.</p> --}}
+                                <p class="descripcion">{{ $detalle->descripcion }}</p>
+                            </td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
+                            <td>{{ $detalle->cantidad }}</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
+                        </tr>
                         @endforeach
 
 
@@ -187,134 +191,140 @@
         <div class="row" style="margin-top: 4rem">
 
             @if ($presupuesto->divisa == 'USD')
-                <div class="medium-3 columns bottom-left show-for-medium-up ">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><strong>Metodos de Pago:</strong> </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
-                                </td>
-                            </tr>
-                            <tr>
+            <div class="medium-3 columns bottom-left show-for-medium-up ">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><strong>Metodos de Pago:</strong> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
+                            </td>
+                        </tr>
+                        <tr>
 
-                                <td>
-                                    <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
-                                </td>
+                            <td>
+                                <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                            </td>
 
-                            </tr>
-                            <tr>
+                        </tr>
+                        <tr>
 
-                                <td>
-                                    <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="medium-4 large-offset-3 columns totals">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>SUB TOTAL:</td>
-                                <td>S/. {{ number_format($presupuesto->sub_total_soles, 2) }}</td>
-                            </tr>
-                            <tr>
-                                <td>IGV: 18%</td>
-                                <td>S/. {{ number_format($presupuesto->impuesto_soles, 2) }}</td>
-                            </tr>
+                            <td>
+                                <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="medium-4 large-offset-3 columns totals">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>SUB TOTAL:</td>
+                            <td>S/. {{ number_format($presupuesto->sub_total_soles, 2) }}</td>
+                        </tr>
+                        <tr>
+                            <td>IGV: 18%</td>
+                            <td>S/. {{ number_format($presupuesto->impuesto_soles, 2) }}</td>
+                        </tr>
 
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>Monto Total:</td>
-                                <td>S/. {{ number_format($presupuesto->total_soles, 2) }}</td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="medium-4 large-offset-3 columns totals">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>IGV: 18%</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->impuesto, 2) }}
-                                </td>
-                            </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Monto Total:</td>
+                            <td>S/. {{ number_format($presupuesto->total_soles, 2) }}</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="medium-4 large-offset-3 columns totals">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>SUB TOTAL:</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{
+                                number_format($presupuesto->sub_total, 2) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>IGV: 18%</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{
+                                number_format($presupuesto->impuesto, 2) }}
+                            </td>
+                        </tr>
 
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Monto Total:</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total,
+                                2) }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
             @else
-                <div class="medium-6 columns bottom-left show-for-medium-up ">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><strong>Metodos de Pago:</strong> </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
-                                </td>
-                            </tr>
-                            <tr>
+            <div class="medium-6 columns bottom-left show-for-medium-up ">
+                <table>
+                    <thead>
+                        <tr>
+                            <th><strong>Metodos de Pago:</strong> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
+                            </td>
+                        </tr>
+                        <tr>
 
-                                <td>
-                                    <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
-                                </td>
+                            <td>
+                                <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                            </td>
 
-                            </tr>
-                            <tr>
+                        </tr>
+                        <tr>
 
-                                <td>
-                                    <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="medium-6 large-offset-3 columns totals">
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>SUB TOTAL:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>IGV: 18%</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->impuesto, 2) }}
-                                </td>
-                            </tr>
+                            <td>
+                                <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="medium-6 large-offset-3 columns totals">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>SUB TOTAL:</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{
+                                number_format($presupuesto->sub_total, 2) }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>IGV: 18%</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{
+                                number_format($presupuesto->impuesto, 2) }}
+                            </td>
+                        </tr>
 
-                        </tbody>
-                        <tfoot>
-                            <tr>
-                                <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Monto Total:</td>
+                            <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total,
+                                2) }}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
             @endif
 
         </div>
@@ -325,19 +335,19 @@
             </div>
         </div>
         @if (count($presupuesto->detalles) > 6)
-            <div class="footer row">
-                <div class="medium-2 columns">
-                    <img
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/footer-logo.png')) }}">
-                </div>
-                <div class="medium-3 large-offset-1 columns">
-                    <p>+51 977 794 338<br>
-                </div>
-
-                <div class="medium-3 columns">
-                    <p style="border:none;">www.talentustechnology.com</p>
-                </div>
+        <div class="footer row">
+            <div class="medium-2 columns">
+                <img
+                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/footer-logo.png')) }}">
             </div>
+            <div class="medium-3 large-offset-1 columns">
+                <p>+51 977 794 338<br>
+            </div>
+
+            <div class="medium-3 columns">
+                <p style="border:none;">www.talentustechnology.com</p>
+            </div>
+        </div>
         @endif
 
     </div>

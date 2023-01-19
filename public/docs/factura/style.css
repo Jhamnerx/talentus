@@ -203,7 +203,7 @@ h6 {
     margin-bottom: 0;
     border: none;
 }
-.products-table h3 {
+.products-table h6 {
     margin: 0;
 
     color: #616262;
@@ -232,6 +232,11 @@ h6 {
 }
 .products-table tbody p {
     margin: 0;
+}
+.products-table .descripcion {
+    margin: 0;
+    font-size: 18px;
+    color: #616262;
 }
 
 .totals table {
