@@ -194,3 +194,9 @@ p {
 .medium-12 {
     width: 100%;
 }
+.flex {
+    display: flex;
+}
+.sello img {
+    width: 150px;
+}
