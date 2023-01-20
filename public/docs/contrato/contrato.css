@@ -43,11 +43,16 @@ p {
 }
 .tabla-vehiculos {
     border: 1px solid;
+    border-color: #052c52;
     padding: 10px;
     font-weight: inherit;
     position: inherit;
 }
 .tabla-border td {
+    border: 1px solid;
+}
+
+.tabla-border th {
     border: 1px solid;
 }
 
@@ -120,12 +125,12 @@ p {
 
 .tabla-2 {
     position: absolute;
-    top: 0px;
-    left: 352px;
+    top: 170px;
+    left: 350px;
 }
 
 .tabla-20 {
-    font-size: 13px;
+    font-size: 12px;
 }
 
 .tabla-20-1 {
@@ -136,16 +141,57 @@ p {
 
 .tabla-20-2 {
     position: absolute;
-    top: 0px;
-    left: 238px;
+    top: 170px;
+    left: 240px;
 }
 
 .tabla-20-3 {
+    position: absolute;
+    top: 170px;
+    left: 470px;
+}
+
+//ESTILOS TABLA 60
+.tabla-60 {
+    font-size: 12px;
+}
+
+.tabla-60-1 {
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+.tabla-60-2 {
+    position: absolute;
+    top: 170px;
+    left: 240px;
+}
+
+.tabla-60-3 {
+    position: absolute;
+    top: 170px;
+    left: 470px;
+}
+
+.tabla-60-4 {
+    position: relative;
+    top: 0px;
+    left: -10;
+}
+
+.tabla-60-5 {
+    position: absolute;
+    top: 0px;
+    left: 240px;
+}
+
+.tabla-60-6 {
     position: absolute;
     top: 0px;
     left: 470px;
 }
 
+//FIN
 .row {
     width: 100%;
 }

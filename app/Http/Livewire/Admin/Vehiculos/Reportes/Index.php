@@ -19,6 +19,7 @@ class Index extends Component
     public $openModalEdit = false;
     public $openModalDelete = false;
     public $openModalDetalle = false;
+    public $openModalRecordatorio = false;
 
     protected $listeners = [
         'updateTable' => 'render'
