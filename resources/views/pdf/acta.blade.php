@@ -241,7 +241,7 @@
                 <table class="tabla">
                     <tr>
                         <td height="20">Fecha de Instalación</td>
-                        <td height="20">: {{ $acta->created_at->format('d-m-Y') }}</td>
+                        <td height="20">: {{ $acta->inicio_cobertura->format('d-m-Y') }}</td>
                     </tr>
 
 
