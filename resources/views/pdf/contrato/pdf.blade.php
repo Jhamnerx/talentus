@@ -1048,9 +1048,9 @@
                     </div>
                 </div>
 
-                <div class="hash" style="position: relative; left: 2rem; top:1rem">
+                {{-- <div class="hash" style="position: relative; left: 2rem; top:1rem">
                     {{ $contrato->unique_hash }}
-                </div>
+                </div> --}}
 
 
             </div>
