@@ -169,7 +169,12 @@ Route::controller(ContratosController::class)->group(function () {
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
 Route::resource('vehiculos', VehiculosController::class)->names('admin.vehiculos');
 
-Route::resource('reportes', ReportesController::class)->names('admin.vehiculos.reportes');
+Route::controller(ReportesController::class)->group(function () {
+
+    Route::get('reportes', 'index')->name('admin.vehiculos.reportes.index');
+    Route::get('reportes/{reporte}', 'show')->name('admin.vehiculos.reportes.show');
+});
+
 
 // CERTIFICADOS
 Route::resource('actas', ActasController::class)->names('admin.certificados.actas');

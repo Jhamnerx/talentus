@@ -2,28 +2,28 @@
 @section('ruta', 'vehiculos-reportes')
 @section('contenido')
 
-    <!-- Table -->
+<!-- Table -->
 
 
-    @livewire('admin.vehiculos.reportes.index')
+@livewire('admin.vehiculos.reportes.index')
 
 @stop
 
 @push('modals')
-    @livewire('admin.vehiculos.reportes.show-contactos')
-    @livewire('admin.vehiculos.reportes.save')
-    @livewire('admin.vehiculos.reportes.edit')
-    @livewire('admin.vehiculos.reportes.delete')
-    @livewire('admin.vehiculos.reportes.show-detalle')
-    @livewire('admin.vehiculos.reportes.recordatorio')
+@livewire('admin.vehiculos.reportes.show-contactos')
+@livewire('admin.vehiculos.reportes.save')
+@livewire('admin.vehiculos.reportes.edit')
+@livewire('admin.vehiculos.reportes.delete')
+@livewire('admin.vehiculos.reportes.show-detalle')
+@livewire('admin.vehiculos.reportes.recordatorio')
 @endpush
 
 
 
 @section('js')
 
-    <script>
-        window.addEventListener('reporte-edit', event => {
+<script>
+    window.addEventListener('reporte-edit', event => {
             iziToast.success({
                 position: 'topRight',
                 title: 'ACTUALIZADO',
@@ -32,11 +32,11 @@
             $('.vehiculos_id').val(null).trigger('change');
 
         })
-    </script>
+</script>
 
 
-    <script>
-        window.addEventListener('detalle-reporte', event => {
+<script>
+    window.addEventListener('detalle-reporte', event => {
             iziToast.success({
                 position: 'topRight',
                 title: 'DETALLE AGREGADO',
@@ -44,10 +44,10 @@
             });
 
         })
-    </script>
+</script>
 
-    <script>
-        window.addEventListener('reporte-delete', event => {
+<script>
+    window.addEventListener('reporte-delete', event => {
             iziToast.error({
                 position: 'topRight',
                 title: 'ELIMINADO',
@@ -55,9 +55,9 @@
             });
 
         })
-    </script>
-    <script>
-        window.addEventListener('reporte-save', event => {
+</script>
+<script>
+    window.addEventListener('reporte-save', event => {
             $(document).ready(function() {
                 Swal.fire({
                     icon: 'success',
@@ -70,10 +70,10 @@
             });
             $('.vehiculos_id').val(null).trigger('change');
         })
-    </script>
+</script>
 
-    <script>
-        window.addEventListener('recordatorio-save', event => {
+<script>
+    window.addEventListener('recordatorio-save', event => {
             $(document).ready(function() {
                 iziToast.success({
                     position: 'topRight',
@@ -82,10 +82,10 @@
                 });
             });
         })
-    </script>
+</script>
 
-    <script>
-        // A basic demo function to handle "select all" functionality
+<script>
+    // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -115,5 +115,5 @@
                 }
             }))
         })
-    </script>
+</script>
 @stop
