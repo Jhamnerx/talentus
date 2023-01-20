@@ -152,13 +152,14 @@
                                 @for ($i = 0; $i < $contrato->detalle->count(); $i++)
                                     <tr>
                                         <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                                        <td class="tabla-vehiculos">
+                                        <td class="tabla-vehiculos" style="font-size: 12px">
                                             {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                         </td>
-                                        <td class="tabla-vehiculos">
+                                        <td class="tabla-vehiculos" style="font-size: 12px">
                                             {{ $contrato->detalle[$i]->vehiculos->placa }}
                                         </td>
-                                        <td class="tabla-vehiculos">{{ $contrato->detalle[$i]->plan }}</td>
+                                        <td class="tabla-vehiculos" style="font-size: 12px">{{
+                                            $contrato->detalle[$i]->plan }}</td>
 
                                     </tr>
                                     @endfor
@@ -190,10 +191,10 @@
 
                         @for ($i = 0; $i < 5; $i++) <tr>
                             <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->tipo }}
                             </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                             </td>
 
@@ -223,10 +224,10 @@
                         @for ($i = 5; $i < $contrato->detalle->count(); $i++)
                             <tr>
                                 <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                                <td class="tabla-vehiculos">
+                                <td class="tabla-vehiculos" style="font-size: 12px">
                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                 </td>
-                                <td class="tabla-vehiculos">
+                                <td class="tabla-vehiculos" style="font-size: 12px">
                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                 </td>
 
@@ -261,10 +262,10 @@
 
                     @for ($i = 0; $i < 10; $i++) <tr>
                         <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                        <td class="tabla-vehiculos">
+                        <td class="tabla-vehiculos" style="font-size: 12px">
                             {{ $contrato->detalle[$i]->vehiculos->tipo }}
                         </td>
-                        <td class="tabla-vehiculos">
+                        <td class="tabla-vehiculos" style="font-size: 12px">
                             {{ $contrato->detalle[$i]->vehiculos->placa }}
                         </td>
 
@@ -295,10 +296,10 @@
                     @for ($i = 10; $i < $contrato->detalle->count(); $i++)
                         <tr>
                             <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->tipo }}
                             </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                             </td>
 
@@ -334,10 +335,10 @@
 
                         @for ($i = 0; $i < 10; $i++) <tr>
                             <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->tipo }}
                             </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                             </td>
 
@@ -367,10 +368,10 @@
 
                         @for ($i = 10; $i < 20; $i++) <tr>
                             <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->tipo }}
                             </td>
-                            <td class="tabla-vehiculos">
+                            <td class="tabla-vehiculos" style="font-size: 12px">
                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                             </td>
 
@@ -399,10 +400,10 @@
                         @for ($i = 20; $i < $contrato->detalle->count(); $i++)
                             <tr>
                                 <td class="tabla-vehiculos"> {{ $i + 1 }} </td>
-                                <td class="tabla-vehiculos">
+                                <td class="tabla-vehiculos" style="font-size: 12px">
                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                 </td>
-                                <td class="tabla-vehiculos">
+                                <td class="tabla-vehiculos" style="font-size: 12px">
                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                 </td>
 
@@ -447,10 +448,12 @@
                         fabricación (la garantía no cubre las manipulaciones que se realicen en los equipos, por
                         personal
                         ajeno
-                        a la empresa y/o no autorizado). De acuerdo al tipo del presente contrato, <b>EL CLIENTE
-                        </b>procede
-                        a
-                        realizar: compra de equipo (…) / alquiler de equipo (…) / cambio de chip (…).<br>
+                        a la empresa y/o no autorizado).
+
+                        De acuerdo al tipo del presente contrato, <b>EL CLIENTE </b> procede a realizar: compra de
+                        equipo,
+                        alquiler de equipo o cambio
+                        de chip.
                         <br>
                     </p>
                     <p class="padding-4">
