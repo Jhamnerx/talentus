@@ -25,7 +25,7 @@ class Save extends Component
 
     public function mount()
     {
-        $this->fecha = Carbon::now()->format('Y-m-d');
+        $this->fecha = Carbon::now()->addDays(30)->format('Y-m-d');
         $this->items = collect();
     }
 
