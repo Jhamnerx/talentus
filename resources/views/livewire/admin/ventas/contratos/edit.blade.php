@@ -32,8 +32,8 @@
                     <span class="text-rose-500">*</span></label>
                 <div class="relative">
 
-
-                    <input wire:model="contrato.fecha" type="text" class="form-input inputDate pl-8 py-2 w-full"
+                    {{ $contrato->fecha }}
+                    <input wire:model="contrato.fecha" type="text" class="form-input fechaContrato pl-8 py-2 w-full"
                         maxlength="10" required>
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -77,7 +77,7 @@
                         $contrato->ciudades_id,
                         [
                             'class' => 'form-select w-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    pl-9 ciudades',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            pl-9 ciudades',
                         ],
                     ) !!}
 
@@ -289,6 +289,18 @@
     @livewire('admin.clientes.save')
 @endpush
 @section('js')
+    <script>
+        $(document).ready(function() {
+            flatpickr('.fechaContrato', {
+                mode: 'single',
+                disableMobile: "true",
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+
+        });
+    </script>
     <script>
         window.addEventListener('add-vehiculo', event => {
             addAlert(event.detail.vehiculo.placa);

@@ -275,7 +275,7 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         <!-- Start -->
-                                        <div class="relative" x-data="{ open: true }" @mouseenter="open = true"
+                                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                             @mouseleave="open = false">
                                             <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
                                                 aria-haspopup="true" :aria-expanded="open" @focus="open = true"
