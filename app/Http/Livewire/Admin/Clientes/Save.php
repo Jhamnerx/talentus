@@ -19,6 +19,8 @@ class Save extends Component
         'openModalSaveCliente'
     ];
 
+    public $errorConsulta;
+
 
 
     protected $messages =
@@ -41,7 +43,7 @@ class Save extends Component
             'email' => 'email|nullable',
             'numero_documento' => [
                 'required',
-                'digits_between:8,11',
+                'min:8',
                 'numeric',
                 Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
             ],
@@ -56,25 +58,62 @@ class Save extends Component
     public function updatedNumeroDocumento($numero)
     {
 
+
         $util = new UtilesController;
 
         if (strlen($numero) >= 8 && strlen($numero) < 11) {
 
-            $resultado = $util->consultaPersona($numero);
 
-            if ($resultado["nombre"]) {
-                $this->razon_social = $resultado["nombre"];
-                $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
-            };
+            if (strlen($numero) ==  8) {
+
+                $resultado = $util->consultaPersona($numero);
+
+                if ($resultado) {
+                    if (!array_key_exists('error', $resultado)) {
+
+                        if ($resultado["nombre"]) {
+                            $this->reset('errorConsulta');
+                            $this->razon_social = $resultado["nombre"];
+                            $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
+                        } else {
+                            $this->errorConsulta = "No se encuentra el nombre";
+                        }
+                    } else {
+                        $this->errorConsulta = "Hay un error en el documento";
+                    }
+                } else {
+                    $this->errorConsulta = "No se encuentra el documento";
+                }
+            } else {
+
+                $this->errorConsulta = "El numero debe tener 8 o 11 digitos";
+            }
         } elseif (strlen($numero) >= 11) {
 
-            $resultado = $util->consultaEmpresa($numero);
+            if (strlen($numero) ==  11) {
 
-            if ($resultado["nombre"]) {
+                $resultado = $util->consultaEmpresa($numero);
 
-                $this->razon_social = $resultado["nombre"];
-                $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
-            };
+                if ($resultado) {
+                    if (!array_key_exists('error', $resultado)) {
+
+                        if ($resultado["nombre"]) {
+                            $this->reset('errorConsulta');
+                            $this->razon_social = $resultado["nombre"];
+                            $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
+                        } else {
+                            $this->errorConsulta = "No se encuentra el nombre";
+                        }
+                    } else {
+                        $this->errorConsulta = "Hay un error en el documento";
+                    }
+                } else {
+                    $this->errorConsulta = "No se encuentra el documento";
+                }
+            } else {
+
+                $this->errorConsulta = "El numero debe tener 8 o 11 digitos";
+            }
         }
     }
 
