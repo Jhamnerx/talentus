@@ -36,7 +36,12 @@ class Create extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_pago = Carbon::now()->format('Y-m-d');
         $this->items = collect();
-        $this->selected = collect([]);
+        $this->selected = collect([
+            'producto' => "",
+            'descripcion' => "",
+            'cantidad' => 1,
+            'total' => ""
+        ]);
     }
 
 
