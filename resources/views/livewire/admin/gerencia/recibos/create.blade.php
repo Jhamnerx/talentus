@@ -246,7 +246,7 @@
 
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
-                    {{ json_encode($selected) }}
+
                     {{-- LISTA DE PRODUCTOS --}}
                     <x-admin.ventas.tabla-detalle-venta :items="$items">
 
