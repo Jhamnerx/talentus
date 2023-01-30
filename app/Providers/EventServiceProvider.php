@@ -33,6 +33,7 @@ use App\Models\Payments;
 use App\Models\Presupuestos;
 use App\Models\Productos;
 use App\Models\Recibos;
+use App\Models\RecibosPagosVarios;
 use App\Models\Reportes;
 use App\Models\SimCard;
 use App\Models\Tareas;
@@ -56,6 +57,7 @@ use App\Observers\PaymentsObserver;
 use App\Observers\PresupuestosObserver;
 use App\Observers\ProductoObserver;
 use App\Observers\ReciboObserver;
+use App\Observers\RecibosPagosObserver;
 use App\Observers\ReportesObserver;
 use App\Observers\SimCardObserver;
 use App\Observers\TareasObserver;
@@ -106,5 +108,6 @@ class EventServiceProvider extends ServiceProvider
         Cobros::observe(CobrosObserver::class);
         GuiaRemision::observe(GuiaRemisionObserver::class);
         Tareas::observe(TareasObserver::class);
+        RecibosPagosVarios::observe(RecibosPagosObserver::class);
     }
 }

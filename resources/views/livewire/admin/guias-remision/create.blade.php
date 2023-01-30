@@ -641,7 +641,17 @@
 
             </div>
         @endif
+        @if ($asignarTecnico)
+            <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
 
+                <h4>ARRASTRA AL PANEL EN BLACO LOS SIM CARD A ASIGNAR</h4>
+                {{-- <input class="form-input" type="text" wire:model='search'> --}}
+
+                <x-admin.guias-remision.lista-sim-card :sims="$sim_cards" :simsadd="$sim_cards_add">
+                </x-admin.guias-remision.lista-sim-card>
+
+            </div>
+        @endif
 
         <div class="px-4 py-3 text-right sm:px-6 col-span-12 mb-2 gap-2 ">
 

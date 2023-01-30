@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\CobrosController;
 use App\Http\Controllers\Admin\FlotasController;
 use App\Http\Controllers\Admin\LineasController;
+use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\RecibosController;
@@ -41,10 +42,11 @@ use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
+use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -153,6 +155,13 @@ Route::controller(VentasFacturasController::class)->group(function () {
 
 Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
 
+
+Route::controller(RecibosPagosVariosController::class)->group(function () {
+
+    Route::get('recibos-pagos', 'index')->name('admin.gerencia.recibos.index');
+    Route::get('recibos-pagos/crear', 'create')->name('admin.gerencia.recibos.create');
+    Route::get('recibos-pagos/{recibo}/editar', 'edit')->name('admin.gerencia.recibos.edit');
+});
 
 //Route::resource('contratos', ContratosController::class)->names('admin.ventas.contratos');
 
@@ -287,6 +296,7 @@ Route::get('pdf/contratos/{contrato:unique_hash}', ContratoPdfController::class)
 Route::get('pdf/certificados/velocimetros/{certificado:unique_hash}', CertificadoVelocimetroPdfController::class)->name('admin.pdf.velocimetros');
 Route::get('pdf/presupuestos/{presupuesto}/{action?}', PresupuestoPdfController::class)->name('admin.pdf.presupuesto');
 Route::get('pdf/recibo/{recibo}/{action?}', ReciboPdfController::class)->name('admin.pdf.recibo');
+Route::get('pdf/recibo-pago/{recibo}/{action?}', ReciboPagoPdfController::class)->name('admin.pdf.recibo.pagos');
 Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name('admin.pdf.factura');
 
 

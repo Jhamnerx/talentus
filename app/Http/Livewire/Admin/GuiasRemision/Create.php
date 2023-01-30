@@ -10,6 +10,7 @@ use App\Models\GuiaRemision;
 use App\Models\ModelosDispositivo;
 use App\Models\MotivosTraslado;
 use App\Models\Productos;
+use App\Models\SimCard;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -20,8 +21,11 @@ use PhpParser\Node\Stmt\TryCatch;
 class Create extends Component
 {
     public $imei_list = [];
-    public $lista_imei2 = [];
     public $imeis_add = [];
+
+    public $sim_cards = [];
+    public $sim_cards_add = [];
+
     public $events = [];
 
     public $error_msg;
@@ -46,7 +50,7 @@ class Create extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
         $this->imei_list = Dispositivos::stock()->pluck('imei')->toArray();
-        $this->lista_imei2 = Dispositivos::stock()->pluck('imei')->toArray();
+        $this->sim_cards = SimCard::pluck('sim_card')->toArray();
 
         $this->items = collect();
         $this->selected = collect([
@@ -130,9 +134,9 @@ class Create extends Component
     public function handleOnSortOrderChanged($sortOrder, $previousSortOrder, $name, $from, $to)
     {
 
-        if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
-            unset($arr[$key]);
-        }
+        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
+        //     unset($arr[$key]);
+        // }
 
         $this->$name = $sortOrder;
 
