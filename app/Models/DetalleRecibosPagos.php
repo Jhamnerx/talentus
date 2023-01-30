@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DetalleRecibos extends Model
+class DetalleRecibosPagos extends Model
 {
     use HasFactory;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    protected $table = 'detalle_recibos';
+    protected $table = 'detalle_recibos_pagos';
     protected $casts = [
         'cantidad' => 'float',
     ];
@@ -18,6 +18,6 @@ class DetalleRecibos extends Model
 
     public function recibos()
     {
-        return $this->belongsTo(Recibos::class, 'recibos_id');
+        return $this->belongsTo(RecibosPagosVarios::class, 'recibos_id');
     }
 }

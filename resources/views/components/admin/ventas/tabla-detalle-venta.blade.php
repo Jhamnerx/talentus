@@ -28,6 +28,7 @@
         </thead>
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-slate-200 listaItems">
+
             <!-- Row -->
             <tr class="main bg-slate-50">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -96,7 +97,7 @@
             {{-- fila para añadir --}}
             @if ($items->count() > 0)
                 @foreach ($items->all() as $clave => $item)
-                    <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
+                    <tr wire:key="item-{{ $clave }}">
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
