@@ -314,9 +314,18 @@ h6 {
     line-height: 14px;
     border-right: 1px solid #d4d2d2;
 }
-.footer img {
+.sub-footer p {
+    height: 40px;
+    font-size: 10px;
+    line-height: 12px;
+}
+.sub-footer img {
+    margin-top: -5px;
     width: 60px;
-    padding-bottom: 100px;
+}
+.sub-footer div {
+    margin-top: 5px;
+    margin-left: -15px;
 }
 
 .print .header {

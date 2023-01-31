@@ -87,25 +87,23 @@
 
                 <h3><img class="icon-invoice"
                         src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/invoice.png')) }}"></i>
-                    RECIBO PARA:</h3>
+                    {{ strlen($recibo->clientes->numero_documento) == 8 ? 'NOMBRE' : 'RAZÓN SOCIAL' }}:</h3>
                 <h2>{{ $recibo->clientes->razon_social }}</h2>
                 <p style="margin-bottom:10px;line-height:22px;">{{ $recibo->clientes->direccion }}<br>
                 </p>
 
                 <p style="margin-bottom:10px;"><img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{
-                    $recibo->clientes->email }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{ $recibo->clientes->email }}
                 </p>
                 <p><img class="icon-mobile"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{
-                    $recibo->clientes->telefono }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{ $recibo->clientes->telefono }}
                 </p>
 
             </div>
 
             <div class="large-7 medium-7 columns invoice-header">
 
-                <h2>RECIBO</h2>
+                <h2>RECIBO INGRESO</h2>
 
                 <table>
                     <thead>
@@ -165,21 +163,21 @@
                     <tbody>
 
                         @foreach ($recibo->detalles as $detalle)
-                        <tr>
-                            <td>
-                                @if ($detalle->descripcion)
-                                <p class="descripcion">{{ $detalle->descripcion }}</p>
-                                @else
-                                <h6> {{ $detalle->producto }}
+                            <tr>
+                                <td>
+                                    @if ($detalle->descripcion)
+                                        <p class="descripcion">{{ $detalle->descripcion }}</p>
+                                    @else
+                                        <h6> {{ $detalle->producto }}
                                     @endif
 
 
 
-                            </td>
-                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                            <td>{{ $detalle->cantidad }}</td>
-                            <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
-                        </tr>
+                                </td>
+                                <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
+                                <td>{{ $detalle->cantidad }}</td>
+                                <td>{{ $recibo->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
+                            </tr>
                         @endforeach
 
 
@@ -199,56 +197,56 @@
                         </tr>
                     </thead>
                     @if ($plantilla->empresa_id == 1)
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p><strong>SCOTIABANK SOLES: </strong>7070011536</p>
-                            </td>
-                        </tr>
-                        <tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p><strong>SCOTIABANK SOLES: </strong>7070011536</p>
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>CONTINENTAL: </strong>001102490201872132</p>
-                            </td>
+                                <td>
+                                    <p><strong>CONTINENTAL: </strong>001102490201872132</p>
+                                </td>
 
-                        </tr>
-                        <tr>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>CONTINENTAL USD: </strong>001102490201872140</p>
-                            </td>
+                                <td>
+                                    <p><strong>CONTINENTAL USD: </strong>001102490201872140</p>
+                                </td>
 
-                        </tr>
-                        <tr>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>INTERBANK: </strong>7673256919822</p>
-                            </td>
-                        </tr>
-                    </tbody>
+                                <td>
+                                    <p><strong>INTERBANK: </strong>7673256919822</p>
+                                </td>
+                            </tr>
+                        </tbody>
                     @elseif ($plantilla->empresa_id == 2)
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p>Sandra Centurion Torres</p>
-                            </td>
-                        </tr>
-                        <tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p>Sandra Centurion Torres</p>
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>SCOTIABANK: </strong>722-8079419</p>
-                            </td>
-                        </tr>
-                        <tr>
+                                <td>
+                                    <p><strong>SCOTIABANK: </strong>722-8079419</p>
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>BCP: </strong>245-92705922-0-70</p>
-                            </td>
+                                <td>
+                                    <p><strong>BCP: </strong>245-92705922-0-70</p>
+                                </td>
 
-                        </tr>
+                            </tr>
 
 
-                    </tbody>
+                        </tbody>
                     @endif
 
 
@@ -270,11 +268,18 @@
 
 
         </div>
+        @if ($recibo->nota)
+            <div class="row terms">
+                <div class="large-12 columns">
+                    <p><strong>Nota:</strong> {{ $recibo->nota }}.</p>
+                </div>
+            </div>
+        @endif
 
         @if (count($recibo->detalles) > 2)
-        <div class="footer" style="margin-top: 180px;"></div>
+            <div class="footer" style="margin-top: 180px;"></div>
         @else
-        <div class="footer" style="margin-top: 120px;"></div>
+            <div class="footer" style="margin-top: 120px;"></div>
         @endif
 
         <div class="sub-footer row">

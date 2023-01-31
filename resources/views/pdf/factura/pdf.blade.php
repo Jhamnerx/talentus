@@ -87,12 +87,10 @@
                 </p>
 
                 <p style="margin-bottom:10px;"><img class="icon-mail"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{
-                    $factura->clientes->email }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mail.png')) }}"></i>{{ $factura->clientes->email }}
                 </p>
                 <p><img class="icon-mobile"
-                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{
-                    $factura->clientes->telefono }}
+                        src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/mobile.png')) }}"></i>{{ $factura->clientes->telefono }}
                 </p>
 
             </div>
@@ -158,16 +156,16 @@
                     <tbody>
 
                         @foreach ($factura->detalles as $detalle)
-                        <tr>
-                            <td>
-                                <p> {{ $detalle->producto }}</p>
-                                <p class="descripcion">{{ $detalle->descripcion }}</p>
+                            <tr>
+                                <td>
+                                    <p> {{ $detalle->producto }}</p>
+                                    <p class="descripcion">{{ $detalle->descripcion }}</p>
 
-                            </td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                            <td>{{ $detalle->cantidad }}</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
-                        </tr>
+                                </td>
+                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
+                                <td>{{ $detalle->cantidad }}</td>
+                                <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
+                            </tr>
                         @endforeach
 
 
@@ -187,53 +185,53 @@
                         </tr>
                     </thead>
                     @if ($plantilla->empresa_id == 1)
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
-                            </td>
-                        </tr>
-                        <tr>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
+                                </td>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
-                            </td>
+                                <td>
+                                    <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
+                                </td>
 
-                        </tr>
-                        <tr>
+                            </tr>
+                            <tr>
 
-                            <td>
-                                <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
-                            </td>
-                        </tr>
-                    </tbody>
+                                <td>
+                                    <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25</p>
+                                </td>
+                            </tr>
+                        </tbody>
                     @elseif ($plantilla->empresa_id == 2)
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <p>KATARY SERVICIOS GENERALES</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <p><strong>BCP CTA CTE SOLES: </strong>245-2669042-0-66</p>
+                                </td>
+                            </tr>
+                            <tr>
 
-                    <tbody>
-                        <tr>
-                            <td>
-                                <p>KATARY SERVICIOS GENERALES</p>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p><strong>BCP CTA CTE SOLES: </strong>245-2669042-0-66</p>
-                            </td>
-                        </tr>
-                        <tr>
+                                <td>
+                                    <p><strong>BCP CCI SOLES: </strong>00224500266904206691</p>
+                                </td>
 
-                            <td>
-                                <p><strong>BCP CCI SOLES: </strong>00224500266904206691</p>
-                            </td>
+                            </tr>
+                            <tr>
 
-                        </tr>
-                        <tr>
-
-                            <td>
-                                <p><strong>BCP CTA DOLARES: </strong>245-2663487-1-64 | CCI: 00224500266348716499</p>
-                            </td>
-                        </tr>
-                    </tbody>
+                                <td>
+                                    <p><strong>BCP CTA DOLARES: </strong>245-2663487-1-64 | CCI: 00224500266348716499
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
                     @endif
                 </table>
             </div>
@@ -242,8 +240,7 @@
                     <tbody>
                         <tr>
                             <td>SUB TOTAL:</td>
-                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->sub_total, 2)
-                                }}
+                            <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($factura->sub_total, 2) }}
                             </td>
                         </tr>
                         <tr>
@@ -265,11 +262,17 @@
 
 
         </div>
-
+        @if ($factura->nota)
+            <div class="row terms">
+                <div class="large-12 columns">
+                    <p><strong>Nota:</strong> {{ $factura->nota }}.</p>
+                </div>
+            </div>
+        @endif
         @if (count($factura->detalles) > 2)
-        <div class="footer" style="margin-top: 180px;"></div>
+            <div class="footer" style="margin-top: 180px;"></div>
         @else
-        <div class="footer" style="margin-top: 120px;"></div>
+            <div class="footer" style="margin-top: 120px;"></div>
         @endif
 
         <div class="sub-footer row">
@@ -291,9 +294,6 @@
             </div>
         </div>
     </div>
-    <!--screen-->
-
-
 
 </body>
 
