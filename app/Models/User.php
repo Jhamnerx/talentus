@@ -105,7 +105,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'user_id', 'imei', null, 'imei');
     }
-
+    public function sim_card()
+    {
+        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'user_id', 'sim_card', null, 'sim_card');
+    }
     //relacion uno a muchos
 
     public function guia()

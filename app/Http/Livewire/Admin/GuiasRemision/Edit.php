@@ -2,23 +2,27 @@
 
 namespace App\Http\Livewire\Admin\GuiasRemision;
 
-use App\Http\Requests\GuiaRemisionRequest;
-use App\Models\Clientes;
-use App\Models\Dispositivos;
+use Exception;
+use App\Models\User;
+use App\Models\SimCard;
 use Livewire\Component;
+use App\Models\Clientes;
+use App\Models\Productos;
+use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
 use App\Models\MotivosTraslado;
-use App\Models\Productos;
-use App\Models\User;
-use Exception;
 use Illuminate\Support\Collection;
+use App\Http\Requests\GuiaRemisionRequest;
 
 class Edit extends Component
 {
     public GuiaRemision $guia;
     public $imei_list = [];
-    public $lista_imei2 = [];
     public $imeis_add = [];
+
+    public $sim_list = [];
+    public $sim_add = [];
+
     public $events = [];
 
     public $error_msg;
@@ -72,7 +76,10 @@ class Edit extends Component
 
         $this->imeis_add = $this->guia->dispositivos->pluck('imei')->toArray();
         $this->imei_list = Dispositivos::stock()->pluck('imei')->toArray();
-        $this->lista_imei2 = Dispositivos::stock()->pluck('imei')->toArray();
+
+
+        $this->sim_add = $this->guia->sim_cards->pluck('sim_card')->toArray();
+        $this->sim_list = SimCard::pluck('sim_card')->toArray();
     }
 
 
@@ -130,10 +137,6 @@ class Edit extends Component
     public function handleOnSortOrderChanged($sortOrder, $previousSortOrder, $name, $from, $to)
     {
 
-        if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
-            unset($arr[$key]);
-        }
-
         $this->$name = $sortOrder;
 
         $this->events = collect($this->events)
@@ -141,7 +144,20 @@ class Edit extends Component
             ->toArray();
     }
 
+    public function handleOnSortOrderChangedSim($sortOrder, $previousSortOrder, $name, $from, $to)
+    {
 
+        // dd($from, $to);
+        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
+        //     unset($arr[$key]);
+        // }
+
+        $this->$name = $sortOrder;
+
+        $this->events = collect($this->events)
+            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
+            ->toArray();
+    }
     public function searchCliente()
     {
         try {
@@ -196,7 +212,17 @@ class Edit extends Component
 
         if ($this->asignarTecnico) {
 
-            $respuesta = Dispositivos::updateAsignarDispositivos(User::find($this->users_id), $data["imeis_add"], $this->guia);
+
+
+            if (count($data["imeis_add"]) > 0) {
+
+                $respuesta = Dispositivos::updateAsignarDispositivos(User::find($this->users_id), $data["imeis_add"], $this->guia);
+            }
+
+            if (count($data["sim_add"]) > 0) {
+
+                $respuesta = SimCard::updateAsignarSimCard(User::find($this->users_id), $data["sim_add"], $this->guia);
+            }
         }
 
         return redirect()->route('admin.almacen.guias.index')->with('update', 'La guia se registro con exito');

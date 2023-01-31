@@ -94,12 +94,12 @@ class Dispositivos extends Model
     public function users()
     {
         //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
-        return $this->hasOne(DispositivosUsers::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion many to many guia
     public function guia()
     {
-        return $this->belongsToMany(User::class, 'dispositivos_users', 'guia_remision_id', 'imei')->using(DispositivosUsers::class);
+        return $this->belongsToMany(DispositivosUsers::class, 'dispositivos_users', 'guia_remision_id', 'imei')->using(DispositivosUsers::class);
     }
 }

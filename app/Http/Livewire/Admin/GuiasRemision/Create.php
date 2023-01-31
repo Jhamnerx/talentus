@@ -23,8 +23,8 @@ class Create extends Component
     public $imei_list = [];
     public $imeis_add = [];
 
-    public $sim_cards = [];
-    public $sim_cards_add = [];
+    public $sim_list = [];
+    public $sim_add = [];
 
     public $events = [];
 
@@ -50,7 +50,7 @@ class Create extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
         $this->imei_list = Dispositivos::stock()->pluck('imei')->toArray();
-        $this->sim_cards = SimCard::pluck('sim_card')->toArray();
+        $this->sim_list = SimCard::pluck('sim_card')->toArray();
 
         $this->items = collect();
         $this->selected = collect([
@@ -144,6 +144,20 @@ class Create extends Component
             ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
             ->toArray();
     }
+    public function handleOnSortOrderChangedSim($sortOrder, $previousSortOrder, $name, $from, $to)
+    {
+
+        // dd($from, $to);
+        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
+        //     unset($arr[$key]);
+        // }
+
+        $this->$name = $sortOrder;
+
+        $this->events = collect($this->events)
+            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
+            ->toArray();
+    }
 
 
     public function searchCliente()
@@ -191,11 +205,21 @@ class Create extends Component
 
         $guia = GuiaRemision::create($data);
 
+        //dd($data["sim_add"], $data["imeis_add"]);
+
         GuiaRemision::createItems($guia, $data["items"]);
 
         if ($this->asignarTecnico) {
 
-            $respuesta = Dispositivos::asignarDispositivos(User::find($this->users_id), $data["imeis_add"], $guia);
+            if (count($data["imeis_add"]) > 0) {
+
+                $respuesta = Dispositivos::asignarDispositivos(User::find($this->users_id), $data["imeis_add"], $guia);
+            }
+
+            if (count($data["sim_add"]) > 0) {
+
+                $respuesta = SimCard::asignarSimCard(User::find($this->users_id), $data["sim_add"], $guia);
+            }
         }
 
         return redirect()->route('admin.almacen.guias.index')->with('store', 'La guia se registro con exito');

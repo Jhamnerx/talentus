@@ -52,4 +52,30 @@ class SimCard extends Model
     {
         return $this->hasMany(CambiosLineas::class, 'sim_card');
     }
+
+    //relacion many to many
+    public function users()
+    {
+
+        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    //relacion many to many guia
+    public function guia()
+    {
+        return $this->belongsToMany(SimCardUsers::class, 'sim_card_users', 'guia_remision_id', 'sim_card')->using(SimCardUsers::class);
+    }
+
+    public static function asignarSimCard(User $user, $items, GuiaRemision $guia)
+    {
+
+        $user->sim_card()->attach($items, ['guia_remision_id' => $guia->id]);
+    }
+
+    public static function updateAsignarSimCard(User $user, $items, GuiaRemision $guia)
+    {
+
+        //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
+        $guia->sim_cards()->syncWithPivotValues($items, ['guia_remision_id' => $guia->id, 'user_id' => $user->id]);
+    }
 }
