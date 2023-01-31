@@ -41,6 +41,7 @@ class Index extends Component
     public function openDetallePanel(GuiaRemision $guia)
     {
 
+        $guia->sim_cards;
         $this->emit('DetallePanel', $guia);
 
         $this->setDetalleOpen();

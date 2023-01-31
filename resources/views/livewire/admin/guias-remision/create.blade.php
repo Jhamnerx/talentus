@@ -135,7 +135,8 @@
                 </label>
                 <div class="relative">
                     <input type="text" name="numero_documento" wire:model='numero_documento'
-                        class="form-input w-full pl-2 pr-9" placeholder="Ingresa número documento">
+                        class="form-input w-full pl-2 pr-9" x-mask="99999999999"
+                        placeholder="Ingresa número documento">
                     <button class="absolute inset-0 left-auto group" type="button"
                         wire:click.prevent="searchCliente" aria-label="Search">
                         <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -323,7 +324,8 @@
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Peso Bruto (Kg) <span class="text-sm text-red-500"> * </span></div>
                 </label>
-                <input type="text" name="peso" wire:model="peso" class="form-input w-full" placeholder="10">
+                <input type="text" x-mask="99999" name="peso" wire:model="peso" class="form-input w-full"
+                    placeholder="10">
                 @error('peso')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                         {{ $message }}
@@ -337,8 +339,8 @@
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Cantidad Items <span class="text-sm text-red-500"> * </span></div>
                 </label>
-                <input type="text" name="cantidad_items" wire:model="cantidad_items" class="form-input w-full"
-                    placeholder="20">
+                <input type="text" x-mask="99999" name="cantidad_items" wire:model="cantidad_items"
+                    class="form-input w-full" placeholder="20">
                 @error('cantidad_items')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                         {{ $message }}
@@ -585,7 +587,7 @@
                             </svg>
                         </div>
                     </div>
-                    @error('user')
+                    @error('users_id')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}
                         </p>
@@ -634,20 +636,22 @@
             <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
 
                 <h4>ARRASTRA AL PANEL EN BLACO LOS IMEIS A ASIGNAR</h4>
-                {{-- <input class="form-input" type="text" wire:model='search'> --}}
+
+                {{ count($imei_list) }}
+                {{ count($imeis_add) }}
 
                 <x-admin.guias-remision.lista-imei :imeis="$imei_list" :imeisadd="$imeis_add">
                 </x-admin.guias-remision.lista-imei>
 
             </div>
         @endif
+
         @if ($asignarTecnico)
             <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
 
                 <h4>ARRASTRA AL PANEL EN BLACO LOS SIM CARD A ASIGNAR</h4>
-                {{-- <input class="form-input" type="text" wire:model='search'> --}}
 
-                <x-admin.guias-remision.lista-sim-card :sims="$sim_cards" :simsadd="$sim_cards_add">
+                <x-admin.guias-remision.lista-sim-card :sims="$sim_list" :simadd="$sim_add">
                 </x-admin.guias-remision.lista-sim-card>
 
             </div>

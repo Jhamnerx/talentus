@@ -16,7 +16,7 @@ class Save extends Component
     public $openModalSave = false;
     public $ciudades;
 
-    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1, $plataforma = "basica";
+    public $numero, $vehiculos_id, $fecha_instalacion, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1, $plataforma = "basica";
 
 
     protected $listeners = [
@@ -33,6 +33,7 @@ class Save extends Component
         $this->openModalSave = true;
         $newActa = new ActasController();
         $this->numero = $newActa->setNextSequenceNumber();
+        $this->fecha_instalacion = Carbon::now()->format('Y-m-d');
         $this->inicio_cobertura = Carbon::now()->format('Y-m-d');
         $this->fin_cobertura = Carbon::now()->addDays(30)->format('Y-m-d');
     }
@@ -49,6 +50,7 @@ class Save extends Component
         $actaRequest = new ActasRequest();
         $values = $this->validate($actaRequest->rules(), $actaRequest->messages());
 
+
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
@@ -56,6 +58,7 @@ class Save extends Component
 
         $acta->vehiculos_id = $values["vehiculos_id"];
         $acta->numero = $values["numero"];
+        $acta->fecha_instalacion = $values["fecha_instalacion"];
         $acta->inicio_cobertura = $values["inicio_cobertura"];
         $acta->fin_cobertura = $values["fin_cobertura"];
         $acta->ciudades_id = $values["ciudades_id"];

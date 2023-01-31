@@ -43,7 +43,8 @@ class GuiaRemisionRequest extends FormRequest
             'items.*.unidad_medida' => 'required',
             'items.*.descripcion' => 'required',
 
-            'imeis_add' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"|min:1|array',
+            'imeis_add' => 'exclude_if:asignarTecnico,false|array',
+            'sim_add' => 'exclude_if:asignarTecnico,false|array',
             'users_id' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
         ];
 

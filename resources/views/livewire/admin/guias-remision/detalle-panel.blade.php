@@ -134,6 +134,56 @@
 
                     </div>
 
+                    {{-- SIM CARDS LIST --}}
+
+                    <div class="drop-shadow-lg mt-12">
+                        <!-- Bottom -->
+
+                        <div class="bg-white rounded-b-xl p-5 pt-2.5 text-sm space-y-3">
+                            <div class="flex justify-between space-x-1">
+
+                                <span class="font-medium text-slate-700 text-center">SIM CARD</span>
+                                <span class="font-medium text-slate-700 text-center">OPERADOR</span>
+                                <span class="font-medium text-slate-700 text-center">TECNICO</span>
+
+                            </div>
+                            @if ($guia->sim_cards->count())
+                                <table class="table-auto w-full">
+                                    <tbody class="text-sm divide-y divide-slate-200">
+
+                                        @foreach ($guia->sim_cards as $sim_card)
+                                            <tr>
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                                    <span
+                                                        class="font-medium text-slate-700 text-right">{{ $sim_card->sim_card }}</span>
+                                                </td>
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                                    <span
+                                                        class="font-medium text-slate-700 text-right">{{ $sim_card->operador }}</span>
+                                                </td>
+                                                <td
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                                    <span
+                                                        class="font-medium text-slate-700 text-right">{{ $guia->user->name }}</span>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @else
+                                <div class="flex justify-between space-x-1">
+                                    <span class="font-medium text-slate-700 text-center">
+                                        No hay detalle de items
+                                    </span>
+                                </div>
+                            @endif
+
+
+                        </div>
+
+                    </div>
                     <!-- Download / Report -->
                     <div class="flex items-center space-x-3 mt-6">
                         {{-- <div class="w-1/2">

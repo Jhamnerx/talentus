@@ -20,6 +20,7 @@ class ActasRequest extends FormRequest
             $rules = [
                 'numero' => 'required|unique:actas,numero,' . $acta->id,
                 'vehiculos_id' => 'required',
+                "fecha_instalacion" => 'required',
                 "inicio_cobertura" => 'required',
                 "fin_cobertura" => 'required',
                 "ciudades_id" => 'required',
@@ -30,6 +31,7 @@ class ActasRequest extends FormRequest
             $rules = [
                 'numero' => 'required|unique:actas',
                 'vehiculos_id' => 'required',
+                "fecha_instalacion" => 'required',
                 "inicio_cobertura" => 'required',
                 "fin_cobertura" => 'required',
                 "ciudades_id" => 'required',
@@ -49,6 +51,7 @@ class ActasRequest extends FormRequest
             'numero.required' => 'El número es obligatorio',
             'numero.unique' => 'Este numero ya esta registrado',
             'vehiculos_id.required' => 'Debe seleccionar un vehiculo',
+            'fecha_instalacion.required' => 'La fecha es obligatoria',
             'inicio_cobertura.required' => 'La fecha es obligatoria',
             'fin_cobertura.required' => 'La fecha es obligatoria',
             'ciudades_id.required' => 'Debe seleccionar una ciudad',

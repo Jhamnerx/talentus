@@ -54,6 +54,10 @@ class GuiaRemision extends Model
         return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', null, 'imei')->withoutGlobalScope(EmpresaScope::class);
     }
 
+    public function sim_cards()
+    {
+        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', null, 'sim_card')->withoutGlobalScope(EmpresaScope::class);
+    }
     //Relacion uno a muchos inversa
 
     public function user()
