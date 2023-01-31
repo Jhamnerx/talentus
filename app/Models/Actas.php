@@ -36,6 +36,7 @@ class Actas extends Model
         'sello' => 'boolean',
         'fondo' => 'boolean',
         'estado' => 'boolean',
+        'fecha_instalacion' => 'date:Y/m/d',
         'inicio_cobertura' => 'date:Y/m/d',
         'fin_cobertura' => 'date:Y/m/d',
         'eliminado' => 'boolean',

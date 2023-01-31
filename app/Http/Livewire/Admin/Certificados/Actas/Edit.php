@@ -2,11 +2,12 @@
 
 namespace App\Http\Livewire\Admin\Certificados\Actas;
 
-use App\Http\Requests\ActasRequest;
+use Carbon\Carbon;
 use App\Models\Actas;
-use App\Models\Ciudades;
 use Livewire\Component;
+use App\Models\Ciudades;
 use Illuminate\Support\Str;
+use App\Http\Requests\ActasRequest;
 
 class Edit extends Component
 {
@@ -14,7 +15,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $acta;
-    public $numero, $vehiculos_id, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo, $sello, $plataforma;
+    public $numero, $vehiculos_id, $fecha_instalacion, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo, $sello, $plataforma;
 
 
     protected $listeners = [
@@ -46,6 +47,8 @@ class Edit extends Component
         $this->ciudades_id = $acta->ciudades_id;
         $this->plataforma = $acta->plataforma;
         $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculo, 'ciudad' => $acta->ciudades]);
+        $this->fecha_instalacion = strlen($acta->fecha_instalacion) > 0 ? $acta->fecha_instalacion->format('Y-m-d') : Carbon::now()->format('Y-m-d');
+        $this->fecha_instalacion = $acta->fecha_instalacion->format('Y-m-d');
         $this->inicio_cobertura = $acta->inicio_cobertura->format('Y-m-d');
         $this->fin_cobertura = $acta->fin_cobertura->format('Y-m-d');
     }
@@ -64,6 +67,7 @@ class Edit extends Component
         $update->codigo = $codigo;
         $update->vehiculos_id = $values["vehiculos_id"];
         $update->fecha = $fecha;
+        $update->fecha_instalacion = $values["fecha_instalacion"];
         $update->inicio_cobertura = $values["inicio_cobertura"];
         $update->fin_cobertura = $values["fin_cobertura"];
         $update->ciudades_id = $values["ciudades_id"];

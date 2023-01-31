@@ -39,7 +39,7 @@
                     <div class="px-8 py-5 bg-white sm:p-6 formSaveActa">
 
                         <div class="grid grid-cols-12 gap-6">
-                            <div class="col-span-12 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-4">
 
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero Acta: <span
                                         class="text-rose-500">*</span></label>
@@ -75,7 +75,7 @@
 
                             </div>
 
-                            <div class="col-span-12 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-4">
                                 <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
@@ -126,7 +126,91 @@
                                     </p>
                                 @enderror
                             </div>
-                            <div class="col-span-12 sm:col-span-6">
+
+                            <div class="col-span-12 sm:col-span-4">
+                                <label class="block text-sm font-medium mb-1" for="ciudades_id">Ciudad: <span
+                                        class="text-rose-500">*</span></label>
+                                <div class="relative" wire:ignore>
+
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
+                                        id="ciudades_save">
+                                    </select>
+
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+
+                                        <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                            <g class="nc-icon-wrapper">
+                                                <path d="M8,18V7A1,1,0,0,1,9,6h4a1,1,0,0,1,1,1v6.091Z" fill="#f74b3b">
+                                                </path>
+                                                <path d="M24,3,7,18.111V44a2,2,0,0,0,2,2H39a2,2,0,0,0,2-2V18.111Z"
+                                                    fill="#e3e3e3"></path>
+                                                <path
+                                                    d="M46,24a1,1,0,0,1-.673-.26L24,4.351,2.673,23.74a1,1,0,0,1-1.346-1.481l22-20a1,1,0,0,1,1.346,0l22,20A1,1,0,0,1,46,24Z"
+                                                    fill="#ff7163"></path>
+                                                <path d="M28,33H20a1,1,0,0,0-1,1V46H29V34A1,1,0,0,0,28,33Z"
+                                                    fill="#bf8c5a"></path>
+                                                <path
+                                                    d="M28,27H20a1,1,0,0,1-1-1V20a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v6A1,1,0,0,1,28,27Z"
+                                                    fill="#3aace9"></path>
+                                                <path d="M14.314,46A7,7,0,1,0,1,43a6.932,6.932,0,0,0,.686,3Z"
+                                                    fill="#78d478"></path>
+                                                <path d="M46.314,46a7,7,0,1,0-12.628,0Z" fill="#78d478"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                @error('ciudades_id')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
+
+                                <label class="block text-sm font-medium mb-1" for="fecha_inicio">Fecha Instalación:
+                                    <span class="text-rose-500">*</span></label>
+                                <div class="relative">
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_instalacion"
+                                        required name="fecha" type="text"
+                                        class="form-input valid:border-emerald-300
+                                                            required:border-rose-300 invalid:border-rose-300 peer inputDateActaInicio font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
+                                        placeholder="Selecciona la fecha">
+                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+
+                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
+                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                            <g class="nc-icon-wrapper">
+                                                <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
+                                                </path>
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
+                                                    fill="#ff7163">
+                                                </path>
+                                                <path
+                                                    d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
+                                                    fill="#aeaeae"></path>
+                                                <path
+                                                    d="M24.7,32.155q0-4.62,1.954-6.877A7.319,7.319,0,0,1,32.5,23.021a10.653,10.653,0,0,1,2.087.16V25.81a8.524,8.524,0,0,0-1.874-.213c-1.8,0-3.517.431-4.364,2.023a6.926,6.926,0,0,0-.628,2.842,4.211,4.211,0,0,1,3.513-1.809c2.937,0,4.449,2.015,4.449,4.929,0,3.271-1.916,5.4-5.3,5.4C26.6,38.979,24.7,36.12,24.7,32.155Zm5.621,4.194c1.545,0,2.182-1.16,2.182-2.725,0-1.461-.651-2.448-2.118-2.448a2.318,2.318,0,0,0-2.417,2.161C27.965,34.856,28.82,36.349,30.318,36.349Z"
+                                                    fill="#aeaeae"></path>
+                                                <path
+                                                    d="M11.5,12A1.5,1.5,0,0,1,10,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,11.5,12Z"
+                                                    fill="#363636"></path>
+                                                <path
+                                                    d="M36.5,12A1.5,1.5,0,0,1,35,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,36.5,12Z"
+                                                    fill="#363636"></path>
+                                            </g>
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                @error('fecha_instalacion')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-4">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_inicio">Inicio de Cobertura:
                                     <span class="text-rose-500">*</span></label>
@@ -170,7 +254,7 @@
                                 @enderror
                             </div>
 
-                            <div class="col-span-12 sm:col-span-6">
+                            <div class="col-span-12 sm:col-span-4">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
@@ -212,46 +296,7 @@
                             </div>
 
 
-                            <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="ciudades_id">Ciudad: <span
-                                        class="text-rose-500">*</span></label>
-                                <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="ciudades_save">
-                                    </select>
-
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                        <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path d="M8,18V7A1,1,0,0,1,9,6h4a1,1,0,0,1,1,1v6.091Z" fill="#f74b3b">
-                                                </path>
-                                                <path d="M24,3,7,18.111V44a2,2,0,0,0,2,2H39a2,2,0,0,0,2-2V18.111Z"
-                                                    fill="#e3e3e3"></path>
-                                                <path
-                                                    d="M46,24a1,1,0,0,1-.673-.26L24,4.351,2.673,23.74a1,1,0,0,1-1.346-1.481l22-20a1,1,0,0,1,1.346,0l22,20A1,1,0,0,1,46,24Z"
-                                                    fill="#ff7163"></path>
-                                                <path d="M28,33H20a1,1,0,0,0-1,1V46H29V34A1,1,0,0,0,28,33Z"
-                                                    fill="#bf8c5a"></path>
-                                                <path
-                                                    d="M28,27H20a1,1,0,0,1-1-1V20a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v6A1,1,0,0,1,28,27Z"
-                                                    fill="#3aace9"></path>
-                                                <path d="M14.314,46A7,7,0,1,0,1,43a6.932,6.932,0,0,0,.686,3Z"
-                                                    fill="#78d478"></path>
-                                                <path d="M46.314,46a7,7,0,1,0-12.628,0Z" fill="#78d478"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-
-                                @error('ciudades_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
                             <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium mb-1" for="plataforma">Plataforma: <span
                                         class="text-rose-500">*</span></label>

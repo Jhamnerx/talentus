@@ -35,6 +35,7 @@ class ActasIndex extends Component
         })->orwhereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
+            ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')

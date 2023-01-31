@@ -230,7 +230,7 @@
                 <b>{{ $acta->vehiculo->cliente
                     ? strtoupper($acta->vehiculo->cliente->razon_social)
                     : 'no
-                                                                                                                                                                            existe' }}</b>
+                                                                                                                                                                                                            existe' }}</b>
                 con DNI/RUC:
                 {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}, ha
                 adquirido un equipo
@@ -246,7 +246,7 @@
         <table class="tabla">
             <tr>
                 <td height="20">Fecha de Instalación</td>
-                <td height="20">: {{ $acta->inicio_cobertura->format('d-m-Y') }}</td>
+                <td height="20">: {{ $acta->fecha_instalacion->format('d-m-Y') }}</td>
             </tr>
 
 
