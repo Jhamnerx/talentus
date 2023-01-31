@@ -39,6 +39,7 @@ class CertificadosGpsIndex extends Component
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
+            ->with('vehiculo.dispositivos.modelo', 'vehiculo.dispositivos')
             ->orderBy('numero', 'desc')
             ->paginate(10);
 

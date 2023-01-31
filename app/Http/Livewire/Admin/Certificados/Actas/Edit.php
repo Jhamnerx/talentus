@@ -47,8 +47,7 @@ class Edit extends Component
         $this->ciudades_id = $acta->ciudades_id;
         $this->plataforma = $acta->plataforma;
         $this->dispatchBrowserEvent('set-vehiculo', ['vehiculo' => $acta->vehiculo, 'ciudad' => $acta->ciudades]);
-        $this->fecha_instalacion = strlen($acta->fecha_instalacion) > 0 ? $acta->fecha_instalacion->format('Y-m-d') : Carbon::now()->format('Y-m-d');
-        $this->fecha_instalacion = $acta->fecha_instalacion->format('Y-m-d');
+        $this->fecha_instalacion = $acta->fecha_instalacion ? $acta->fecha_instalacion->format('Y-m-d') : Carbon::now()->format('Y-m-d');
         $this->inicio_cobertura = $acta->inicio_cobertura->format('Y-m-d');
         $this->fin_cobertura = $acta->fin_cobertura->format('Y-m-d');
     }
