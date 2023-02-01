@@ -42,4 +42,14 @@ class ItemsVehiculo extends Component
     {
         $this->emit('addVehiculo', $vehiculo);
     }
+
+    public function addAll()
+    {
+
+
+        foreach ($this->vehiculos as $vehiculo) {
+
+            $this->emit('addVehiculo', $vehiculo);
+        }
+    }
 }

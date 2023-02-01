@@ -82,7 +82,7 @@ class Save extends Component
         $request = new ContratosRequest();
 
         $validate = $this->validate($request->rules(), $request->messages());
-        // dd($validate);
+        //dd($validate);
         $contrato = Contratos::create([
             'clientes_id' => $validate["clientes_id"],
             'fecha' => $validate["fecha"],

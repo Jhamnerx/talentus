@@ -16,6 +16,7 @@ class CertificadosGpsIndex extends Component
     public $openModalSave = false;
     public $openModalEdit = false;
     public $openModalDelete = false;
+    public $openModalDetalle = false;
 
     protected $listeners = [
         'updateTable' => 'render',

@@ -25,7 +25,7 @@ use Maatwebsite\Excel\Concerns\WithGroupedHeadingRow;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use App\Notifications\Imports\ImportHasFailedNotification;
 
-class LineasImport implements ToCollection, WithChunkReading, ShouldQueue, SkipsOnFailure, WithEvents, WithValidation, WithHeadingRow, WithGroupedHeadingRow, SkipsEmptyRows
+class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFailure, WithEvents, WithValidation, WithHeadingRow, WithGroupedHeadingRow, SkipsEmptyRows
 {
     use Queueable, RegistersEventListeners, Importable;
 
@@ -36,28 +36,49 @@ class LineasImport implements ToCollection, WithChunkReading, ShouldQueue, Skips
         $this->importedBy = $importedBy;
     }
 
-    public function collection(Collection $rows)
+
+    public function model(array $fila)
     {
 
-        foreach ($rows as $row) {
+        $linea = Lineas::create([
+            'numero'    => $fila['numero'],
+            'operador'    => $fila['operador'],
+            'empresa_id'    => 1,
+        ]);
 
-            $linea = Lineas::create([
-                'numero'    => $row['numero'],
-                'operador'    => $row['operador'],
+
+        if ($linea) {
+
+            SimCard::create([
+                'sim_card'    => $fila['sim_card'],
+                'operador'    => $fila['operador'],
+                'lineas_id' => $linea->id,
                 'empresa_id'    => 1,
             ]);
-
-            if ($linea) {
-
-                SimCard::create([
-                    'sim_card'    => $row['sim_card'],
-                    'operador'    => $row['operador'],
-                    'lineas_id' => $linea->id,
-                    'empresa_id'    => 1,
-                ]);
-            }
         }
     }
+    // public function collection(Collection $rows)
+    // {
+
+    //     foreach ($rows as $row) {
+
+    //         $linea = Lineas::create([
+    //             'numero'    => $row['numero'],
+    //             'operador'    => $row['operador'],
+    //             'empresa_id'    => 1,
+    //         ]);
+
+    //         if ($linea) {
+
+    //             SimCard::create([
+    //                 'sim_card'    => $row['sim_card'],
+    //                 'operador'    => $row['operador'],
+    //                 'lineas_id' => $linea->id,
+    //                 'empresa_id'    => 1,
+    //             ]);
+    //         }
+    //     }
+    // }
 
     public function rules(): array
     {
@@ -65,7 +86,7 @@ class LineasImport implements ToCollection, WithChunkReading, ShouldQueue, Skips
 
             'numero' => 'required|unique:lineas,numero',
             'operador' => 'required',
-            'sim_card' => 'unique:sim_card,sim_card',
+            'sim_card' => 'required|unique:sim_card,sim_card',
         ];
 
         return $rules;
