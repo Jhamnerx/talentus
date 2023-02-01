@@ -33,8 +33,8 @@ class ContratosRequest extends FormRequest
             'items.*.plan' => 'required|integer',
             'items.*.placa' => 'required',
             'items.*.vehiculos_id' => 'required',
-            'sello' => 'boolean',
-            'fondo' => 'boolean',
+            'sello' => 'required|boolean',
+            'fondo' => 'required|boolean',
 
 
         ];

@@ -54,7 +54,7 @@
                         </div>
 
                         <div class="text-sm font-medium text-slate-800 mb-3">
-                            01</div>
+                            #{{ count($vehiculos) }}</div>
                         <div
                             class="text-xs inline-flex font-medium bg-slate-100 text-slate-500 rounded-full text-center px-2.5 py-1">
                             Vehiculos</div>
@@ -78,8 +78,23 @@
 
 
                         @if ($cliente)
-                            <input wire:model='search' class="form-input pl-9 focus:border-slate-300" type="search"
-                                placeholder="Buscar contrato…" />
+                            <div class="flex">
+                                <div class="m-1 text-center w-full sm:w-2/4">
+                                    <input wire:model='search' class="form-input pl-9 w-full focus:border-slate-300"
+                                        type="search" placeholder="Buscar vehiculo…" />
+                                </div>
+
+
+                                <div class="m-1 text-center w-full sm:w-2/4">
+
+                                    <button type="button" wire:click.prevent="addAll()"
+                                        class="w-full bg-gray-800 mx-3 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
+                                        Añadir todos
+                                    </button>
+
+                                </div>
+
+                            </div>
                         @endif
 
                         <div class="overflow-x-auto">

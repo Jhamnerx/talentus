@@ -112,17 +112,15 @@
                     <div class="m-2 w-full mt-2">
                         <label for="fondo">Fondo:</label>
                         <!-- Start -->
-                        <div class="flex items-center" x-data="{ checked: true }">
+                        <div class="flex items-center">
                             <div class="form-switch">
-                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only fondo"
-                                    x-model="checked" />
+                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only fondo" />
                                 <label class="bg-slate-400" for="fondo-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                     <span class="sr-only">fondo switch</span>
                                 </label>
                             </div>
-                            <div class="text-sm text-slate-400 italic ml-2"
-                                x-text="checked ? 'Activado' : 'Desactivado'"></div>
+
                         </div>
                         <!-- End -->
                     </div>
@@ -130,17 +128,12 @@
                     <div class="m-2 w-full">
                         <label for="sello">Sello:</label>
                         <!-- Start -->
-                        <div class="flex items-center" x-data="{ checked: true }">
-                            <div class="form-switch">
-                                <input wire:model="sello" name="sello" type="checkbox" id="sello-1" class="sr-only"
-                                    x-model="checked" />
-                                <label class="bg-slate-400" for="sello-1">
-                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                    <span class="sr-only">sello switch</span>
-                                </label>
-                            </div>
-                            <div class="text-sm text-slate-400 italic ml-2"
-                                x-text="checked ? 'Activado' : 'Desactivado'"></div>
+                        <div class="form-switch">
+                            <input wire:model="sello" name="sello" type="checkbox" id="sello-1" class="sr-only" />
+                            <label class="bg-slate-400" for="sello-1">
+                                <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                <span class="sr-only">sello switch</span>
+                            </label>
                         </div>
                         <!-- End -->
                     </div>
@@ -165,7 +158,7 @@
                                 <path
                                     d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
                             </svg>
-                            Placa
+                            Cantidad: {{ $items->count() }}
                         </div>
 
                         <div class="mt-2 flex items-center text-sm text-gray-500">
@@ -188,7 +181,10 @@
 
                 <div class="flex -mx-1 border-b px-2 py-2 ">
                     <div class="flex-auto px-5 xl:w-32 text-center">
-                        <p class="text-gray-800 uppercase tracking-wide text-sm font-bold">Placa</p>
+
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">Placa</span>
+                        </p>
                     </div>
                     <div class="flex-auto xl:w-28 text-center">
                         <p class="leading-none">
@@ -197,6 +193,9 @@
                     </div>
 
                     <div class="flex-auto xl:w-20 text-center">
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">Acciones</span>
+                        </p>
                     </div>
                 </div>
 
@@ -268,9 +267,6 @@
                     @endif
 
 
-
-
-
                 </div>
 
                 <button type="button" @click.stop="$dispatch('vehiculosPanelOpen', true)"
@@ -288,8 +284,6 @@
             <button type="button"
                 class="btnGuardarContrato cursor-pointer btn bg-emerald-500 hover:bg-emerald-600 text-white"
                 wire:click.prevent="saveContrato">GUARDAR</button>
-
-            {{ $fecha }}
         </div>
     </div>
 
