@@ -15,6 +15,7 @@ class TareasObserver
 
         $tarea->token = $tareaController->setNextSequenceNumber();
         $tarea->user_id = auth()->user()->id;
+        $tarea->empresa_id = session('empresa');
     }
 
     public function created(Tareas $tarea)
