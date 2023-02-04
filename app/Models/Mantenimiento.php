@@ -41,4 +41,9 @@ class Mantenimiento extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function tareas()
+    {
+        return $this->hasMany(Tareas::class, 'mantenimiento_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }
