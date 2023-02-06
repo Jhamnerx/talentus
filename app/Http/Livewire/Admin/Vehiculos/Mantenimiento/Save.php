@@ -87,6 +87,7 @@ class Save extends Component
         $mantenimiento = Mantenimiento::create($values);
         $this->closeModal();
         $this->dispatchBrowserEvent('mantenimiento-save');
+        $this->emit('update-mantenimiento');
     }
     public function closeModal()
     {

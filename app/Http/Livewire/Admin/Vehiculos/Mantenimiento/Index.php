@@ -16,6 +16,10 @@ class Index extends Component
 
     public $search;
 
+    protected $listeners = [
+        'update-mantenimiento' => 'render'
+    ];
+
     public function render()
     {
 
