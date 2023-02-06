@@ -90,7 +90,7 @@
         <div x-data="handleSelect">
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
@@ -247,7 +247,6 @@
                                                     x-transition:leave="transition ease-out duration-200"
                                                     x-transition:leave-start="opacity-100"
                                                     x-transition:leave-end="opacity-0" x-cloak>
-
                                                     <ul>
 
                                                         <li>
@@ -306,16 +305,12 @@
                                                             </a>
                                                         </li>
 
-
-
-
                                                         <li @click="open = false">
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="createTask({{ $mantenimiento->id }})"
                                                                 class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-30"
                                                                 role="menuitem" tabindex="-1">
-
                                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                                     viewBox="0 0 64 64"
                                                                     class="h-5 w-5 mr-3 text-gray-400 group-hover:text-yellow-500">
@@ -338,41 +333,47 @@
                                                             </a>
                                                         </li>
 
+                                                        @if ($mantenimiento->estado->name == 'COMPLETADA')
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markAs({{ $mantenimiento->id }}, 'CANCELADO')"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-34"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-rose-600">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg> Marcar como Cancelada
+                                                                </a>
+                                                            </li>
+                                                        @else
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markAs({{ $mantenimiento->id }}, 'COMPLETADA')"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Marcar como Completada
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
-                                                        <li>
-                                                            <a href="javascript: void(0)"
-                                                                wire:click.prevent="markAs({{ $mantenimiento->id }}, 'COMPLETADA')"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-33"
-                                                                role="menuitem" tabindex="-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                    </path>
-                                                                </svg>
-                                                                Marcar como Completada
-                                                            </a>
-                                                        </li>
 
-                                                        <li>
-                                                            <a href="javascript: void(0)"
-                                                                wire:click.prevent="markAs({{ $mantenimiento->id }}, 'CANCELADO')"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-34"
-                                                                role="menuitem" tabindex="-1">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-rose-600">
-                                                                    <path stroke-linecap="round"
-                                                                        stroke-linejoin="round" stroke-width="2"
-                                                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                    </path>
-                                                                </svg> Marcar como Cancelada
-                                                            </a>
-                                                        </li>
+
 
                                                     </ul>
 

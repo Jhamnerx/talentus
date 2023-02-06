@@ -5,6 +5,7 @@
     <!-- Tabla -->
     @livewire('admin.vehiculos.mantenimiento.index')
     @livewire('admin.vehiculos.mantenimiento.save')
+    @livewire('admin.vehiculos.mantenimiento.create-task')
 
 @stop
 
@@ -53,7 +54,32 @@
             });
         })
     </script>
-
+    <script>
+        window.addEventListener('save-task', event => {
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'TAREA CREADA',
+                timeout: 2500,
+                message: 'Se ha creado la tarea <b>' + event.detail.tarea.token + '</b>',
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(5, 44, 82)'
+            });
+        })
+    </script>
+    <script>
+        window.addEventListener('mark-as', event => {
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'MANTENIMIENTO MARCADO COMO: ' + event.detail.estado,
+                timeout: 2500,
+                message: 'Se ha cambiado el estado del registro',
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(66, 245, 158)'
+            });
+        })
+    </script>
     <script>
         // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {

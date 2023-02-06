@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Mantenimiento;
+use Illuminate\Database\Capsule\Manager;
 
 class Index extends Component
 {
@@ -44,5 +45,22 @@ class Index extends Component
     public function openModalSave()
     {
         $this->emit('openModalSaveMantenimiento', ['from' => 'index']);
+    }
+
+
+    public function createTask(Mantenimiento $mantenimiento)
+    {
+
+        $this->emit('openModalCreateTask', $mantenimiento);
+    }
+
+    public function markAs(Mantenimiento $mantenimiento, $value)
+    {
+
+        if ($mantenimiento->estado->name !== $value) {
+            $mantenimiento->estado = $value;
+            $mantenimiento->save();
+            $this->dispatchBrowserEvent('mark-as', ['estado' => $value]);
+        }
     }
 }
