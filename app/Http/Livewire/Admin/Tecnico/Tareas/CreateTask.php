@@ -31,7 +31,7 @@ class CreateTask extends Component
             'vehiculos_id' => 'required',
             'tecnico_id' => 'required',
             'cliente_id' => 'required',
-            'dispositivo' => 'exclude_if:tipo_tarea_id,2|exclude_if:tipo_tarea_id,4|exclude_if:tipo_tarea_id,5|required',
+            'dispositivo' => 'exclude_if:tipo_tarea_id,2|exclude_if:tipo_tarea_id,4|required',
             'numero' => 'exclude_if:tipo_tarea_id,4|exclude_if:tipo_tarea_id,5|required',
             'nuevo_numero' => 'required_if:tipo_tarea_id,2',
             'sim_card' => 'exclude_if:tipo_tarea_id,4|exclude_if:tipo_tarea_id,5|required',
