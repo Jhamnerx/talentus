@@ -73,9 +73,13 @@ class Index extends Component
         }
     }
 
-
     public function openModalDelete(Mantenimiento $mantenimiento)
     {
         $this->emit('EliminarMantenimiento', $mantenimiento);
+    }
+
+    public function openModalExport()
+    {
+        $this->emit('openModalExport');
     }
 }

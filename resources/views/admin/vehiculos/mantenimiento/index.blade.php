@@ -8,6 +8,7 @@
     @livewire('admin.vehiculos.mantenimiento.edit')
     @livewire('admin.vehiculos.mantenimiento.create-task')
     @livewire('admin.vehiculos.mantenimiento.delete')
+    @livewire('admin.vehiculos.mantenimiento.export')
 
 @stop
 
