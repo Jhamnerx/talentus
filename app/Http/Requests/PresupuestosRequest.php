@@ -24,7 +24,9 @@ class PresupuestosRequest extends FormRequest
         $rules = [
             'clientes_id' => 'required',
             'numero' => [
-                'required', Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required',
+                Rule::unique('presupuestos', 'numero')
+                    ->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'fecha' => 'required|date',
             'tipoCambio' => 'required',

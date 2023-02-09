@@ -5,7 +5,9 @@
     <!-- Tabla -->
     @livewire('admin.vehiculos.mantenimiento.index')
     @livewire('admin.vehiculos.mantenimiento.save')
+    @livewire('admin.vehiculos.mantenimiento.edit')
     @livewire('admin.vehiculos.mantenimiento.create-task')
+    @livewire('admin.vehiculos.mantenimiento.delete')
 
 @stop
 
@@ -38,6 +40,22 @@
 
                 })
             });
+            $('.vehiculos_id').val(null).trigger('change');
+        })
+    </script>
+    <script>
+        window.addEventListener('mantenimiento-update', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: 'Tarea Mantenimiento Actualizado',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+            $('.vehiculos_id_edit').val(null).trigger('change');
         })
     </script>
     <script>

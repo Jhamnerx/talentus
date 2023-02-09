@@ -51,11 +51,16 @@ class Index extends Component
         $this->emit('openModalSaveMantenimiento', ['from' => 'index']);
     }
 
-
     public function createTask(Mantenimiento $mantenimiento)
     {
 
         $this->emit('openModalCreateTask', $mantenimiento);
+    }
+
+    public function openModalEdit(Mantenimiento $mantenimiento)
+    {
+
+        $this->emit('openModalEditMantenimiento', $mantenimiento);
     }
 
     public function markAs(Mantenimiento $mantenimiento, $value)
@@ -66,5 +71,11 @@ class Index extends Component
             $mantenimiento->save();
             $this->dispatchBrowserEvent('mark-as', ['estado' => $value]);
         }
+    }
+
+
+    public function openModalDelete(Mantenimiento $mantenimiento)
+    {
+        $this->emit('EliminarMantenimiento', $mantenimiento);
     }
 }
