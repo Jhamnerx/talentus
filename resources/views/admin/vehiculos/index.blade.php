@@ -7,12 +7,29 @@
     @livewire('admin.vehiculos.save-vehiculo')
     @livewire('admin.vehiculos.delete')
     @livewire('admin.vehiculos.import')
+    @livewire('admin.vehiculos.suspend')
+    @livewire('admin.vehiculos.mantenimiento.save')
+
 
 @stop
 
 @section('js')
 
+    <script>
+        window.addEventListener('mantenimiento-save', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Guardado',
+                    text: 'Tarea Mantenimiento guardada',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
 
+                })
+            });
+            $('.vehiculos_id').val(null).trigger('change');
+        })
+    </script>
     <script>
         window.addEventListener('change-status', event => {
             $(document).ready(function() {

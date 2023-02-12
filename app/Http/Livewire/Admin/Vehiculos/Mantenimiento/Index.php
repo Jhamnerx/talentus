@@ -48,7 +48,7 @@ class Index extends Component
 
     public function openModalSave()
     {
-        $this->emit('openModalSaveMantenimiento', ['from' => 'index']);
+        $this->emit('openModalSaveMantenimiento', 'index');
     }
 
     public function createTask(Mantenimiento $mantenimiento)

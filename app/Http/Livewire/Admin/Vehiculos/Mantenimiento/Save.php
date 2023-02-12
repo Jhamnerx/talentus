@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Vehiculos\Mantenimiento;
 
-use App\Http\Controllers\Admin\MantenimientoController;
-use App\Models\Mantenimiento;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use App\Models\Vehiculos;
+use App\Models\Mantenimiento;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Admin\MantenimientoController;
 
 class Save extends Component
 {
@@ -16,6 +17,7 @@ class Save extends Component
 
 
     public $numero, $detalle_trabajo, $fecha_hora_mantenimiento, $notify_admin = true, $notify_client = false, $nota, $estado, $vehiculo_id;
+    public $placa = null, $from;
 
     protected $listeners = [
         'openModalSaveMantenimiento',
@@ -57,12 +59,20 @@ class Save extends Component
         return view('livewire.admin.vehiculos.mantenimiento.save');
     }
 
-    public function openModalSaveMantenimiento()
+    public function openModalSaveMantenimiento($from, Vehiculos $vehiculo = null)
     {
-        $this->openModal();
+
+
         $ctr = new MantenimientoController();
         $this->numero =  $ctr->setNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
+
+        if ($vehiculo) {
+            $this->placa = $vehiculo->placa;
+            $this->vehiculo_id = $vehiculo->id;
+        }
+        $this->from = $from;
+        $this->openModal();;
     }
 
 
