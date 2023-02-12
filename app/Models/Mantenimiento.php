@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\mantenimientoStatus;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -31,6 +33,29 @@ class Mantenimiento extends Model
         'estado' => mantenimientoStatus::class,
     ];
 
+    // pdf informe
+    public function getPDFData()
+    {
+
+        $plantilla = plantilla::first();
+        $fondo = $plantilla->img_documentos;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'mantenimiento' => $this,
+            'plantilla' => $plantilla,
+            'fondo' => $fondo,
+            'fecha' => Carbon::now(),
+            'sello' => $sello,
+        ]);
+
+        $customPaper = array(0, 0, 792.00, 1224.00);
+
+        $pdf = PDF::loadView('pdf.mantenimiento.informe')->setPaper('a4', 'landscape');
+        //return view('pdf.mantenimiento.informe');
+
+        return $pdf->stream('MANTENIMIENTO-' . $this->vehiculo->placa . ' ' . $this->numero . '.pdf');
+    }
+
     //Relacion uno a muchos inversa
     public function vehiculo()
     {
@@ -42,8 +67,8 @@ class Mantenimiento extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function tareas()
+    public function tarea()
     {
-        return $this->hasMany(Tareas::class, 'mantenimiento_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->hasOne(Tareas::class, 'mantenimiento_id')->withoutGlobalScope(EmpresaScope::class);
     }
 }

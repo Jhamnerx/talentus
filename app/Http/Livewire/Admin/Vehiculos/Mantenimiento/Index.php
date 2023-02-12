@@ -71,6 +71,15 @@ class Index extends Component
             $mantenimiento->save();
             $this->dispatchBrowserEvent('mark-as', ['estado' => $value]);
         }
+
+        if ($value = "COMPLETADA") {
+
+            if ($mantenimiento->tarea) {
+                $mantenimiento->tarea->estado = 'COMPLETE';
+                $mantenimiento->tarea->fecha_termino = Carbon::now();
+                $mantenimiento->tarea->save();
+            }
+        }
     }
 
     public function openModalDelete(Mantenimiento $mantenimiento)

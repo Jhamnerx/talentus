@@ -82,7 +82,7 @@ class CreateTask extends Component
     {
         $data = $this->validate();
 
-        $tarea = $this->mantenimiento->tareas()->create($data);
+        $tarea = $this->mantenimiento->tarea()->create($data);
 
         $this->closeModal();
         $this->dispatchBrowserEvent('save-task', ['tarea' => $tarea]);

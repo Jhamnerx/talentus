@@ -120,8 +120,6 @@
 
 
         .titulo {
-
-
             display: grid;
             grid-template-columns: 30% 70% 1fr;
             grid-template-rows: 1fr;
@@ -191,7 +189,7 @@
         </div>
 
         @php
-
+            
             $qr = base64_encode(
                 QrCode::format('png')
                     ->size(120)
@@ -212,7 +210,7 @@
                             route('consulta.actas', $acta->codigo),
                     ),
             );
-
+            
         @endphp
         <div class="qr">
             <img src="data:image/jpeg;base64, {{ $qr }}">
@@ -230,7 +228,7 @@
                 <b>{{ $acta->vehiculo->cliente
                     ? strtoupper($acta->vehiculo->cliente->razon_social)
                     : 'no
-                                                                                                                                                                                                                            existe' }}</b>
+                                                                                                                                                                                                                                            existe' }}</b>
                 con DNI/RUC:
                 {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}, ha
                 adquirido un equipo

@@ -316,6 +316,11 @@ Route::get('pdf/recibo-pago/{recibo}/{action?}', ReciboPagoPdfController::class)
 Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name('admin.pdf.factura');
 
 
+//mantenimiento informe pdf
+//-----------------------------
+
+Route::get('pdf/mantenimientos/{mantenimiento}', [MantenimientoController::class, 'pdfInforme'])->name('admin.pdf.mantenimiento');
+
 
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');

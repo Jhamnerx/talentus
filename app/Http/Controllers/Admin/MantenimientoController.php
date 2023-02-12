@@ -24,7 +24,6 @@ class MantenimientoController extends Controller
 
     public function setNextSequenceNumber()
     {
-
         $id = IdGenerator::generate(
             [
                 'table' => 'mantenimientos',
@@ -36,5 +35,10 @@ class MantenimientoController extends Controller
             ]
         );
         return trim($id);
+    }
+
+    public function pdfInforme(Mantenimiento $mantenimiento)
+    {
+        return $mantenimiento->getPDFData();
     }
 }
