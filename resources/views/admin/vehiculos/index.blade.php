@@ -8,7 +8,7 @@
     @livewire('admin.vehiculos.delete')
     @livewire('admin.vehiculos.import')
     @livewire('admin.vehiculos.suspend')
-    @livewire('admin.vehiculos.mantenimiento.save')
+    @livewire('admin.vehiculos.mantenimiento.save', ['update' => session('updated-numero')])
 
 
 @stop

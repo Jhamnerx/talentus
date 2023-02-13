@@ -30,8 +30,15 @@ class VehiculosController extends Controller
         $request->validate($requestVehiculo->rules($request->dispositivos_id, $request->numero, $vehiculo), $requestVehiculo->messages());
 
 
-        $vehiculo->update($request->all());
-        return redirect()->route('admin.vehiculos.index')->with('update', 'El vehiculo se actualizo con exito');
+        $updates = $vehiculo->update($request->all());
+
+        $changes =  $vehiculo->getChanges();
+        if (array_key_exists('numero', $changes)) {
+            return redirect()->route('admin.vehiculos.index')->with('updated-numero', $vehiculo->placa);
+        } else {
+            return redirect()->route('admin.vehiculos.index')->with('update', 'El vehiculo se actualizo con exito');
+        }
+        //
     }
 
     public function exportExcel()

@@ -505,3 +505,33 @@
 
 
 </div>
+@push('scripts')
+    @if (session('updated-numero'))
+        <script>
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Actualizado',
+                    text: 'La Actualización cambio el numero, deseas registrar una programación de mantenimiento?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, Registrar!',
+                    cancelButtonText: 'Cerrar!'
+
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        @this.emit('updated-numero', '{{ session('updated-numero') }}')
+                    } else if (result.isDenied) {
+
+                    }
+                })
+            });
+        </script>
+    @endif
+
+    <script>
+        console.log('hola');
+    </script>
+@endpush

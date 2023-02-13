@@ -18,10 +18,13 @@ class Save extends Component
 
     public $numero, $detalle_trabajo, $fecha_hora_mantenimiento, $notify_admin = true, $notify_client = false, $nota, $estado, $vehiculo_id;
     public $placa = null, $from;
+    public $updates;
 
     protected $listeners = [
         'openModalSaveMantenimiento',
+        'updated-numero' => 'listenUpdatedNumero',
     ];
+
 
     protected function rules()
     {
@@ -105,5 +108,17 @@ class Save extends Component
         $this->resetErrorBag();
         $this->resetValidation();
         $this->reset();
+    }
+
+    public function listenUpdatedNumero($placa)
+
+    {
+        $ctr = new MantenimientoController();
+        $this->numero =  $ctr->setNextSequenceNumber();
+        $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
+        $this->vehiculo_id = Vehiculos::where('placa', $placa)->first()->id;
+        $this->placa = $placa;
+        $this->from = 'vehiculos-index';
+        $this->openModal();
     }
 }
