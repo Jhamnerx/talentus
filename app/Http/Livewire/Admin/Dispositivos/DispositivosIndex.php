@@ -6,6 +6,7 @@ use App\Models\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class DispositivosIndex extends Component
 {
     use WithPagination;
@@ -25,6 +26,7 @@ class DispositivosIndex extends Component
         })->orwhereHas('vehiculos', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('imei', 'like', '%' . $this->search . '%')
+            ->orWhere('estado', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
