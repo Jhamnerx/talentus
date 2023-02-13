@@ -87,6 +87,11 @@ class VehiculosIndex extends Component
         return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total'));
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
+
     public function filter($dias)
     {
         switch ($dias) {
