@@ -17,7 +17,6 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\RecibosController;
-use App\Http\Controllers\Admin\CiudadesController;
 use App\Http\Controllers\Admin\ClientesController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\ReportesController;
@@ -47,6 +46,7 @@ use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
+use App\Http\Controllers\Admin\MantenimientoController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -176,7 +176,23 @@ Route::controller(ContratosController::class)->group(function () {
 
 // VEHICULOS
 Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
-Route::resource('vehiculos', VehiculosController::class)->names('admin.vehiculos');
+
+
+Route::controller(VehiculosController::class)->group(function () {
+
+    Route::get('vehiculos', 'index')->name('admin.vehiculos.index');
+    Route::get('vehiculos/{vehiculo}/editar', 'edit')->name('admin.vehiculos.edit');
+    Route::put('vehiculos/{vehiculo}', 'update')->name('admin.vehiculos.update');
+});
+
+
+Route::controller(MantenimientoController::class)->group(function () {
+
+    Route::get('mantenimiento', 'index')->name('admin.vehiculos.mantenimiento.index');
+    Route::get('mantenimiento/{mantenimiento}', 'show')->name('admin.vehiculos.mantenimiento.show');
+});
+
+
 
 Route::controller(ReportesController::class)->group(function () {
 
@@ -299,6 +315,11 @@ Route::get('pdf/recibo/{recibo}/{action?}', ReciboPdfController::class)->name('a
 Route::get('pdf/recibo-pago/{recibo}/{action?}', ReciboPagoPdfController::class)->name('admin.pdf.recibo.pagos');
 Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name('admin.pdf.factura');
 
+
+//mantenimiento informe pdf
+//-----------------------------
+
+Route::get('pdf/mantenimientos/{mantenimiento}', [MantenimientoController::class, 'pdfInforme'])->name('admin.pdf.mantenimiento');
 
 
 //notificaciones y mensajes

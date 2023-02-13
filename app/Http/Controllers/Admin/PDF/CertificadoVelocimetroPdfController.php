@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\Admin\PDF;
 
+use App\Models\Ciudades;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\CertificadosVelocimetros;
-use Illuminate\Http\Request;
 
 class CertificadoVelocimetroPdfController extends Controller
 {
     public function __invoke(CertificadosVelocimetros $certificado)
     {
-
+        $ciudad = Ciudades::find($certificado->ciudades_id);
+        $certificado->fecha =
+            $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+        $certificado->save();
 
         return $certificado->getPDFData();
     }

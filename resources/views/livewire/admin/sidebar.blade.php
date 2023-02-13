@@ -483,15 +483,16 @@
                                         </li>
                                     @endcan
 
-                                    {{-- <li class="mb-1 last:mb-0">
-                                    <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
-                                        :class="page === 'clientes-contactos' && '!text-indigo-500'"
-                                        href="{{ route('admin.clientes.contactos.index') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Contactos
-                                        </span>
-                                    </a>
-                                </li> --}}
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-slate-400 hover:text-slate-200 transition duration-150 truncate"
+                                            :class="page === 'vehiculos-mantenimiento' && '!text-indigo-500'"
+                                            href="{{ route('admin.vehiculos.mantenimiento.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mantenimientos
+                                                Programados
+                                            </span>
+                                        </a>
+                                    </li>
 
                                     @can('ver-vehiculos-reportes')
                                         <li class="mb-1 last:mb-0">

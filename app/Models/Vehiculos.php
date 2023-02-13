@@ -128,4 +128,10 @@ class Vehiculos extends Model
 
         return $this->hasMany(Tareas::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
     }
+
+
+    public function mantenimientos()
+    {
+        return $this->hasMany(Mantenimiento::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }

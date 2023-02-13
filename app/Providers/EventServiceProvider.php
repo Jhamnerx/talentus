@@ -28,6 +28,7 @@ use App\Models\Facturas;
 use App\Models\Flotas;
 use App\Models\GuiaRemision;
 use App\Models\Lineas;
+use App\Models\Mantenimiento;
 use App\Models\ModelosDispositivo;
 use App\Models\Payments;
 use App\Models\Presupuestos;
@@ -52,6 +53,7 @@ use App\Observers\FacturaObserver;
 use App\Observers\FlotasObserver;
 use App\Observers\GuiaRemisionObserver;
 use App\Observers\LineasObserver;
+use App\Observers\MantenimientoObserver;
 use App\Observers\ModelosDispositivosObserver;
 use App\Observers\PaymentsObserver;
 use App\Observers\PresupuestosObserver;
@@ -109,5 +111,6 @@ class EventServiceProvider extends ServiceProvider
         GuiaRemision::observe(GuiaRemisionObserver::class);
         Tareas::observe(TareasObserver::class);
         RecibosPagosVarios::observe(RecibosPagosObserver::class);
+        Mantenimiento::observe(MantenimientoObserver::class);
     }
 }

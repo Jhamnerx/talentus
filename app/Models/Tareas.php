@@ -36,6 +36,13 @@ class Tareas extends Model
         'respuesta' => 'boolean',
     ];
 
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
     //relacion con tipo de tareas
 
     public function scopeEstado($query, $estado)
@@ -72,5 +79,11 @@ class Tareas extends Model
     public function image()
     {
         return $this->morphOne(Imagen::class, 'imageable')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+
+    public function mantenimiento()
+    {
+        return $this->belongsTo(Mantenimiento::class, 'mantenimiento_id');
     }
 }

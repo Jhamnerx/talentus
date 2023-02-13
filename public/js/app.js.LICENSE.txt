@@ -13,7 +13,7 @@
  */
 
 /*!
- * Pusher JavaScript Library v7.5.0
+ * Pusher JavaScript Library v7.6.0
  * https://pusher.com/
  *
  * Copyright 2020, Pusher

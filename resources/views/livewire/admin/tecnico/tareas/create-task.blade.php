@@ -52,7 +52,7 @@
                                         </option>
 
                                         @foreach ($tipo_tareas as $key => $tarea)
-                                        <option value="{{$key}}">{{$tarea}}</option>
+                                            <option value="{{ $key }}">{{ $tarea }}</option>
                                         @endforeach
                                     </select>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -76,18 +76,17 @@
                                     </div>
                                 </div>
                                 @error('tipo_tarea_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             {{-- titulo --}}
                             <div class="col-span-12">
                                 <div class="text-center font-semibold text-slate-800">
-                                    SERVICIO: {{$titulo}}.
+                                    SERVICIO: {{ $titulo }}.
                                 </div>
-                                {{json_encode($errors->all())}}
                             </div>
 
                             {{-- vehiculo --}}
@@ -140,20 +139,20 @@
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                                 @if ($ErrorMsgVehiculo)
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $ErrorMsgVehiculo }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $ErrorMsgVehiculo }}
+                                    </p>
                                 @endif
                             </div>
 
                             {{-- dispositivo --}}
-                            <div class="col-span-12 sm:col-span-6 dispositivo {{$tipo_tarea_id ==2 ||$tipo_tarea_id ==4  ? 'hidden' : 'cambio'
-                                }}">
+                            <div
+                                class="col-span-12 sm:col-span-6 dispositivo {{ $tipo_tarea_id == 2 || $tipo_tarea_id == 4 ? 'hidden' : 'cambio' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Dispositivo:
                                 </label>
@@ -175,26 +174,27 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                     		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
-                                                    height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;"
+                                                    width="181.135" height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
                                                                     	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
+                                                r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
                                 @error('dispositivo')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             {{-- velocimetro --}}
-                            <div class="col-span-12 sm:col-span-6 {{$tipo_tarea_id==4 ? 'velocimetro' : 'hidden'
-                                                            }}">
+                            <div
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 ? 'velocimetro' : 'hidden' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Modelo Velocimetro:
                                 </label>
@@ -204,8 +204,8 @@
                                         wire:model="modelo_velocimetro" id="modelo_velocimetro">
                                         <option value="0" disabled selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
-                                        <option value="{{ $velocimetro->nombre }}">
-                                            {{ $velocimetro->nombre }}</option>
+                                            <option value="{{ $velocimetro->nombre }}">
+                                                {{ $velocimetro->nombre }}</option>
                                         @endforeach
                                     </select>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -221,25 +221,26 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                                                 		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
-                                                    height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;"
+                                                    width="181.135" height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
                                                                                                 	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
+                                                r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
                                 @error('modelo_velocimetro')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- numero --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5 ? 'hidden' : 'velo'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 || $tipo_tarea_id == 5 ? 'hidden' : 'velo' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Número:
                                 </label>
@@ -264,14 +265,14 @@
                                     </div>
                                 </div>
                                 @error('numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- sim card --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5  ? 'hidden' : 'velo'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 || $tipo_tarea_id == 5 ? 'hidden' : 'velo' }}">
                                 <label class="block text-sm font-medium mb-1" for="sim_card">
                                     Sim Card:
                                 </label>
@@ -305,14 +306,14 @@
                                     </div>
                                 </div>
                                 @error('sim_card')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- numero nuevo --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id == 2 && $tipo_tarea_id !==4 ? 'cambio' : 'hidden'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 4 ? 'cambio' : 'hidden' }}">
                                 <label class="block text-sm font-medium mb-1" for="nuevo_numero">
                                     Número Nuevo:
                                 </label>
@@ -337,15 +338,15 @@
                                     </div>
                                 </div>
                                 @error('nuevo_numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             {{-- nuevo sim card --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id == 2 && $tipo_tarea_id !==5  ? 'cambio' : 'hidden'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 5 ? 'cambio' : 'hidden' }}">
                                 <label class=" block text-sm font-medium mb-1" for="nuevo_sim_card">
                                     Sim Card Nuevo:
                                 </label>
@@ -379,9 +380,9 @@
                                     </div>
                                 </div>
                                 @error('nuevo_sim_card')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -401,7 +402,8 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
+                                                    fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -420,9 +422,9 @@
                                     </div>
                                 </div>
                                 @error('fecha_hora')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -432,31 +434,31 @@
                                 <div class="flex flex-wrap items-center">
 
                                     @foreach ($tecnicos as $tecnico)
-                                    <div class="m-3">
-                                        <label class="flex items-center">
-                                            <input type="radio" name="radio-buttons" class="form-radio"
-                                                wire:model="tecnico_id" value="{{$tecnico->id}}" />
-                                            <span class="text-sm ml-2">{{$tecnico->name}}</span>
-                                        </label>
-                                    </div>
+                                        <div class="m-3">
+                                            <label class="flex items-center">
+                                                <input type="radio" name="radio-buttons" class="form-radio"
+                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                                            </label>
+                                        </div>
                                     @endforeach
 
                                 </div>
                                 @error('tecnico_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
 
-                            @if ($tipo_tarea_id == "0")
-                            <div class="col-span-12">
+                            @if ($tipo_tarea_id == '0')
+                                <div class="col-span-12">
 
-                                <div class="text-center font-medium text-rose-600">
-                                    SELECCIONA EL TIPO DE TAREA.
+                                    <div class="text-center font-medium text-rose-600">
+                                        SELECCIONA EL TIPO DE TAREA.
+                                    </div>
                                 </div>
-                            </div>
                             @endif
 
                         </div>
@@ -481,173 +483,168 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
+        <script>
+            window.addEventListener('save-task', event => {
+                $('.selectVehiculo').val(null).trigger('change');
+                $('.selectModelDispositivo').val(null).trigger('change');
+            })
+        </script>
 
-<script>
-    window.addEventListener('save-task', event => {
-        $('.selectVehiculo').val(null).trigger('change');
-        $('.selectModelDispositivo').val(null).trigger('change');
-    })
+        <script>
+            $(document).ready(function() {
+                selects();
+                autocompleteNumero();
+                initFechaHora();
 
-</script>
+            })
+            window.addEventListener('change-tipo-tarea', event => {
+                if (event.detail.value == 4) {
+                    $('.dispositivo').hide()
+                }
+                selects();
+                autocompleteNumero();
+                initFechaHora();
 
-<script>
-    $(document).ready(function() {
-        selects();
-        autocompleteNumero();
-        initFechaHora();
+            })
 
-    })
-    window.addEventListener('change-tipo-tarea', event => {
-        if(event.detail.value == 4){
-            $('.dispositivo').hide()
-        }
-        selects();
-        autocompleteNumero();
-        initFechaHora();
+            function selects() {
+                $('.selectVehiculo').select2({
+                    placeholder: 'Buscar un Vehiculo',
+                    language: "es",
+                    minimumInputLength: 2,
+                    selectionCssClass: 'pl-9',
+                    width: '100%',
+                    ajax: {
+                        url: '{{ route('search.vehiculos') }}',
+                        dataType: 'json',
+                        delay: 250,
+                        cache: true,
+                        data: function(params) {
+                            var query = {
+                                term: params.term,
+                            }
+                            return query;
+                        },
+                        processResults: function(data, params) {
 
-    })
+                            var suggestions = $.map(data.suggestions, function(obj) {
+                                obj.id = obj.id || obj.value;
+                                obj.text = obj.data;
+                                return obj;
+                            });
 
-    function selects() {
-        $('.selectVehiculo').select2({
-            placeholder: 'Buscar un Vehiculo',
-            language: "es",
-            minimumInputLength: 2,
-            selectionCssClass: 'pl-9',
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.vehiculos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
+                            return {
+                                results: suggestions,
+                            };
+
+                        },
+
+
                     }
-                    return query;
-                },
-                processResults: function(data, params) {
+                });
 
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
+                $('.selectVehiculo').on('select2:select', function(e) {
 
-                    return {
-                        results: suggestions,
-                    };
+                    var data = e.params.data;
+                    @this.set('vehiculos_id', data.id)
 
-                },
+                });
+
+                $('.selectModelDispositivo').select2({
+                    placeholder: 'Buscar un Dispositivo',
+                    language: "es",
+                    selectionCssClass: 'pl-9',
+                    width: '100%',
+                    ajax: {
+                        url: '{{ route('search.dispositivos.modelos') }}',
+                        dataType: 'json',
+                        delay: 250,
+                        cache: true,
+                        data: function(params) {
+                            var query = {
+                                term: params.term,
+                            }
+                            return query;
+                        },
+                        processResults: function(data, params) {
+
+                            var suggestions = $.map(data.suggestions, function(obj) {
+                                obj.id = obj.id || obj.data;
+                                obj.text = obj.value;
+                                return obj;
+                            });
+
+                            return {
+                                results: suggestions,
+                            };
+
+                        },
 
 
-            }
-        });
-
-        $('.selectVehiculo').on('select2:select', function(e) {
-
-            var data = e.params.data;
-            @this.set('vehiculos_id', data.id)
-
-        });
-
-        $('.selectModelDispositivo').select2({
-            placeholder: 'Buscar un Dispositivo',
-            language: "es",
-            selectionCssClass: 'pl-9',
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.dispositivos.modelos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
                     }
-                    return query;
-                },
-                processResults: function(data, params) {
+                });
 
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-                        return obj;
-                    });
+                $('.selectModelDispositivo').on('select2:select', function(e) {
 
-                    return {
-                        results: suggestions,
-                    };
+                    var data = e.params.data;
+                    @this.set('dispositivo', data.modelo)
 
-                },
-
-
+                });
             }
-        });
+        </script>
 
-        $('.selectModelDispositivo').on('select2:select', function(e) {
+        <script>
+            function autocompleteNumero() {
+                $('.numero').devbridgeAutocomplete({
+                    lookup: function(query, done) {
+                        $.ajax({
+                            url: "{{ route('search.lineas') }}",
+                            dataType: 'json',
+                            data: {
+                                term: query
+                            },
+                            success: function(data) {
+                                done(data);
+                            }
+                        })
 
-            var data = e.params.data;
-            @this.set('dispositivo', data.modelo)
-
-        });
-    }
-
-
-</script>
-
-<script>
-    function autocompleteNumero(){
-        $('.numero').devbridgeAutocomplete({
-            lookup: function(query, done) {
-                $.ajax({
-                    url: "{{ route('search.lineas') }}",
-                    dataType: 'json',
-                    data: {
-                        term: query
                     },
-                    success: function(data) {
-                        done(data);
+                    minChars: 2,
+                    autoSelectFirst: false,
+                    deferRequestBy: 10,
+                    onSelect: function(suggestion) {
+
+                        // $('.operador').val(suggestion.operador);
+                        // @this.set('operador', suggestion.operador)
+                        @this.set('numero', suggestion.value)
+                        // $('.sim_card').val(suggestion.sim_card);
+                        @this.set('sim_card', suggestion.sim_card)
+                        // $('.sim_card_id').val(suggestion.sim_card_id);
+                        // @this.set('sim_card_id', suggestion.sim_card_id)
+
+                    },
+                    onHint: function(hint) {
+                        //console.log(hint);
+                    },
+                    onSearchComplete: function(query, suggestions) {
+
                     }
-                })
 
-            },
-            minChars: 2,
-            autoSelectFirst: false,
-            deferRequestBy: 10,
-            onSelect: function(suggestion) {
-
-                // $('.operador').val(suggestion.operador);
-                // @this.set('operador', suggestion.operador)
-                @this.set('numero', suggestion.value)
-                // $('.sim_card').val(suggestion.sim_card);
-                @this.set('sim_card', suggestion.sim_card)
-                // $('.sim_card_id').val(suggestion.sim_card_id);
-                // @this.set('sim_card_id', suggestion.sim_card_id)
-
-            },
-            onHint: function(hint) {
-                //console.log(hint);
-            },
-            onSearchComplete: function(query, suggestions) {
-
+                });
             }
 
-        });
-    }
-    function initFechaHora(){
-        $(document).ready(function() {
-            flatpickr('.fecha-tarea', {
-                enableTime: true,
-                disableMobile: "true",
-                dateFormat: "Y-m-d H:i",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-    }
-
-
-</script>
-@endpush
+            function initFechaHora() {
+                $(document).ready(function() {
+                    flatpickr('.fecha-tarea', {
+                        enableTime: true,
+                        disableMobile: "true",
+                        dateFormat: "Y-m-d H:i",
+                        prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                        nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+                    });
+                })
+            }
+        </script>
+    @endpush
 @endonce

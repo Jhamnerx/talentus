@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Ventas\Recibos;
+namespace App\Http\Livewire\Admin\Vehiculos\Mantenimiento;
 
-use App\Exports\RecibosExport;
+use App\Exports\MantenimientosExport;
 use Carbon\Carbon;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
 
-class Reportes extends Component
+class Export extends Component
 {
-    public $openModalReporte = false;
+
+    public $openModalExport = false;
 
     public $fecha_inicio;
     public $fecha_fin;
@@ -18,7 +19,7 @@ class Reportes extends Component
 
 
     protected $listeners = [
-        'openModalReporte' => 'openModal'
+        'openModalExport' => 'openModal'
     ];
 
     protected  $rules = [
@@ -36,28 +37,28 @@ class Reportes extends Component
 
 
     ];
+
     public function mount()
     {
 
         $this->fecha_inicio = Carbon::now()->format('Y-m-d');
-        $this->fecha_fin = date('Y-m-d');
-        $this->estado = 'PAID';
+        $this->fecha_fin = Carbon::now()->addMonth()->format('Y-m-d');
+        $this->estado = 'PENDIENTE';
     }
 
     public function render()
     {
-        return view('livewire.admin.ventas.recibos.reportes');
+        return view('livewire.admin.vehiculos.mantenimiento.export');
     }
-
 
     public function openModal()
     {
-        $this->openModalReporte = true;
+        $this->openModalExport = true;
     }
 
     public function closeModal()
     {
-        $this->openModalReporte = false;
+        $this->openModalExport = false;
         $this->reset();
         $this->resetErrorBag();
     }
@@ -66,7 +67,7 @@ class Reportes extends Component
     {
 
         $this->validate();
-        return Excel::download(new RecibosExport($this->estado, $this->fecha_inicio, $this->fecha_fin), 'recibos_reportes.xlsx');
+        return Excel::download(new MantenimientosExport($this->estado, $this->fecha_inicio, $this->fecha_fin), 'mantenimientos_reportes.xlsx');
     }
 
     public function updated($label)

@@ -131,4 +131,13 @@ class VehiculosIndex extends Component
 
         $this->emit('deleteVehiculo', $vehiculo);
     }
+
+    public function suspendVehiculo(Vehiculos $vehiculo)
+    {
+        $this->emit('suspendVehiculo', $vehiculo);
+    }
+    public function createMantenimiento(Vehiculos $vehiculo)
+    {
+        $this->emit('openModalSaveMantenimiento', 'vehiculos-index', $vehiculo);
+    }
 }
