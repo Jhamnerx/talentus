@@ -203,7 +203,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Placa</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-pre-wrap">
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 ">
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -254,7 +254,7 @@
                                             {{ $reporte->vehiculos->placa }}
                                         </div>
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-pre-wrap">
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         @if (count($reporte->vehiculos->cliente->contactos) > 0)
                                             <div wire:click="openModalContactos({{ $reporte->vehiculos->cliente->id }})"
                                                 class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
