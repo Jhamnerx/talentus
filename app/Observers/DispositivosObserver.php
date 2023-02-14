@@ -12,6 +12,16 @@ class DispositivosObserver
      * @param  \App\Models\Dispositivos  $dispositivos
      * @return void
      */
+    public function creating(Dispositivos $dispositivo)
+    {
+
+        if (!\App::runningInConsole()) {
+            $dispositivo->empresa_id = session('empresa');
+            $dispositivo->user_id = auth()->user()->id;
+        }
+    }
+
+
     public function created(Dispositivos $dispositivos)
     {
         //

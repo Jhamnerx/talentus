@@ -45,11 +45,6 @@ class GpsController extends Controller
         return redirect()->route('admin.almacen.dispositivos.index')->with('store', 'El dispositivo se guardo con exito');;
     }
 
-    public function show(Dispositivos $dispositivo)
-    {
-        return view('admin.almacen.dispositivos.show');
-    }
-
     public function edit(Dispositivos $dispositivo)
     {
         $modelos = ModelosDispositivo::pluck('modelo', 'id');

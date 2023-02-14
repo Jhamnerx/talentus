@@ -56,8 +56,6 @@
                         <div class="grid grid-cols-12 gap-6">
 
                             <div class="col-span-6 sm:col-span-6">
-                                {!! Form::hidden('empresa_id', session('empresa')) !!}
-
 
                                 {!! Html::decode(
                                     Form::label('imei', 'Imei <span class="text-rose-500">*</span>', ['class' => 'block text-sm font-medium mb-1']),

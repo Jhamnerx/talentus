@@ -214,6 +214,9 @@
                                 <div class="font-semibold text-left">VEHICULO</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Registrado por</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
                             </th>
                         </tr>
@@ -287,6 +290,12 @@
                                             </div>
                                         @endif
 
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left text-slate-800 text-sm">
+                                            {{ $dispositivo->user ? $dispositivo->user->name : '' }}
+
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">
