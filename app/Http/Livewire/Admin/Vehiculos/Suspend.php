@@ -19,9 +19,22 @@ class Suspend extends Component
 
     public function delete()
     {
-        $this->vehiculo->delete();
+
+        if ($this->vehiculo->numero) {
+
+            $this->vehiculo->setAttribute('old_numero', $this->vehiculo->numero);
+            $this->vehiculo->setAttribute('old_sim_card', $this->vehiculo->sim_card->sim_card);
+        }
+
+
+
+        $this->vehiculo->setAttribute('numero', NULL);
+        $this->vehiculo->setAttribute('sim_card_id', NULL);
+        $this->vehiculo->setAttribute('estado', 2);
+        $this->vehiculo->save();
         // return redirect()->route('admin.vehiculos.index');
-        $this->dispatchBrowserEvent('vehiculo-delete', ['delete' => $this->vehiculo]);
+        $this->dispatchBrowserEvent('change-status', ['status' => 2]);
+
 
         $this->emit('updateTable');
     }
