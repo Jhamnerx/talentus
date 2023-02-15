@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Vehiculos;
 
 use App\Http\Requests\VehiculosRequest;
 use App\Models\Clientes;
+use App\Models\Dispositivos;
 use App\Models\Flotas;
 use App\Models\Vehiculos;
 use Livewire\Component;
@@ -54,11 +55,23 @@ class SaveVehiculo extends Component
 
         Vehiculos::create($validatedDate);
 
+
+        $this->setDispositivoVendido($validatedDate['dispositivo_imei']);
+
         $this->emit('updateTable');
         $this->modalOpen = false;
 
-        return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
-        return redirect()->route('admin.vehiculos.index')->with('flash.bannerStyle', 'success');
+        //return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
+        //return redirect()->route('admin.vehiculos.index')->with('flash.bannerStyle', 'success');
+    }
+    public function setDispositivoVendido($imei)
+    {
+
+        $dispositivo = Dispositivos::where('imei', $imei)->firstOrFail();
+        if ($dispositivo) {
+            $dispositivo->estado = "VENDIDO";
+            $dispositivo->save();
+        }
     }
 
     public function updated($label)

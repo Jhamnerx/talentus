@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Vehiculos;
+use App\Models\Dispositivos;
+use Illuminate\Http\Request;
 use App\Exports\VehiculosExport;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\VehiculosRequest;
-use App\Models\Vehiculos;
-use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\VehiculosRequest;
 
 class VehiculosController extends Controller
 {
@@ -29,6 +30,7 @@ class VehiculosController extends Controller
         $requestVehiculo = new VehiculosRequest();
         $request->validate($requestVehiculo->rules($request->dispositivos_id, $request->numero, $vehiculo), $requestVehiculo->messages());
 
+        $this->setDispositivoVendido($request->dispositivo_imei);
 
         $updates = $vehiculo->update($request->all());
 
@@ -39,6 +41,16 @@ class VehiculosController extends Controller
             return redirect()->route('admin.vehiculos.index')->with('update', 'El vehiculo se actualizo con exito');
         }
         //
+    }
+
+    public function setDispositivoVendido($imei)
+    {
+
+        $dispositivo = Dispositivos::where('imei', $imei)->firstOrFail();
+        if ($dispositivo && $dispositivo != "VENDIDO") {
+            $dispositivo->estado = "VENDIDO";
+            $dispositivo->save();
+        }
     }
 
     public function exportExcel()
