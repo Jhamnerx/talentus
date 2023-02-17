@@ -80,11 +80,16 @@ Route::controller(ProductosController::class)->group(function () {
 
 Route::controller(LineasController::class)->group(function () {
 
-    Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
-    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
-    Route::get('disponibles/lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
-    Route::get('asign/lineas', 'asignLinea')->name('admin.asign.lineas');
-    Route::post('asign/lineas/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+    Route::get('sim-card', 'index')->name('admin.almacen.lineas.index');
+    Route::get('sim-card/crear', 'create')->name('admin.almacen.lineas.create');
+    Route::get('asignar/linea', 'asignLinea')->name('admin.asign.lineas');
+    Route::post('asignar/linea/store', 'asignLineaStore')->name('admin.asign.lineas.store');
+
+    //lineas
+    Route::get('lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
+    Route::get('lineas/crear', 'createLinea')->name('admin.almacen.lineas.disponibles.create');
+    Route::get('asignar/sim-card', 'asignSimCard')->name('admin.asign.simcard');
+    Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.asign.simcard.store');
 });
 
 

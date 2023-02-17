@@ -53,6 +53,11 @@ class Dispositivos extends Model
     {
         return $query->where('modelo_id', '=', $modelo);
     }
+
+    public function scopeMarca($query, $marca)
+    {
+        return $query->where('modelos_dispositivos.marca', '=', $marca);
+    }
     //GLOBAL SCOPES
     protected static function booted()
     {
