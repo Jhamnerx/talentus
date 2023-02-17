@@ -14,9 +14,9 @@ return new class extends Migration
     public function up()
     {
         Schema::table('dispositivos', function (Blueprint $table) {
-            $table->unsignedBigInteger('user_id')->nullable()->after('empresa_id');
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
+            //
+            $table->boolean('in_fota')->default(false)->after('estado');
+            $table->boolean('consultado')->default(false)->after('in_fota');
         });
     }
 
@@ -27,7 +27,7 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('dispositivos', function (Blueprint $table) {
+        Schema::table('fota_to_dispositivos', function (Blueprint $table) {
             //
         });
     }

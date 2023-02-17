@@ -167,6 +167,29 @@
                     @livewire('admin.dispositivos.import')
                 @endcan
 
+                <div class="relative inline-flex">
+
+                    <button wire:click.prevent="consultaFota" wire:loading.attr="disabled"
+                        wire:loading.class="bg-[#62abf3]" wire:loading.class.remove="hover:bg-[#0054A6] bg-[#477dd8]"
+                        class="btn bg-[#4790d8] hover:bg-[#0054A6] text-white btn border-slate-200 hover:border-slate-300">
+                        <svg class="w-6 h-6 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                            <g fill="currentColor" class="nc-icon-wrapper">
+                                <path
+                                    d="M22.707,8.293A1,1,0,0,0,21,9v6H17a17,17,0,0,0,0,34h9a2,2,0,0,0,0-4H17a13,13,0,0,1,0-26H31a1,1,0,0,0,.707-1.707Z">
+                                </path>
+                                <path data-color="color-2"
+                                    d="M47,15H38a2,2,0,0,0,0,4h9a13,13,0,0,1,0,26H33a1,1,0,0,0-.707,1.707l9,9A1,1,0,0,0,42,56a.987.987,0,0,0,.383-.076A1,1,0,0,0,43,55V49h4a17,17,0,0,0,0-34Z">
+                                </path>
+                            </g>
+                        </svg>
+                        <span class="hidden xs:block ml-2">Consultar Fota</span>
+                    </button>
+
+                </div>
+                <div class="relative inline-flex" wire:loading wire:target="consultaFota">
+                    Consultando a fota web...
+                </div>
+
             </div>
         </div>
 
@@ -182,7 +205,7 @@
         </header>
         <div x-data="handleSelect">
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
@@ -211,10 +234,16 @@
                                 <div class="font-semibold text-left">MARCA</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">FOTA</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">VEHICULO</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Registrado por</div>
+                                <div class="font-semibold text-left">Registrado por:</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Fecha registro:</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
@@ -278,6 +307,18 @@
                                         <div class="text-left">{{ $dispositivo->modelo->marca }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($dispositivo->in_fota)
+                                            <div class="text-left">
+
+                                                <img width="60%"
+                                                    src="https://fm.teltonika.lt//static/media/teltonikaFavicon.1d173e0a4f5b5a7d7471.ico"
+                                                    alt="">
+
+                                            </div>
+                                        @endif
+
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                         @if (!empty($dispositivo->vehiculos))
                                             <div class="font-medium text-sky-500">
@@ -294,6 +335,12 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left text-slate-800 text-sm">
                                             {{ $dispositivo->user ? $dispositivo->user->name : '' }}
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left text-slate-800 text-sm">
+                                            {{ $dispositivo->created_at->format('d-m-Y h:m') }}
 
                                         </div>
                                     </td>
@@ -356,7 +403,7 @@
                                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
                                                                     </path>
                                                                 </svg>
-                                                                Ver
+                                                                Ver Información
                                                             </a>
                                                         </li>
 
@@ -372,7 +419,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         @endif
