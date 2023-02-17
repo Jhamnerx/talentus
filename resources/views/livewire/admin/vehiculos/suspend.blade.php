@@ -38,11 +38,29 @@
                                     volver activar </p>
                             </div>
                         </div>
+                        {{ $remove }}
+                        @if ($vehiculo)
+                            @if ($vehiculo->dispositivos)
+                                <div class="mb-2">
+                                    <label class="block text-sm mb-1 text-talentus-100 font-semibold"
+                                        for="remove">Remover
+                                        IMEI del Gps</label>
+                                    <input wire:model="remove" name="remove" type="checkbox" value="true"
+                                        class="form-checkbox px-2 py-1">
+
+                                </div>
+                                <p class="text-xs text-gray-500"> El imei actual se guardara en otro campo para permitir
+                                    usar el dispositivo en otra unidad </p>
+                            @endif
+
+                        @endif
+
+
                         <!-- Modal footer -->
                         <div class="flex flex-wrap justify-end space-x-2 text-right">
                             <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                                 @click="modalSuspend = false">Cancelar</button>
-                            <button wire:click="delete" class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
+                            <button wire:click="suspend" class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
                                 @click="modalSuspend = false">
                                 Si, Eliminar</button>
                         </div>
