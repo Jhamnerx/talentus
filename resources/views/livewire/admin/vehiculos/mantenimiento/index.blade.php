@@ -394,7 +394,7 @@
                                 </tr>
                             @endforeach
                         @else
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         @endif

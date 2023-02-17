@@ -229,16 +229,7 @@
                                 <div class="font-semibold text-left">Marca</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Modelo</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Tipo</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Año</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Color</div>
+                                <div class="font-semibold text-left">Datos</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Cliente</div>
@@ -279,17 +270,127 @@
                                         <div class="font-medium text-slate-800">{{ $vehiculo->marca }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $vehiculo->modelo }}</div>
+                                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                            @mouseleave="open = false">
+                                            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                                aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                                @focusout="open = false" @click.prevent>
+                                                <span class="mr-2">
+                                                    INFO VEHICULO
+                                                </span>
+                                                <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                                                </svg>
+                                            </button>
+                                            <div
+                                                class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2 h-[calc(100vh-64px)]">
+                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
+                                                    x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+                                                    <div class="">
+                                                        <div class="font-medium text-slate-800 mb-0.5 pb-2  text-base">
+                                                            <b>{{ $vehiculo->placa }}</b>
+                                                        </div>
+                                                        <div
+                                                            class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
+                                                            <table
+                                                                class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                                                                <thead
+                                                                    class="text-xs  text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                                    <tr>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            DATO
+                                                                        </th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            VALOR
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody class="a overflow-y-auto">
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            MODELO
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->modelo }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            TIPO
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->tipo }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            AÑO
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->year }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            COLOR
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->color }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            MOTOR
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->motor }}
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    <tr
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        <th scope="row"
+                                                                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                            SERIE
+                                                                        </th>
+                                                                        <td class="px-6 py-4">
+                                                                            {{ $vehiculo->serie }}
+                                                                        </td>
+
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
                                     </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $vehiculo->tipo }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $vehiculo->year }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $vehiculo->color }}</div>
-                                    </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="font-medium text-sky-500">
                                             @if ($vehiculo->cliente)
