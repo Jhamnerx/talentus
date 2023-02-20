@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Disponibles extends Component
+class Index extends Component
 {
 
     use WithPagination;
@@ -27,7 +27,6 @@ class Disponibles extends Component
     {
         $this->render();
     }
-
     public function updateLineas()
     {
 
@@ -70,7 +69,7 @@ class Disponibles extends Component
         $total = Lineas::all()->count();
 
 
-        return view('livewire.admin.lineas.disponibles', compact('lineas', 'total'));
+        return view('livewire.admin.lineas.index', compact('lineas', 'total'));
     }
 
     public function operador($operador = null)

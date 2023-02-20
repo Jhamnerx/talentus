@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\MantenimientoController;
+use App\Http\Controllers\Admin\SimCardController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -78,21 +79,22 @@ Route::controller(ProductosController::class)->group(function () {
 });
 
 
-Route::controller(LineasController::class)->group(function () {
+Route::controller(SimCardController::class)->group(function () {
 
-    Route::get('sim-card', 'index')->name('admin.almacen.lineas.index');
-    Route::get('sim-card/crear', 'create')->name('admin.almacen.lineas.create');
-    Route::get('asignar/linea', 'asignLinea')->name('admin.asign.lineas');
-    Route::post('asignar/linea/store', 'asignLineaStore')->name('admin.asign.lineas.store');
-
-    //lineas
-    Route::get('lineas', 'disponibles')->name('admin.almacen.lineas.disponibles.index');
-    Route::get('lineas/crear', 'createLinea')->name('admin.almacen.lineas.disponibles.create');
-    Route::get('asignar/sim-card', 'asignSimCard')->name('admin.asign.simcard');
-    Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.asign.simcard.store');
+    Route::get('sim-card', 'index')->name('admin.almacen.sim-card.index');
+    Route::get('sim-card/crear', 'create')->name('admin.almacen.sim-card.create');
+    Route::get('asignar/sim-card', 'asign')->name('admin.almacen.sim-card.asign');
+    Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.almacen.sim-card.asign.store');
 });
 
 
+Route::controller(LineasController::class)->group(function () {
+    //lineas
+    Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
+    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
+    Route::get('asignar/linea', 'asign')->name('admin.almacen.lineas.asign');
+    Route::post('asignar/linea/store', 'asignLineaStore')->name('admin.almacen.lineas.simcard.store');
+});
 
 Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('admin.almacen.modelos-dispositivos');
 

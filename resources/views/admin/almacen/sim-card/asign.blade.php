@@ -1,11 +1,11 @@
 @extends('layouts.admin')
-@section('ruta', 'almacen-lineas')
+@section('ruta', 'almacen-sim-card')
 @section('contenido')
     <!-- Code block starts -->
     <div
         class="my-6 lg:my-12 container px-6 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
         <!-- Add  button -->
-        <a href="{{ route('admin.almacen.lineas.index') }}">
+        <a href="{{ route('admin.almacen.sim-card.index') }}">
             <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
                     viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
@@ -17,7 +17,7 @@
             </button>
         </a>
         <div>
-            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">ASIGNAR SIMCARD A LINEA</h4>
+            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-100">ASIGNAR LINEA A SIMCARD</h4>
             <ul aria-label="current Status"
                 class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
                 <li class="flex items-center mr-4">
@@ -43,7 +43,7 @@
             <div class="mt-5 md:mt-0 md:col-span-7 ml-6">
 
 
-                @livewire('admin.lineas.asign', key($user->id))
+                @livewire('admin.sim-card.asign-linea', key($user->id))
 
 
             </div>

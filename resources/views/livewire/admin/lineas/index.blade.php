@@ -42,7 +42,7 @@
 
 
             @can('asignar.linea-sim_card')
-                <a href="{{ route('admin.asign.lineas') }}">
+                <a href="{{ route('admin.almacen.lineas.asign') }}">
                     <button
                         class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
                         <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">

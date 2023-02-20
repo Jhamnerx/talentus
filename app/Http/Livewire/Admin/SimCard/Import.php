@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Lineas;
+namespace App\Http\Livewire\Admin\SimCard;
 
-use App\Imports\Lineas;
+use Exception;
 use Livewire\Component;
+use App\Imports\LineasImport;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
-use Exception;
+use Maatwebsite\Excel\Validators\ValidationException;
 
-class LineasImport extends Component
+class Import extends Component
 {
     use WithFileUploads;
-
 
     public $file;
     public $errorInfo = null;
@@ -20,13 +20,14 @@ class LineasImport extends Component
     protected $listeners = [
 
         'openModalImport' => 'openModal',
-
     ];
 
 
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
     ];
+
+
 
     protected $messages = [
         'file.required' => 'Debes seleccionar un archivo',
@@ -42,33 +43,34 @@ class LineasImport extends Component
 
     public function render()
     {
-        return view('livewire.admin.lineas.lineas-import');
+        return view('livewire.admin.sim-card.import');
     }
 
     public function importExcel()
     {
         $this->validate();
+
         $this->errorInfo = null;
+
         try {
 
-            $exit = Excel::queueImport(new Lineas, $this->file);
+            $import = Excel::Import(new LineasImport(auth()->user()), $this->file);
 
-            $this->reset();
-        } catch (Exception $e) {
-            // dd($e);
-            $this->errorInfo = $e->errorInfo["2"];
+            $this->modalOpenImport = false;
+        } catch (ValidationException $e) {;
         }
     }
 
 
-    public function openModal(){
+    public function openModal()
+    {
 
 
         $this->modalOpenImport = true;
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalOpenImport = false;
         $this->reset();

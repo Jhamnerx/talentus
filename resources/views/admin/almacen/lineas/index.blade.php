@@ -3,18 +3,13 @@
 @section('contenido')
 
     <!-- Table -->
-    @livewire('admin.lineas.lineas-index')
-    @livewire('admin.lineas.import')
+
+    @livewire('admin.lineas.index')
 
 @stop
 
 @section('js')
     <script>
-        console.log('Hi!');
-    </script>
-
-    <script>
-        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,

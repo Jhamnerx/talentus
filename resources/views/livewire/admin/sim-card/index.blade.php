@@ -28,7 +28,7 @@
 
             <!-- Add  button -->
             @can('crear-sim_card')
-                <a href="{{ route('admin.almacen.lineas.create') }}">
+                <a href="{{ route('admin.almacen.sim-card.create') }}">
                     <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                         <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                             <path
@@ -41,7 +41,7 @@
 
 
             @can('asignar.linea-sim_card')
-                <a href="{{ route('admin.asign.lineas') }}">
+                <a href="{{ route('admin.almacen.sim-card.asign') }}">
                     <button
                         class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
                         <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
@@ -318,7 +318,7 @@
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                             <div class="space-x-1">
                                                 @if (!empty($sim_card->linea))
-                                                    @livewire('admin.lineas.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id))
+                                                    @livewire('admin.sim-card.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id))
                                                 @else
                                                     <div class="text-left">-</div>
                                                 @endif
@@ -330,7 +330,7 @@
                                     @can('ver.cambios-sim_card')
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                             <div class="space-x-1">
-                                                @livewire('admin.lineas.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
+                                                @livewire('admin.sim-card.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
                                             </div>
                                         </td>
                                     @endcan

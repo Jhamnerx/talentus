@@ -1,14 +1,20 @@
 @extends('layouts.admin')
-@section('ruta', 'almacen-disponibles-lineas')
+@section('ruta', 'almacen-sim-card')
 @section('contenido')
 
     <!-- Table -->
-    @livewire('admin.lineas.disponibles')
+    @livewire('admin.sim-card.index')
+    @livewire('admin.sim-card.import')
 
 @stop
 
 @section('js')
     <script>
+        console.log('Hi!');
+    </script>
+
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,

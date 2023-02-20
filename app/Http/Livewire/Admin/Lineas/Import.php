@@ -2,16 +2,16 @@
 
 namespace App\Http\Livewire\Admin\Lineas;
 
-use Exception;
+use App\Imports\Lineas;
 use Livewire\Component;
-use App\Imports\LineasImport;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
-use Maatwebsite\Excel\Validators\ValidationException;
+use Exception;
 
 class Import extends Component
 {
     use WithFileUploads;
+
 
     public $file;
     public $errorInfo = null;
@@ -20,14 +20,13 @@ class Import extends Component
     protected $listeners = [
 
         'openModalImport' => 'openModal',
+
     ];
 
 
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,xls,csv',
     ];
-
-
 
     protected $messages = [
         'file.required' => 'Debes seleccionar un archivo',
@@ -49,28 +48,27 @@ class Import extends Component
     public function importExcel()
     {
         $this->validate();
-
         $this->errorInfo = null;
-
         try {
 
-            $import = Excel::Import(new LineasImport(auth()->user()), $this->file);
+            $exit = Excel::queueImport(new Lineas, $this->file);
 
-            $this->modalOpenImport = false;
-        } catch (ValidationException $e) {;
+            $this->reset();
+        } catch (Exception $e) {
+            // dd($e);
+            $this->errorInfo = $e->errorInfo["2"];
         }
     }
 
 
-    public function openModal()
-    {
+    public function openModal(){
 
 
         $this->modalOpenImport = true;
+
     }
 
-    public function closeModal()
-    {
+    public function closeModal(){
 
         $this->modalOpenImport = false;
         $this->reset();
