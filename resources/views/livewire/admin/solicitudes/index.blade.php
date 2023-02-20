@@ -1,6 +1,5 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: 'administracion-solicitudes', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }"
-    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+    x-data="{ page: 'administracion-solicitudes', sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
         <!-- Page header -->
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
@@ -62,8 +61,8 @@
         <!-- Table -->
         <div class="bg-white shadow-lg rounded-sm border border-slate-200">
             <header class="px-5 py-4">
-                <h2 class="font-semibold text-slate-800">Total Solicitudes <span class="text-slate-400 font-medium">{{
-                        $solicitudes->total() }}</span>
+                <h2 class="font-semibold text-slate-800">Total Solicitudes <span
+                        class="text-slate-400 font-medium">{{ $solicitudes->total() }}</span>
                 </h2>
 
             </header>
@@ -120,101 +119,107 @@
                         <tbody class="text-sm divide-y divide-slate-200">
                             <!-- Row -->
                             @if ($solicitudes->count())
-                            @foreach ($solicitudes as $solicitud)
-                            <tr>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center">
-                                        <label class="inline-flex">
-                                            <span class="sr-only">Select</span>
-                                            <input class="table-item form-checkbox" type="checkbox"
-                                                @click="uncheckParent" />
-                                        </label>
-                                    </div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->numero }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->tipo_solicitud }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <div class="text-left uppercase">{{ $solicitud->nombre }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->tipo_solicitud == "servicio" ?
-                                        $solicitud->email : '' }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->tipo_solicitud == "servicio" ?
-                                        $solicitud->servicio_solicitado : '' }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <div class="text-left uppercase">{{ $solicitud->detalle }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->tipo_solicitud == "reporte" ?
-                                        $solicitud->placa : '' }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    @if ($solicitud->tipo_solicitud == "reporte")
-                                    <div class="text-left uppercase">
-                                        <b>{{ $solicitud->fecha_inicial }}</b> a
-                                        <b>{{$solicitud->fecha_final}}</b>
-                                    </div>
-                                    @else
-                                    <div class="text-left uppercase">
-                                        -
-                                    </div>
-                                    @endif
-
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left uppercase">{{ $solicitud->telefono_envio }} <br>
-                                        {{$solicitud->email_envio}}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    @can('admin.solicitudes.finalize')
-
-
-                                    @if (!$solicitud->estado)
-                                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
-                                        @mouseleave="open = false">
-                                        <button type="button" wire:click.prevent="markComplete({{$solicitud->id}})"
-                                            aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                                            @focusout="open = false" @click.prevent type="button"
-                                            class="btn rounded-full bg-emerald-400 hover:bg-emerald-600 text-white">
-                                            <svg class="w-4 h-4 fill-current shrink-0"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                <g fill="none" class="nc-icon-wrapper">
-                                                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                                                        fill="currentColor"></path>
-                                                </g>
-                                            </svg>
-                                        </button>
-                                        <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
-                                            <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2" x-show="open"
-                                                x-transition:enter="transition ease-out duration-200 transform"
-                                                x-transition:enter-start="opacity-0 translate-y-2"
-                                                x-transition:enter-end="opacity-100 translate-y-0"
-                                                x-transition:leave="transition ease-out duration-200"
-                                                x-transition:leave-start="opacity-100"
-                                                x-transition:leave-end="opacity-0" x-cloak>
-                                                <div class="text-xs text-slate-200 whitespace-nowrap">
-                                                    Marcar como Terminada
-                                                </div>
+                                @foreach ($solicitudes as $solicitud)
+                                    <tr>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                            <div class="flex items-center">
+                                                <label class="inline-flex">
+                                                    <span class="sr-only">Select</span>
+                                                    <input class="table-item form-checkbox" type="checkbox"
+                                                        @click="uncheckParent" />
+                                                </label>
                                             </div>
-                                        </div>
-                                    </div>
-                                    @endif
-                                    @endcan
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">{{ $solicitud->numero }}</div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">{{ $solicitud->tipo_solicitud }}</div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                            <div class="text-left uppercase">{{ $solicitud->nombre }}</div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">
+                                                {{ $solicitud->tipo_solicitud == 'servicio' ? $solicitud->email : '' }}
+                                            </div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">
+                                                {{ $solicitud->tipo_solicitud == 'servicio' ? $solicitud->servicio_solicitado : '' }}
+                                            </div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                            <div class="text-left uppercase">{{ $solicitud->detalle }}</div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">
+                                                {{ $solicitud->tipo_solicitud == 'reporte' ? $solicitud->placa : '' }}
+                                            </div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            @if ($solicitud->tipo_solicitud == 'reporte')
+                                                <div class="text-left uppercase">
+                                                    <b>{{ $solicitud->fecha_inicial }}</b> a
+                                                    <b>{{ $solicitud->fecha_final }}</b>
+                                                </div>
+                                            @else
+                                                <div class="text-left uppercase">
+                                                    -
+                                                </div>
+                                            @endif
 
-                                </td>
-                            </tr>
-                            @endforeach
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-left uppercase">{{ $solicitud->telefono_envio }} <br>
+                                                {{ $solicitud->email_envio }}</div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            @can('admin.solicitudes.finalize')
+                                                @if (!$solicitud->estado)
+                                                    <div class="relative" x-data="{ open: false }"
+                                                        @mouseenter="open = true" @mouseleave="open = false">
+                                                        <button type="button"
+                                                            wire:click.prevent="markComplete({{ $solicitud->id }})"
+                                                            aria-haspopup="true" :aria-expanded="open"
+                                                            @focus="open = true" @focusout="open = false" @click.prevent
+                                                            type="button"
+                                                            class="btn rounded-full bg-emerald-400 hover:bg-emerald-600 text-white">
+                                                            <svg class="w-4 h-4 fill-current shrink-0"
+                                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                                <g fill="none" class="nc-icon-wrapper">
+                                                                    <path
+                                                                        d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
+                                                                        fill="currentColor"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
+                                                            <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
+                                                                x-show="open"
+                                                                x-transition:enter="transition ease-out duration-200 transform"
+                                                                x-transition:enter-start="opacity-0 translate-y-2"
+                                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                                x-transition:leave="transition ease-out duration-200"
+                                                                x-transition:leave-start="opacity-100"
+                                                                x-transition:leave-end="opacity-0" x-cloak>
+                                                                <div class="text-xs text-slate-200 whitespace-nowrap">
+                                                                    Marcar como Terminada
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            @endcan
+
+                                        </td>
+                                    </tr>
+                                @endforeach
                             @else
-                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                                <td colspan="11"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
                             @endif
 
 
