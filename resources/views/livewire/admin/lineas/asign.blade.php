@@ -3,8 +3,7 @@
 
     <div class="bg-white sm:p-6 shadow-md rounded-md">
         <div class="grid grid-cols-12 gap-2 mb-1 relative ml-4">
-            {{ $numero }}
-            {{ $linea_id }}
+
             <div class="col-span-12 sm:col-span-12 mb-4 mx-3">
                 <div>
                     {!! Form::label('numero', '1. Ingrese una línea:', [
@@ -23,8 +22,6 @@
                     </p>
                 @enderror
             </div>
-
-            {{ $sim_card }}
 
             <div class="col-span-12 sm:col-span-12 mb-4 mx-3">
 

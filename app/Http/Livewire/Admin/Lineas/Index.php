@@ -19,6 +19,7 @@ class Index extends Component
 
     protected $listeners = [
         'render' => 'render',
+        'index-update' => 'render',
         'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
         'echo:lineas,LineasImportUpdated' => 'updateLineas'
     ];
@@ -66,10 +67,8 @@ class Index extends Component
                 ->paginate(10);
         }
 
-        $total = Lineas::all()->count();
 
-
-        return view('livewire.admin.lineas.index', compact('lineas', 'total'));
+        return view('livewire.admin.lineas.index', compact('lineas'));
     }
 
     public function operador($operador = null)
@@ -127,5 +126,10 @@ class Index extends Component
     public function openModalImport()
     {
         $this->emit('openModalImport');
+    }
+
+    public function asignToPlaca(Lineas $linea)
+    {
+        $this->emit('asign-to-placa', $linea);
     }
 }

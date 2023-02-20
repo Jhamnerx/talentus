@@ -5,10 +5,21 @@
     <!-- Table -->
 
     @livewire('admin.lineas.index')
+    @livewire('admin.lineas.asign-to-placa')
 
 @stop
 
 @section('js')
+    <script>
+        window.addEventListener('asign-linea-to-placa', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: '#' + event.detail.linea,
+                message: 'Numero asignado a la siguiente placa: ' + event.detail.placa,
+            });
+            $('.vehiculos_id').val(null).trigger('change');
+        })
+    </script>
     <script>
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({

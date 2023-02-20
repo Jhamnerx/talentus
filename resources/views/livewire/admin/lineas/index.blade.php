@@ -504,6 +504,46 @@
                                                                 </a>
                                                             </li>
                                                         @endif
+                                                        @if ($linea->sim_card)
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="asignToPlaca({{ $linea->id }})"
+                                                                    class="text-gray-700  group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    id="headlessui-menu-item-33" role="menuitem"
+                                                                    tabindex="-1">
+                                                                    <svg class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 64 64">
+                                                                        <g stroke-linecap="round" stroke-width="2"
+                                                                            fill="none" stroke="currentColor"
+                                                                            stroke-linejoin="round"
+                                                                            class="nc-icon-wrapper">
+                                                                            <line data-cap="butt" x1="32"
+                                                                                y1="29" x2="41"
+                                                                                y2="19"></line>
+                                                                            <path data-cap="butt"
+                                                                                d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29">
+                                                                            </path>
+                                                                            <polyline points="16 54 16 58 6 58 6 54">
+                                                                            </polyline>
+                                                                            <path
+                                                                                d="M62,49H2V36.066a4.99,4.99,0,0,1,1.465-3.532L7,29H57l3.535,3.535A5,5,0,0,1,62,36.071Z">
+                                                                            </path>
+                                                                            <circle cx="11" cy="40"
+                                                                                r="3"></circle>
+                                                                            <polyline points="58 54 58 58 48 58 48 54">
+                                                                            </polyline>
+                                                                            <circle cx="53" cy="40"
+                                                                                r="3"></circle>
+                                                                            <line x1="25" y1="40"
+                                                                                x2="39" y2="40"></line>
+                                                                        </g>
+                                                                    </svg>
+                                                                    Asignar a placa
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
                                                     </ul>
 
 
