@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Lineas;
+namespace App\Http\Livewire\Admin\SimCard;
 
 use App\Models\CambiosLineas;
 use Livewire\Component;
@@ -17,6 +17,6 @@ class VerCambios extends Component
         $cambios = CambiosLineas::where('sim_card_id', $this->sim_card->id)->orderBy('id', 'desc')->get();
 
         //dd($cambios);
-        return view('livewire.admin.lineas.ver-cambios', compact('cambios'));
+        return view('livewire.admin.sim-card.ver-cambios', compact('cambios'));
     }
 }

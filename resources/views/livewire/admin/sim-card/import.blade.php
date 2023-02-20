@@ -41,7 +41,7 @@
                     <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
 
                     <div x-data="{ file: @entangle('file'), files: null }"
-                        class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
+                        class="mt-1 cursor-pointer relative flex justify-center px-6 pt-5 pb-6 border-2  border-gray-300 border-dashed rounded-md"
                         x-on:dragover="$el.classList.add('border-emerald-400')"
                         x-on:dragleave="$el.classList.remove('border-emerald-400')">
                         <input wire:model="file" type="file"
@@ -98,9 +98,9 @@
                         <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                     @enderror
 
                     <div>

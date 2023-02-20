@@ -3,18 +3,24 @@
 @section('contenido')
 
     <!-- Table -->
-    @livewire('admin.lineas.lineas-index')
-    @livewire('admin.lineas.import')
+
+    @livewire('admin.lineas.index')
+    @livewire('admin.lineas.asign-to-placa')
 
 @stop
 
 @section('js')
     <script>
-        console.log('Hi!');
+        window.addEventListener('asign-linea-to-placa', event => {
+            iziToast.success({
+                position: 'topRight',
+                title: '#' + event.detail.linea,
+                message: 'Numero asignado a la siguiente placa: ' + event.detail.placa,
+            });
+            $('.vehiculos_id').val(null).trigger('change');
+        })
     </script>
-
     <script>
-        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,

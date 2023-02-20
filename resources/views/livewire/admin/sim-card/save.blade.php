@@ -8,12 +8,12 @@
             </div>
             <div class="col-span-4 sm:col-span-3">
                 {!! Form::hidden('empresa_id', session('empresa'), ['wire:model.lazy' => 'empresa_id', 'x-data' => 'form()']) !!}
-                {!! Form::label('numero', 'Número:', ['class' => 'block text-sm font-medium mb-1']) !!}
+                {!! Form::label('sim_card_n', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1']) !!}
 
-                <input type="tel" class="form-input w-full" placeholder="Escribe el Número" wire:model="numero.0"
+                <input type="tel" class="form-input w-full" placeholder="Escribe el sim card" wire:model="sim_card_n.0"
                     maxlength="20">
 
-                @error('numero.0')
+                @error('sim_card_n.0')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                         {{ $message }}
                     </p>
@@ -58,12 +58,12 @@
                     <span>{{ $key + 2 }}</span>
                 </div>
                 <div class="col-span-4 sm:col-span-3">
-                    {!! Form::label('sim_card', 'Número:', ['class' => 'block text-sm font-medium mb-1']) !!}
-                    <input type="tel" class="form-input w-full" placeholder="Escribe el Número"
-                        wire:model="numero.{{ $value }}" maxlength="20">
+                    {!! Form::label('sim_card', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1']) !!}
+                    <input type="tel" class="form-input w-full" placeholder="Escribe el sim card"
+                        wire:model="sim_card_n.{{ $value }}" maxlength="20">
 
 
-                    @error('numero.' . $value)
+                    @error('sim_card_n.' . $value)
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}
                         </p>

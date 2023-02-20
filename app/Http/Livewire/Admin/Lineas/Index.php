@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Disponibles extends Component
+class Index extends Component
 {
 
     use WithPagination;
@@ -19,6 +19,7 @@ class Disponibles extends Component
 
     protected $listeners = [
         'render' => 'render',
+        'index-update' => 'render',
         'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
         'echo:lineas,LineasImportUpdated' => 'updateLineas'
     ];
@@ -27,7 +28,6 @@ class Disponibles extends Component
     {
         $this->render();
     }
-
     public function updateLineas()
     {
 
@@ -67,10 +67,8 @@ class Disponibles extends Component
                 ->paginate(10);
         }
 
-        $total = Lineas::all()->count();
 
-
-        return view('livewire.admin.lineas.disponibles', compact('lineas', 'total'));
+        return view('livewire.admin.lineas.index', compact('lineas'));
     }
 
     public function operador($operador = null)
@@ -128,5 +126,10 @@ class Disponibles extends Component
     public function openModalImport()
     {
         $this->emit('openModalImport');
+    }
+
+    public function asignToPlaca(Lineas $linea)
+    {
+        $this->emit('asign-to-placa', $linea);
     }
 }

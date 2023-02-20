@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Livewire\Admin\Lineas;
+namespace App\Http\Livewire\Admin\SimCard;
 
 use App\Models\SimCard;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class LineasIndex extends Component
+class Index extends Component
 {
     use WithPagination;
 
@@ -65,9 +65,13 @@ class LineasIndex extends Component
         }
         $total = SimCard::all()->count();
 
-        return view('livewire.admin.lineas.lineas-index', compact('sim_cards', 'total'));
+        return view('livewire.admin.sim-card.index', compact('sim_cards', 'total'));
     }
 
+    public function updatingSearch()
+    {
+        $this->resetPage();
+    }
 
     public function filter($dias)
     {

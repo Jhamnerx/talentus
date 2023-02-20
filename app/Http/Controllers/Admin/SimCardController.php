@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exports\LineasExport;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\LineasRequest;
-use App\Models\CambiosLineas;
 use App\Models\Lineas;
 use App\Models\SimCard;
 use Illuminate\Http\Request;
+use App\Exports\LineasExport;
+use App\Models\CambiosLineas;
+use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 
-class LineasController extends Controller
+class SimCardController extends Controller
 {
-
     function __construct()
     {
         $this->middleware('permission:ver-sim_card', ['only' => ['index', 'disponibles']]);
@@ -24,32 +22,27 @@ class LineasController extends Controller
 
     public function index()
     {
-        return view('admin.almacen.lineas.index');
+        return view('admin.almacen.sim-card.index');
     }
 
     public function create()
     {
-        return view('admin.almacen.lineas.create');
+        return view('admin.almacen.sim-card.create');
     }
 
-
-    public function asign(Request $request)
-    {
-        return view('admin.almacen.lineas.asign');
-    }
 
     public function exportExcel()
     {
         return Excel::download(new LineasExport, 'lineas.xls');
     }
 
-    public function asignLinea(Request $request)
+    public function asign(Request $request)
     {
-        return view('admin.almacen.lineas.asign');
+        return view('admin.almacen.sim-card.asign');
     }
 
 
-    public function asignLineaStore(Request $request)
+    public function asignSimCardStore(Request $request)
     {
 
         if ($request->lineas_id == null) {

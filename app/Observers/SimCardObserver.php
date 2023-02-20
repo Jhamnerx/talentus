@@ -12,9 +12,9 @@ class SimCardObserver
      * @param  \App\Models\SimCard  $simCard
      * @return void
      */
-    public function created(SimCard $simCard)
+    public function creating(SimCard $simCard)
     {
-        //
+        $simCard->empresa_id = session('empresa');
     }
 
     /**

@@ -1,5 +1,5 @@
 <div>
-    {!! Form::open(['route' => 'admin.asign.lineas.store', 'autocomplete' => 'off']) !!}
+    {!! Form::open(['route' => 'admin.almacen.sim-card.asign.store', 'autocomplete' => 'off']) !!}
 
     <div class="bg-white sm:p-6 shadow-md rounded-md">
         <div class="grid grid-cols-12 gap-2 mb-1 relative ml-4">
@@ -8,7 +8,7 @@
 
                 {!! Form::label('sim_card', '1. Ingrese código de nuevo chip:', [
                     'class' => 'block text-sm font-medium
-                                                                mb-1',
+                                                                                mb-1',
                 ]) !!}
                 {!! Form::text('sim_card', $value, [
                     'placeholder' => 'Escribe el sim card',
@@ -29,7 +29,7 @@
             <div class="col-span-12 sm:col-span-12 mb-4 mx-3">
                 {!! Form::label('numero', '2. Ingrese una línea:', [
                     'class' => 'block text-sm font-medium
-                                                                mb-1',
+                                                                                mb-1',
                 ]) !!}
 
                 <input name="numero" id="autocomplete-ajax-linea" type="text" class="form-input w-full sm:w-1/2"
@@ -61,8 +61,8 @@
 
             {!! Form::submit('Asignar', [
                 'class' => 'btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 focus:outline-none
-                                                focus:ring-2 focus:ring-offset-2
-                                                focus:ring-emerald-600 text-white',
+                                                            focus:ring-2 focus:ring-offset-2
+                                                            focus:ring-emerald-600 text-white',
             ]) !!}
 
         </div>
