@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Admin\Mensaje;
 use App\Models\Cobros;
 use App\Notifications\EnviarMensajeCobro;
+use App\Scopes\EmpresaScope;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -27,16 +28,27 @@ class checkCobros implements ShouldQueue
 
     public function handle()
     {
+        $vencidos = Cobros::where('fecha_vencimiento', '<=', Carbon::now()->addDays(1)->format('Y-m-d'))
+            ->where('estado', '1')
+            ->orwhere('estado', '0')
+            ->withoutGlobalScope(EmpresaScope::class)
+            ->get();
 
-        $cobros = Cobros::whereBetween('fecha_vencimiento', [Carbon::now()->format('Y-m-d'), Carbon::now()->addDays(4)->format('Y-m-d')])->get();
+        foreach ($vencidos as $vencido) {
+
+            $vencido->estado = 2;
+            $vencido->save();
+        }
+
+
+        $cobros = Cobros::whereBetween('fecha_vencimiento', [Carbon::now()->format('Y-m-d'), Carbon::now()->addDays(4)->format('Y-m-d')])->withoutGlobalScope(EmpresaScope::class)->get();
 
         foreach ($cobros as $cobro) {
             //dd($cobro->fecha_vencimiento);
-           //Log::alert(Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false));
-          // Log::alert(date_diff(Carbon::now(), $cobro->fecha_vencimiento)->format('%r%a')+1);
+            //Log::alert(Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false));
+            // Log::alert(date_diff(Carbon::now(), $cobro->fecha_vencimiento)->format('%r%a')+1);
             //dd(Carbon::now()->diffInDays($cobro->fecha_vencimiento));
             //date_diff($cobro->fecha_vencimiento, $cobro->fecha_vencimiento)->format('%a') ;
-            
 
             if (Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false) <= 4 && Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false) > 0) {
 
@@ -59,7 +71,7 @@ class checkCobros implements ShouldQueue
                 $mensaje->sendCobroMessage($data, $cobro);
             }
 
-            if (Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false) <= 0 ) {
+            if (Carbon::now()->floatDiffInDays($cobro->fecha_vencimiento, false) <= 0) {
 
                 //Log::alert("cobro vencido");
 
@@ -69,7 +81,7 @@ class checkCobros implements ShouldQueue
                 $data = array(
                     'body' => 'Cobro vencido',
                     'asunto' => 'NOTIFICACIÓN DE COBRO VENCIDO',
-                    'estado' => 'VENCIDO', 
+                    'estado' => 'VENCIDO',
                     'accion' => 'notification_cobro_vencido',
                     'url' => "admin.cobros.show",
                     'id_cobro' => $cobro->id,
@@ -77,10 +89,7 @@ class checkCobros implements ShouldQueue
 
                 $mensaje = new Mensaje();
                 $mensaje->sendCobroMessage($data, $cobro);
-
             }
-            
         }
-
     }
 }
