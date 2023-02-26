@@ -2,10 +2,11 @@
 
 namespace App\Observers;
 
-use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Models\Tareas;
-use App\Notifications\Tecnico\NotificacionTarea;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\Tecnico\NotificacionTarea;
+use App\Http\Controllers\Admin\ServicioTecnicoController;
 
 class TareasObserver
 {
@@ -15,6 +16,7 @@ class TareasObserver
 
         $tarea->token = $tareaController->setNextSequenceNumber();
         $tarea->user_id = auth()->user()->id;
+        $tarea->uuid = Str::uuid();
         $tarea->empresa_id = session('empresa');
     }
 

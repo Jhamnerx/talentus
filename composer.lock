@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea7003c6f071d4e411bff59e8e7acf16",
+    "content-hash": "d4cb44787408bbe925d5bb9c53b066ae",
     "packages": [
         {
             "name": "asantibanez/laravel-blade-sortable",
@@ -4383,6 +4383,61 @@
                 }
             ],
             "time": "2023-01-29T18:53:47+00:00"
+        },
+        {
+            "name": "netflie/whatsapp-cloud-api",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/netflie/whatsapp-cloud-api.git",
+                "reference": "8dabc2743a0e6267b0f83c77c65072a42ed4b832"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/netflie/whatsapp-cloud-api/zipball/8dabc2743a0e6267b0f83c77c65072a42ed4b832",
+                "reference": "8dabc2743a0e6267b0f83c77c65072a42ed4b832",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^7.0",
+                "myclabs/php-enum": "^1.8",
+                "php": "^7.4 || ^8.0 || ^8.1",
+                "vlucas/phpdotenv": "^5.4"
+            },
+            "require-dev": {
+                "fakerphp/faker": "^1.19",
+                "friendsofphp/php-cs-fixer": "^3.13",
+                "phpspec/prophecy-phpunit": "^2.0",
+                "phpstan/phpstan": "^1.9",
+                "phpunit/phpunit": "^9.0",
+                "symfony/var-dumper": "^5.0"
+            },
+            "type": "libray",
+            "autoload": {
+                "psr-4": {
+                    "Netflie\\WhatsAppCloudApi\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Álex Albarca",
+                    "email": "alex@albarca.es"
+                },
+                {
+                    "name": "Álex Albarca",
+                    "email": "alex@netflie.es"
+                }
+            ],
+            "description": "The first PHP SDK to send and receive messages using a cloud-hosted version of the WhatsApp Business Platform",
+            "support": {
+                "issues": "https://github.com/netflie/whatsapp-cloud-api/issues",
+                "source": "https://github.com/netflie/whatsapp-cloud-api/tree/2.0.2"
+            },
+            "time": "2023-02-06T18:04:30+00:00"
         },
         {
             "name": "nette/schema",
@@ -11481,5 +11536,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }

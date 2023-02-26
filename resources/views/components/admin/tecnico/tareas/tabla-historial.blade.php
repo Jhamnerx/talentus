@@ -1,7 +1,7 @@
 <div class="bg-white shadow-lg rounded-sm border  border-slate-200 mt-6 ">
     <header class="px-5 py-4">
-        <h2 class="font-semibold text-slate-800">Total Tareas: <span
-                class="text-slate-400 font-medium">{{$tareas->total()}}</span>
+        <h2 class="font-semibold text-slate-800">Total Tareas: <span class="text-slate-400 font-medium">{{
+                $tareas->total() }}</span>
         </h2>
     </header>
     <div x-data="handleSelect">
@@ -60,7 +60,7 @@
                             <div class="flex items-center">
                                 <label class="inline-flex">
                                     <span class="sr-only">Select</span>
-                                    <input class="table-item form-checkbox" id-tarea="{{$tarea->id}}" type="checkbox"
+                                    <input class="table-item form-checkbox" id-tarea="{{ $tarea->id }}" type="checkbox"
                                         @click="uncheckParent" />
                                 </label>
                             </div>
@@ -68,72 +68,73 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div wire:click.prevent="infoTask"
                                 class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
-                                {{$tarea->token}}
+                                {{ $tarea->token }}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="text-left font-medium text-slate-800">
                                 @switch($tarea->tipo_tarea_id)
                                 @case(1)
-
-                                Instalación de GPS {{$tarea->dispositivo}} en vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-
+                                Instalación de GPS {{ $tarea->dispositivo }} en vehículo:
+                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
                                 @break
 
                                 @case(2)
-                                Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(3)
-                                Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
-                                <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(4)
-                                Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(5)
-                                Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                                Cambio de chip en el vehículo: <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
                                 @break
 
+                                @case(3)
+                                Desinstalación de GPS {{ $tarea->dispositivo }} en el vehículo:
+                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha Tarea:
+                                <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
+
+                                @case(4)
+                                Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> en el
+                                vehículo:
+                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
+
+                                @case(5)
+                                Mantenimiento GPS {{ $tarea->dispositivo }} en el vehículo:
+                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
                                 @endswitch
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-center">
-                                {{$tarea->vehiculo->placa}}
+                                {{ $tarea->vehiculo->placa }}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-left">
 
                                 <div
-                                    class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
-                                    {{$tarea->estado->name()}}
+                                    class="text-sm inline-flex font-medium bg-{{ $tarea->estado->color() }}-100 text-{{ $tarea->estado->color() }}-600 rounded-full text-center px-2.5 py-1">
+                                    {{ $tarea->estado->name() }}
                                 </div>
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="text-center">
-                                {{$tarea->tipo_tarea->costo}}
+                                {{ $tarea->tipo_tarea->costo }}
                             </div>
                         </td>
                         @canany(['tecnico.tareas.edit', 'tecnico.tareas.delete', 'tecnico.tareas.action.pdf'])
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
                                 @can('tecnico.tareas.action.pdf')
-                                <button type="button" wire:click.prevent="exportTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="exportTask({{ $tarea->id }})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24">
@@ -146,14 +147,15 @@
                                 </button>
                                 @endcan
                                 @can('tecnico.tareas.edit')
-                                <button type="button" wire:click.prevent="editTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="editTask({{ $tarea->id }})"
                                     class="btn bg-orange-600 hover:bg-orange-700 text-white">
 
                                     <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 48 48">
                                         <g stroke-linecap="square" stroke-width="2" fill="none" stroke="currentColor"
                                             stroke-linejoin="miter" class="nc-icon-wrapper" stroke-miterlimit="10">
-                                            <line x1="29" y1="9" x2="39" y2="19"></line>
+                                            <line x1="29" y1="9" x2="39" y2="19">
+                                            </line>
                                             <path
                                                 d="M17,41,3,45,7,31,34.121,3.879a3,3,0,0,1,4.243,0l5.757,5.757a3,3,0,0,1,0,4.243Z">
                                             </path>
@@ -162,7 +164,7 @@
                                 </button>
                                 @endcan
                                 @can('tecnico.tareas.delete')
-                                <button type="button" wire:click.prevent="deleteTask({{$tarea->id}})"
+                                <button type="button" wire:click.prevent="deleteTask({{ $tarea->id }})"
                                     class="btn bg-rose-600 hover:bg-rose-700 text-white">
                                     <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
                                         <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
@@ -177,7 +179,10 @@
                         @can('tecnico.tareas.action.wsp')
                         <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">
-                                <button type="button" class="rounded-full bg-emerald-600 hover:bg-emerald-700">
+                                <button wire:click="notifyTecnico({{$tarea->id}})" type="button"
+                                    wire:loading.attr="disabled" wire:loading.class="bg-emerald-400"
+                                    wire:loading.class.remove="hover:bg-emerald-70 bg-emerald-700"
+                                    class="rounded-full bg-emerald-600 hover:bg-emerald-700">
                                     <svg class="w-10 h-10 shrink-0" xmlns="http://www.w3.org/2000/svg"
                                         aria-label="WhatsApp" role="img" viewBox="0 0 512 512">
                                         <rect width="512" height="512" rx="15%" fill="#25d366" />
