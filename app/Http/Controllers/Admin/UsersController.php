@@ -55,12 +55,15 @@ class UsersController extends Controller
         $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
+            'tipo_documento' => $input['tipo_documento'],
+            'numero_documento' => $input['numero_documento'],
+            'telefonos' => $input['telefonos'],
             'password' => Hash::make($input['password']),
         ]);
 
         $user->assignRole($request->input('roles'));
 
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('store', 'usuario registrado');
     }
 
     public function edit(User $user)
@@ -96,12 +99,12 @@ class UsersController extends Controller
         DB::table('model_has_roles')->where('model_id', $user->id)->delete();
 
         $user->assignRole($request->input('roles'));
-        return redirect()->route('admin.users.index');
+        return redirect()->route('admin.users.index')->with('update', 'usuario actualizado');
     }
 
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('admin.usuarios.index');
+        return redirect()->route('admin.usuarios.index')->with('delete', 'usuario eliminado');
     }
 }

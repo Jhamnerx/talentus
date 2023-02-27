@@ -24,22 +24,20 @@
         });
     })
 </script>
-
+@if (session('delete'))
 <script>
-    window.addEventListener('vehiculo-delete', event => {
-        $( document ).ready(function() {
+    $( document ).ready(function() {
             Swal.fire({
             icon: 'error',
             title: 'Eliminado',
-            text: 'Vehiculo Eliminado',
+            text: '{{session("delete")}}',
             showConfirmButton: true,
             confirmButtonText: "Cerrar"
-
-            })
-        });
-    })
+        })
+    });
 </script>
 
+@endif
 
 @if (session('store'))
 
