@@ -114,6 +114,34 @@
     })
 
 </script>
+<script>
+    window.addEventListener('mensaje-tecnico-enviado', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'NOTIFICACION POR WHATSAPP',
+            timeout: 2500,
+            message: 'Se envio la notificación al tecnico ',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(5, 44, 82)'
+        });
+    })
+
+</script>
+<script>
+    window.addEventListener('error-mensaje-whatsapp', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'OCURRIO UN ERROR AL ENVIAR',
+            timeout: 2500,
+            message: 'No se pudo enviar el mensaje',
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(237, 71, 82)'
+        });
+    })
+
+</script>
 
 
 

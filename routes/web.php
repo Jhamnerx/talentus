@@ -1,12 +1,12 @@
 <?php
 
-use App\Http\Controllers\Admin\ReportesGerenciales;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WebController;
+use App\Http\Controllers\ExtrasController;
 use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\PlatBasicaController;
 use App\Http\Controllers\PlatPremiumController;
 use App\Http\Controllers\SolicitudesController;
-use App\Http\Controllers\WebController;
-use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [WebController::class, 'index'])->name('web.home');
@@ -35,15 +35,16 @@ Route::controller(SolicitudesController::class)->group(function () {
     Route::get('solicitudes/{solicitud}', 'create')->name('solicitudes');
 });
 
+// Route::controller(ExtrasController::class)->group(function () {
+
+//     Route::get('confirmacion/{uuid}', 'confirmacion')->name('confirmacion.tarea');
+// });
+
+Route::get('confirmacion/tareas/{tarea:uuid}', ExtrasController::class)->name('confirmacion.tarea');
+
 
 Route::get('faq', [WebController::class, 'faq'])->name('web.faq');
 Route::get('contacto', [WebController::class, 'contacto'])->name('web.contacto');
 Route::post('send/form', [WebController::class, 'submitContacto'])->name('contact.form');
-
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
 
 Route::middleware(['auth:sanctum', 'verified'])->get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');

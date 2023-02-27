@@ -7,6 +7,7 @@ use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\UtilesController;
+use App\Http\Controllers\Admin\WhatsAppApi;
 
 class TablaHistorial extends Component
 {
@@ -90,5 +91,22 @@ class TablaHistorial extends Component
             fn () => print($pdfContent),
             "reporte_tarea-" . $tarea->token . ".pdf"
         );
+    }
+
+
+    public function notifyTecnico(Tareas $tarea)
+    {
+
+        $whatsApp = new WhatsAppApi();
+
+        $respuesta = $whatsApp->sendConfirmationClient($tarea);
+
+        if ($respuesta->httpStatusCode() == 200) {
+
+            $this->dispatchBrowserEvent('mensaje-tecnico-enviado');
+        } else {
+
+            $this->dispatchBrowserEvent('error-mensaje-whatsapp');
+        }
     }
 }
