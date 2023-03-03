@@ -4,6 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <style>
+        .w-7 {
+            width: 1.75rem
+                /* 28px */
+            ;
+        }
+
         .styled-table {
             border-collapse: collapse;
             margin: 25px 0;

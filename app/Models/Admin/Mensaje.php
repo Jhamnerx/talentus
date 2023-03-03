@@ -2,10 +2,14 @@
 
 namespace App\Models\Admin;
 
+use App\Models\Clientes;
 use App\Models\Cobros;
+use App\Models\Mantenimiento;
 use App\Models\User;
 use App\Notifications\EnviarMensaje;
 use App\Notifications\EnviarMensajeCobro;
+use App\Notifications\Mantenimientos\NotifyAdmin;
+use App\Notifications\Mantenimientos\NotifyClient;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,5 +79,19 @@ class Mensaje extends Model
         //return redirect()->back();
 
 
+    }
+
+
+    public function sendMantenimientoMessageAdmin($data, Mantenimiento $mantenimiento)
+    {
+        $users = User::role('admin')->get();
+
+        Notification::send($users, new NotifyAdmin($data, $mantenimiento));
+    }
+
+    public function sendMantenimientoMessageClient($data, Mantenimiento $mantenimiento, Clientes $cliente)
+    {
+
+        $cliente->notify(new NotifyClient($data, $mantenimiento));
     }
 }

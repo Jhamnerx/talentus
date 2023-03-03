@@ -27,9 +27,10 @@
     @livewire('admin.tecnico.tareas.tabla-tipo-tarea')
     @endcan
 
-
 </div>
 
+<!-- Modal de chat CHAT-->
+@livewire('admin.tecnico.notificaciones.cliente-contactos')
 @stop
 
 @push('modals')
@@ -115,15 +116,15 @@
 
 </script>
 <script>
-    window.addEventListener('mensaje-tecnico-enviado', event => {
+    window.addEventListener('mensaje-enviado', event => {
         iziToast.show({
             theme: 'dark',
             icon: 'far fa-envelope-open',
-            title: 'NOTIFICACION POR WHATSAPP',
+            title: 'NOTIFICACIÓN POR WHATSAPP',
             timeout: 2500,
-            message: 'Se envio la notificación al tecnico ',
+            message: 'Se envio la notificación',
             position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-            progressBarColor: 'rgb(5, 44, 82)'
+            progressBarColor: 'rgb(5, 44, 82)',
         });
     })
 
@@ -135,7 +136,19 @@
             icon: 'far fa-envelope-open',
             title: 'OCURRIO UN ERROR AL ENVIAR',
             timeout: 2500,
-            message: 'No se pudo enviar el mensaje',
+            message: 'No se pudo enviar el mensaje: '+event.detail.error,
+            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+            progressBarColor: 'rgb(237, 71, 82)'
+        });
+    })
+
+    window.addEventListener('not-number', event => {
+        iziToast.show({
+            theme: 'dark',
+            icon: 'far fa-envelope-open',
+            title: 'OCURRIO UN ERROR AL ENVIAR',
+            timeout: 2500,
+            message: 'No se encontro un número registrado',
             position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
             progressBarColor: 'rgb(237, 71, 82)'
         });

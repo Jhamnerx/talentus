@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Tecnico\Tareas\Modales;
 
-use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Tareas;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Admin\WhatsAppApi;
+use App\Http\Controllers\Admin\UtilesController;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class Complete extends Component
@@ -80,11 +81,33 @@ class Complete extends Component
         $this->dispatchBrowserEvent('save-imagen', ['tarea' => $tarea->token]);
     }
 
-    public function sendWhatsApp(Tareas $task)
+    public function sendConfirmationClient(Tareas $tarea)
     {
-        $util = new UtilesController();
-        $respuesta = $util->whatsAppSendMessageInstalation($task);
-        $task->sent_message = true;
-        $task->save();
+        $whatsApp = new WhatsAppApi();
+
+        if ($tarea->cliente->telefono) {
+
+            $respuesta = $whatsApp->sendConfirmationClient($tarea);
+            $this->mensajeRespuesta($respuesta, $tarea);
+        } else {
+
+            $this->dispatchBrowserEvent('not-number');
+        }
+    }
+
+    public function mensajeRespuesta($respuesta, Tareas $tarea): bool
+    {
+
+        if ($respuesta->httpStatusCode() == 200) {
+
+            $this->dispatchBrowserEvent('mensaje-enviado');
+            $tarea->sent_message = true;
+            $tarea->save();
+            return true;
+        } else {
+
+            $this->dispatchBrowserEvent('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
+            return false;
+        }
     }
 }

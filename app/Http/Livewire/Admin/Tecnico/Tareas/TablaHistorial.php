@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\WhatsAppApi;
+use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class TablaHistorial extends Component
 {
@@ -96,17 +97,33 @@ class TablaHistorial extends Component
 
     public function notifyTecnico(Tareas $tarea)
     {
-
         $whatsApp = new WhatsAppApi();
 
-        $respuesta = $whatsApp->sendConfirmationClient($tarea);
+        if ($tarea->tecnico->telefonos) {
+
+            $respuesta = $whatsApp->notifyTecnico($tarea);
+
+            $this->mensajeRespuesta($respuesta);
+            $tarea->sent_message = true;
+            $tarea->save();
+        } else {
+
+            $this->dispatchBrowserEvent('not-number');
+        }
+    }
+
+    public function mensajeRespuesta($respuesta): bool
+    {
 
         if ($respuesta->httpStatusCode() == 200) {
 
-            $this->dispatchBrowserEvent('mensaje-tecnico-enviado');
+            $this->dispatchBrowserEvent('mensaje-enviado');
+
+            return true;
         } else {
 
-            $this->dispatchBrowserEvent('error-mensaje-whatsapp');
+            $this->dispatchBrowserEvent('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
+            return false;
         }
     }
 }
