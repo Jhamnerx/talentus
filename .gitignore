@@ -14,3 +14,4 @@ yarn-error.log
 /.idea
 /.vscode
 *.zip
+/storage\app\public\profile-photos/

@@ -33,6 +33,7 @@ class Tareas extends Model
         'estado' => TareasStatus::class,
         'fecha_hora' => 'datetime',
         'fecha_termino' => 'datetime',
+        'fecha_validacion' => 'datetime',
         'respuesta' => 'boolean',
     ];
 

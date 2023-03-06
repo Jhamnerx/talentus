@@ -60,8 +60,10 @@
                         <div class="col-span-12 sm:col-span-6">
 
                             {!! Html::decode(
-                            Form::label('name', 'Nombre: <span class="text-rose-500">*</span>', ['class' => 'block
-                            text-sm font-medium mb-1']),
+                            Form::label('name', 'Nombre: <span class="text-rose-500">*</span>', [
+                            'class' => 'block
+                            text-sm font-medium mb-1',
+                            ]),
                             ) !!}
 
                             {!! Form::text('name', null, [
@@ -80,8 +82,10 @@
                         <div class="col-span-12 sm:col-span-6">
 
                             {!! Html::decode(
-                            Form::label('email', 'Email: <span class="text-rose-500">*</span>', ['class' => 'block
-                            text-sm font-medium mb-1']),
+                            Form::label('email', 'Email: <span class="text-rose-500">*</span>', [
+                            'class' => 'block
+                            text-sm font-medium mb-1',
+                            ]),
                             ) !!}
 
                             {!! Form::text('email', null, [
@@ -99,8 +103,10 @@
                         <div class="col-span-12 sm:col-span-12">
 
                             {!! Html::decode(
-                            Form::label('roles', 'Rol: <span class="text-rose-500">*</span>', ['class' => 'block text-sm
-                            font-medium mb-1']),
+                            Form::label('roles', 'Rol: <span class="text-rose-500">*</span>', [
+                            'class' => 'block text-sm
+                            font-medium mb-1',
+                            ]),
                             ) !!}
 
 
@@ -117,8 +123,10 @@
                             mb-1',
                             ]) !!}
 
-                            {!! Form::password('password', ['class' => 'form-input w-full', 'placeholder' => 'Escribe un
-                            password']) !!}
+                            {!! Form::password('password', [
+                            'class' => 'form-input w-full',
+                            'placeholder' => 'Escribe una contraseña',
+                            ]) !!}
                             @error('password')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                 {{ $message }}
@@ -134,7 +142,7 @@
 
                             {!! Form::password('password_confirmation', [
                             'class' => 'form-input w-full',
-                            'placeholder' => 'Escribe un password',
+                            'placeholder' => 'Escribe un una contraseña',
                             ]) !!}
                             @error('password_confirmation')
                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -143,6 +151,27 @@
                             @enderror
                         </div>
 
+                        <div class="col-span-12 sm:col-span-4">
+                            <label for="tipo_documento" class="block text-sm font-medium mb-1">Tipo Documento:</label>
+
+                            <select name="tipo_documento" id="tipo_documento" class="form-select w-full">
+                                <option value="DNI" selected @selected(old('tipo_documento')=='DNI' )>DNI</option>
+                                <option value="RUC" @selected(old('tipo_documento')=='RUC' )>RUC</option>
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-4">
+                            <label for="numero_documento" class="block text-sm font-medium mb-1">Número
+                                Documento:</label>
+
+                            <input type="text" value="{{old('numero_documento')}}" name="numero_documento"
+                                class="form-input w-full" placeholder="52416324">
+                        </div>
+                        <div class="col-span-12 sm:col-span-4">
+                            <label for="telefonos" class="block text-sm font-medium mb-1">Celular:</label>
+
+                            <input type="text" value="{{old('telefonos')}}" name="telefonos" class="form-input w-full"
+                                placeholder="987654321" maxlength="9">
+                        </div>
 
 
                     </div>

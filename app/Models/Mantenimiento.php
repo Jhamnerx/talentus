@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\mantenimientoStatus;
 use Spatie\Activitylog\LogOptions;
@@ -32,6 +33,16 @@ class Mantenimiento extends Model
         'fecha_hora_mantenimiento' => 'date',
         'estado' => mantenimientoStatus::class,
     ];
+
+
+    public function ScopeNotifyAdmin($query, $value = 0)
+    {
+        return $query->where('notify_admin', $value);
+    }
+    public function ScopeOrNotifyClient($query, $value = 0)
+    {
+        return $query->orWhere('notify_client', $value);
+    }
 
     // pdf informe
     public function getPDFData()
