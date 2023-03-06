@@ -9,7 +9,7 @@ use Livewire\Component;
 class Delete extends Component
 {
 
-    public Model $model;
+    public Reportes $reporte;
 
     public $openModalDelete = false;
     public $field = "eliminado";
@@ -22,9 +22,10 @@ class Delete extends Component
 
     public function delete()
     {
-        $this->model->setAttribute($this->field, '1')->save();
+        $this->reporte->setAttribute($this->field, '1')->save();
+        $this->reporte->delete();
         // return redirect()->route('admin.vehiculos.index');
-        $this->dispatchBrowserEvent('reporte-delete', ['vehiculo' => $this->model->vehiculos->placa]);
+        $this->dispatchBrowserEvent('reporte-delete', ['vehiculo' => $this->reporte->vehiculos->placa]);
 
         $this->emit('updateTable');
     }
@@ -36,6 +37,6 @@ class Delete extends Component
     public function openModal(Reportes $reportes)
     {
         $this->openModalDelete = true;
-        $this->model = $reportes;
+        $this->reporte = $reportes;
     }
 }

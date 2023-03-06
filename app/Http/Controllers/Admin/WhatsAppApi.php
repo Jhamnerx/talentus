@@ -19,7 +19,7 @@ class WhatsAppApi extends Controller
 
     public function __construct()
     {
-        $this->token = config('TOKEN_API_SUNAT');
+        $this->token = config('WHATSAPP_CLOUD_API_TOKEN');
         $this->number_id = config('WHATSAPP_CLOUD_API_FROM_PHONE_NUMBER');
     }
 
@@ -32,7 +32,7 @@ class WhatsAppApi extends Controller
                 'access_token' => $this->token,
             ]);
 
-            $res = $api->sendTextMessage('51947542499', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
+            $res = $api->sendTextMessage('51961482121', 'Hey there! I\'m using WhatsApp Cloud API. Visit https://www.netflie.es');
 
             return $res;
         } catch (Exception $th) {
@@ -47,7 +47,6 @@ class WhatsAppApi extends Controller
             'from_phone_number_id' => $this->number_id,
             'access_token' => $this->token,
         ]);
-
 
         try {
             $component_header = [];
@@ -70,7 +69,7 @@ class WhatsAppApi extends Controller
             $component_buttons = [];
 
             $components = new Component($component_header, $component_body, $component_buttons);
-            $result = $api->sendTemplate('51947542499', 'notificacion_tarea_creada ', 'es', $components); // Language is optional
+            $result = $api->sendTemplate($tarea->tecnico->telefonos, 'notificacion_tarea_creada', 'es', $components); // Language is optional
 
             return $result;
         } catch (\Exception $e) {
@@ -79,7 +78,7 @@ class WhatsAppApi extends Controller
         }
     }
 
-    // MPM, QUICK_REPLY, URL
+    // BUTTON TYPES MPM, QUICK_REPLY, URL
     public function sendConfirmationClient(Tareas $tarea)
     {
 
@@ -103,6 +102,10 @@ class WhatsAppApi extends Controller
                 ],
                 [
                     'type' => 'text',
+                    'text' => $tarea->cliente->razon_social,
+                ],
+                [
+                    'type' => 'text',
                     'text' => $tarea->fecha_hora->format('d/m/Y') . " " . $tarea->fecha_hora->format('h:i A'),
                 ],
             ];
@@ -122,7 +125,7 @@ class WhatsAppApi extends Controller
             ];
 
             $components = new Component($component_header, $component_body, $component_buttons);
-            $result = $api->sendTemplate('51947542499', 'confirmacion_cliente_tarea', 'es', $components); // Language is optional
+            $result = $api->sendTemplate($tarea->cliente->telefono, 'confirmacion_cliente_tarea', 'es', $components); // Language is optional
 
             return $result;
         } catch (\Exception $e) {

@@ -33,7 +33,7 @@
                         <!-- /.footer-widget__title -->
                         <p>Recibir notificaciones y actualizaciones</p>
                         <form class="footer-widget__mc-form mc-form" data-url="MAILCHIMP__POPUP__FORM__URL">
-                            <input type="text" name="email" placeholder="Your mail address">
+                            <input type="text" name="email" placeholder="Correo Electronico">
                             <button type="submit"><i class="fal fa-paper-plane"></i></button>
                         </form><!-- /.footer-widget__mc-form -->
                         <div class="mc-form__response"></div><!-- /.mc-form__response -->

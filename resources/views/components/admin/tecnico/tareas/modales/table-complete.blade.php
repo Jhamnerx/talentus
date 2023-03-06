@@ -162,9 +162,9 @@
                             <div class="flex gap-2 justify-center">
                                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                     @mouseleave="open = false">
-                                    <button wire:click="sendWhatsApp({{$tarea->id}})" aria-haspopup="true"
-                                        :aria-expanded="open" @focus="open = true" @focusout="open = false"
-                                        @click.prevent type="button"
+                                    <button wire:click.prevent="sendConfirmationClient({{$tarea->id}})"
+                                        aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                        @focusout="open = false" @click.prevent type="button"
                                         class="rounded-full bg-emerald-600 hover:bg-emerald-700">
                                         <svg class="w-8 h-8 shrink-0" xmlns="http://www.w3.org/2000/svg"
                                             aria-label="WhatsApp" role="img" viewBox="0 0 512 512">
