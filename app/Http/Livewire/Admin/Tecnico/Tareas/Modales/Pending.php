@@ -62,6 +62,7 @@ class Pending extends Component
         $task->save();
         $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
         $this->render();
+        $this->emit('update-unread');
     }
     public function markComplete(Tareas $task)
     {
@@ -70,6 +71,7 @@ class Pending extends Component
         $task->save();
         $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA COMPLETADA', 'message' => 'Se marco como completada la tarea',  'token' => $task->token, 'color' => '#34d399', 'progressBarColor' => 'rgb(255,255,255)']);
         $this->render();
+        $this->emit('update-unread');
     }
     public function updatedImagen($value, $key)
     {
@@ -106,5 +108,9 @@ class Pending extends Component
         $respuesta = $util->whatsAppSendMessageInstalation($task);
         $task->sent_message = true;
         $task->save();
+    }
+    public function openModalNotificationClient(Tareas $tarea)
+    {
+        $this->emit('send-notificacion-client', $tarea);
     }
 }
