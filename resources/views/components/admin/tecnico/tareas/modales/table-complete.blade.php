@@ -162,7 +162,7 @@
                             <div class="flex gap-2 justify-center">
                                 <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                     @mouseleave="open = false">
-                                    <button wire:click.prevent="sendConfirmationClient({{$tarea->id}})"
+                                    <button wire:click.prevent="openModalNotificationClient({{$tarea->id}})"
                                         aria-haspopup="true" :aria-expanded="open" @focus="open = true"
                                         @focusout="open = false" @click.prevent type="button"
                                         class="rounded-full bg-emerald-600 hover:bg-emerald-700">

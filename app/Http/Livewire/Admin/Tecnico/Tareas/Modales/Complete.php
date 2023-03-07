@@ -81,33 +81,8 @@ class Complete extends Component
         $this->dispatchBrowserEvent('save-imagen', ['tarea' => $tarea->token]);
     }
 
-    public function sendConfirmationClient(Tareas $tarea)
+    public function openModalNotificationClient(Tareas $tarea)
     {
-        $whatsApp = new WhatsAppApi();
-
-        if ($tarea->cliente->telefono) {
-
-            $respuesta = $whatsApp->sendConfirmationClient($tarea);
-            $this->mensajeRespuesta($respuesta, $tarea);
-        } else {
-
-            $this->dispatchBrowserEvent('not-number');
-        }
-    }
-
-    public function mensajeRespuesta($respuesta, Tareas $tarea): bool
-    {
-
-        if ($respuesta->httpStatusCode() == 200) {
-
-            $this->dispatchBrowserEvent('mensaje-enviado');
-            $tarea->sent_message = true;
-            $tarea->save();
-            return true;
-        } else {
-
-            $this->dispatchBrowserEvent('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
-            return false;
-        }
+        $this->emit('send-notificacion-client', $tarea);
     }
 }

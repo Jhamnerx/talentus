@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use ResponseException;
 use App\Http\Controllers\Controller;
+use App\Models\Contactos;
 use App\Models\Tareas;
 use Exception;
 use Netflie\WhatsAppCloudApi\WhatsAppCloudApi;
@@ -79,7 +80,7 @@ class WhatsAppApi extends Controller
     }
 
     // BUTTON TYPES MPM, QUICK_REPLY, URL
-    public function sendConfirmationClient(Tareas $tarea)
+    public function sendConfirmationClient(Tareas $tarea, Contactos $contacto)
     {
 
         $api = new WhatsAppCloudApi([
@@ -125,7 +126,7 @@ class WhatsAppApi extends Controller
             ];
 
             $components = new Component($component_header, $component_body, $component_buttons);
-            $result = $api->sendTemplate($tarea->cliente->telefono, 'confirmacion_cliente_tarea', 'es', $components); // Language is optional
+            $result = $api->sendTemplate('51' . $contacto->telefono, 'confirmacion_cliente_tarea', 'es', $components); // Language is optional
 
             return $result;
         } catch (\Exception $e) {
