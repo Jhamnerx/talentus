@@ -45,6 +45,7 @@
 @livewire('admin.tecnico.tareas.modales.show-tecnicos')
 @livewire('admin.tecnico.tareas.tipos.create')
 @livewire('admin.tecnico.tareas.tipos.edit')
+@livewire('admin.tecnico.tareas.delete')
 @endpush
 
 @section('js')

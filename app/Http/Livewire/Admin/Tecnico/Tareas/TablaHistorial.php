@@ -68,9 +68,7 @@ class TablaHistorial extends Component
     public function deleteTask(Tareas $task)
     {
 
-        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA ELIMINADA', 'message' => 'Se elimino la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-        $task->delete();
-        $this->render();
+        $this->emit('deleteTarea', $task);
     }
 
     public function sendGroupWhatsApp(Tareas $task)
