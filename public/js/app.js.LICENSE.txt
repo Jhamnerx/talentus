@@ -6,6 +6,11 @@
  */
 
 /*!
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * For licensing, see LICENSE.md.
+ */
+
+/*!
  * Chart.js v3.9.1
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
