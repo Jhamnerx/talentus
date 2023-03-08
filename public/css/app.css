@@ -1698,6 +1698,9 @@ select {
 .w-96 {
   width: 24rem;
 }
+.w-7 {
+  width: 1.75rem;
+}
 .w-9 {
   width: 2.25rem;
 }
@@ -1706,9 +1709,6 @@ select {
 }
 .w-64 {
   width: 16rem;
-}
-.w-7 {
-  width: 1.75rem;
 }
 .w-2\.5 {
   width: 0.625rem;
@@ -3366,6 +3366,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(3 105 161 / var(--tw-text-opacity));
 }
+.text-blue-700 {
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity));
+}
 .text-slate-200 {
   --tw-text-opacity: 1;
   color: rgb(226 232 240 / var(--tw-text-opacity));
@@ -3433,10 +3437,6 @@ select {
 .text-talentus {
   --tw-text-opacity: 1;
   color: rgb(20 29 56 / var(--tw-text-opacity));
-}
-.text-blue-700 {
-  --tw-text-opacity: 1;
-  color: rgb(29 78 216 / var(--tw-text-opacity));
 }
 .text-indigo-400 {
   --tw-text-opacity: 1;
@@ -4654,6 +4654,10 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(15 118 110 / var(--tw-bg-opacity));
 }
+.hover\:bg-slate-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+}
 .hover\:bg-orange-700:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(194 65 12 / var(--tw-bg-opacity));
@@ -4670,9 +4674,9 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(167 139 250 / var(--tw-bg-opacity));
 }
-.hover\:bg-indigo-100:hover {
+.hover\:bg-indigo-50:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(224 231 255 / var(--tw-bg-opacity));
+  background-color: rgb(238 242 255 / var(--tw-bg-opacity));
 }
 .hover\:bg-indigo-200:hover {
   --tw-bg-opacity: 1;
@@ -4701,14 +4705,6 @@ select {
 .hover\:bg-talentus-200:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(5 44 82 / var(--tw-bg-opacity));
-}
-.hover\:bg-talentus-100:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(15 71 135 / var(--tw-bg-opacity));
-}
-.hover\:bg-indigo-50:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(238 242 255 / var(--tw-bg-opacity));
 }
 .hover\:bg-gradient-to-br:hover {
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
@@ -6572,6 +6568,10 @@ select {
     width: 75%;
   }
 
+  .xl\:w-3\/5 {
+    width: 60%;
+  }
+
   .xl\:w-32 {
     width: 8rem;
   }
@@ -6729,6 +6729,10 @@ select {
 
   .\32xl\:w-3\/4 {
     width: 75%;
+  }
+
+  .\32xl\:w-3\/5 {
+    width: 60%;
   }
 
   .\32xl\:px-12 {

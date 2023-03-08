@@ -83,8 +83,10 @@ class TablaHistorial extends Component
 
     public function exportTask(Tareas $tarea)
     {
+
+
         $pdfContent = PDF::loadView('pdf.reportes.tarea', ['tarea' => $tarea])
-            ->setPaper('Legal', 'landscape')->output();
+            ->setOption(['isHtml5ParserEnabled' => true])->setPaper('Legal')->output();
 
         return response()->streamDownload(
             fn () => print($pdfContent),
@@ -123,5 +125,9 @@ class TablaHistorial extends Component
             $this->dispatchBrowserEvent('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
             return false;
         }
+    }
+    public function openModalInform(Tareas $tarea)
+    {
+        $this->emit('open-modal-inform', $tarea);
     }
 }

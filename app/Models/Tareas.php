@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class Tareas extends Model
 {
@@ -86,5 +87,28 @@ class Tareas extends Model
     public function mantenimiento()
     {
         return $this->belongsTo(Mantenimiento::class, 'mantenimiento_id');
+    }
+
+
+    public function informe()
+    {
+        return $this->hasOne(InformeTareas::class, 'tarea_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+
+    public function getPDFData()
+    {
+        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
+        $fondo = $plantilla->fondo_contrato;
+        $sello = $plantilla->img_firma;
+        view()->share([
+            'tarea' => $this,
+            'fondo' => $fondo,
+            'plantilla' => $plantilla,
+        ]);
+
+        $pdf = PDF::loadView('pdf.reportes.tarea');
+        //return view('pdf.reportes.tarea');
+        return $pdf->stream('REPORTE TAREA ' . $this->token . 'pdf');
     }
 }

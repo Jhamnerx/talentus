@@ -36,7 +36,6 @@
 @push('modals')
 @livewire('admin.tecnico.tareas.create-task')
 @livewire('admin.tecnico.tareas.reportes.reporte-principal')
-@livewire('admin.tecnico.tareas.create-tipo-tarea')
 @livewire('admin.tecnico.tareas.edit-task')
 @livewire('admin.tecnico.tareas.modales.w-reading')
 @livewire('admin.tecnico.tareas.modales.complete')
@@ -46,9 +45,17 @@
 @livewire('admin.tecnico.tareas.tipos.create')
 @livewire('admin.tecnico.tareas.tipos.edit')
 @livewire('admin.tecnico.tareas.delete')
+
+
+{{-- ckeditpor --}}
+@livewire('admin.tecnico.tareas.inform-task')
+
+
+</div>
 @endpush
 
 @section('js')
+
 <script>
     // INICIALIZAR LOS INPUTS DE FECHA
         $(document).ready(function() {

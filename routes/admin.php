@@ -47,6 +47,7 @@ use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\MantenimientoController;
+use App\Http\Controllers\Admin\PDF\TareaPdfController;
 use App\Http\Controllers\Admin\SimCardController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
@@ -328,6 +329,10 @@ Route::get('pdf/factura/{factura}/{action?}', FacturaPdfController::class)->name
 
 Route::get('pdf/mantenimientos/{mantenimiento}', [MantenimientoController::class, 'pdfInforme'])->name('admin.pdf.mantenimiento');
 
+
+//  tarea informe pdf
+// -------------------------------------------------
+Route::get('pdf/tarea/{tarea}', TareaPdfController::class)->name('admin.pdf.tarea');
 
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');

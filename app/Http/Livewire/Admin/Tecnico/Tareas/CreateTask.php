@@ -8,6 +8,7 @@ use App\Models\Tareas;
 use App\Models\tipoTareas;
 use App\Models\User;
 use App\Models\Vehiculos;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class CreateTask extends Component
@@ -113,6 +114,13 @@ class CreateTask extends Component
     {
         $data = $this->validate();
         $tarea = Tareas::create($data);
+        if ($tarea) {
+
+            $tarea->informe()->create([
+                'message' => '',
+                'user_id' => Auth::user()->id,
+            ]);
+        }
         $this->dispatchBrowserEvent('save-task', ['tarea' => $tarea]);
         $this->reset();
         $this->emit('updateIndex');
