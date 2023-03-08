@@ -68,9 +68,7 @@ class TablaHistorial extends Component
     public function deleteTask(Tareas $task)
     {
 
-        $this->dispatchBrowserEvent('update-task', ['titulo' => 'TAREA ELIMINADA', 'message' => 'Se elimino la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-        $task->delete();
-        $this->render();
+        $this->emit('deleteTarea', $task);
     }
 
     public function sendGroupWhatsApp(Tareas $task)
@@ -85,8 +83,10 @@ class TablaHistorial extends Component
 
     public function exportTask(Tareas $tarea)
     {
+
+
         $pdfContent = PDF::loadView('pdf.reportes.tarea', ['tarea' => $tarea])
-            ->setPaper('Legal', 'landscape')->output();
+            ->setOption(['isHtml5ParserEnabled' => true])->setPaper('Legal')->output();
 
         return response()->streamDownload(
             fn () => print($pdfContent),
@@ -125,5 +125,9 @@ class TablaHistorial extends Component
             $this->dispatchBrowserEvent('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
             return false;
         }
+    }
+    public function openModalInform(Tareas $tarea)
+    {
+        $this->emit('open-modal-inform', $tarea);
     }
 }

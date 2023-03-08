@@ -134,19 +134,36 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="flex gap-2 justify-center">
                                 @can('tecnico.tareas.action.pdf')
-                                <button type="button" wire:click.prevent="exportTask({{ $tarea->id }})"
-                                    class="btn bg-rose-600 hover:bg-rose-700 text-white">
-                                    <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24">
-                                        <g fill="none" class="nc-icon-wrapper">
-                                            <path
-                                                d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm12 6V9c0-.55-.45-1-1-1h-2v5h2c.55 0 1-.45 1-1zm-2-3h1v3h-1V9zm4 2h1v-1h-1V9h1V8h-2v5h1v-2zm-8 0h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H9v5h1v-2zm0-2h1v1h-1V9z"
-                                                fill="currentColor"></path>
+                                <a target="_blank" href="{{route('admin.pdf.tarea', $tarea)}}">
+                                    <button type="button" class="btn bg-rose-600 hover:bg-rose-700 text-white">
+                                        <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24">
+                                            <g fill="none" class="nc-icon-wrapper">
+                                                <path
+                                                    d="M20 2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12zM4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm12 6V9c0-.55-.45-1-1-1h-2v5h2c.55 0 1-.45 1-1zm-2-3h1v3h-1V9zm4 2h1v-1h-1V9h1V8h-2v5h1v-2zm-8 0h1c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1H9v5h1v-2zm0-2h1v1h-1V9z"
+                                                    fill="currentColor"></path>
+                                            </g>
+                                        </svg>
+                                    </button>
+                                </a>
+                                @endcan
+                                @can('tecnico.tareas.edit')
+                                <button type="button" wire:click.prevent="openModalInform({{ $tarea->id }})"
+                                    class="btn bg-white hover:bg-slate-300 text-black">
+                                    <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 64 64">
+                                        <g stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"
+                                            stroke-linejoin="round" class="nc-icon-wrapper">
+                                            <polyline data-cap="butt" points="56 20 39 20 39 3"></polyline>
+                                            <polygon points="56 20 56 61 8 61 8 3 39 3 56 20"></polygon>
+                                            <line x1="19" y1="49" x2="45" y2="49"></line>
+                                            <line x1="19" y1="39" x2="45" y2="39"></line>
+                                            <line x1="19" y1="29" x2="45" y2="29"></line>
+                                            <line x1="19" y1="19" x2="30" y2="19"></line>
                                         </g>
                                     </svg>
                                 </button>
-                                @endcan
-                                @can('tecnico.tareas.edit')
+
                                 <button type="button" wire:click.prevent="editTask({{ $tarea->id }})"
                                     class="btn bg-orange-600 hover:bg-orange-700 text-white">
 
@@ -162,6 +179,7 @@
                                         </g>
                                     </svg>
                                 </button>
+
                                 @endcan
                                 @can('tecnico.tareas.delete')
                                 <button type="button" wire:click.prevent="deleteTask({{ $tarea->id }})"
@@ -176,6 +194,7 @@
                             </div>
                         </td>
                         @endcanany
+
                         @can('tecnico.tareas.action.wsp')
                         <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                             <div class="flex gap-2 justify-center">

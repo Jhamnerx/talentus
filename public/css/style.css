@@ -1605,6 +1605,9 @@ select{
 .w-96{
   width: 24rem;
 }
+.w-7{
+  width: 1.75rem;
+}
 .w-9{
   width: 2.25rem;
 }
@@ -1613,9 +1616,6 @@ select{
 }
 .w-64{
   width: 16rem;
-}
-.w-7{
-  width: 1.75rem;
 }
 .w-2\.5{
   width: 0.625rem;
@@ -3272,6 +3272,10 @@ select{
   --tw-text-opacity: 1;
   color: rgb(3 105 161 / var(--tw-text-opacity));
 }
+.text-blue-700{
+  --tw-text-opacity: 1;
+  color: rgb(29 78 216 / var(--tw-text-opacity));
+}
 .text-slate-200{
   --tw-text-opacity: 1;
   color: rgb(226 232 240 / var(--tw-text-opacity));
@@ -3339,10 +3343,6 @@ select{
 .text-talentus{
   --tw-text-opacity: 1;
   color: rgb(20 29 56 / var(--tw-text-opacity));
-}
-.text-blue-700{
-  --tw-text-opacity: 1;
-  color: rgb(29 78 216 / var(--tw-text-opacity));
 }
 .text-indigo-400{
   --tw-text-opacity: 1;
@@ -5755,6 +5755,144 @@ option:hover {
 .select2-container--classic.select2-container--open .select2-dropdown {
   border-color: #5897fb;
 }
+.document-editor {
+  border: 1px solid var(--ck-color-base-border);
+  border-radius: var(--ck-border-radius);
+  /* Set vertical boundaries for the document editor. */
+  max-height: 700px;
+  /* This element is a flex container for easier rendering. */
+  display: flex;
+  flex-flow: column nowrap;
+}
+.document-editor__toolbar {
+  /* Make sure the toolbar container is always above the editable. */
+  z-index: 1;
+  /* Create the illusion of the toolbar floating over the editable. */
+  box-shadow: 0 0 5px hsla(0deg, 0%, 0%, 0.2);
+  /* Use the CKEditor CSS variables to keep the UI consistent. */
+  border-bottom: 1px solid var(--ck-color-toolbar-border);
+}
+/* Adjust the look of the toolbar inside of the container. */
+.document-editor__toolbar .ck-toolbar {
+  border: 0;
+  border-radius: 0;
+}
+/* Make the editable container look like the inside of a native word processor app. */
+.document-editor__editable-container {
+  padding: calc(2 * var(--ck-spacing-large));
+  background: var(--ck-color-base-foreground);
+  /* Make it possible to scroll the "page" of the edited content. */
+  overflow-y: scroll;
+}
+.document-editor__editable-container .document-editor__editable.ck-editor__editable {
+  /* Set the dimensions of the "page". */
+  width: 15.8cm;
+  min-height: 21cm;
+  /* Keep the "page" off the boundaries of the container. */
+  padding: 1cm 2cm 2cm;
+  border: 1px hsl(0deg, 0%, 82.7%) solid;
+  border-radius: var(--ck-border-radius);
+  background: white;
+  /* The "page" should cast a slight shadow (3D illusion). */
+  box-shadow: 0 0 5px hsla(0deg, 0%, 0%, 0.1);
+  /* Center the "page". */
+  margin: 0 auto;
+}
+/* Override the page's width in the "Examples" section which is wider. */
+.main__content-wide .document-editor__editable-container .document-editor__editable.ck-editor__editable {
+  width: 18cm;
+}
+/* Set the default font for the "page" of the content. */
+.document-editor .ck-content,
+.document-editor .ck-heading-dropdown .ck-list .ck-button__label {
+  font: 16px/1.6 "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* Adjust the headings dropdown to host some larger heading styles. */
+.document-editor .ck-heading-dropdown .ck-list .ck-button__label {
+  line-height: calc(1.7 * var(--ck-line-height-base) * var(--ck-font-size-base));
+  min-width: 6em;
+}
+/* Scale down all heading previews because they are way too big to be presented in the UI.
+    Preserve the relative scale, though. */
+.document-editor .ck-heading-dropdown .ck-list .ck-heading_heading1 .ck-button__label,
+.document-editor .ck-heading-dropdown .ck-list .ck-heading_heading2 .ck-button__label {
+  transform: scale(0.8);
+  transform-origin: left;
+}
+/* Set the styles for "Heading 1". */
+.document-editor .ck-content h2,
+.document-editor .ck-heading-dropdown .ck-heading_heading1 .ck-button__label {
+  font-size: 2.18em;
+  font-weight: normal;
+}
+.document-editor .ck-content h2 {
+  line-height: 1.37em;
+  padding-top: 0.342em;
+  margin-bottom: 0.142em;
+}
+/* Set the styles for "Heading 2". */
+.document-editor .ck-content h3,
+.document-editor .ck-heading-dropdown .ck-heading_heading2 .ck-button__label {
+  font-size: 1.75em;
+  font-weight: normal;
+  color: hsl(203deg, 100%, 50%);
+}
+.document-editor .ck-heading-dropdown .ck-heading_heading2.ck-on .ck-button__label {
+  color: var(--ck-color-list-button-on-text);
+}
+/* Set the styles for "Heading 2". */
+.document-editor .ck-content h3 {
+  line-height: 1.86em;
+  padding-top: 0.171em;
+  margin-bottom: 0.357em;
+}
+/* Set the styles for "Heading 3". */
+.document-editor .ck-content h4,
+.document-editor .ck-heading-dropdown .ck-heading_heading3 .ck-button__label {
+  font-size: 1.31em;
+  font-weight: bold;
+}
+.document-editor .ck-content h4 {
+  line-height: 1.24em;
+  padding-top: 0.286em;
+  margin-bottom: 0.952em;
+}
+/* Make the block quoted text serif with some additional spacing. */
+.document-editor .ck-content blockquote {
+  font-family: Georgia, serif;
+  margin-left: calc(2 * var(--ck-spacing-large));
+  margin-right: calc(2 * var(--ck-spacing-large));
+}
+@media only screen and (max-width: 960px) {
+  /* Because on mobile 2cm paddings are to big. */
+  .document-editor__editable-container .document-editor__editable.ck-editor__editable {
+    padding: 1.5em;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  .main__content-wide .document-editor__editable-container .document-editor__editable.ck-editor__editable {
+    width: 100%;
+  }
+}
+/* Style document editor a'ka Google Docs.*/
+@media only screen and (min-width: 1360px) {
+  .main .main__content.main__content-wide {
+    padding-right: 0;
+  }
+}
+@media only screen and (min-width: 1600px) {
+  .main .main__content.main__content-wide {
+    width: 24cm;
+  }
+  .main .main__content.main__content-wide .main__content-inner {
+    width: auto;
+    margin: 0 50px;
+  }
+  /* Keep "page" look based on viewport width. */
+  .main__content-wide .document-editor__editable-container .document-editor__editable.ck-editor__editable {
+    width: 60%;
+  }
+}
 [x-cloak=""] {
   display: none;
 }
@@ -5985,6 +6123,10 @@ option:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(15 118 110 / var(--tw-bg-opacity));
 }
+.hover\:bg-slate-300:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
+}
 .hover\:bg-orange-700:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(194 65 12 / var(--tw-bg-opacity));
@@ -6001,9 +6143,9 @@ option:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(167 139 250 / var(--tw-bg-opacity));
 }
-.hover\:bg-indigo-100:hover{
+.hover\:bg-indigo-50:hover{
   --tw-bg-opacity: 1;
-  background-color: rgb(224 231 255 / var(--tw-bg-opacity));
+  background-color: rgb(238 242 255 / var(--tw-bg-opacity));
 }
 .hover\:bg-indigo-200:hover{
   --tw-bg-opacity: 1;
@@ -6032,14 +6174,6 @@ option:hover {
 .hover\:bg-talentus-200:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(5 44 82 / var(--tw-bg-opacity));
-}
-.hover\:bg-talentus-100:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(15 71 135 / var(--tw-bg-opacity));
-}
-.hover\:bg-indigo-50:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(238 242 255 / var(--tw-bg-opacity));
 }
 .hover\:bg-gradient-to-br:hover{
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
@@ -7573,6 +7707,9 @@ option:hover {
   .xl\:w-2\/3{
     width: 66.666667%;
   }
+  .xl\:w-3\/5{
+    width: 60%;
+  }
   .xl\:w-96{
     width: 24rem;
   }
@@ -7705,6 +7842,9 @@ option:hover {
   }
   .\32xl\:\!w-64{
     width: 16rem !important;
+  }
+  .\32xl\:w-3\/5{
+    width: 60%;
   }
   .\32xl\:w-3\/4{
     width: 75%;

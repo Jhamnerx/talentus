@@ -1,9 +1,14 @@
 <html>
 
 <head>
+    <title> TAREA REPORTE #{{ $tarea->token }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-
+    @php $fondo=base64_encode(file_get_contents(asset("storage/". $fondo))) @endphp
     <style>
+        .page-break {
+            page-break-after: always;
+        }
+
         .w-7 {
             width: 1.75rem
                 /* 28px */
@@ -190,6 +195,57 @@
         .uppercase {
             text-transform: uppercase;
         }
+
+        .cont-table {
+            margin-left: 10px;
+            width: 500px;
+            margin-right: 10px;
+        }
+
+        .tabla1 {
+            position: relative;
+            width: 500px;
+            top: 4rem;
+
+            margin-right: 3rem;
+        }
+
+        .tabla2 {
+            position: absolute;
+            width: 100%;
+            top: 27rem;
+            width: 100%;
+        }
+
+        body:before {
+            display: block;
+            position: fixed;
+            top: -65px;
+            right: -28px;
+            bottom: -84px;
+            left: -98px;
+
+            background-image:
+
+                url(data:image/jpeg;base64,{{ $fondo }});
+            background-size: 100%;
+            background-repeat: no-repeat;
+            /* opacity: .2; */
+            content: "";
+            z-index: -1000;
+        }
+
+        @page {
+            display: block;
+            flex-wrap: wrap;
+            overflow: hidden;
+
+            margin-top: 3.8rem;
+            margin-left: 6rem;
+            margin-right: 2rem;
+            margin-bottom: 3.8rem;
+            padding-bottom: 1rem;
+        }
     </style>
 
 
@@ -203,7 +259,9 @@
     <header class="px-5 py-4 flex">
 
         <div class="flex-auto">
-            <h2 class="font-semibold text-slate-800 uppercase ">REPORTE TAREA {{$tarea->token}}:
+
+            <h2 class="font-semibold text-slate-800 uppercase " style="text-align: center">REPORTE TAREA
+                {{$tarea->token}}:
 
             </h2>
 
@@ -251,120 +309,145 @@
 
     </header>
 
-    <table class="styled-table">
-        <thead>
-            <tr>
-                <td>
-                    <div class="font-semibold text-center">#Tarea</div>
+    <div class="cont-table">
+        <table class="styled-table tabla1">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="font-semibold text-center">#Tarea</div>
 
-                </td>
-                <td>
-                    <div class="font-semibold text-center">Descripción</div>
-                </td>
-                <td>
-                    <div class="font-semibold text-left"> Vehiculo</div>
-                </td>
-                <td>
-                    <div class="font-semibold text-center">Estado</div>
-                </td>
-                <td>
-                    <div class="font-semibold text-center">Fecha Termino</div>
-                </td>
-                <td>
-                    <div class="font-semibold text-center"> Validacion Cliente</div>
-                </td>
-            </tr>
-        </thead>
-        <!-- Table body -->
-        <tbody class="text-sm divide-y divide-slate-200">
+                    </td>
+                    <td>
+                        <div class="font-semibold text-center">Descripción</div>
+                    </td>
+                </tr>
+            </thead>
+            <!-- Table body -->
+            <tbody class="text-sm divide-y divide-slate-200">
 
-            <tr>
+                <tr>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap" style="max-width: 150px">
 
-                    <div class="text-blue-700">
-                        {{ $tarea->token }}
-                    </div>
-                </td>
+                        <div class="text-blue-700">
+                            {{ $tarea->token }}
+                        </div>
+                    </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-slate-800" style="max-width: 720px">
+                        <div class="text-slate-800" style="max-width: 536px">
 
-                        @switch($tarea->tipo_tarea_id)
-                        @case(1)
+                            @switch($tarea->tipo_tarea_id)
+                            @case(1)
 
-                        Instalación de GPS {{$tarea->dispositivo}} en vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                            Instalación de GPS {{$tarea->dispositivo}} en vehículo:
+                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
+                            instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
-                        @break
+                            @break
 
-                        @case(2)
-                        Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(3)
-                        Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
-                        <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(4)
-                        Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(5)
-                        Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
+                            @case(2)
+                            Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
+                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                            @break
+                            @case(3)
+                            Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
+                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
+                            <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                            @break
+                            @case(4)
+                            Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
+                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
+                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                            @break
+                            @case(5)
+                            Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
+                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
+                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                            @break
 
-                        @endswitch
-                    </div>
+                            @endswitch
+                        </div>
 
-                </td>
-
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-medium text-slate-800">
-
-                        {{$tarea->vehiculo->placa}}
-                    </div>
-                </td>
-
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div
-                        class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
-                        {{$tarea->estado->name()}}
-                    </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
-                    <div class=" text-slate-800">
-
-                        {{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-'}}
-                    </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                    <div class="text-center">
-                        @if ($tarea->respuesta)
-
-                        <img src="{{asset('images/valid.png')}}" class="w-7" alt="">
-                        @else
-                        <img src="{{asset('images/invalid.png')}}" class="w-7" alt="">
-                        @endif
-                    </div>
-                </td>
+                    </td>
 
 
-            </tr>
+                </tr>
 
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <div class="cont-table">
+        <table class="styled-table tabla2">
+            <thead>
+                <tr>
+                    <td>
+                        <div class="font-semibold text-left"> Vehiculo</div>
+                    </td>
+                    <td>
+                        <div class="font-semibold text-center">Estado</div>
+                    </td>
+                    <td>
+                        <div class="font-semibold text-center">Fecha Termino</div>
+                    </td>
+                    <td>
+                        <div class="font-semibold text-center"> Validacion Cliente</div>
+                    </td>
+                </tr>
+            </thead>
+            <!-- Table body -->
+            <tbody class="text-sm divide-y divide-slate-200">
+
+                <tr>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-medium text-slate-800">
+
+                            {{$tarea->vehiculo->placa}}
+                        </div>
+                    </td>
+
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div
+                            class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
+                            {{$tarea->estado->name()}}
+                        </div>
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                        <div class=" text-slate-800">
+
+                            {{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-'}}
+                        </div>
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3">
+                        <div class="text-center">
+                            @if ($tarea->respuesta)
+
+                            <img src="{{asset('images/valid.png')}}" class="w-7" alt="">
+                            @else
+                            <img src="{{asset('images/invalid.png')}}" class="w-7" alt="">
+                            @endif
+                        </div>
+                    </td>
+
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="page-break"></div>
+    {!!$tarea->informe ? html_entity_decode($tarea->informe->message) : ''!!}
+
 </body>
 
 
