@@ -109,6 +109,6 @@ class Tareas extends Model
 
         $pdf = PDF::loadView('pdf.reportes.tarea');
         //return view('pdf.reportes.tarea');
-        return $pdf->stream('REPORTE TAREA ' . $this->token . 'pdf');
+        return $pdf->stream('REPORTE TAREA ' . $this->token . '.pdf');
     }
 }
