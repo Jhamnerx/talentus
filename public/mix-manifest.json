@@ -1,8 +1,8 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/style.css": "/css/style.css",
-    "/css/cliente/cliente.css": "/css/cliente/cliente.css",
-    "/css/app.css": "/css/app.css",
-    "/plugins/jquery/jquery.min.js": "/plugins/jquery/jquery.min.js",
-    "/plugins/tw-elements/index.min.js": "/plugins/tw-elements/index.min.js"
+    "/js/app.js": "/js/app.js?id=efd9577820bb7ed0bc605d8351387252",
+    "/css/style.css": "/css/style.css?id=385de717208eeee902fba6c3970ebed5",
+    "/css/cliente/cliente.css": "/css/cliente/cliente.css?id=d21fcb908b64f6c52a7f5568a4ac8934",
+    "/css/app.css": "/css/app.css?id=d687406eba45221f0eae05792a586597",
+    "/plugins/jquery/jquery.min.js": "/plugins/jquery/jquery.min.js?id=00727d1d5d9c90f7de826f1a4a9cc632",
+    "/plugins/tw-elements/index.min.js": "/plugins/tw-elements/index.min.js?id=7cce5c7fd9bc212826e4a66638d04b98"
 }
