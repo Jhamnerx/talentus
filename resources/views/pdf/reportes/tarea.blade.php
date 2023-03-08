@@ -344,7 +344,7 @@
                             Instalación de GPS {{$tarea->dispositivo}} en vehículo:
                             <b>{{$tarea->vehiculo->placa}}</b>, Fecha
                             instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
 
                             @break
 
