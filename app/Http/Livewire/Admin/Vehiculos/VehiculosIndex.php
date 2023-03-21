@@ -145,4 +145,9 @@ class VehiculosIndex extends Component
     {
         $this->emit('openModalSaveMantenimiento', 'vehiculos-index', $vehiculo);
     }
+    public function openModalAddVehiculo()
+    {
+
+        $this->emit('openModalAddVehiculo');
+    }
 }

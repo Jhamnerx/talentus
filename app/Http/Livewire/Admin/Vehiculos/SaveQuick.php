@@ -79,6 +79,7 @@ class SaveQuick extends Component
             $vehiculo->flotas()->attach($this->flotas_selected);
         }
         $this->reset();
+        $this->emit('updateTable');
         $this->dispatchBrowserEvent('save-quick-vehiculo', ['placa' => $vehiculo->placa]);
     }
 }
