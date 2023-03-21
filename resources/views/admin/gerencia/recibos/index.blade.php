@@ -5,7 +5,7 @@
     <!-- Table -->
     @livewire('admin.gerencia.recibos.index')
     {{-- @livewire('admin.gerencia.recibos.reportes') --}}
-    @livewire('admin.gerencia.recibos.send')
+    {{-- @livewire('admin.gerencia.recibos.send') --}}
     @livewire('admin.gerencia.recibos.delete')
 
 @stop

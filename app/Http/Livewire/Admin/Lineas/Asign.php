@@ -43,21 +43,23 @@ class Asign extends Component
 
         $linea = Lineas::findOrFail($this->linea_id);
 
+
         // si la linea tiene asignada un sim card se cambiara
         if ($linea->sim_card) {
 
-            $this->setOldSimCard($linea);
+            $this->setOldSimCard($linea, $linea->sim_card->sim_card);
             $this->updateSimCard($linea->sim_card);
         }
 
         $sim_card = SimCard::firstOrCreate(
             ['sim_card' => $this->sim_card],
             [
-                'lineas_id' => $linea->id,
+                'lineas_id' => null,
                 'sim_card' => $this->sim_card,
                 'operador' => $linea->operador,
             ]
         );
+
 
         #Registra el cambio
         CambiosLineas::create([
@@ -82,13 +84,14 @@ class Asign extends Component
 
 
 
+
         return redirect()->route('admin.almacen.lineas.index')->with('asign', 'Se asigno la linea, Con el numero existente');
     }
 
-    public function setOldSimCard(Lineas $linea)
+    public function setOldSimCard(Lineas $linea, $sim_card_old)
     {
+        $linea->old_sim_card = $sim_card_old;
 
-        $linea->old_sim_card = $linea->sim_card->sim_card;
         $linea->save();
     }
 

@@ -72,12 +72,14 @@ class LineasController extends Controller
         }
 
         //verificar si enviamos el id de la linea
+
         if ($request->lineas_id) {
 
             $sim_card_linea = SimCard::where('lineas_id', $request->lineas_id)->first();
 
             $sim_card = SimCard::where('id', $request->sim_card_id)->first();
 
+            dd($sim_card, $sim_card_linea);
 
             if ($sim_card_linea) {
 
