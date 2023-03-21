@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>RECIBO #{{ $recibo->serie_numero }}</title>
+    <title>RECIBO EGRESO #{{ $recibo->serie_numero }}</title>
 
 
     {{--
@@ -103,7 +103,7 @@
 
             <div class="large-7 medium-7 columns invoice-header">
 
-                <h2>RECIBO</h2>
+                <h2>RECIBO EGRESO</h2>
 
                 <table>
                     <thead>
@@ -190,67 +190,7 @@
 
         <div class="row" style="margin-top: 2rem">
             <div class="large-5 medium-5 small-12 columns bottom-left">
-                <table>
-                    <thead>
-                        <tr>
-                            <th><strong>Metodos de Pago:</strong> </th>
-                        </tr>
-                    </thead>
-                    @if ($plantilla->empresa_id == 1)
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p><strong>SCOTIABANK SOLES: </strong>7070011536</p>
-                                </td>
-                            </tr>
-                            <tr>
 
-                                <td>
-                                    <p><strong>CONTINENTAL: </strong>001102490201872132</p>
-                                </td>
-
-                            </tr>
-                            <tr>
-
-                                <td>
-                                    <p><strong>CONTINENTAL USD: </strong>001102490201872140</p>
-                                </td>
-
-                            </tr>
-                            <tr>
-
-                                <td>
-                                    <p><strong>INTERBANK: </strong>7673256919822</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    @elseif ($plantilla->empresa_id == 2)
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <p>Sandra Centurion Torres</p>
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td>
-                                    <p><strong>SCOTIABANK: </strong>722-8079419</p>
-                                </td>
-                            </tr>
-                            <tr>
-
-                                <td>
-                                    <p><strong>BCP: </strong>245-92705922-0-70</p>
-                                </td>
-
-                            </tr>
-
-
-                        </tbody>
-                    @endif
-
-
-                </table>
             </div>
             <div class="medium-6 large-offset-3 columns totals">
                 <table>

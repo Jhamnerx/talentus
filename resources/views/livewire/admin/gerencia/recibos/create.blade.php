@@ -14,7 +14,7 @@
             </button>
         </a>
         <div class="mt-2 md:mt-0">
-            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">CREAR RECIBO PAGOS</h4>
+            <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">CREAR RECIBO EGRESO</h4>
             <ul aria-label="current Status"
                 class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
                 <li class="flex items-center mr-4">
@@ -47,8 +47,7 @@
                             <div>Cliente <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="flex" wire:ignore>
-                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
-                                required>
+                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
                             </select>
 
                             @livewire('admin.clientes.button-open-modal')
@@ -56,15 +55,15 @@
                         </div>
 
                         @error('clientes_id')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
 
                     @if ($cliente)
-                        <x-admin.ventas.cliente-selected :cliente="$cliente">
-                        </x-admin.ventas.cliente-selected>
+                    <x-admin.ventas.cliente-selected :cliente="$cliente">
+                    </x-admin.ventas.cliente-selected>
                     @endif
 
 
@@ -82,9 +81,9 @@
 
                         </div>
                         @error('serie_numero')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
                     <div class="col-span-12 xs:col-span-6 mb-2">
@@ -99,9 +98,9 @@
 
                         </div>
                         @error('numero')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
                     {{-- FECHA --}}
@@ -125,9 +124,9 @@
                                 placeholder="Selecciona la fecha">
                         </div>
                         @error('fecha_emision')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
 
@@ -153,9 +152,9 @@
                                 placeholder="Selecciona la fecha">
                         </div>
                         @error('fecha_pago')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
                     </div>
 
@@ -175,9 +174,9 @@
 
 
                         @error('divisa')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
 
                     </div>
@@ -186,18 +185,17 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Forma de Pago
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="forma_pago" name="forma_pago" id="forma_pago"
-                            class="form-select w-full">
+                        <select wire:model="forma_pago" name="forma_pago" id="forma_pago" class="form-select w-full">
                             @foreach ($payments_methods as $key => $method)
-                                <option value="{{ $key }}"> {{ $method }}</option>
+                            <option value="{{ $key }}"> {{ $method }}</option>
                             @endforeach
                         </select>
 
 
                         @error('divisa')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
 
                     </div>
@@ -219,8 +217,8 @@
 
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input checked type="radio" wire:model="tipo_pago" name="tipo_pago"
-                                        value="CONTADO" class="form-radio " />
+                                    <input checked type="radio" wire:model="tipo_pago" name="tipo_pago" value="CONTADO"
+                                        class="form-radio " />
                                     <span class="text-sm ml-2">CONTADO</span>
                                 </label>
                             </div>
@@ -235,9 +233,9 @@
                         </div>
 
                         @error('tipo_pago')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                         @enderror
 
                     </div>
@@ -287,8 +285,8 @@
 
 </div>
 @section('js')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             cont = 0;
             detalles = 0;
             flatpickr('.fechaEmision', {
@@ -390,9 +388,9 @@
                 message: 'Se añadio un producto al recibo',
             });
         }
-    </script>
-    <script>
-        window.addEventListener('unselect-cliente', event => {
+</script>
+<script>
+    window.addEventListener('unselect-cliente', event => {
 
             $('.clientes_id').val(null).trigger('change');
 
@@ -402,5 +400,5 @@
             addAlert();
 
         })
-    </script>
+</script>
 @endsection
