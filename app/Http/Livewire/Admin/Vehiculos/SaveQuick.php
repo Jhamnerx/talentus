@@ -47,6 +47,10 @@ class SaveQuick extends Component
     {
         $this->modalOpen = true;
     }
+    public function closeModal()
+    {
+        $this->modalOpen = false;
+    }
 
     public function updatedClientesId($value)
     {
