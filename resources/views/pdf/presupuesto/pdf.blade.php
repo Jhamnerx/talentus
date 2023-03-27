@@ -497,7 +497,8 @@
             <p>&nbsp;</p>
             <p><strong>FMB920 -2G&nbsp;</strong></p>
             <figure class="image">
-                <img width="350px" src="https://teltonika-gps.com/cdn/extras/9270/fmb920-840xAuto.webp"
+                <img width="350px"
+                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmb920-840xAuto.png')) }}"
                     alt="fmb920.png">
             </figure>
             <p style="margin-left:36.0pt;text-align:justify;"><span
@@ -520,7 +521,8 @@
             <p style="text-align:justify;">&nbsp;</p>
             <p style="text-align:justify;"><span style="color:black;"><strong>FMC130-4G&nbsp;</strong></span></p>
             <figure class="image">
-                <img width="350px" src="https://teltonika-gps.com/cdn/extras/7215/fmc130-840xAuto.webp"
+                <img width="350px"
+                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmc130-840xAuto.png')) }}"
                     alt="fmc130.png">
             </figure>
             <p style="margin-left:36.0pt;"><span style="color:black;"><strong>Características:</strong></span></p>
