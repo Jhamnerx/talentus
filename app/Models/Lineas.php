@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use App\Enums\LineasStatus;
 use App\Scopes\EmpresaScope;
+use App\Models\OldSimCardLinea;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -71,6 +72,14 @@ class Lineas extends Model
 
         return $this->hasMany(CambiosLineas::class, 'new_numero');
     }
+
+    public function old_sim_cards()
+    {
+
+        return $this->hasMany(OldSimCardLinea::class, 'linea_id');
+    }
+
+
 
     public function getFechaSuspencionAttribute($value)
     {
