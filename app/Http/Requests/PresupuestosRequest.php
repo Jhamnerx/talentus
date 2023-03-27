@@ -39,6 +39,7 @@ class PresupuestosRequest extends FormRequest
             'impuesto_soles' => 'required',
             'total_soles' => 'required',
             'nota' => 'nullable',
+            'features' => 'boolean',
             'items' => 'array|between:1,100',
             'items.*.producto_id' => 'required',
             'items.*.producto' => 'required',
@@ -47,6 +48,7 @@ class PresupuestosRequest extends FormRequest
             'items.*.cantidad' => 'required|digits_between:1,100',
             'items.*.precio' => 'required',
             'items.*.total' => 'required',
+
         ];
 
         if ($presupuesto) {

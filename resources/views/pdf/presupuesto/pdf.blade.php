@@ -16,6 +16,10 @@
     <link rel="stylesheet" href="{{ asset('docs/presupuesto/style.css') }}">
 
     <style type="text/css">
+        .page-break {
+            page-break-after: always;
+        }
+
         .footer {
             padding-top: 2rem;
         }
@@ -42,6 +46,20 @@
 
             font-size: 14px;
             color: #ababab;
+        }
+
+        .contenedor-caracteristicas {
+            padding: 2rem, 2rem;
+            font-size: 12px;
+            display: block;
+            flex-wrap: wrap;
+            overflow: hidden;
+
+            margin-top: 3.8rem;
+            margin-left: 2.8rem;
+            margin-right: 6rem;
+            margin-bottom: 3.8rem;
+            padding-bottom: 1rem;
         }
     </style>
 </head>
@@ -444,6 +462,85 @@
     </div>
     <!--screen-->
 
+    @if ($presupuesto->features)
+        <div class="page-break"></div>
+
+        <p style="text-align:center;"><strong>Ofrecemos una solución PERSONALIZABLE y ESCALABLE para la gestión de su
+                flota de vehículos, con las siguientes características.</strong></p>
+        <div class="row contenedor-caracteristicas">
+
+            <p style="text-align:justify;"><span style="color:black;">1. Visualización en tiempo real de la ubicación de
+                    sus
+                    vehículos en todo el territorio nacional.</span></p>
+            <p style="text-align:justify;"><span style="color:black;">2. Transmisión/Actualización de la posición según
+                    plan
+                    seleccionado cuando el vehículo se encuentre en movimiento, en caso no haya eventos (1min).</span>
+            </p>
+            <p style="text-align:justify;"><span style="color:black;">3. Rutas recorridas por cada unidad.</span></p>
+            <p style="text-align:justify;"><span style="color:black;">4. Velocidad durante estos desplazamientos.</span>
+            </p>
+            <p style="text-align:justify;"><span style="color:black;">5. Tiempo y lugar de cada una de sus
+                    paradas.</span>
+            </p>
+            <p style="text-align:justify;"><span style="color:black;">6. <strong>Geocercas, sólo plataforma
+                        premium</strong></span></p>
+            <p style="text-align:justify;"><span style="color:black;">7. Alerta de Velocidad con Zumbador en Cabina
+                    (opcional)</span></p>
+            <p style="text-align:justify;"><span style="color:black;">8. Soporte técnico ilimitado para absolución de
+                    dudas
+                    y consultas en línea&nbsp;</span></p>
+            <p style="text-align:justify;"><span style="color:black;">9. Consulta de Reportes hasta 30 días de
+                    almacenamiento de la unidad.</span></p>
+            <p style="text-align:justify;"><span style="color:black;">10. Central de Monitoreo las 24 horas del día los
+                    365
+                    días del año.</span></p>
+            <p>&nbsp;</p>
+            <p><strong>FMB920 -2G&nbsp;</strong></p>
+            <figure class="image">
+                <img width="350px" src="https://teltonika-gps.com/cdn/extras/9270/fmb920-840xAuto.webp"
+                    alt="fmb920.png">
+            </figure>
+            <p style="margin-left:36.0pt;text-align:justify;"><span
+                    style="color:black;"><strong>Características:</strong></span></p>
+            <ul style="list-style-type:disc;">
+                <li style="text-align:justify;"><span style="color:black;">Cobertura 2G</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Memoria de 128mg.</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo: Frenado aceleración
+                        y
+                        giro brusco (en plataforma premium)</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Detección de Jumping</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de reportes: (Paradas,
+                        Alertas, kilometrajes, etc, en plataforma premium)</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a reglas de velocidad
+                        (en
+                        plataforma premium)</span></li>
+            </ul>
+            <p style="text-align:justify;">&nbsp;</p>
+            <p style="text-align:justify;">&nbsp;</p>
+            <p style="text-align:justify;"><span style="color:black;"><strong>FMC130-4G&nbsp;</strong></span></p>
+            <figure class="image">
+                <img width="350px" src="https://teltonika-gps.com/cdn/extras/7215/fmc130-840xAuto.webp"
+                    alt="fmc130.png">
+            </figure>
+            <p style="margin-left:36.0pt;"><span style="color:black;"><strong>Características:</strong></span></p>
+            <ul style="list-style-type:disc;">
+                <li style="text-align:justify;"><span style="color:black;">Cobertura 4G</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Memoria de 128mg.</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Corte de motor, buzzer, pánico, apertura de
+                        puertas</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo: Frenado aceleración
+                        y
+                        giro brusco.</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Detección de Jumping.</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de reportes: (Paradas,
+                        Alertas, kilometrajes, etc)</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a reglas de
+                        velocidad</span></li>
+                <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span></li>
+            </ul>
+        </div>
+    @endif
 
 
 </body>
