@@ -17,7 +17,7 @@ class Create extends Component
     public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
     public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
     public $sub_total_soles = 0.00, $impuesto_soles = 0.00, $total_soles = 0.00;
-
+    public $features = false;
 
     public $tipoCambio = 0;
     public $ConvertirSoles = false;
@@ -190,7 +190,6 @@ class Create extends Component
 
         $request = new PresupuestosRequest();
         $data = $this->validate($request->rules(), $request->messages());
-
         $presupuesto = Presupuestos::create($data);
         $presupuesto->save();
 

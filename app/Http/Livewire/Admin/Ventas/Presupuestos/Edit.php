@@ -14,7 +14,7 @@ class Edit extends Component
     public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa, $nota;
     public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
     public $sub_total_soles = 0.00, $impuesto_soles = 0.00, $total_soles = 0.00;
-
+    public $features = false;
     public Presupuestos $presupuesto;
 
     public $tipoCambio = 0;
@@ -35,6 +35,8 @@ class Edit extends Component
         $this->sub_total = $this->presupuesto->sub_total;
         $this->impuesto = $this->presupuesto->impuesto;
         $this->total = $this->presupuesto->total;
+        $this->features = $this->presupuesto->features;
+
 
 
         if ($this->presupuesto->divisa == "USD") {
