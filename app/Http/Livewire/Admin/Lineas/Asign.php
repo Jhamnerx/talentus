@@ -7,6 +7,7 @@ use App\Models\SimCard;
 use Livewire\Component;
 use App\Models\CambiosLineas;
 use BaconQrCode\Renderer\Path\Line;
+use Illuminate\Support\Facades\Auth;
 
 class Asign extends Component
 {
@@ -93,6 +94,12 @@ class Asign extends Component
         $linea->old_sim_card = $sim_card_old;
 
         $linea->save();
+
+
+        $old = $linea->old_sim_cards()->create([
+            'old_sim_card' =>  $sim_card_old,
+            'user_id' => Auth::user()->id,
+        ]);
     }
 
     public function updateSimCard(SimCard $sim_card)

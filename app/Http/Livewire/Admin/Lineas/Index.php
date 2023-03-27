@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -55,6 +56,7 @@ class Index extends Component
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')
             ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
+            ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -131,5 +133,21 @@ class Index extends Component
     public function asignToPlaca(Lineas $linea)
     {
         $this->emit('asign-to-placa', $linea);
+    }
+
+    public function consulta()
+    {
+
+
+        $lineas = Lineas::whereNotNull('old_sim_card')->get();
+
+
+        foreach ($lineas as $linea) {
+
+            $linea->old_sim_cards()->create([
+                'old_sim_card' =>  $linea->old_sim_card,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
     }
 }
