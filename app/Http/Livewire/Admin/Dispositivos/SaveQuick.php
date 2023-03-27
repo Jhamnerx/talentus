@@ -53,15 +53,22 @@ class SaveQuick extends Component
         $this->closeModal();
 
         $this->reset();
+        $this->dispatchBrowserEvent('save-quick-imei', ['imei' => $dispositivo->imei]);
     }
 
     public function openModal()
     {
         $this->modalOpen = true;
+        $this->reset('of_client');
     }
 
     public function closeModal()
     {
         $this->modalOpen = false;
+    }
+    public function updated($attr)
+    {
+
+        $this->validateOnly($attr);
     }
 }

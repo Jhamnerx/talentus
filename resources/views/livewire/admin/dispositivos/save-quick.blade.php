@@ -17,8 +17,6 @@
                 </svg>
             </button>
 
-
-
         </div>
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
@@ -96,7 +94,7 @@
                                     @enderror
 
                                     <div class="col-span-12 mt-2">
-                                        <label
+                                        <label for="of_client"
                                             class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                                             <div>
                                                 De cliente?:
@@ -108,12 +106,13 @@
                                             <div class="m-3">
                                                 <!-- Start -->
                                                 <label class="flex items-center">
-                                                    <input type="radio" name="of_client" wire:model="of_client"
-                                                        value="1" class="form-radio" />
+                                                    <input type="checkbox" name="of_client" wire:model="of_client"
+                                                        class="form-checkbox" />
                                                     <span class="text-sm ml-2">SI</span>
                                                 </label>
                                                 <!-- End -->
                                             </div>
+                                            {{ $of_client }}
 
                                         </div>
 
@@ -144,4 +143,13 @@
 
 </div>
 @push('scripts')
+    <script>
+        window.addEventListener('save-quick-imei', event => {
+            iziToast.success({
+                title: 'DISPOSITIVO GUARDADO',
+                message: 'se ha registrado el siguiente imei ' + event.detail.imei + '!',
+                position: 'topRight'
+            });
+        })
+    </script>
 @endpush
