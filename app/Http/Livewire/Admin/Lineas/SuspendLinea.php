@@ -75,7 +75,7 @@ class SuspendLinea extends Component
 
 
         $this->dispatchBrowserEvent('suspend-save', ['lista' => $lista]);
-
+        $this->emit('suspend-save');
         $this->closeModal();
     }
 }
