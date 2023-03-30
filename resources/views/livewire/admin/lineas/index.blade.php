@@ -263,6 +263,22 @@
                         Movistar
                     </button>
                 </li>
+                <li class="m-1">
+                    <button wire:click="operador('cuy')"
+                        :class="clickeado === 4 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 4"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        Cuy
+                    </button>
+                </li>
+                <li class="m-1">
+                    <button wire:click="operador('multioperador')"
+                        :class="clickeado === 5 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 5"
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        MultiOperador (M2M)
+                    </button>
+                </li>
             </ul>
         </div>
 
