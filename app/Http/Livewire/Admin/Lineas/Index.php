@@ -26,11 +26,16 @@ class Index extends Component
 
     protected $listeners = [
         'render' => 'render',
+        'suspend-save' => 'setSelectedNull',
         'index-update' => 'render',
         'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
         'echo:lineas,LineasImportUpdated' => 'updateLineas'
     ];
 
+    public function setSelectedNull()
+    {
+        $this->selected = [];
+    }
     public function updateLineasToSimCard()
     {
         $this->render();
