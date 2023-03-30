@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Admin\Gerencia\Reportes\Modales;
 
+use App\Exports\Gerencia\LineasExport;
 use App\Models\Lineas;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteLineas extends Component
 {
@@ -75,6 +77,11 @@ class ReporteLineas extends Component
             fn () => print($pdfContent),
             "reporte_lineas.pdf"
         );
+    }
+
+    public function exportToExcel()
+    {
+        return Excel::download(new LineasExport($this->suspencion, $this->operador), 'reporte_lineas.xlsx');
     }
 
     public function getOperadoresCount()

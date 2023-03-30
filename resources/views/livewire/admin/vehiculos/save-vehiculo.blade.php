@@ -384,12 +384,14 @@
                                 </p>
                             @enderror
                         </div>
+                        {{ $dispositivo_imei }}
                         <div class="col-span-6 sm:col-span-6">
 
                             <label class="block text-sm font-medium mb-1" for="imei">IMEI GPS: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
-                                <input id="dispositivo_imei" name="dispositivo_imei" placeholder="357073292893290"
+                                <input autocomplete="off" id="dispositivo_imei" name="dispositivo_imei"
+                                    placeholder="357073292893290"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                                                                                             required:border-rose-300 invalid:border-rose-300 peer dispositivo"
                                     type="text" required />
@@ -418,6 +420,11 @@
                                 </div>
                             </div>
                             @error('dispositivos_id')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                            @error('dispositivo_imei')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
                                 </p>
@@ -650,11 +657,11 @@
                     })
 
                 },
-                minChars: 2,
+                minChars: 1,
                 autoSelectFirst: false,
                 deferRequestBy: 5,
                 onSelect: function(suggestion) {
-                    //console.log(suggestion.operador);
+
                     $('.modelo').val(suggestion.modelo);
                     @this.set('modelo_gps', suggestion.modelo)
                     $('.dispositivos_id').val(suggestion.data);
@@ -666,11 +673,23 @@
                 },
                 onHint: function(hint) {
                     //$('#numero').val(hint);
-                    // console.log(hint);
+
 
                 },
                 onSearchComplete: function(query, suggestions) {
                     // console.log(query);
+
+                },
+                onSearchStart: function(query) {
+
+                    var busqueda = query.query;
+
+                    if (this.value.length < 1) {
+
+                        console.log('false');
+                    }
+
+
 
                 },
                 onInvalidateSelection: function() {

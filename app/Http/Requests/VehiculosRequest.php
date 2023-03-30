@@ -44,7 +44,7 @@ class VehiculosRequest extends FormRequest
             "modelo_gps" => 'nullable',
             "operador" => 'nullable',
             "sim_card" => 'nullable',
-            "dispositivo_imei" => 'nullable',
+            "dispositivo_imei" => 'exists:dispositivos,imei',
             "descripcion" => 'nullable',
 
             // "dispositivos_id" => "required|unique:vehiculos",
@@ -81,6 +81,7 @@ class VehiculosRequest extends FormRequest
             'numero.required' => 'El numero es requerido',
             'numero.unique' => 'ya estas registrando este sim en la placa ' . $numero . '',
             'dispositivos_id.required' => 'El imei es requerido',
+            'dispositivo_imei.exists' => 'El imei debe estar registrado',
             'dispositivos_id.unique' => 'Este imei ya esta registrado en la placa ' . $placa . '',
 
         ];

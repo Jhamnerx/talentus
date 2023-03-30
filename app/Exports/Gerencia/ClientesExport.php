@@ -18,7 +18,7 @@ class ClientesExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder im
     use Exportable;
 
     protected $estado;
-    function __construct($estado,)
+    function __construct($estado)
     {
         $this->estado = $estado;
     }
