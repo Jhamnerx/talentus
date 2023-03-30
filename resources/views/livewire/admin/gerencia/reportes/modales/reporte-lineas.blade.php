@@ -56,7 +56,7 @@
                                     <select wire:model="operador" class="form-select w-full pl-9" id="">
                                         <option value="todos">Todos</option>
                                         @foreach ($operadores as $operador)
-                                        <option value="{{$operador->operador}}">{{$operador->operador}}</option>
+                                            <option value="{{ $operador->operador }}">{{ $operador->operador }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -84,16 +84,37 @@
                                     <div>OPCIONES PARA EXPORTAR: </div>
 
                                 </label>
-                                <div class="flex flex-wrap items-center justify-center -m-1.5">
+                                <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3">
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
                                         <button wire:click.prevent="exportToPdf"
                                             class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">PDF</button>
                                     </div>
+
+                                    <div class="flex flex-wrap pt-2 -space-x-px gap-3">
+                                        <button wire:click.prevent="exportToExcel"
+                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">EXCEL</button>
+                                    </div>
                                 </div>
+
 
                             </div>
                             <div class="col-span-12">
                                 <div class="mb-1 text-center w-full" wire:loading wire:target="exportToPdf">
+
+                                    <div class='loader-download'>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--dot-download'></div>
+                                        <div class='loader--text-download'></div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-span-12">
+                                <div class="mb-1 text-center w-full" wire:loading wire:target="exportToExcel">
 
                                     <div class='loader-download'>
                                         <div class='loader--dot-download'></div>
