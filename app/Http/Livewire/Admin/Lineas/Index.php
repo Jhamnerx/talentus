@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -17,6 +18,11 @@ class Index extends Component
     public $to = '';
     public $operador = null;
     public $modalOpenImport = false;
+
+
+
+    public $selected = [];
+
 
     protected $listeners = [
         'render' => 'render',
@@ -108,14 +114,6 @@ class Index extends Component
         }
     }
 
-    public function suspender(Lineas $linea)
-    {
-
-        $linea->fecha_suspencion = Carbon::now();
-        $linea->estado = 2;
-        $linea->date_to_suspend = Carbon::now()->addDays(59);
-        $linea->save();
-    }
 
     public function activar(Lineas $linea)
     {
@@ -149,5 +147,30 @@ class Index extends Component
                 'user_id' => Auth::user()->id,
             ]);
         }
+    }
+
+    public function openModalSuspend()
+    {
+
+        $items = collect($this->selected);
+
+        $this->emit('open-modal-suspend', $items);
+    }
+
+
+
+    public function suspender(Lineas $linea)
+    {
+
+        $items = collect($linea->numero);
+
+        $this->emit('open-modal-suspend', $items);
+    }
+
+
+    public function unSelect()
+    {
+
+        $this->selected = [];
     }
 }

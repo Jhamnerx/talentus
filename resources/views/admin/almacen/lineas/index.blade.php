@@ -6,6 +6,7 @@
 
     @livewire('admin.lineas.index')
     @livewire('admin.lineas.asign-to-placa')
+    @livewire('admin.lineas.suspend-linea')
 
 @stop
 
@@ -20,37 +21,7 @@
             $('.vehiculos_id').val(null).trigger('change');
         })
     </script>
-    <script>
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('handleSelect', () => ({
-                selectall: false,
-                selectAction() {
-                    countEl = document.querySelector('.table-items-action');
-                    if (!countEl) return;
-                    checkboxes = document.querySelectorAll('input.table-item:checked');
-                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
-                    if (checkboxes.length > 0) {
-                        countEl.classList.remove('hidden');
-                    } else {
-                        countEl.classList.add('hidden');
-                    }
-                },
-                toggleAll() {
-                    this.selectall = !this.selectall;
-                    checkboxes = document.querySelectorAll('input.table-item');
-                    [...checkboxes].map((el) => {
-                        el.checked = this.selectall;
-                    });
-                    this.selectAction();
-                },
-                uncheckParent() {
-                    this.selectall = false;
-                    document.getElementById('parent-checkbox').checked = false;
-                    this.selectAction();
-                }
-            }))
-        })
-    </script>
+
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -137,4 +108,52 @@
             });
         </script>
     @endif
+
+
+
+
+    {{-- SUSPEND SCRIPTS --}}
+
+    <script>
+        $(document).ready(function() {
+            flatpickr('.fechaInicio', {
+                mode: 'single',
+                disableMobile: "true",
+                defaultDate: "today",
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+        });
+
+        $(document).ready(function() {
+            flatpickr('.fechaFinal', {
+                mode: 'single',
+                disableMobile: "true",
+                defaultDate: [new Date().setDate(new Date().getDate() + 60), new Date()],
+                dateFormat: "Y-m-d",
+                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
+                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
+            });
+        });
+    </script>
+
+
+    <script>
+        window.addEventListener('suspend-save', event => {
+            iziToast.success({
+                maxWidth: 500,
+                position: 'center',
+                title: 'Se ha guardado el registro de suspencion!',
+                message: 'Las siguientes Lineas: ' + event.detail.lista,
+                position: 'topRight',
+                transitionIn: 'bounceInLeft',
+                // iconText: 'star',
+                onOpened: function(instance, toast) {},
+                onClosed: function(instance, toast, closedBy) {
+                    console.info('closedBy: ' + closedBy);
+                }
+            });
+        })
+    </script>
 @stop

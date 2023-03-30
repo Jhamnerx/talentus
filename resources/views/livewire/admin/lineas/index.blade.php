@@ -62,127 +62,151 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Right side -->
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+        <div class="sm:grid sm:grid-flow-col flex flex-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
             <!-- Delete button -->
-            <div class="table-items-action hidden">
-                <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> items selected</div>
-                    <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
-                </div>
-            </div>
-
-            <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                        <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Hoy</span>
-                        </button>
-                        <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 7 días</span>
-                        </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Todos</span>
+            @if (count($selected) > 0)
+                <div class="table-items-action">
+                    <div class="flex items-center gap-2">
+                        <div class="xl:block text-sm italic mr-2 whitespace-nowrap"><span
+                                class="table-items-count">{{ count($selected) }}</span> items seleccionados</div>
+                        <button type="button" wire:click.prevent="openModalSuspend"
+                            class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Suspender
                         </button>
 
+                        <button wire:click="unSelect" class="btn border-slate-200 hover:border-slate-300">
+                            <svg class="w-4 h-4 fill-current text-rose-500 shrink-0" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24">
+                                <g fill="none" class="nc-icon-wrapper">
+                                    <path
+                                        d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                                        fill="currentColor"></path>
+                                </g>
+                            </svg>
+                        </button>
                     </div>
+
+
                 </div>
-            </div>
-
-            <!-- Export button -->
-            @can('exportar-sim_card')
-                <div class="relative inline-flex">
-                    <a href="{{ route('admin.export.lineas') }}">
-                        <button
-                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
-                            <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
-                                <path
-                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                            </svg>
-                            <span class="hidden xs:block ml-2">Exportar</span>
-                        </button>
-                    </a>
-                </div>
-            @endcan
-
-
-            @if (Auth::user()->email == 'jhamnerx1x@gmail.com')
-                <button class="btn" wire:click="consulta"> consulta</button>
             @endif
 
+
+            <div class="flex gap-1">
+
+
+                <!-- Dropdown -->
+                <div class="relative float-left" x-data="{ open: false, selected: 4 }">
+                    <button
+                        class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+                        aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
+                        :aria-expanded="open">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
+                                <path
+                                    d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
+                            </svg>
+                            <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
+                        </span>
+                        <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                            viewBox="0 0 11 7">
+                            <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
+                        </svg>
+                    </button>
+                    <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                        @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
+                        x-transition:enter="transition ease-out duration-100 transform"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
+                        x-transition:leave-end="opacity-0" x-cloak>
+                        <div class="font-medium text-sm text-slate-600" x-ref="options">
+                            <button wire:click="filter(1)" tabindex="0"
+                                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                                :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
+                                @focus="open = true" @focusout="open = false">
+                                <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                    :class="selected !== 0 && 'invisible'" width="12" height="9"
+                                    viewBox="0 0 12 9">
+                                    <path
+                                        d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                </svg>
+                                <span>Hoy</span>
+                            </button>
+                            <button wire:click="filter(7)" tabindex="0"
+                                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                                :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
+                                @focus="open = true" @focusout="open = false">
+                                <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                    :class="selected !== 1 && 'invisible'" width="12" height="9"
+                                    viewBox="0 0 12 9">
+                                    <path
+                                        d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                </svg>
+                                <span>Ultimos 7 días</span>
+                            </button>
+                            <button wire:click="filter(30)" tabindex="0"
+                                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                                :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
+                                @focus="open = true" @focusout="open = false">
+                                <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                    :class="selected !== 2 && 'invisible'" width="12" height="9"
+                                    viewBox="0 0 12 9">
+                                    <path
+                                        d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                </svg>
+                                <span>Ultimo Mes</span>
+                            </button>
+                            <button wire:click="filter(12)" tabindex="0"
+                                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                                :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
+                                @focus="open = true" @focusout="open = false">
+                                <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                    :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                    viewBox="0 0 12 9">
+                                    <path
+                                        d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                </svg>
+                                <span>Ultimos 12 Meses</span>
+                            </button>
+                            <button wire:click="filter(0)" tabindex="0"
+                                class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                                :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
+                                @focus="open = true" @focusout="open = false">
+                                <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                    :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                    viewBox="0 0 12 9">
+                                    <path
+                                        d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                </svg>
+                                <span>Todos</span>
+                            </button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export button -->
+                @can('exportar-sim_card')
+                    <div class="relative float-right">
+                        <a href="{{ route('admin.export.lineas') }}">
+                            <button
+                                class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
+                                    <path
+                                        d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                </svg>
+                                <span class="hidden xs:block ml-2">Exportar</span>
+                            </button>
+                        </a>
+                    </div>
+                @endcan
+
+            </div>
+            @if (Auth::user()->email == 'jhamnerx1x@gmail.com')
+                <div class="hidden">
+                    <button class="btn hidden" wire:click="consulta"> consulta</button>
+                </div>
+            @endif
 
             <!-- Import button -->
             {{-- <div class="relative inline-flex">
@@ -200,9 +224,12 @@
                 </button>
             </div> --}}
         </div>
+
+
+
         <!-- Left side -->
 
-        <div class="mb-4 sm:mb-0 text-slate-500" x-data="{ clickeado: 0 }">
+        <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
                     <button wire:click="operador()"
@@ -248,7 +275,7 @@
             </h2>
 
         </header>
-        <div x-data="handleSelect">
+        <div>
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
 
@@ -259,11 +286,7 @@
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Selecionar Todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
-                                    </label>
+
                                 </div>
                             </th>
 
@@ -305,8 +328,9 @@
                                         <div class="flex items-center">
                                             <label class="inline-flex">
                                                 <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
+                                                <input wire:model="selected" value="{{ $linea->numero }}"
+                                                    id-linea="{{ $linea->numero }}" class="table-item form-checkbox"
+                                                    type="checkbox" />
                                             </label>
                                         </div>
                                     </td>
@@ -385,18 +409,10 @@
 
                                         @if ($linea->estado->name == 'SUSPENDIDA')
                                             <div class="font-medium text-red-500">
-                                                @php
-                                                    $dias = $linea->now->diffInDays($linea->date_to_suspend);
-                                                @endphp
-
                                                 Suspendido <br>
 
-                                                @if ($dias > 0)
-                                                    {{ $dias }} Dias Restantes
-                                                @else
-                                                    -
-                                                @endif
-
+                                                {{ $linea->fecha_suspencion->format('d-m-Y') }} -
+                                                {{ $linea->date_to_suspend->format('d-m-Y') }}
                                             </div>
                                         @else
                                             <div class="font-medium text-emerald-500">
@@ -405,7 +421,6 @@
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
                                         @if (count($linea->old_sim_cards) > 0)
                                             <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                                 @mouseleave="open = false">
@@ -647,3 +662,56 @@
 
     </div>
 </div>
+
+@push('scripts')
+    <script>
+        // A basic demo function to handle "select all" functionality
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('handleSelect', () => ({
+                selectall: false,
+                selected: [],
+                selectAction() {
+                    countEl = document.querySelector('.table-items-action');
+                    if (!countEl) return;
+                    checkboxes = document.querySelectorAll('input.table-item:checked');
+                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
+                    if (checkboxes.length > 0) {
+                        countEl.classList.remove('hidden');
+                    } else {
+                        countEl.classList.add('hidden');
+                    }
+                    //console.log(this.selected);
+                },
+                toggleAll() {
+                    this.selectall = !this.selectall;
+                    checkboxes = document.querySelectorAll('input.table-item');
+                    [...checkboxes].map((el) => {
+                        el.checked = this.selectall;
+                    });
+                    ids = countEl = document.querySelectorAll('input.table-item');
+                    [...ids].map((el) => {
+                        if (el.checked) {
+                            selects.push(el.getAttribute('id-linea'));
+                        };
+                    });
+                    this.selected = selects;
+                    this.selectAction();
+                },
+                uncheckParent() {
+                    this.selectall = false;
+                    selects = [];
+                    document.getElementById('parent-checkbox').checked = false;
+                    ids = countEl = document.querySelectorAll('input.table-item');
+                    [...ids].map((el) => {
+                        if (el.checked) {
+                            selects.push(el.getAttribute('id-linea'));
+                        };
+                    });
+                    this.selected = selects;
+                    //console.log(this.selected);
+                    this.selectAction();
+                }
+            }))
+        })
+    </script>
+@endpush
