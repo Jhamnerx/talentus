@@ -54,16 +54,16 @@ class SaveVehiculo extends Component
         $validatedDate = $this->validate($requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
 
 
-        // Vehiculos::create($validatedDate);
+        Vehiculos::create($validatedDate);
 
 
-        //$this->setDispositivoVendido($validatedDate['dispositivo_imei']);
+        $this->setDispositivoVendido($validatedDate['dispositivo_imei']);
 
-        //$this->emit('updateTable');
-        //$this->modalOpen = false;
+        $this->emit('updateTable');
+        $this->modalOpen = false;
 
-        //return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
-        //return redirect()->route('admin.vehiculos.index')->with('flash.bannerStyle', 'success');
+        return redirect()->route('admin.vehiculos.index')->with('flash.banner', 'El vehiculo fue creado');
+        return redirect()->route('admin.vehiculos.index')->with('flash.bannerStyle', 'success');
     }
     public function setDispositivoVendido($imei)
     {
