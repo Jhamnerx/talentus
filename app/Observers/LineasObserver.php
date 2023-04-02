@@ -6,23 +6,16 @@ use App\Models\Lineas;
 
 class LineasObserver
 {
-    /**
-     * Handle the Lineas "created" event.
-     *
-     * @param  \App\Models\Lineas  $lineas
-     * @return void
-     */
-    public function created(Lineas $lineas)
+
+    public function created(Lineas $linea)
     {
         //
     }
+    public function creating(Lineas $linea)
+    {
+        $linea->empresa_id = session('empresa');
+    }
 
-    /**
-     * Handle the Lineas "updated" event.
-     *
-     * @param  \App\Models\Lineas  $lineas
-     * @return void
-     */
     public function updated(Lineas $lineas)
     {
         //

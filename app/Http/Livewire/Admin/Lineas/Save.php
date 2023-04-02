@@ -4,41 +4,37 @@ namespace App\Http\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use Livewire\Component;
+use Illuminate\Support\Collection;
 
 class Save extends Component
 {
 
-
-    public $numero, $operador;
-    public $empresa_id;
-    public $inputs = [];
-    public $i = 0;
-
+    public Collection $items;
 
     protected $rules = [
-        'operador.0' => 'required',
-        "numero.0"  => "required|distinct|unique:lineas,numero",
 
-        'operador.*' => 'required',
-        "numero.*"  => "required|distinct|unique:lineas,numero",
+        'items.*.operador' => 'required|alpha:ascii',
+        "items.*.numero"  => "required|distinct|unique:lineas,numero|numeric",
 
     ];
 
     protected $messages = [
-        'numero.0.required' => 'El Número requerido',
-        'numero.0.unique' => 'El Número ya existe',
-        'numero.0.distinct' => 'ya estas registrando este sim',
-        'operador.0.required' => 'El operador es requerido',
-
-        'numero.*.required' => 'El Número es requerido',
-        'numero.*.unique' => 'El Número ya existe',
-        'numero.*.distinct' => 'ya estas registrando este numero',
-        'operador.*.required' => 'El operador es requerido',
+        'items.*.numero.required' => 'El sim card es requerido',
+        'items.*.numero.unique' => 'El sim card ya existe',
+        'items.*.numero.distinct' => 'ya estas registrando este sim card',
+        'items.*.numero.numeric' => 'El campo no debe contener letras',
+        'items.*.operador.required' => 'El operador es requerido',
+        'items.*.operador.alpha' => 'El campo no debe contener números',
     ];
+
 
     public function mount()
     {
-        $this->empresa_id = session('empresa');
+        $this->items = collect();
+        $this->items->push([
+            'numero' => '',
+            'operador' => '',
+        ]);
     }
 
     public function render()
@@ -46,22 +42,22 @@ class Save extends Component
         return view('livewire.admin.lineas.save');
     }
 
-    public function add($i)
+    public function addItem()
     {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs, $i);
-    }
-    public function remove($i)
-    {
-        unset($this->inputs[$i]);
+        $this->items->push([
+            'numero' => '',
+            'operador' => '',
+        ]);
     }
 
-    private function resetInputFields()
+    public function eliminarItem($key)
     {
-        $this->numero = '';
-        $this->operador = '';
+        if (count($this->items) > 1) {
+            unset($this->items[$key]);
+        }
     }
+
+
 
     public function updated($propertyName)
     {
@@ -73,18 +69,10 @@ class Save extends Component
     {
         $validatedDate = $this->validate();
 
-        foreach ($this->operador as $key => $value) {
+        foreach ($this->items as $item) {
 
-            Lineas::create([
-                'numero' => $this->numero[$key],
-                'operador' => $this->operador[$key],
-                'empresa_id' => $this->empresa_id,
-            ]);
+            $numero = Lineas::create($item);
         }
-
-        $this->inputs = [];
-
-        $this->resetInputFields();
 
         return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
     }
