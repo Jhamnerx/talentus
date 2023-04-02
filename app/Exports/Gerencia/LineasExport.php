@@ -34,21 +34,21 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             if ($this->operador !== "todos") {
 
 
-                return Lineas::query()->whereNotNull('fecha_suspencion')->Operador($this->operador);
+                return Lineas::query()->whereNotNull('fecha_suspencion')->Operador($this->operador)->where('baja', false);
             } else {
 
 
-                return Lineas::query()->whereNotNull('fecha_suspencion');
+                return Lineas::query()->whereNotNull('fecha_suspencion')->where('baja', false);
             }
         } else {
 
             if ($this->operador !== "todos") {
 
 
-                return Lineas::query()->Operador($this->operador);
+                return Lineas::query()->Operador($this->operador)->where('baja', false);
             } else {
 
-                return Lineas::query();
+                return Lineas::query()->where('baja', false);
             }
         }
     }

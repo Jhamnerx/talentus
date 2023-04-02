@@ -188,16 +188,16 @@
                 <!-- Export button -->
                 @can('exportar-sim_card')
                     <div class="relative float-right">
-                        <a href="{{ route('admin.export.lineas') }}">
-                            <button
-                                class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
-                                <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
-                                    <path
-                                        d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                </svg>
-                                <span class="hidden xs:block ml-2">Exportar</span>
-                            </button>
-                        </a>
+
+                        <button wire:click.prevent="openModalReporteLineas"
+                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
+                                <path
+                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                            </svg>
+                            <span class="hidden xs:block ml-2">Generar Reporte</span>
+                        </button>
+
                     </div>
                 @endcan
 
@@ -339,7 +339,7 @@
                         <!-- Row -->
                         @if ($lineas->count())
                             @foreach ($lineas as $linea)
-                                <tr>
+                                <tr class="{{ $linea->baja ? 'bg-rose-100' : '' }}">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center">
                                             <label class="inline-flex">
@@ -422,19 +422,25 @@
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        @if ($linea->estado->name == 'SUSPENDIDA')
-                                            <div class="font-medium text-red-500">
-                                                Suspendido <br>
-
-                                                {{ $linea->fecha_suspencion->format('d-m-Y') }} -
-                                                {{ $linea->date_to_suspend->format('d-m-Y') }}
+                                        @if ($linea->baja)
+                                            <div class="font-medium text-red-600">
+                                                BAJA DEFINITIVA
                                             </div>
                                         @else
-                                            <div class="font-medium text-emerald-500">
-                                                {{ $linea->estado->name }}
-                                            </div>
+                                            @if ($linea->estado->name == 'SUSPENDIDA')
+                                                <div class="font-medium text-red-500">
+                                                    Suspendido <br>
+
+                                                    {{ $linea->fecha_suspencion->format('d-m-Y') }} -
+                                                    {{ $linea->date_to_suspend->format('d-m-Y') }}
+                                                </div>
+                                            @else
+                                                <div class="font-medium text-emerald-500">
+                                                    {{ $linea->estado->name }}
+                                                </div>
+                                            @endif
                                         @endif
+
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         @if (count($linea->old_sim_cards) > 0)
@@ -552,24 +558,27 @@
                                                                     Suspender
                                                                 </a>
                                                             </li>
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="activar({{ $linea->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-33"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Activar
-                                                                </a>
-                                                            </li>
+                                                            @if (!$linea->baja)
+                                                                <li>
+                                                                    <a href="javascript: void(0)"
+                                                                        wire:click.prevent="activar({{ $linea->id }})"
+                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                        disabled="false" id="headlessui-menu-item-33"
+                                                                        role="menuitem" tabindex="-1">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            fill="none" viewBox="0 0 24 24"
+                                                                            stroke="currentColor"
+                                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round"
+                                                                                stroke-width="2"
+                                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                            </path>
+                                                                        </svg>
+                                                                        Activar
+                                                                    </a>
+                                                                </li>
+                                                            @endif
                                                         @else
                                                             <li>
                                                                 <a href="javascript: void(0)"

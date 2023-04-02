@@ -49,21 +49,21 @@ class ReporteLineas extends Component
         //$this->validate();
         if ($this->suspencion) {
 
-            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->whereNotNull('fecha_suspencion')->get();
+            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->whereNotNull('fecha_suspencion')->where('baja', false)->get();
         } else {
 
-            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->get();
+            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->where('baja', false)->get();
         }
 
 
         if ($this->operador !== "todos") {
 
-            $lineas = Lineas::Operador($this->operador)->with('sim_card')->get();
+            $lineas = Lineas::Operador($this->operador)->with('sim_card')->where('baja', false)->get();
         }
 
         if ($this->suspencion == true && $this->operador !== "todos") {
 
-            $lineas = Lineas::Operador($this->operador)->whereNotNull('fecha_suspencion')->with('sim_card')->get();
+            $lineas = Lineas::Operador($this->operador)->whereNotNull('fecha_suspencion')->where('baja', false)->with('sim_card')->get();
         }
 
         //$operadores = Lineas::select('operador')->distinct()->get();

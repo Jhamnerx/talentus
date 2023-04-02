@@ -96,6 +96,25 @@
                             @enderror
                         </div>
 
+                        <div class="col-span-12 gap-2">
+                            {{ $baja }}
+                            <div class="m-2 w-full mt-2">
+                                <label for="baja">Baja definitiva:</label>
+                                <!-- Start -->
+                                <div class="flex items-center">
+                                    <div class="form-switch">
+                                        <input wire:model="baja" type="checkbox" id="baja-1" class="sr-only baja" />
+                                        <label class="bg-slate-400" for="baja-1">
+                                            <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                            <span class="sr-only">baja switch</span>
+                                        </label>
+                                    </div>
+
+                                </div>
+                                <!-- End -->
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>

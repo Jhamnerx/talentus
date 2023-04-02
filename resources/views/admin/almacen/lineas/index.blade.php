@@ -8,6 +8,7 @@
     @livewire('admin.lineas.asign-to-placa')
     @livewire('admin.lineas.suspend-linea')
 
+    @livewire('admin.gerencia.reportes.modales.reporte-lineas')
 @stop
 
 @section('js')
