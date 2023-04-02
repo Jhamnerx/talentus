@@ -16,7 +16,7 @@ class SuspendLinea extends Component
     ];
 
 
-    public $fecha_suspencion, $date_to_suspend;
+    public $fecha_suspencion, $date_to_suspend, $baja = false;
 
 
     public Collection $lineas;
@@ -60,6 +60,7 @@ class SuspendLinea extends Component
         $this->lineas->toQuery()->update([
             'fecha_suspencion' => $this->fecha_suspencion,
             'date_to_suspend' => $this->date_to_suspend,
+            'baja' => $this->baja,
             'estado' => 2,
         ]);
 
@@ -72,7 +73,6 @@ class SuspendLinea extends Component
         }
 
         $lista .= '</ul>';
-
 
         $this->dispatchBrowserEvent('suspend-save', ['lista' => $lista]);
         $this->emit('suspend-save');

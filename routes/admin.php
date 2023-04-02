@@ -189,6 +189,7 @@ Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flota
 Route::controller(VehiculosController::class)->group(function () {
 
     Route::get('vehiculos', 'index')->name('admin.vehiculos.index');
+    Route::get('vehiculos/{vehiculo}', 'show')->name('admin.vehiculos.show');
     Route::get('vehiculos/{vehiculo}/editar', 'edit')->name('admin.vehiculos.edit');
     Route::put('vehiculos/{vehiculo}', 'update')->name('admin.vehiculos.update');
 });

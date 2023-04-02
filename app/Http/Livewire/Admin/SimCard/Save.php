@@ -4,35 +4,27 @@ namespace App\Http\Livewire\Admin\SimCard;
 
 
 use App\Models\SimCard;
+use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Save extends Component
 {
-    public $sim_card, $sim_card_n, $operador;
-    public $empresa_id;
-    public $inputs = [];
-    public $i = 0;
-
+    public Collection $items;
 
     protected $rules = [
-        'operador.0' => 'required',
-        "sim_card_n.0"  => "required|distinct|unique:sim_card,sim_card",
 
-        'operador.*' => 'required',
-        "sim_card_n.*"  => "required|distinct|unique:sim_card,sim_card",
+        'items.*.operador' => 'required|alpha:ascii',
+        "items.*.sim_card"  => "required|distinct|unique:sim_card,sim_card|numeric",
 
     ];
 
     protected $messages = [
-        'sim_card_n.0.required' => 'El sim card es requerido',
-        'sim_card_n.0.unique' => 'El sim card ya existe',
-        'sim_card_n.0.distinct' => 'ya estas registrando este sim',
-        'operador.0.required' => 'El operador es requerido',
-
-        'sim_card_n.*.required' => 'El sim card es requerido',
-        'sim_card_n.*.unique' => 'El sim card ya existe',
-        'sim_card_n.*.distinct' => 'ya estas registrando este numero',
-        'operador.*.required' => 'El operador es requerido',
+        'items.*.sim_card.required' => 'El sim card es requerido',
+        'items.*.sim_card.unique' => 'El sim card ya existe',
+        'items.*.sim_card.distinct' => 'ya estas registrando este sim card',
+        'items.*.sim_card.numeric' => 'El campo no debe contener letras',
+        'items.*.operador.required' => 'El operador es requerido',
+        'items.*.operador.alpha' => 'El campo no debe contener números',
     ];
 
 
@@ -40,69 +32,48 @@ class Save extends Component
 
     public function mount()
     {
-        $this->empresa_id = session('empresa');
-    }
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function add($i)
-    {
-        $i = $i + 1;
-        $this->i = $i;
-        array_push($this->inputs, $i);
+        $this->items = collect();
+        $this->items->push([
+            'sim_card' => '',
+            'operador' => '',
+        ]);
     }
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    public function remove($i)
+    public function addItem()
     {
-        unset($this->inputs[$i]);
+        $this->items->push([
+            'sim_card' => '',
+            'operador' => '',
+        ]);
     }
 
 
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
-    private function resetInputFields()
+    public function eliminarItem($key)
     {
-        $this->sim_card_n = '';
-        $this->operador = '';
+        if (count($this->items) > 1) {
+            unset($this->items[$key]);
+        }
     }
 
     public function store()
     {
         $validatedDate = $this->validate();
 
-        foreach ($this->operador as $key => $value) {
+        foreach ($this->items as $item) {
 
-            SimCard::create([
-                'sim_card' => $this->sim_card_n[$key],
-                'operador' => $this->operador[$key],
-                'empresa_id' => $this->empresa_id,
-            ]);
+            $sim_card = SimCard::create($item);
         }
-
-        $this->inputs = [];
-
-        $this->resetInputFields();
 
         return redirect()->route('admin.almacen.sim-card.index')->with('store', 'Se guardo con exito');
     }
+
     public function render()
     {
-        $this->sim_card = SimCard::all();
         return view('livewire.admin.sim-card.save');
     }
 
-    public function updated($propertyName)
+    public function updated($attr)
     {
-        $this->validateOnly($propertyName);
+        $this->validateOnly($attr);
     }
 }

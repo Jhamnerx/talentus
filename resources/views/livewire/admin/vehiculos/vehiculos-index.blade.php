@@ -479,6 +479,25 @@
                                                         x-transition:leave-start="opacity-100"
                                                         x-transition:leave-end="opacity-0" x-cloak>
                                                         <ul>
+                                                            <li>
+                                                                <a href="{{ route('admin.vehiculos.show', $vehiculo) }}"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-29"
+                                                                    role="menuitem" tabindex="-1"><svg
+                                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                                                        </path>
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                                        </path>
+                                                                    </svg> Ver
+                                                                </a>
+                                                            </li>
                                                             @can('editar-vehiculos-vehiculos')
                                                                 <li>
                                                                     <a href="{{ route('admin.vehiculos.edit', $vehiculo) }}"

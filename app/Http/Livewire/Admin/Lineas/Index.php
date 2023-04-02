@@ -178,4 +178,9 @@ class Index extends Component
 
         $this->selected = [];
     }
+
+    public function openModalReporteLineas()
+    {
+        $this->emit('openModalReporteLineas');
+    }
 }

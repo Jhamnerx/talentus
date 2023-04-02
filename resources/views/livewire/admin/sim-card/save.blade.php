@@ -1,6 +1,6 @@
 <div>
 
-    <div class="px-4 py-5 bg-white sm:p-6">
+    {{-- <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-2 mb-1 relative">
 
             <div class="col-span-1 sm:col-span-1">
@@ -48,43 +48,59 @@
 
         </div>
 
+    </div> --}}
+
+    <div class="flex flex-auto gap-2 mx-4 py-2">
+        <div></div>
+        <div class="w-full">
+            <a wire:click.prevent="addItem"
+                class="btn bg-indigo-500 hover:cursor-pointer hover:bg-indigo-600 text-white float-right">
+                <svg class="w-4 h-4 fill-current opacity-50 shrink-0 text-white" viewBox="0 0 16 16">
+                    <path
+                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                </svg>
+
+            </a>
+
+        </div>
     </div>
 
-    @foreach ($inputs as $key => $value)
+
+
+    @foreach ($items->all() as $clave => $item)
         <div class="px-4 py-5 bg-white sm:p-6">
             <div class="grid grid-cols-12 gap-2 relative">
 
-                <div class="col-span-1 sm:col-span-1">
-                    <span>{{ $key + 2 }}</span>
+                <div class="col-span-1 sm:col-span-1 flex items-center justify-center">
+                    <span>{{ $clave + 1 }}</span>
                 </div>
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('sim_card', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1']) !!}
                     <input type="tel" class="form-input w-full" placeholder="Escribe el sim card"
-                        wire:model="sim_card_n.{{ $value }}" maxlength="20">
+                        wire:model="items.{{ $clave }}.sim_card" maxlength="20">
 
 
-                    @error('sim_card_n.' . $value)
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
+                    @if ($errors->has('items.' . $clave . '.sim_card'))
+                        <p class="mt-2  text-pink-600 text-sm">
+                            {{ $errors->first('items.' . $clave . '.sim_card') }}
                         </p>
-                    @enderror
+                    @endif
                 </div>
 
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('operador', 'Operador:', ['class' => 'block text-sm font-medium mb-1']) !!}
-                    <input type="text"
-                        class="form-input w-full valid:border-emerald-300
-                            required:border-rose-300 invalid:border-rose-300 peer"
-                        wire:model="operador.{{ $value }}" placeholder="Escribe el operador" required>
-                    @error('operador.' . $value)
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
+                    <input type="text" class="form-input w-full" wire:model="items.{{ $clave }}.operador"
+                        placeholder="Escribe el operador" required>
+
+                    @if ($errors->has('items.' . $clave . '.operador'))
+                        <p class="mt-2  text-pink-600 text-sm">
+                            {{ $errors->first('items.' . $clave . '.operador') }}
                         </p>
-                    @enderror
+                    @endif
 
                 </div>
-                <div class="col-span-2 sm:col-span-2">
-                    <button type="button" wire:click.prevent="remove({{ $key }})"
+                <div class="col-span-2 sm:col-span-2 flex items-center justify-center">
+                    <button type="button" wire:click.prevent="eliminarItem('{{ $clave }}')"
                         class="text-rose-500 hover:text-rose-600 rounded-full">
                         <span class="sr-only">Eliminar</span>
                         <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -94,13 +110,14 @@
                         </svg>
                     </button>
 
-                    {{-- <button type="button" class="btn btn-primary" @click="saveForm(index)">Save</button> --}}
+
                 </div>
 
             </div>
 
         </div>
     @endforeach
+
     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
 
         <button wire:click.prevent="store()"
