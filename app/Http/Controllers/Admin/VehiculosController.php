@@ -16,6 +16,10 @@ class VehiculosController extends Controller
     {
         return view('admin.vehiculos.index');
     }
+    public function show(Vehiculos $vehiculo)
+    {
+        return view('admin.vehiculos.show', compact('vehiculo'));
+    }
 
 
     public function edit(Vehiculos $vehiculo)
