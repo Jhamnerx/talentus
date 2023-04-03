@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
         // $schedule->job(new checkCobros)->everyFiveMinutes();
         $schedule->job(new checkCobros)->dailyAt('08:50');
         $schedule->command('activitylog:clean')->weekly();
-        $schedule->job(new checkMantenimientoVehiculos)->everyMinute();
+        $schedule->job(new checkMantenimientoVehiculos)->daily();
     }
 
     /**
