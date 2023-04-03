@@ -9,7 +9,10 @@ class Edit extends Component
 {
 
     public $modalEdit = false;
+    public $nombre, $costo = 0;
 
+
+    public tipoTareas $tipo_tarea;
     protected $listeners = [
         'openModalEditTipoTask' => 'openModal',
     ];
@@ -36,11 +39,12 @@ class Edit extends Component
     }
 
 
-    public function openModal(tipoTareas $task)
+    public function openModal(tipoTareas $tipo_tarea)
     {
 
-        $this->nombre = $task->nombre;
-        $this->costo = $task->costo;
+        $this->nombre = $tipo_tarea->nombre;
+        $this->costo = $tipo_tarea->costo;
+        $this->tipo_tarea = $tipo_tarea;
         $this->modalEdit = true;
     }
     public function closeModal()
@@ -57,7 +61,7 @@ class Edit extends Component
     public function save()
     {
         $data = $this->validate();
-        $this->task->update($data);
+        $this->tipo_tarea->update($data);
         $this->closeModal();
         $this->emit('updateIndex');
     }
