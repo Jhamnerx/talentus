@@ -2,31 +2,47 @@
 
 namespace App\Exports;
 
-use App\Models\Tareas;
 use App\Models\User;
+use App\Models\Tareas;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
-use Maatwebsite\Excel\Concerns\WithEvents;
 
-class TareasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithCustomValueBinder, ShouldAutoSize, WithStyles, ShouldQueue
+class TareasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, WithCustomValueBinder, ShouldAutoSize, WithStyles, ShouldQueue, WithDrawings
 {
     use Exportable;
     protected $tecnico_id, $fecha_inicial, $fecha_final, $estado;
+
+    public function drawings()
+    {
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('This is my logo');
+        $drawing->setPath(public_path('/images/logo-excel.png'));
+        $drawing->setHeight(90);
+        $drawing->setCoordinates('B1');
+
+        return $drawing;
+    }
 
 
     public function styles(Worksheet $sheet)
     {
         return [
             // Style the first row as bold text.
-            1    => ['font' => ['bold' => true, 'size' => 16]],
+            1    => ['font' => ['bold' => true, 'size' => 14]],
+            6    => ['font' => ['bold' => true, 'size' => 14]],
+            7 => ['Border' => ['allBorders' => true]]
         ];
     }
 

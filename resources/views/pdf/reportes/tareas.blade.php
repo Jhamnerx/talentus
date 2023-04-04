@@ -180,6 +180,24 @@
         .text-left {
             text-align: left;
         }
+
+        .border-separate {
+            border-collapse: separate;
+        }
+
+        .border {
+            border-width: 1px;
+        }
+
+        .border-slate-400 {
+            --tw-border-opacity: 1;
+            border-color: rgb(148 163 184 / var(--tw-border-opacity));
+        }
+
+        .border-slate-800 {
+            --tw-border-opacity: 1;
+            border-color: rgb(30 41 59 / var(--tw-border-opacity));
+        }
     </style>
 
 
@@ -200,33 +218,35 @@
         </div>
 
 
-        <div class="flex-auto">
-
+        <div class="flex flex-auto">
+            <div>
+                <img src="{{ public_path('/images/logo-excel.png') }}" height="100" alt="">
+            </div>
             <div class="relative">
                 <div class="m-1.5">
                     <!-- Start -->
-                    <table class="detalle">
+                    <table class="detalle border-separate border  border-slate-800">
                         <tbody class="text-sm divide-y divide-slate-200">
                             <tr>
-                                <td colspan="2">
+                                <td colspan="2" class="border border-slate-800">
                                     <div class="text-center">
-                                        {{$tecnico->name}}
+                                        {{ $tecnico->name }}
                                     </div>
 
                                 </td>
                             </tr>
                             <tr>
-                                <td>Fecha Inicial</td>
-                                <td>{{$fechas['fecha_inicial']}}</td>
+                                <td class="border">Fecha Inicial</td>
+                                <td class="border">{{ $fechas['fecha_inicial'] }}</td>
                             </tr>
                             <tr>
-                                <td>Fecha Final</td>
-                                <td>{{$fechas['fecha_final']}}</td>
+                                <td class="border">Fecha Final</td>
+                                <td class="border">{{ $fechas['fecha_final'] }}</td>
                             </tr>
 
                             <tr>
-                                <td>Total:</td>
-                                <td>S/. {{number_format($total_costo, 2)}}</td>
+                                <td class="border">Total:</td>
+                                <td class="border">S/. {{ number_format($total_costo, 2) }}</td>
                             </tr>
                         </tbody>
 
@@ -252,6 +272,9 @@
                     <div class="font-semibold text-center">Descripción</div>
                 </td>
                 <td>
+                    <div class="font-semibold text-left"> Empresa</div>
+                </td>
+                <td>
                     <div class="font-semibold text-left"> Vehiculo</div>
                 </td>
                 <td>
@@ -273,103 +296,104 @@
 
             <!-- Row -->
             @if ($tareas->count())
-            @foreach ($tareas as $tarea)
-            <tr>
+                @foreach ($tareas as $tarea)
+                    <tr>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-blue-700">
-                        {{ $tarea->token }}
-                    </div>
-                </td>
+                            <div class="text-blue-700">
+                                {{ $tarea->token }}
+                            </div>
+                        </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-slate-800" style="max-width: 720px">
+                            <div class="text-slate-800" style="max-width: 650px">
 
-                        @switch($tarea->tipo_tarea_id)
-                        @case(1)
+                                @switch($tarea->tipo_tarea_id)
+                                    @case(1)
+                                        Instalación de GPS </b>, Fecha
+                                        instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                    @break
 
-                        Instalación de GPS {{$tarea->dispositivo}} en vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                                    @case(2)
+                                        Cambio de chip, Fecha
+                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                    @break
 
-                        @break
+                                    @case(3)
+                                        Desinstalación de GPS {{ $tarea->dispositivo }}, Fecha Tarea:
+                                        <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                    @break
 
-                        @case(2)
-                        Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(3)
-                        Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
-                        <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(4)
-                        Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
-                        @case(5)
-                        Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
-                        <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                        Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                        <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                        @break
+                                    @case(4)
+                                        Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> , Fecha
+                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                    @break
 
-                        @endswitch
-                    </div>
+                                    @case(5)
+                                        Mantenimiento GPS {{ $tarea->dispositivo }}</b>, Fecha
+                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                    @break
+                                @endswitch
+                            </div>
 
-                </td>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="text-slate-800">
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-medium text-slate-800">
+                                {{ $tarea->vehiculo->cliente ? $tarea->vehiculo->cliente->razon_social : 'CLIENTE NO ENCONTRADO' }}
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-medium text-slate-800">
 
-                        {{$tarea->vehiculo->placa}}
-                    </div>
-                </td>
-
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div
-                        class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
-                        {{$tarea->estado->name()}}
-                    </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
-                    <div class=" text-slate-800">
-
-                        {{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-'}}
-                    </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center">
-                        {{$tarea->tipo_tarea->costo}}
-                    </div>
+                                {{ $tarea->vehiculo->placa }}
+                            </div>
+                        </td>
 
 
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                    <div class="text-center">
-                        @if ($tarea->respuesta)
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div
+                                class="text-sm inline-flex font-medium bg-{{ $tarea->estado->color() }}-100 text-{{ $tarea->estado->color() }}-600 rounded-full text-center px-2.5 py-1">
+                                {{ $tarea->estado->name() }}
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                            <div class=" text-slate-800">
 
-                        <img src="{{asset('images/valid.png')}}" class="w-7" alt="">
-                        @else
-                        <img src="{{asset('images/invalid.png')}}" class="w-7" alt="">
-                        @endif
-                    </div>
-                </td>
+                                {{ $tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-' }}
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center">
+                                {{ $tarea->tipo_tarea->costo }}
+                            </div>
 
 
-            </tr>
-            @endforeach
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                            <div class="text-center">
+                                @if ($tarea->respuesta)
+                                    <img src="{{ asset('images/valid.png') }}" class="w-7" alt="">
+                                @else
+                                    <img src="{{ asset('images/invalid.png') }}" class="w-7" alt="">
+                                @endif
+                            </div>
+                        </td>
+
+
+                    </tr>
+                @endforeach
             @else
-            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                <div class="text-center">No hay Registros</div>
-            </td>
+                <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                    <div class="text-center">No hay Registros</div>
+                </td>
             @endif
 
 

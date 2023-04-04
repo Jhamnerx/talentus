@@ -205,7 +205,7 @@
         .tabla1 {
             position: relative;
             width: 500px;
-            top: 4rem;
+            top: 0.6rem;
 
             margin-right: 3rem;
         }
@@ -261,7 +261,7 @@
         <div class="flex-auto">
 
             <h2 class="font-semibold text-slate-800 uppercase " style="text-align: center">REPORTE TAREA
-                {{$tarea->token}}:
+                {{ $tarea->token }}:
 
             </h2>
 
@@ -278,22 +278,22 @@
                             <tr>
                                 <td colspan="2">
                                     <div class="text-center">
-                                        {{$tarea->tecnico->name}}
+                                        {{ $tarea->tecnico->name }}
                                     </div>
 
                                 </td>
                             </tr>
                             <tr>
                                 <td>Fecha Tarea</td>
-                                <td>{{$tarea->created_at->format('d-m-Y h:i A')}}</td>
+                                <td>{{ $tarea->created_at->format('d-m-Y h:i A') }}</td>
                             </tr>
                             <tr>
                                 <td>Fecha Terminada</td>
-                                <td>{{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y h:i A') : ''}}</td>
+                                <td>{{ $tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y h:i A') : '' }}</td>
                             </tr>
                             <tr>
                                 <td>Fecha y hora Validacion:</td>
-                                <td>{{$tarea->fecha_validacion ? $tarea->fecha_validacion->format('d-m-Y h:i A') : '' }}
+                                <td>{{ $tarea->fecha_validacion ? $tarea->fecha_validacion->format('d-m-Y h:i A') : '' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -309,6 +309,15 @@
 
     </header>
 
+    <div class="flex-auto">
+
+        <h2 class="font-semibold text-slate-800 uppercase " style="text-align: center">
+            @if ($tarea->vehiculo)
+                {{ $tarea->vehiculo->cliente ? $tarea->vehiculo->cliente->razon_social : 'EMPRESA NO ENCONTRADA' }}
+            @endif
+        </h2>
+
+    </div>
     <div class="cont-table">
         <table class="styled-table tabla1">
             <thead>
@@ -339,39 +348,39 @@
                         <div class="text-slate-800" style="max-width: 536px">
 
                             @switch($tarea->tipo_tarea_id)
-                            @case(1)
+                                @case(1)
+                                    Instalación de GPS {{ $tarea->dispositivo }} en vehículo:
+                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                    instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
 
-                            Instalación de GPS {{$tarea->dispositivo}} en vehículo:
-                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                            instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
+                                @case(2)
+                                    Cambio de chip en el vehículo: <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
 
-                            @break
+                                @case(3)
+                                    Desinstalación de GPS {{ $tarea->dispositivo }} en el vehículo:
+                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha Tarea:
+                                    <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
 
-                            @case(2)
-                            Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                            @break
-                            @case(3)
-                            Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
-                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
-                            <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                            @break
-                            @case(4)
-                            Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
-                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                            @break
-                            @case(5)
-                            Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
-                            <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                            Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                            <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                            @break
+                                @case(4)
+                                    Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> en el vehículo:
+                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
 
+                                @case(5)
+                                    Mantenimiento GPS {{ $tarea->dispositivo }} en el vehículo:
+                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
+                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
+                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
+                                @break
                             @endswitch
                         </div>
 
@@ -411,29 +420,28 @@
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-medium text-slate-800">
 
-                            {{$tarea->vehiculo->placa}}
+                            {{ $tarea->vehiculo->placa }}
                         </div>
                     </td>
 
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div
-                            class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
-                            {{$tarea->estado->name()}}
+                            class="text-sm inline-flex font-medium bg-{{ $tarea->estado->color() }}-100 text-{{ $tarea->estado->color() }}-600 rounded-full text-center px-2.5 py-1">
+                            {{ $tarea->estado->name() }}
                         </div>
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                         <div class=" text-slate-800">
 
-                            {{$tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-'}}
+                            {{ $tarea->fecha_termino ? $tarea->fecha_termino->format('d-m-Y') : '-' }}
                         </div>
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                         <div class="text-center">
                             @if ($tarea->respuesta)
-
-                            <img src="{{asset('images/valid.png')}}" class="w-7" alt="">
+                                <img src="{{ asset('images/valid.png') }}" class="w-7" alt="">
                             @else
-                            <img src="{{asset('images/invalid.png')}}" class="w-7" alt="">
+                                <img src="{{ asset('images/invalid.png') }}" class="w-7" alt="">
                             @endif
                         </div>
                     </td>
@@ -446,7 +454,7 @@
     </div>
 
     <div class="page-break"></div>
-    {!!$tarea->informe ? html_entity_decode($tarea->informe->message) : ''!!}
+    {!! $tarea->informe ? html_entity_decode($tarea->informe->message) : '' !!}
 
 </body>
 

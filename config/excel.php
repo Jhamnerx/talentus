@@ -60,7 +60,7 @@ return [
         |
         */
         'properties'             => [
-            'creator'        => '',
+            'creator'        => 'Talentus Technology EIRL',
             'lastModifiedBy' => '',
             'title'          => '',
             'description'    => '',
