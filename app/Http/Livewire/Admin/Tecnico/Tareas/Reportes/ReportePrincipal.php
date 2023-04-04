@@ -53,12 +53,6 @@ class ReportePrincipal extends Component
         $this->openModalReporte = true;
     }
 
-    public function exportToExcel()
-    {
-        $this->validate();
-        return Excel::download(new TareasExport($this->tecnico_id, $this->fecha_inicial, $this->fecha_final, $this->estado), 'reporte_tareas.xlsx');
-    }
-
     public function SumTotalCostTask($tareas)
     {
 
@@ -75,6 +69,16 @@ class ReportePrincipal extends Component
 
         return $value->sum();
     }
+
+
+    public function exportToExcel()
+    {
+
+        $this->validate();
+        return Excel::download(new TareasExport($this->tecnico_id, $this->fecha_inicial, $this->fecha_final, $this->estado), 'reporte_tareas.xlsx');
+    }
+
+
     public function exportToPdf()
     {
         $this->validate();
