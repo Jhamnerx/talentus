@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CheckRecordatorios;
+use App\Jobs\CheckBirthdayContacts;
 use App\Jobs\checkCobros;
 use App\Jobs\checkMantenimientoVehiculos;
 use App\Jobs\checkRecordatorios as JobsCheckRecordatorios;
@@ -31,6 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new checkCobros)->dailyAt('08:50');
         $schedule->command('activitylog:clean')->weekly();
         $schedule->job(new checkMantenimientoVehiculos)->daily();
+        $schedule->job(new CheckBirthdayContacts)->everyMinute();
     }
 
     /**
