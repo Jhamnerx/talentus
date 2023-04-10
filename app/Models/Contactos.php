@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use App\Notifications\Birthday\NotifyAdmin;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\ContactosFlotasFactory;
@@ -37,6 +39,7 @@ class Contactos extends Model
 
     protected $casts = [
         'is_gerente' => 'boolean',
+
     ];
 
     // Scope local de activo
@@ -55,5 +58,20 @@ class Contactos extends Model
     public function clientes()
     {
         return $this->belongsTo(Clientes::class, 'clientes_id');
+    }
+
+    public function notifyAdminBirthday()
+    {
+
+        view()->share([
+            'contacto' => $this,
+        ]);
+
+        $pdf = PDF::loadView('pdf.birthday.pdf');
+
+        // return $pdf->stream('pdf.pdf');
+        $user = User::where('email', 'monitoreo@talentustechnology.com')->first();
+
+        $user->notify(new NotifyAdmin($this, $pdf));
     }
 }
