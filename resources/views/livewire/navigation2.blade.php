@@ -112,8 +112,8 @@
             class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">
             Ingresar
         </a>
-        <a href="{{ route('register') }}"
-            class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">Registrar</a>
+        {{-- <a href="{{ route('register') }}"
+            class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">Registrar</a> --}}
 
     </div>
 
@@ -229,8 +229,8 @@
                 class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">
                 Ingresar
             </a>
-            <a href="{{ route('register') }}"
-                class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">Registrar</a>
+            {{-- <a href="{{ route('register') }}"
+                class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">Registrar</a> --}}
 
         </div>
     @endauth
@@ -355,8 +355,8 @@
                         class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">
                         Ingresar
                     </a>
-                    <a href="{{ route('register') }}"
-                        class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">Registrar</a>
+                    {{-- <a href="{{ route('register') }}"
+                        class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-bold">Registrar</a> --}}
 
                 </div>
 
@@ -474,8 +474,8 @@
                     class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">
                     Ingresar
                 </a>
-                <a href="{{ route('register') }}"
-                    class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">Registrar</a>
+                {{-- <a href="{{ route('register') }}"
+                    class="text-gray-300 hover:bg-gray-900 hover:text-white px-3 py-2 rounded-md text-base font-medium">Registrar</a> --}}
 
             </div>
         @endauth

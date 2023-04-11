@@ -25,7 +25,7 @@
                 @guest
                     <div class="">
                         <a href="{{ route('login') }}" class="thm-btn main-nav__btn">Iniciar Sesión</a>
-                        <a href="{{ route('register') }}" class="thm-btn main-nav__btn">Registrarse</a>
+                        {{-- <a href="{{ route('register') }}" class="thm-btn main-nav__btn">Registrarse</a> --}}
                     </div>
                 @endguest
                 @auth
