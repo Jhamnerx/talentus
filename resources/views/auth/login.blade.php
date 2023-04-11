@@ -107,10 +107,10 @@
 
                         <!-- Footer -->
                         <div class="pt-5 mt-6 border-t border-slate-200">
-                            <div class="text-sm">
+                            {{-- <div class="text-sm">
                                 No tienes una cuenta? <a class="font-medium text-indigo-500 hover:text-indigo-600"
                                     href="{{ route('register') }}">Registrate</a>
-                            </div>
+                            </div> --}}
                             <!-- Warning -->
                             <div class="mt-5">
                                 <div class="bg-yellow-100 text-yellow-600 px-3 py-2 rounded">
