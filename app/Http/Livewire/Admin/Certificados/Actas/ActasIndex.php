@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Actas;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Vinkla\Hashids\Facades\Hashids;
 
 class ActasIndex extends Component
 {
@@ -134,11 +135,19 @@ class ActasIndex extends Component
 
         $this->emit('openModalImport');
     }
-    public function test()
+    public function test(Actas $acta)
     {
-        $ctr = new UtilesController();
 
-        $value = $ctr->test();
-        dd($value);
+        $hash = Hashids::connection(Actas::class)->encode($acta->id);
+
+
+        dd($hash);
+        // $ctr = new UtilesController();
+
+        // $value = $ctr->test();
+        // dd($value);
+
+
+
     }
 }

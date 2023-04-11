@@ -88,7 +88,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -127,7 +128,8 @@
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -138,7 +140,8 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -149,7 +152,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -177,8 +181,8 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Certificados <span class="text-slate-400 font-medium">{{
-                    $certificados->total() }}</span>
+            <h2 class="font-semibold text-slate-800">Certificados <span
+                    class="text-slate-400 font-medium">{{ $certificados->total() }}</span>
             </h2>
         </header>
         <div x-data="handleSelect">
@@ -230,218 +234,225 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @if ($certificados->count())
-                        @foreach ($certificados as $certificado)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-sky-500">
-                                    @if (!$certificado->codigo == null)
-                                    {{ $certificado->codigo }}
-                                    @else
-                                    {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' .
-                                    $certificado->numero }}
-                                    @endif
-
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
-                                    <a target="_blank" href="{{ route('admin.pdf.velocimetros', $certificado) }}">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                            <span class="sr-only">Descargar</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path
-                                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                            </svg>
-                                        </button>
-                                    </a>
-
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{ $certificado->vehiculo->placa }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{ $certificado->vehiculo->cliente->razon_social
-                                    }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-blue-800">{{ $certificado->velocimetro_modelo }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{ $certificado->fecha }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
-                                <div>
-                                    <div class="m-3 w-48">
-                                        <!-- Start -->
-
-                                        <!-- Start -->
-
-                                        @livewire('admin.certificados.velocimetros.status-sello', ['model' =>
-                                        $certificado, 'field' => 'sello'], key('sello' . $certificado->id))
-
-                                        @livewire('admin.certificados.velocimetros.status-fondo', ['model' =>
-                                        $certificado, 'field' => 'fondo'], key('fondo' . $certificado->id))
-                                        <!-- End -->
-                                        <!-- End -->
-                                    </div>
-                                </div>
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="relative inline-flex" x-data="{ open: false }">
-                                    <div class="relative inline-block h-full text-left">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                            :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                            @click.prevent="open = !open" :aria-expanded="open">
-                                            <span class="sr-only">Menu</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <circle cx="16" cy="16" r="2" />
-                                                <circle cx="10" cy="16" r="2" />
-                                                <circle cx="22" cy="16" r="2" />
-                                            </svg>
-                                        </button>
-                                        <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                                            @click.outside="open = false" @keydown.escape.window="open = false"
-                                            x-show="open"
-                                            x-transition:enter="transition ease-out duration-200 transform"
-                                            x-transition:enter-start="opacity-0 -translate-y-2"
-                                            x-transition:enter-end="opacity-100 translate-y-0"
-                                            x-transition:leave="transition ease-out duration-200"
-                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                            x-cloak>
-
-                                            <ul>
-                                                <li>
-
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="openModalEdit({{ $certificado->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-27" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                                            </path>
-                                                        </svg> Editar
-
-                                                    </a>
-                                                </li>
-                                                <li>
-
-                                                    <button type="button"
-                                                        wire:click.prevent="openModalDelete({{ $certificado->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                            </path>
-                                                        </svg>
-                                                        Eliminar
-                                                    </button>
-
-
-
-                                                </li>
-                                                <li>
-                                                    <a href="{{ route('admin.certificados.velocimetros.show', $certificado) }}"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-29" role="menuitem"
-                                                        tabindex="-1"><svg xmlns="http://www.w3.org/2000/svg"
-                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-                                                            </path>
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                                            </path>
-                                                        </svg> Ver
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a wire:click.prevent="cambiarEstado('{{ $certificado->id }}', 'estado', '{{ $certificado->estado ? 0 : 1 }}')"
-                                                        class="text-gray-700 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-29" role="menuitem"
-                                                        tabindex="-1">
-                                                        @if (!$certificado->estado)
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3"
-                                                            viewBox="0 0 48 48">
-                                                            <g stroke-linecap="square" transform="translate(0.5 0.5)"
-                                                                fill="none" stroke="currentColor"
-                                                                stroke-linejoin="miter" class="nc-icon-wrapper"
-                                                                stroke-miterlimit="10">
-                                                                <path data-cap="butt"
-                                                                    d="M16,10H32A14,14,0,0,1,46,24h0A14,14,0,0,1,32,38H16"
-                                                                    stroke-linecap="butt"></path>
-                                                                <circle cx="16" cy="24" r="14"></circle>
-                                                            </g>
-                                                        </svg>
-                                                        @else
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3"
-                                                            viewBox="0 0 48 48">
-                                                            <g class="nc-icon-wrapper">
-                                                                <path d="M33,9H15a15,15,0,0,0,0,30H33A15,15,0,0,0,33,9Z"
-                                                                    fill="#6cc4f5"></path>
-                                                                <circle cx="15" cy="24" r="13" fill="#fff">
-                                                                </circle>
-                                                            </g>
-                                                        </svg>
-                                                        @endif
-                                                        Cambiar Estado
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click="modalOpenSend({{ $certificado->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-32" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
-                                                            </path>
-                                                        </svg> Enviar
-                                                    </a>
-                                                </li>
-
-                                            </ul>
-
+                            @foreach ($certificados as $certificado)
+                                <tr>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-sky-500">
+                                            @if (!$certificado->codigo == null)
+                                                {{ $certificado->codigo }}
+                                            @else
+                                                {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}
+                                            @endif
 
                                         </div>
-                                    </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+                                            <a target="_blank"
+                                                href="{{ route('admin.pdf.velocimetros', ['certificado' => $certificado, 'vehiculo' => $certificado->vehiculo]) }}">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    <span class="sr-only">Descargar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                                    </svg>
+                                                </button>
+                                            </a>
 
-                                </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $certificado->vehiculo->placa }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">
+                                            {{ $certificado->vehiculo->cliente->razon_social }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-blue-800">{{ $certificado->velocimetro_modelo }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $certificado->fecha }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
+                                        <div>
+                                            <div class="m-3 w-48">
+                                                <!-- Start -->
 
-                            </td>
+                                                <!-- Start -->
 
-                        </tr>
-                        @endforeach
+                                                @livewire('admin.certificados.velocimetros.status-sello', ['model' => $certificado, 'field' => 'sello'], key('sello' . $certificado->id))
+
+                                                @livewire('admin.certificados.velocimetros.status-fondo', ['model' => $certificado, 'field' => 'fondo'], key('fondo' . $certificado->id))
+                                                <!-- End -->
+                                                <!-- End -->
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
+                                                    </svg>
+                                                </button>
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+
+                                                    <ul>
+                                                        <li>
+
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalEdit({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                    </path>
+                                                                </svg> Editar
+
+                                                            </a>
+                                                        </li>
+                                                        <li>
+
+                                                            <button type="button"
+                                                                wire:click.prevent="openModalDelete({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Eliminar
+                                                            </button>
+
+
+
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{ route('admin.certificados.velocimetros.show', $certificado) }}"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-29"
+                                                                role="menuitem" tabindex="-1"><svg
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                                                    </path>
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                                                    </path>
+                                                                </svg> Ver
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a wire:click.prevent="cambiarEstado('{{ $certificado->id }}', 'estado', '{{ $certificado->estado ? 0 : 1 }}')"
+                                                                class="text-gray-700 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-29"
+                                                                role="menuitem" tabindex="-1">
+                                                                @if (!$certificado->estado)
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        class="h-6 w-6 mr-3" viewBox="0 0 48 48">
+                                                                        <g stroke-linecap="square"
+                                                                            transform="translate(0.5 0.5)"
+                                                                            fill="none" stroke="currentColor"
+                                                                            stroke-linejoin="miter"
+                                                                            class="nc-icon-wrapper"
+                                                                            stroke-miterlimit="10">
+                                                                            <path data-cap="butt"
+                                                                                d="M16,10H32A14,14,0,0,1,46,24h0A14,14,0,0,1,32,38H16"
+                                                                                stroke-linecap="butt"></path>
+                                                                            <circle cx="16" cy="24"
+                                                                                r="14"></circle>
+                                                                        </g>
+                                                                    </svg>
+                                                                @else
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        class="h-6 w-6 mr-3" viewBox="0 0 48 48">
+                                                                        <g class="nc-icon-wrapper">
+                                                                            <path
+                                                                                d="M33,9H15a15,15,0,0,0,0,30H33A15,15,0,0,0,33,9Z"
+                                                                                fill="#6cc4f5"></path>
+                                                                            <circle cx="15" cy="24"
+                                                                                r="13" fill="#fff">
+                                                                            </circle>
+                                                                        </g>
+                                                                    </svg>
+                                                                @endif
+                                                                Cambiar Estado
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click="modalOpenSend({{ $certificado->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-32"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
+                                                                    </path>
+                                                                </svg> Enviar
+                                                            </a>
+                                                        </li>
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 
@@ -462,20 +473,20 @@
 </div>
 
 @push('scripts')
-@if (session('eliminar'))
-<script>
-    $(document).ready(function() {
+    @if (session('eliminar'))
+        <script>
+            $(document).ready(function() {
                 Swal.fire(
                     'Eliminada!',
                     'Certificado eliminado correctamente.',
                     'success'
                 )
             });
-</script>
-@endif
+        </script>
+    @endif
 
-<script>
-    $('.formularioEliminar').submit(function(e) {
+    <script>
+        $('.formularioEliminar').submit(function(e) {
             e.preventDefault();
             Swal.fire({
                 title: 'Estas Seguro?',
@@ -492,5 +503,5 @@
                 }
             })
         })
-</script>
+    </script>
 @endpush

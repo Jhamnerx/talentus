@@ -8,11 +8,14 @@ use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
+use App\Models\Vehiculos;
 
 class ActaPdfController extends Controller
 {
-    public function __invoke(Actas $acta)
+    public function __invoke(Actas $acta, Vehiculos $vehiculo)
     {
+        // dd($acta->toSql(), $vehiculo->toSql());
+
         $ciudad = Ciudades::find($acta->ciudades_id);
         $acta->fecha =
             $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;

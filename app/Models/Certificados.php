@@ -66,7 +66,10 @@ class Certificados extends Model
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EmpresaScope::class);
     }
-
+    public function vehiculos()
+    {
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 
     public function getPDFData()
     {
