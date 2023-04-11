@@ -1,7 +1,17 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE HTML
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional //EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+    xmlns:o="urn:schemas-microsoft-com:office:office">
 
 <head>
+    <!--[if gte mso 9]>
+<xml>
+  <o:OfficeDocumentSettings>
+    <o:AllowPNG/>
+    <o:PixelsPerInch>96</o:PixelsPerInch>
+  </o:OfficeDocumentSettings>
+</xml>
+<![endif]-->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="x-apple-disable-message-reformatting">
@@ -9,8 +19,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!--<![endif]-->
     <title></title>
-
-    {{ header('Content-type:application/pdf') }}
 
     <style type="text/css">
         @media only screen and (min-width: 620px) {
@@ -118,7 +126,7 @@
             }
 
             #u_row_5 .v-row-background-image--inner {
-                background-image: url('images/image-3.png') !important;
+                background-image: url("{{ Storage::url('mail/birthday/images/image-3.png') }}") !important;
                 background-position: center top !important;
                 background-repeat: no-repeat !important;
             }
@@ -155,13 +163,13 @@
             }
 
             #u_row_1 .v-row-background-image--outer {
-                background-image: url('images/image-6.png') !important;
+                background-image: url("{{ Storage::url('mail/birthday/images/image-6.png') }}") !important;
                 background-position: center top !important;
                 background-repeat: no-repeat !important;
             }
 
             #u_row_1.v-row-background-image--outer {
-                background-image: url('images/image-6.png') !important;
+                background-image: url("{{ Storage::url('mail/birthday/images/image-6.png') }}") !important;
                 background-position: center top !important;
                 background-repeat: no-repeat !important;
             }
@@ -277,6 +285,13 @@
     </style>
 
 
+
+    <!--[if !mso]><!-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700&display=swap" rel="stylesheet"
+        type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet" type="text/css">
+    <!--<![endif]-->
+
 </head>
 
 <body class="clean-body u_body"
@@ -300,11 +315,11 @@
                                 style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
                                 <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
 
-                                <!--[if (mso)|(IE)]><td align="center" width="181" style="background-color: #ee6c9a;width: 181px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="181" style="background-color: #052c52;width: 181px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-30p17"
                                     style="max-width: 320px;min-width: 181px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #ee6c9a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #052c52;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -327,8 +342,9 @@
                                                                         align="center">
 
                                                                         <img align="center" border="0"
-                                                                            src="images/image-4.png" alt="Unlayer L"
-                                                                            title="Unlayer L"
+                                                                            src="{{ Storage::url('mail/birthday/images/image-4.png') }}"
+                                                                            alt="talentustechnology L"
+                                                                            title="talentustechnology L"
                                                                             style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 58%;max-width: 93.38px;"
                                                                             width="93.38"
                                                                             class="v-src-width v-src-max-width" />
@@ -348,11 +364,11 @@
                                     </div>
                                 </div>
                                 <!--[if (mso)|(IE)]></td><![endif]-->
-                                <!--[if (mso)|(IE)]><td align="center" width="419" style="background-color: #ee6c9a;width: 419px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="419" style="background-color: #052c52;width: 419px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-69p83"
                                     style="max-width: 320px;min-width: 419px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #ee6c9a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #052c52;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -420,10 +436,8 @@
                         <div class="u-row"
                             style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
                             <div class="v-row-background-image--inner"
-                                style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-image: url('images/image-2.png');background-repeat: no-repeat;background-position: center top;background-color: transparent;">
-                                <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-image: url('images/image-2.png');background-repeat: no-repeat;background-position: center top;background-color: transparent;"><![endif]-->
+                                style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-image: url('{{ Storage::url('mail/birthday/images/image-2.png') }}');background-repeat: no-repeat;background-position: center top;background-color: transparent;">
 
-                                <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;" valign="top"><![endif]-->
                                 <div class="u-col u-col-100"
                                     style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
                                     <div style="height: 100%;width: 100% !important;">
@@ -462,7 +476,7 @@
 
                                                             <h1 class="v-text-align v-font-size"
                                                                 style="margin: 0px; color: #ecf0f1; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Montserrat',sans-serif; font-size: 30px;">
-                                                                <strong>NOMBRE CLIENTE!</strong>
+                                                                <strong>{{ $contacto->nombre }}!</strong>
                                                             </h1>
 
                                                         </td>
@@ -487,8 +501,8 @@
                                                                         align="center">
 
                                                                         <img align="center" border="0"
-                                                                            src="images/image-1.png" alt="Birthday"
-                                                                            title="Birthday"
+                                                                            src="{{ Storage::url('mail/birthday/images/image-1.png') }}"
+                                                                            alt="Birthday" title="Birthday"
                                                                             style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 47%;max-width: 282px;"
                                                                             width="282"
                                                                             class="v-src-width v-src-max-width" />
@@ -523,11 +537,11 @@
                                 style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
                                 <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
 
-                                <!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #f8dfe1;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #176fc40f;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-100"
                                     style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #f8dfe1;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #176fc40f;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -589,14 +603,12 @@
 
 
                     <div class="u-row-container v-row-background-image--outer v-row-background-color"
-                        style="padding: 0px;background-image: url('images/image-5.png');background-repeat: no-repeat;background-position: center top;background-color: transparent">
+                        style="padding: 0px;background-image: url('{{ Storage::url('mail/birthday/images/image-5.png') }}');background-repeat: no-repeat;background-position: center top;background-color: transparent">
                         <div class="u-row"
                             style="Margin: 0 auto;min-width: 320px;max-width: 600px;overflow-wrap: break-word;word-wrap: break-word;word-break: break-word;background-color: transparent;">
                             <div class="v-row-background-image--inner"
                                 style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
-                                <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-image: url('images/image-5.png');background-repeat: no-repeat;background-position: center top;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
 
-                                <!--[if (mso)|(IE)]><td align="center" width="600" style="width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-100"
                                     style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
                                     <div
@@ -617,7 +629,7 @@
 
                                                             <h1 class="v-text-align v-font-size"
                                                                 style="margin: 0px; color: #252525; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Montserrat',sans-serif; font-size: 22px;">
-                                                                <strong>Obten Descuentos hasta de 30%</strong>
+                                                                <strong>Obten Descuentos por flota</strong>
                                                             </h1>
 
                                                         </td>
@@ -655,10 +667,10 @@
                                                             align="left">
 
                                                             <div class="v-text-align" align="center">
-                                                                <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Montserrat',sans-serif;"><tr><td class="v-text-align" style="font-family:'Montserrat',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.unlayer.com" style="height:54px; v-text-anchor:middle; width:174px;" arcsize="46.5%" stroke="f" fillcolor="#ee6c9a"><w:anchorlock/><center style="color:#ffffff;font-family:'Montserrat',sans-serif;"><![endif]-->
-                                                                <a href="https://www.unlayer.com" target="_blank"
-                                                                    class="v-size-width"
-                                                                    style="box-sizing: border-box;display: inline-block;font-family:'Montserrat',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #ee6c9a; border-radius: 25px;-webkit-border-radius: 25px; -moz-border-radius: 25px; width:30%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
+                                                                <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-spacing: 0; border-collapse: collapse; mso-table-lspace:0pt; mso-table-rspace:0pt;font-family:'Montserrat',sans-serif;"><tr><td class="v-text-align" style="font-family:'Montserrat',sans-serif;" align="center"><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="https://www.talentustechnology.com" style="height:54px; v-text-anchor:middle; width:174px;" arcsize="46.5%" stroke="f" fillcolor="#052c52"><w:anchorlock/><center style="color:#ffffff;font-family:'Montserrat',sans-serif;"><![endif]-->
+                                                                <a href="https://www.talentustechnology.com"
+                                                                    target="_blank" class="v-size-width"
+                                                                    style="box-sizing: border-box;display: inline-block;font-family:'Montserrat',sans-serif;text-decoration: none;-webkit-text-size-adjust: none;text-align: center;color: #ffffff; background-color: #052c52; border-radius: 25px;-webkit-border-radius: 25px; -moz-border-radius: 25px; width:30%; max-width:100%; overflow-wrap: break-word; word-break: break-word; word-wrap:break-word; mso-border-alt: none;">
                                                                     <span class="v-padding"
                                                                         style="display:block;padding:10px 20px;line-height:120%;"><strong><span
                                                                                 style="font-size: 14px; line-height: 16.8px;">Conoce
@@ -693,11 +705,11 @@
                                 style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
                                 <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
 
-                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ee6c9a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #052c52;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-33p33"
                                     style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #ee6c9a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #052c52;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -720,8 +732,9 @@
                                                                         align="center">
 
                                                                         <img align="center" border="0"
-                                                                            src="images/image-7.png"
-                                                                            alt="Unlayer Logo" title="Unlayer Logo"
+                                                                            src="{{ Storage::url('mail/birthday/images/image-7.png') }}"
+                                                                            alt="talentustechnology Logo"
+                                                                            title="talentustechnology Logo"
                                                                             style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 54%;max-width: 97.2px;"
                                                                             width="97.2"
                                                                             class="v-src-width v-src-max-width" />
@@ -741,11 +754,11 @@
                                     </div>
                                 </div>
                                 <!--[if (mso)|(IE)]></td><![endif]-->
-                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ee6c9a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #052c52;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-33p33"
                                     style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #ee6c9a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #052c52;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -802,11 +815,11 @@
                                     </div>
                                 </div>
                                 <!--[if (mso)|(IE)]></td><![endif]-->
-                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #ee6c9a;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="200" style="background-color: #052c52;width: 200px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-33p33"
                                     style="max-width: 320px;min-width: 200px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #ee6c9a;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #052c52;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
@@ -872,11 +885,11 @@
                                 style="border-collapse: collapse;display: table;width: 100%;height: 100%;background-color: transparent;">
                                 <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="v-row-background-image--outer v-row-background-color" style="padding: 0px;background-color: transparent;" align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:600px;"><tr class="v-row-background-image--inner" style="background-color: transparent;"><![endif]-->
 
-                                <!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #f8dfe1;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
+                                <!--[if (mso)|(IE)]><td align="center" width="600" style="background-color: #176fc40f;width: 600px;padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;" valign="top"><![endif]-->
                                 <div class="u-col u-col-100"
                                     style="max-width: 320px;min-width: 600px;display: table-cell;vertical-align: top;">
                                     <div
-                                        style="background-color: #f8dfe1;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
+                                        style="background-color: #176fc40f;height: 100%;width: 100% !important;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">
                                         <!--[if (!mso)&(!IE)]><!-->
                                         <div
                                             style="padding: 0px;border-top: 0px solid transparent;border-left: 0px solid transparent;border-right: 0px solid transparent;border-bottom: 0px solid transparent;border-radius: 0px;-webkit-border-radius: 0px; -moz-border-radius: 0px;">

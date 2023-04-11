@@ -8,17 +8,15 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NotifyAdmin extends Notification
+class NotifyContactBirthday extends Notification
 {
     use Queueable;
 
     public Contactos $contacto;
-    public $pdf;
 
-    public function __construct(Contactos $contacto, $pdf)
+    public function __construct(Contactos $contacto)
     {
         $this->contacto = $contacto;
-        $this->pdf = $pdf;
     }
 
     public function via($notifiable)
@@ -29,17 +27,7 @@ class NotifyAdmin extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->attachData($this->pdf->output(), 'FELICITACIONES ' . $this->contacto->nombre . '.pdf', [
-                'mime' => 'application/pdf',
-            ])
-            ->subject('NOTIFICACION DE CUMPLEAÑOS CLIENTE')
+            ->subject('FELIZ CUMPLEAÑOS ' . $this->contacto->nombre . ' TE DESEA TALENTUS TECHNOLOGY')
             ->view('pdf.birthday.pdf', ['contacto' => $this->contacto]);
-    }
-
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
     }
 }

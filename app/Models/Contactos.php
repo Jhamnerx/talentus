@@ -7,10 +7,10 @@ use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
-use App\Notifications\Birthday\NotifyAdmin;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\ContactosFlotasFactory;
+use App\Notifications\Birthday\NotifyContactBirthday;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Contactos extends Model
@@ -60,18 +60,13 @@ class Contactos extends Model
         return $this->belongsTo(Clientes::class, 'clientes_id');
     }
 
-    public function notifyAdminBirthday()
+    public function notifyContactBirthday()
     {
 
-        view()->share([
-            'contacto' => $this,
-        ]);
-
-        $pdf = PDF::loadView('pdf.birthday.pdf');
-
+        // $pdf = PDF::loadView('pdf.birthday.pdf');
         // return $pdf->stream('pdf.pdf');
         $user = User::where('email', 'monitoreo@talentustechnology.com')->first();
 
-        $user->notify(new NotifyAdmin($this, $pdf));
+        $user->notify(new NotifyContactBirthday($this));
     }
 }

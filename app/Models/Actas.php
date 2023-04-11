@@ -67,7 +67,10 @@ class Actas extends Model
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
-
+    public function vehiculos()
+    {
+        return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+    }
 
     public function getPDFData()
     {

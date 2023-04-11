@@ -35,7 +35,7 @@ class CheckBirthdayContacts implements ShouldQueue
      */
     public function handle()
     {
-        $contactos = Contactos::withoutGlobalScope(EmpresaScope::class)->get();
+        $contactos = Contactos::where('birthday', Carbon::today()->format('d/m/Y'))->withoutGlobalScope(EmpresaScope::class)->get();
 
         $today = Carbon::today()->format('Y-m-d');
 
@@ -45,7 +45,7 @@ class CheckBirthdayContacts implements ShouldQueue
 
             if ($today === $birthday) {
 
-                return $contacto->notifyAdminBirthday();
+                return $contacto->notifyContactBirthday();
             }
         }
     }
