@@ -138,12 +138,12 @@
                             <div class="col-span-12 sm:col-span-4">
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_instalacion">Fecha
-                                    Instalacion:
+                                    Instalación:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_instalacion"
-                                        required name="fecha_instalacion" type="text"
-                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDateCertificadoFinal font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
+                                        required name="fecha_instalacion" type="text" readonly
+                                        class="form-input inputDateCertificadoFinal font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
@@ -183,8 +183,8 @@
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
-                                        required name="fecha_fin" type="text"
-                                        class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
+                                        required name="fecha_fin" type="text" readonly
+                                        class="form-input inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
