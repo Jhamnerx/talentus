@@ -61,7 +61,7 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <input maxlength="10" wire:model="fecha_suspencion" type="text"
+                                <input maxlength="10" wire:model="fecha_suspencion" type="text" readonly
                                     class="form-input fecha fechaInicio w-full pl-9" placeholder="Selecciona la fecha">
                             </div>
                             @error('fecha_suspencion')
@@ -86,7 +86,7 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <input maxlength="10" wire:model="date_to_suspend" type="text"
+                                <input maxlength="10" wire:model="date_to_suspend" type="text" readonly
                                     class="form-input fecha fechaFinal w-full pl-9" placeholder="Selecciona la fecha">
                             </div>
                             @error('date_to_suspend')
