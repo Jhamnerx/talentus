@@ -18,6 +18,23 @@ class SuspendLinea extends Component
 
     public $fecha_suspencion, $date_to_suspend, $baja = false;
 
+    protected $rules = [
+
+        'fecha_suspencion' => 'required|date',
+        "date_to_suspend"  => "required|date",
+        "baja"  => "required",
+
+    ];
+    protected $messages = [
+
+        'fecha_suspencion.required' => 'La fecha es requerida',
+        'fecha_suspencion.date' => 'Usa un formato de fecha',
+        "date_to_suspend.required"  => "La fecha es requerida",
+        "date_to_suspend.date"  => "Usa un formato de fecha",
+        "baja.required"  => "required",
+
+    ];
+
 
     public Collection $lineas;
     public $items = [];
@@ -57,6 +74,7 @@ class SuspendLinea extends Component
     public function save()
     {
 
+        $this->validate();
         $this->lineas->toQuery()->update([
             'fecha_suspencion' => $this->fecha_suspencion,
             'date_to_suspend' => $this->date_to_suspend,
@@ -77,5 +95,9 @@ class SuspendLinea extends Component
         $this->dispatchBrowserEvent('suspend-save', ['lista' => $lista]);
         $this->emit('suspend-save');
         $this->closeModal();
+    }
+    public function updated($attr)
+    {
+        $this->validateOnly($attr);
     }
 }
