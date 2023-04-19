@@ -35,13 +35,13 @@ class CheckBirthdayContacts implements ShouldQueue
      */
     public function handle()
     {
-        $contactos = Contactos::where('birthday', Carbon::today()->format('d/m/Y'))->withoutGlobalScope(EmpresaScope::class)->get();
+        $contactos = Contactos::where('birthday', 'LIKE', Carbon::today()->format('d/m') . '%')->withoutGlobalScope(EmpresaScope::class)->get();
 
-        $today = Carbon::today()->format('Y-m-d');
+        $today = Carbon::today()->format('d-m');
 
         foreach ($contactos as $key => $contacto) {
 
-            $birthday = Carbon::createFromFormat('d/m/Y', $contacto->birthday)->format('Y-m-d');
+            $birthday = Carbon::createFromFormat('d/m/Y', $contacto->birthday)->format('d-m');
 
             if ($today === $birthday) {
 

@@ -476,7 +476,7 @@
 
                                                             <h1 class="v-text-align v-font-size"
                                                                 style="margin: 0px; color: #ecf0f1; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Montserrat',sans-serif; font-size: 30px;">
-                                                                <strong>{{ $contacto->nombre }}!</strong>
+                                                                <strong>{{ strtoupper($contacto->nombre) }}!</strong>
                                                             </h1>
 
                                                         </td>

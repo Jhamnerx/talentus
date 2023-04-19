@@ -27,7 +27,7 @@ class NotifyContactBirthday extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('FELIZ CUMPLEAÑOS ' . $this->contacto->nombre . ' TE DESEA TALENTUS TECHNOLOGY')
+            ->subject('FELIZ CUMPLEAÑOS ' . strtoupper($this->contacto->nombre) . ' TE DESEA TALENTUS TECHNOLOGY')
             ->view('pdf.birthday.pdf', ['contacto' => $this->contacto]);
     }
 }

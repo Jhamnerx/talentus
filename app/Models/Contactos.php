@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Clientes;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
+use App\Notifications\EnviarMensaje;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\ContactosFlotasFactory;
 use App\Notifications\Birthday\NotifyContactBirthday;
@@ -21,7 +25,7 @@ class Contactos extends Model
         return ContactosFlotasFactory::new();
     }
 
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, Notifiable;
     use LogsActivity;
     protected static $recordEvents = ['deleted', 'created', 'updated'];
 
@@ -65,8 +69,20 @@ class Contactos extends Model
 
         // $pdf = PDF::loadView('pdf.birthday.pdf');
         // return $pdf->stream('pdf.pdf');
-        $user = User::where('email', 'monitoreo@talentustechnology.com')->first();
 
-        $user->notify(new NotifyContactBirthday($this));
+
+        $this->notify(new NotifyContactBirthday($this));
+
+
+        // $data = array(
+        //     'id_certificado' => $event->certificado->id,
+        //     'url' => "admin.certificados.velocimetros.index",
+        //     'asunto' => 'CERTIFICADO DE VELOCIMETRO CREADO',
+        //     'body' => 'El usuario ' . User::find($event->certificado->user_id)->name . ' ha creado un nuevo certificado',
+        //     'accion' => 'certificado_velocimetro_created',
+        //     'from_user_id' => auth()->id(),
+        // );
+        $users = User::role('monitoreo')->get();
+        Notification::send($users, new NotifyContactBirthday($this));
     }
 }
