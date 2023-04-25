@@ -19,7 +19,7 @@ class Suspend extends Component
     public function suspend()
     {
 
-        if ($this->vehiculo->numero) {
+        if ($this->vehiculo->sim_card) {
 
             $this->vehiculo->setAttribute('old_numero', $this->vehiculo->numero);
             $this->vehiculo->setAttribute('old_sim_card', $this->vehiculo->sim_card->sim_card);
