@@ -198,6 +198,17 @@
         </div>
 
     </div>
+    @php
+        $cliente = $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : '';
+        $placa = $certificado->vehiculo ? $certificado->vehiculo->placa : '';
+        $marca = $certificado->vehiculo ? $certificado->vehiculo->marca : '';
+        $modelo = $certificado->vehiculo ? $certificado->vehiculo->modelo : '';
+        $year = $certificado->vehiculo ? $certificado->vehiculo->year : '';
+        $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
+        $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
+        $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
+        
+    @endphp
     <div class="titulo">
         <div class=" title">
             <span>CERTIFICADO DE INSTALACIÓN DE
@@ -206,12 +217,7 @@
         <div class="qr">
             <img
                 src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate(
-                            ' VEHICULO: ' .
-                                $certificado->vehiculo->placa .
-                                " \n CERTIFICADO DE INSTALACION LIMITADOR DE VELOCIDAD \nEXPEDIDO A: " .
-                                $certificado->vehiculo->cliente->razon_social,
-                        ),
+                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
                 ) }}">
 
         </div>
@@ -223,7 +229,10 @@
         <div>
             <span>
                 <b>{{ $plantilla->razon_social }}</b>, Certifica que la EMPRESA
-                {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : 'REGISTRAR CLIENTE' }},
+                {{ $certificado->vehiculo->cliente
+                    ? $certificado->vehiculo->cliente->razon_social
+                    : 'REGISTRAR
+                                                                                                                        CLIENTE' }},
                 con DNI/RUC:
                 {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}
             </span>
