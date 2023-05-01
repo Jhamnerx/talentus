@@ -192,7 +192,7 @@
         .qr {
             padding-left: 37rem;
             position: relative;
-            top: -42px;
+            top: -48px;
         }
 
 
@@ -275,7 +275,7 @@
         <div class="qr">
             <img
                 src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(110)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
+                    QrCode::format('png')->size(100)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
                 ) }}">
 
         </div>
@@ -374,8 +374,8 @@
                 {{ $certificado->observaciones
                     ? $certificado->observaciones
                     : 'La unidad cuenta con un dispositivo registrador de eventos y ocurrencias lo cual permite la
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        lectura en cualquier lugar, así mismo emite reportes impresos, de igual forma cuenta con medidas de
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        seguridad que impide su desconexión de acuerdo a la RD N° 843 -2010-MTC/15.' }}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        lectura en cualquier lugar, así mismo emite reportes impresos, de igual forma cuenta con medidas de
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        seguridad que impide su desconexión de acuerdo a la RD N° 843 -2010-MTC/15.' }}
             </b>
         </span>
     </div>
