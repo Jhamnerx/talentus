@@ -17,8 +17,10 @@
 
             font-family: "Arial, Helvetica, sans-serif";
             background-repeat: no-repeat;
+            font-size: 10px;
             background-size: 100%;
-
+            text-align: justify;
+            text-justify: inter-word;
         }
 
         html {
@@ -37,11 +39,11 @@
         }
 
         .certifica {
-            margin-top: 1rem;
+            margin-top: 0.3rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 16px;
+            font-size: 14px;
             color: #000;
             line-height: 1.7;
             // position: relative;
@@ -49,35 +51,74 @@
         }
 
         .subtitulo {
-            margin-top: 2rem;
+            margin-top: 1rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 16px;
+            font-size: 14px;
             color: #000;
             line-height: 1.7;
         }
 
         .descripcion {
-            margin-top: 3rem;
+            margin-top: 0.5rem;
             margin-bottom: 1rem;
             text-justify: auto;
             margin-left: 5rem;
-            font-size: 16px;
+            font-size: 14px;
+            color: #000;
+            line-height: 1.7;
+            text-align: left;
+        }
+
+        .texto {
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-justify: auto;
+            margin-left: 5rem;
+            font-size: 14px;
+            color: #000;
+            line-height: 1.7;
+            text-align: left;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .observaciones {
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-justify: auto;
+            margin-left: 5rem;
+            font-size: 14px;
+            color: #000;
+            line-height: 1.7;
+            text-align: left;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .datos-velocimetro {
+            margin-top: 0.5rem;
+            margin-bottom: 1rem;
+            text-justify: auto;
+            margin-left: 5rem;
+            font-size: 14px;
             color: #000;
             line-height: 1.7;
             text-align: left;
         }
 
         .descripcion span {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .descripcion table {}
 
         .tabla {
-            padding: 0rem 7.2rem;
-            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+            align-content: center;
         }
 
         .table {
@@ -87,22 +128,25 @@
         }
 
         .footer {
-            font-size: 16px;
             color: #000;
             width: 100%;
-
+            margin-top: 0.1rem;
+            text-justify: auto;
+            margin-left: 2rem;
+            font-size: 14px;
+            line-height: 1.7;
+            text-align: right;
         }
 
         .footer .sello {
-            margin-top: 6rem;
-            width: 50%;
-            text-align: center;
+
+            text-align: right;
+            padding-right: 4rem;
         }
 
 
         .fecha {
             text-align: right;
-            margin-top: -2rem;
             padding-right: 4rem;
         }
 
@@ -127,7 +171,7 @@
             color: #052c52;
             font-style:  !important;
             font-weight: bold;
-            font-size: 26px;
+            font-size: 24px;
             font-family: "DejaVu Sans";
             margin-left: 31rem;
             margin-top: -1rem;
@@ -140,8 +184,8 @@
             display: grid;
             grid-template-columns: 30% 70% 1fr;
             grid-template-rows: 1fr;
-            gap: 0px 7em;
-            height: 160px;
+            gap: 0px 1em;
+            height: 100px;
 
         }
 
@@ -166,13 +210,26 @@
 
         .title span {
             position: relative;
-            top: 60px;
+            top: 5px;
         }
 
         .hash {
-            padding-left: 31rem;
-            padding-top: 5rem;
+            margin-bottom: 1rem;
+            text-justify: auto;
+            margin-right: 0.5rem;
             font-size: 12px;
+            color: #000;
+            line-height: 1.7;
+            text-align: right;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            text-align: center;
+            padding: 0.01rem 0.4rem;
         }
     </style>
 
@@ -207,17 +264,18 @@
         $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
         $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
         $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
-        
+
     @endphp
     <div class="titulo">
-        <div class=" title">
-            <span>CERTIFICADO DE INSTALACIÓN DE
-                LIMITADOR DE VELOCIDAD</span>
+        <div class="title">
+            <span>
+                CERTIFICADO DE LIMITADOR DE VELOCIDAD
+            </span>
         </div>
         <div class="qr">
             <img
                 src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(120)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
+                    QrCode::format('png')->size(110)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
                 ) }}">
 
         </div>
@@ -228,13 +286,9 @@
     <div class="certifica">
         <div>
             <span>
-                <b>{{ $plantilla->razon_social }}</b>, Certifica que la EMPRESA
-                {{ $certificado->vehiculo->cliente
-                    ? $certificado->vehiculo->cliente->razon_social
-                    : 'REGISTRAR
-                                                                                                                        CLIENTE' }},
-                con DNI/RUC:
-                {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}
+                De acuerdo a lo establecido por la Octava Disposición Complementaria
+                Transitoria del Reglamento Nacional de Administración de Transportes aprobado por Decreto
+                Supremo N° 017-2009-MTC, <b>TALENTUS TECHNOLOGY EIRL</b>
             </span>
 
         </div>
@@ -243,54 +297,112 @@
     <div class="subtitulo">
         <span>
             <b>
-                Ha adquirido un equipo LIMITADOR DE VELOCIDAD SATELITAL, modelo {{ $certificado->velocimetro_modelo }},
-                implementado con
-                alerta de Exceso de Velocidad Mayor A 90KM/H
+                CERTIFICA:
+
             </b>
         </span>
     </div>
 
     <div class="descripcion">
-        <span>El mismo que se encuentra instalado en el vehículo con:</span>
+        <span>Que el vehículo materia de inspección y que consigna las siguientes características:</span>
 
-        <table class="table">
+        <table class="tabla" border="1">
             <tr>
-                <td height="20">Placa: </td>
-                <td height="20"> <b>{{ $certificado->vehiculo->placa }}</b></td>
-            </tr>
-
-        </table>
-        <table class="tabla">
-            <tr>
-                <td height="20">Color de Led</td>
-                <td height="20">:Rojo Intenso</td>
+                <td height="5" width="20">1</td>
+                <td height="5">TITULAR:</td>
+                <td height="5">
+                    {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : 'SIN - DATOS' }}
+                </td>
             </tr>
             <tr>
-                <td height="20">Velocidad</td>
-                <td height="20">:KM/H</td>
+                <td height="5">2</td>
+                <td height="5">PLACA:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->placa : 'SIN DATOS' }}</td>
             </tr>
             <tr>
-                <td height="20">Potencia</td>
-                <td height="20">:3 Watts.</td>
+                <td height="5">3</td>
+                <td height="5">CATEGORIA:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->categoria : 'SIN DATOS' }}</td>
             </tr>
             <tr>
-                <td height="20">Tipo de Visualizacion</td>
-                <td height="20">:Digital</td>
+                <td height="5">4</td>
+                <td height="5">MARCA:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->marca : 'SIN DATOS' }}</td>
             </tr>
             <tr>
-                <td height="20">Rango del Factor de Velocidad</td>
-                <td height="20">:2000-4000 Pulson/Km, adicional reloj satelital</td>
+                <td height="5">5</td>
+                <td height="5">MODELO:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->modelo : 'SIN DATOS' }}</td>
             </tr>
             <tr>
-                <td height="20">Peso</td>
-                <td height="20">:370gr</td>
+                <td height="5">6</td>
+                <td height="5">AÑO DE FABRICACIÓN:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->year : 'SIN DATOS' }}</td>
+            </tr>
+            <tr>
+                <td height="5">7</td>
+                <td height="5">VIN/N° DE SERIE:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->serie : 'SIN DATOS' }}</td>
+            </tr>
+            <tr>
+                <td height="5">8</td>
+                <td height="5">N° DE MOTOR:</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->motor : 'SIN DATOS' }}</td>
             </tr>
 
         </table>
 
     </div>
 
+    <div class="texto">
+        <span>Cuenta con una alarma sonora en la cabina del conductor y en el salón del vehículo que se activa cuando
+            excede la velocidad máxima permitida por las normas de tránsito.
+            Asimismo, mediante el presente documento certifica que el vehículo destinado al servicio de transporte
+            terrestre de ámbito nacional o regional cuenta con sistema electrónico de inyección, ha sido calibrado para
+            que el vehículo no desarrolle velocidades mayores a noventa (90) kilómetros por hora.
+            El/los mismo(s) que se ha(n) colocado bajo los mecanismos de seguridad para que terceras personas no puedan
+            acceder a la modificación de sus parámetros de ajuste.
+        </span>
+
+
+    </div>
+
+    <div class="observaciones">
+        <span>
+            <b> OBSERVACIONES:
+
+                {{ $certificado->observaciones
+                    ? $certificado->observaciones
+                    : 'La unidad cuenta con un dispositivo registrador de eventos y ocurrencias lo cual permite la
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        lectura en cualquier lugar, así mismo emite reportes impresos, de igual forma cuenta con medidas de
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        seguridad que impide su desconexión de acuerdo a la RD N° 843 -2010-MTC/15.' }}
+            </b>
+        </span>
+    </div>
+    <div class="datos-velocimetro">
+
+        <table class="tabla" border="1">
+            <tr>
+                <td height="5"><b>MARCA:</b></td>
+                <td height="5">
+                    MICRODEV
+                </td>
+            </tr>
+            <tr>
+                <td height="5"> <b>MODELO:</b></td>
+                <td height="5">{{ $certificado->velocimetro_modelo }}</td>
+            </tr>
+
+
+        </table>
+
+    </div>
     <div class="footer">
+
+        <div class="fecha">
+            <p>Se expide el presente certificado en la ciudad de {{ $certificado->fecha }}</p>
+        </div>
+
         <div class="sello">
             @if ($certificado->sello)
                 <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
@@ -298,13 +410,12 @@
             @endif
 
         </div>
-        <div class="fecha">
-            <p>{{ $certificado->fecha }}</p>
-        </div>
+
     </div>
 
     <div class="hash">
-        {{ $certificado->unique_hash }}
+        <span>{{ $certificado->unique_hash }}</span>
+
     </div>
 
 </div>

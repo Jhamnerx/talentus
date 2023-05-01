@@ -13,7 +13,7 @@ class CertificadosVelocimetrosRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,6 +29,7 @@ class CertificadosVelocimetrosRequest extends FormRequest
                 'vehiculos_id' => 'required',
                 'velocimetro_modelo' => 'required',
                 "ciudades_id" => 'required',
+                "observacion" => 'nullable',
 
             ];
         } else {
@@ -37,6 +38,7 @@ class CertificadosVelocimetrosRequest extends FormRequest
                 'vehiculos_id' => 'required',
                 'velocimetro_modelo' => 'required',
                 "ciudades_id" => 'required',
+                "observacion" => 'nullable',
                 "fondo" => 'nullable',
                 "sello" => 'nullable',
             ];

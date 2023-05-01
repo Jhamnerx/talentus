@@ -14,7 +14,7 @@ class Save extends Component
 {
 
     public $openModalSave = false;
-    public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1, $velocimetro_modelo;
+    public $numero, $vehiculos_id, $ciudades_id, $fondo = 1, $sello = 1, $velocimetro_modelo, $observacion;
 
     protected $listeners = [
         'guardarCertificado' => 'openModal'
@@ -48,7 +48,7 @@ class Save extends Component
 
         $ciudad = Ciudades::find($values["ciudades_id"]);
 
-        $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+        $fecha = $ciudad->nombre . " a los " . today()->day . " del mes de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
         $certificado = new CertificadosVelocimetros();
         $certificado->vehiculos_id = $values["vehiculos_id"];
@@ -62,6 +62,7 @@ class Save extends Component
         $certificado->year = today()->year;
         $certificado->codigo = $codigo;
         $certificado->fecha = $fecha;
+        $certificado->observacion = $values["observacion"];
         $certificado->save();
 
         $this->dispatchBrowserEvent('certificado-velocimetro-save', ['vehiculo' => $certificado->vehiculo->placa]);

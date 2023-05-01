@@ -17,6 +17,7 @@ class VelocimetrosIndex extends Component
     public $openModalEdit = false;
     public $openModalDelete = false;
     public $openModalAddVehiculo = false;
+    public $openModalDetalle = false;
 
     protected $listeners = [
         'updateTable' => 'render',
