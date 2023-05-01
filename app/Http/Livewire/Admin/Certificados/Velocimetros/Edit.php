@@ -14,7 +14,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $certificado;
-    public $numero, $vehiculos_id, $ciudades_id, $fondo, $sello, $velocimetro_modelo;
+    public $numero, $vehiculos_id, $ciudades_id, $fondo, $sello, $velocimetro_modelo, $observacion;
 
 
     protected $listeners = [
@@ -40,6 +40,7 @@ class Edit extends Component
 
         $this->certificado = $certificado;
         $this->numero = $certificado->numero;
+        $this->observacion = $certificado->observacion;
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
         $this->velocimetro_modelo = $certificado->velocimetro_modelo;
@@ -53,7 +54,7 @@ class Edit extends Component
 
         $update = CertificadosVelocimetros::find($this->certificado->id);
         $ciudad = Ciudades::find($values["ciudades_id"]);
-        $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+        $fecha = $ciudad->nombre . " a los " . today()->day . " del mes de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
         $update->numero = $values["numero"];
         $update->velocimetro_modelo = $values["velocimetro_modelo"];
@@ -62,6 +63,7 @@ class Edit extends Component
         $update->fecha = $fecha;
         $codigo = $ciudad->prefijo . "-" . $values["numero"];
         $update->codigo = $codigo;
+        $update->observacion = $values["observacion"];
         $update->save();
 
         $this->openModalEdit = false;

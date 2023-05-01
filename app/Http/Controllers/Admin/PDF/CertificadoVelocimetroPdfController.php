@@ -13,8 +13,7 @@ class CertificadoVelocimetroPdfController extends Controller
     public function __invoke(CertificadosVelocimetros $certificado)
     {
         $ciudad = Ciudades::find($certificado->ciudades_id);
-        $certificado->fecha =
-            $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+        $certificado->fecha = $ciudad->nombre . " a los " . today()->day . " del mes de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
         $certificado->save();
 
         return $certificado->getPDFData();
