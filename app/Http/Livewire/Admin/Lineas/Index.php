@@ -66,7 +66,7 @@ class Index extends Component
             });
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('operador', 'like', '%' . $this->search . '%')
-            ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
+
             ->with('sim_card.vehiculos', 'sim_card.vehiculos.cliente', 'old_sim_cards')
             ->orderBy('id', 'desc')
             ->paginate(10);

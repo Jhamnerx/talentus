@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Exports\LineasExport;
 use App\Models\CambiosLineas;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SimCardController extends Controller
@@ -103,7 +104,10 @@ class SimCardController extends Controller
 
                 #Colocar el old sim card a la linea
                 $linea->old_sim_card = $sim_card_linea->sim_card;
+
                 $linea->save();
+
+                $this->setOldSimCard($linea, $sim_card_linea->sim_card);
 
                 return redirect()->route('admin.almacen.sim-card.index')->with('asign', 'Se asigno la linea, Con el numero existente');
             } else {
@@ -167,5 +171,18 @@ class SimCardController extends Controller
             $sim_card->save();
             return redirect()->route('admin.almacen.sim-card.index')->with('asign', 'Se asigno la linea, Con el numero creado');
         }
+    }
+
+    public function setOldSimCard(Lineas $linea, $sim_card_old)
+    {
+        $linea->old_sim_card = $sim_card_old;
+
+        $linea->save();
+
+
+        $old = $linea->old_sim_cards()->create([
+            'old_sim_card' =>  $sim_card_old,
+            'user_id' => Auth::user()->id,
+        ]);
     }
 }
