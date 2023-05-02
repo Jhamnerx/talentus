@@ -444,19 +444,19 @@
     </div>
 
     {{-- @if (count($presupuesto->detalles) > 6)
-        <div class="footer row">
-            <div class="medium-2 columns">
-                <img
-                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/footer-logo.png')) }}">
-            </div>
-            <div class="medium-3 large-offset-1 columns">
-                <p>+51 977 794 338<br>
-            </div>
-
-            <div class="medium-3 columns">
-                <p style="border:none;">www.talentustechnology.com</p>
-            </div>
+    <div class="footer row">
+        <div class="medium-2 columns">
+            <img
+                src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/footer-logo.png')) }}">
         </div>
+        <div class="medium-3 large-offset-1 columns">
+            <p>+51 977 794 338<br>
+        </div>
+
+        <div class="medium-3 columns">
+            <p style="border:none;">www.talentustechnology.com</p>
+        </div>
+    </div>
     @endif --}}
 
     </div>
@@ -495,55 +495,134 @@
                     365
                     días del año.</span></p>
             <p>&nbsp;</p>
-            <p><strong>FMB920 -2G&nbsp;</strong></p>
-            <figure class="image">
-                <img width="350px"
-                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmb920-840xAuto.png')) }}"
-                    alt="fmb920.png">
-            </figure>
-            <p style="margin-left:36.0pt;text-align:justify;"><span
-                    style="color:black;"><strong>Características:</strong></span></p>
-            <ul style="list-style-type:disc;">
-                <li style="text-align:justify;"><span style="color:black;">Cobertura 2G</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Memoria de 128mg.</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo: Frenado aceleración
-                        y
-                        giro brusco (en plataforma premium)</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Detección de Jumping</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de reportes: (Paradas,
-                        Alertas, kilometrajes, etc, en plataforma premium)</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a reglas de velocidad
-                        (en
-                        plataforma premium)</span></li>
-            </ul>
-            <p style="text-align:justify;">&nbsp;</p>
-            <p style="text-align:justify;">&nbsp;</p>
-            <p style="text-align:justify;"><span style="color:black;"><strong>FMC130-4G&nbsp;</strong></span></p>
-            <figure class="image">
-                <img width="350px"
-                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmc130-840xAuto.png')) }}"
-                    alt="fmc130.png">
-            </figure>
-            <p style="margin-left:36.0pt;"><span style="color:black;"><strong>Características:</strong></span></p>
-            <ul style="list-style-type:disc;">
-                <li style="text-align:justify;"><span style="color:black;">Cobertura 4G</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Memoria de 128mg.</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Corte de motor, buzzer, pánico, apertura de
-                        puertas</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo: Frenado aceleración
-                        y
-                        giro brusco.</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Detección de Jumping.</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de reportes: (Paradas,
-                        Alertas, kilometrajes, etc)</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a reglas de
-                        velocidad</span></li>
-                <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span></li>
-            </ul>
+
+            <main id="main" class="site-main">
+                <div class="ast-woocommerce-container">
+                    <div class="woocommerce-notices-wrapper"></div>
+                    <div id="product-312"
+                        class="ast-article-single ast-woo-product-no-review desktop-align-left tablet-align-left mobile-align-left product type-product post-312 status-publish first instock product_cat-feminine-deodorants has-post-thumbnail shipping-taxable purchasable product-type-simple">
+                        <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
+                            data-columns="4" style="opacity: 1; transition: opacity 0.25s ease-in-out 0s;">
+                            <figure class="image">
+                                <img width="350px"
+                                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmb920-840xAuto.png')) }}"
+                                    alt="fmb920.png">
+                            </figure>
+                        </div>
+                        <div class="summary entry-summary">
+                            <span class="single-product-category">
+                                <a rel="tag">Teltonika</a>
+                            </span>
+                            <h1 class="product_title entry-title">FMB920 -2G</h1>
+                            <p class="price"><span class="woocommerce-Price-amount amount"><bdi><span
+                                            class="woocommerce-Price-currencySymbol">-
+                                        </span>Características</bdi></span></p>
+
+                            <div class="woocommerce-product-details__short-description">
+                                <ul style="list-style-type:disc;">
+                                    <li style="text-align:justify;"><span style="color:black;">Cobertura 2G</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Memoria de
+                                            128mg.</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo:
+                                            Frenado
+                                            aceleración
+                                            y
+                                            giro brusco (en plataforma premium)</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Detección de
+                                            Jumping</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de
+                                            reportes:
+                                            (Paradas,
+                                            Alertas, kilometrajes, etc, en plataforma premium)</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a
+                                            reglas
+                                            de velocidad
+                                            (en
+                                            plataforma premium)</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="product_meta">
+                                <span class="posted_in">Mas info:
+                                    <a href="https://talentustechnology.com/servicios/venta-de-equipos/"
+                                        rel="tag">
+                                        Click Aquí
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ast-woocommerce-container">
+                    <div class="woocommerce-notices-wrapper"></div>
+                    <div id="product-312"
+                        class="ast-article-single ast-woo-product-no-review desktop-align-left tablet-align-left mobile-align-left product type-product post-312 status-publish first instock product_cat-feminine-deodorants has-post-thumbnail shipping-taxable purchasable product-type-simple">
+                        <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
+                            data-columns="4" style="opacity: 1; transition: opacity 0.25s ease-in-out 0s;">
+                            <figure class="image">
+                                <img width="350px"
+                                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmc130-840xAuto.png')) }}"
+                                    alt="fmc130.png">
+                            </figure>
+                        </div>
+                        <div class="summary entry-summary">
+                            <span class="single-product-category">
+                                <a rel="tag">Teltonika</a>
+                            </span>
+                            <h1 class="product_title entry-title">FMC130-4G</h1>
+                            <p class="price"><span class="woocommerce-Price-amount amount"><bdi><span
+                                            class="woocommerce-Price-currencySymbol">-
+                                        </span>Características</bdi></span></p>
+
+                            <div class="woocommerce-product-details__short-description">
+                                <ul style="list-style-type:disc;">
+                                    <li style="text-align:justify;"><span style="color:black;">Cobertura 4G</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Memoria de
+                                            128mg.</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Corte de motor, buzzer,
+                                            pánico,
+                                            apertura de
+                                            puertas</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo:
+                                            Frenado
+                                            aceleración
+                                            y
+                                            giro brusco.</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Detección de
+                                            Jumping.</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de
+                                            reportes:
+                                            (Paradas,
+                                            Alertas, kilometrajes, etc)</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a
+                                            reglas
+                                            de
+                                            velocidad</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="product_meta">
+                                <span class="posted_in">Mas info:
+                                    <a href="https://talentustechnology.com/servicios/venta-de-equipos/"
+                                        rel="tag">
+                                        Click Aquí
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
         </div>
     @endif
-
 
 </body>
 
