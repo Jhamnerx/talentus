@@ -17,6 +17,10 @@ class SolicitudesController extends Controller
     {
         return view('admin.solicitudes.index');
     }
+    public function review()
+    {
+        return view('admin.reviews.index');
+    }
 
     public static function setNextSequenceNumber()
     {

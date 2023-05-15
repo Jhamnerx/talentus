@@ -1,11 +1,15 @@
 require("./bootstrap");
 
-import Alpine from "alpinejs";
+import Swal from "sweetalert2";
 
-window.Alpine = Alpine;
+window.Swal = Swal;
+import iziToast from "izitoast";
+window.iziToast = iziToast;
 
-Alpine.start();
+import DataTable from "datatables.net-dt";
+import Sortable from "sortablejs";
+window.DataTable = DataTable;
 
-import theme from "./cliente/theme";
+import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 
-theme();
+window.DecoupledEditor = DecoupledEditor;

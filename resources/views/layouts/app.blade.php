@@ -18,15 +18,18 @@
     <link rel="stylesheet" href="{{ mix('css/style.css') }}">
 
 
-    <link rel="stylesheet" href="{{asset('css/fontawesome-all.min.css')}}">
-
+    <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
 
 
     @livewireStyles
 
     <!-- Scripts -->
 
+    <!-- Alpine Plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
 
+    <!-- Alpine Core -->
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </head>
 
@@ -59,22 +62,39 @@
 
 
 
-    <script src="{{ mix('js/app.js') }}"></script>
-    <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
-    <script src="{{asset('plugins/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{asset('plugins/bootstrap-datepicker.min.js')}}"></script>
-    <script src="{{asset('plugins/bootstrap-select.min.js')}}"></script>
+    <script src="{{ mix('js/cliente.js') }}"></script>
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-datepicker.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap-select.min.js') }}"></script>
 
-    <script src="{{asset('plugins/isotope.js')}}"></script>
-    <script src="{{asset('plugins/jquery.waypoints.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery.counterup.min.js')}}"></script>
-    <script src="{{asset('plugins/jquery.magnific-popup.min.js')}}"></script>
-    <script src="{{asset('plugins/owl.carousel.min.js')}}"></script>
-    <script src="{{asset('plugins/TweenMax.min.js')}}"></script>
-    <script src="{{asset('plugins/input-case-enforcer/input-case-enforcer.min.js')}}"></script>
-    <script src="{{asset('plugins/wow.js')}}"></script>
+    <script src="{{ asset('plugins/isotope.js') }}"></script>
+    <script src="{{ asset('plugins/jquery.waypoints.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery.counterup.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ asset('plugins/owl.carousel.min.js') }}"></script>
+    <script src="{{ asset('plugins/TweenMax.min.js') }}"></script>
+    <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
+    <script src="{{ asset('plugins/wow.js') }}"></script>
     <script src="{{ asset('js/theme.js') }}"></script>
+
     @stack('scripts')
+
+    <script>
+        window.addEventListener('save-review', event => {
+            $(document).ready(function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'GRACIAS POR TU RESPUESTAS',
+                    text: 'Estamos comprometidos a ayudarte!',
+                    showConfirmButton: true,
+                    confirmButtonText: "Cerrar"
+
+                })
+            });
+
+        })
+    </script>
 </body>
 
 </html>
