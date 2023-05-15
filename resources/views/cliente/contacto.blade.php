@@ -79,7 +79,9 @@
                                 referrerpolicy="no-referrer-when-downgrade"></iframe>
                         </div>
                         <div class="col-lg-6">
-                            <form action="{{ route('contact.form') }}" class="contact-one__form contact-form-validated">
+                            <form action="{{ route('contact.form') }}" method="post"
+                                class="contact-one__form contact-form-validated">
+                                @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <input type="text" placeholder="Nombre" name="name">

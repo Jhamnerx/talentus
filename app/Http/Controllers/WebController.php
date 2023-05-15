@@ -18,8 +18,12 @@ class WebController extends Controller
     {
         return view('cliente.contacto');
     }
+    public function review()
+    {
+        return view('cliente.review');
+    }
 
-    public function submitContacto(Request $request){
-
+    public function submitContacto(Request $request)
+    {
     }
 }

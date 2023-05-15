@@ -6,8 +6,8 @@
 
 @section('contenido')
 
-<!-- Table -->
-@livewire('admin.solicitudes.index')
+    <!-- Table -->
+    @livewire('admin.solicitudes.index')
 
 @stop
 
@@ -16,9 +16,9 @@
 {{-- section de js --}}
 @section('js')
 
-@if (session('store'))
-<script>
-    $(document).ready(function() {
+    @if (session('store'))
+        <script>
+            $(document).ready(function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Guardado',
@@ -28,26 +28,25 @@
 
                 })
             });
-</script>
-@endif
+        </script>
+    @endif
 
-<script>
-    window.addEventListener('update-solicitud', event => {
-        iziToast.show({
-            color: event.detail.color,
-            icon: '<i class="fas fa-tasks"></i>',
-            title: event.detail.titulo,
-            timeout: 2500,
-            message: '<b>'+event.detail.message+' '+event.detail.numero+'</b>',
-            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-            progressBarColor: event.detail.progressBarColor
-        });
-    })
-
-</script>
-@if (session('update'))
-<script>
-    $(document).ready(function() {
+    <script>
+        window.addEventListener('update-solicitud', event => {
+            iziToast.show({
+                color: event.detail.color,
+                icon: '<i class="fas fa-tasks"></i>',
+                title: event.detail.titulo,
+                timeout: 2500,
+                message: '<b>' + event.detail.message + ' ' + event.detail.numero + '</b>',
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: event.detail.progressBarColor
+            });
+        })
+    </script>
+    @if (session('update'))
+        <script>
+            $(document).ready(function() {
                 Swal.fire({
                     icon: 'success',
                     title: 'Actualizado',
@@ -57,12 +56,12 @@
 
                 })
             });
-</script>
-@endif
+        </script>
+    @endif
 
-@if (session('delete'))
-<script>
-    $(document).ready(function() {
+    @if (session('delete'))
+        <script>
+            $(document).ready(function() {
                 Swal.fire({
                     icon: 'error',
                     title: 'Eliminado',
@@ -72,12 +71,12 @@
 
                 })
             });
-</script>
-@endif
+        </script>
+    @endif
 
 
-<script>
-    // A basic demo function to handle "select all" functionality
+    <script>
+        // A basic demo function to handle "select all" functionality
         document.addEventListener('alpine:init', () => {
             Alpine.data('handleSelect', () => ({
                 selectall: false,
@@ -107,5 +106,5 @@
                 }
             }))
         })
-</script>
+    </script>
 @stop

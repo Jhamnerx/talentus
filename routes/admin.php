@@ -338,6 +338,7 @@ Route::get('pdf/tarea/{tarea}', TareaPdfController::class)->name('admin.pdf.tare
 //notificaciones y mensajes
 route::get('mensajes/{mensaje}', [MensajeController::class, 'show'])->name('mensajes.show');
 route::get('solicitudes', [SolicitudesController::class, 'index'])->name('admin.solicitudes.index');
+route::get('reviews', [SolicitudesController::class, 'review'])->name('admin.reviews.index');
 
 Route::controller(ReportesGerenciales::class)->group(function () {
 

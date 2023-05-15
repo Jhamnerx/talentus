@@ -45,6 +45,7 @@ Route::get('confirmacion/tareas/{tarea:uuid}', ExtrasController::class)->name('c
 
 Route::get('faq', [WebController::class, 'faq'])->name('web.faq');
 Route::get('contacto', [WebController::class, 'contacto'])->name('web.contacto');
-Route::post('send/form', [WebController::class, 'submitContacto'])->name('contact.form');
+Route::get('review', [WebController::class, 'review'])->name('web.review');
+Route::post('send-form', [WebController::class, 'submitContacto'])->name('contact.form');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');
