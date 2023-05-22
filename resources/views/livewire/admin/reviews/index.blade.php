@@ -129,7 +129,7 @@
                                             <div class="text-left uppercase">{{ $review->empresa }}</div>
                                         </td>
                                         <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                            <div class="text-left uppercase">{{ $review->nombre }}</div>
+                                            <div class="text-left uppercase">{{ $review->name }}</div>
                                         </td>
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                             <div class="text-left uppercase">
