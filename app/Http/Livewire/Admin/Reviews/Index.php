@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Admin\Reviews;
 
+use App\Exports\ReviewsExport;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Cliente\Review;
+use Maatwebsite\Excel\Facades\Excel;
 
 class Index extends Component
 {
@@ -24,5 +26,10 @@ class Index extends Component
             ->paginate(10);
 
         return view('livewire.admin.reviews.index', compact('reviews'));
+    }
+
+    public function ExportReviews()
+    {
+        return Excel::download(new ReviewsExport, 'revisiones_clientes.xls');
     }
 }

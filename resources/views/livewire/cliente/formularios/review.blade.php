@@ -211,7 +211,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="NINGUA" type="radio"
+                                                <input wire:model="q4" value="NINGUNA" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">5. Ninguna de las anteriores</span>
                                             </label>
