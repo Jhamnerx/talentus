@@ -246,6 +246,16 @@
             margin-bottom: 3.8rem;
             padding-bottom: 1rem;
         }
+
+        .image img {
+            width: 200px;
+            max-width: 200px;
+        }
+
+        .image_resized img {
+            width: 200px;
+            max-width: 200px;
+        }
     </style>
 
 
