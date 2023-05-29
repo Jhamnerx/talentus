@@ -27,6 +27,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    {{-- CKEDITOR --}}
+    <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
     {{-- dataTables --}}
     <script src="{{ asset('plugins/datatables/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery.mockjax.js') }}"></script>
@@ -36,7 +38,7 @@
 
 
     {{-- VenoBox IMAGEN VIEWER --}}
-    <link rel="stylesheet" href="{{asset('plugins/veno-box/venobox.css')}}" type="text/css" media="screen" />
+    <link rel="stylesheet" href="{{ asset('plugins/veno-box/venobox.css') }}" type="text/css" media="screen" />
     {{-- <script src="{{ asset('plugins/veno-box/venobox.esm.js') }}"></script> --}}
     {{-- Select2 --}}
 
@@ -52,8 +54,7 @@
 </head>
 
 <body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }"
-    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
     <script>
