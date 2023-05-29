@@ -22,7 +22,7 @@
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
-                        <div class="font-semibold text-slate-800">CREAR INFORME {{$tarea ? $tarea->token : ''}}</div>
+                        <div class="font-semibold text-slate-800">CREAR INFORME {{ $tarea ? $tarea->token : '' }}</div>
                         <button wire:click.prevent="closeModal" class="text-slate-400 hover:text-slate-500">
                             <div class="sr-only">Close</div>
                             <svg class="w-4 h-4 fill-current">
@@ -39,7 +39,7 @@
                         <div class="document-editor__toolbar"></div>
                         <div class="document-editor__editable-container">
                             <div class="document-editor__editable">
-                                {{$tarea ? $tarea->informe : ''}}
+                                {{ $tarea ? $tarea->informe : '' }}
                             </div>
                         </div>
                     </div>
@@ -64,18 +64,19 @@
 </div>
 
 @push('scripts')
-<script>
-    let ck;
+    <script>
+        let ck;
 
-    $(document).ready(function() {
-    DecoupledEditor
-            .create( document.querySelector( '.document-editor__editable' ) )
-                .then( editor => {
+        $(document).ready(function() {
+            console.log(DecoupledDocumentEditor);
+            DecoupledDocumentEditor
+                .create(document.querySelector('.document-editor__editable'))
+                .then(editor => {
 
                     ck = editor;
-                    const toolbarContainer = document.querySelector( '.document-editor__toolbar' );
+                    const toolbarContainer = document.querySelector('.document-editor__toolbar');
 
-                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                    toolbarContainer.appendChild(editor.ui.view.toolbar.element);
                     window.editor = editor;
 
                     editor.model.document.on('change:data', () => {
@@ -83,37 +84,35 @@
                     })
 
                 })
-            .catch( error => {
-                    console.error( error );
-        });
+                .catch(error => {
+                    console.error(error);
+                });
 
-    })
-</script>
-
-
-<script>
-    window.addEventListener('set-data', event => {
-       //console.log(event.detail.data);
-
-        ck.setData(event.detail.data);
-
-    })
-
-</script>
+        })
+    </script>
 
 
-<script>
-    window.addEventListener('save-inform', event => {
-        iziToast.show({
-            theme: 'dark',
-            icon: 'far fa-envelope-open',
-            title: 'INFORME TAREA CREADA',
-            timeout: 2500,
-            message: 'Se ha creado el informa de la tarea <b>'+event.detail.token+'</b>',
-            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-            progressBarColor: 'rgb(5, 44, 82)'
-        });
-    })
+    <script>
+        window.addEventListener('set-data', event => {
+            //console.log(event.detail.data);
 
-</script>
+            ck.setData(event.detail.data);
+
+        })
+    </script>
+
+
+    <script>
+        window.addEventListener('save-inform', event => {
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'INFORME TAREA CREADA',
+                timeout: 2500,
+                message: 'Se ha creado el informa de la tarea <b>' + event.detail.token + '</b>',
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(5, 44, 82)'
+            });
+        })
+    </script>
 @endpush

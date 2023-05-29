@@ -54,6 +54,7 @@
         "@alpinejs/intersect": "^3.10.2",
         "@alpinejs/mask": "^3.10.4",
         "@ckeditor/ckeditor5-build-decoupled-document": "^36.0.1",
+        "@ckeditor/ckeditor5-upload": "^38.0.1",
         "alpinejs": "^3.9.1",
         "chart.js": "^3.9.1",
         "chartjs-adapter-moment": "^1.0.0",
