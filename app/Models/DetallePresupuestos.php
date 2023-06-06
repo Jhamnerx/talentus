@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Productos;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class DetallePresupuestos extends Model
 {
@@ -21,5 +22,10 @@ class DetallePresupuestos extends Model
     public function presupuestos()
     {
         return $this->belongsTo(Presupuestos::class, 'presupuestos_id')->withoutGlobalScope(EliminadoScope::class);
+    }
+
+    public function info_producto()
+    {
+        return $this->belongsTo(Productos::class, 'producto_id')->withoutGlobalScope(EliminadoScope::class);
     }
 }
