@@ -198,7 +198,9 @@
                                     <p class="descripcion">{{ $detalle->descripcion }}</p>
                                 </td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
-                                <td>{{ $detalle->cantidad }}</td>
+                                <td>{{ $detalle->cantidad }}
+                                    {{ $detalle->info_producto->unit->codigo == 'KGM' ? $detalle->info_producto->unit->codigo : '' }}
+                                </td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->total }}</td>
                             </tr>
                         @endforeach
