@@ -61,6 +61,14 @@
             margin-bottom: 3.8rem;
             padding-bottom: 1rem;
         }
+
+        .producto-titulo {
+            font-size: 16px;
+        }
+
+        .descripcion {
+            font-size: 15px;
+        }
     </style>
 </head>
 
@@ -186,7 +194,7 @@
                         @foreach ($presupuesto->detalles as $detalle)
                             <tr>
                                 <td>
-                                    {{-- <p>{{ $detalle->producto }}.</p> --}}
+                                    <p class="producto-titulo"><b>{{ $detalle->producto }}</b>.</p>
                                     <p class="descripcion">{{ $detalle->descripcion }}</p>
                                 </td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>
@@ -408,7 +416,12 @@
 
         <div class="row terms">
             <div class="large-12 columns">
-                <p><strong>Terminos:</strong> Esta cotizacion es valida hasta su fecha de caducidad.</p>
+                <p><strong>Terminos:</strong></p>
+                <ul>
+                    <li>Esta cotizacion es valida hasta su fecha de caducidad</li>
+                    <li>El tiempo de entrega es inmediata previa solicitud con anticipación</li>
+
+                </ul>
             </div>
         </div>
         @if ($presupuesto->nota)
@@ -425,7 +438,7 @@
         @endif
         <div class="sub-footer row">
             <div class="large-5 medium-3 columns">
-                <img
+                <img style="margin-top: -25px"
                     src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/footer-logo.png')) }}">
             </div>
             <div class="large-2 medium-3 large-offset-1 columns">
