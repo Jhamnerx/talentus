@@ -416,9 +416,12 @@
 
         <div class="row terms">
             <div class="large-12 columns">
-                <p><strong>Terminos:</strong>
-                    Esta cotizacion es valida hasta su fecha de caducidad, El tiempo de entrega es inmediata previa
-                    solicitud con anticipación</p>
+                <p><strong>Terminos:</strong></p>
+                <ul>
+                    <li>Esta cotizacion es valida hasta su fecha de caducidad</li>
+                    <li>El tiempo de entrega es inmediata previa solicitud con anticipación</li>
+
+                </ul>
             </div>
         </div>
         @if ($presupuesto->nota)
