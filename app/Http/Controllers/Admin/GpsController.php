@@ -41,7 +41,6 @@ class GpsController extends Controller
     public function store(DispositivosRequest $request)
     {
 
-
         Dispositivos::create($request->all());
         return redirect()->route('admin.almacen.dispositivos.index')->with('store', 'El dispositivo se guardo con exito');;
     }

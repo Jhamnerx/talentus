@@ -87,6 +87,7 @@ class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFai
             'numero' => 'required|unique:lineas,numero',
             'operador' => 'required',
             'sim_card' => 'required|unique:sim_card,sim_card',
+            // 'empresa_id' => 'required',
         ];
 
         return $rules;

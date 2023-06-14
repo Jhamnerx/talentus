@@ -14,7 +14,10 @@ class SimCardObserver
      */
     public function creating(SimCard $simCard)
     {
-        $simCard->empresa_id = session('empresa');
+        if (!\App::runningInConsole()) {
+
+            $simCard->empresa_id = session('empresa');
+        }
     }
 
     /**
