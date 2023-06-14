@@ -13,7 +13,10 @@ class LineasObserver
     }
     public function creating(Lineas $linea)
     {
-        $linea->empresa_id = session('empresa');
+        if (!\App::runningInConsole()) {
+
+            $simCard->empresa_id = session('empresa');
+        }
     }
 
     public function updated(Lineas $lineas)

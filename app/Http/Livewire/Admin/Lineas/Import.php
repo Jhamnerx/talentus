@@ -61,14 +61,15 @@ class Import extends Component
     }
 
 
-    public function openModal(){
+    public function openModal()
+    {
 
 
         $this->modalOpenImport = true;
-
     }
 
-    public function closeModal(){
+    public function closeModal()
+    {
 
         $this->modalOpenImport = false;
         $this->reset();
