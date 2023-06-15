@@ -15,7 +15,7 @@ class LineasObserver
     {
         if (!\App::runningInConsole()) {
 
-            $simCard->empresa_id = session('empresa');
+            $linea->empresa_id = session('empresa');
         }
     }
 
