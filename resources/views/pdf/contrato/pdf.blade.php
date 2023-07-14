@@ -76,7 +76,7 @@
                     con domicilio
                     fiscal en {{ $contrato->cliente->direccion }},
                     debidamente
-                    representada por su <b>Gerente General
+                    representada por su <b>Representante Legal
                     </b><b>{{ $contrato->cliente->contactos()->gerente(1)->first()
                         ? $contrato->cliente->contactos()->gerente(1)->first()->nombre
                         : '"agregar"' }}</b>,
