@@ -511,7 +511,8 @@
                     días del año.</span></p>
             <p>&nbsp;</p>
 
-            <main id="main" class="site-main">
+            <main id="main" class="site-main" style="margin-top: 20rem">
+                {{-- FMB920 --}}
                 <div class="ast-woocommerce-container">
                     <div class="woocommerce-notices-wrapper"></div>
                     <div id="product-312"
@@ -572,6 +573,70 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- FMC920 --}}
+                <div class="ast-woocommerce-container">
+                    <div class="woocommerce-notices-wrapper"></div>
+                    <div id="product-312"
+                        class="ast-article-single ast-woo-product-no-review desktop-align-left tablet-align-left mobile-align-left product type-product post-312 status-publish first instock product_cat-feminine-deodorants has-post-thumbnail shipping-taxable purchasable product-type-simple">
+                        <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
+                            data-columns="4" style="opacity: 1; transition: opacity 0.25s ease-in-out 0s;">
+                            <figure class="image">
+                                <img width="350px"
+                                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmc920-side-840xAuto.png')) }}"
+                                    alt="fmb920.png">
+                            </figure>
+                        </div>
+                        <div class="summary entry-summary">
+                            <span class="single-product-category">
+                                <a rel="tag">Teltonika</a>
+                            </span>
+                            <h1 class="product_title entry-title">FMC920 - 4G</h1>
+                            <p class="price"><span class="woocommerce-Price-amount amount"><bdi><span
+                                            class="woocommerce-Price-currencySymbol">-
+                                        </span>Características</bdi></span></p>
+
+                            <div class="woocommerce-product-details__short-description">
+                                <ul style="list-style-type:disc;">
+                                    <li style="text-align:justify;"><span style="color:black;">Cobertura 4G con
+                                            respaldo 2G</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Memoria de
+                                            128mg.</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo:
+                                            Frenado
+                                            aceleración
+                                            y
+                                            giro brusco (en plataforma premium)</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Detección de
+                                            Jumping</span>
+                                    </li>
+                                    <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de
+                                            reportes:
+                                            (Paradas,
+                                            Alertas, kilometrajes, etc, en plataforma premium)</span></li>
+                                    <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a
+                                            reglas
+                                            de velocidad
+                                            (en
+                                            plataforma premium)</span></li>
+                                </ul>
+                            </div>
+
+                            <div class="product_meta">
+                                <span class="posted_in">Mas info:
+                                    <a href="https://talentustechnology.com/servicios/venta-de-equipos/"
+                                        rel="tag">
+                                        Click Aquí
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- FMC130 --}}
                 <div class="ast-woocommerce-container">
                     <div class="woocommerce-notices-wrapper"></div>
                     <div id="product-312"
