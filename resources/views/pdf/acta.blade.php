@@ -228,7 +228,7 @@
                 <b>{{ $acta->vehiculo->cliente
                     ? strtoupper($acta->vehiculo->cliente->razon_social)
                     : 'no
-                                                                                            existe' }}</b>
+                                                                                                            existe' }}</b>
                 con DNI/RUC:
                 {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}, ha
                 adquirido un equipo

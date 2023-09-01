@@ -169,7 +169,7 @@
             width: 100%;
             overflow: hidden;
             color: #052c52;
-            font-style:  !important;
+            font-style: !important;
             font-weight: bold;
             font-size: 24px;
             font-family: "DejaVu Sans";
@@ -264,7 +264,7 @@
         $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
         $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
         $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
-
+        
     @endphp
     <div class="titulo">
         <div class="title">
@@ -322,7 +322,7 @@
             <tr>
                 <td height="5">3</td>
                 <td height="5">CATEGORIA:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->categoria : 'SIN DATOS' }}</td>
+                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->tipo : 'SIN DATOS' }}</td>
             </tr>
             <tr>
                 <td height="5">4</td>
@@ -369,13 +369,8 @@
 
     <div class="observaciones">
         <span>
-            <b> OBSERVACIONES:
-
-                {{ $certificado->observaciones
-                    ? $certificado->observaciones
-                    : 'La unidad cuenta con un dispositivo registrador de eventos y ocurrencias lo cual permite la
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        lectura en cualquier lugar, así mismo emite reportes impresos, de igual forma cuenta con medidas de
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        seguridad que impide su desconexión de acuerdo a la RD N° 843 -2010-MTC/15.' }}
+            <b>
+                {{ $certificado->observaciones ? $certificado->observaciones : '' }}
             </b>
         </span>
     </div>
