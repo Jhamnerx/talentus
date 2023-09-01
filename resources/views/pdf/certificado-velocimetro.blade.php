@@ -357,11 +357,6 @@
     <div class="texto">
         <span>Cuenta con una alarma sonora en la cabina del conductor y en el salón del vehículo que se activa cuando
             excede la velocidad máxima permitida por las normas de tránsito.
-            Asimismo, mediante el presente documento certifica que el vehículo destinado al servicio de transporte
-            terrestre de ámbito nacional o regional cuenta con sistema electrónico de inyección, ha sido calibrado para
-            que el vehículo no desarrolle velocidades mayores a noventa (90) kilómetros por hora.
-            El/los mismo(s) que se ha(n) colocado bajo los mecanismos de seguridad para que terceras personas no puedan
-            acceder a la modificación de sus parámetros de ajuste.
         </span>
 
 
