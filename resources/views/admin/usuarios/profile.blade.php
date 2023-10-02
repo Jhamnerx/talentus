@@ -440,7 +440,7 @@
                         </div>
                         <div class="text-sm">
                             <h3 class="font-medium text-slate-800">Cumpleaños</h3>
-                            <div>{{ $user->birthday->format('d F, Y') }}</div>
+                            <div>{{ $user->birthday ? $user->birthday->format('d F, Y') : 'SIN FECHA' }}</div>
                         </div>
                         <div class="text-sm">
                             <h3 class="font-medium text-slate-800">Inicio Laboral</h3>
