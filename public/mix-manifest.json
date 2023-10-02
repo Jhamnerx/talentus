@@ -1,9 +1,9 @@
 {
-    "/js/app.js": "/js/app.js?id=024b10f065a7b86ec746beff747847f1",
-    "/js/cliente.js": "/js/cliente.js?id=432895ca8e744e4a0bf923be4ac7adc3",
-    "/css/style.css": "/css/style.css?id=24734b67ce754005d6bb12a271fdb467",
-    "/css/cliente/cliente.css": "/css/cliente/cliente.css?id=31a007c3b9d1abc0cd81ec3ad8098fd7",
-    "/css/app.css": "/css/app.css?id=0ee16a6b87cc51da9f2762854bf426a7",
-    "/plugins/jquery/jquery.min.js": "/plugins/jquery/jquery.min.js?id=00727d1d5d9c90f7de826f1a4a9cc632",
-    "/plugins/tw-elements/index.min.js": "/plugins/tw-elements/index.min.js?id=7cce5c7fd9bc212826e4a66638d04b98"
+    "/js/app.js": "/js/app.js",
+    "/js/cliente.js": "/js/cliente.js",
+    "/css/style.css": "/css/style.css",
+    "/css/cliente/cliente.css": "/css/cliente/cliente.css",
+    "/css/app.css": "/css/app.css",
+    "/plugins/jquery/jquery.min.js": "/plugins/jquery/jquery.min.js",
+    "/plugins/tw-elements/index.min.js": "/plugins/tw-elements/index.min.js"
 }

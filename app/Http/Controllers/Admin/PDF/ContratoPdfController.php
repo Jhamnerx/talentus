@@ -17,8 +17,7 @@ class ContratoPdfController extends Controller
 
     public function sendToMail(Contratos $contrato, $data)
     {
-       // dd($this)
+        // dd($this)
         return $contrato->getPDFDataToMail($data);
-        
     }
 }

@@ -17,10 +17,9 @@
         <div class="flex w-full">
             <div class="flex w-2/4">
                 @error('codigo')
-
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{$message}}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
@@ -30,12 +29,10 @@
 </div>
 
 @push('scripts')
-<script>
-    $( document ).ready(function() {
+    <script>
+        $(document).ready(function() {
 
-        $('#codigo').caseEnforcer('uppercase');
-    });
-
-</script>
-
+            $('#codigo').caseEnforcer('uppercase');
+        });
+    </script>
 @endpush

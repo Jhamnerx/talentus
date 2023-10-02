@@ -17,7 +17,7 @@ class ResultVelocimetroSearch extends Component
     public function render()
     {
         $certificado = null;
-        $certificado = CertificadosVelocimetros::where('codigo', $this->search)->first();
+        $certificado = CertificadosVelocimetros::where('codigo', $this->search)->withoutGlobalScopes()->first();
 
         return view('livewire.app.consultas.certificados.result-velocimetro-search', compact('certificado'));
     }
