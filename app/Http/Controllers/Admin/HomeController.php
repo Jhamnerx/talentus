@@ -13,6 +13,10 @@ use Illuminate\Support\Arr;
 
 class HomeController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('role:admin');
+    }
 
     public function index(Request $request)
     {
@@ -99,7 +103,6 @@ class HomeController extends Controller
 
         return $totales;
     }
-
 
 
 

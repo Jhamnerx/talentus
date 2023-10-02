@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\TareasStatus;
 use App\Scopes\EmpresaScope;
+use App\Scopes\OnlyTareas;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -43,6 +44,7 @@ class Tareas extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
+        static::addGlobalScope(new OnlyTareas);
     }
 
     //relacion con tipo de tareas

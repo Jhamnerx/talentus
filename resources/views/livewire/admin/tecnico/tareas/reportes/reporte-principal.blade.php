@@ -58,9 +58,9 @@
                                         placeholder="Selecciona la fecha">
                                 </div>
                                 @error('fecha_inicial')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 md:col-span-6 gap-2">
@@ -84,9 +84,9 @@
                                         placeholder="Selecciona la fecha">
                                 </div>
                                 @error('fecha_final')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 md:col-span-6 gap-2">
@@ -105,10 +105,10 @@
                                         </svg>
                                     </div>
                                     <select wire:model="estado" class="form-select w-full pl-9" id="">
-                                        <option value="PENDIENT">PENDIENT</option>
-                                        <option value="UNREAD">UNREAD</option>
-                                        <option value="COMPLETE" selected>COMPLETE</option>
-                                        <option value="CANCELED">CANCELED</option>
+                                        <option value="PENDIENT">PENDIENTE</option>
+                                        <option value="UNREAD">SIN LEER</option>
+                                        <option value="COMPLETE" selected>COMPLETADAS</option>
+                                        <option value="CANCELED">CANCELADAS</option>
                                     </select>
                                 </div>
                             </div>
@@ -118,20 +118,20 @@
                                 <div class="flex flex-wrap items-center">
 
                                     @foreach ($tecnicos as $tecnico)
-                                    <div class="m-3">
-                                        <label class="flex items-center">
-                                            <input type="radio" name="radio-buttons" class="form-radio"
-                                                wire:model="tecnico_id" value="{{$tecnico->id}}" />
-                                            <span class="text-sm ml-2">{{$tecnico->name}}</span>
-                                        </label>
-                                    </div>
+                                        <div class="m-3">
+                                            <label class="flex items-center">
+                                                <input type="radio" name="radio-buttons" class="form-radio"
+                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                                            </label>
+                                        </div>
                                     @endforeach
 
                                 </div>
                                 @error('tecnico_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
