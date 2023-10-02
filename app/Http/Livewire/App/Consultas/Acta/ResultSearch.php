@@ -16,12 +16,13 @@ class ResultSearch extends Component
     public function render()
     {
         $acta = null;
-        $acta = Actas::where('codigo', $this->search)->first();
+        $acta = Actas::where('codigo', $this->search)->withoutGlobalScopes()->first();
 
         return view('livewire.app.consultas.acta.result-search', compact('acta'));
     }
     public function showResult($codigo)
     {
+
         $this->search = $codigo;
         $this->is_search = true;
         // dd($unique_hash);

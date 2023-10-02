@@ -16,7 +16,7 @@ class ResultGpsSearch extends Component
     public function render()
     {
         $certificado = null;
-        $certificado = Certificados::where('codigo', $this->search)->first();
+        $certificado = Certificados::where('codigo', $this->search)->withoutGlobalScopes()->first();
         return view('livewire.app.consultas.certificados.result-gps-search', compact('certificado'));
     }
     public function showResult($codigo)

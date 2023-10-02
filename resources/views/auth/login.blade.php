@@ -35,7 +35,7 @@
                                 class="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
                                 Ingresa en tu cuenta</p>
 
-
+                            {{--
                             <button aria-label="Continue with google" role="button"
                                 class="focus:outline-none hover:bg-slate-50 hover:border-gray-400 focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
                                 <img src="{{ asset('images/icons/google.svg') }}" alt="google">
@@ -51,7 +51,7 @@
                                 <hr class="w-full bg-gray-400">
                                 <p class="text-base font-medium leading-4 px-2.5 text-gray-400">O</p>
                                 <hr class="w-full bg-gray-400  ">
-                            </div>
+                            </div> --}}
 
 
                             <div class="space-y-4">
