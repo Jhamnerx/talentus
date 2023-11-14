@@ -1,7 +1,7 @@
-require("./bootstrap");
-require("./main");
-require("./utils");
-require("./slider");
+import "./bootstrap";
+import "./main";
+import "./utils";
+import "./slider";
 
 import Alpine from "alpinejs";
 

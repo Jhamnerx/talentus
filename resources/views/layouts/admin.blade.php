@@ -9,8 +9,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    @vite('resources/css/app.css')
+    @vite('resources/css/style.css')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
     {{-- dataTables --}}
@@ -23,7 +23,7 @@
     {{--
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
     <script src="{{asset('plugins/tw-elements/index.min.js')}}"></script> --}}
-    <script src="{{ mix('js/app.js') }}" defer></script>
+    @vite('resources/js/app.js')
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -97,7 +97,7 @@
     @stack('scripts')
 
 
-    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
+    {{-- @vite('resources/js/app.js') --}}
 </body>
 <script>
     $(document).ready(function() {

@@ -13,9 +13,9 @@
 
     <!-- Styles -->
 
-    <link rel="stylesheet" href="{{ mix('css/cliente/cliente.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    @vite('resources/css/cliente/cliente.css')
+    @vite('resources/css/app.css')
+    @vite('resources/css/style.css')
 
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
@@ -62,7 +62,7 @@
 
 
 
-    <script src="{{ mix('js/cliente.js') }}"></script>
+    @vite('resources/js/cliente.js')
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-datepicker.min.js') }}"></script>
