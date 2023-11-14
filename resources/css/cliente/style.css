@@ -393,7 +393,7 @@ h6 {
     content: "";
     width: 100%;
     max-width: 190px;
-    background-image: url(../images/cliente/shapes/sec-stripe-1-1.png);
+    background-image: url(../../images/cliente/shapes/sec-stripe-1-1.png);
     background-repeat: repeat-x;
     height: 10px;
 }
@@ -1082,7 +1082,7 @@ h6 {
 --------------------------------------------------------------*/
 
 .banner-one {
-    background-image: url(../images/cliente/resources/home-one/banner-bg-1-1.png);
+    background-image: url(../../images/cliente/resources/home-one/banner-bg-1-1.png);
     background-repeat: no-repeat;
     background-position: bottom left;
 }
@@ -1257,7 +1257,7 @@ h6 {
 --------------------------------------------------------------*/
 
 .banner-two {
-    background-image: url(../images/cliente/shapes/banner-2-bg-1.png);
+    background-image: url(../../images/cliente/shapes/banner-2-bg-1.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: -85px 0px;
@@ -1327,7 +1327,7 @@ h6 {
 --------------------------------------------------------------*/
 
 .banner-three {
-    background-image: url(../images/cliente/shapes/banner-3-bg-1-1.jpg);
+    background-image: url(../../images/cliente/shapes/banner-3-bg-1-1.jpg);
     background-position: center top;
     position: relative;
 }
@@ -1372,7 +1372,7 @@ h6 {
 .page-header {
     padding-top: 255px;
     padding-bottom: 110px;
-    background-image: url(../images/cliente/resources/inner-banner-bg-1-1.jpg);
+    background-image: url(../../images/cliente/resources/inner-banner-bg-1-1.jpg);
     background-size: cover;
     background-position: top center;
 }
@@ -2363,7 +2363,9 @@ h6 {
 }
 
 .contact-one__form
-    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(
+        .input-group-btn
+    ) {
     width: 100%;
 }
 
@@ -2392,7 +2394,7 @@ h6 {
 }
 
 .contact-two .block-title__two h4::after {
-    background-image: url(../images/cliente/shapes/sec-stripe-2-1.png);
+    background-image: url(../../images/cliente/shapes/sec-stripe-2-1.png);
 }
 
 .contact-two .block-title__two h3 {
@@ -2427,7 +2429,7 @@ h6 {
 }
 
 .contact-two__form::after {
-    background-image: url(../images/cliente/shapes/contact-shape-1.png);
+    background-image: url(../../images/cliente/shapes/contact-shape-1.png);
     background-position: center center;
 }
 
@@ -2496,7 +2498,9 @@ h6 {
 }
 
 .contact-two__form
-    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(.input-group-btn) {
+    .bootstrap-select:not([class*="col-"]):not([class*="form-control"]):not(
+        .input-group-btn
+    ) {
     width: 100%;
 }
 
@@ -3081,7 +3085,7 @@ h6 {
     content: "";
     width: 21px;
     height: 21px;
-    background-image: url(../images/cliente/shapes/faq-close-1-1.png);
+    background-image: url(../../images/cliente/shapes/faq-close-1-1.png);
     background-repeat: no-repeat;
     background-position: center center;
     position: absolute;
@@ -3136,7 +3140,7 @@ h6 {
 .faq-one__home-one {
     padding-top: 110px;
     padding-bottom: 10px;
-    background-image: url(../images/cliente/resources/faq-1-moc-1.png);
+    background-image: url(../../images/cliente/resources/faq-1-moc-1.png);
     background-repeat: no-repeat;
     background-position: bottom right;
 }
@@ -3185,7 +3189,7 @@ h6 {
     transition: all 500ms ease;
     width: 65px;
     height: 48px;
-    background-image: url(../images/cliente/shapes/testi-qoute-1-2.png);
+    background-image: url(../../images/cliente/shapes/testi-qoute-1-2.png);
 }
 
 .testimonials-one__single:hover .testimonials-one__qoute::before {
@@ -3196,7 +3200,7 @@ h6 {
     content: "";
     width: 65px;
     height: 48px;
-    background-image: url(../images/cliente/shapes/testi-qoute-1-1.png);
+    background-image: url(../../images/cliente/shapes/testi-qoute-1-1.png);
     position: absolute;
     top: -15px;
     right: 30px;
@@ -3215,7 +3219,7 @@ h6 {
     left: 0px;
     right: 0;
     bottom: 0;
-    background-image: url(../images/cliente/shapes/testi-map-1-1.png);
+    background-image: url(../../images/cliente/shapes/testi-map-1-1.png);
     background-repeat: no-repeat;
     background-position: top left;
     opacity: 0.4;
@@ -3352,7 +3356,7 @@ h6 {
     right: 0;
     bottom: 0;
     left: 0;
-    background-image: url(../images/cliente/shapes/testi-map-2-1.png);
+    background-image: url(../../images/cliente/shapes/testi-map-2-1.png);
     background-repeat: no-repeat;
     background-position: center center;
     opacity: 0;
@@ -3379,7 +3383,7 @@ h6 {
     left: 22px;
     width: 106px;
     height: 80px;
-    background-image: url(../images/cliente/shapes/testi-qoute-2.png);
+    background-image: url(../../images/cliente/shapes/testi-qoute-2.png);
     background-repeat: no-repeat;
     opacity: 0;
     transition: all 500ms ease;
@@ -4579,7 +4583,7 @@ h6 {
 
 .service-one__home-three {
     background-color: #f4f6fd;
-    background-image: url(../images/cliente/shapes/service-6-bg-1-1.jpg);
+    background-image: url(../../images/cliente/shapes/service-6-bg-1-1.jpg);
 }
 
 .service-one__home-three .service-one__single {
@@ -4625,7 +4629,7 @@ h6 {
 .service-two {
     position: relative;
     background-color: #041048;
-    background-image: url(../images/cliente/shapes/service-shape-1-1.png);
+    background-image: url(../../images/cliente/shapes/service-shape-1-1.png);
     background-repeat: no-repeat;
     background-position: 0 105%;
     padding-top: 110px;
@@ -4639,7 +4643,7 @@ h6 {
     right: 0;
     left: 0;
     bottom: 0;
-    background-image: url(../images/cliente/shapes/service-shape-1-2.png);
+    background-image: url(../../images/cliente/shapes/service-shape-1-2.png);
     background-repeat: no-repeat;
     background-position: left center;
 }
@@ -4668,7 +4672,7 @@ h6 {
 }
 
 .service-two__content .block-title__two h4::after {
-    background-image: url(../images/cliente/shapes/sec-stripe-3-1.png);
+    background-image: url(../../images/cliente/shapes/sec-stripe-3-1.png);
 }
 
 .service-two__content .block-title__two h3,
@@ -4780,7 +4784,7 @@ h6 {
 }
 
 .service-three__single::after {
-    background-image: url(../images/cliente/shapes/service-shape-2-2.png);
+    background-image: url(../../images/cliente/shapes/service-shape-2-2.png);
     color: rgba(22, 33, 113, 0);
     width: 100%;
     height: 250px;
@@ -4801,7 +4805,7 @@ h6 {
     content: "";
     width: 95px;
     height: 100%;
-    background-image: url(../images/cliente/shapes/service-shape-2-1.png);
+    background-image: url(../../images/cliente/shapes/service-shape-2-1.png);
     background-repeat: no-repeat;
     position: absolute;
     top: 0;
@@ -5024,7 +5028,7 @@ h6 {
     bottom: 0;
     background-repeat: no-repeat;
     background-position: bottom left;
-    background-image: url(../images/cliente/shapes/service-5-shape-1.png);
+    background-image: url(../../images/cliente/shapes/service-5-shape-1.png);
     transform: scale(0, 1);
     transform-origin: left;
     transition: transform 500ms ease;
@@ -5215,7 +5219,7 @@ h6 {
     content: "";
     width: 100%;
     max-width: 190px;
-    background-image: url(../images/cliente/shapes/sec-stripe-1-1.png);
+    background-image: url(../../images/cliente/shapes/sec-stripe-1-1.png);
     background-repeat: repeat-x;
     height: 10px;
     margin-left: 25px;
@@ -6135,7 +6139,7 @@ h6 {
     position: absolute;
     bottom: calc(100% - 335px);
     right: -470px;
-    background-image: url(../images/cliente/shapes/banner-3-shape-1-1.png);
+    background-image: url(../../images/cliente/shapes/banner-3-shape-1-1.png);
 }
 
 /*--------------------------------------------------------------

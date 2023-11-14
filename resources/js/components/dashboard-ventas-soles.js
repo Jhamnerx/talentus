@@ -12,9 +12,8 @@ import {
 // Import utilities
 // Import TailwindCSS variables
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../tailwind.config";
 // Import utilities
-import { formatValue, hexToRGB } from "../utils";
+import { tailwindConfig, formatValue } from "../utils";
 
 // Tailwind config
 const fullConfig = resolveConfig(tailwindConfig);

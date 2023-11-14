@@ -10,7 +10,7 @@
     <!-- Styles -->
 
     @vite('resources/css/app.css')
-    @vite('resources/css/style.css')
+    @vite('resources/css/style.scss')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
     {{-- dataTables --}}

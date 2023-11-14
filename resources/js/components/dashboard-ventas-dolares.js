@@ -12,9 +12,7 @@ import {
 // Import utilities
 // Import TailwindCSS variables
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../tailwind.config";
-// Import utilities
-import { formatValue, hexToRGB } from "../utils";
+import { tailwindConfig, formatValue } from "../utils";
 
 // Tailwind config
 const fullConfig = resolveConfig(tailwindConfig);
@@ -54,9 +52,10 @@ const cardVentaDolares = () => {
                             // data: [
                             //     800, 1600, 900, 1300, 1950, 1700,
                             // ],
-                            backgroundColor: fullConfig.theme.colors.blue[400],
+                            backgroundColor:
+                                tailwindConfig().theme.colors.blue[400],
                             hoverBackgroundColor:
-                                fullConfig.theme.colors.blue[500],
+                                tailwindConfig().theme.colors.blue[500],
                             barPercentage: 0.66,
                             categoryPercentage: 0.66,
                         },
@@ -68,9 +67,9 @@ const cardVentaDolares = () => {
                             //     4900, 2600, 5350, 4800, 5200, 4800,
                             // ],
                             backgroundColor:
-                                fullConfig.theme.colors.indigo[500],
+                                tailwindConfig().theme.colors.indigo[500],
                             hoverBackgroundColor:
-                                fullConfig.theme.colors.indigo[600],
+                                tailwindConfig().theme.colors.indigo[600],
                             barPercentage: 0.66,
                             categoryPercentage: 0.66,
                         },
@@ -163,7 +162,7 @@ const cardVentaDolares = () => {
                             items.forEach((item) => {
                                 const li = document.createElement("li");
                                 li.style.marginRight =
-                                    fullConfig.theme.margin[4];
+                                    tailwindConfig().theme.margin[4];
                                 // Button element
                                 const button = document.createElement("button");
                                 button.style.display = "inline-flex";
@@ -179,12 +178,14 @@ const cardVentaDolares = () => {
                                 // Color box
                                 const box = document.createElement("span");
                                 box.style.display = "block";
-                                box.style.width = fullConfig.theme.width[3];
-                                box.style.height = fullConfig.theme.height[3];
+                                box.style.width =
+                                    tailwindConfig().theme.width[3];
+                                box.style.height =
+                                    tailwindConfig().theme.height[3];
                                 box.style.borderRadius =
-                                    fullConfig.theme.borderRadius.full;
+                                    tailwindConfig().theme.borderRadius.full;
                                 box.style.marginRight =
-                                    fullConfig.theme.margin[2];
+                                    tailwindConfig().theme.margin[2];
                                 box.style.borderWidth = "3px";
                                 box.style.borderColor = item.fillStyle;
                                 box.style.pointerEvents = "none";
@@ -195,25 +196,25 @@ const cardVentaDolares = () => {
                                 labelContainer.style.alignItems = "center";
                                 const value = document.createElement("span");
                                 value.style.color =
-                                    fullConfig.theme.colors.slate[800];
+                                    tailwindConfig().theme.colors.slate[800];
                                 value.style.fontSize =
-                                    fullConfig.theme.fontSize["2xl"][0];
+                                    tailwindConfig().theme.fontSize["2xl"][0];
                                 value.style.lineHeight =
-                                    fullConfig.theme.fontSize[
+                                    tailwindConfig().theme.fontSize[
                                         "2xl"
                                     ][1].lineHeight;
                                 value.style.fontWeight =
-                                    fullConfig.theme.fontWeight.bold;
+                                    tailwindConfig().theme.fontWeight.bold;
                                 value.style.marginRight =
-                                    fullConfig.theme.margin[2];
+                                    tailwindConfig().theme.margin[2];
                                 value.style.pointerEvents = "none";
                                 const label = document.createElement("span");
                                 label.style.color =
-                                    fullConfig.theme.colors.slate[500];
+                                    tailwindConfig().theme.colors.slate[500];
                                 label.style.fontSize =
-                                    fullConfig.theme.fontSize.sm[0];
+                                    tailwindConfig().theme.fontSize.sm[0];
                                 label.style.lineHeight =
-                                    fullConfig.theme.fontSize.sm[1].lineHeight;
+                                    tailwindConfig().theme.fontSize.sm[1].lineHeight;
                                 const theValue = c.data.datasets[
                                     item.datasetIndex
                                 ].data.reduce((a, b) => a + b, 0);
