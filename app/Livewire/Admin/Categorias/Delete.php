@@ -2,25 +2,42 @@
 
 namespace App\Livewire\Admin\Categorias;
 
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use App\Models\Categoria;
+use Livewire\Attributes\On;
+use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Component
 {
-    public Model $model;
+    public Categoria $categoria;
 
-
-    public $field = "eliminado";
-
-    public $eliminado;
+    public $modalDelete = false;
 
     public function delete()
     {
-        // $this->model->setAttribute($this->field, '1')->save();
-        $this->model->delete();
-        return redirect()->route('admin.almacen.categorias.index')->with('delete', 'La categoria se elimino con exito');
+        $this->categoria->delete();
+        $this->afterDelete();
     }
 
+    #[On('open-modal-delete')]
+    public function openModal(Categoria $categoria)
+    {
+        $this->categoria = $categoria;
+        $this->modalDelete = true;
+    }
+
+    public function closeModal()
+    {
+
+        $this->modalDelete = false;
+    }
+
+    public function afterDelete()
+    {
+        $this->closeModal();
+        $this->dispatch('delete-categoria', mensaje: 'La categoria se elimino con exito');
+        $this->dispatch('update-table');
+    }
 
 
     public function render()

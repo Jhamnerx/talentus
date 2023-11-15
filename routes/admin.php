@@ -59,12 +59,7 @@ Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
 
 Route::controller(CategoriaController::class)->group(function () {
-
     Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
-    Route::get('categorias/create', 'create')->name('admin.almacen.categorias.create');
-    Route::post('categorias', 'store')->name('admin.almacen.categorias.store');
-    Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
-    Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
 });
 
 

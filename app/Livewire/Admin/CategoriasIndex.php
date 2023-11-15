@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Admin;
 
-use App\Models\Categoria;
 use Livewire\Component;
+use App\Models\Categoria;
 use Livewire\WithPagination;
+use Illuminate\Support\Collection;
 
 class CategoriasIndex extends Component
 {
@@ -13,7 +14,13 @@ class CategoriasIndex extends Component
     public $search;
     public $sort = "id";
     public $direction = "desc";
+    public Collection $selected;
 
+    public function mount()
+    {
+
+        $this->selected = collect();
+    }
     public function render()
     {
         $categorias = Categoria::where(function ($query) {
@@ -21,9 +28,38 @@ class CategoriasIndex extends Component
                 ->orwhere('nombre', 'like', '%' . $this->search . '%');
         })->orderBy('id', 'desc')
             ->paginate(10);
-        // ->get();
 
-        $total = Categoria::all()->count();
-        return view('livewire.admin.categorias-index', compact('categorias', 'total'));
+        return view('livewire.admin.categorias-index', compact('categorias'));
+    }
+
+    #[\Livewire\Attributes\On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+    public function openModalCreate()
+    {
+
+        $this->dispatch('open-modal-create');
+    }
+
+    public function openModalDelete(Categoria $categoria)
+    {
+
+        $this->dispatch('open-modal-delete', categoria: $categoria);
+    }
+
+    public function openModalEdit(Categoria $categoria)
+    {
+        $this->dispatch('open-modal-edit', categoria: $categoria);
+    }
+
+    public function deleteSelected()
+    {
+        $categorias = Categoria::findMany($this->selected);
+        $categorias->map->delete();
+        $this->selected = collect();
+        $this->render();
     }
 }

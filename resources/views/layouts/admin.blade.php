@@ -50,7 +50,7 @@
 
 
     @livewireStyles
-
+    <wireui:scripts />
 </head>
 
 <body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
@@ -121,10 +121,10 @@
     });
 </script>
 <script>
-    Livewire.onPageExpired((response, message) => {
-        console.log('pagina expirada')
+    // Livewire.onPageExpired((response, message) => {
+    //     console.log('pagina expirada')
 
-    })
+    // })
 </script>
 
 </html>
