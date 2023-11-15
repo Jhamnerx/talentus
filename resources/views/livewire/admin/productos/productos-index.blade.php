@@ -10,16 +10,7 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-            <!-- Delete button -->
-            <div class="table-items-action hidden">
-                <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span>
-                        items Seleccionados</div>
-                    <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
-                </div>
-            </div>
+
 
             <!-- Search form -->
             <form class="relative" autocomplete="off">
@@ -54,15 +45,13 @@
 
             <!-- Add customer button -->
             @can('crear-producto')
-                <a href="{{ route('admin.almacen.productos.create') }}">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Añadir Producto</span>
-                    </button>
-                </a>
+                <button wire:click.preven="openModalCreate" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Añadir Producto</span>
+                </button>
             @endcan
 
 
@@ -78,7 +67,7 @@
                 <span class="text-slate-400 font-medium">{{ $productos->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
             <!-- Table -->
             <div class="overflow-x-auto">
                 <table class="table-auto w-full">
@@ -86,15 +75,6 @@
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Selecionar Todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
-                                    </label>
-                                </div>
-                            </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <span class="sr-only">Favorito</span>
@@ -108,22 +88,20 @@
                                 <div class="font-semibold text-left">Unidad Medida</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Nombre</div>
+                                <div class="font-semibold text-left">Descripcion</div>
                             </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Categoria</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Precio</div>
+                                <div class="font-semibold text-left">Valor Unitario</div>
                             </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Stock</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="font-semibold text-left">Descripcion</div>
-                            </th>
+
                             @can('cambiar.estado-producto')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Estado</div>
@@ -139,17 +117,7 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         @if ($productos->count())
                             @foreach ($productos as $producto)
-                                <!-- Row -->
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
+                                <tr wire:key="{{ $producto->id }}">
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="flex items-center relative">
@@ -182,7 +150,7 @@
                                                 </div>
                                             @endif
 
-                                            <div class="font-medium text-slate-800">{{ $producto->nombre }}</div>
+                                            <div class="font-medium text-slate-800">{{ $producto->descripcion }}</div>
                                         </div>
                                     </td>
 
@@ -195,7 +163,10 @@
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-emerald-500">${{ $producto->precio }}
+                                        <div class="text-left font-medium text-emerald-500">
+
+                                            {{ $producto->divisa = 'USD' ? '$ ' : 'S/ ' }}
+                                            {{ $producto->valor_unitario }}
                                         </div>
                                     </td>
 
@@ -206,24 +177,16 @@
                                         @endphp
 
                                         <div class="text-left">
-                                            {{ $producto->tipo == 'producto' ? $producto->stock . $pr : $serv }}
+                                            {{ $producto->tipo == 'producto' ? $producto->stock . ' ' . $producto->unit->name : $serv }}
                                         </div>
                                     </td>
 
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                        <div class="text-left">{{ $producto->descripcion }}</div>
-                                    </td>
                                     @can('cambiar.estado-producto')
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                             <div>
                                                 <div class="m-3 ">
 
-
                                                     @livewire('admin.productos.change-status', ['model' => $producto, 'field' => 'is_active'], key('active' . $producto->id))
-
-
-
-
 
                                                 </div>
                                             </div>
@@ -232,13 +195,27 @@
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="space-x-1">
-
-
-
-                                            @livewire('admin.productos.delete', ['model' => $producto], key('delete' . $producto->id))
-
-
-
+                                            @can('editar-producto')
+                                                <button wire:click.prevent="openModalEdit"
+                                                    class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    <span class="sr-only">Editar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
+                                            @can('eliminar-producto')
+                                                <button wire:click.prevent="openModalDelete" aria-controls="danger-modal"
+                                                    class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                    <span class="sr-only">Eliminar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                        <path
+                                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -258,7 +235,6 @@
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $productos->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
 
     </div>
 </div>
