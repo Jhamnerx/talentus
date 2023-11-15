@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
@@ -44,7 +44,7 @@
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
 
-                                <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa"
+                                <input wire:model.live="placa" placeholder="ABC-780" name="placa" id="placa"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" required />
@@ -82,7 +82,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="marca">Marca:</label>
                             <div class="relative">
-                                <input wire:model="marca" placeholder="TOYOTA" name="marca" id="marca"
+                                <input wire:model.live="marca" placeholder="TOYOTA" name="marca" id="marca"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -101,7 +101,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo:</label>
                             <div class="relative">
-                                <input wire:model="modelo" placeholder="HILUX" name="modelo" id="modelo"
+                                <input wire:model.live="modelo" placeholder="HILUX" name="modelo" id="modelo"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -120,7 +120,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="tipo">Tipo:</label>
                             <div class="relative">
-                                <input wire:model="tipo" id="tipo" name="tipo" placeholder="PICK UP"
+                                <input wire:model.live="tipo" id="tipo" name="tipo" placeholder="PICK UP"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -139,7 +139,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="year">Año:</label>
                             <div class="relative">
-                                <input wire:model="year" id="year" name="year" placeholder="2019"
+                                <input wire:model.live="year" id="year" name="year" placeholder="2019"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -171,7 +171,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="color">Color:</label>
                             <div class="relative">
-                                <input wire:model="color" id="color" name="color"
+                                <input wire:model.live="color" id="color" name="color"
                                     placeholder="BLANCO ROJO AZUL" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -196,7 +196,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                <input wire:model="motor" id="motor" name="motor" placeholder="1GDG066086"
+                                <input wire:model.live="motor" id="motor" name="motor" placeholder="1GDG066086"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -226,7 +226,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="serie">Serie:</label>
                             <div class="relative">
-                                <input wire:model="serie" id="serie" name="serie"
+                                <input wire:model.live="serie" id="serie" name="serie"
                                     placeholder="8AJHA8CD9K2629775" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -251,7 +251,7 @@
                                     class="text-rose-500">*</span></label>
 
 
-                            <select wire:model="clientes_id" id="clientes_ids" class="clientes_ids w-full"
+                            <select wire:model.live="clientes_id" id="clientes_ids" class="clientes_ids w-full"
                                 required></select>
 
 
@@ -326,7 +326,7 @@
                             <label class="block text-sm font-medium mb-1" for="operador">Operador:</label>
                             <div class="relative">
 
-                                <input wire:model="operador" id="operador" name="operador" placeholder="Claro"
+                                <input wire:model.live="operador" id="operador" name="operador" placeholder="Claro"
                                     class="form-input w-full pl-9" type="text" disabled />
 
                                 {{-- <input type="text" class="form-input w-full pl-9 operador" name="operador"
@@ -354,7 +354,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="sim_card">Sim Card:</label>
                             <div class="relative">
-                                <input wire:model="sim_card" id="sim_card" name="sim_card"
+                                <input wire:model.live="sim_card" id="sim_card" name="sim_card"
                                     placeholder="3189219220212" class="form-input w-full pl-9" type="text"
                                     disabled />
 
@@ -397,7 +397,7 @@
                                     type="text" required />
 
 
-                                <input wire:model="dispositivos_id" type="hidden" name="dispositivos_id"
+                                <input wire:model.live="dispositivos_id" type="hidden" name="dispositivos_id"
                                     class="dispositivos_id">
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -434,7 +434,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo_id">MODELO GPS:</label>
                             <div class="relative">
-                                <input wire:model="modelo_gps" id="modelo_id" name="modelo_id" placeholder="FMB920"
+                                <input wire:model.live="modelo_gps" id="modelo_id" name="modelo_id" placeholder="FMB920"
                                     class="form-input w-full pl-9" type="text" disabled />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -460,7 +460,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea wire:model="descripcion" class="form-input w-full pl-9" name="descripcion" id="descripcion"
+                                <textarea wire:model.live="descripcion" class="form-input w-full pl-9" name="descripcion" id="descripcion"
                                     rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

@@ -2,7 +2,7 @@
 
     <!-- Basic Modal -->
     <!-- Start -->
-    <div x-data="{ modalSave: @entangle('modalOpen') }">
+    <div x-data="{ modalSave: @entangle('modalOpen').live }">
 
 
         <!-- Modal backdrop -->
@@ -44,7 +44,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
-                                    <input placeholder="Ejem. 205" disabled readonly maxlength="10" wire:model="numero"
+                                    <input placeholder="Ejem. 205" disabled readonly maxlength="10" wire:model.live="numero"
                                         required name="fecha" type="text"
                                         class="form-input pl-8 py-2text-black w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -188,7 +188,7 @@
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10"
-                                        wire:model="fecha_hora_mantenimiento" required name="fecha" type="text"
+                                        wire:model.live="fecha_hora_mantenimiento" required name="fecha" type="text"
                                         class="form-input fecha-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -231,7 +231,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">DETALLE:</label>
                                 <div class="relative">
-                                    <textarea wire:model="detalle_trabajo" class="form-input w-full pl-9" name="descripcion" id="descripcion"
+                                    <textarea wire:model.live="detalle_trabajo" class="form-input w-full pl-9" name="descripcion" id="descripcion"
                                         rows="2" placeholder="Ingresar Breve detalle"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -264,7 +264,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">NOTA:</label>
                                 <div class="relative">
-                                    <textarea wire:model="nota" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
+                                    <textarea wire:model.live="nota" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
                                         placeholder="Ingresar Breve nota"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -302,7 +302,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="notify_client" value="1"
-                                                class="form-radio" wire:model="notify_client" />
+                                                class="form-radio" wire:model.live="notify_client" />
                                             <span class="text-sm ml-2">Si</span>
                                         </label>
                                     </div>
@@ -310,7 +310,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="notify_client" value="0"
-                                                class="form-radio" wire:model="notify_client" />
+                                                class="form-radio" wire:model.live="notify_client" />
                                             <span class="text-sm ml-2">No</span>
                                         </label>
                                     </div>
@@ -325,7 +325,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="notify_admin" class="form-radio"
-                                                wire:model="notify_admin" value="1" />
+                                                wire:model.live="notify_admin" value="1" />
                                             <span class="text-sm ml-2">Si</span>
                                         </label>
                                     </div>
@@ -333,7 +333,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="notify_admin" class="form-radio"
-                                                wire:model="notify_admin" value="0" />
+                                                wire:model.live="notify_admin" value="0" />
                                             <span class="text-sm ml-2">No</span>
                                         </label>
                                     </div>

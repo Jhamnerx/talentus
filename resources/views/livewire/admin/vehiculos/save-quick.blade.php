@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
@@ -37,7 +37,7 @@
                             <label class="block text-sm font-medium mb-1" for="placa">Placa: <span
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
-                                <input wire:model="placa" placeholder="ABC-780" name="placa" id="placa"
+                                <input wire:model.live="placa" placeholder="ABC-780" name="placa" id="placa"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" required />
@@ -74,7 +74,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="marca">Marca:</label>
                             <div class="relative">
-                                <input wire:model="marca" placeholder="TOYOTA" name="marca" id="marca"
+                                <input wire:model.live="marca" placeholder="TOYOTA" name="marca" id="marca"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -93,7 +93,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo:</label>
                             <div class="relative">
-                                <input wire:model="modelo" placeholder="HILUX" name="modelo" id="modelo"
+                                <input wire:model.live="modelo" placeholder="HILUX" name="modelo" id="modelo"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -112,7 +112,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="tipo">Tipo:</label>
                             <div class="relative">
-                                <input wire:model="tipo" id="tipo" name="tipo" placeholder="PICK UP"
+                                <input wire:model.live="tipo" id="tipo" name="tipo" placeholder="PICK UP"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -131,7 +131,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="year">Año:</label>
                             <div class="relative">
-                                <input wire:model="year" id="year" name="year" placeholder="2019"
+                                <input wire:model.live="year" id="year" name="year" placeholder="2019"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -163,7 +163,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="color">Color:</label>
                             <div class="relative">
-                                <input wire:model="color" id="color" name="color"
+                                <input wire:model.live="color" id="color" name="color"
                                     placeholder="BLANCO ROJO AZUL" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -188,7 +188,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                <input wire:model="motor" id="motor" name="motor" placeholder="1GDG066086"
+                                <input wire:model.live="motor" id="motor" name="motor" placeholder="1GDG066086"
                                     class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -218,7 +218,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="serie">Serie:</label>
                             <div class="relative">
-                                <input wire:model="serie" id="serie" name="serie"
+                                <input wire:model.live="serie" id="serie" name="serie"
                                     placeholder="8AJHA8CD9K2629775" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -243,7 +243,7 @@
                                     class="text-rose-500">*</span></label>
 
 
-                            <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
+                            <select wire:model.live="clientes_id" name="clientes_id" id="clientes_id"
                                 class="clientes_id w-full" required></select>
 
                         </div>
@@ -264,7 +264,7 @@
                                             <span class="text-sm mr-2 uppercase">{{ $flota->nombre }} </span>
 
                                             <input type="checkbox" value="{{ $flota->id }}"
-                                                wire:model="flotas_selected" class="form-checkbox">
+                                                wire:model.live="flotas_selected" class="form-checkbox">
                                         </label>
                                     @endforeach
                                 </div>

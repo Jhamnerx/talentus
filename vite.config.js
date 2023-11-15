@@ -10,6 +10,7 @@ export default defineConfig({
                 "resources/css/style.scss",
                 "resources/js/app.js",
                 "resources/js/cliente.js",
+                "resources/js/cliente/theme.js",
             ],
             refresh: true,
         }),

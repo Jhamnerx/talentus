@@ -10,7 +10,7 @@
                         'class' => 'block text-sm font-medium mb-1',
                     ]) !!}
 
-                    <input name="numero" wire:model="numero" id="autocomplete-ajax-linea" type="text"
+                    <input name="numero" wire:model.live="numero" id="autocomplete-ajax-linea" type="text"
                         class="form-input w-full sm:w-1/2" placeholder="Ingresar Linea" maxlength="15">
                 </div>
                 <div class="text-xs mt-1">La Linea debe estar registrada!</div>
@@ -30,7 +30,7 @@
                         'class' => 'block text-sm font-medium  mb-1',
                     ]) !!}
 
-                    <input type="text" class="form-input w-full sm:w-1/2" wire:model="sim_card"
+                    <input type="text" class="form-input w-full sm:w-1/2" wire:model.live="sim_card"
                         id="autocomplete-ajax-sim" placeholder="Escribe el sim card o selecciona">
                 </div>
 

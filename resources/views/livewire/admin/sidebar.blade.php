@@ -767,10 +767,10 @@
                                             <line class="fill-current text-slate-600" x1="4" y1="5"
                                                 x2="8" y2="5" />
                                             <path d="M6 5v11a1 1 0 0 0 1 1h5" />
-                                            <rect class="fill-current text-slate-400" x="12" y="7"
-                                                width="8" height="4" rx="1" />
-                                            <rect class="fill-current text-slate-400" x="12" y="15"
-                                                width="8" height="4" rx="1" />
+                                            <rect class="fill-current text-slate-400" x="12" y="7" width="8"
+                                                height="4" rx="1" />
+                                            <rect class="fill-current text-slate-400" x="12" y="15" width="8"
+                                                height="4" rx="1" />
                                         </svg>
                                         <span
                                             class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">

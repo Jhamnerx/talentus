@@ -1,4 +1,4 @@
-<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen') }"
+<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen').live }"
     @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
     <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-6">
@@ -34,7 +34,7 @@
                     <span class="text-rose-500">*</span></label>
                 <div class="relative">
 
-                    <input type="text" name="fecha" wire:model="fecha" class="form-input w-full pl-9 fechaContrato"
+                    <input type="text" name="fecha" wire:model.live="fecha" class="form-input w-full pl-9 fechaContrato"
                         placeholder="yyyy-mm-dd" maxlength="10" required>
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -114,7 +114,7 @@
                         <!-- Start -->
                         <div class="flex items-center">
                             <div class="form-switch">
-                                <input wire:model="fondo" type="checkbox" id="fondo-1" class="sr-only fondo" />
+                                <input wire:model.live="fondo" type="checkbox" id="fondo-1" class="sr-only fondo" />
                                 <label class="bg-slate-400" for="fondo-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                     <span class="sr-only">fondo switch</span>
@@ -129,7 +129,7 @@
                         <label for="sello">Sello:</label>
                         <!-- Start -->
                         <div class="form-switch">
-                            <input wire:model="sello" name="sello" type="checkbox" id="sello-1" class="sr-only" />
+                            <input wire:model.live="sello" name="sello" type="checkbox" id="sello-1" class="sr-only" />
                             <label class="bg-slate-400" for="sello-1">
                                 <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                 <span class="sr-only">sello switch</span>
@@ -227,7 +227,7 @@
 
                                 <div class="flex-auto xl:w-28 text-center">
 
-                                    <input wire:model="items.{{ $placa }}.plan"
+                                    <input wire:model.live="items.{{ $placa }}.plan"
                                         class="form-input w-16 md:w-28 lg:w-28" type="text">
 
                                     @if ($errors->has('items.' . $placa . '.plan'))

@@ -2,7 +2,7 @@
 
     <!-- Basic Modal -->
     <!-- Start -->
-    <div x-data="{ modalSave: @entangle('openModalSave') }">
+    <div x-data="{ modalSave: @entangle('openModalSave').live }">
 
 
         <!-- Modal backdrop -->
@@ -44,7 +44,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero Acta: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
-                                    <input placeholder="Ejem. 205" maxlength="10" wire:model="numero" required
+                                    <input placeholder="Ejem. 205" maxlength="10" wire:model.live="numero" required
                                         name="fecha" type="text" class="form-input  font-base pl-8 py-2  w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
@@ -172,7 +172,7 @@
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
                                     <input placeholder="yyyy-mm-dd" maxlength="10" x-mask="9999-99-99" readonly
-                                        wire:model="fecha_instalacion" required name="fecha" type="text"
+                                        wire:model.live="fecha_instalacion" required name="fecha" type="text"
                                         class="form-input inputDateActaInicio font-base pl-8 py-2  input w-full"
                                         placeholder="Selecciona la fecha">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -213,7 +213,7 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_inicio">Inicio de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="inicio_cobertura"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model.live="inicio_cobertura"
                                         readonly required name="fecha" type="text"
                                         class="form-input inputDateActaInicio font-base pl-8 py-2  input w-full"
                                         placeholder="Selecciona la fecha">
@@ -256,7 +256,7 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model.live="fin_cobertura"
                                         readonly required name="fecha_fin" type="text"
                                         class="form-input  inputDateActaFinal font-base pl-8 py-2  input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -302,7 +302,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="radio-buttons" class="form-radio"
-                                                wire:model="plataforma" value="basica" />
+                                                wire:model.live="plataforma" value="basica" />
                                             <span class="text-sm ml-2">Basica</span>
                                         </label>
                                     </div>
@@ -310,7 +310,7 @@
                                     <div class="m-3">
                                         <label class="flex items-center">
                                             <input type="radio" name="radio-buttons" class="form-radio"
-                                                wire:model="plataforma" value="premium" />
+                                                wire:model.live="plataforma" value="premium" />
                                             <span class="text-sm ml-2">Premium</span>
                                         </label>
                                     </div>
@@ -332,7 +332,7 @@
 
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1"
+                                                <input wire:model.live="fondo" type="checkbox" id="fondo-1"
                                                     class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="fondo-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
@@ -349,7 +349,7 @@
 
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1"
+                                                <input wire:model.live="sello" type="checkbox" id="sello-1"
                                                     class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="sello-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>

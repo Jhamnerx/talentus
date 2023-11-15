@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalCreateTask: @entangle('modalCreateTask') }">
+    <div x-data="{ modalCreateTask: @entangle('modalCreateTask').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalCreateTask"
@@ -45,7 +45,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9" id="tipo_tarea_id"
-                                        wire:model="tipo_tarea_id">
+                                        wire:model.live="tipo_tarea_id">
 
                                         <option value="5">MANTENIMIENTO</option>
 
@@ -91,7 +91,7 @@
                                 </label>
                                 <div class="relative" wire:ignore>
 
-                                    <input type="text" wire:model="placa" placeholder="PLACA" disabled readonly
+                                    <input type="text" wire:model.live="placa" placeholder="PLACA" disabled readonly
                                         class="form-input w-full pl-9">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -146,7 +146,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full fecha-tarea"
-                                        wire:model="fecha_hora" placeholder="2023-05-12 03:00">
+                                        wire:model.live="fecha_hora" placeholder="2023-05-12 03:00">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -187,7 +187,7 @@
                                 </label>
                                 <div class="relative" wire:ignore>
 
-                                    <input type="text" placeholder="FMB920" wire:model="dispositivo"
+                                    <input type="text" placeholder="FMB920" wire:model.live="dispositivo"
                                         class="form-input w-full pl-9">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" version="1.1" id="Layer_1"
@@ -228,7 +228,7 @@
                                         <div class="m-3">
                                             <label class="flex items-center">
                                                 <input type="radio" name="radio-buttons" class="form-radio"
-                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
                                                 <span class="text-sm ml-2">{{ $tecnico->name }}</span>
                                             </label>
                                         </div>

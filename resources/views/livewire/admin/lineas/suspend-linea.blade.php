@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalAsign: @entangle('openModal') }">
+    <div x-data="{ modalAsign: @entangle('openModal').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalAsign = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->
@@ -61,7 +61,7 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <input maxlength="10" wire:model="fecha_suspencion" type="text" readonly
+                                <input maxlength="10" wire:model.live="fecha_suspencion" type="text" readonly
                                     class="form-input fecha fechaInicio w-full pl-9" placeholder="Selecciona la fecha">
                             </div>
                             @error('fecha_suspencion')
@@ -86,7 +86,7 @@
                                             clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <input maxlength="10" wire:model="date_to_suspend" type="text" readonly
+                                <input maxlength="10" wire:model.live="date_to_suspend" type="text" readonly
                                     class="form-input fecha fechaFinal w-full pl-9" placeholder="Selecciona la fecha">
                             </div>
                             @error('date_to_suspend')
@@ -103,7 +103,7 @@
                                 <!-- Start -->
                                 <div class="flex items-center">
                                     <div class="form-switch">
-                                        <input wire:model="baja" type="checkbox" id="baja-1" class="sr-only baja" />
+                                        <input wire:model.live="baja" type="checkbox" id="baja-1" class="sr-only baja" />
                                         <label class="bg-slate-400" for="baja-1">
                                             <span class="bg-white shadow-sm" aria-hidden="true"></span>
                                             <span class="sr-only">baja switch</span>

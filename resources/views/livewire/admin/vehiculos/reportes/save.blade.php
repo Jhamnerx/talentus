@@ -1,6 +1,6 @@
 <div>
 
-    <div x-data="{ modalSave: @entangle('openModalSave') }">
+    <div x-data="{ modalSave: @entangle('openModalSave').live }">
 
 
         <!-- Modal backdrop -->
@@ -46,7 +46,7 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select wire:model="vehiculos_id" name="vehiculos_id" id="vehiculos_id"
+                                    <select wire:model.live="vehiculos_id" name="vehiculos_id" id="vehiculos_id"
                                         class="vehiculos_id w-full form-input pl-9" required></select>
 
                                     @error('vehiculos_id')
@@ -89,7 +89,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="fecha_t">Fecha Transmisión:</label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_t" required
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model.live="fecha_t" required
                                         name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer fechaTransmision font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
@@ -120,7 +120,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input maxlength="6" wire:model="hora_t" type="text"
+                                    <input maxlength="6" wire:model.live="hora_t" type="text"
                                         class="form-input w-full pl-9 hora_t" placeholder="Selecciona la Hora"
                                         required />
 
@@ -154,7 +154,7 @@
                                         <label class="flex-auto items-center">
                                             <span class="text-sm mr-2">{{ $i['detalle'] }} </span>
 
-                                            <input name="text_add" wire:model="text_add" class="form-checkbox"
+                                            <input name="text_add" wire:model.live="text_add" class="form-checkbox"
                                                 type="radio" value="{{ $i['descripcion'] }}">
                                         </label>
                                     @endforeach
@@ -167,7 +167,7 @@
                                         <label class="flex-auto items-center">
                                             <span class="text-sm mr-2">{{ $accion['detalle'] }} </span>
 
-                                            <input name="accion" wire:model="accion" class="form-checkbox"
+                                            <input name="accion" wire:model.live="accion" class="form-checkbox"
                                                 type="radio" value="{{ $accion['descripcion'] }}">
                                         </label>
                                     @endforeach
@@ -177,7 +177,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea title="Hola" wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
+                                    <textarea title="Hola" wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
                                         rows="5" placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

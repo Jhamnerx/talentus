@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalRecordatorio: @entangle('openModalRecordatorio') }">
+    <div x-data="{ modalRecordatorio: @entangle('openModalRecordatorio').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalRecordatorio = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->
@@ -38,7 +38,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="marca">Fecha Recordatorio:</label>
                             <div class="relative">
-                                <input maxlength="10" wire:model="fecha_recordatorio" required name="fecha_recordatorio"
+                                <input maxlength="10" wire:model.live="fecha_recordatorio" required name="fecha_recordatorio"
                                     type="text"
                                     class="form-input fechaRecordatorio pl-8 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                     placeholder="Selecciona la fecha">
@@ -66,7 +66,7 @@
                             <div class="relative">
 
 
-                                <textarea wire:model="nota" placeholder="Ingresa una nota"
+                                <textarea wire:model.live="nota" placeholder="Ingresa una nota"
                                     class="form-input pl-8 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                     name="nota" id="nota" cols="30" rows="10"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
 
         <div class="relative inline-flex">
             <button @click="modalOpen = true" aria-controls="basic-modal"
@@ -51,7 +51,7 @@
 
 
                         <label for="modelo" class="block text-sm font-medium text-gray-700">Selecciona Modelo:</label>
-                        <select wire:model="modelo" class="form-select w-full" name="modelo" id="modelo">
+                        <select wire:model.live="modelo" class="form-select w-full" name="modelo" id="modelo">
                             <option selected>Selecciona un modelo</option>
                             @foreach ($modelos as $modelo)
                                 <option value="{{ $modelo->id }}">{{ $modelo->modelo }}</option>
@@ -66,11 +66,11 @@
                     </div>
 
                     <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
-                    <div x-data="{ file: @entangle('file'), files: null }"
+                    <div x-data="{ file: @entangle('file').live, files: null }"
                         class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
                         x-on:dragover="$el.classList.add('border-emerald-400')"
                         x-on:dragleave="$el.classList.remove('border-emerald-400')">
-                        <input wire:model="file" type="file"
+                        <input wire:model.live="file" type="file"
                             class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer"
                             id="file" x-on:change="files = $event.target.files; console.log($event.target.files);"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">

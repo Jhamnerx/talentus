@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalAsign: @entangle('openModal') }">
+    <div x-data="{ modalAsign: @entangle('openModal').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalAsign = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->

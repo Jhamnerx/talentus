@@ -24,7 +24,7 @@
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('numero', 'Número:', ['class' => 'block text-sm font-medium mb-1']) !!}
                     <input type="tel" class="form-input w-full" placeholder="Escribe el número"
-                        wire:model="items.{{ $clave }}.numero" maxlength="20">
+                        wire:model.live="items.{{ $clave }}.numero" maxlength="20">
 
 
                     @if ($errors->has('items.' . $clave . '.numero'))
@@ -36,7 +36,7 @@
 
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('operador', 'Operador:', ['class' => 'block text-sm font-medium mb-1']) !!}
-                    <input type="text" class="form-input w-full" wire:model="items.{{ $clave }}.operador"
+                    <input type="text" class="form-input w-full" wire:model.live="items.{{ $clave }}.operador"
                         placeholder="Escribe el operador" required>
 
                     @if ($errors->has('items.' . $clave . '.operador'))

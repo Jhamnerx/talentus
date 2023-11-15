@@ -42,7 +42,7 @@
                                     clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <input required wire:model="fecha_vencimiento" name="fecha_vencimiento" type="text"
+                        <input required wire:model.live="fecha_vencimiento" name="fecha_vencimiento" type="text"
                             class="form-input fechaVencimiento
                      font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500"
                             placeholder="Selecciona la fecha">
@@ -119,7 +119,7 @@
                             Periodo:
                         </div>
                     </label>
-                    <select wire:model="periodo" name="periodo" id="periodo" class="w-full form-input pl-2" required>
+                    <select wire:model.live="periodo" name="periodo" id="periodo" class="w-full form-input pl-2" required>
 
                         <option value="MENSUAL" selected>MENSUAL</option>
                         <option value="BIMENSUAL">BIMENSUAL</option>
@@ -144,7 +144,7 @@
                             Tipo Pago:
                         </div>
                     </label>
-                    <select wire:model="tipo_pago" name="tipo_pago" id="tipo_pago" class="w-full form-input pl-2"
+                    <select wire:model.live="tipo_pago" name="tipo_pago" id="tipo_pago" class="w-full form-input pl-2"
                         required>
 
                         <option value="RECIBO">RECIBO</option>
@@ -178,7 +178,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <select name="divisa" wire:model="divisa" id="divisa"
+                        <select name="divisa" wire:model.live="divisa" id="divisa"
                             class="form-select pl-9 py-2 w-full">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
@@ -209,7 +209,7 @@
                                 </g>
                             </svg>
                         </div>
-                        <input required value="30" type="number" step="0.1" wire:model="monto_unidad"
+                        <input required value="30" type="number" step="0.1" wire:model.live="monto_unidad"
                             class="form-input valid:border-emerald-300
                     required:border-rose-300 invalid:border-rose-300 peer font-base pl-9 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block w-full sm:text-sm border-gray-200 rounded-md text-black input dark:focus:border-blue-500">
 
@@ -231,7 +231,7 @@
                     </div>
                     <!---->
                 </label>
-                <textarea wire:model="nota" class="form-input w-full px-4 py-3" name="nota" id="" cols="30"
+                <textarea wire:model.live="nota" class="form-input w-full px-4 py-3" name="nota" id="" cols="30"
                     rows="5" placeholder="Ingresar nota (opcional)"></textarea>
             </div>
             <!-- ... -->

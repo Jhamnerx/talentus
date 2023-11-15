@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
         <button class="btn bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300"
             @click="modalOpen = true" aria-controls="basic-modal">
             <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
@@ -48,7 +48,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo:
                             </label>
-                            <input wire:model='modelo' id="modelo" class="form-input w-full" type="text"
+                            <input wire:model.live='modelo' id="modelo" class="form-input w-full" type="text"
                                 placeholder="Escribe el modelo..." />
                             @error('modelo')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -59,7 +59,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="marca">Marca:
                             </label>
-                            <input wire:model='marca' id="marca" class="form-input w-full" type="text"
+                            <input wire:model.live='marca' id="marca" class="form-input w-full" type="text"
                                 placeholder="Escribe la Marca..." />
                             @error('marca')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -70,7 +70,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="certificado">Certificado:
                             </label>
-                            <input wire:model='certificado' id="certificado" class="form-input w-full" type="text"
+                            <input wire:model.live='certificado' id="certificado" class="form-input w-full" type="text"
                                 placeholder="Escribe el Certificado..." />
                             @error('certificado')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -121,7 +121,7 @@
                                     <div class="col-span-12 py-2">
                                         <div class="flex gap-2">
 
-                                            <textarea class="form-textarea w-full" wire:model="caracteristicas.{{ $clave }}.text" rows="2">
+                                            <textarea class="form-textarea w-full" wire:model.live="caracteristicas.{{ $clave }}.text" rows="2">
 
                                             </textarea>
 

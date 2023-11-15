@@ -77,7 +77,7 @@
                         </label>
                         <div class="relative">
 
-                            <input required readonly wire:model="serie" name="serie" id="serie"
+                            <input required readonly wire:model.live="serie" name="serie" id="serie"
                                 class="form-input w-full" type="text" />
 
                         </div>
@@ -95,7 +95,7 @@
                         </label>
                         <div class="relative">
 
-                            <input required readonly wire:model="numero" name="numero" id="numero"
+                            <input required readonly wire:model.live="numero" name="numero" id="numero"
                                 class="form-input w-full" type="text" />
 
                         </div>
@@ -121,7 +121,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_emision" wire:model="fecha_emision" type="text"
+                            <input name="fecha_emision" wire:model.live="fecha_emision" type="text"
                                 class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
                                 placeholder="Selecciona la fecha">
                         </div>
@@ -149,7 +149,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_vencimiento" wire:model="fecha_vencimiento" type="text"
+                            <input name="fecha_vencimiento" wire:model.live="fecha_vencimiento" type="text"
                                 class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
                                 placeholder="Selecciona la fecha">
                         </div>
@@ -169,7 +169,7 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+                        <select wire:model.live="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -187,7 +187,7 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Forma de Pago
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="forma_pago" name="forma_pago" id="forma_pago"
+                        <select wire:model.live="forma_pago" name="forma_pago" id="forma_pago"
                             class="form-select w-full">
                             @foreach ($payments_methods as $key => $method)
                                 <option value="{{ $key }}"> {{ $method }}</option>
@@ -208,7 +208,7 @@
                             <div>Nota
                             </div>
                         </label>
-                        <textarea class="form-input w-full px-4 py-3" name="nota" wire:model="nota" id="" cols="30"
+                        <textarea class="form-input w-full px-4 py-3" name="nota" wire:model.live="nota" id="" cols="30"
                             rows="4" placeholder="Ingresar nota (opcional)"></textarea>
                     </div>
                     <div class="col-span-12 md:col-span-6">
@@ -220,14 +220,14 @@
 
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input checked type="radio" wire:model="tipo_venta" name="tipo_venta"
+                                    <input checked type="radio" wire:model.live="tipo_venta" name="tipo_venta"
                                         value="CONTADO" class="form-radio " />
                                     <span class="text-sm ml-2">CONTADO</span>
                                 </label>
                             </div>
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input type="radio" wire:model="tipo_venta" name="tipo_venta" value="CREDITO"
+                                    <input type="radio" wire:model.live="tipo_venta" name="tipo_venta" value="CREDITO"
                                         class="form-radio" />
                                     <span class="text-sm ml-2">CREDITO</span>
                                 </label>
@@ -320,7 +320,7 @@
                                             Adelanto
                                         </div>
                                         <div class="text-right w-40 px-3">
-                                            <input type="text" class="form-input w-full" wire:model='adelanto'>
+                                            <input type="text" class="form-input w-full" wire:model.live='adelanto'>
                                         </div>
                                     </div>
                                 </div>

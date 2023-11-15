@@ -30,7 +30,7 @@
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <input wire:model="selected.codigo" type="text" class="form-input" placeholder="codigo" disabled
+                    <input wire:model.live="selected.codigo" type="text" class="form-input" placeholder="codigo" disabled
                         readonly>
                     @if ($errors->has('selected.codigo'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -40,7 +40,7 @@
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <input type="number" wire:model="selected.cantidad" min="1" step="1"
+                    <input type="number" wire:model.live="selected.cantidad" min="1" step="1"
                         class="form-input cantidad" placeholder="Cantidad">
                     @if ($errors->has('selected.cantidad'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -50,7 +50,7 @@
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <input type="text" wire:model="selected.unidad_medida" class="form-input unidad_medida" disabled
+                    <input type="text" wire:model.live="selected.unidad_medida" class="form-input unidad_medida" disabled
                         readonly placeholder="unidad de medida">
                     @if ($errors->has('selected.unidad_medida'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -59,7 +59,7 @@
                     @endif
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <textarea rows="4" wire:model="selected.descripcion" class="form-input descripcion" placeholder="Descripción"></textarea>
+                    <textarea rows="4" wire:model.live="selected.descripcion" class="form-input descripcion" placeholder="Descripción"></textarea>
                     @if ($errors->has('selected.descripcion'))
                         <p class="mt-2  text-pink-600 text-sm">
                             {{ $errors->first('selected.descripcion') }}
@@ -94,7 +94,7 @@
                 @foreach ($items->all() as $clave => $item)
                     <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input type="text" wire:model="items.{{ $clave }}.codigo" class="form-input"
+                            <input type="text" wire:model.live="items.{{ $clave }}.codigo" class="form-input"
                                 readonly>
                             @if ($errors->has('items.' . $clave . '.codigo'))
                                 <p class="mt-2  text-pink-600 text-sm">
@@ -103,7 +103,7 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input required type="number" wire:model="items.{{ $clave }}.cantidad"
+                            <input required type="number" wire:model.live="items.{{ $clave }}.cantidad"
                                 min="1" step="0.1" class="form-input cantidad" placeholder="Cantidad">
                             @if ($errors->has('items.' . $clave . '.cantidad'))
                                 <p class="mt-2  text-pink-600 text-sm">
@@ -112,7 +112,7 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input type="text" wire:model="items.{{ $clave }}.unidad_medida"
+                            <input type="text" wire:model.live="items.{{ $clave }}.unidad_medida"
                                 class="form-input" readonly>
                             @if ($errors->has('items.' . $clave . '.unidad_medida'))
                                 <p class="mt-2  text-pink-600 text-sm">
@@ -121,7 +121,7 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
+                            <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
                         </td>
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

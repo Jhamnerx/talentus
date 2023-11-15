@@ -2,7 +2,7 @@
 
 
 
-    <div x-data="{ modalDelete: @entangle('openModalDelete') }">
+    <div x-data="{ modalDelete: @entangle('openModalDelete').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalDelete"

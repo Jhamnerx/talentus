@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalSave: @entangle('openModalSave') }">
+    <div x-data="{ modalSave: @entangle('openModalSave').live }">
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSave"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
@@ -40,7 +40,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="Ejem. 205" maxlength="10" wire:model="numero" required
+                                    <input placeholder="Ejem. 205" maxlength="10" wire:model.live="numero" required
                                         name="fecha" type="text"
                                         class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -168,7 +168,7 @@
                                     Velocimetro: <span class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <select class="form-select w-full pl-9" wire:model="velocimetro_modelo">
+                                    <select class="form-select w-full pl-9" wire:model.live="velocimetro_modelo">
                                         <option selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
                                             <option value="{{ $velocimetro->nombre }}">
@@ -198,7 +198,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="observacion">OBSERVACIÓN:</label>
                                 <div class="relative">
-                                    <textarea wire:model="observacion" class="form-input w-full pl-9" name="observacion" id="observacion"
+                                    <textarea wire:model.live="observacion" class="form-input w-full pl-9" name="observacion" id="observacion"
                                         rows="4" placeholder="Ingresar Observación"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -237,7 +237,7 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="fondo" type="checkbox" id="fondo-1"
+                                                <input wire:model.live="fondo" type="checkbox" id="fondo-1"
                                                     class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="fondo-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
@@ -254,7 +254,7 @@
                                         <!-- Start -->
                                         <div class="flex items-center" x-data="{ checked: true }">
                                             <div class="form-switch">
-                                                <input wire:model="sello" type="checkbox" id="sello-1"
+                                                <input wire:model.live="sello" type="checkbox" id="sello-1"
                                                     class="sr-only" x-model="checked" />
                                                 <label class="bg-slate-400" for="sello-1">
                                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>

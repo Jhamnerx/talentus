@@ -16,7 +16,7 @@
                     </div>
                 </label>
                 <div class="relative">
-                    <input name="serie_numero" id="serie_numero" wire:model='serie_numero'
+                    <input name="serie_numero" id="serie_numero" wire:model.live='serie_numero'
                         class="form-input w-full pl-9 py-2 outline-none focus:outline-none rounded-md text-black text-sm"
                         type="text" placeholder="T001-002" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -48,7 +48,7 @@
                     <div>Fecha Emisión <span class="text-sm text-red-500"> * </span></div>
                 </label>
                 <div class="relative">
-                    <input name="fecha_emision" autocomplete="nope" id="fecha_emision" wire:model='fecha_emision'
+                    <input name="fecha_emision" autocomplete="nope" id="fecha_emision" wire:model.live='fecha_emision'
                         class="form-input w-full pl-9 py-2 outline-none focus:outline-none rounded-md text-black text-sm fecha_emision"
                         type="text" placeholder="2022-09-28" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -96,7 +96,7 @@
                 </label>
                 <div class="relative">
 
-                    <select name="tipo_documento" id="tipo_documento" wire:model='tipo_documento'
+                    <select name="tipo_documento" id="tipo_documento" wire:model.live='tipo_documento'
                         @change="cambiarTipoDocumento($event.target.value)"
                         class="form-select w-full pl-9 py-2 text-black text-sm">
                         <option value="RUC">RUC</option>
@@ -134,7 +134,7 @@
                     <div>N° Documento <span class="text-sm text-red-500"> * </span></div>
                 </label>
                 <div class="relative">
-                    <input type="text" name="numero_documento" wire:model='numero_documento'
+                    <input type="text" name="numero_documento" wire:model.live='numero_documento'
                         class="form-input w-full pl-2 pr-9" x-mask="99999999999"
                         placeholder="Ingresa número documento">
                     <button class="absolute inset-0 left-auto group" type="button"
@@ -170,7 +170,7 @@
                     </div>
                 </label>
                 <div class="relative">
-                    <input name="razon_social" id="razon_social" wire:model='razon_social'
+                    <input name="razon_social" id="razon_social" wire:model.live='razon_social'
                         class="form-input w-full pl-9 py-2 outline-none focus:outline-none rounded-md text-black text-sm"
                         type="text" placeholder="Ingrese Nombre o Razon Social" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -212,7 +212,7 @@
                     {!! Form::select('motivo_traslado', $motivos, null, [
                         'class' => 'form-select w-full pl-9 py-2 text-black text-sm',
                         '@change' => 'cambiarMotivo($event.target.value)',
-                        'wire:model' => 'motivo_traslado',
+                        'wire:model.live' => 'motivo_traslado',
                     ]) !!}
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -241,7 +241,7 @@
                 </label>
                 <div class="relative">
 
-                    <select name="modalidad_traslado" id="modalidad_traslado" wire:model='modalidad_traslado'
+                    <select name="modalidad_traslado" id="modalidad_traslado" wire:model.live='modalidad_traslado'
                         class="form-select w-full pl-9 py-2 text-black text-sm">
                         <option value="01">TRANSPORTE PRIVADO</option>
                         <option value="02">TRANSPORTE PUBLICO</option>
@@ -288,7 +288,7 @@
                     <div>Fecha Inicio Traslado <span class="text-sm text-red-500"> * </span></div>
                 </label>
                 <div class="relative">
-                    <input name="fecha_inicio_traslado" id="fecha_inicio_traslado" wire:model='fecha_inicio_traslado'
+                    <input name="fecha_inicio_traslado" id="fecha_inicio_traslado" wire:model.live='fecha_inicio_traslado'
                         class="form-input w-full pl-9 py-2 outline-none focus:outline-none rounded-md text-black text-sm fecha_inicio_traslado"
                         type="text" placeholder="2022-09-28" />
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -324,7 +324,7 @@
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Peso Bruto (Kg) <span class="text-sm text-red-500"> * </span></div>
                 </label>
-                <input type="text" x-mask="99999" name="peso" wire:model="peso" class="form-input w-full"
+                <input type="text" x-mask="99999" name="peso" wire:model.live="peso" class="form-input w-full"
                     placeholder="10">
                 @error('peso')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -339,7 +339,7 @@
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Cantidad Items <span class="text-sm text-red-500"> * </span></div>
                 </label>
-                <input type="text" x-mask="99999" name="cantidad_items" wire:model="cantidad_items"
+                <input type="text" x-mask="99999" name="cantidad_items" wire:model.live="cantidad_items"
                     class="form-input w-full" placeholder="20">
                 @error('cantidad_items')
                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -355,7 +355,7 @@
                     <div>Numero Contenedor </div>
                 </label>
 
-                <input type="text" name="numero_contenedor" autocomplete="nope" wire:model="numero_contenedor"
+                <input type="text" name="numero_contenedor" autocomplete="nope" wire:model.live="numero_contenedor"
                     class="form-input w-full" placeholder="opcional">
 
                 @error('numero_contenedor')
@@ -372,7 +372,7 @@
                     <div>Codigo Puerto</div>
                 </label>
 
-                <input type="text" name="code_puerto" autocomplete="nope" wire:model="code_puerto"
+                <input type="text" name="code_puerto" autocomplete="nope" wire:model.live="code_puerto"
                     class="form-input w-full" placeholder="Codigo puerto | opcional">
 
                 @error('code_puerto')
@@ -399,7 +399,7 @@
                         <div>Direccion <span class="text-sm text-red-500"> * </span></div>
                     </label>
 
-                    <input type="text" name="direccion_partida" wire:model="direccion_partida"
+                    <input type="text" name="direccion_partida" wire:model.live="direccion_partida"
                         class="form-input w-full" placeholder="Direccion de partida">
                     @error('direccion_partida')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -456,7 +456,7 @@
                     </label>
 
                     <input type="text" name="direccion_llegada" autocomplete="nope"
-                        wire:model="direccion_llegada" class="form-input w-full" placeholder="Direccion de llegada">
+                        wire:model.live="direccion_llegada" class="form-input w-full" placeholder="Direccion de llegada">
                     @error('direccion_llegada')
                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                             {{ $message }}
@@ -511,7 +511,7 @@
                 </label>
                 <div class="relative" wire:ignore>
 
-                    <select name="factura_id" wire:model='factura_id'
+                    <select name="factura_id" wire:model.live='factura_id'
                         class="form-select w-full pl-9 py-2 text-black text-sm facturasSelect" id="factura_id">
 
                     </select>
@@ -546,7 +546,7 @@
 
                     <div class="flex items-center" x-data="{ checked: false }">
                         <div class="form-switch">
-                            <input value="true" wire:model='asignarTecnico' role="switch"
+                            <input value="true" wire:model.live='asignarTecnico' role="switch"
                                 @change="Asignar($data)" type="checkbox" id="switch-asign" class="sr-only"
                                 x-model="checked" />
                             <label class="bg-slate-400" for="switch-asign">

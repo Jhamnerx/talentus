@@ -65,7 +65,7 @@
                             <div>Número de Presupuesto <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="relative">
-                            <input required wire:model="numero" name="numero" id="numero"
+                            <input required wire:model.live="numero" name="numero" id="numero"
                                 class="form-input w-full md:w-2/4" type="text" />
 
                         </div>
@@ -93,7 +93,7 @@
                                 </svg>
                             </div>
 
-                            <input type="text" wire:model="fecha"
+                            <input type="text" wire:model.live="fecha"
                                 class="form-input fechaPresupuesto font-base pl-8 py-2 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                 placeholder="Seleccion la fecha emisión">
                         </div>
@@ -121,7 +121,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_caducidad" type="text" wire:model="fecha_caducidad"
+                            <input name="fecha_caducidad" type="text" wire:model.live="fecha_caducidad"
                                 class="form-input fechaFinPresupuesto font-base pl-8 py-2  block w-full sm:text-sm border-gray-200 rounded-md text-black input"
                                 placeholder="Selecciona la fecha">
                         </div>
@@ -139,7 +139,7 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+                        <select wire:model.live="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -162,7 +162,7 @@
                             Nota
                         </label>
 
-                        <textarea wire:model="nota" class="form-input w-full px-4 py-3" name="nota" id="" rows="4"
+                        <textarea wire:model.live="nota" class="form-input w-full px-4 py-3" name="nota" id="" rows="4"
                             placeholder="Ingresar nota opcional"></textarea>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                                     </svg>
                                 </button>
                                 <label for="productos" class="sr-only">Añadir Artículo</label>
-                                <select id="productos" wire:model="producto"
+                                <select id="productos" wire:model.live="producto"
                                     class="bg-gray-50 productoSelect border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 dark:border-l-gray-700 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option selected>Añadir Artículo</option>
                                 </select>
@@ -193,7 +193,7 @@
                                 <!-- Start -->
                                 <div class="flex items-center">
                                     <div class="form-switch">
-                                        <input wire:model="features" type="checkbox" id="features-1"
+                                        <input wire:model.live="features" type="checkbox" id="features-1"
                                             class="sr-only features" />
                                         <label class="bg-slate-400" for="features-1">
                                             <span class="bg-white shadow-sm" aria-hidden="true"></span>
@@ -241,7 +241,7 @@
                                 <!-- Row -->
                                 <tr class="main bg-slate-50">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
+                                        <textarea wire:model.live="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
                                         @if ($errors->has('selected.producto'))
                                             <p class="mt-2  text-pink-600 text-sm">
                                                 {{ $errors->first('selected.producto') }}
@@ -249,7 +249,7 @@
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
+                                        <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
                                         @if ($errors->has('selected.descripcion'))
                                             <p class="mt-2  text-pink-600 text-sm">
                                                 {{ $errors->first('selected.descripcion') }}
@@ -258,7 +258,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                        <input wire:model="selected.cantidad" type="number" min="1"
+                                        <input wire:model.live="selected.cantidad" type="number" min="1"
                                             value="1" step="1" class="form-input qyt"
                                             placeholder="Cantidad">
                                         @if ($errors->has('selected.cantidad'))
@@ -269,7 +269,7 @@
                                     </td>
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input wire:model="selected.precio" type="number" min="0"
+                                        <input wire:model.live="selected.precio" type="number" min="0"
                                             step="0.1" class="form-input importe" placeholder="Importe">
                                         @if ($errors->has('selected.precio'))
                                             <p class="mt-2  text-pink-600 text-sm">
@@ -311,7 +311,7 @@
                                     @foreach ($items->all() as $clave => $item)
                                         <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
+                                                <textarea required wire:model.live="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
                                                 </textarea>
                                                 @if ($errors->has('items.' . $clave . '.cantidad'))
@@ -321,13 +321,13 @@
                                                 @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
+                                                <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
                                                 </textarea>
 
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <input required type="number" x-mask="99999"
-                                                    wire:model="items.{{ $clave }}.cantidad" min="1"
+                                                    wire:model.live="items.{{ $clave }}.cantidad" min="1"
                                                     step="1" class="form-input cantidad" placeholder="Cantidad"
                                                     value="2">
                                                 @if ($errors->has('items.' . $clave . '.cantidad'))
@@ -338,7 +338,7 @@
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <input required type="number" required min="1" step="0.1"
-                                                    wire:model="items.{{ $clave }}.precio"
+                                                    wire:model.live="items.{{ $clave }}.precio"
                                                     class="form-input precio">
                                                 @if ($errors->has('items.' . $clave . '.cantidad'))
                                                     <p class="mt-2  text-pink-600 text-sm">
@@ -347,7 +347,7 @@
                                                 @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input type="text" wire:model="items.{{ $clave }}.total"
+                                                <input type="text" wire:model.live="items.{{ $clave }}.total"
                                                     class="form-input importe subtotal" readonly>
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

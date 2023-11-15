@@ -1,4 +1,4 @@
-<div x-data="select({data: @entangle('data')})" x-init="init()" @click.away="closeListbox()"
+<div x-data="select({data: @entangle('data').live})" x-init="init()" @click.away="closeListbox()"
     @keydown.escape="closeListbox()" class="relative">
     <span x-text="search"></span>
     <span class="inline-block w-full rounded-md shadow-sm">

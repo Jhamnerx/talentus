@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
 
         <div class="relative inline-flex">
 
@@ -62,7 +62,7 @@
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
 
-                                <input wire:model="nombre" placeholder="NOMBRE DE FLOTA" name="nombre" id="nombre"
+                                <input wire:model.live="nombre" placeholder="NOMBRE DE FLOTA" name="nombre" id="nombre"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" />
@@ -104,7 +104,7 @@
                                     class="text-rose-500">*</span></label>
 
                             <div class="relative">
-                                <select wire:model="clientes_id" name="clientes_id" id="clientes_id"
+                                <select wire:model.live="clientes_id" name="clientes_id" id="clientes_id"
                                     class="clientes_id w-full" required></select>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -135,7 +135,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea class="form-input w-full pl-9" wire:model="descripcion" name="descripcion" id="descripcion"
+                                <textarea class="form-input w-full pl-9" wire:model.live="descripcion" name="descripcion" id="descripcion"
                                     rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

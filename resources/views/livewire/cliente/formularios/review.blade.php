@@ -8,7 +8,7 @@
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label class="block text-sm font-medium mb-1" for="emprsa">Empresa:</label>
-                                        <input wire:model='empresa' type="text" class="form-input w-full"
+                                        <input wire:model.live='empresa' type="text" class="form-input w-full"
                                             placeholder="Talentus Technology EIRL">
                                         @error('empresa')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -19,7 +19,7 @@
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label class="block text-sm font-medium mb-1" for="marca">Cargo:</label>
-                                        <input type="text" wire:model="cargo" class="form-input w-full"
+                                        <input type="text" wire:model.live="cargo" class="form-input w-full"
                                             placeholder="Gerente">
 
                                         @error('cargo')
@@ -31,7 +31,7 @@
                                     <div class="col-span-12">
                                         <label class="block text-sm font-medium mb-1" for="marca">Nombre y
                                             Apellido:</label>
-                                        <input wire:model="name" type="text" class="form-input w-full"
+                                        <input wire:model.live="name" type="text" class="form-input w-full"
                                             placeholder="e.g John">
 
                                         @error('name')
@@ -43,7 +43,7 @@
 
                                     <div class="col-span-12 sm:col-span-6">
                                         <label class="block text-sm font-medium mb-1" for="telefono">Telefono:</label>
-                                        <input wire:model="telefono" type="tel" class="form-input w-full"
+                                        <input wire:model.live="telefono" type="tel" class="form-input w-full"
                                             placeholder="987654321">
                                         @error('telefono')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -54,7 +54,7 @@
                                     <div class="col-span-12 sm:col-span-6">
                                         <label class="block text-sm font-medium mb-1" for="birthday">Fecha de
                                             nacimiento:</label>
-                                        <input wire:model="birthday" type="text" x-mask="99/99/9999"
+                                        <input wire:model.live="birthday" type="text" x-mask="99/99/9999"
                                             placeholder="mm/dd/yyyyy" class="form-input w-full">
                                         @error('birthday')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -71,7 +71,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q1" value="Muy satisfecho" type="radio"
+                                                <input wire:model.live="q1" value="Muy satisfecho" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">1. Muy satisfecho</span>
                                             </label>
@@ -80,7 +80,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q1" value="Satisfecho" type="radio"
+                                                <input wire:model.live="q1" value="Satisfecho" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">2. Satisfecho</span>
                                             </label>
@@ -89,7 +89,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q1" value="Poco satisfecho" type="radio"
+                                                <input wire:model.live="q1" value="Poco satisfecho" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">3. Poco satisfecho</span>
                                             </label>
@@ -98,7 +98,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q1" value="Nada satisfecho" type="radio"
+                                                <input wire:model.live="q1" value="Nada satisfecho" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">4. Nada satisfecho</span>
                                             </label>
@@ -117,7 +117,7 @@
 
                                         <div>
 
-                                            <textarea wire:model="q2" class="form-textarea w-full" cols="30" rows="5"></textarea>
+                                            <textarea wire:model.live="q2" class="form-textarea w-full" cols="30" rows="5"></textarea>
                                         </div>
                                         @error('q2')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -134,7 +134,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q3" value="SI" type="radio"
+                                                <input wire:model.live="q3" value="SI" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">SI</span>
                                             </label>
@@ -143,7 +143,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q3" value="NO" type="radio"
+                                                <input wire:model.live="q3" value="NO" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">NO</span>
                                             </label>
@@ -156,7 +156,7 @@
                                         @enderror
                                         <div>
 
-                                            <textarea wire:model="q3_res" class="form-textarea w-full" cols="30" rows="5"></textarea>
+                                            <textarea wire:model.live="q3_res" class="form-textarea w-full" cols="30" rows="5"></textarea>
                                         </div>
                                         @error('q3_res')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -175,7 +175,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="FACTURACION" type="radio"
+                                                <input wire:model.live="q4" value="FACTURACION" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">1. Facturación</span>
                                             </label>
@@ -184,7 +184,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="REPORTES" type="radio"
+                                                <input wire:model.live="q4" value="REPORTES" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">2. Reportes</span>
                                             </label>
@@ -193,7 +193,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="SERVICIO TECNICO" type="radio"
+                                                <input wire:model.live="q4" value="SERVICIO TECNICO" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">3. Servicio técnico</span>
                                             </label>
@@ -202,7 +202,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="TODAS" type="radio"
+                                                <input wire:model.live="q4" value="TODAS" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">4. Todas las anteriores</span>
                                             </label>
@@ -211,7 +211,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q4" value="NINGUNA" type="radio"
+                                                <input wire:model.live="q4" value="NINGUNA" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">5. Ninguna de las anteriores</span>
                                             </label>
@@ -232,7 +232,7 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q5" value="SI" type="radio"
+                                                <input wire:model.live="q5" value="SI" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2">SI</span>
                                             </label>
@@ -241,11 +241,11 @@
                                         <div class="m-3">
 
                                             <label class="flex items-center">
-                                                <input wire:model="q5" value="NO" type="radio"
+                                                <input wire:model.live="q5" value="NO" type="radio"
                                                     class="form-radio" />
                                                 <span class="text-sm ml-2 pr-3">NO, Por qué? </span>
 
-                                                <input wire:model="q5_why"type="text"
+                                                <input wire:model.live="q5_why"type="text"
                                                     class="form-input w-1/2 pl-2">
                                             </label>
 

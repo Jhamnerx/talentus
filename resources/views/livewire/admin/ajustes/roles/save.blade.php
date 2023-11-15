@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ openModalSave: @entangle('openModalSave') }">
+    <div x-data="{ openModalSave: @entangle('openModalSave').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalSave"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -54,7 +54,7 @@
 
                                 <div class="relative rounded-md shadow-sm font-base">
 
-                                    <input name="name" wire:model="name" type="text"
+                                    <input name="name" wire:model.live="name" type="text"
                                         class="font-base block w-full sm:text-sm border-gray-200 rounded-md text-black focus:ring-indigo-400 focus:border-indigo-400"
                                         tabindex="0">
 
@@ -96,7 +96,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="ver-categoria"
+                                            <input name="permission[]" wire:model.live="permission" id="ver-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="ver-categoria">
@@ -113,7 +113,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="crear-categoria"
+                                            <input name="permission[]" wire:model.live="permission" id="crear-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="crear-categoria">
@@ -129,7 +129,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="editar-categoria"
+                                            <input name="permission[]" wire:model.live="permission" id="editar-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="editar-categoria">
@@ -146,7 +146,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 id="cambiar.estado-categoria" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="cambiar.estado-categoria">
@@ -163,7 +163,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="eliminar-categoria"
+                                            <input name="permission[]" wire:model.live="permission" id="eliminar-categoria"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500"
                                                 value="eliminar-categoria">
@@ -186,7 +186,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-producto"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-producto"
                                                 id="ver-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -201,7 +201,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-producto"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-producto"
                                                 id="crear-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -217,7 +217,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-producto"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-producto"
                                                 id="editar-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -233,7 +233,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="cambiar.estado-producto" id="cambiar.estado-producto"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -250,7 +250,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-producto"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-producto"
                                                 id="eliminar-producto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -274,7 +274,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-sim_card"
                                                 id="ver-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -289,7 +289,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-sim_card"
                                                 id="crear-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -305,7 +305,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-sim_card"
                                                 id="editar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -321,7 +321,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar.numero-sim_card" id="asignar.linea-sim_card"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -338,7 +338,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="asignar.linea-sim_card" id="eliminar.numero-sim_card"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -355,7 +355,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-sim_card"
                                                 id="eliminar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -371,7 +371,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver.cambios-sim_card" id="ver.cambios-sim_card" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -388,7 +388,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="importar-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="importar-sim_card"
                                                 id="importar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -404,7 +404,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="exportar-sim_card"
+                                            <input name="permission[]" wire:model.live="permission" value="exportar-sim_card"
                                                 id="exportar-sim_card" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -427,7 +427,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-dispositivo"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-dispositivo"
                                                 id="ver-dispositivo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -443,7 +443,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver.modelos-dispositivo" id="ver.modelos-dispositivo"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -460,7 +460,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-dispositivo"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-dispositivo"
                                                 id="crear-dispositivo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -476,7 +476,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-dispositivo" id="editar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -493,7 +493,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-dispositivo" id="eliminar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -510,7 +510,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="importar-dispositivo" id="importar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -527,7 +527,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="exportar-dispositivo" id="exportar-dispositivo" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -551,7 +551,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-guias"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-guias"
                                                 id="ver-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -566,7 +566,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-guias"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-guias"
                                                 id="crear-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -581,7 +581,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-guias"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-guias"
                                                 id="editar-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -596,7 +596,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="detalle-guias"
+                                            <input name="permission[]" wire:model.live="permission" value="detalle-guias"
                                                 id="detalle-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -612,7 +612,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-guias"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-guias"
                                                 id="eliminar-guias" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -638,7 +638,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-cliente"
                                                 id="ver-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -653,7 +653,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-cliente"
                                                 id="crear-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -668,7 +668,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-cliente"
                                                 id="editar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -684,7 +684,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="cambiar.estado-cliente" id="cambiar.estado-cliente"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -701,7 +701,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-cliente"
                                                 id="eliminar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -717,7 +717,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="exportar-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="exportar-cliente"
                                                 id="xportar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -733,7 +733,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="importar-cliente"
+                                            <input name="permission[]" wire:model.live="permission" value="importar-cliente"
                                                 id="importar-cliente" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -755,7 +755,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-contacto"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-contacto"
                                                 id="ver-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -770,7 +770,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-contacto"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-contacto"
                                                 id="crear-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -785,7 +785,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-contacto"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-contacto"
                                                 id="editar-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -801,7 +801,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-contacto"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-contacto"
                                                 id="eliminar-contacto" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -823,7 +823,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-proveedor"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-proveedor"
                                                 id="ver-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -838,7 +838,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-proveedor"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-proveedor"
                                                 id="crear-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -853,7 +853,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="editar-proveedor"
+                                            <input name="permission[]" wire:model.live="permission" id="editar-proveedor"
                                                 value="editar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -868,7 +868,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 id="cambiar.estado-proveedor" value="cambiar.estado-proveedor"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -885,7 +885,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="exportar-proveedor"
+                                            <input name="permission[]" wire:model.live="permission" id="exportar-proveedor"
                                                 value="exportar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -901,7 +901,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="importar-proveedor"
+                                            <input name="permission[]" wire:model.live="permission" id="importar-proveedor"
                                                 value="importar-proveedor" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -917,7 +917,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-proveedor" id="eliminar-proveedor" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -942,7 +942,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-compras_facturas" id="ver-compras_facturas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -959,7 +959,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-compras_facturas" id="crear-compras_facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -976,7 +976,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-compras_facturas" id="editar-compras_facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -992,7 +992,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-compras_facturas" id="eliminar-compras_facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1014,7 +1014,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-cotizaciones"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-cotizaciones"
                                                 id="ver-cotizaciones" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1030,7 +1030,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-cotizaciones" id="crear-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1047,7 +1047,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-cotizaciones" id="editar-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1064,7 +1064,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-cotizaciones" id="eliminar-cotizaciones"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1081,7 +1081,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="convertir-cotizaciones" id="convertir-cotizaciones"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1098,7 +1098,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-cotizaciones" id="enviar-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1115,7 +1115,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="estados-cotizaciones" id="estados-cotizaciones" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1132,7 +1132,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-cotizaciones" id="descargar-cotizaciones"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1157,7 +1157,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-ventas-facturas" id="ver-ventas-facturas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1174,7 +1174,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-ventas-facturas" id="crear-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1191,7 +1191,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-ventas-facturas" id="editar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1207,7 +1207,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-ventas-facturas" id="eliminar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1223,7 +1223,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="exportar-ventas-facturas" id="exportar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1239,7 +1239,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-ventas-facturas" id="enviar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1255,7 +1255,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-ventas-facturas" id="enviar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1271,7 +1271,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-ventas-facturas" id="descargar-ventas-facturas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1297,7 +1297,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-recibo"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-recibo"
                                                 id="ver-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1312,7 +1312,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="crear-recibo"
+                                            <input name="permission[]" wire:model.live="permission" value="crear-recibo"
                                                 id="crear-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1327,7 +1327,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-recibo"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-recibo"
                                                 id="editar-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1342,7 +1342,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="eliminar-recibo"
+                                            <input name="permission[]" wire:model.live="permission" value="eliminar-recibo"
                                                 id="eliminar-recibo" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1358,7 +1358,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="enviar-recibos"
+                                            <input name="permission[]" wire:model.live="permission" value="enviar-recibos"
                                                 id="enviar-recibos" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1374,7 +1374,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="reportes-recibos"
+                                            <input name="permission[]" wire:model.live="permission" value="reportes-recibos"
                                                 id="estados-recibos" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1390,7 +1390,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="reportes-recibos"
+                                            <input name="permission[]" wire:model.live="permission" value="reportes-recibos"
                                                 id="reportes-recibos" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1414,7 +1414,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="ver-contrato"
+                                            <input name="permission[]" wire:model.live="permission" value="ver-contrato"
                                                 variant="indigo" type="checkbox" id="ver-contrato"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1429,7 +1429,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" id="crear-contrato" wire:model="permission"
+                                            <input name="permission[]" id="crear-contrato" wire:model.live="permission"
                                                 value="crear-contrato" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1445,7 +1445,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" value="editar-contrato"
+                                            <input name="permission[]" wire:model.live="permission" value="editar-contrato"
                                                 id="editar-contrato" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1461,7 +1461,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-contrato" id="descargar-contrato" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1478,7 +1478,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="caracteristicas-contrato" id="caracteristicas-contrato"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1495,7 +1495,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="cambiar.estado-contrato" id="cambiar.estado-contrato"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1512,7 +1512,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" id="enviar-contrato" wire:model="permission"
+                                            <input name="permission[]" id="enviar-contrato" wire:model.live="permission"
                                                 value="enviar-contrato" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1529,7 +1529,7 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" id="crear-registro-contrato"
-                                                wire:model="permission" value="crear-registro-contrato" variant="indigo"
+                                                wire:model.live="permission" value="crear-registro-contrato" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1552,7 +1552,7 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" id="ver-vehiculos-vehiculos"
-                                                wire:model="permission" value="ver-vehiculos-vehiculos" variant="indigo"
+                                                wire:model.live="permission" value="ver-vehiculos-vehiculos" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1569,7 +1569,7 @@
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
                                             <input name="permission[]" id="crear-vehiculos-vehiculos"
-                                                wire:model="permission" value="crear-vehiculos-vehiculos"
+                                                wire:model.live="permission" value="crear-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -1585,7 +1585,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-vehiculos-vehiculos" id="editar-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1603,7 +1603,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-vehiculos-vehiculos" id="eliminar-vehiculos-vehiculos"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1626,7 +1626,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-vehiculos-flotas" id="ver-vehiculos-flotas" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1643,7 +1643,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-vehiculos-flotas" id="crear-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1660,7 +1660,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-vehiculos-flotas" id="editar-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1678,7 +1678,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-vehiculos-flotas" id="eliminar-vehiculos-flotas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1701,7 +1701,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-vehiculos-reportes" id="ver-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1718,7 +1718,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-vehiculos-reportes" id="crear-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1735,7 +1735,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-vehiculos-reportes" id="editar-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1753,7 +1753,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-vehiculos-reportes" id="eliminar-vehiculos-reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1779,7 +1779,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-certificados-actas" id="ver-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1796,7 +1796,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-certificados-actas" id="crear-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1813,7 +1813,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-certificados-actas" id="editar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1830,7 +1830,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-certificados-actas" id="descargar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1847,7 +1847,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-certificados-actas" id="enviar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1864,7 +1864,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-certificados-actas" id="eliminar-certificados-actas"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1888,7 +1888,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-certificados-gps" id="ver-certificados-gps" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1905,7 +1905,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-certificados-gps" id="crear-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1922,7 +1922,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-certificados-gps" id="editar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1939,7 +1939,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-certificados-gps" id="descargar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1956,7 +1956,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-certificados-gps" id="enviar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1973,7 +1973,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-certificados-gps" id="eliminar-certificados-gps"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -1997,7 +1997,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="ver-certificados-velocimetros" id="ver-certificados-velocimetros"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2014,7 +2014,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="crear-certificados-velocimetros"
                                                 id="crear-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2031,7 +2031,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="editar-certificados-velocimetros"
                                                 id="editar-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2048,7 +2048,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="descargar-certificados-velocimetros"
                                                 id="descargar-certificados-velocimetros" variant="indigo"
                                                 type="checkbox"
@@ -2066,7 +2066,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="enviar-certificados-velocimetros"
                                                 id="enviar-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2083,7 +2083,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="eliminar-certificados-velocimetros"
                                                 id="eliminar-certificados-velocimetros" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2108,7 +2108,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.solicitudes.index" id="admin.solicitudes.index"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2125,7 +2125,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.solicitudes.finalize" id="admin.solicitudes.finalize"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2149,7 +2149,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.reportes.index" id="admin.reportes.index" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2166,7 +2166,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.reportes.logs.index" id="admin.reportes.logs.index"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2183,7 +2183,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.reportes.logs.actions" id="admin.reportes.logs.actions"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2208,7 +2208,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.usuarios.index" id="admin.usuarios.index" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2226,7 +2226,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.usuarios.create" id="admin.usuarios.create"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2243,7 +2243,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.usuarios.edit" id="admin.usuarios.edit" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2260,7 +2260,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.usuarios.status" id="admin.usuarios.status"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2277,7 +2277,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.usuarios.delete" id="admin.usuarios.delete"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2303,7 +2303,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.cobros.index" id="admin.cobros.index" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2321,7 +2321,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.cobros.create" id="admin.cobros.create" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2338,7 +2338,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission" id="admin.cobros.edit"
+                                            <input name="permission[]" wire:model.live="permission" id="admin.cobros.edit"
                                                 value="admin.cobros.edit" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                                         </div>
@@ -2354,7 +2354,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.cobros.delete" id="admin.cobros.delete" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2380,7 +2380,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.payments.index" id="admin.payments.index" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2397,7 +2397,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.payments.create" id="admin.payments.create"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2422,7 +2422,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.ciudades.index" id="admin.settings.ciudades.index"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2439,7 +2439,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.ciudades.create"
                                                 id="admin.settings.ciudades.create" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2456,7 +2456,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.ciudades.edit" id="admin.settings.ciudades.edit"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2473,7 +2473,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.ciudades.delete"
                                                 id="admin.settings.ciudades.delete" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2500,7 +2500,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.roles.index" id="admin.settings.roles.index"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2517,7 +2517,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.roles.create" id="admin.settings.roles.create"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2534,7 +2534,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.roles.edit" id="admin.settings.roles.edit"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2551,7 +2551,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.roles.delete" id="admin.settings.roles.delete"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2577,7 +2577,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 id="admin.settings.plantilla.index"
                                                 value="admin.settings.plantilla.index" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2594,7 +2594,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.plantilla.informacion.edit"
                                                 id="admin.settings.plantilla.informacion.edit" variant="indigo"
                                                 type="checkbox"
@@ -2612,7 +2612,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.plantilla.sunat.edit"
                                                 id="admin.settings.plantilla.sunat.edit" variant="indigo"
                                                 type="checkbox"
@@ -2630,7 +2630,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.plantilla.series.edit"
                                                 id="admin.settings.plantilla.series.edit" variant="indigo"
                                                 type="checkbox"
@@ -2648,7 +2648,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="admin.settings.plantilla.images.edit"
                                                 id="admin.settings.plantilla.images.edi" variant="indigo"
                                                 type="checkbox"
@@ -2675,7 +2675,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.index" id="tecnico.tareas.index" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2692,7 +2692,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.reportes" id="tecnico.tareas.reportes"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2709,7 +2709,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.cards" id="tecnico.tareas.cards" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2726,7 +2726,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.cards.sin-leer.actions"
                                                 id="tecnico.tareas.cards.sin-leer" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2743,7 +2743,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.cards.complete.actions"
                                                 id="tecnico.tareas.cards.complete.actions" variant="indigo"
                                                 type="checkbox"
@@ -2761,7 +2761,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.cards.pendient.actions"
                                                 id="tecnico.tareas.cards.pendient.actions" variant="indigo"
                                                 type="checkbox"
@@ -2779,7 +2779,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.cards.canceled.actions"
                                                 id="tecnico.tareas.cards.canceled.actions" variant="indigo"
                                                 type="checkbox"
@@ -2797,7 +2797,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tecnicos.admin" id="tecnico.tareas.tecnicos.admin"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2814,7 +2814,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tabla-historial"
                                                 id="tecnico.tareas.tabla-historial" variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2831,7 +2831,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.create" id="tecnico.tareas.create"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2848,7 +2848,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.edit" id="tecnico.tareas.edit" variant="indigo"
                                                 type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2865,7 +2865,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.delete" id="tecnico.tareas.delete"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2882,7 +2882,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.action.pdf" id="tecnico.tareas.action.pdf"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2899,7 +2899,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.action.wsp" id="tecnico.tareas.action.wsp"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2917,7 +2917,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tipo.index" id="tecnico.tareas.tipo.index"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2934,7 +2934,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tipo.create" id="tecnico.tareas.tipo.create"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2951,7 +2951,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tipo.edit" id="tecnico.tareas.tipo.edit"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
@@ -2968,7 +2968,7 @@
                                 <div class="flex">
                                     <div class="relative flex items-start" variant="indigo">
                                         <div class="flex items-center h-5">
-                                            <input name="permission[]" wire:model="permission"
+                                            <input name="permission[]" wire:model.live="permission"
                                                 value="tecnico.tareas.tipo.delete" id="tecnico.tareas.tipo.delete"
                                                 variant="indigo" type="checkbox"
                                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">

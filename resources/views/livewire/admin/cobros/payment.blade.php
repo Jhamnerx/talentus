@@ -5,7 +5,7 @@
         </button>
     </div>
     <!-- Start -->
-    <div x-data="{ modalPayment: @entangle('modalPayment') }">
+    <div x-data="{ modalPayment: @entangle('modalPayment').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalPayment"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -50,7 +50,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" lang="es">
 
-                                    <input type="text" class="form-input w-full" wire:model='numero' disabled>
+                                    <input type="text" class="form-input w-full" wire:model.live='numero' disabled>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="absolute inset-0 right-auto flex items-center pointer-events-none"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -73,7 +73,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" lang="es">
 
-                                    <select id="tipo_pago" name="tipo_pago" wire:model="tipo_pago"
+                                    <select id="tipo_pago" name="tipo_pago" wire:model.live="tipo_pago"
                                         class="tipo_pago w-full form-input pl-9" required>
                                         <option selected value="FACTURA">FACTURA</option>
                                         <option value="RECIBO">RECIBO</option>
@@ -139,7 +139,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <select id="payment_method" name="payment_method" wire:model="payment_method_id"
+                                    <select id="payment_method" name="payment_method" wire:model.live="payment_method_id"
                                         class="payment_method w-full form-input pl-9">
 
                                         @foreach ($paymentsMethods as $methods)
@@ -173,7 +173,7 @@
 
                                     <div class="m-3">
                                         <label class="flex items-center">
-                                            <input type="checkbox" class="form-checkbox" wire:model="pay"
+                                            <input type="checkbox" class="form-checkbox" wire:model.live="pay"
                                                 value="true" />
                                             <span class="text-sm ml-2">Si</span>
                                         </label>
@@ -188,7 +188,7 @@
 
                                 <div class="relative">
 
-                                    <input wire:model="monto" type="text" class="form-input w-full pl-12"
+                                    <input wire:model.live="monto" type="text" class="form-input w-full pl-12"
                                         placeholder="$199.00">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <span class="text-sm text-slate-400 font-medium px-3">S/</span>
@@ -207,7 +207,7 @@
 
                                 <div class="relative">
 
-                                    <input wire:model="numero_operacion" type="text" class="form-input w-full pl-12"
+                                    <input wire:model.live="numero_operacion" type="text" class="form-input w-full pl-12"
                                         placeholder="45474001">
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -252,7 +252,7 @@
                                 </label>
 
                                 <div class="relative">
-                                    <textarea class="w-full form-input pl-9" wire:model="nota" name="nota" id=""
+                                    <textarea class="w-full form-input pl-9" wire:model.live="nota" name="nota" id=""
                                         rows="4" placeholder="Ingresa una nota">
                                     </textarea>
 

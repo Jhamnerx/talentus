@@ -23,14 +23,6 @@
 
     @livewireStyles
 
-    <!-- Scripts -->
-
-    <!-- Alpine Plugins -->
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Alpine Core -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
 </head>
 
 <body class="font-sans antialiased">
@@ -76,7 +68,8 @@
     <script src="{{ asset('plugins/TweenMax.min.js') }}"></script>
     <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
     <script src="{{ asset('plugins/wow.js') }}"></script>
-    <script src="{{ asset('js/theme.js') }}"></script>
+
+    @vite('resources/js/cliente/theme.js')
 
     @stack('scripts')
 

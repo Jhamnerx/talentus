@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalContacto: @entangle('openModalDetalle') }">
+    <div x-data="{ modalContacto: @entangle('openModalDetalle').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalContacto = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->
@@ -88,7 +88,7 @@
                                     <div class="grow">
                                         <div class="flex flex-wrap items-center justify-between mb-0.5">
 
-                                            <textarea wire:model="detalle" class="form-input w-full"
+                                            <textarea wire:model.live="detalle" class="form-input w-full"
                                                 placeholder="Ingresar informacion adicional" name="detalle" id=""
                                                 rows="3"></textarea>
                                         </div>

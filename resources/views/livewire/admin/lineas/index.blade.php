@@ -12,7 +12,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar sim card" />
 
 
@@ -344,7 +344,7 @@
                                         <div class="flex items-center">
                                             <label class="inline-flex">
                                                 <span class="sr-only">Select</span>
-                                                <input wire:model="selected" value="{{ $linea->numero }}"
+                                                <input wire:model.live="selected" value="{{ $linea->numero }}"
                                                     id-linea="{{ $linea->numero }}" class="table-item form-checkbox"
                                                     type="checkbox" />
                                             </label>

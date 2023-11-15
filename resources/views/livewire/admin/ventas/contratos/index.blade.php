@@ -14,7 +14,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
                     type="search" placeholder="Buscar contrato…" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"

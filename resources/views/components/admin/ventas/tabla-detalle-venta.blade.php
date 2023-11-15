@@ -32,7 +32,7 @@
             <!-- Row -->
             <tr class="main bg-slate-50">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <textarea wire:model="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
+                    <textarea wire:model.live="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
                     @if ($errors->has('selected.producto'))
                         <p class="mt-2  text-pink-600 text-sm">
                             {{ $errors->first('selected.producto') }}
@@ -40,7 +40,7 @@
                     @endif
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <textarea wire:model="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
+                    <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
                     @if ($errors->has('selected.descripcion'))
                         <p class="mt-2  text-pink-600 text-sm">
                             {{ $errors->first('selected.descripcion') }}
@@ -49,7 +49,7 @@
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <input wire:model="selected.cantidad" type="text" min="1" value="1" step="1"
+                    <input wire:model.live="selected.cantidad" type="text" min="1" value="1" step="1"
                         class="form-input qyt" placeholder="Cantidad">
                     @if ($errors->has('selected.cantidad'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -59,7 +59,7 @@
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <input wire:model="selected.precio" type="number" min="0" step="0.1"
+                    <input wire:model.live="selected.precio" type="number" min="0" step="0.1"
                         class="form-input importe" placeholder="Importe">
                     @if ($errors->has('selected.precio'))
                         <p class="mt-2  text-pink-600 text-sm">
@@ -99,7 +99,7 @@
                 @foreach ($items->all() as $clave => $item)
                     <tr wire:key="item-{{ $clave }}">
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model="items.{{ $clave }}.producto" class="form-textarea" rows="4">
+                            <textarea required wire:model.live="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
                             </textarea>
                             @if ($errors->has('items.' . $clave . '.producto'))
@@ -109,10 +109,10 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
+                            <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input required type="number" wire:model="items.{{ $clave }}.cantidad"
+                            <input required type="number" wire:model.live="items.{{ $clave }}.cantidad"
                                 min="1" step="0.1" class="form-input cantidad" placeholder="Cantidad">
                             @if ($errors->has('items.' . $clave . '.cantidad'))
                                 <p class="mt-2  text-pink-600 text-sm">
@@ -122,7 +122,7 @@
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <input required type="number" required min="1" step="0.1"
-                                wire:model="items.{{ $clave }}.precio" class="form-input precio">
+                                wire:model.live="items.{{ $clave }}.precio" class="form-input precio">
                             @if ($errors->has('items.' . $clave . '.precio'))
                                 <p class="mt-2  text-pink-600 text-sm">
                                     {{ $errors->first('items.' . $clave . '.precio') }}
@@ -130,7 +130,7 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input type="text" wire:model="items.{{ $clave }}.total"
+                            <input type="text" wire:model.live="items.{{ $clave }}.total"
                                 class="form-input importe subtotal" readonly>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">

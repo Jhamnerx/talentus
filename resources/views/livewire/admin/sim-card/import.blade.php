@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpenImport') }">
+    <div x-data="{ modalOpen: @entangle('modalOpenImport').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
@@ -40,11 +40,11 @@
 
                     <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
 
-                    <div x-data="{ file: @entangle('file'), files: null }"
+                    <div x-data="{ file: @entangle('file').live, files: null }"
                         class="mt-1 cursor-pointer relative flex justify-center px-6 pt-5 pb-6 border-2  border-gray-300 border-dashed rounded-md"
                         x-on:dragover="$el.classList.add('border-emerald-400')"
                         x-on:dragleave="$el.classList.remove('border-emerald-400')">
-                        <input wire:model="file" type="file"
+                        <input wire:model.live="file" type="file"
                             class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer"
                             id="file" x-on:change="files = $event.target.files; console.log($event.target.files);"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">

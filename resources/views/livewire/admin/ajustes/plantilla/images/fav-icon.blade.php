@@ -12,7 +12,7 @@
             <img src="{{ asset('storage/' . $plantilla->fav_icon) }}" alt="">
         </div>
         @else
-        <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('fav_icon'), files: null }">
+        <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('fav_icon').live, files: null }">
             @if ($fav_icon)
             <div class="px-5 py-2 border-b ">
                 <div class="flex justify-between items-center">
@@ -49,7 +49,7 @@
             <div class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
                 x-on:dragover="$el.classList.add('border-emerald-400')"
                 x-on:dragleave="$el.classList.remove('border-emerald-400')">
-                <input wire:model="fav_icon" type="file"
+                <input wire:model.live="fav_icon" type="file"
                     class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer" id="file"
                     x-on:change="files = $event.target.files; console.log($event.target.files);" accept="image/*">
                 <div class="space-y-1 text-center">

@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpenEdit: @entangle('modalOpenEdit') }">
+    <div x-data="{ modalOpenEdit: @entangle('modalOpenEdit').live }">
 
         <div class="relative inline-flex">
 
@@ -65,7 +65,7 @@
 
                                 {!! Form::text('nombre', null, ['class' => 'form-input w-full pl-9
                                 valid:border-emerald-300
-                                required:border-rose-300 invalid:border-rose-300 peer', 'wire:model' => 'nombre']) !!}
+                                required:border-rose-300 invalid:border-rose-300 peer', 'wire:model.live' => 'nombre']) !!}
 
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -103,10 +103,10 @@
 
                             <label class="block text-sm font-medium mb-1" for="clientes_id">Cliente:</label>
                             <div class="relative">
-                                <input wire:model="nombre_cliente" id="cliente_edit" class="form-input w-full pl-9"
+                                <input wire:model.live="nombre_cliente" id="cliente_edit" class="form-input w-full pl-9"
                                     type="text" />
 
-                                <input type="hidden" id="clientes_id" name="clientes_id" wire:model="clientes_id">
+                                <input type="hidden" id="clientes_id" name="clientes_id" wire:model.live="clientes_id">
 
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
@@ -136,7 +136,7 @@
 
                             <label class="block text-sm font-medium mb-1" for="descripcion">DESCRIPCIÓN:</label>
                             <div class="relative">
-                                <textarea class="form-input w-full pl-9" wire:model="descripcion" name="descripcion"
+                                <textarea class="form-input w-full pl-9" wire:model.live="descripcion" name="descripcion"
                                     id="descripcion" rows="2" placeholder="Ingresar Breve Descripcíon"></textarea>
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

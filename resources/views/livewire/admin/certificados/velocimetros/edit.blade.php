@@ -2,7 +2,7 @@
 
     <!-- Basic Modal -->
     <!-- Start -->
-    <div x-data="{ modalEdit: @entangle('openModalEdit') }">
+    <div x-data="{ modalEdit: @entangle('openModalEdit').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
@@ -45,7 +45,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero Acta: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="Ejem. 205" maxlength="10" wire:model="numero" required
+                                    <input placeholder="Ejem. 205" maxlength="10" wire:model.live="numero" required
                                         name="fecha" type="text"
                                         class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -81,7 +81,7 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select wire:model="vehiculos_id"
+                                    <select wire:model.live="vehiculos_id"
                                         class="vehiculos_id vehiculosEdit w-full form-input pl-9 " required></select>
 
 
@@ -177,7 +177,7 @@
                                     Velocimetro: <span class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <select class="form-select w-full pl-9" wire:model="velocimetro_modelo">
+                                    <select class="form-select w-full pl-9" wire:model.live="velocimetro_modelo">
                                         <option selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
                                             <option value="{{ $velocimetro->nombre }}">
@@ -207,7 +207,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="observacion">OBSERVACIÓN:</label>
                                 <div class="relative">
-                                    <textarea wire:model="observacion" class="form-input w-full pl-9" name="observacion" id="observacion"
+                                    <textarea wire:model.live="observacion" class="form-input w-full pl-9" name="observacion" id="observacion"
                                         rows="4" placeholder="Ingresar Observación"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

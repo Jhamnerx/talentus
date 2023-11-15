@@ -24,7 +24,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Contacto..." />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">

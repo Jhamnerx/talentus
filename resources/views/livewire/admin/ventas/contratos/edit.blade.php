@@ -1,4 +1,4 @@
-<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen') }"
+<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen').live }"
     @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
     <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-6">
@@ -33,7 +33,7 @@
                 <div class="relative">
 
 
-                    <input wire:model="contrato.fecha" type="text" class="form-input fechaContrato pl-8 py-2 w-full"
+                    <input wire:model.live="contrato.fecha" type="text" class="form-input fechaContrato pl-8 py-2 w-full"
                         maxlength="10" required>
 
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -119,7 +119,7 @@
                         <!-- Start -->
                         <div class="flex items-center">
                             <div class="form-switch">
-                                <input wire:model="contrato.fondo" type="checkbox" id="fondo-1"
+                                <input wire:model.live="contrato.fondo" type="checkbox" id="fondo-1"
                                     class="sr-only fondo" />
                                 <label class="bg-slate-400" for="fondo-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
@@ -137,7 +137,7 @@
                         <!-- Start -->
                         <div class="flex items-center">
                             <div class="form-switch">
-                                <input wire:model="contrato.sello" name="sello" type="checkbox" id="sello-1"
+                                <input wire:model.live="contrato.sello" name="sello" type="checkbox" id="sello-1"
                                     class="sr-only" />
                                 <label class="bg-slate-400" for="sello-1">
                                     <span class="bg-white shadow-sm" aria-hidden="true"></span>
@@ -223,7 +223,7 @@
 
                                 <div class="flex-auto xl:w-28 text-center">
 
-                                    <input wire:model="items.{{ $placa }}.plan"
+                                    <input wire:model.live="items.{{ $placa }}.plan"
                                         class="form-input w-16 md:w-28 lg:w-28" type="text">
 
                                     @if ($errors->has('items.' . $placa . '.plan'))

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalReporte: @entangle('modalReporte') }">
+    <div x-data="{ modalReporte: @entangle('modalReporte').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -53,7 +53,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="operador" class="form-select w-full pl-9" id="">
+                                    <select wire:model.live="operador" class="form-select w-full pl-9" id="">
                                         <option value="todos">Todos</option>
                                         @foreach ($operadores as $operador)
                                             <option value="{{ $operador->operador }}">{{ $operador->operador }}</option>
@@ -70,7 +70,7 @@
                                     <div class="">
                                         <label class=" flex items-center">
                                             <input type="checkbox" name="radio-buttons" class="form-radio w-6 h-6"
-                                                wire:model="suspencion" value="true" />
+                                                wire:model.live="suspencion" value="true" />
                                             {{-- <span class="text-sm ml-2">{{$tecnico->name}}</span> --}}
                                         </label>
                                     </div>

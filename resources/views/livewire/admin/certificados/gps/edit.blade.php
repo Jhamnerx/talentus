@@ -2,7 +2,7 @@
 
     <!-- Basic Modal -->
     <!-- Start -->
-    <div x-data="{ modalEdit: @entangle('openModalEdit') }">
+    <div x-data="{ modalEdit: @entangle('openModalEdit').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
@@ -45,7 +45,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Numero Acta: <span
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore lang="es">
-                                    <input placeholder="Ejem. 205" maxlength="10" wire:model="numero" required
+                                    <input placeholder="Ejem. 205" maxlength="10" wire:model.live="numero" required
                                         name="fecha" type="text"
                                         class="form-input valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -81,7 +81,7 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <select wire:model="vehiculos_id"
+                                    <select wire:model.live="vehiculos_id"
                                         class="vehiculos_id vehiculosEdit w-full form-input pl-9 " required></select>
 
 
@@ -136,7 +136,7 @@
                                     Instalación:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fecha_instalacion"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model.live="fecha_instalacion"
                                         required name="fecha_instalacion" type="text" readonly
                                         class="form-input inputDateCertificadoFinal font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -177,7 +177,7 @@
                                 <label class="block text-sm font-medium mb-1" for="fecha_fin">Fin de Cobertura:
                                     <span class="text-rose-500">*</span></label>
                                 <div class="relative">
-                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model="fin_cobertura"
+                                    <input placeholder="yyyy-mm-dd" maxlength="10" wire:model.live="fin_cobertura"
                                         required name="fecha_fin" type="text" readonly
                                         class="form-input inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -269,7 +269,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model="accesorios" value="CORTE DE MOTOR"
+                                            <input type="checkbox" wire:model.live="accesorios" value="CORTE DE MOTOR"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">CORTE DE MOTOR</span>
                                         </label>
@@ -278,7 +278,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model="accesorios" value="BOTON DE PANICO"
+                                            <input type="checkbox" wire:model.live="accesorios" value="BOTON DE PANICO"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">BOTON DE PANICO</span>
                                         </label>
@@ -287,7 +287,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model="accesorios" value="BUZZER"
+                                            <input type="checkbox" wire:model.live="accesorios" value="BUZZER"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">BUZZER</span>
                                         </label>
@@ -296,7 +296,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model="accesorios" value="CIERRE DE PUERTA"
+                                            <input type="checkbox" wire:model.live="accesorios" value="CIERRE DE PUERTA"
                                                 class="form-checkbox" />
                                             <span class="text-sm ml-2">CIERRE DE PUERTAS</span>
                                         </label>

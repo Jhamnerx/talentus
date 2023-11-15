@@ -3,16 +3,6 @@ import "./main";
 import "./utils";
 import "./slider";
 
-import Alpine from "alpinejs";
-
-window.Alpine = Alpine;
-
-import mask from "@alpinejs/mask";
-
-Alpine.plugin(mask);
-
-Alpine.start();
-
 import VenoBox from "venobox";
 
 window.VenoBox = VenoBox;

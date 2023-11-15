@@ -1,5 +1,5 @@
 <div class="grow">
-    <form wire:submit.prevent="updateProfileInformation">
+    <form wire:submit="updateProfileInformation">
         <!-- Panel body -->
         <div class="p-6 space-y-6" x-data="{ photoName: null, photoPreview: null }">
             <h2 class="text-2xl text-slate-800 font-bold mb-5">Mi Cuenta</h2>
@@ -21,7 +21,7 @@
                             x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                         </span>
                     </div>
-                    <input type="file" class="hidden" wire:model="photo" x-ref="photo"
+                    <input type="file" class="hidden" wire:model.live="photo" x-ref="photo"
                         x-on:change="
                                                                             photoName = $refs.photo.files[0].name;
                                                                             const reader = new FileReader();
@@ -51,7 +51,7 @@
                 <div class="sm:flex sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-5">
                     <div class="sm:w-1/3">
                         <label class="block text-sm font-medium mb-1" for="name">Nombre:</label>
-                        <input id="name" class="form-input w-full" type="text" wire:model.defer="state.name"
+                        <input id="name" class="form-input w-full" type="text" wire:model.live="state.name"
                             autocomplete="name" />
                         <x-jet-input-error for="name" class="mt-2" />
                     </div>
@@ -74,7 +74,7 @@
                 <div class="flex flex-wrap mt-5">
                     <div class="mr-2">
                         <label class="sr-only" for="email">Business email</label>
-                        <input id="email" class="form-input" type="email" wire:model.defer="state.email" />
+                        <input id="email" class="form-input" type="email" wire:model.live="state.email" />
                         <x-jet-input-error for="email" class="mt-2" />
                     </div>
                     {{-- <button

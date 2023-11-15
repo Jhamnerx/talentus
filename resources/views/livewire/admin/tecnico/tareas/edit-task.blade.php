@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalEdit: @entangle('modalEdit') }">
+    <div x-data="{ modalEdit: @entangle('modalEdit').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
@@ -44,7 +44,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9" id="tipo_tarea_id"
-                                        wire:model="tipo_tarea_id">
+                                        wire:model.live="tipo_tarea_id">
 
                                         <option class="text-slate-400" value="0" disabled selected>Selecciona una
                                             opción...
@@ -96,7 +96,7 @@
                                 </label>
                                 <div class="relative">
 
-                                    <input type="text" wire:model="placa" disabled class="form-input w-full pl-9">
+                                    <input type="text" wire:model.live="placa" disabled class="form-input w-full pl-9">
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -199,7 +199,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9 select-modelo-velocimetro"
-                                        wire:model="modelo_velocimetro" id="modelo_velocimetro">
+                                        wire:model.live="modelo_velocimetro" id="modelo_velocimetro">
                                         <option value="0" disabled selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
                                         <option value="{{ $velocimetro->nombre }}">
@@ -242,7 +242,7 @@
                                     Número:
                                 </label>
                                 <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full numero" wire:model.defer="numero"
+                                    <input type="text" class="form-input pl-9 w-full numero" wire:model.live="numero"
                                         placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -275,7 +275,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full sim_card"
-                                        placeholder="Ingresa o busca un sim card" wire:model="sim_card">
+                                        placeholder="Ingresa o busca un sim card" wire:model.live="sim_card">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -316,7 +316,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full nuevo_numero"
-                                        wire:model="nuevo_numero" placeholder="Ingresa o busca un numero">
+                                        wire:model.live="nuevo_numero" placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -349,7 +349,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full nuevo_sim_card"
-                                        placeholder="Ingresa o busca un sim card" wire:model="nuevo_sim_card">
+                                        placeholder="Ingresa o busca un sim card" wire:model.live="nuevo_sim_card">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -392,7 +392,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full fecha-tarea"
-                                        wire:model="fecha_hora" placeholder="2023-05-12 03:00">
+                                        wire:model.live="fecha_hora" placeholder="2023-05-12 03:00">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">

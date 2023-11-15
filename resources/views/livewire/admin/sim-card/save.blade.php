@@ -7,10 +7,10 @@
                 <span>1</span>
             </div>
             <div class="col-span-4 sm:col-span-3">
-                {!! Form::hidden('empresa_id', session('empresa'), ['wire:model.lazy' => 'empresa_id', 'x-data' => 'form()']) !!}
+                {!! Form::hidden('empresa_id', session('empresa'), ['wire:model.live.blur' => 'empresa_id', 'x-data' => 'form()']) !!}
                 {!! Form::label('sim_card_n', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1']) !!}
 
-                <input type="tel" class="form-input w-full" placeholder="Escribe el sim card" wire:model="sim_card_n.0"
+                <input type="tel" class="form-input w-full" placeholder="Escribe el sim card" wire:model.live="sim_card_n.0"
                     maxlength="20">
 
                 @error('sim_card_n.0')
@@ -24,7 +24,7 @@
                 {!! Form::label('operador', 'Operador:', ['class' => 'block text-sm font-medium mb-1']) !!}
                 <input type="text"
                     class="form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300 peer"
-                    wire:model="operador.0" placeholder="Escribe el operador" required>
+                    wire:model.live="operador.0" placeholder="Escribe el operador" required>
 
 
 
@@ -77,7 +77,7 @@
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('sim_card', 'Sim Card:', ['class' => 'block text-sm font-medium mb-1']) !!}
                     <input type="tel" class="form-input w-full" placeholder="Escribe el sim card"
-                        wire:model="items.{{ $clave }}.sim_card" maxlength="20">
+                        wire:model.live="items.{{ $clave }}.sim_card" maxlength="20">
 
 
                     @if ($errors->has('items.' . $clave . '.sim_card'))
@@ -89,7 +89,7 @@
 
                 <div class="col-span-4 sm:col-span-3">
                     {!! Form::label('operador', 'Operador:', ['class' => 'block text-sm font-medium mb-1']) !!}
-                    <input type="text" class="form-input w-full" wire:model="items.{{ $clave }}.operador"
+                    <input type="text" class="form-input w-full" wire:model.live="items.{{ $clave }}.operador"
                         placeholder="Escribe el operador" required>
 
                     @if ($errors->has('items.' . $clave . '.operador'))

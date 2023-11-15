@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalEdit: @entangle('openModalEdit') }">
+    <div x-data="{ modalEdit: @entangle('openModalEdit').live }">
 
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -43,7 +43,7 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <input class="form-input w-full pl-9" type="text" readonly wire:model='vehiculo'>
+                                    <input class="form-input w-full pl-9" type="text" readonly wire:model.live='vehiculo'>
 
                                     @error('vehiculo')
                                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -85,7 +85,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="marca">Fecha Transmision:</label>
                                 <div class="relative">
-                                    <input maxlength="10" wire:model="fecha_t" required name="fecha" type="text"
+                                    <input maxlength="10" wire:model.live="fecha_t" required name="fecha" type="text"
                                         class="form-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -115,7 +115,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input maxlength="6" wire:model="hora_t" type="text"
+                                    <input maxlength="6" wire:model.live="hora_t" type="text"
                                         class="form-input w-full pl-9 hora_t" placeholder="Selecciona la Hora"
                                         required />
 
@@ -172,7 +172,7 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea wire:model="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="5"
+                                    <textarea wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="5"
                                         placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 

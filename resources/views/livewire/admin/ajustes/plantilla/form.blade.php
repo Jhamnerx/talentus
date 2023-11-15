@@ -78,7 +78,7 @@
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="ruc">RUC:</label>
                 <div class="relative">
-                    <input type="text" class="form-input w-full pl-9" wire:model='ruc'>
+                    <input type="text" class="form-input w-full pl-9" wire:model.live='ruc'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                             <g fill="currentColor" class="nc-icon-wrapper">
@@ -101,7 +101,7 @@
                 <label class="block text-sm font-medium mb-1" for="razon_social">RAZON SOCIAL:</label>
 
                 <div class="relative">
-                    <input type="text" class="form-input w-full pl-9" wire:model='razon_social'>
+                    <input type="text" class="form-input w-full pl-9" wire:model.live='razon_social'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                             <g fill="currentColor" class="nc-icon-wrapper">
@@ -122,7 +122,7 @@
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="telefono">TELEFONO:</label>
                 <div class="relative">
-                    <input type="text" class="form-input w-full pl-9" wire:model='telefono'>
+                    <input type="text" class="form-input w-full pl-9" wire:model.live='telefono'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g fill="currentColor" class="nc-icon-wrapper">
@@ -151,7 +151,7 @@
                 <label class="block text-sm font-medium mb-1" for="ubigeo">UBIGEO:</label>
                 <div class="relative">
                     <input type="text" placeholder="INGRESA TU UBIGEO" class="form-input w-full pl-9"
-                        wire:model='direccion.ubigeo'>
+                        wire:model.live='direccion.ubigeo'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
@@ -172,7 +172,7 @@
                 <label class="block text-sm font-medium mb-1" for="direccion">DIRECCION:</label>
                 <div class="relative">
                     <input type="text" placeholder="INGRESA UNA DIRECCION" class="form-input w-full pl-9"
-                        wire:model='direccion.direccion'>
+                        wire:model.live='direccion.direccion'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
@@ -193,7 +193,7 @@
                 <label class="block text-sm font-medium mb-1" for="region">REGION:</label>
                 <div class="relative">
                     <input type="text" placeholder="INGRESA UNA REGION" class="form-input w-full pl-9"
-                        wire:model='direccion.region'>
+                        wire:model.live='direccion.region'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
@@ -214,7 +214,7 @@
                 <label class="block text-sm font-medium mb-1" for="provincia">PROVINCIA:</label>
                 <div class="relative">
                     <input type="text" placeholder="INGRESA UNA PROVINCIA" class="form-input w-full pl-9"
-                        wire:model='direccion.provincia'>
+                        wire:model.live='direccion.provincia'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
@@ -235,7 +235,7 @@
                 <label class="block text-sm font-medium mb-1" for="distrito">DISTRITO:</label>
                 <div class="relative">
                     <input type="text" placeholder="INGRESA UN DISTRITO" class="form-input w-full pl-9"
-                        wire:model='direccion.distrito'>
+                        wire:model.live='direccion.distrito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
@@ -282,7 +282,7 @@
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="usuario_sol_sunat">USUARIO SOL SUNAT:</label>
                 <div class="relative">
-                    <input type="text" class="form-input w-full pl-9" wire:model='sunat.usuario_sol_sunat'>
+                    <input type="text" class="form-input w-full pl-9" wire:model.live='sunat.usuario_sol_sunat'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                             <g fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
@@ -306,7 +306,7 @@
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="clave_sol_sunat">CLAVE SOL SUNAT:</label>
                 <div class="relative">
-                    <input type="password" class="form-input w-full pl-9" wire:model='sunat.clave_sol_sunat'>
+                    <input type="password" class="form-input w-full pl-9" wire:model.live='sunat.clave_sol_sunat'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -330,7 +330,7 @@
                 <label class="block text-sm font-medium mb-1" for="clave_certificado_cdt">CLAVE CERTIFICADO
                     CDT:</label>
                 <div class="relative">
-                    <input type="password" class="form-input w-full pl-9" wire:model='sunat.clave_certificado_cdt'>
+                    <input type="password" class="form-input w-full pl-9" wire:model.live='sunat.clave_certificado_cdt'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -380,7 +380,7 @@
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="serie_factura">SERIE FACTURA:</label>
                 <div class="relative">
-                    <input type="text" placeholder="F001" class="form-input w-full pl-9" wire:model='series.factura'>
+                    <input type="text" placeholder="F001" class="form-input w-full pl-9" wire:model.live='series.factura'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -408,7 +408,7 @@
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.boleta">SERIE BOLETA:</label>
                 <div class="relative">
-                    <input type="text" placeholder="B001" class="form-input w-full pl-9" wire:model='series.boleta'>
+                    <input type="text" placeholder="B001" class="form-input w-full pl-9" wire:model.live='series.boleta'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -435,7 +435,7 @@
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.recibos">SERIE RECIBO:</label>
                 <div class="relative">
-                    <input type="text" placeholder="R001" class="form-input w-full pl-9" wire:model='series.recibo'>
+                    <input type="text" placeholder="R001" class="form-input w-full pl-9" wire:model.live='series.recibo'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -463,7 +463,7 @@
                 <label class="block text-sm font-medium mb-1" for="series.nota_credito">SERIE NOTA DE CREDITO:</label>
                 <div class="relative">
                     <input type="text" placeholder="FF001" class="form-input w-full pl-9"
-                        wire:model='series.nota_credito'>
+                        wire:model.live='series.nota_credito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -491,7 +491,7 @@
                 <label class="block text-sm font-medium mb-1" for="series.nota_debito">SERIE NOTA DE DEBITO:</label>
                 <div class="relative">
                     <input type="text" placeholder="FF01" class="form-input w-full pl-9"
-                        wire:model='series.nota_debito'>
+                        wire:model.live='series.nota_debito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
@@ -518,7 +518,7 @@
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.nota_debito">SERIE COTIZACION:</label>
                 <div class="relative">
-                    <input type="text" placeholder="PRE" class="form-input w-full pl-9" wire:model='series.cotizacion'>
+                    <input type="text" placeholder="PRE" class="form-input w-full pl-9" wire:model.live='series.cotizacion'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">

@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalEditOpen: @entangle('modalEditOpen') }">
+    <div x-data="{ modalEditOpen: @entangle('modalEditOpen').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEditOpen"
@@ -41,7 +41,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="modelo">Modelo
                             </label>
-                            <input wire:model='modelo' id="modelo" class="form-input w-full" type="text"
+                            <input wire:model.live='modelo' id="modelo" class="form-input w-full" type="text"
                                 placeholder="Escribe el modelo..." />
                             @error('modelo')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -52,7 +52,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="marca">Marca
                             </label>
-                            <input wire:model='marca' id="descripcion" class="form-input w-full" type="text"
+                            <input wire:model.live='marca' id="descripcion" class="form-input w-full" type="text"
                                 placeholder="Escribe la Marca..." />
                             @error('marca')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -63,7 +63,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="certificado">Certificado
                             </label>
-                            <input wire:model='certificado' id="certificado" class="form-input w-full" type="text"
+                            <input wire:model.live='certificado' id="certificado" class="form-input w-full" type="text"
                                 placeholder="Escribe el Certificado..." />
 
                         </div>
@@ -97,7 +97,7 @@
                                     <div class="col-span-12 py-2">
                                         <div class="flex gap-2">
 
-                                            <textarea class="form-textarea w-full" wire:model="caracteristicas.{{ $clave }}.text">
+                                            <textarea class="form-textarea w-full" wire:model.live="caracteristicas.{{ $clave }}.text">
 
                                             </textarea>
 

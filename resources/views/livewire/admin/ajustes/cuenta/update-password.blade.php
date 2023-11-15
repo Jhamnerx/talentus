@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
 
         <div class="relative inline-flex">
         </div>
@@ -38,28 +38,28 @@
                     </div>
                 </div>
                 <!-- Modal content -->
-                <form wire:submit.prevent="updatePassword">
+                <form wire:submit="updatePassword">
                     <div class="px-8 py-5 bg-white sm:p-6">
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-6 sm:col-span-12">
                                 <x-jet-label for="current_password" value="{{ __('Current Password') }}" />
                                 <x-jet-input id="current_password" type="password" class="mt-1 block w-full"
-                                    wire:model.defer="state.current_password" autocomplete="current-password" />
+                                    wire:model.live="state.current_password" autocomplete="current-password" />
                                 <x-jet-input-error for="current_password" class="mt-2" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-12">
                                 <x-jet-label for="password" value="{{ __('New Password') }}" />
                                 <x-jet-input id="password" type="password" class="mt-1 block w-full"
-                                    wire:model.defer="state.password" autocomplete="new-password" />
+                                    wire:model.live="state.password" autocomplete="new-password" />
                                 <x-jet-input-error for="password" class="mt-2" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-12">
                                 <x-jet-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
                                 <x-jet-input id="password_confirmation" type="password" class="mt-1 block w-full"
-                                    wire:model.defer="state.password_confirmation" autocomplete="new-password" />
+                                    wire:model.live="state.password_confirmation" autocomplete="new-password" />
                                 <x-jet-input-error for="password_confirmation" class="mt-2" />
                             </div>
 

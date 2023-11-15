@@ -80,7 +80,7 @@
                         @if ($cliente)
                             <div class="flex">
                                 <div class="m-1 text-center w-full sm:w-2/4">
-                                    <input wire:model='search' class="form-input pl-9 w-full focus:border-slate-300"
+                                    <input wire:model.live='search' class="form-input pl-9 w-full focus:border-slate-300"
                                         type="search" placeholder="Buscar vehiculo…" />
                                 </div>
 

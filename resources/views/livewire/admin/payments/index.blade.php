@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" x-data="{ transactionOpen: @entangle('PaymentOpen') }"
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto" x-data="{ transactionOpen: @entangle('PaymentOpen').live }"
     @set-transactionopen="transactionOpen = $event.detail">
 
     <!-- Page header -->
@@ -26,7 +26,7 @@
             <!-- buscador -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Search</label>
-                <input id="action-search" wire:model="search" class="form-input pl-9 focus:border-slate-300"
+                <input id="action-search" wire:model.live="search" class="form-input pl-9 focus:border-slate-300"
                     type="search" placeholder="Buscar..." />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"

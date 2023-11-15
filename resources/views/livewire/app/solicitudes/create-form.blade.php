@@ -5,7 +5,7 @@
         <label class="block text-sm font-medium mb-1" for="numero">Ingresa tu Nombre o razon social: <span
                 class="text-rose-500">*</span></label>
 
-        <input placeholder="Talentus Technology" wire:model="nombre" required type="text" class="form-input w-full">
+        <input placeholder="Talentus Technology" wire:model.live="nombre" required type="text" class="form-input w-full">
 
         @error('nombre')
         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -18,7 +18,7 @@
         <label class="block text-sm font-medium mb-1" for="email">Ingresa tu email: <span
                 class="text-rose-500">*</span></label>
 
-        <input placeholder="soporte@talentustechnology.com" wire:model="email" wire:model="email" required name="fecha"
+        <input placeholder="soporte@talentustechnology.com" wire:model.live="email" wire:model.live="email" required name="fecha"
             type="text" class="form-input w-full">
 
         @error('email')
@@ -33,7 +33,7 @@
         <label class="block text-sm font-medium mb-1" for="email">Servicio a solicitar: <span
                 class="text-rose-500">*</span></label>
 
-        <select class="form-select w-full" wire:model="servicio_solicitado">
+        <select class="form-select w-full" wire:model.live="servicio_solicitado">
             <option value="SERVICIO DE MONITOREO">SERVICIO DE MONITOREO</option>
             <option value="COMPRA EQUIPO GPS">COMPRA EQUIPO GPS</option>
             <option value="OTRO">OTRO (indique en el detalle)</option>
@@ -50,7 +50,7 @@
         <label class="block text-sm font-medium mb-1" for="servicio_solicitad">Cuentanos un poco más: <span
                 class="text-rose-500">*</span></label>
 
-        <textarea class="form-textarea w-full" rows="5" wire:model="detalle"></textarea>
+        <textarea class="form-textarea w-full" rows="5" wire:model.live="detalle"></textarea>
 
 
         @error('detalle')
@@ -65,7 +65,7 @@
         <label class="block text-sm font-medium mb-1" for="numero">Ingresa tu Nombre o razon social: <span
                 class="text-rose-500">*</span></label>
 
-        <input placeholder="Talentus Technology" wire:model="nombre" required type="text" class="form-input w-full">
+        <input placeholder="Talentus Technology" wire:model.live="nombre" required type="text" class="form-input w-full">
 
         @error('nombre')
         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -77,7 +77,7 @@
     <div class="col-span-12 md:col-span-6">
         <label class="block text-sm font-medium mb-1" for="email_envio">Ingresa tu email:</label>
 
-        <input placeholder="soporte@talentustechnology.com" wire:model="email_envio" required name="fecha" type="text"
+        <input placeholder="soporte@talentustechnology.com" wire:model.live="email_envio" required name="fecha" type="text"
             class="form-input w-full">
         <div class="text-xs mt-1">Este correo se usara para enviar el reporte!</div>
         @error('email_envio')
@@ -90,7 +90,7 @@
     <div class="col-span-12 md:col-span-6">
         <label class="block text-sm font-medium mb-1" for="telefono_envio">Ingresa tu Numero:</label>
 
-        <input placeholder="+51 987654321" wire:model="telefono_envio" required name="fecha" type="text"
+        <input placeholder="+51 987654321" wire:model.live="telefono_envio" required name="fecha" type="text"
             class="form-input w-full">
         <div class="text-xs mt-1">Este número se usara para enviar el reporte!</div>
 
@@ -105,7 +105,7 @@
         <label class="block text-sm font-medium mb-1" for="fecha_inicial">Fecha Inicial: <span
                 class="text-rose-500">*</span></label>
 
-        <input placeholder="2022-12-12" wire:model="fecha_inicial" required name="fecha" type="text"
+        <input placeholder="2022-12-12" wire:model.live="fecha_inicial" required name="fecha" type="text"
             class="form-input w-full fecha">
         <div class="text-xs mt-1">Ingresa la fecha inicial del reporte!</div>
 
@@ -120,7 +120,7 @@
         <label class="block text-sm font-medium mb-1" for="fecha_final">Fecha Final: <span
                 class="text-rose-500">*</span></label>
 
-        <input placeholder="2022-12-12" wire:model="fecha_final" required name="fecha" type="text"
+        <input placeholder="2022-12-12" wire:model.live="fecha_final" required name="fecha" type="text"
             class="form-input w-full fecha">
         <div class="text-xs mt-1">Ingresa la fecha final del reporte!</div>
 
@@ -134,7 +134,7 @@
     <div class="col-span-12 md:col-span-6">
         <label class="block text-sm font-medium mb-1" for="placa">Placa Vehículo: <span
                 class="text-rose-500">*</span></label>
-        <input placeholder="ABC-123" wire:model="placa" required name="placa" type="text"
+        <input placeholder="ABC-123" wire:model.live="placa" required name="placa" type="text"
             class="form-input w-full placa">
         <div class="text-xs mt-1">Por favor ingresa la placa de la unidad!</div>
         @error('placa')
@@ -146,7 +146,7 @@
     <div class="col-span-12">
         <label class="block text-sm font-medium mb-1" for="servicio_solicitado">Ingresa alguna indicación: </label>
 
-        <textarea class="form-textarea w-full" rows="5" wire:model="detalle"></textarea>
+        <textarea class="form-textarea w-full" rows="5" wire:model.live="detalle"></textarea>
 
 
         @error('detalle')
