@@ -35,7 +35,12 @@ class Delete extends Component
     public function afterDelete()
     {
         $this->closeModal();
-        $this->dispatch('delete-categoria', mensaje: 'La categoria se elimino con exito');
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'CATEGORIA ELIMINADA',
+            mensaje: 'se elimino correctamente la categoria'
+        );
         $this->dispatch('update-table');
     }
 

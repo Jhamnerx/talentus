@@ -41,7 +41,12 @@ class CreateModal extends Component
     public function afterSave($categoria)
     {
         $this->closeModal();
-        $this->dispatch('store-categoria', mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente');
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'CATEGORIA REGISTRADA',
+            mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
+        );
         $this->dispatch('update-table');
     }
 }

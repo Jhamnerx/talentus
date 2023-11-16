@@ -46,7 +46,12 @@ class EditModal extends Component
     public function afterSave($categoria)
     {
         $this->closeModal();
-        $this->dispatch('update-categoria', mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente');
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'CATEGORIA ACTUALIZADA',
+            mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'
+        );
         $this->dispatch('update-table');
     }
 }
