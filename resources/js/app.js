@@ -26,6 +26,14 @@ window.Swal = Swal;
 import iziToast from "izitoast";
 window.iziToast = iziToast;
 
+//FILE POND IMAGE DROP AND DRAG
+import * as FilePond from "filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+FilePond.registerPlugin(FilePondPluginImagePreview);
+
+window.FilePond = FilePond;
+
 import DataTable from "datatables.net-dt";
 import Sortable from "sortablejs";
 window.DataTable = DataTable;

@@ -2,25 +2,56 @@
 
 namespace App\Livewire\Admin\Productos;
 
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use App\Models\Productos;
+use Livewire\Attributes\On;
 
 class Delete extends Component
 {
-    public Model $model;
+    public $modalDelete = false;
+
+    public Productos $producto;
 
 
-    public $field = "eliminado";
+    protected $listeners = [
+        'openModalDelete' => 'openModal',
+    ];
 
-    public $eliminado;
 
-    public function delete()
-    {
-        $this->model->delete();
-        return redirect()->route('admin.almacen.productos.index')->with('delete', 'El producto fue eliminado');;
-    }
     public function render()
     {
         return view('livewire.admin.productos.delete');
+    }
+
+    #[On('open-modal-delete')]
+    public function openModal(Productos $producto)
+    {
+        $this->modalDelete = true;
+        $this->producto = $producto;
+    }
+
+
+    public function closeModal()
+    {
+        $this->modalDelete = false;
+    }
+
+    public function delete()
+    {
+        $this->producto->delete();
+        $this->afterDelete();
+    }
+
+    public function afterDelete()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'PRODUCTO ELIMINADO',
+            mensaje: 'se elimino correctamente el producto'
+        );
+
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

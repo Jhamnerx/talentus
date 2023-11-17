@@ -29,6 +29,15 @@ class Productos extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $casts = [
+        'id' => 'integer',
+        'categoria_id' => 'integer',
+        'stock' => 'integer',
+        'valor_unitario' => 'decimal:2',
+        'user_id' => 'integer',
+        'ventas' => 'integer',
+        'afecto_icbper' => 'boolean',
+    ];
 
     // Scope local de activo
     public function scopeActive($query, $status)

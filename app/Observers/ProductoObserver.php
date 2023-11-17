@@ -19,7 +19,7 @@ class ProductoObserver
         if (!\App::runningInConsole()) {
 
             $producto->empresa_id = session('empresa');
-            $producto->codigo = IdGenerator::generate(['table' => 'productos', 'field' => 'codigo', 'length' => 9, 'prefix' => 'PROD-']);;
+            // $producto->codigo = IdGenerator::generate(['table' => 'productos', 'field' => 'codigo', 'length' => 9, 'prefix' => 'PROD-']);;
         }
     }
     public function updating(Productos $producto)

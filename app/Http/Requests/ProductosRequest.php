@@ -14,7 +14,6 @@ class ProductosRequest extends FormRequest
     public function authorize()
     {
         return true;
-
     }
 
     /**
@@ -22,21 +21,35 @@ class ProductosRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($producto = null): array
     {
-
         $rules = [
-            'nombre' => 'required',
-            'categoria_id' => 'required',
-            'precio' => 'required',
-            'file' => 'image'
+            'descripcion' => 'required',
+            'categoria_id' => 'required|exists:categorias,id',
+            'codigo' => 'required|unique:productos,codigo',
+            'unit_code' => 'required|exists:units,codigo',
+            'stock' => 'numeric',
+            'valor_unitario' => 'numeric',
+            'ventas' => 'numeric',
+            'afecto_icbper' => 'boolean',
+            'divisa' => 'required',
+            'tipo' => 'required'
         ];
 
-        if ($this->tipo == 'Producto') {
-            $rules = array_merge($rules, [
-
-                'stock' => 'required',
-            ]);
+        if ($producto) {
+            $rules = [
+                'descripcion' => 'required',
+                'categoria_id' => 'required|exists:categorias,id',
+                'codigo' => 'required|unique:productos,codigo,' . $producto->id,
+                // 'tipo_afectacion_id' => 'required|exists:tipo_afectacion,codigo',
+                'unit_code' => 'required|exists:units,codigo',
+                'stock' => 'numeric',
+                'valor_unitario' => 'numeric',
+                'ventas' => 'numeric',
+                'afecto_icbper' => 'boolean',
+                'divisa' => 'required',
+                'tipo' => 'required'
+            ];
         }
 
         return $rules;

@@ -45,7 +45,7 @@
 
             <!-- Add customer button -->
             @can('crear-producto')
-                <button wire:click.preven="openModalCreate" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <button wire:click.prevent="openModalCreate" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -76,23 +76,20 @@
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
 
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <span class="sr-only">Favorito</span>
-                            </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Codigo</div>
                             </th>
-
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Unidad Medida</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Descripcion</div>
+                                <div class="font-semibold text-left">IMAGEN</div>
                             </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Categoria</div>
+                                <div class="font-semibold text-left">DESCRIPCIÓN</div>
+                            </th>
+
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">CATEGORIA</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Valor Unitario</div>
@@ -120,35 +117,30 @@
                                 <tr wire:key="{{ $producto->id }}">
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center relative">
-                                            <button>
-                                                <svg class="w-4 h-4 shrink-0 fill-current text-slate-300"
-                                                    viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                                </svg>
-                                            </button>
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left font-medium text-sky-500">#{{ $producto->codigo }}</div>
                                     </td>
-
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-slate-900">{{ $producto->unit->name }}
+                                        <div class="flex items-center">
+                                            <div
+                                                class="w-14 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
+
+                                                @if ($producto->image)
+                                                    <img class="ml-1 rounded-full"
+                                                        src="{{ Storage::url($producto->image->url) }}" width="56"
+                                                        alt="Imagen producto" />
+                                                @else
+                                                    <img class="ml-1 rounded-full"
+                                                        src="{{ Storage::url('public/productos/default.jpg') }}"
+                                                        width="56" alt="Imagen producto" />
+                                                @endif
+                                            </div>
+
                                         </div>
                                     </td>
+
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            @if ($producto->image)
-                                                <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                                    <img class="rounded-full"
-                                                        src="{{ Storage::url($producto->image->url) }}" width="40"
-                                                        height="40" />
-                                                </div>
-                                            @endif
 
                                             <div class="font-medium text-slate-800">{{ $producto->descripcion }}</div>
                                         </div>
@@ -194,28 +186,76 @@
                                     @endcan
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            @can('editar-producto')
-                                                <button wire:click.prevent="openModalEdit"
-                                                    class="text-slate-400 hover:text-slate-500 rounded-full">
-                                                    <span class="sr-only">Editar</span>
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                        <path
-                                                            d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
                                                     </svg>
                                                 </button>
-                                            @endcan
-                                            @can('eliminar-producto')
-                                                <button wire:click.prevent="openModalDelete" aria-controls="danger-modal"
-                                                    class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                    <span class="sr-only">Eliminar</span>
-                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                        <path
-                                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                    </svg>
-                                                </button>
-                                            @endcan
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false" @keydown.escape.window="open = false"
+                                                    x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+                                                    <ul>
+                                                        @can('editar-producto')
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="openModalEdit({{ $producto->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-27"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke="currentColor"
+                                                                        class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                        </path>
+                                                                    </svg> Editar
+
+                                                                </a>
+                                                            </li>
+                                                        @endcan
+
+                                                        @can('eliminar-producto')
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="openModalDelete({{ $producto->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-28"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke="currentColor"
+                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Eliminar
+                                                                </a>
+                                                            </li>
+                                                        @endcan
+
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -238,3 +278,5 @@
 
     </div>
 </div>
+@push('scripts')
+@endpush

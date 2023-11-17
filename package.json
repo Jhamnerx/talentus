@@ -55,6 +55,8 @@
         "chart.js": "^3.9.1",
         "chartjs-adapter-moment": "^1.0.0",
         "datatables.net-dt": "^1.12.1",
+        "filepond": "^4.30.4",
+        "filepond-plugin-image-preview": "^4.6.11",
         "focus-visible": "^5.2.0",
         "izitoast": "^1.4.0",
         "moment": "^2.29.1",

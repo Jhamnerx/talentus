@@ -2,6 +2,7 @@
 
 use Maatwebsite\Excel\Row;
 use App\Models\Dispositivos;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\GpsController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\RecibosController;
+use App\Http\Controllers\Admin\SimCardController;
 use App\Http\Controllers\Admin\ClientesController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\ReportesController;
@@ -31,6 +33,8 @@ use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProveedoresController;
 use App\Http\Controllers\Admin\SolicitudesController;
 use App\Http\Controllers\Admin\UserProfileController;
+use App\Http\Controllers\Admin\PDF\TareaPdfController;
+use App\Http\Controllers\Admin\MantenimientoController;
 use App\Http\Controllers\Admin\PDF\ReciboPdfController;
 use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PDF\FacturaPdfController;
@@ -39,34 +43,23 @@ use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Controllers\Admin\ComprasFacturasController;
 use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
-use App\Http\Controllers\Admin\MantenimientoController;
-use App\Http\Controllers\Admin\PDF\TareaPdfController;
-use App\Http\Controllers\Admin\SimCardController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
 
-
 // ALMACEN
-
-
-
 Route::controller(CategoriaController::class)->group(function () {
     Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
 });
 
-
-
-
 Route::controller(ProductosController::class)->group(function () {
-
     Route::get('productos', 'index')->name('admin.almacen.productos.index');
     Route::get('productos/create', 'create')->name('admin.almacen.productos.create');
     Route::post('productos', 'store')->name('admin.almacen.productos.store');

@@ -92,31 +92,31 @@
 
     @livewireScripts
 
-    @yield('js')
 
-    @stack('scripts')
 
 
     {{-- @vite('resources/js/app.js') --}}
 </body>
 <script>
     $(document).ready(function() {
-
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            //width: 600,
+            //padding: "3em",
+            showConfirmButton: false,
+            timer: 2200,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
         Echo.private('App.Models.User.' + {{ Auth::user()->id }})
             .notification((notification) => {
                 Livewire.emit('notificaciones-update');
 
             });
-
-        // Echo.channel('clientes')
-        //     .listen('ClientesImportUpdated', (e) => {
-        //         console.log("evento recibido");
-        //     });
-
-        // Echo.channel('clientes')
-        //     .listen('ClientesImportUpdated', (e) => {
-        //         console.log("evento recibido");
-        //     });
 
     });
 </script>
@@ -126,5 +126,51 @@
 
     // })
 </script>
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        //success
+        //question
+        //info
+        //warning
+        //error
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+
+        Livewire.on('notify-toast', (event) => {
+            Toast.fire({
+                icon: event.icon,
+                title: event.title,
+                html: event.mensaje,
+                showCloseButton: true,
+            });
+
+        });
+
+        Livewire.on('notify', (event) => {
+            Swal.fire({
+                icon: event.icon,
+                title: event.tittle,
+                text: event.mensaje,
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+
+        });
+    });
+</script>
+@yield('js')
+
+@stack('scripts')
 
 </html>
