@@ -26,7 +26,6 @@ class ProductosIndex extends Component
             ->with('image', 'categoria', 'unit')
             ->orderBy('id', 'desc')
             ->paginate(10);
-
         return view('livewire.admin.productos.productos-index', compact('productos'));
     }
 

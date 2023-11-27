@@ -130,8 +130,8 @@
                                                         alt="Imagen producto" />
                                                 @else
                                                     <img class="ml-1 rounded-full"
-                                                        src="{{ Storage::url('public/productos/default.jpg') }}"
-                                                        width="56" alt="Imagen producto" />
+                                                        src="{{ Storage::url('productos/default.jpg') }}" width="56"
+                                                        alt="Imagen producto" />
                                                 @endif
                                             </div>
 
