@@ -29,25 +29,6 @@
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     {{-- CKEDITOR --}}
     <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
-    {{-- dataTables --}}
-    <script src="{{ asset('plugins/datatables/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.mockjax.js') }}"></script>
-    {{-- <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script> --}}
-    <script src="{{ asset('plugins/jquery.autocomplete.js') }}"></script>
-    <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
-
-
-    {{-- VenoBox IMAGEN VIEWER --}}
-    <link rel="stylesheet" href="{{ asset('plugins/veno-box/venobox.css') }}" type="text/css" media="screen" />
-    {{-- <script src="{{ asset('plugins/veno-box/venobox.esm.js') }}"></script> --}}
-    {{-- Select2 --}}
-
-    <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
-        integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
     @livewireStyles
     <wireui:scripts />
@@ -93,9 +74,6 @@
     @livewireScripts
 
 
-
-
-    {{-- @vite('resources/js/app.js') --}}
 </body>
 <script>
     $(document).ready(function() {

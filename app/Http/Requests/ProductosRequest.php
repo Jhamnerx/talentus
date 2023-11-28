@@ -30,7 +30,6 @@ class ProductosRequest extends FormRequest
             'unit_code' => 'required|exists:units,codigo',
             'stock' => 'numeric',
             'valor_unitario' => 'numeric',
-            'ventas' => 'numeric',
             'afecto_icbper' => 'boolean',
             'divisa' => 'required',
             'tipo' => 'required'
@@ -45,7 +44,6 @@ class ProductosRequest extends FormRequest
                 'unit_code' => 'required|exists:units,codigo',
                 'stock' => 'numeric',
                 'valor_unitario' => 'numeric',
-                'ventas' => 'numeric',
                 'afecto_icbper' => 'boolean',
                 'divisa' => 'required',
                 'tipo' => 'required'
