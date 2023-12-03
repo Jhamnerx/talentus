@@ -5,11 +5,13 @@ namespace App\Livewire\Admin\SimCard;
 
 use App\Models\SimCard;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Save extends Component
 {
     public Collection $items;
+    public $modalCreate = false;
 
     protected $rules = [
 
@@ -27,10 +29,29 @@ class Save extends Component
         'items.*.operador.alpha' => 'El campo no debe contener números',
     ];
 
+    #[On('open-modal-create')]
+    public function openModal()
+    {
+        $this->modalCreate = true;
+    }
 
+    public function closeModal()
+    {
+        $this->modalCreate = false;
+    }
+    public function cancel()
+    {
+        $this->inicializarItems();
+    }
 
 
     public function mount()
+    {
+
+        $this->inicializarItems();
+    }
+
+    public function inicializarItems()
     {
         $this->items = collect();
         $this->items->push([
@@ -55,7 +76,7 @@ class Save extends Component
         }
     }
 
-    public function store()
+    public function save()
     {
         $validatedDate = $this->validate();
 
@@ -64,7 +85,8 @@ class Save extends Component
             $sim_card = SimCard::create($item);
         }
 
-        return redirect()->route('admin.almacen.sim-card.index')->with('store', 'Se guardo con exito');
+
+        $this->afterSave();
     }
 
     public function render()
@@ -75,5 +97,17 @@ class Save extends Component
     public function updated($attr)
     {
         $this->validateOnly($attr);
+    }
+
+    public function afterSave()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'SIM CARDS REGISTRADO',
+            mensaje: 'se guardo correctamente los sim cards'
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

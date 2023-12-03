@@ -2,56 +2,73 @@
 
 namespace App\Livewire\Admin\SimCard;
 
-use App\Models\CambiosLineas;
 use App\Models\Lineas;
 use App\Models\SimCard;
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Models\CambiosLineas;
 
 class UnAsign extends Component
 {
-    public Model $sim_card;
+    public SimCard $sim_card;
     public $openUnAsign = false;
-    // protected $listeners = ['unAsign' => 'unAsign'];
-
 
     public function render()
     {
         return view('livewire.admin.sim-card.un-asign');
     }
 
-    public function openModal()
+    #[On('open-modal-unasign')]
+    public function openModal(SimCard $sim)
     {
         $this->openUnAsign = true;
-        //dd($this->sim_card);
+        $this->sim_card = $sim;
+    }
+
+    public function closeModal()
+    {
+        $this->openUnAsign = false;
+        $this->reset();
     }
 
     public function unAsign()
     {
 
+        if ($this->sim_card) {
+            CambiosLineas::create([
+                'tipo_cambio' => 'Se elimino el numero asignado',
+                'sim_card_id' => $this->sim_card->id,
+                'old_numero' => $this->sim_card->lineas_id,
+                'new_numero' => null,
+                'user_id' => auth()->user()->id,
+            ]);
+
+            $linea = Lineas::findOrFail($this->sim_card->lineas_id);
+
+            if ($linea) {
+                $linea->old_sim_card = $this->sim_card->sim_card;
+                $linea->save();
+            }
 
 
-        CambiosLineas::create([
-            'tipo_cambio' => 'Se elimino el numero asignado',
-            'sim_card_id' => $this->sim_card->id,
-            'old_numero' => $this->sim_card->lineas_id,
-            'new_numero' => null,
-            'user_id' => auth()->user()->id,
-        ]);
+            $this->sim_card->update([
+                "lineas_id" => null,
+            ]);
 
-        $linea = Lineas::findOrFail($this->sim_card->lineas_id);
-
-        if ($linea) {
-            $linea->old_sim_card = $this->sim_card->sim_card;
-            $linea->save();
+            $this->afterAction();
         }
+    }
 
+    public function afterAction()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'SE ELIMINO EL NUMERO',
+            mensaje: 'El sim card fisico se encuentra sin numero'
+        );
 
-        $this->sim_card->update([
-            "lineas_id" => null,
-        ]);
-
-        $this->openUnAsign = false;
-        return redirect()->route('admin.almacen.sim-card.index')->with('unasign', 'Se Elimino el numero del Sim Card');;
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

@@ -51,7 +51,7 @@
             </div>
             <div class="mt-5 md:mt-0 md:col-span-10 mr-6">
 
-                @livewire('admin.sim-card.save', key($user->id))
+                @livewire('admin.sim-card.save')
 
             </div>
         </div>

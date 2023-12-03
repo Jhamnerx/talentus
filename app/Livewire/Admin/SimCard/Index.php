@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\SimCard;
 
 use App\Models\SimCard;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 
 class Index extends Component
@@ -103,5 +104,22 @@ class Index extends Component
     {
 
         $this->dispatch('openModalImport');
+    }
+
+    public function openModalUnAsign(SimCard $sim)
+    {
+        $this->dispatch('open-modal-unasign', sim: $sim);
+    }
+
+    #[On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+
+    public function openModalCreate()
+    {
+        $this->dispatch('open-modal-create');
     }
 }

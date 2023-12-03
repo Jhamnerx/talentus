@@ -55,7 +55,7 @@
                             <h2 class="font-semibold text-slate-800">{{ $sim_card->sim_card }} <span
                                     class="text-slate-400 font-medium"></span></h2>
                         </header>
-                        <div x-data="handleSelect">
+                        <div>
 
                             <!-- Table -->
                             <div class="overflow-x-auto">
