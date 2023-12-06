@@ -61,17 +61,13 @@ Route::controller(CategoriaController::class)->group(function () {
 
 Route::controller(ProductosController::class)->group(function () {
     Route::get('productos', 'index')->name('admin.almacen.productos.index');
-    Route::get('productos/create', 'create')->name('admin.almacen.productos.create');
-    Route::post('productos', 'store')->name('admin.almacen.productos.store');
-    Route::get('productos/{producto}/editar', 'edit')->name('admin.almacen.productos.edit');
-    Route::put('productos/{producto}', 'update')->name('admin.almacen.productos.update');
 });
 
 
 Route::controller(SimCardController::class)->group(function () {
 
     Route::get('sim-card', 'index')->name('admin.almacen.sim-card.index');
-    Route::get('sim-card/crear', 'create')->name('admin.almacen.sim-card.create');
+
     Route::get('asignar/sim-card', 'asign')->name('admin.almacen.sim-card.asign');
     Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.almacen.sim-card.asign.store');
 });

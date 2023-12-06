@@ -30,6 +30,8 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('series', 'series')->name('api.series.index');
     Route::get('productos', 'productos')->name('api.productos.index');
     Route::get('documentos', 'documentos')->name('api.documentos.index');
+    Route::get('sim-card', 'sim')->name('api.sim.index');
+    Route::get('lineas', 'lineas')->name('api.lineas.index');
 });
 
 

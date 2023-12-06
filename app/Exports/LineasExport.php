@@ -33,9 +33,9 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             '#',
             'Sim Card',
             'Numero',
-
             'Operador',
-            'Fecha',
+            'Vehiculo - Dispositivo',
+            'Fecha Registro',
         ];
     }
 
@@ -46,6 +46,7 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             $sim->sim_card,
             ($sim->linea) ? $sim->linea->numero : '',
             $sim->operador,
+            $sim->vehiculos ? $sim->vehiculos->placa : '',
             Carbon::createFromFormat('Y-m-d H:i:s', $sim->created_at)->format('d-m-Y'),
 
         ];

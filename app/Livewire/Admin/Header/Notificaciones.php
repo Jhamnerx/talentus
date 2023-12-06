@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Header;
 
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Notificaciones extends Component
@@ -18,7 +19,7 @@ class Notificaciones extends Component
 
         $this->update();
     }
-
+    #[On('notificaciones-update')]
     public function update()
     {
 

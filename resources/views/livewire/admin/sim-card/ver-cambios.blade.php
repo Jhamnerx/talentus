@@ -116,7 +116,8 @@
                                                             <div class="text-left font-medium text-rose-500">+51
                                                                 {{ $cambio->linea_old->numero }}</div>
                                                         @else
-                                                            <div class="text-left font-medium text-rose-500">Asignado 1°
+                                                            <div class="text-left font-medium text-rose-500">Asignado
+                                                                por 1° vez
                                                             </div>
                                                         @endif
 

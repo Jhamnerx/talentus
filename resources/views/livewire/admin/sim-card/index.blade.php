@@ -28,7 +28,7 @@
 
             <!-- Add  button -->
             @can('crear-sim_card')
-                <button wire:click.preven='openModalCreate()' class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                <button wire:click.prevent='openModalCreate()' class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -39,16 +39,14 @@
 
 
             @can('asignar.linea-sim_card')
-                <a href="{{ route('admin.almacen.sim-card.asign') }}">
-                    <button
-                        class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
-                        <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Asignar Linea a Sim Card</span>
-                    </button>
-                </a>
+                <button wire:click.prevent="openModalAsign()"
+                    class="btn btnAsignar bg-emerald-500 hover:bg-emerald-600 text-white btn border-slate-200 hover:border-slate-300">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Asignar Linea a Sim Card</span>
+                </button>
             @endcan
 
         </div>

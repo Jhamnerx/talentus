@@ -102,8 +102,7 @@ class Index extends Component
 
     public function openModalImport()
     {
-
-        $this->dispatch('openModalImport');
+        $this->dispatch('open-modal-import');
     }
 
     public function openModalUnAsign(SimCard $sim)
@@ -121,5 +120,11 @@ class Index extends Component
     public function openModalCreate()
     {
         $this->dispatch('open-modal-create');
+    }
+
+    public function openModalAsign()
+    {
+
+        $this->dispatch('open-modal-asign');
     }
 }

@@ -1,10 +1,12 @@
 <x-form.modal.card title="Registrar Sim Card fisico" blur wire:model.live="modalCreate" align="center" max-width="3xl">
 
     <div class="flex flex-auto gap-2 mx-4 py-2">
-        <div></div>
+        <div class=""></div>
         <div class="w-full">
 
-            <x-form.button.circle wire:click.prevent="addItem" spinner primary label="+" class="float-right" />
+            <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
+                class="float-right" />
+            {{-- <span class="float-right mr-2">AÑADIR ITEM</span> --}}
         </div>
     </div>
     <div class=" relative">

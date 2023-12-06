@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\SimCard;
 use Exception;
 use Livewire\Component;
 use App\Imports\LineasImport;
+use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
@@ -61,10 +62,9 @@ class Import extends Component
         }
     }
 
-
+    #[On('open-modal-import')]
     public function openModal()
     {
-
 
         $this->modalOpenImport = true;
     }
@@ -73,6 +73,7 @@ class Import extends Component
     {
 
         $this->modalOpenImport = false;
+        $this->reset('file', 'errorInfo');
         $this->reset();
     }
 }

@@ -7,6 +7,8 @@ use App\Models\Categoria;
 use App\Models\Productos;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Lineas;
+use App\Models\SimCard;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -163,6 +165,44 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', []))
+
+            )
+            ->get();
+    }
+    public function sim(Request $request): Collection
+    {
+        return SimCard::query()
+            ->select('id', 'sim_card')
+            ->orderBy('id')
+            ->withoutGlobalScopes()
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('sim_card', 'like', "%{$request->search}%")
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('sim_card', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->get();
+    }
+    public function lineas(Request $request): Collection
+    {
+        return Lineas::query()
+            ->select('id', 'numero')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('numero', 'like', "%{$request->search}%")
+
+            )
+            ->withoutGlobalScopes()
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('numero', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
 
             )
             ->get();
