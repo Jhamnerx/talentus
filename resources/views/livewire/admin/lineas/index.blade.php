@@ -1,10 +1,9 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-    <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">LINEAS ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">LINEAS MOVILES✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -13,7 +12,7 @@
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
                 <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar sim card" />
+                    placeholder="Buscar lineas" />
 
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
@@ -85,17 +84,14 @@
                             </svg>
                         </button>
                     </div>
-
-
                 </div>
             @endif
 
 
             <div class="flex gap-1">
 
-
                 <!-- Dropdown -->
-                <div class="relative float-left" x-data="{ open: false, selected: 4 }">
+                <div wire:ignore class="relative float-left" x-data="{ open: false, selected: 4 }">
                     <button
                         class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                         aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
@@ -207,75 +203,55 @@
                     <button class="btn hidden" wire:click="consulta"> consulta</button>
                 </div>
             @endif
-
-            <!-- Import button -->
-            {{-- <div class="relative inline-flex">
-                <button wire:click="openModalImport()" aria-controls="basic-modal"
-                    class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
-                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
-                        <polyline points="7 9 12 4 17 9" />
-                        <line x1="12" y1="4" x2="12" y2="16" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Importar</span>
-                </button>
-            </div> --}}
         </div>
 
-
-
-        <!-- Left side -->
 
         <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
                 <li class="m-1">
-                    <button wire:click="operador()"
+                    <button wire:click.prevent="SetOperador()"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
-                        @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-smduration-150 ease-in-out">
                         Todas
                     </button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="operador('claro')"
+                    <button wire:click.prevent="SetOperador('claro')"
                         :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                         Claro
                     </button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="operador('entel')"
+                    <button wire:click.prevent="SetOperador('entel')"
                         :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                         Entel
                     </button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="operador('movistar')"
+                    <button wire:click.prevent="SetOperador('movistar')"
                         :class="clickeado === 3 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 3"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                         Movistar
                     </button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="operador('cuy')"
+                    <button wire:click.prevent="SetOperador('cuy')"
                         :class="clickeado === 4 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 4"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm duration-150 ease-in-out">
                         Cuy
                     </button>
                 </li>
                 <li class="m-1">
-                    <button wire:click="operador('multioperador')"
+                    <button wire:click.prevent="SetOperador('multioperador')"
                         :class="clickeado === 5 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 5"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-whiteduration-150 ease-in-out">
                         MultiOperador (M2M)
                     </button>
                 </li>
@@ -689,54 +665,4 @@
 </div>
 
 @push('scripts')
-    <script>
-        // A basic demo function to handle "select all" functionality
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('handleSelect', () => ({
-                selectall: false,
-                selected: [],
-                selectAction() {
-                    countEl = document.querySelector('.table-items-action');
-                    if (!countEl) return;
-                    checkboxes = document.querySelectorAll('input.table-item:checked');
-                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
-                    if (checkboxes.length > 0) {
-                        countEl.classList.remove('hidden');
-                    } else {
-                        countEl.classList.add('hidden');
-                    }
-                    //console.log(this.selected);
-                },
-                toggleAll() {
-                    this.selectall = !this.selectall;
-                    checkboxes = document.querySelectorAll('input.table-item');
-                    [...checkboxes].map((el) => {
-                        el.checked = this.selectall;
-                    });
-                    ids = countEl = document.querySelectorAll('input.table-item');
-                    [...ids].map((el) => {
-                        if (el.checked) {
-                            selects.push(el.getAttribute('id-linea'));
-                        };
-                    });
-                    this.selected = selects;
-                    this.selectAction();
-                },
-                uncheckParent() {
-                    this.selectall = false;
-                    selects = [];
-                    document.getElementById('parent-checkbox').checked = false;
-                    ids = countEl = document.querySelectorAll('input.table-item');
-                    [...ids].map((el) => {
-                        if (el.checked) {
-                            selects.push(el.getAttribute('id-linea'));
-                        };
-                    });
-                    this.selected = selects;
-                    //console.log(this.selected);
-                    this.selectAction();
-                }
-            }))
-        })
-    </script>
 @endpush

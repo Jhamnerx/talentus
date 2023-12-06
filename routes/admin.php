@@ -67,9 +67,6 @@ Route::controller(ProductosController::class)->group(function () {
 Route::controller(SimCardController::class)->group(function () {
 
     Route::get('sim-card', 'index')->name('admin.almacen.sim-card.index');
-
-    Route::get('asignar/sim-card', 'asign')->name('admin.almacen.sim-card.asign');
-    Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.almacen.sim-card.asign.store');
 });
 
 

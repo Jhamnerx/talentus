@@ -15,24 +15,12 @@ class SimCardController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:ver-sim_card', ['only' => ['index', 'disponibles']]);
-        $this->middleware('permission:crear-sim_card', ['only' => ['create']]);
-        $this->middleware('permission:editar-sim_card', ['only' => ['edit']]);
+        $this->middleware('permission:ver-sim_card', ['only' => ['index']]);
     }
 
 
     public function index()
     {
         return view('admin.almacen.sim-card.index');
-    }
-
-    // public function exportExcel()
-    // {
-    //     return Excel::download(new LineasExport, 'sim_cards.xls');
-    // }
-
-    public function asign(Request $request)
-    {
-        return view('admin.almacen.sim-card.asign');
     }
 }

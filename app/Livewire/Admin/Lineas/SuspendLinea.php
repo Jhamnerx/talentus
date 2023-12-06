@@ -6,15 +6,11 @@ use Carbon\Carbon;
 use App\Models\Lineas;
 use Livewire\Component;
 use Illuminate\Database\Eloquent\Collection;
+use Livewire\Attributes\On;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx\Theme;
 
 class SuspendLinea extends Component
 {
-
-    protected $listeners = [
-        'open-modal-suspend' => 'openModal',
-    ];
-
 
     public $fecha_suspencion, $date_to_suspend, $baja = false;
 
@@ -43,8 +39,8 @@ class SuspendLinea extends Component
 
     public function mount()
     {
-        $this->fecha_suspencion = Carbon::now()->format('Y-m-d');
-        $this->date_to_suspend = Carbon::now()->addDays(60)->format('Y-m-d');
+        $this->fecha_suspencion = Carbon::now();
+        $this->date_to_suspend = Carbon::now()->addDays(60);
     }
 
 
@@ -53,7 +49,7 @@ class SuspendLinea extends Component
         return view('livewire.admin.lineas.suspend-linea');
     }
 
-
+    #[On('open-modal-suspend')]
     public function openModal($items)
     {
         $this->items =  $items;
@@ -92,8 +88,8 @@ class SuspendLinea extends Component
 
         $lista .= '</ul>';
 
-        $this->dispatch('suspend-save', ['lista' => $lista]);
-        $this->dispatch('suspend-save');
+        $this->dispatch('suspend-save', lista: $lista);
+
         $this->closeModal();
     }
     public function updated($attr)

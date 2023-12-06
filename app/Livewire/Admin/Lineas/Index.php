@@ -42,7 +42,6 @@ class Index extends Component
     }
     public function updateLineas()
     {
-
         $this->render();
         $this->dispatch('lineas-import');
     }
@@ -84,7 +83,7 @@ class Index extends Component
         return view('livewire.admin.lineas.index', compact('lineas'));
     }
 
-    public function operador($operador = null)
+    public function SetOperador($operador = null)
     {
         $this->operador = $operador;
     }
@@ -140,11 +139,7 @@ class Index extends Component
 
     public function consulta()
     {
-
-
         $lineas = Lineas::whereNotNull('old_sim_card')->get();
-
-
         foreach ($lineas as $linea) {
 
             $linea->old_sim_cards()->create([
@@ -156,7 +151,6 @@ class Index extends Component
 
     public function openModalSuspend()
     {
-
         $items = collect($this->selected);
 
         $this->dispatch('open-modal-suspend', $items);
@@ -166,9 +160,7 @@ class Index extends Component
 
     public function suspender(Lineas $linea)
     {
-
         $items = collect($linea->numero);
-
         $this->dispatch('open-modal-suspend', $items);
     }
 

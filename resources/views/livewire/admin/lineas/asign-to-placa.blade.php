@@ -212,47 +212,5 @@
 </div>
 
 @push('scripts')
-    <script>
-        $('.vehiculos_id').select2({
-            placeholder: '    Buscar un Vehiculo',
-            language: "es",
-            minimumInputLength: 2,
-            selectionCssClass: 'pl-9',
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.vehiculos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        $('.vehiculos_id').on('select2:select', function(e) {
-
-            var data = e.params.data;
-            @this.set('vehiculo_id', data.id)
-
-        });
-    </script>
+    <script></script>
 @endpush

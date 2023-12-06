@@ -145,6 +145,24 @@
             })
 
         });
+
+        Livewire.on('suspend-save', (event) => {
+            iziToast.success({
+                maxWidth: 500,
+                position: 'center',
+                title: 'Se ha guardado el registro de suspencion!',
+                message: 'Las siguientes Lineas: ' + event.lista,
+                position: 'topRight',
+                transitionIn: 'bounceInLeft',
+                // iconText: 'star',
+                onOpened: function(instance, toast) {},
+                onClosed: function(instance, toast, closedBy) {
+                    console.info('closedBy: ' + closedBy);
+                }
+            });
+
+        });
+
     });
 </script>
 @yield('js')
