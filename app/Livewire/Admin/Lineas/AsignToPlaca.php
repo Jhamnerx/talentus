@@ -4,30 +4,30 @@ namespace App\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class AsignToPlaca extends Component
 {
     public $openModal = false;
 
-    public $asignado = false, $confirmation = false;
+    public $asignado = false, $confirm = false;
 
     public Lineas $linea;
     public $vehiculo_id;
 
-    protected $listeners = [
-        'asign-to-placa' => 'asignToPlaca'
-    ];
 
     public function render()
     {
         return view('livewire.admin.lineas.asign-to-placa');
     }
 
+    #[On('asign-to-placa')]
     public function asignToPlaca(Lineas $linea)
     {
 
         $this->asignado = $linea->sim_card->vehiculos ? true : false;
+        $this->vehiculo_id = $linea->sim_card->vehiculos ? $linea->sim_card->vehiculos->placa : null;
 
         $this->linea = $linea;
 
@@ -37,7 +37,7 @@ class AsignToPlaca extends Component
     public function removeLinea()
     {
 
-        $this->confirmation = true;
+        $this->confirm = true;
     }
     public function confirmation()
     {
@@ -51,6 +51,7 @@ class AsignToPlaca extends Component
             $this->asignado = false;
             $this->dispatch('index-update');
         }
+        $this->reset('confirm');
     }
 
     public function openModal()
@@ -67,13 +68,22 @@ class AsignToPlaca extends Component
 
     public function asign()
     {
-
         $vehiculo = Vehiculos::findOrFail($this->vehiculo_id);
         $vehiculo->sim_card_id = $this->linea->sim_card->id;
         $vehiculo->save();
 
-        $this->dispatch('asign-linea-to-placa', ['placa' => $vehiculo->placa, 'linea' => $this->linea->numero]);
-        $this->dispatch('index-update');
+        $this->afterSave($vehiculo);
+    }
+
+    public function afterSave($vehiculo)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'LINEA ASIGNADA A VEHICULO',
+            mensaje: 'se asigno la linea: ' . $this->linea->numero . ' a la placa: ' . $vehiculo->placa
+        );
         $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

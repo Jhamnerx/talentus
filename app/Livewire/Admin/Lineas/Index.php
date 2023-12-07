@@ -6,6 +6,7 @@ use App\Models\Lineas;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -25,21 +26,30 @@ class Index extends Component
 
 
     protected $listeners = [
-        'render' => 'render',
-        'suspend-save' => 'setSelectedNull',
-        'index-update' => 'render',
+
         'echo:sim,SimCardImportUpdated' => 'updateLineasToSimCard',
         'echo:lineas,LineasImportUpdated' => 'updateLineas'
+
     ];
 
+
+    #[On('update-table', 'render')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+    #[On('suspend-save')]
     public function setSelectedNull()
     {
         $this->selected = [];
     }
+
     public function updateLineasToSimCard()
     {
         $this->render();
     }
+
     public function updateLineas()
     {
         $this->render();

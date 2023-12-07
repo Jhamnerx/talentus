@@ -32,6 +32,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('documentos', 'documentos')->name('api.documentos.index');
     Route::get('sim-card', 'sim')->name('api.sim.index');
     Route::get('lineas', 'lineas')->name('api.lineas.index');
+    Route::get('vehiculos', 'vehiculos')->name('api.vehiculos.index');
 });
 
 

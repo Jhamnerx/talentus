@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Lineas;
 use App\Models\SimCard;
+use App\Models\Vehiculos;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -202,6 +203,25 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('numero', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+
+            )
+            ->get();
+    }
+    public function vehiculos(Request $request): Collection
+    {
+        return Vehiculos::query()
+            ->select('id', 'placa')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('placa', 'like', "%{$request->search}%")
+
+            )
+            ->withoutGlobalScopes()
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('placa', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
 
             )
