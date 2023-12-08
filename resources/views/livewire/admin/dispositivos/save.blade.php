@@ -1,12 +1,10 @@
-<x-form.modal.card title="Registrar Lineas" blur wire:model.live="modalCreate" align="center" max-width="3xl">
+<x-form.modal.card title="REGISTRAR DISPOSITIVOS" blur wire:model.live="modalCreate" align="center" max-width="3xl">
 
     <div class="flex flex-auto gap-2 mx-4 py-2">
         <div class=""></div>
         <div class="w-full">
-
             <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
                 class="float-right" />
-
         </div>
     </div>
     <div class=" relative">
@@ -18,17 +16,15 @@
                         <div class="font-semibold text-left">#</div>
                     </th>
                     <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div class="font-semibold text-left">NUMERO</div>
+                        <div class="font-semibold text-left">IMEI</div>
                     </th>
 
                     <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div class="font-semibold text-left">OPERADOR</div>
+                        <div class="font-semibold text-left">MODELO</div>
                     </th>
                     <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-semibold text-center">ACCIONES</div>
                     </th>
-
-
                 </tr>
             </thead>
 
@@ -41,14 +37,16 @@
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                            <x-form.input placeholder="número de linea"
-                                wire:model.live="items.{{ $clave }}.numero" />
+                            <x-form.input placeholder="IMEI DISPOSITIVO"
+                                wire:model.live="items.{{ $clave }}.imei" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <x-form.select name="modelo_id" wire:model.live="items.{{ $clave }}.modelo_id"
+                                placeholder="Selecciona un modelo" :async-data="[
+                                    'api' => route('api.dispositivos.index'),
+                                ]" option-label="modelo"
+                                option-value="id" option-description="marca" />
 
-                            <x-form.input placeholder="ingresa operador"
-                                wire:model.live="items.{{ $clave }}.operador" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 

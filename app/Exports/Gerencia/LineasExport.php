@@ -66,7 +66,8 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             'Empresa Actual',
             'Placa',
             'Estado',
-            'Fecha',
+            'Fecha Registro',
+            'Registrado por',
         ];
     }
 
@@ -82,6 +83,7 @@ class LineasExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder impl
             ($linea->sim_card) ? ($linea->sim_card->vehiculos ? $linea->sim_card->vehiculos->placa : '') : '',
             $linea->estado->name ==  "SUSPENDIDA" ? "SUSPENDIDA: " . $linea->fecha_suspencion->format('d-m-Y') . "-" . $linea->date_to_suspend->format('d-m-Y') : $linea->estado->name,
             Carbon::createFromFormat('Y-m-d H:i:s', $linea->created_at)->format('d-m-Y'),
+            $linea->user ? $linea->user->name : '',
 
         ];
     }

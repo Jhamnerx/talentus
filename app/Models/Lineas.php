@@ -101,4 +101,9 @@ class Lineas extends Model
     {
         return Carbon::now();
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }

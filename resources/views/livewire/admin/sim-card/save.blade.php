@@ -3,10 +3,8 @@
     <div class="flex flex-auto gap-2 mx-4 py-2">
         <div class=""></div>
         <div class="w-full">
-
             <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
                 class="float-right" />
-            {{-- <span class="float-right mr-2">AÑADIR ITEM</span> --}}
         </div>
     </div>
     <div class=" relative">
@@ -27,8 +25,6 @@
                     <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-semibold text-center">ACCIONES</div>
                     </th>
-
-
                 </tr>
             </thead>
 
@@ -41,7 +37,6 @@
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
                             <x-form.input placeholder="imei sim card"
                                 wire:model.live="items.{{ $clave }}.sim_card" />
                         </td>

@@ -1,12 +1,10 @@
 <div>
     <div x-data="{ modalReporte: @entangle('modalReporte').live }">
-        <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
         </div>
-        <!-- Modal dialog -->
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
             role="dialog" aria-modal="true" x-show="modalReporte"
@@ -71,7 +69,7 @@
                                         <label class=" flex items-center">
                                             <input type="checkbox" name="radio-buttons" class="form-radio w-6 h-6"
                                                 wire:model.live="suspencion" value="true" />
-                                            {{-- <span class="text-sm ml-2">{{$tecnico->name}}</span> --}}
+
                                         </label>
                                     </div>
 

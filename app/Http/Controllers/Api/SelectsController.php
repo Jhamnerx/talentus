@@ -7,7 +7,9 @@ use App\Models\Categoria;
 use App\Models\Productos;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Dispositivos;
 use App\Models\Lineas;
+use App\Models\ModelosDispositivo;
 use App\Models\SimCard;
 use App\Models\Vehiculos;
 use Illuminate\Support\Facades\Storage;
@@ -222,6 +224,25 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('placa', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+
+            )
+            ->get();
+    }
+    public function dispositivos(Request $request): Collection
+    {
+        return ModelosDispositivo::query()
+            ->select('id', 'modelo', 'marca')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('modelo', 'like', "%{$request->search}%")
+
+            )
+            ->withoutGlobalScopes()
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('modelo', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
 
             )

@@ -86,7 +86,7 @@
         <div class="grid grid-cols-12 gap-6">
 
             <div class="col-span-12 sm:col-span-6">
-                <x-form.select id="vehiculo_id" name="vehiculo_id" label="Selecciona una categoria"
+                <x-form.select id="vehiculo_id" name="vehiculo_id" label="Selecciona un vehiculo"
                     wire:model.live="vehiculo_id" placeholder="Selecciona un vehiculo" :async-data="[
                         'api' => route('api.vehiculos.index'),
                     ]"

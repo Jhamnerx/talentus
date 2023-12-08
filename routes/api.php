@@ -33,6 +33,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('sim-card', 'sim')->name('api.sim.index');
     Route::get('lineas', 'lineas')->name('api.lineas.index');
     Route::get('vehiculos', 'vehiculos')->name('api.vehiculos.index');
+    Route::get('dispositivos', 'dispositivos')->name('api.dispositivos.index');
 });
 
 

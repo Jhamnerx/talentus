@@ -73,20 +73,14 @@ Route::controller(SimCardController::class)->group(function () {
 Route::controller(LineasController::class)->group(function () {
     //lineas
     Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
-    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
-    Route::get('asignar/linea', 'asign')->name('admin.almacen.lineas.asign');
-    Route::post('asignar/linea/store', 'asignLineaStore')->name('admin.almacen.lineas.simcard.store');
 });
 
-Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('admin.almacen.modelos-dispositivos');
-
-Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
-    'dispositivos' => 'dispositivo'
-]);
-
+Route::controller(GpsController::class)->group(function () {
+    Route::get('dispositivos', 'index')->name('admin.almacen.dispositivos.index');
+    Route::get('modelos/dispositivos')->name('admin.almacen.modelos-dispositivos');
+});
 
 
-// Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 Route::controller(GuiaRemisionController::class)->group(function () {
     Route::get('guias', 'index')->name('admin.almacen.guias.index');
     Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');

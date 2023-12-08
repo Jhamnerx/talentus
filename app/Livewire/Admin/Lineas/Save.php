@@ -4,12 +4,14 @@ namespace App\Livewire\Admin\Lineas;
 
 use App\Models\Lineas;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
 
 class Save extends Component
 {
 
     public Collection $items;
+    public $modalCreate = false;
 
     protected $rules = [
 
@@ -28,13 +30,35 @@ class Save extends Component
     ];
 
 
+    public function cancel()
+    {
+        $this->inicializarItems();
+    }
+
+
     public function mount()
+    {
+
+        $this->inicializarItems();
+    }
+
+    public function inicializarItems()
     {
         $this->items = collect();
         $this->items->push([
             'numero' => '',
             'operador' => '',
         ]);
+    }
+
+    #[On('open-modal-create')]
+    public function openModal()
+    {
+        $this->modalCreate = true;
+    }
+    public function closeModal()
+    {
+        $this->modalCreate = false;
     }
 
     public function render()
@@ -65,7 +89,7 @@ class Save extends Component
     }
 
 
-    public function store()
+    public function save()
     {
         $validatedDate = $this->validate();
 
@@ -74,6 +98,17 @@ class Save extends Component
             $numero = Lineas::create($item);
         }
 
-        return redirect()->route('admin.almacen.lineas.index')->with('store', 'Se guardo con exito');
+        $this->afterSave();
+    }
+    public function afterSave()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'LINEAS REGISTRADAS',
+            mensaje: 'se guardo correctamente las lineas'
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

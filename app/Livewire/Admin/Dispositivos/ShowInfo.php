@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Dispositivos;
 
 use App\Http\Controllers\Admin\FotaWebApiController;
 use App\Models\Dispositivos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 
@@ -11,13 +12,6 @@ class ShowInfo extends Component
 {
     public $modalOpen = false;
     public $datos = [];
-
-
-    protected $listeners = [
-        'show-info-dispositivo' => 'openModalInfo'
-    ];
-
-
 
     public function mount()
     {
@@ -39,14 +33,13 @@ class ShowInfo extends Component
     {
         return view('livewire.admin.dispositivos.show-info');
     }
-
+    #[On('show-info-dispositivo')]
     public function openModalInfo(Dispositivos $dispositivo)
     {
         $this->openModal();
 
         $api = new FotaWebApiController();
         $info = $api->getDevice($dispositivo->imei);
-
 
         if ($info) {
             $this->datos = collect([
@@ -58,6 +51,8 @@ class ShowInfo extends Component
                 'description' => $info->description,
                 'company_name' => $info->company_name,
                 'group_name' => $info->group_name,
+                'iccid' => $info->iccid,
+                'imsi' => $info->imsi,
                 'seen_at' => $info->seen_at,
             ]);
         } else {

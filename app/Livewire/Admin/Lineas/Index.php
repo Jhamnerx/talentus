@@ -102,32 +102,6 @@ class Index extends Component
     {
         $this->resetPage();
     }
-    public function filter($dias)
-    {
-        switch ($dias) {
-            case '1':
-                $this->from = date('Y-m-d');
-                $this->to = date('Y-m-d');
-                break;
-            case '7':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 7 days"));
-                $this->to = date('Y-m-d');
-                break;
-            case '30':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 month"));
-                $this->to = date('Y-m-d');
-                break;
-            case '12':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 year"));
-                $this->to = date('Y-m-d');
-                break;
-            case '0':
-                $this->from = '';
-                $this->to = '';
-                break;
-        }
-    }
-
 
     public function activar(Lineas $linea)
     {
@@ -184,5 +158,14 @@ class Index extends Component
     public function openModalReporteLineas()
     {
         $this->dispatch('openModalReporteLineas');
+    }
+
+    public function openModalCreate()
+    {
+        $this->dispatch('open-modal-create');
+    }
+    public function openModalAsign()
+    {
+        $this->dispatch('open-modal-asign');
     }
 }

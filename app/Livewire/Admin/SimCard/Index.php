@@ -124,7 +124,6 @@ class Index extends Component
 
     public function openModalAsign()
     {
-
         $this->dispatch('open-modal-asign');
     }
 }

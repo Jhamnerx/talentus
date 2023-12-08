@@ -10,8 +10,9 @@
 @push('modals')
     @livewire('admin.lineas.asign-to-placa')
     @livewire('admin.lineas.suspend-linea')
-
+    @livewire('admin.lineas.save')
     @livewire('admin.gerencia.reportes.modales.reporte-lineas')
+    @livewire('admin.sim-card.asign-linea')
 @endpush
 
 @section('js')

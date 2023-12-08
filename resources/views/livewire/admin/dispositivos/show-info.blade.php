@@ -110,6 +110,18 @@
                                                         <div class="text-sm font-medium text-emerald-600 ml-2">
                                                             {{ $datos['group_name'] }}</div>
                                                     </li>
+                                                    <li
+                                                        class="flex items-center justify-between py-3 border-b border-slate-200">
+                                                        <div class="text-sm">iccid:</div>
+                                                        <div class="text-sm font-medium text-emerald-600 ml-2">
+                                                            {{ $datos['iccid'] }}</div>
+                                                    </li>
+                                                    <li
+                                                        class="flex items-center justify-between py-3 border-b border-slate-200">
+                                                        <div class="text-sm">imsi:</div>
+                                                        <div class="text-sm font-medium text-emerald-600 ml-2">
+                                                            {{ $datos['imsi'] }}</div>
+                                                    </li>
                                                 </ul>
                                             </div>
 

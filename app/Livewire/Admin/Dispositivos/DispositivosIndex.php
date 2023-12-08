@@ -2,18 +2,20 @@
 
 namespace App\Livewire\Admin\Dispositivos;
 
+use DateTime;
 use Carbon\Carbon;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\Dispositivos;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\FotaWebApiController;
-use DateTime;
 
 class DispositivosIndex extends Component
 {
     use WithPagination;
-    public $search;
-    public $estado = 0;
+    #[Url(except: '')]
+    public $search = '';
 
     protected $listeners = ['render' => 'render'];
 
@@ -36,35 +38,18 @@ class DispositivosIndex extends Component
             ->paginate(10);
 
 
-        if ($this->estado == "VENDIDO") {
-
-            $dispositivos = Dispositivos::whereHas('modelo', function ($query) {
-                $query->where('marca', 'like', '%' . $this->search . '%')
-                    ->orWhere('modelo', 'like', '%' . $this->search . '%');
-            })->orwhereHas('vehiculos', function ($query) {
-                $query->where('placa', 'like', '%' . $this->search . '%');
-            })->orWhere('imei', 'like', '%' . $this->search . '%')
-                ->vendido()
-                ->with('vehiculos', 'modelo')
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-        }
-
-        if ($this->estado == "STOCK") {
-
-            $dispositivos = Dispositivos::whereHas('modelo', function ($query) {
-                $query->where('marca', 'like', '%' . $this->search . '%')
-                    ->orWhere('modelo', 'like', '%' . $this->search . '%');
-            })->orwhereHas('vehiculos', function ($query) {
-                $query->where('placa', 'like', '%' . $this->search . '%');
-            })->orWhere('imei', 'like', '%' . $this->search . '%')
-                ->stock()
-                ->with('vehiculos', 'modelo')
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-        }
-
         return view('livewire.admin.dispositivos.dispositivos-index', compact('dispositivos'));
+    }
+
+    #[On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+    public function search()
+    {
+        $this->resetPage();
     }
 
     public function updatingSearch()
@@ -78,11 +63,6 @@ class DispositivosIndex extends Component
         return $d && $d->format($format) == $date;
     }
 
-    public function filter($estado)
-    {
-        $this->estado = $estado;
-        $this->resetPage();
-    }
 
     public function verInfoDispositivo(Dispositivos $dispositivo)
     {
@@ -111,8 +91,24 @@ class DispositivosIndex extends Component
                 $dispositivo->save();
             }
         }
+        $this->afterSave();
+    }
 
-        $this->dispatch('consulta-finish', ['cantidad' => $dispositivos->count()]);
+    public function afterSave()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'SE HA CONSULTADO A FOTA WEB',
+            mensaje: 'se ha completado la consulta correctamente a la api de fota web'
+        );
+
         $this->render();
+    }
+
+    public function openModalCreate()
+    {
+
+        $this->dispatch('open-modal-create');
     }
 }
