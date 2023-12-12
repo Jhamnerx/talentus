@@ -9,6 +9,8 @@
 @push('modals')
     @livewire('admin.dispositivos.show-info')
     @livewire('admin.dispositivos.save')
+    @livewire('admin.dispositivos.edit')
+    @livewire('admin.dispositivos.import')
 @endpush
 
 

@@ -54,8 +54,6 @@ class ModelosDispositivo extends Model
     }
 
     //relacion uno a muchos
-
-
     public function dispositivo()
     {
         return $this->hasMany(Dispositivos::class, 'modelo_id');

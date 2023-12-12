@@ -5,14 +5,15 @@ namespace App\Livewire\Admin\Dispositivos;
 use App\Models\ModelosDispositivo;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ModelosDispositivosIndex extends Component
 {
     use WithPagination;
-    public $modalEditOpen = false;
     public $search;
 
     protected $listeners = [
-        'ActualizarTabla' => 'render'
+        'ActualizarTabla' => 'render',
+        'update-table' => 'render'
     ];
 
     public function render()
@@ -32,8 +33,11 @@ class ModelosDispositivosIndex extends Component
 
     public function showModal(ModelosDispositivo $modelo)
     {
-        //dd($modelo);
-        $this->modalEditOpen = true;
         $this->dispatch('abrirModal', $modelo);
+    }
+
+    public function openModalDelete(ModelosDispositivo $modelo)
+    {
+        $this->dispatch('open-modal-delete', modelo: $modelo);
     }
 }

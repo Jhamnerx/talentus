@@ -32,7 +32,7 @@
                 <div class="px-5 py-3 border-b border-slate-200">
                     <div class="flex justify-between items-center">
                         <div class="font-semibold text-slate-800">REGISTRAR MODELOS GPS</div>
-                        <button class="text-slate-400 hover:text-slate-500" @click="modalOpen = false">
+                        <button class="text-slate-400 hover:text-slate-500" wire:click.prevent='closeModal'>
                             <div class="sr-only">Close</div>
                             <svg class="w-4 h-4 fill-current">
                                 <path
@@ -70,8 +70,8 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium mb-1" for="certificado">Certificado:
                             </label>
-                            <input wire:model.live='certificado' id="certificado" class="form-input w-full" type="text"
-                                placeholder="Escribe el Certificado..." />
+                            <input wire:model.live='certificado' id="certificado" class="form-input w-full"
+                                type="text" placeholder="Escribe el Certificado..." />
                             @error('certificado')
                                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                     {{ $message }}
@@ -156,7 +156,7 @@
                         <div class="flex flex-wrap justify-end space-x-2">
                             <button type="button"
                                 class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                                @click="modalOpen = false">Cerrar</button>
+                                wire:click.prevent='closeModal'>Cerrar</button>
                             <button wire:click.prevent='save'
                                 class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                         </div>

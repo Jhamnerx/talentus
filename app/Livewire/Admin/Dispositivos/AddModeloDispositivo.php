@@ -39,7 +39,7 @@ class AddModeloDispositivo extends Component
         $this->modalOpen = false;
         $this->resetErrorBag();
         $this->resetValidation();
-        $this->reset();
+        $this->reset('modelo', 'marca', 'certificado');
     }
 
     public function save()

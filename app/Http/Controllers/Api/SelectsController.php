@@ -186,7 +186,7 @@ class SelectsController extends Controller
             )
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('sim_card', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
             )
             ->get();
@@ -204,7 +204,7 @@ class SelectsController extends Controller
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('numero', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
 
             )
@@ -223,13 +223,13 @@ class SelectsController extends Controller
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('placa', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
 
             )
             ->get();
     }
-    public function dispositivos(Request $request): Collection
+    public function modelosDispositivos(Request $request): Collection
     {
         return ModelosDispositivo::query()
             ->select('id', 'modelo', 'marca')
@@ -242,8 +242,8 @@ class SelectsController extends Controller
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('modelo', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(20)
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(10)
 
             )
             ->get();

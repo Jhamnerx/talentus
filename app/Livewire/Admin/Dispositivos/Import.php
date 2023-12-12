@@ -9,6 +9,7 @@ use App\Models\ModelosDispositivo;
 use App\Imports\DispositivosImport;
 use Collator;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -17,7 +18,7 @@ class Import extends Component
     use WithFileUploads;
     public $file;
     public $modelo;
-    public $modalOpen = false;
+    public $modalImport = false;
     public Collection $errorInfo;
 
     protected $rules = [
@@ -41,8 +42,16 @@ class Import extends Component
     {
         $this->validateOnly($propertyName);
     }
+    #[On('open-modal-import')]
+    public function openModal()
+    {
+        $this->modalImport = true;
+    }
 
-
+    public function closeModal()
+    {
+        $this->modalImport = false;
+    }
     public function render()
     {
         $modelos = ModelosDispositivo::all();
@@ -53,25 +62,16 @@ class Import extends Component
     public function importExcel()
     {
         $this->validate();
-        //$this->errorInfo = [];
 
         try {
 
             $excel = Excel::import(new DispositivosImport($this->modelo), $this->file);
-            $this->modalOpen = false;
-            $this->dispatch('render');
-        } catch (ValidationException $e) {;
+            $this->afterSave();
+        } catch (ValidationException $e) {
+
             $failures = $e->failures();
             foreach ($failures as $failure) {
 
-                // $this->errorInfo->push(
-                //     [
-                //         'row' => $failure->row(),
-                //         'attribute' => $failure->attribute(),
-                //         'errors' => $failure->errors(),
-                //         'values' => $failure->values(),
-                //     ]
-                // );
                 $errores = $failure->errors();
                 $values = $failure->values();
                 foreach ($errores as $key => $error) {
@@ -82,13 +82,23 @@ class Import extends Component
                         ]);
                     }
                 }
-
                 $failure->row(); // row that went wrong
                 $failure->attribute(); // either heading key (if using heading row concern) or column index
                 $failure->errors(); // Actual error messages from Laravel validator
                 $failure->values(); // The values of the row that has failed.
             }
-            ///dd($this->errorInfo);
         }
+    }
+
+    public function afterSave()
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'DISPOSITIVOS IMPORTADOS',
+            mensaje: 'se completo la importacion de dispositivos'
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 }

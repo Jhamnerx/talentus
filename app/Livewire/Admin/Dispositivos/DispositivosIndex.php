@@ -111,4 +111,14 @@ class DispositivosIndex extends Component
 
         $this->dispatch('open-modal-create');
     }
+
+    public function openModalEdit(Dispositivos $dispositivo)
+    {
+
+        $this->dispatch('open-modal-edit', dispositivo: $dispositivo);
+    }
+    public function OpenModalImport()
+    {
+        $this->dispatch('open-modal-import');
+    }
 }

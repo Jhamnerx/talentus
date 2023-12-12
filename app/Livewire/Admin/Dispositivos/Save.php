@@ -53,7 +53,7 @@ class Save extends Component
         $this->items->push([
             'imei' => '',
             'modelo_id' => '',
-            'of_client' => '',
+            'of_client' => false,
         ]);
     }
 
@@ -62,7 +62,7 @@ class Save extends Component
         $this->items->push([
             'imei' => '',
             'modelo_id' => '',
-            'of_client' => '',
+            'of_client' => false,
         ]);
     }
 

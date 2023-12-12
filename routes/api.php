@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SelectsController;
+use App\Http\Controllers\Admin\UtilesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('sim-card', 'sim')->name('api.sim.index');
     Route::get('lineas', 'lineas')->name('api.lineas.index');
     Route::get('vehiculos', 'vehiculos')->name('api.vehiculos.index');
-    Route::get('dispositivos', 'dispositivos')->name('api.dispositivos.index');
+    Route::get('modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
 });
 
 

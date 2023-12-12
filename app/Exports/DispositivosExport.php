@@ -34,8 +34,10 @@ class DispositivosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             '#',
             'IMEI',
             'MODELO',
+            'MARCA',
             'VEHICULO',
-            'Fecha',
+            'Registrado por:',
+            'Fecha Registro',
         ];
     }
 
@@ -45,7 +47,9 @@ class DispositivosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $dispositivo->id,
             $dispositivo->imei,
             $dispositivo->modelo->modelo,
+            $dispositivo->modelo->marca,
             ($dispositivo->vehiculos) ? $dispositivo->vehiculos->placa : 'Disponible',
+            $dispositivo->user ? $dispositivo->user->name : '',
             Carbon::createFromFormat('Y-m-d H:i:s', $dispositivo->created_at)->format('d-m-Y'),
 
         ];

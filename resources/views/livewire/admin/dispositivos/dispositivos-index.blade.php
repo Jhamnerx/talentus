@@ -11,10 +11,9 @@
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
             <form class="relative">
-                <label for="action-search" class="sr-only">Buscar</label>
+                <label class="sr-only">Buscar</label>
                 <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Dispositivo" />
-                {{ $search }}
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -325,7 +324,9 @@
                                                 <ul>
 
                                                     <li>
-                                                        <a class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                        <a href="javascript: void(0)"
+                                                            wire:click.prevent='openModalEdit({{ $dispositivo->id }})'
+                                                            class="text-gray-700 cursor-pointer group flex items-center px-4 py-2 text-sm font-normal"
                                                             disabled="false" id="headlessui-menu-item-27"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"

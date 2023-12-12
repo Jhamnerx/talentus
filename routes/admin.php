@@ -77,7 +77,7 @@ Route::controller(LineasController::class)->group(function () {
 
 Route::controller(GpsController::class)->group(function () {
     Route::get('dispositivos', 'index')->name('admin.almacen.dispositivos.index');
-    Route::get('modelos/dispositivos')->name('admin.almacen.modelos-dispositivos');
+    Route::get('modelos/dispositivos', 'showModels')->name('admin.almacen.modelos-dispositivos');
 });
 
 
@@ -242,23 +242,23 @@ Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(fu
 
 Route::controller(SearchController::class)->prefix('search')->group(function () {
 
-    Route::get('clientes', 'clientes')->name('search.clientes');
-    Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
-    Route::get('proveedores', 'proveedores')->name('search.proveedores');
-    Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
-    Route::get('flotas', 'flotas')->name('search.flotas');
-    Route::get('flota', 'flota')->name('search.flota');
+    // Route::get('clientes', 'clientes')->name('search.clientes');
+    //Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
+    //Route::get('proveedores', 'proveedores')->name('search.proveedores');
+    //Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
+    //Route::get('flotas', 'flotas')->name('search.flotas');
+    // Route::get('flota', 'flota')->name('search.flota');
 
-    Route::get('sim_card', 'sim_card')->name('search.sim_card');
-    Route::get('lineas', 'lineas')->name('search.lineas');
-    Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
-    Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
-    Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
-    Route::get('ciudades', 'ciudades')->name('search.ciudades');
-    Route::get('productos', 'productos')->name('search.productos');
-    Route::get('facturas', 'facturas')->name('search.facturas');
-    Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
-    Route::get('users', 'users')->name('search.users');
+    // Route::get('sim_card', 'sim_card')->name('search.sim_card');
+    // Route::get('lineas', 'lineas')->name('search.lineas');
+    // Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    // //Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
+    // Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
+    // Route::get('ciudades', 'ciudades')->name('search.ciudades');
+    // Route::get('productos', 'productos')->name('search.productos');
+    // Route::get('facturas', 'facturas')->name('search.facturas');
+    // Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
+    // Route::get('users', 'users')->name('search.users');
 });
 
 

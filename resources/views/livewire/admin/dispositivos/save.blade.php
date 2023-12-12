@@ -23,6 +23,9 @@
                         <div class="font-semibold text-left">MODELO</div>
                     </th>
                     <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-semibold text-center">DE CLIENTE</div>
+                    </th>
+                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-semibold text-center">ACCIONES</div>
                     </th>
                 </tr>
@@ -40,12 +43,17 @@
                             <x-form.input placeholder="IMEI DISPOSITIVO"
                                 wire:model.live="items.{{ $clave }}.imei" />
                         </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap  text-left">
                             <x-form.select name="modelo_id" wire:model.live="items.{{ $clave }}.modelo_id"
                                 placeholder="Selecciona un modelo" :async-data="[
-                                    'api' => route('api.dispositivos.index'),
+                                    'api' => route('api.dispositivos.modelos.index'),
                                 ]" option-label="modelo"
                                 option-value="id" option-description="marca" />
+
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                            <x-form.toggle wire:model.live="items.{{ $clave }}.of_client" value="true" />
 
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -56,6 +64,7 @@
 
                     </tr>
                 @endforeach
+
             </tbody>
         </table>
 
