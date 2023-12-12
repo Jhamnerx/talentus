@@ -218,271 +218,228 @@
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
-                        @if ($lineas->count())
-                            @foreach ($lineas as $linea)
-                                <tr class="{{ $linea->baja ? 'bg-rose-100' : '' }}">
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input wire:model.live="selected" value="{{ $linea->numero }}"
-                                                    id-linea="{{ $linea->numero }}" class="table-item form-checkbox"
-                                                    type="checkbox" />
-                                            </label>
+
+                        @foreach ($lineas as $linea)
+                            <tr class="{{ $linea->baja ? 'bg-rose-100' : '' }}">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input wire:model.live="selected" value="{{ $linea->numero }}"
+                                                id-linea="{{ $linea->numero }}" class="table-item form-checkbox"
+                                                type="checkbox" />
+                                        </label>
+                                    </div>
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+
+                                            <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" width="20" height="20">
+                                                <g fill="none" class="nc-icon-wrapper">
+                                                    <path
+                                                        d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
+                                                        fill="white"></path>
+                                                </g>
+                                            </svg>
                                         </div>
-                                    </td>
+                                        @if (!empty($linea->numero))
+                                            <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
+                                        @else
+                                            <div class="font-medium text-slate-800"></div>
+                                        @endif
+                                    </div>
+                                </td>
 
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                                <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" width="20" height="20">
-                                                    <g fill="none" class="nc-icon-wrapper">
-                                                        <path
-                                                            d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
-                                                            fill="white"></path>
-                                                    </g>
+                                    <div class="text-left">{{ $linea->operador }}</div>
+
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if (!empty($linea->sim_card))
+                                        <div class="text-left font-medium text-slate-800">
+                                            {{ $linea->sim_card->sim_card }}</div>
+                                    @else
+                                        <div class="text-left font-medium text-red-300">SIN ASIGNAR</div>
+                                    @endif
+
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left font-medium text-slate-800">
+
+                                    </div>
+                                    @if (!empty($linea->sim_card))
+                                        <div class="text-left font-medium text-slate-800">
+                                            @if (!empty($linea->sim_card->vehiculos))
+                                                {{ $linea->sim_card->vehiculos->cliente->razon_social }}
+                                            @endif
+                                        </div>
+                                    @else
+                                        <div class="text-left font-medium text-red-300"></div>
+                                    @endif
+
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left font-medium text-slate-800">
+
+                                    </div>
+                                    @if (!empty($linea->sim_card))
+                                        <div class="text-left font-medium text-slate-800">
+                                            @if (!empty($linea->sim_card->vehiculos))
+                                                {{ $linea->sim_card->vehiculos->placa }}
+                                            @endif
+                                        </div>
+                                    @else
+                                        <div class="text-left font-medium text-red-300"></div>
+                                    @endif
+
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if ($linea->baja)
+                                        <div class="font-medium text-red-600">
+                                            BAJA DEFINITIVA
+                                        </div>
+                                    @else
+                                        @if ($linea->estado->name == 'SUSPENDIDA')
+                                            <div class="font-medium text-red-500">
+                                                Suspendido <br>
+
+                                                {{ $linea->fecha_suspencion->format('d-m-Y') }} -
+                                                {{ $linea->date_to_suspend->format('d-m-Y') }}
+                                            </div>
+                                        @else
+                                            <div class="font-medium text-emerald-500">
+                                                {{ $linea->estado->name }}
+                                            </div>
+                                        @endif
+                                    @endif
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if (count($linea->old_sim_cards) > 0)
+                                        <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                            @mouseleave="open = false">
+                                            <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                                aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                                @focusout="open = false" @click.prevent>
+                                                <span class="mr-2">
+                                                    {{ $linea->old_sim_card }}
+                                                </span>
+                                                <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
+                                                    <path
+                                                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
                                                 </svg>
-                                            </div>
-                                            @if (!empty($linea->numero))
-                                                <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
-                                            @else
-                                                <div class="font-medium text-slate-800"></div>
-                                            @endif
-                                        </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                        <div class="text-left">{{ $linea->operador }}</div>
-
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if (!empty($linea->sim_card))
-                                            <div class="text-left font-medium text-slate-800">
-                                                {{ $linea->sim_card->sim_card }}</div>
-                                        @else
-                                            <div class="text-left font-medium text-red-300">SIN ASIGNAR</div>
-                                        @endif
-
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-slate-800">
-
-                                        </div>
-                                        @if (!empty($linea->sim_card))
-                                            <div class="text-left font-medium text-slate-800">
-                                                @if (!empty($linea->sim_card->vehiculos))
-                                                    {{ $linea->sim_card->vehiculos->cliente->razon_social }}
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="text-left font-medium text-red-300"></div>
-                                        @endif
-
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-slate-800">
-
-                                        </div>
-                                        @if (!empty($linea->sim_card))
-                                            <div class="text-left font-medium text-slate-800">
-                                                @if (!empty($linea->sim_card->vehiculos))
-                                                    {{ $linea->sim_card->vehiculos->placa }}
-                                                @endif
-                                            </div>
-                                        @else
-                                            <div class="text-left font-medium text-red-300"></div>
-                                        @endif
-
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if ($linea->baja)
-                                            <div class="font-medium text-red-600">
-                                                BAJA DEFINITIVA
-                                            </div>
-                                        @else
-                                            @if ($linea->estado->name == 'SUSPENDIDA')
-                                                <div class="font-medium text-red-500">
-                                                    Suspendido <br>
-
-                                                    {{ $linea->fecha_suspencion->format('d-m-Y') }} -
-                                                    {{ $linea->date_to_suspend->format('d-m-Y') }}
-                                                </div>
-                                            @else
-                                                <div class="font-medium text-emerald-500">
-                                                    {{ $linea->estado->name }}
-                                                </div>
-                                            @endif
-                                        @endif
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if (count($linea->old_sim_cards) > 0)
-                                            <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
-                                                @mouseleave="open = false">
-                                                <button
-                                                    class="btn border-slate-200 hover:border-slate-300 text-slate-600"
-                                                    aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                                                    @focusout="open = false" @click.prevent>
-                                                    <span class="mr-2">
-                                                        {{ $linea->old_sim_card }}
-                                                    </span>
-                                                    <svg class="w-4 h-4 fill-current text-slate-400"
-                                                        viewBox="0 0 16 16">
-                                                        <path
-                                                            d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                                                    </svg>
-                                                </button>
-                                                <div
-                                                    class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2 h-[calc(100vh-64px)]">
-                                                    <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
-                                                        x-show="open"
-                                                        x-transition:enter="transition ease-out duration-200 transform"
-                                                        x-transition:enter-start="opacity-0 translate-y-2"
-                                                        x-transition:enter-end="opacity-100 translate-y-0"
-                                                        x-transition:leave="transition ease-out duration-200"
-                                                        x-transition:leave-start="opacity-100"
-                                                        x-transition:leave-end="opacity-0" x-cloak>
-                                                        <div class="">
-                                                            <div
-                                                                class="font-medium text-slate-800 mb-0.5 pb-2  text-base text-center">
-                                                                <b> {{ $linea->numero }}</b>
-                                                            </div>
-                                                            <div
-                                                                class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
-                                                                <table
-                                                                    class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
-                                                                    <thead
-                                                                        class="text-xs  text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                                                        <tr>
-                                                                            <th scope="col" class="px-6 py-3">
-                                                                                SIM ANTERIOR
-                                                                            </th>
-                                                                            <th scope="col" class="px-6 py-3">
-                                                                                FECHA CAMBIO
-                                                                            </th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody class="a overflow-y-auto">
-
-                                                                        @foreach ($linea->old_sim_cards()->orderBy('created_at', 'desc')->get() as $old)
-                                                                            <tr
-                                                                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                                                                <th scope="row"
-                                                                                    class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                                                                                    {{ $old->old_sim_card }}
-                                                                                </th>
-                                                                                <td class="px-6 py-4">
-                                                                                    {{ $old->created_at->format('d-m-Y') }}
-                                                                                </td>
-
-                                                                            </tr>
-                                                                        @endforeach
-
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="relative inline-flex" x-data="{ open: false }">
-                                            <div class="relative inline-block h-full text-left">
-                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
-                                                    aria-haspopup="true" @click.prevent="open = !open"
-                                                    :aria-expanded="open">
-                                                    <span class="sr-only">Menu</span>
-                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                        <circle cx="16" cy="16" r="2" />
-                                                        <circle cx="10" cy="16" r="2" />
-                                                        <circle cx="22" cy="16" r="2" />
-                                                    </svg>
-                                                </button>
-                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                                                    @click.outside="open = false"
-                                                    @keydown.escape.window="open = false" x-show="open"
+                                            </button>
+                                            <div
+                                                class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2 h-[calc(100vh-64px)]">
+                                                <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
+                                                    x-show="open"
                                                     x-transition:enter="transition ease-out duration-200 transform"
-                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-start="opacity-0 translate-y-2"
                                                     x-transition:enter-end="opacity-100 translate-y-0"
                                                     x-transition:leave="transition ease-out duration-200"
                                                     x-transition:leave-start="opacity-100"
                                                     x-transition:leave-end="opacity-0" x-cloak>
+                                                    <div class="">
+                                                        <div
+                                                            class="font-medium text-slate-800 mb-0.5 pb-2  text-base text-center">
+                                                            <b> {{ $linea->numero }}</b>
+                                                        </div>
+                                                        <div
+                                                            class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
+                                                            <table
+                                                                class="w-full text-sm text-center text-gray-500 dark:text-gray-400">
+                                                                <thead
+                                                                    class="text-xs  text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                                    <tr>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            SIM ANTERIOR
+                                                                        </th>
+                                                                        <th scope="col" class="px-6 py-3">
+                                                                            FECHA CAMBIO
+                                                                        </th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody class="a overflow-y-auto">
 
-                                                    <ul>
-                                                        @if ($linea->fecha_suspencion)
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="true" id="headlessui-menu-item-28"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Suspender
-                                                                </a>
-                                                            </li>
-                                                            @if (!$linea->baja)
-                                                                <li>
-                                                                    <a href="javascript: void(0)"
-                                                                        wire:click.prevent="activar({{ $linea->id }})"
-                                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                        disabled="false" id="headlessui-menu-item-33"
-                                                                        role="menuitem" tabindex="-1">
-                                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                                            fill="none" viewBox="0 0 24 24"
-                                                                            stroke="currentColor"
-                                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
-                                                                            <path stroke-linecap="round"
-                                                                                stroke-linejoin="round"
-                                                                                stroke-width="2"
-                                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                                            </path>
-                                                                        </svg>
-                                                                        Activar
-                                                                    </a>
-                                                                </li>
-                                                            @endif
-                                                        @else
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="suspender({{ $linea->id }})"
-                                                                    class="text-gray-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="true" id="headlessui-menu-item-28"
-                                                                    role="menuitem" tabindex="-1">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                                        fill="none" viewBox="0 0 24 24"
-                                                                        stroke="currentColor"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                                        </path>
-                                                                    </svg>
-                                                                    Suspender
-                                                                </a>
-                                                            </li>
+                                                                    @foreach ($linea->old_sim_cards()->orderBy('created_at', 'desc')->get() as $old)
+                                                                        <tr
+                                                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                            <th scope="row"
+                                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                                {{ $old->old_sim_card }}
+                                                                            </th>
+                                                                            <td class="px-6 py-4">
+                                                                                {{ $old->created_at->format('d-m-Y') }}
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="relative inline-flex" x-data="{ open: false }">
+                                        <div class="relative inline-block h-full text-left">
+                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
+                                                @click.prevent="open = !open" :aria-expanded="open">
+                                                <span class="sr-only">Menu</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <circle cx="16" cy="16" r="2" />
+                                                    <circle cx="10" cy="16" r="2" />
+                                                    <circle cx="22" cy="16" r="2" />
+                                                </svg>
+                                            </button>
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                @click.outside="open = false" @keydown.escape.window="open = false"
+                                                x-show="open"
+                                                x-transition:enter="transition ease-out duration-200 transform"
+                                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                x-transition:leave="transition ease-out duration-200"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" x-cloak>
+
+                                                <ul>
+                                                    @if ($linea->fecha_suspencion)
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="true" id="headlessui-menu-item-28"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Suspender
+                                                            </a>
+                                                        </li>
+                                                        @if (!$linea->baja)
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="activar({{ $linea->id }})"
-                                                                    class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-33"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -498,63 +455,99 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                        @if ($linea->sim_card)
-                                                            <li>
-                                                                <a href="javascript: void(0)"
-                                                                    wire:click.prevent="asignToPlaca({{ $linea->id }})"
-                                                                    class="text-gray-700  group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    id="headlessui-menu-item-33" role="menuitem"
-                                                                    tabindex="-1">
-                                                                    <svg class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500"
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        viewBox="0 0 64 64">
-                                                                        <g stroke-linecap="round" stroke-width="2"
-                                                                            fill="none" stroke="currentColor"
-                                                                            stroke-linejoin="round"
-                                                                            class="nc-icon-wrapper">
-                                                                            <line data-cap="butt" x1="32"
-                                                                                y1="29" x2="41"
-                                                                                y2="19"></line>
-                                                                            <path data-cap="butt"
-                                                                                d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29">
-                                                                            </path>
-                                                                            <polyline points="16 54 16 58 6 58 6 54">
-                                                                            </polyline>
-                                                                            <path
-                                                                                d="M62,49H2V36.066a4.99,4.99,0,0,1,1.465-3.532L7,29H57l3.535,3.535A5,5,0,0,1,62,36.071Z">
-                                                                            </path>
-                                                                            <circle cx="11" cy="40"
-                                                                                r="3"></circle>
-                                                                            <polyline points="58 54 58 58 48 58 48 54">
-                                                                            </polyline>
-                                                                            <circle cx="53" cy="40"
-                                                                                r="3"></circle>
-                                                                            <line x1="25" y1="40"
-                                                                                x2="39" y2="40"></line>
-                                                                        </g>
-                                                                    </svg>
-                                                                    Asignar a placa
-                                                                </a>
-                                                            </li>
-                                                        @endif
+                                                    @else
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="suspender({{ $linea->id }})"
+                                                                class="text-gray-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="true" id="headlessui-menu-item-28"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Suspender
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="activar({{ $linea->id }})"
+                                                                class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-33"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                    </path>
+                                                                </svg>
+                                                                Activar
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                    @if ($linea->sim_card)
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="asignToPlaca({{ $linea->id }})"
+                                                                class="text-gray-700  group flex items-center px-4 py-2 text-sm font-normal"
+                                                                id="headlessui-menu-item-33" role="menuitem"
+                                                                tabindex="-1">
+                                                                <svg class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    viewBox="0 0 64 64">
+                                                                    <g stroke-linecap="round" stroke-width="2"
+                                                                        fill="none" stroke="currentColor"
+                                                                        stroke-linejoin="round"
+                                                                        class="nc-icon-wrapper">
+                                                                        <line data-cap="butt" x1="32"
+                                                                            y1="29" x2="41"
+                                                                            y2="19"></line>
+                                                                        <path data-cap="butt"
+                                                                            d="M57,29,52.829,8.98A5,5,0,0,0,47.934,5H16.066a5,5,0,0,0-4.895,3.98L7,29">
+                                                                        </path>
+                                                                        <polyline points="16 54 16 58 6 58 6 54">
+                                                                        </polyline>
+                                                                        <path
+                                                                            d="M62,49H2V36.066a4.99,4.99,0,0,1,1.465-3.532L7,29H57l3.535,3.535A5,5,0,0,1,62,36.071Z">
+                                                                        </path>
+                                                                        <circle cx="11" cy="40" r="3">
+                                                                        </circle>
+                                                                        <polyline points="58 54 58 58 48 58 48 54">
+                                                                        </polyline>
+                                                                        <circle cx="53" cy="40" r="3">
+                                                                        </circle>
+                                                                        <line x1="25" y1="40"
+                                                                            x2="39" y2="40"></line>
+                                                                    </g>
+                                                                </svg>
+                                                                Asignar a placa
+                                                            </a>
+                                                        </li>
+                                                    @endif
 
-                                                    </ul>
+                                                </ul>
 
 
-                                                </div>
                                             </div>
-
                                         </div>
 
-                                    </td>
+                                    </div>
 
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                </td>
+
+                            </tr>
+                        @endforeach
+
+                        {{-- <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
-                            </td>
-                        @endif
+                            </td> --}}
+
 
                     </tbody>
                 </table>

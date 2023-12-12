@@ -240,159 +240,151 @@
                     </thead>
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
-                        <!-- Row -->
-                        @if ($sim_cards->count())
-                            @foreach ($sim_cards as $sim_card)
-                                <tr wire:key="{{ $sim_card->id }}">
+
+                        @foreach ($sim_cards as $sim_card)
+                            <tr wire:key="{{ $sim_card->id }}">
 
 
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div
-                                                class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-talentus-100 rounded-full mr-2 sm:mr-3">
 
-                                                <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24" width="20" height="20">
-                                                    <g fill="none" class="nc-icon-wrapper">
-                                                        <path
-                                                            d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
-                                                            fill="white"></path>
-                                                    </g>
-                                                </svg>
-                                            </div>
-                                            @if (!empty($sim_card->sim_card))
-                                                <div class="font-medium text-slate-800">{{ $sim_card->sim_card }}</div>
-                                            @else
-                                                <div class="font-medium text-slate-800"></div>
-                                            @endif
+                                            <svg class="ml-1" xmlns="http://www.w3.org/2000/svg"
+                                                viewBox="0 0 24 24" width="20" height="20">
+                                                <g fill="none" class="nc-icon-wrapper">
+                                                    <path
+                                                        d="M18 2h-8L4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 2v16H6V8.83L10.83 4H18zM7 17h2v2H7v-2zm8 0h2v2h-2v-2zm-8-6h2v4H7v-4zm4 4h2v4h-2v-4zm0-4h2v2h-2v-2zm4 0h2v4h-2v-4z"
+                                                        fill="white"></path>
+                                                </g>
+                                            </svg>
                                         </div>
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if (!empty($sim_card->linea))
-                                            <div class="text-left">{{ $sim_card->linea->numero }}</div>
+                                        @if (!empty($sim_card->sim_card))
+                                            <div class="font-medium text-slate-800">{{ $sim_card->sim_card }}</div>
                                         @else
-                                            <div class="text-left"># -</div>
+                                            <div class="font-medium text-slate-800"></div>
                                         @endif
+                                    </div>
+                                </td>
 
-                                    </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if (!empty($sim_card->linea))
+                                        <div class="text-left">{{ $sim_card->linea->numero }}</div>
+                                    @else
+                                        <div class="text-left"># -</div>
+                                    @endif
 
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left">{{ $sim_card->operador }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
-                                        @if (!empty($sim_card->vehiculos))
-                                            <div class="flex items-center space-x-2 justify-center">
-                                                <!-- Start -->
-                                                <div class="relative" x-data="{ open: false }"
-                                                    @mouseenter="open = true" @mouseleave="open = false">
-                                                    <button class="block" aria-haspopup="true"
-                                                        :aria-expanded="open" @focus="open = true"
-                                                        @focusout="open = false" @click.prevent>
-                                                        <svg class="w-4 h-4 fill-current text-slate-400"
-                                                            viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                                                        </svg>
-                                                    </button>
-                                                    <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
-                                                        <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
-                                                            x-show="open"
-                                                            x-transition:enter="transition ease-out duration-200 transform"
-                                                            x-transition:enter-start="opacity-0 translate-y-2"
-                                                            x-transition:enter-end="opacity-100 translate-y-0"
-                                                            x-transition:leave="transition ease-out duration-200"
-                                                            x-transition:leave-start="opacity-100"
-                                                            x-transition:leave-end="opacity-0" x-cloak>
-                                                            <div class="text-xs text-slate-200 whitespace-nowrap">
-                                                                Esta opción te permite ir al vehiculo asignado y
-                                                                editarlo
-                                                            </div>
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">{{ $sim_card->operador }}</div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                    @if (!empty($sim_card->vehiculos))
+                                        <div class="flex items-center space-x-2 justify-center">
+                                            <!-- Start -->
+                                            <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                                @mouseleave="open = false">
+                                                <button class="block" aria-haspopup="true" :aria-expanded="open"
+                                                    @focus="open = true" @focusout="open = false" @click.prevent>
+                                                    <svg class="w-4 h-4 fill-current text-slate-400"
+                                                        viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                                                    </svg>
+                                                </button>
+                                                <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
+                                                    <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
+                                                        x-show="open"
+                                                        x-transition:enter="transition ease-out duration-200 transform"
+                                                        x-transition:enter-start="opacity-0 translate-y-2"
+                                                        x-transition:enter-end="opacity-100 translate-y-0"
+                                                        x-transition:leave="transition ease-out duration-200"
+                                                        x-transition:leave-start="opacity-100"
+                                                        x-transition:leave-end="opacity-0" x-cloak>
+                                                        <div class="text-xs text-slate-200 whitespace-nowrap">
+                                                            Esta opción te permite ir al vehiculo asignado y
+                                                            editarlo
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <!-- End -->
-                                                <div class="font-medium text-sky-500">
-                                                    <a
-                                                        href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{ $sim_card->vehiculos->placa }}</a>
-                                                </div>
                                             </div>
-                                        @else
-                                            <div class="font-medium text-emerald-500">
-                                                Sin Vehiculo
+                                            <!-- End -->
+                                            <div class="font-medium text-sky-500">
+                                                <a
+                                                    href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{ $sim_card->vehiculos->placa }}</a>
                                             </div>
-                                        @endif
+                                        </div>
+                                    @else
+                                        <div class="font-medium text-emerald-500">
+                                            Sin Vehiculo
+                                        </div>
+                                    @endif
 
-                                    </td>
-                                    @can('eliminar.numero-sim_card')
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="space-x-1">
+                                </td>
+                                @can('eliminar.numero-sim_card')
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
 
 
-                                                @if (!empty($sim_card->linea))
-                                                    <div class="flex items-center space-x-2 justify-center">
-                                                        <!-- Start -->
-                                                        <div class="relative" x-data="{ open: false }"
-                                                            @mouseenter="open = true" @mouseleave="open = false">
-                                                            <button aria-haspopup="true" :aria-expanded="open"
-                                                                @focus="open = true" @focusout="open = false"
-                                                                @click.prevent
-                                                                wire:click.prevent="openModalUnAsign({{ $sim_card }})"
-                                                                class="btn border-slate-200 hover:border-slate-300 text-rose-500">
-                                                                <svg class="w-4 h-4 fill-current shrink-0"
-                                                                    viewBox="0 0 16 16">
-                                                                    <path
-                                                                        d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
-                                                                </svg>
+                                            @if (!empty($sim_card->linea))
+                                                <div class="flex items-center space-x-2 justify-center">
+                                                    <!-- Start -->
+                                                    <div class="relative" x-data="{ open: false }"
+                                                        @mouseenter="open = true" @mouseleave="open = false">
+                                                        <button aria-haspopup="true" :aria-expanded="open"
+                                                            @focus="open = true" @focusout="open = false" @click.prevent
+                                                            wire:click.prevent="openModalUnAsign({{ $sim_card }})"
+                                                            class="btn border-slate-200 hover:border-slate-300 text-rose-500">
+                                                            <svg class="w-4 h-4 fill-current shrink-0"
+                                                                viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M5 7h2v6H5V7zm4 0h2v6H9V7zm3-6v2h4v2h-1v10c0 .6-.4 1-1 1H2c-.6 0-1-.4-1-1V5H0V3h4V1c0-.6.4-1 1-1h6c.6 0 1 .4 1 1zM6 2v1h4V2H6zm7 3H3v9h10V5z" />
+                                                            </svg>
 
-                                                            </button>
-                                                            <div
-                                                                class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
-                                                                <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
-                                                                    x-show="open"
-                                                                    x-transition:enter="transition ease-out duration-200 transform"
-                                                                    x-transition:enter-start="opacity-0 translate-y-2"
-                                                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                                                    x-transition:leave="transition ease-out duration-200"
-                                                                    x-transition:leave-start="opacity-100"
-                                                                    x-transition:leave-end="opacity-0" x-cloak>
-                                                                    <div class="text-xs text-slate-200 whitespace-nowrap">
-                                                                        Esta opción te permite desvincular el numero
-                                                                        asociado a este sim card fisico
+                                                        </button>
+                                                        <div class="z-10 absolute bottom-full left-1/2 -translate-x-1/2">
+                                                            <div class="bg-slate-800 p-2 rounded overflow-hidden mb-2"
+                                                                x-show="open"
+                                                                x-transition:enter="transition ease-out duration-200 transform"
+                                                                x-transition:enter-start="opacity-0 translate-y-2"
+                                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                                x-transition:leave="transition ease-out duration-200"
+                                                                x-transition:leave-start="opacity-100"
+                                                                x-transition:leave-end="opacity-0" x-cloak>
+                                                                <div class="text-xs text-slate-200 whitespace-nowrap">
+                                                                    Esta opción te permite desvincular el numero
+                                                                    asociado a este sim card fisico
 
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!-- End -->
-
                                                     </div>
+                                                    <!-- End -->
+
+                                                </div>
 
 
-                                                    {{-- @livewire('admin.sim-card.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id)) --}}
-                                                @else
-                                                    <div class="text-left">-</div>
-                                                @endif
+                                                {{-- @livewire('admin.sim-card.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id)) --}}
+                                            @else
+                                                <div class="text-left">-</div>
+                                            @endif
 
-                                            </div>
-                                        </td>
-                                    @endcan
+                                        </div>
+                                    </td>
+                                @endcan
 
-                                    @can('ver.cambios-sim_card')
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="space-x-1">
-                                                @livewire('admin.sim-card.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
-                                            </div>
-                                        </td>
-                                    @endcan
+                                @can('ver.cambios-sim_card')
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+                                            @livewire('admin.sim-card.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
+                                        </div>
+                                    </td>
+                                @endcan
 
-                                </tr>
-                            @endforeach
-                        @else
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros de sim cards</div>
-                            </td>
-                        @endif
+                            </tr>
+                        @endforeach
+
 
                     </tbody>
                 </table>
