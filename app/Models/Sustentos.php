@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Ubigeos extends Model
+class Sustentos extends Model
 {
     use HasFactory;
 
@@ -15,7 +16,7 @@ class Ubigeos extends Model
      * @var array
      */
     protected $guarded = [];
-    protected $table = 'ubigeos';
+    protected $table = 'sustentos';
     /**
      * The attributes that should be cast to native types.
      *
@@ -24,4 +25,14 @@ class Ubigeos extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function notaCredito(): HasOne
+    {
+        return $this->hasOne(NotaCredito::class);
+    }
+
+    public function notaDebito(): HasOne
+    {
+        return $this->hasOne(NotaDebito::class);
+    }
 }

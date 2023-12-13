@@ -2,81 +2,57 @@
 
 namespace App\Models;
 
-use App\Scopes\EmpresaScope;
-use App\Enums\ModalidadTraslado;
-use Spatie\Activitylog\LogOptions;
-use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GuiaRemision extends Model
 {
-    use HasFactory, SoftDeletes;
-    use LogsActivity;
-    protected static $recordEvents = ['deleted', 'created', 'updated'];
+    use HasFactory;
 
-    public function getActivitylogOptions(): LogOptions
-    {
-        return LogOptions::defaults()
-            ->logUnguarded()
-            ->logOnlyDirty();
-        // Chain fluent methods for configuration options
-    }
+    /**
+     * The attributes that aren't mass assignable.
+     *
+     * @var array
+     */
+    protected $guarded = [];
     protected $table = 'guia_remision';
-    protected $guarded = ['id', 'created_at', 'updated_at'];
-
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
     protected $casts = [
-        'fecha_emision' => 'date:Y/m/d',
-        'fecha_inicio_traslado' => 'date:Y/m/d',
-        'modalidad_traslado' => ModalidadTraslado::class,
+        'id' => 'integer',
+        'cliente_id' => 'integer',
+        'fecha_emision' => 'date',
+        'venta_id' => 'integer',
+        'fecha_inicio_traslado' => 'date',
+        'user_id' => 'integer',
     ];
-    //GLOBAL SCOPE EMPRESA
-    // protected static function booted()
-    // {
-    //     static::addGlobalScope(new EmpresaScope);
-    // }
 
-    //relacion uno a muchos
-
-    public function detalles()
+    public function cliente(): BelongsTo
     {
-        return $this->hasMany(detalleGuiaRemision::class, 'guia_remision_id');
+        return $this->belongsTo(\App\Models\Clientes::class);
     }
 
-    public function motivo()
+    public function venta(): BelongsTo
     {
-        return $this->hasOne(MotivosTraslado::class, 'codigo', 'motivo_traslado');
+        return $this->belongsTo(\App\Models\Ventas::class);
     }
 
-    public function dispositivos()
+    public function motivoTraslado(): BelongsTo
     {
-        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', null, 'imei')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsTo(MotivoTraslado::class, 'motivo_traslado_id', 'codigo');
     }
 
-    public function sim_cards()
+    public function modalidadTransporte(): BelongsTo
     {
-        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', null, 'sim_card')->withoutGlobalScope(EmpresaScope::class);
-    }
-    //Relacion uno a muchos inversa
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(ModalidadTransporte::class, 'modalidad_transporte_id', 'codigo');
     }
 
-    public function factura()
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Facturas::class, 'factura_id');
-    }
-
-    public static function createItems($guia, $items)
-    {
-        foreach ($items as $item) {
-
-            $item['guia_remision_id'] = $guia->id;
-
-            $guia->detalles()->create($item);
-        }
+        return $this->belongsTo(User::class);
     }
 }

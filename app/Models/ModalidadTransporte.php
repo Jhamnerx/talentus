@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Ubigeos extends Model
+class ModalidadTransporte extends Model
 {
     use HasFactory;
 
@@ -15,13 +16,10 @@ class Ubigeos extends Model
      * @var array
      */
     protected $guarded = [];
-    protected $table = 'ubigeos';
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-    ];
+    protected $table = 'modalidad_transporte';
+
+    public function guiaRemision(): HasOne
+    {
+        return $this->hasOne(GuiaRemision::class);
+    }
 }

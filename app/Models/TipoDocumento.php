@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Ubigeos extends Model
+class TipoDocumento extends Model
 {
     use HasFactory;
 
@@ -15,13 +16,10 @@ class Ubigeos extends Model
      * @var array
      */
     protected $guarded = [];
-    protected $table = 'ubigeos';
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-    ];
+    protected $table = 'tipo_documentos';
+
+    public function cliente(): HasMany
+    {
+        return $this->hasMany(Clientes::class);
+    }
 }

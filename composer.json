@@ -12,6 +12,7 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "bensampo/laravel-enum": "^6.1",
         "doctrine/dbal": "^3.5",
+        "greenter/lite": "^5.0",
         "guzzlehttp/guzzle": "^7.4",
         "intervention/image": "^2.7",
         "jhamnerx/laravel-id-generator": "dev-master",

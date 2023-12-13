@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Ubigeos extends Model
+class Series extends Model
 {
     use HasFactory;
 
@@ -15,7 +16,8 @@ class Ubigeos extends Model
      * @var array
      */
     protected $guarded = [];
-    protected $table = 'ubigeos';
+    protected $table = 'series';
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -24,4 +26,9 @@ class Ubigeos extends Model
     protected $casts = [
         'id' => 'integer',
     ];
+
+    public function tipoComprobante(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\TipoComprobantes::class, 'tipo_comprobante_id', 'codigo');
+    }
 }
