@@ -227,6 +227,7 @@ Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.
 Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
 Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
+Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
 Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');

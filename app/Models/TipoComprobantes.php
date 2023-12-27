@@ -18,9 +18,17 @@ class TipoComprobantes extends Model
     protected $guarded = [];
     protected $table = 'tipo_comprobantes';
 
+    protected $primaryKey = "codigo";
+    // protected $incrementing = false;
+
+    protected $casts = [
+        'codigo' => 'string',
+        'descripcion' => 'string',
+    ];
+
     public function compras(): HasMany
     {
-        return $this->hasMany(Compras::class);
+        return $this->hasMany(ComprasFacturas::class);
     }
 
     public function ventas(): HasMany

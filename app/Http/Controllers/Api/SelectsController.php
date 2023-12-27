@@ -3,15 +3,17 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Unit;
+use App\Models\Lineas;
+use App\Models\SimCard;
 use App\Models\Categoria;
 use App\Models\Productos;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Dispositivos;
-use App\Models\Lineas;
-use App\Models\ModelosDispositivo;
-use App\Models\SimCard;
 use App\Models\Vehiculos;
+use App\Models\Dispositivos;
+use Illuminate\Http\Request;
+use App\Models\TipoDocumento;
+use App\Models\ModelosDispositivo;
+use App\Http\Controllers\Controller;
+use App\Models\TipoComprobantes;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -157,6 +159,25 @@ class SelectsController extends Controller
     {
 
         return TipoDocumento::query()
+            ->select('codigo', 'descripcion')
+            ->orderBy('codigo')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('descripcion', 'like', "%{$request->search}%")
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', []))
+
+            )
+            ->get();
+    }
+    public function comprobantes(Request $request): Collection
+    {
+
+        return TipoComprobantes::query()
             ->select('codigo', 'descripcion')
             ->orderBy('codigo')
             ->when(

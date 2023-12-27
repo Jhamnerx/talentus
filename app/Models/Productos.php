@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Categoria;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
@@ -70,11 +72,10 @@ class Productos extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();
     }
 
-    public function unit()
+    public function unit(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'unit_code');
+        return $this->belongsTo(Unit::class, 'unit_code', 'codigo');
     }
-
 
     //Relacion uno a muchos inversa
 

@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Scopes\EmpresaScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Series extends Model
 {
@@ -25,7 +26,17 @@ class Series extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'correlativo' => 'integer',
+        'tipo_comprobante_id' => 'string',
+        'serie' => 'string',
     ];
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
 
     public function tipoComprobante(): BelongsTo
     {

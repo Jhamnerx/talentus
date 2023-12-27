@@ -12,6 +12,10 @@ class Header extends Component
     public function render()
     {
 
+        if (!session()->has('empresa')) {
+
+            session()->put('empresa', 1);
+        }
         $empresas = Empresa::all();
         $empresa_actual = Empresa::where('id', session('empresa'))->first()->plantilla->razon_social;
         return view('livewire.admin.header', compact('empresas', 'empresa_actual'));

@@ -34,56 +34,71 @@
                 </a>
             </li>
             @can('admin.settings.ciudades.index')
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'ciudades' && 'bg-indigo-50'"
-                    href="{{ route('admin.ajustes.ciudades') }}">
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                        :class="settingsPanel === 'ciudades' && 'bg-indigo-50'"
+                        href="{{ route('admin.ajustes.ciudades') }}">
 
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'ciudades' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
-                        </path>
-                    </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'ciudades' ? 'text-indigo-500' : 'hover:text-slate-700'">Ciudades</span>
-                </a>
-            </li>
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
+                            :class="settingsPanel === 'ciudades' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                            </path>
+                        </svg>
+                        <span class="text-sm font-medium text-slate-600"
+                            :class="settingsPanel === 'ciudades' ? 'text-indigo-500' : 'hover:text-slate-700'">Ciudades</span>
+                    </a>
+                </li>
             @endcan
 
             @can('admin.settings.roles.index')
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="{{ route('admin.ajustes.roles') }}">
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                        :class="settingsPanel === 'roles' && 'bg-indigo-50'" href="{{ route('admin.ajustes.roles') }}">
 
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'roles' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
-                        fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                        </path>
-                    </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'roles' ? 'text-indigo-500' : 'hover:text-slate-700'">Roles</span>
-                </a>
-            </li>
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
+                            :class="settingsPanel === 'roles' && 'text-indigo-400'" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-5 w-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
+                            </path>
+                        </svg>
+                        <span class="text-sm font-medium text-slate-600"
+                            :class="settingsPanel === 'roles' ? 'text-indigo-500' : 'hover:text-slate-700'">Roles</span>
+                    </a>
+                </li>
             @endcan
-
+            @can('admin.settings.series.index')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.series') }}"
+                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                        :class="settingsPanel === 'series' && 'bg-indigo-50'">
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
+                            :class="settingsPanel === 'series' && 'text-indigo-400'" viewBox="0 0 16 16">
+                            <path
+                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                        </svg>
+                        <span class="text-sm font-medium text-slate-600"
+                            :class="settingsPanel === 'series' ? 'text-indigo-500' : 'hover:text-slate-700'">Series
+                            Comprobantes</span>
+                    </a>
+                </li>
+            @endcan
             @can('admin.settings.plantilla.index')
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a href="{{ route('admin.ajustes.plantilla') }}"
-                    class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'plantilla' && 'bg-indigo-50'">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'plantilla' && 'text-indigo-400'" viewBox="0 0 16 16">
-                        <path
-                            d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
-                    </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'plantilla' ? 'text-indigo-500' : 'hover:text-slate-700'">Plantilla</span>
-                </a>
-            </li>
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.plantilla') }}"
+                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                        :class="settingsPanel === 'plantilla' && 'bg-indigo-50'">
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
+                            :class="settingsPanel === 'plantilla' && 'text-indigo-400'" viewBox="0 0 16 16">
+                            <path
+                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                        </svg>
+                        <span class="text-sm font-medium text-slate-600"
+                            :class="settingsPanel === 'plantilla' ? 'text-indigo-500' : 'hover:text-slate-700'">Plantilla</span>
+                    </a>
+                </li>
             @endcan
 
         </ul>

@@ -30,8 +30,8 @@
                             <path
                                 d="M8 8.992a2 2 0 1 1-.002-3.998A2 2 0 0 1 8 8.992Zm-.7 6.694c-.1-.1-4.2-3.696-4.2-3.796C1.7 10.69 1 8.892 1 6.994 1 3.097 4.1 0 8 0s7 3.097 7 6.994c0 1.898-.7 3.697-2.1 4.996-.1.1-4.1 3.696-4.2 3.796-.4.3-1 .3-1.4-.1Zm-2.7-4.995L8 13.688l3.4-2.997c1-1 1.6-2.198 1.6-3.597 0-2.798-2.2-4.996-5-4.996S3 4.196 3 6.994c0 1.399.6 2.698 1.6 3.697 0-.1 0-.1 0 0Z" />
                         </svg>
-                        <span class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{
-                            $plantilla->direccion['region'] }},
+                        <span
+                            class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{ $plantilla->direccion['departamento'] }},
                             PERÚ</span>
                     </div>
                     <div class="flex items-center">
@@ -91,9 +91,9 @@
                     </div>
                 </div>
                 @error('ruc')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-6">
@@ -114,9 +114,9 @@
                     </div>
                 </div>
                 @error('razon_social')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
@@ -140,9 +140,9 @@
                     </div>
                 </div>
                 @error('telefono')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
@@ -163,9 +163,9 @@
                     </div>
                 </div>
                 @error('direccion.ubigeo')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-6">
@@ -174,7 +174,8 @@
                     <input type="text" placeholder="INGRESA UNA DIRECCION" class="form-input w-full pl-9"
                         wire:model.live='direccion.direccion'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
                                     d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26.26.55.47 1.5 1.26 1.5s1-.95 1.25-1.5c.37-.81.7-1.51 1.17-2.26.96-1.53 2.21-2.85 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"
@@ -184,9 +185,9 @@
                     </div>
                 </div>
                 @error('direccion.direccion')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
@@ -195,7 +196,8 @@
                     <input type="text" placeholder="INGRESA UNA REGION" class="form-input w-full pl-9"
                         wire:model.live='direccion.region'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
                                     d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26.26.55.47 1.5 1.26 1.5s1-.95 1.25-1.5c.37-.81.7-1.51 1.17-2.26.96-1.53 2.21-2.85 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"
@@ -205,9 +207,9 @@
                     </div>
                 </div>
                 @error('direccion.region')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-2">
@@ -216,7 +218,8 @@
                     <input type="text" placeholder="INGRESA UNA PROVINCIA" class="form-input w-full pl-9"
                         wire:model.live='direccion.provincia'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
                                     d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26.26.55.47 1.5 1.26 1.5s1-.95 1.25-1.5c.37-.81.7-1.51 1.17-2.26.96-1.53 2.21-2.85 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"
@@ -226,9 +229,9 @@
                     </div>
                 </div>
                 @error('direccion.provincia')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-2">
@@ -237,7 +240,8 @@
                     <input type="text" placeholder="INGRESA UN DISTRITO" class="form-input w-full pl-9"
                         wire:model.live='direccion.distrito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
                                     d="M12 2C8.13 2 5 5.13 5 9c0 1.74.5 3.37 1.41 4.84.95 1.54 2.2 2.86 3.16 4.4.47.75.81 1.45 1.17 2.26.26.55.47 1.5 1.26 1.5s1-.95 1.25-1.5c.37-.81.7-1.51 1.17-2.26.96-1.53 2.21-2.85 3.16-4.4C18.5 12.37 19 10.74 19 9c0-3.87-3.13-7-7-7zm0 9.75a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"
@@ -247,17 +251,17 @@
                     </div>
                 </div>
                 @error('direccion.distrito')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.informacion.edit')
-                <button type="button" wire:click.prevent="save"
-                    class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600  text-white">
-                    GUARDAR
-                </button>
+                    <button type="button" wire:click.prevent="save"
+                        class="btn cursor-pointer bg-emerald-500 hover:bg-emerald-600  text-white">
+                        GUARDAR
+                    </button>
                 @endcan
 
 
@@ -284,10 +288,12 @@
                 <div class="relative">
                     <input type="text" class="form-input w-full pl-9" wire:model.live='sunat.usuario_sol_sunat'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 64 64">
                             <g fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
                                 <path d="M38,39H26A18,18,0,0,0,8,57H8s9,4,24,4,24-4,24-4h0A18,18,0,0,0,38,39Z"
-                                    fill="none" stroke="currentColor" stroke-linecap="square" stroke-miterlimit="10">
+                                    fill="none" stroke="currentColor" stroke-linecap="square"
+                                    stroke-miterlimit="10">
                                 </path>
                                 <path data-color="color-2"
                                     d="M19,17.067a13,13,0,1,1,26,0C45,24.283,39.18,32,32,32S19,24.283,19,17.067Z"
@@ -297,9 +303,9 @@
                     </div>
                 </div>
                 @error('sunat.usuario_sol_sunat')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
@@ -308,7 +314,8 @@
                 <div class="relative">
                     <input type="password" class="form-input w-full pl-9" wire:model.live='sunat.clave_sol_sunat'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path
                                     d="M38,23a1,1,0,0,1-.707-.293l-6-6a1,1,0,0,1,0-1.414l8-8a1,1,0,0,1,1.414,0l6,6a1,1,0,0,1,0,1.414l-2,2a1,1,0,0,1-1.414,0L41,14.414,38.414,17l2.293,2.293a1,1,0,0,1,0,1.414l-2,2A1,1,0,0,1,38,23Z"
@@ -321,18 +328,20 @@
                     </div>
                 </div>
                 @error('sunat.clave_sol_sunat')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-12 sm:col-span-3">
                 <label class="block text-sm font-medium mb-1" for="clave_certificado_cdt">CLAVE CERTIFICADO
                     CDT:</label>
                 <div class="relative">
-                    <input type="password" class="form-input w-full pl-9" wire:model.live='sunat.clave_certificado_cdt'>
+                    <input type="password" class="form-input w-full pl-9"
+                        wire:model.live='sunat.clave_certificado_cdt'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path
                                     d="M38,23a1,1,0,0,1-.707-.293l-6-6a1,1,0,0,1,0-1.414l8-8a1,1,0,0,1,1.414,0l6,6a1,1,0,0,1,0,1.414l-2,2a1,1,0,0,1-1.414,0L41,14.414,38.414,17l2.293,2.293a1,1,0,0,1,0,1.414l-2,2A1,1,0,0,1,38,23Z"
@@ -345,17 +354,17 @@
                     </div>
                 </div>
                 @error('sunat.clave_certificado_cdt')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.sunat.edit')
-                <button type="button" wire:click.prevent="saveSunat"
-                    class="btn cursor-pointer bg-talentus-100 hover:bg-talentus-200  text-white">
-                    GUARDAR
-                </button>
+                    <button type="button" wire:click.prevent="saveSunat"
+                        class="btn cursor-pointer bg-talentus-100 hover:bg-talentus-200  text-white">
+                        GUARDAR
+                    </button>
                 @endcan
 
             </div>
@@ -380,9 +389,11 @@
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="serie_factura">SERIE FACTURA:</label>
                 <div class="relative">
-                    <input type="text" placeholder="F001" class="form-input w-full pl-9" wire:model.live='series.factura'>
+                    <input type="text" placeholder="F001" class="form-input w-full pl-9"
+                        wire:model.live='series.factura'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -399,18 +410,20 @@
                     </div>
                 </div>
                 @error('series.factura')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
 
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.boleta">SERIE BOLETA:</label>
                 <div class="relative">
-                    <input type="text" placeholder="B001" class="form-input w-full pl-9" wire:model.live='series.boleta'>
+                    <input type="text" placeholder="B001" class="form-input w-full pl-9"
+                        wire:model.live='series.boleta'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -427,17 +440,19 @@
                     </div>
                 </div>
                 @error('series.boleta')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.recibos">SERIE RECIBO:</label>
                 <div class="relative">
-                    <input type="text" placeholder="R001" class="form-input w-full pl-9" wire:model.live='series.recibo'>
+                    <input type="text" placeholder="R001" class="form-input w-full pl-9"
+                        wire:model.live='series.recibo'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -454,9 +469,9 @@
                     </div>
                 </div>
                 @error('series.recibo')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
@@ -465,7 +480,8 @@
                     <input type="text" placeholder="FF001" class="form-input w-full pl-9"
                         wire:model.live='series.nota_credito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -482,9 +498,9 @@
                     </div>
                 </div>
                 @error('series.nota_credito')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
@@ -493,7 +509,8 @@
                     <input type="text" placeholder="FF01" class="form-input w-full pl-9"
                         wire:model.live='series.nota_debito'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -510,17 +527,19 @@
                     </div>
                 </div>
                 @error('series.nota_debito')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="col-span-10 sm:col-span-2">
                 <label class="block text-sm font-medium mb-1" for="series.nota_debito">SERIE COTIZACION:</label>
                 <div class="relative">
-                    <input type="text" placeholder="PRE" class="form-input w-full pl-9" wire:model.live='series.cotizacion'>
+                    <input type="text" placeholder="PRE" class="form-input w-full pl-9"
+                        wire:model.live='series.cotizacion'>
                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 48 48">
                             <g class="nc-icon-wrapper">
                                 <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                     fill="#e3e3e3"></path>
@@ -537,17 +556,17 @@
                     </div>
                 </div>
                 @error('series.cotizacion')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
                 @enderror
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.series.edit')
-                <button type="button" wire:click.prevent="saveSeries"
-                    class="btn cursor-pointer bg-indigo-500 hover:bg-indigo-600  text-white">
-                    GUARDAR
-                </button>
+                    <button type="button" wire:click.prevent="saveSeries"
+                        class="btn cursor-pointer bg-indigo-500 hover:bg-indigo-600  text-white">
+                        GUARDAR
+                    </button>
                 @endcan
 
 
@@ -571,21 +590,16 @@
         {{-- FORMULARIOS DE IMAGENES --}}
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
 
-            @livewire('admin.ajustes.plantilla.images.documentos', ['plantilla' => $plantilla], key('doc' .
-            $plantilla->id))
-            @livewire('admin.ajustes.plantilla.images.contrato', ['plantilla' => $plantilla], key('contrato' .
-            $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.documentos', ['plantilla' => $plantilla], key('doc' . $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.contrato', ['plantilla' => $plantilla], key('contrato' . $plantilla->id))
             @livewire('admin.ajustes.plantilla.images.logo', ['plantilla' => $plantilla], key('logo' . $plantilla->id))
-            @livewire('admin.ajustes.plantilla.images.fav-icon', ['plantilla' => $plantilla], key('fav-icon' .
-            $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.fav-icon', ['plantilla' => $plantilla], key('fav-icon' . $plantilla->id))
         </div>
 
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
 
-            @livewire('admin.ajustes.plantilla.images.banner', ['plantilla' => $plantilla], key('banner' .
-            $plantilla->id))
-            @livewire('admin.ajustes.plantilla.images.firma', ['plantilla' => $plantilla], key('firma' .
-            $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.banner', ['plantilla' => $plantilla], key('banner' . $plantilla->id))
+            @livewire('admin.ajustes.plantilla.images.firma', ['plantilla' => $plantilla], key('firma' . $plantilla->id))
 
 
         </div>
@@ -595,5 +609,5 @@
 </div>
 
 @push('modals')
-@livewire('admin.ajustes.plantilla.del-images')
+    @livewire('admin.ajustes.plantilla.del-images')
 @endpush

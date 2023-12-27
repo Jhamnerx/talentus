@@ -28,8 +28,10 @@ class plantilla extends Model
     ];
 
     //GLOBAL SCOPE EMPRESA
+    //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
+        static::addGlobalScope(new EmpresaScope);
     }
 
     protected function mailConfig(): Attribute
@@ -62,6 +64,13 @@ class plantilla extends Model
         );
     }
 
+    protected  function igvbnormal(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes["igv"]),
+        );
+    }
+
     //+ IGV
     protected  function igv(): Attribute
     {
@@ -69,8 +78,6 @@ class plantilla extends Model
             get: fn (mixed $value, array $attributes) => $attributes["igv"] / 100,
         );
     }
-
-
 
 
     public function empresa()
