@@ -46,7 +46,12 @@ class Logo extends Component
         $url = $this->logo->storeAs($empresa . '/imagenes', 'logo.png');
         $this->plantilla->logo = $url;
         $this->plantilla->save();
-        $this->dispatch('save.image', ['mensaje' => 'Imagen Logo Guardada Correctamente.']);
-        //session()->flash('save.image', 'Imagen Documentos Guardada Correctamente.');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen Logo Guardada Correctamente.'
+        );
     }
 }

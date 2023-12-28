@@ -50,7 +50,25 @@
 
             <!-- Site header -->
             @livewire('admin.header', ['page' => request()->fullUrl()])
+
             <x-jet-banner />
+
+            <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center h-16 -mb-px">
+
+                        <div class="hover text-left mx-2">
+                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
+                                    class="hover:text-talentus-200">{{ \App\Models\Empresa::where('id', session('empresa'))->first()->plantilla->razon_social }}</b>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <x-admin.comprobantes />
+
             <main>
 
 

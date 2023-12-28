@@ -49,6 +49,7 @@ use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
+use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
@@ -337,3 +338,15 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin
 
 Route::get('/json-data-ventas', [HomeController::class, 'getDataVentas'])->name('json_data_feed');
 Route::get('/test/sunat', [UtilesController::class, 'sunatConsulta'])->name('sunat.consulta');
+
+
+
+Route::controller(ComprobantesController::class)->group(function () {
+
+    Route::get('ventas', 'index')->name('admin.ventas.index');
+    Route::get('emitir/factura', 'emitirFactura')->name('admin.factura.create');
+    Route::get('emitir/boleta', 'emitirBoleta')->name('admin.boleta.create');
+    Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
+    Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
+    Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');
+});

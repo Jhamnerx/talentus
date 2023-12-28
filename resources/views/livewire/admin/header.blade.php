@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between h-16 -mb-px">
 
             <!-- Header: Left side -->
-            <div class="flex">
+            <div class="flex lg:hidden">
                 <!-- Hamburger button -->
                 <button class="text-slate-500 hover:text-slate-600 lg:hidden" @click.stop="sidebarOpen = !sidebarOpen"
                     aria-controls="sidebar" :aria-expanded="sidebarOpen">
@@ -17,14 +17,26 @@
 
             </div>
 
-            <div class="hover w-full">
-                <p class="text-talentus-200">EMPRESA: <b class="hover:text-talentus-200">{{ $empresa_actual }}</b>
+            <div class="hover text-left mx-2 hidden md:flex">
+                <p class="text-talentus-200 text-wrap text-xs md:text-base ">EMPRESA: <b
+                        class="hover:text-talentus-200">{{ $empresa_actual }}</b>
                 </p>
             </div>
 
             <!-- Header: Right side -->
             <div class="flex items-center space-x-3">
 
+                <div class="m-1.5">
+
+
+                    <!-- Start -->
+                    <div
+                        class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
+                        TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
+                    </div>
+
+                    <!-- End -->
+                </div>
 
                 <!-- Notifications button -->
                 @livewire('admin.header.notificaciones')

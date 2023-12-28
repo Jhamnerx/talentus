@@ -32,7 +32,7 @@ class UtilesController extends Controller
 
             try {
 
-                $token = env('TOKEN_API_SUNAT');
+                $token = env('TOKEN_API_CONSULTA_SUNAT');
 
                 $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -47,16 +47,29 @@ class UtilesController extends Controller
                     ],
                 ];
 
-                $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
+                $res = $client->request('GET', '/v2/sunat/tipo-cambio', $parameters);
                 $response = json_decode($res->getBody()->getContents(), true);
 
-                Cache::put(
-                    'cambio',
-                    $response["venta"],
-                    now()->addMinutes(1)
-                );
 
-                return $response["venta"];
+                if (array_key_exists('precioVenta', $response)) {
+
+                    Cache::put(
+                        'cambio',
+                        $response["precioVenta"],
+                        now()->addHours(4)
+                    );
+                    Cache::put(
+                        'precioVenta',
+                        $response["precioVenta"],
+                        now()->addHours(4)
+                    );
+                    Cache::put(
+                        'precioCompra',
+                        $response["precioCompra"],
+                        now()->addHours(4)
+                    );
+                    return $response["precioVenta"];
+                }
             } catch (\Exception $e) {
 
                 return $e->getMessage();

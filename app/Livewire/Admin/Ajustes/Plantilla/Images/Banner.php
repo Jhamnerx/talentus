@@ -47,6 +47,12 @@ class Banner extends Component
         $url = $this->banner->storeAs($empresa . '/imagenes', 'banner.png');
         $this->plantilla->banner = $url;
         $this->plantilla->save();
-        $this->dispatch('save.image', ['mensaje' => 'Imagen Banner Guardada Correctamente.']);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen Banner Guardada Correctamente.'
+        );
     }
 }

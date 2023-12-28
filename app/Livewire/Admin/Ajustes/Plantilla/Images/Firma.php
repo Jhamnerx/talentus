@@ -47,6 +47,12 @@ class Firma extends Component
         $this->plantilla->img_firma = $url;
         $this->plantilla->save();
         $this->dispatch('save.image', ['mensaje' => 'Imagen img_firma Guardada Correctamente.']);
-        //session()->flash('save.image', 'Imagen Documentos Guardada Correctamente.');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen De la Firma Guardada Correctamente.'
+        );
     }
 }

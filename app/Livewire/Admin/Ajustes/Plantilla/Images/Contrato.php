@@ -49,6 +49,12 @@ class Contrato extends Component
         $url = $this->fondo_contrato->storeAs($empresa . '/imagenes', 'fondo_contrato.png');
         $this->plantilla->fondo_contrato = $url;
         $this->plantilla->save();
-        $this->dispatch('save.image', ['mensaje' => 'Fondo Contrato Guardado Correctamente.']);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen Fondo Contrato Guardada Correctamente.'
+        );
     }
 }

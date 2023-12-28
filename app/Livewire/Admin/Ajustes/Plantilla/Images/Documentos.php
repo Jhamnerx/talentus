@@ -49,7 +49,12 @@ class Documentos extends Component
         $url = $this->img_documento->storeAs($empresa . '/imagenes', 'img_documento.png');
         $this->plantilla->img_documentos = $url;
         $this->plantilla->save();
-        $this->dispatch('save.image', ['mensaje' => 'Imagen Documentos Guardada Correctamente.']);
-        //session()->flash('save.image', 'Imagen Documentos Guardada Correctamente.');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen Documentos Guardada Correctamente.'
+        );
     }
 }

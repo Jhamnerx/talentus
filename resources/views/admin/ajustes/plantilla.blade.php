@@ -116,6 +116,10 @@
 
 @stop
 
+@push('modals')
+    @livewire('admin.ajustes.plantilla.del-images')
+@endpush
+
 @section('js')
 
 @endsection

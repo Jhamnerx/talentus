@@ -19,7 +19,7 @@
         "laravel-lang/lang": "^9.0",
         "laravel/framework": "^10.0",
         "laravel/jetstream": "^2.6",
-        "laravel/sanctum": "^3.2",
+        "laravel/sanctum": "*",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.3",
         "livewire/livewire": "^3.0",

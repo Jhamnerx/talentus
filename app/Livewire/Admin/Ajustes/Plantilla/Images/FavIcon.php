@@ -45,7 +45,12 @@ class FavIcon extends Component
         $url = $this->fav_icon->storeAs($empresa . '/imagenes', 'fav_icon.png');
         $this->plantilla->fav_icon = $url;
         $this->plantilla->save();
-        $this->dispatch('save.image', ['mensaje' => 'Imagen Documentos Guardada Correctamente.']);
-        //session()->flash('save.image', 'Imagen Documentos Guardada Correctamente.');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'IMAGEN GUARDADA',
+            mensaje: 'Imagen FavIcon Guardada Correctamente.'
+        );
     }
 }
