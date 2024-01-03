@@ -116,8 +116,6 @@ class Emitir extends Component
 
     public function updatedSerie($value)
     {
-
-
         $this->changeSerieUpdate($value);
     }
 
@@ -131,6 +129,7 @@ class Emitir extends Component
             $this->serie = $serie->serie;
             $this->correlativo = $serie->correlativo + 1;
             $this->min_correlativo = $serie->correlativo + 1;
+            $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
         } else {
 
             $this->reset('correlativo');

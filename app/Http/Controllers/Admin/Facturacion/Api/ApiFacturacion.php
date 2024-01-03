@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Facturacion\Api;
 use DateTime;
 use App\Models\Ventas;
 use App\Models\Empresa;
+use App\Models\plantilla;
 use Illuminate\Http\Request;
 use App\Models\VentasDetalle;
 use Greenter\Model\Sale\Cuota;
@@ -50,6 +51,14 @@ class ApiFacturacion extends Controller
         $formatter = new NumeroALetras();
         $cliente = $this->getCliente($venta);
 
+
+        // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
+        // $guiaRemision = (new Document())
+        // ->setTipoDoc('09') // Guia de Remision remitente: 09, catalogo 01
+        // ->setNroDoc('T001-2'); // Serie y correlativo de la guia de remision
+
+
+
         $invoice = new Invoice();
         $invoice
             ->setUblVersion('2.1')
@@ -71,6 +80,11 @@ class ApiFacturacion extends Controller
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
+
+
+        // $invoice->setGuias([
+        //     $guiaRemision // Incluir guia remision.
+        // ])
 
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
@@ -122,6 +136,103 @@ class ApiFacturacion extends Controller
 
         // Guardar XML firmado digitalmente.
         $util->writeXml($invoice, $see->getFactory()->getLastXml());
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+
+            return $msg;
+        }
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+        $util->writeCdr($invoice, $result->getCdrZip());
+
+        $respuesta = $util->showResponse($invoice, $cdr);
+        return $respuesta['fe_mensaje_sunat'];
+    }
+
+    public function sendInvoiceOnly(Ventas $venta)
+    {
+        $util = Util::getInstance();
+        $formatter = new NumeroALetras();
+        $cliente = $this->getCliente($venta);
+        $plantilla = plantilla::first();
+
+        // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
+        // $guiaRemision = (new Document())
+        // ->setTipoDoc('09') // Guia de Remision remitente: 09, catalogo 01
+        // ->setNroDoc('T001-2'); // Serie y correlativo de la guia de remision
+
+        $invoice = new Invoice();
+        $invoice
+            ->setUblVersion('2.1')
+            ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
+            ->setTipoOperacion('0101')
+            ->setObservacion($venta->observacion)
+            ->setTipoDoc($venta->tipo_comprobante_id)
+            ->setSerie($venta->serie)
+            ->setCorrelativo($venta->correlativo)
+            ->setFechaEmision(new DateTime($venta->fecha_hora_emision))
+            ->setTipoMoneda($venta->divisa)
+            ->setCompany($util->getCompany())
+            ->setClient($cliente)
+            ->setMtoOperGravadas($venta->op_gravadas)
+            ->setMtoOperExoneradas($venta->op_exoneradas)
+            ->setMtoOperInafectas($venta->op_inafectas)
+            ->setMtoIGV($venta->igv)
+            ->setTotalImpuestos($venta->igv)
+            ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+            ->setSubTotal($venta->total)
+            ->setMtoImpVenta($venta->total);
+
+
+        // $invoice->setGuias([
+        //     $guiaRemision // Incluir guia remision.
+        // ])
+
+        //EVALUAR SI LA VENTA ES A CREDITO
+        if ($venta->forma_pago == 'CREDITO') {
+
+            $invoice->setFormaPago(new FormaPagoCredito($venta->total, $venta->divisa));
+            $cuotas = $this->addCuotas($venta);
+            $invoice->setCuotas($cuotas);
+        } else {
+
+            $invoice->setFormaPago(new FormaPagoContado());
+        }
+
+
+        //AÑADIR DESCUENTO SI ES QUE HAY
+        if ($venta->descuento > 0) {
+
+            $invoice->setDescuentos([
+                (new Charge())
+                    ->setCodTipo('02') // Catalog. 53
+                    ->setMontoBase($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+                    ->setFactor($venta->descuento_factor)
+                    ->setMonto($venta->descuento)
+            ]);
+        }
+
+
+        //ESTBLECER EL VENDEDOR DEL COMPROBANTE
+        $invoice->setSeller((new Client())
+            ->setRznSocial(Auth::user()->name));
+
+        //ESTABLECER ITEMS DEL COMPROBANTE
+        $items = $this->getItemsInvoice($venta->ventaDetalles);
+
+        $invoice->setDetails($items)
+            ->setLegends([
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
+            ]);
+        // Envio a SUNAT.
+        $see = $util->getSee();
+
+        $result = $see->sendXml(get_class($invoice), $invoice->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $venta->nombre_xml));
 
         if (!$result->isSuccess()) {
 

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Facturacion\Ventas;
 
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 use App\Models\Ventas;
 use Livewire\Component;
@@ -67,8 +68,9 @@ class Index extends Component
     public function getCdr(Ventas $venta)
     {
 
-        $api = new ComprobantesController();
-        $mensaje =  $api->enviarSunat($venta);
-        return redirect()->route('admin.ventas.index')->with('get-cdr', $mensaje);
+        $api = new ApiFacturacion();
+        $mensaje =  $api->sendInvoiceOnly($venta);
+        dd($mensaje);
+        //return redirect()->route('admin.ventas.index')->with('get-cdr', $mensaje);
     }
 }
