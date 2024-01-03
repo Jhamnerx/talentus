@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Ventas extends Model
 {
@@ -62,6 +63,7 @@ class Ventas extends Model
         'sent' => 'boolean',
         'detalle_cuotas' => AsCollection::class,
     ];
+
 
     public function ventaDetalles(): HasMany
     {
@@ -119,5 +121,7 @@ class Ventas extends Model
 
             $item = $venta->ventaDetalles()->create($ventaItem);
         }
+
+        return $venta->ventaDetalles;
     }
 }

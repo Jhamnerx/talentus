@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Empresa;
 use Livewire\Component;
+use App\Models\plantilla;
 
 class Header extends Component
 {
@@ -17,7 +18,7 @@ class Header extends Component
             session()->put('empresa', 1);
         }
         $empresas = Empresa::all();
-        $empresa_actual = Empresa::where('id', session('empresa'))->first()->plantilla->razon_social;
+        $empresa_actual = plantilla::first()->razon_social;
         return view('livewire.admin.header', compact('empresas', 'empresa_actual'));
     }
 

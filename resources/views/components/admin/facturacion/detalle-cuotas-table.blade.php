@@ -13,7 +13,7 @@
                     </div>
                     <div>
 
-                        <x-form.inputs.number autocomplete="false" name="numero_cuotas" wire:model="numero_cuotas"
+                        <x-form.inputs.number autocomplete="false" name="numero_cuotas" wire:model.live="numero_cuotas"
                             min="0" />
 
                     </div>
@@ -23,7 +23,7 @@
                     </div>
                     <div>
 
-                        <x-form.inputs.number name="vence_cuotas" wire:model="vence_cuotas" />
+                        <x-form.inputs.number name="vence_cuotas" wire:model.live="vence_cuotas" />
                     </div>
 
                 </div>
@@ -74,7 +74,7 @@
                             </tr>
                         </thead>
                         <tbody>
-
+                            {{ json_encode($cuotas) }}
                             @if (!$cuotas->isEmpty())
                                 @foreach ($cuotas->all() as $clave => $cuota)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
@@ -93,7 +93,7 @@
                                         </td>
                                         <td class="py-4 px-6 min-w-36">
                                             <x-form.inputs.currency
-                                                wire:model.lazy="detalle_cuotas.{{ $clave }}.importe" />
+                                                wire:model.blur="detalle_cuotas.{{ $clave }}.importe" />
 
                                         </td>
 

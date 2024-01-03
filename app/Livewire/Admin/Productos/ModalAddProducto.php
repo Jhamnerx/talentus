@@ -3,13 +3,15 @@
 namespace App\Livewire\Admin\Productos;
 
 use App\Models\Empresa;
+use App\Models\plantilla;
 use Livewire\Component;
 use App\Models\Productos;
 use Illuminate\Support\Collection;
+use Livewire\Attributes\On;
 
 class ModalAddProducto extends Component
 {
-    public Empresa $empresa;
+    public plantilla $plantilla;
     public $showModal = false;
 
     public $divisa = "PEN";
@@ -18,16 +20,9 @@ class ModalAddProducto extends Component
     public Collection $selected;
     public $tipo_afectacion = "10";
 
-
-    protected $listeners = [
-        'openModalAddProducto' => 'showModal'
-    ];
-
     public function mount(Productos $productos)
     {
-
-
-        $this->empresa = Empresa::first();
+        $this->plantilla = plantilla::first();
 
         $this->selected = collect([
             'producto_id' => "",
@@ -37,18 +32,21 @@ class ModalAddProducto extends Component
             'unit_name' => "UNIDAD",
             'descripcion' => "",
             'valor_unitario' => 0.00,
+            'precio_unitario' => 0.00,
             'igv' => 0.00,
             'icbper' => 0.00,
             'total_icbper' => 0.00,
             'total' => 0.00,
+            'porcentaje_igv' => 18,
             'codigo_afectacion' => $this->tipo_afectacion,
             'afecto_icbper' => false
         ]);
     }
 
-
+    #[On('openModalAddProducto')]
     public function showModal()
     {
+
         $this->showModal = true;
     }
 
@@ -69,27 +67,38 @@ class ModalAddProducto extends Component
     {
     }
     //BUSCAR PRODUCTO SELECCIONADO Y AÑADIRLO
+
+    public function prueba()
+    {
+    }
+
     function updatedProductSelectedId($id)
     {
 
         $producto = Productos::find($id);
 
-        $igv_p = $this->calcularIgvProducto($producto->valor_unitario);
+        $igv = $this->calcularIgvProducto($producto->valor_unitario);
 
         $this->selected->put('producto_id', $producto->id);
         $this->selected->put('codigo', $producto->codigo);
-        $this->selected->put('unit', $producto->unit_id);
+        $this->selected->put('unit', $producto->unit_code);
         $this->selected->put('unit_name', $producto->unit->descripcion);
         $this->selected->put('descripcion', $producto->descripcion);
         $this->selected->put('valor_unitario', round(floatval($producto->valor_unitario), 4));
+        $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($producto->valor_unitario)), 4));
         //$this->selected->put('igv', round(floatval($igv_p), 4));
-        $this->selected->put('icbper', $producto->afecto_icbper ? round(floatval($this->empresa->icbper), 4) : 0);
-        $this->selected->put('total_icbper', $producto->afecto_icbper ? round(floatval($this->empresa->icbper * $this->selected["cantidad"]), 4) : 0);
+        $this->selected->put('icbper', ($producto->afecto_icbper) ? round(floatval($this->plantilla->icbper), 4) : 0.00);
+        $this->selected->put('total_icbper', ($producto->afecto_icbper) ? round(floatval($this->plantilla->icbper * $this->selected["cantidad"]), 4) : 0.00);
         // $this->selected->put('total', round(floatval($producto->valor_unitario), 4) + round(floatval($igv_p), 4));
         $this->selected->put('codigo_afectacion', $this->tipo_afectacion);
         $this->selected->put('afecto_icbper', $producto->afecto_icbper);
         $this->calcularMontosProducto();
-        //dd($this->selected);
+    }
+
+
+    public function calcularPrecioUnitario($valor_unitario)
+    {
+        return ($valor_unitario * $this->plantilla->igv) + $valor_unitario;
     }
 
     public function calcularIgvProducto($valor_unitario)
@@ -99,7 +108,7 @@ class ModalAddProducto extends Component
         if ($this->tipo_afectacion == 10) {
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
-            $igv = round($sub_total * $this->empresa->igv, 4);
+            $igv = round($sub_total * $this->plantilla->igv, 4);
         } else {
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
@@ -137,40 +146,44 @@ class ModalAddProducto extends Component
         if ($this->tipo_afectacion == 10) {
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
-            $igv = round($sub_total * $this->empresa->igv, 4);
-            $total_icbper = floatval($this->selected["cantidad"] * $this->empresa->icbper);
+            $igv = round($sub_total * $this->plantilla->igv, 4);
+            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * $this->plantilla->icbper) : 0.00;
             $total = $sub_total + $igv;
         } else {
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
             $igv = 0.00;
-            $total_icbper = floatval($this->selected["cantidad"] * $this->empresa->icbper);
+            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * $this->plantilla->icbper) : 0.00;
             $total = $sub_total + $igv;
         }
 
-
-
         $this->selected["igv"] = round($igv, 4);
-        $this->selected["total"] = $this->selected["afecto_icbper"] ? round($total + $total_icbper, 4) : round($total, 4);
+        $this->selected["porcentaje_igv"] = ($this->tipo_afectacion == 10) ? $this->plantilla->igvbnormal : 0.00;
+        $this->selected["total"] = ($this->selected["afecto_icbper"]) ? round($total + $total_icbper, 4) : round($total, 4);
+        $this->selected["precio_unitario"] = ($this->selected["afecto_icbper"]) ? round($total + $total_icbper, 4) : round($total, 4);
         $this->selected["total_icbper"] = $total_icbper;
     }
 
+    #[On('reset-selected')]
     public function resetSelected()
     {
         $this->selected = collect([
             'producto_id' => "",
-            'codigo' => "#CODIGO",
+            'codigo' => "",
             'cantidad' => 1,
-            'unit' => "ZZ",
+            'unit' => "NIU",
+            'unit_name' => "UNIDAD",
             'descripcion' => "",
             'valor_unitario' => 0.00,
             'igv' => 0.00,
-            'precio_unitario' => 0.00,
+            'porcentaje_igv' => 0.00,
             'icbper' => 0.00,
+            'total_icbper' => 0.00,
             'total' => 0.00,
-            'codigo_afectacion' => "",
+            'codigo_afectacion' => $this->tipo_afectacion,
             'afecto_icbper' => false
         ]);
+        $this->reset('product_selected_id', 'divisa');
     }
 
     public function addProducto()
@@ -203,7 +216,7 @@ class ModalAddProducto extends Component
 
         ]);
 
-        $this->emit('add-producto', $this->selected);
+        $this->dispatch('add-producto', selected: $this->selected);
 
         $this->closeModal();
     }

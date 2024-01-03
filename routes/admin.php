@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ActasController;
 use App\Http\Controllers\Admin\GuiasController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Admin\CobrosController;
 use App\Http\Controllers\Admin\FlotasController;
 use App\Http\Controllers\Admin\LineasController;
@@ -349,4 +350,32 @@ Route::controller(ComprobantesController::class)->group(function () {
     Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
     Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
     Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');
+});
+
+
+
+//SELECTS
+
+
+
+Route::controller(SelectsController::class)->group(function () {
+
+    Route::get('api/categorias', 'categorias')->name('api.categorias.index');
+    Route::get('api/tipo-afectacion', 'tipoAfectacion')->name('api.tipo-afectacion.index');
+    Route::get('api/unit', 'unit')->name('api.unit.index');
+    Route::get('api/clientes', 'clientes')->name('api.clientes.index');
+    Route::get('api/series', 'series')->name('api.series.index');
+    Route::get('api/productos', 'productos')->name('api.productos.index');
+    Route::get('api/documentos', 'documentos')->name('api.documentos.index');
+    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/sim-card', 'sim')->name('api.sim.index');
+    Route::get('api/lineas', 'lineas')->name('api.lineas.index');
+    Route::get('api/vehiculos', 'vehiculos')->name('api.vehiculos.index');
+    Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
+});
+
+
+Route::controller(UtilesController::class)->group(function () {
+
+    Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
 });

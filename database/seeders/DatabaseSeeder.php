@@ -71,6 +71,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(TipoTareasSeeder::class);
 
         $this->call(PlantillaSeeder::class);
+        $this->call(ProductoSeeder::class);
         $this->call(MetodoPagoSeeder::class);
         $this->call(ModalidadTransporteSeeder::class);
         $this->call(MotivoTrasladoSeeder::class);

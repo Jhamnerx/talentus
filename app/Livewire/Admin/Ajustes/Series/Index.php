@@ -7,8 +7,8 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Illuminate\Validation\Rule;
 
-use function PHPSTORM_META\map;
 use App\Models\TipoComprobantes;
 
 class Index extends Component
@@ -30,7 +30,10 @@ class Index extends Component
         $datos = $this->validate(
             [
                 'tipo_comprobante_id' => 'required|exists:tipo_comprobantes,codigo',
-                'serie' => 'required|unique:series,serie',
+                'serie' => [
+
+                    'required', Rule::unique('series', 'serie')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                ],
                 'correlativo' => 'numeric|min:0|required',
             ],
             [
@@ -46,14 +49,26 @@ class Index extends Component
         $comprobante = TipoComprobantes::find($this->tipo_comprobante_id);
 
         $comprobante->series()->create([
-            'serie' => $datos['serie'],
-            'correlativo' => Str::upper($datos['correlativo']),
+            'serie' => Str::upper($datos['serie']),
+            'correlativo' => $datos['correlativo'],
+            'empresa_id' => session('empresa'),
         ]);
 
         $this->afterSave($datos['serie'], $comprobante->descripcion);
 
         $this->reset('serie', 'correlativo');
     }
+
+    public function afterSave($serie, $comprobante)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'SERIE CREADA',
+            mensaje: 'La serie: ' . $serie . ' de ' . $comprobante . ' fue creada',
+        );
+    }
+
     #[On('update-table')]
     public function updateTable()
     {

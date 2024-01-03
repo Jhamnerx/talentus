@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('serie_correlativo');
             $table->foreignId('cliente_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('fecha_emision');
-            $table->dateTime('fecha_hora_emision');
+            $table->dateTime('fecha_hora_emision')->nullable();
             $table->date('fecha_vencimiento');
             $table->string('divisa')->nullable();
             $table->decimal('tipo_cambio', 11, 2)->nullable();
@@ -70,6 +70,7 @@ return new class extends Migration
             $table->boolean('servicios_selva')->default(false);
             $table->boolean('viewed')->default(false);
             $table->boolean('sent')->default(false);
+            $table->text('observacion')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
 

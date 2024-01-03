@@ -13,8 +13,6 @@
     @vite('resources/css/style.scss')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
-    {{-- dataTables --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/css/jquery.dataTables.min.css') }}">
 
 
     @vite('resources/js/app.js')
@@ -59,7 +57,7 @@
 
                         <div class="hover text-left mx-2">
                             <p class="text-talentus-200 text-wrap ">EMPRESA: <b
-                                    class="hover:text-talentus-200">{{ \App\Models\Empresa::where('id', session('empresa'))->first()->plantilla->razon_social }}</b>
+                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
                             </p>
                         </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Unit;
 use App\Models\Lineas;
+use App\Models\Series;
 use App\Models\SimCard;
 use App\Models\Clientes;
 use App\Models\Categoria;
@@ -12,6 +13,7 @@ use App\Models\Vehiculos;
 use App\Models\Dispositivos;
 use Illuminate\Http\Request;
 use App\Models\TipoDocumento;
+use App\Models\TipoAfectacion;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
@@ -38,7 +40,7 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(12)
+                fn (Builder $query) => $query->limit(30)
             )
             ->get();
     }
@@ -56,7 +58,6 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(10)
             )
             ->get();
     }
@@ -84,9 +85,8 @@ class SelectsController extends Controller
     public function clientes(Request $request): Collection
     {
 
-        dd(session('empresa'));
         return Clientes::query()
-            ->select('id', 'razon_so54cial', 'numero_documento', 'tipo_documento_id')
+            ->select('id', 'razon_social', 'numero_documento', 'tipo_documento_id')
             ->orderBy('id')
             ->when(
                 $request->search,
@@ -102,7 +102,7 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(15)
+                fn (Builder $query) => $query->limit(20)
             )
             ->get();
     }
@@ -123,7 +123,7 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('serie', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(10)
+                fn (Builder $query) => $query->limit(20)
             )
             ->get();
     }
@@ -132,7 +132,7 @@ class SelectsController extends Controller
     {
 
         return Productos::query()
-            ->select('id', 'codigo', 'serie', 'descripcion', 'valor_unitario', 'unit_id', 'stock')
+            ->select('id', 'codigo', 'serie', 'descripcion', 'valor_unitario', 'unit_code', 'stock')
             ->orderBy('id')
             ->when(
                 $request->search,
@@ -146,11 +146,11 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(10)
+                fn (Builder $query) => $query->limit(20)
             )
             ->get()->map(function (Productos $producto) {
 
-                $producto->imagen = $producto->image ? Storage::url($producto->image->url) : Storage::url('public/productos/default.jpg');
+                $producto->imagen = $producto->image ? Storage::url($producto->image->url) : Storage::url('productos/default.jpg');
                 $producto->option_description = $producto->codigo . " - Stock: " . $producto->stock . " " . $producto->unit->descripcion . " - Precio: $" . $producto->valor_unitario;
 
                 return $producto;
@@ -266,7 +266,6 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(10)
 
             )
             ->get();

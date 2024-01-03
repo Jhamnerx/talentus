@@ -8,13 +8,17 @@ use App\Models\Ventas;
 use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\MetodoPago;
+use Livewire\Attributes\On;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Collection;
 use App\Http\Requests\VentasRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
-use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+
 
 class Emitir extends Component
 {
@@ -28,7 +32,7 @@ class Emitir extends Component
 
     public $sub_total = 0.00, $op_gravadas = 0.00, $op_exoneradas = 0.00, $op_inafectas = 0.00,
         $op_gratuitas = 0.00, $descuento = 0.00, $igv = 0.00, $icbper = 0.00,  $total;
-    public $op_gravadas_help = 0.00;
+
 
     public Collection $detalle_cuotas;
 
@@ -41,7 +45,7 @@ class Emitir extends Component
 
     public Collection $items;
     public $cliente;
-    public Empresa $empresa;
+    public plantilla $plantilla;
 
 
     public $simbolo = "S/. ";
@@ -50,12 +54,6 @@ class Emitir extends Component
 
     //PROPIEDAD PARA ASIGNAR EL MINIMO DEL CORRELATIVO
     public $min_correlativo;
-
-
-    // escucha eventos
-    protected $listeners = [
-        'add-producto' => 'addProducto',
-    ];
 
 
 
@@ -67,7 +65,7 @@ class Emitir extends Component
 
         //ESTABLACER FECHAS DEFAULT
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
-        $this->fecha_hora_emision = Carbon::now();
+        //$this->fecha_hora_emision = Carbon::now();
         //$this->fecha_hora_emision = "2023-07-20 11:44:00";
         $this->fecha_vencimiento = Carbon::now()->addDays(1)->format('Y-m-d');
         // $this->fecha_vencimiento = "2023-07-20 11:44:00";
@@ -85,7 +83,7 @@ class Emitir extends Component
             $this->cliente_id = 1;
             $this->cliente = Clientes::find(1);
         }
-        $this->empresa = Empresa::first();
+        $this->plantilla = plantilla::first();
     }
 
 
@@ -212,18 +210,17 @@ class Emitir extends Component
 
     public function openModalCreateProduct()
     {
-        $this->emit('openModalCreate');
+        $this->dispatch('openModalCreate');
     }
 
     public function calcularIgvProducto(Productos $producto): float
     {
 
-        $empresa = Empresa::first();
 
         switch ($producto->tipoAfectacion->codigo_afectacion) {
             case "1000":
 
-                $igv = round(floatval($producto->valor_unitario), 2) *  $empresa->igv;
+                $igv = round(floatval($producto->valor_unitario), 2) *  $this->plantilla->igv;
 
                 return floatval($igv);
             default:
@@ -237,8 +234,10 @@ class Emitir extends Component
 
 
     //AÑADIR ITEM SELECCIONADO A LA LISTA DE ITEMS
+    #[On('add-producto')]
     function addProducto($selected)
     {
+
         try {
 
 
@@ -260,7 +259,9 @@ class Emitir extends Component
                     'unit_name' => $selected["unit_name"],
                     'descripcion' => $selected["descripcion"],
                     'valor_unitario' => $selected["valor_unitario"],
+                    'precio_unitario' => $selected["precio_unitario"],
                     'igv' => $selected["igv"],
+                    'porcentaje_igv' => $selected["porcentaje_igv"],
                     'icbper' => $selected["icbper"],
                     'total_icbper' => $selected["total_icbper"],
                     'sub_total' => $selected["valor_unitario"] * $selected["cantidad"],
@@ -269,12 +270,13 @@ class Emitir extends Component
                     'afecto_icbper' => $selected["afecto_icbper"],
                 ]);
 
-                //$this->resetSelected();
+                //ENVIAR EVENTO PARA REINICIAR PRODUCTO SELECCIONADO EN MODAL
+                $this->dispatch('reset-selected');
 
                 //  CALCULAR TOTALES AL AÑADIR PRODUCTO
                 $this->reCalTotal();
 
-                $this->dispatchBrowserEvent('add-producto');
+                //$this->dispatchBrowserEvent('add-producto');
                 $this->calcularCuotas($this->numero_cuotas);
             }
         } catch (\Exception $e) {
@@ -288,11 +290,13 @@ class Emitir extends Component
         $request = new VentasRequest();
         $datos = $this->validate($request->rules(), $request->messages());
 
+
+
         try {
 
             $venta = Ventas::create($datos);
 
-            //dd($venta);
+
             //ACTUALIZAR DIRECCION
             if (is_null($this->cliente->direccion)) {
 
@@ -303,16 +307,18 @@ class Emitir extends Component
             }
 
             //CREAR ITEMS DE LA VENTA
-            Ventas::createItems($venta, $datos["items"]);
+            $items = Ventas::createItems($venta, $datos["items"]);
 
 
-            $comprobanteControlador = new ComprobantesController();
-            $mensaje = $comprobanteControlador->emitirComprobante($venta, $this->metodo_type);
-            // dd($mensaje);
+            $api = new ApiFacturacion();
+            $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
+
+            dd($mensaje);
             // $this->afterSave();
             //return redirect()->route('admin.ventas.index')->with('store', $mensaje);
         } catch (\Throwable $th) {
 
+            dd($th);
             $this->dispatchBrowserEvent('error-sunat', $th);
         }
 
@@ -335,8 +341,7 @@ class Emitir extends Component
     {
         $this->items = $this->items->map(function ($item, $key) {
 
-
-            $item["igv"] =  $item["codigo_afectacion"] == '10' ? round(floatval($item["valor_unitario"] * $item["cantidad"]) * $this->empresa->igv, 4) : 0.00;
+            $item["igv"] =  $item["codigo_afectacion"] == '10' ? round(floatval($item["valor_unitario"] * $item["cantidad"]) * $this->plantilla->igv, 4) : 0.00;
 
             $item["sub_total"] =  round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]), 4);
             $item["total"] =  $item["afecto_icbper"] ? round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]) + $item["igv"] + $item["total_icbper"], 4)  : round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]) + $item["igv"], 4);
@@ -354,7 +359,6 @@ class Emitir extends Component
         $this->descuento =  $this->calcularDescuento();
         $this->sub_total =   $this->calcularSubTotal();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
-        $this->op_gravadas_help = $this->calculartotalhelp();
         // $this->op_gratuitas = $this->calcularOperacionesGratuitas();
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
         $this->op_inafectas = $this->calcularOperacionesInafectas();
@@ -383,9 +387,7 @@ class Emitir extends Component
     public function calcularIgv()
     {
 
-        $empresa = Empresa::first();
-
-        $igv = floatval($this->op_gravadas) *  $empresa->igv;
+        $igv = floatval($this->op_gravadas) *  $this->plantilla->igv;
 
         return round($igv, 4);
     }
@@ -482,7 +484,7 @@ class Emitir extends Component
 
         $this->validate([
             'descuento_monto' => [
-                'lt:op_gravadas_help',
+                'lt:op_gravadas',
                 'exclude_if:op_gravadas,0'
             ],
         ]);
@@ -513,7 +515,7 @@ class Emitir extends Component
             $descuento = $this->descuento_monto;
             if ($this->sub_total) {
 
-                $this->descuento_factor = ($this->descuento_monto * 100 / $this->sub_total)  / 100;
+                $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 4);
             }
         } else {
             if ($this->total) {
@@ -531,21 +533,6 @@ class Emitir extends Component
         return round($descuento, 2);
     }
 
-    public function calculartotalhelp()
-    {
-
-        $op_gravadas = $this->items->map(function ($item, $key) {
-
-            if ($item['codigo_afectacion'] == '1000') {
-                $op_gravadas = 0.00;
-                $op_gravadas = $op_gravadas + $item['sub_total'];
-                return round($op_gravadas, 2);
-            }
-        })->sum();
-
-
-        return $op_gravadas;
-    }
 
     public function eliminarProducto($key)
     {
@@ -559,9 +546,9 @@ class Emitir extends Component
         $request = new VentasRequest();
         $this->validateOnly($propertyName, $request->rules(), $request->messages());
     }
-
+    // ABRIR MODAL PARA REGISTRAR PRODUCTO Y AÑADIR AL COMPROBANTE
     public function openModalAddProducto()
     {
-        $this->emit('openModalAddProducto');
+        $this->dispatch('openModalAddProducto');
     }
 }

@@ -11,7 +11,7 @@ class plantilla extends Model
 {
     use HasFactory;
     protected $table = 'plantilla';
-
+    protected $primaryKey = 'id';
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
@@ -27,7 +27,6 @@ class plantilla extends Model
         //'sunat_datos' => AsArrayObject::class,
     ];
 
-    //GLOBAL SCOPE EMPRESA
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {

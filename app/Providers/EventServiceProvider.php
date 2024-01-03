@@ -39,6 +39,7 @@ use App\Models\Reportes;
 use App\Models\SimCard;
 use App\Models\Tareas;
 use App\Models\Vehiculos;
+use App\Models\Ventas;
 use App\Observers\ActaObserver;
 use App\Observers\CategoriasObserver;
 use App\Observers\CertificadosObserver;
@@ -64,6 +65,7 @@ use App\Observers\ReportesObserver;
 use App\Observers\SimCardObserver;
 use App\Observers\TareasObserver;
 use App\Observers\VehiculosObserver;
+use App\Observers\VentasObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -112,5 +114,6 @@ class EventServiceProvider extends ServiceProvider
         Tareas::observe(TareasObserver::class);
         RecibosPagosVarios::observe(RecibosPagosObserver::class);
         Mantenimiento::observe(MantenimientoObserver::class);
+        Ventas::observe(VentasObserver::class);
     }
 }

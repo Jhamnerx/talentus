@@ -9,6 +9,16 @@
 @import "filepond/dist/filepond.min.css";
 @import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 
+[x-cloak=""] {
+    display: none;
+}
+
+@media screen and (max-width: theme("screens.lg")) {
+    [x-cloak="lg"] {
+        display: none;
+    }
+}
+
 .contenedor-estados-sunat .sunat-estado {
     font-weight: 600;
 }

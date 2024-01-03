@@ -35,6 +35,14 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'facturacion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/facturacion'),
+            'url' => env('APP_URL') . '/facturacion',
+            'visibility' => 'public',
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

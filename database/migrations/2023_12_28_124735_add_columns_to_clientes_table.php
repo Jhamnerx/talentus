@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('clientes', function (Blueprint $table) {
-            $table->text('ubigeo')->nullable()->after('is_active');
-            $table->string('tipo_documento_id')->nullable()->after('is_active');
+            $table->text('ubigeo')->nullable()->after('web_site');
+            $table->string('tipo_documento_id')->nullable()->after('razon_social');
             $table->foreign('tipo_documento_id')->references('codigo')->on('tipo_documentos')->onDelete('cascade')->onUpdate('cascade');
             $table->dateTime('ultima_compra')->nullable()->after('is_active');
             $table->string('compras')->default('0')->after('is_active');

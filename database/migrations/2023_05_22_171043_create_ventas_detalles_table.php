@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('tipo_precio')->nullable();
             $table->decimal('cantidad', 11, 4);
             $table->decimal('valor_unitario', 11, 4);
+            $table->decimal('precio_unitario', 11, 4);
             $table->boolean('afecto_icbper')->default(false);
             $table->decimal('icbper', 11, 4)->nullable();
             $table->decimal('total_icbper', 11, 4)->nullable();
