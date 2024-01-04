@@ -53,7 +53,7 @@ class VentasRequest extends FormRequest
             'detalle_cuotas.*' => 'array|between:1,100|required_if:forma_pago,CREDITO',
             'forma_pago' => 'required',
 
-            'items' => 'array|between:1,100',
+            'items' => 'array|between:1,1000',
             'items.*.producto_id' => 'required',
             'items.*.codigo' => 'required',
             'items.*.cantidad' => 'required|gte:1',
@@ -84,6 +84,8 @@ class VentasRequest extends FormRequest
 
         $messages = [
             'total_cuotas.same' => 'la suma de las cuotas debe ser igual al Monto neto',
+            'cliente_id.required' => 'Debes Seleccionar un cliente',
+            'items.between' => 'Debes Añadir al menos 1 producto o servicio',
         ];
         return $messages;
     }
