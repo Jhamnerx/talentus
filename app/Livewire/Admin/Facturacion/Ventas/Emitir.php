@@ -289,12 +289,9 @@ class Emitir extends Component
         $request = new VentasRequest();
         $datos = $this->validate($request->rules(), $request->messages());
 
-
-
         try {
 
             $venta = Ventas::create($datos);
-
 
             //ACTUALIZAR DIRECCION
             if (is_null($this->cliente->direccion)) {
@@ -309,16 +306,24 @@ class Emitir extends Component
             $items = Ventas::createItems($venta, $datos["items"]);
 
 
+            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+
+            //dd($venta->getSerie->correltivo);
+            $venta->getSerie->increment('correlativo');
+
             $api = new ApiFacturacion();
             $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
 
-            dd($mensaje);
+            // dd($mensaje);
             // $this->afterSave();
+            session()->flash('venta-registrada', $mensaje);
+
+            $this->redirectRoute('admin.ventas.index');
             //return redirect()->route('admin.ventas.index')->with('store', $mensaje);
         } catch (\Throwable $th) {
 
             dd($th);
-            $this->dispatchBrowserEvent('error-sunat', $th);
+            $this->dispatch('error-sunat', $th);
         }
 
         // dd($venta->ventaDetalles);
@@ -326,13 +331,14 @@ class Emitir extends Component
 
 
 
-    public function afterSave()
+    public function afterSave($mensaje)
     {
-        $this->dispatchBrowserEvent('model', [
-            'tipo' => 'success',
-            'titulo' => 'VENTA REGISTRADA',
-            'texto' => 'se guardo correctamente la venta'
-        ]);
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'VENTA REGISTRADA',
+            mensaje: $mensaje,
+        );
     }
 
     //CALCULAR IGV Y SUN TOTAL AL MODIFICAR CANTIDAD DEL ITEM #
@@ -341,16 +347,17 @@ class Emitir extends Component
         $this->items = $this->items->map(function ($item, $key) {
 
             $item["igv"] =  $item["codigo_afectacion"] == '10' ? round(floatval($item["valor_unitario"] * $item["cantidad"]) * $this->plantilla->igv, 4) : 0.00;
-
             $item["sub_total"] =  round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]), 4);
             $item["total"] =  $item["afecto_icbper"] ? round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]) + $item["igv"] + $item["total_icbper"], 4)  : round(floatval($item["cantidad"]) *  floatval($item["valor_unitario"]) + $item["igv"], 4);
             //   $item["afecto_icbper"] ? $item["icbper"] = 0.50 * round(floatval($item["cantidad"])) : 0;
+            $item["precio_unitario"] = ($item["valor_unitario"] * $this->plantilla->igv) + $item["valor_unitario"];
 
             return $item;
         });
 
         $this->reCalTotal();
     }
+
 
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()

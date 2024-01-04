@@ -178,4 +178,20 @@
 
 @stack('scripts')
 
+@if (session('venta-registrada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'VENTA REGISTRADA',
+                text: '{{ session('venta-registrada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+
+
 </html>

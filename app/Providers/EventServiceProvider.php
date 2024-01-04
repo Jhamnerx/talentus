@@ -2,74 +2,76 @@
 
 namespace App\Providers;
 
-use App\Events\ClientesImportUpdated;
-use App\Events\nuevaActaCreada;
-use App\Events\nuevoCertificadoCreado;
-use App\Events\nuevoCertificadoGpsCreado;
-use App\Listeners\nuevaActaCreadaAdminsListener;
-use App\Listeners\nuevaActaCreadaEmailListener;
-use App\Listeners\nuevoCertificadoAdminsListener;
-use App\Listeners\nuevoCertificadoEmailListener;
-use App\Listeners\nuevoCertificadoGpsAdminsListener;
-use App\Listeners\nuevoCertificadoGpsEmailListener;
-use App\Models\Actas;
 use App\Models\User;
-use App\Observers\UserObserver;
-use App\Models\Categoria;
-use App\Models\Certificados;
-use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
-use App\Models\Clientes;
+use App\Models\Actas;
 use App\Models\Cobros;
-use App\Models\ComprasFacturas;
+use App\Models\Flotas;
+use App\Models\Lineas;
+use App\Models\Tareas;
+use App\Models\Ventas;
+use App\Models\Recibos;
+use App\Models\SimCard;
+use App\Models\Clientes;
+use App\Models\Facturas;
+use App\Models\Payments;
+use App\Models\Reportes;
+use App\Models\Categoria;
 use App\Models\Contactos;
 use App\Models\Contratos;
-use App\Models\Dispositivos;
-use App\Models\Facturas;
-use App\Models\Flotas;
-use App\Models\GuiaRemision;
-use App\Models\Lineas;
-use App\Models\Mantenimiento;
-use App\Models\ModelosDispositivo;
-use App\Models\Payments;
-use App\Models\Presupuestos;
 use App\Models\Productos;
-use App\Models\Recibos;
-use App\Models\RecibosPagosVarios;
-use App\Models\Reportes;
-use App\Models\SimCard;
-use App\Models\Tareas;
 use App\Models\Vehiculos;
-use App\Models\Ventas;
+use App\Models\Certificados;
+use App\Models\Dispositivos;
+use App\Models\GuiaRemision;
+use App\Models\Presupuestos;
+use App\Models\Mantenimiento;
+use App\Events\nuevaActaCreada;
+use App\Models\ComprasFacturas;
 use App\Observers\ActaObserver;
-use App\Observers\CategoriasObserver;
-use App\Observers\CertificadosObserver;
-use App\Observers\CertificadosVelocimetrosObserver;
-use App\Observers\ClientesObserver;
+use App\Observers\UserObserver;
 use App\Observers\CobrosObserver;
-use App\Observers\ComprasFacturasObserver;
+use App\Observers\FlotasObserver;
+use App\Observers\LineasObserver;
+use App\Observers\ReciboObserver;
+use App\Observers\TareasObserver;
+use App\Observers\VentasObserver;
+use App\Models\ModelosDispositivo;
+use App\Models\RecibosPagosVarios;
+use App\Observers\FacturaObserver;
+use App\Observers\SimCardObserver;
+use App\Observers\ClientesObserver;
+use App\Observers\PaymentsObserver;
+use App\Observers\ProductoObserver;
+use App\Observers\ReportesObserver;
 use App\Observers\ContactosObserver;
 use App\Observers\ContratosObserver;
-use App\Observers\DispositivosObserver;
-use App\Observers\FacturaObserver;
-use App\Observers\FlotasObserver;
-use App\Observers\GuiaRemisionObserver;
-use App\Observers\LineasObserver;
-use App\Observers\MantenimientoObserver;
-use App\Observers\ModelosDispositivosObserver;
-use App\Observers\PaymentsObserver;
-use App\Observers\PresupuestosObserver;
-use App\Observers\ProductoObserver;
-use App\Observers\ReciboObserver;
-use App\Observers\RecibosPagosObserver;
-use App\Observers\ReportesObserver;
-use App\Observers\SimCardObserver;
-use App\Observers\TareasObserver;
 use App\Observers\VehiculosObserver;
-use App\Observers\VentasObserver;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use App\Events\ClientesImportUpdated;
+use App\Observers\CategoriasObserver;
 use Illuminate\Support\Facades\Event;
+use App\Events\nuevoCertificadoCreado;
+use Illuminate\Auth\Events\Registered;
+use App\Observers\CertificadosObserver;
+use App\Observers\DispositivosObserver;
+use App\Observers\GuiaRemisionObserver;
+use App\Observers\PresupuestosObserver;
+use App\Observers\RecibosPagosObserver;
+use App\Observers\MantenimientoObserver;
+use App\Events\nuevoCertificadoGpsCreado;
+use App\Observers\ComprasFacturasObserver;
+use App\Events\Facturacion\EmitirComprobante;
+use App\Listeners\Facturacion\UpdateComprobante;
+use App\Observers\ModelosDispositivosObserver;
+use App\Listeners\nuevaActaCreadaEmailListener;
+use App\Listeners\nuevaActaCreadaAdminsListener;
+use App\Listeners\nuevoCertificadoEmailListener;
+use App\Listeners\nuevoCertificadoAdminsListener;
+use App\Listeners\nuevoCertificadoGpsEmailListener;
+use App\Observers\CertificadosVelocimetrosObserver;
+use App\Listeners\nuevoCertificadoGpsAdminsListener;
+use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
+use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
 class EventServiceProvider extends ServiceProvider
@@ -83,7 +85,9 @@ class EventServiceProvider extends ServiceProvider
         nuevoCertificadoCreado::class => [nuevoCertificadoEmailListener::class, nuevoCertificadoAdminsListener::class],
         nuevoCertificadoGpsCreado::class => [nuevoCertificadoGpsEmailListener::class, nuevoCertificadoGpsAdminsListener::class],
         ClientesImportUpdated::class => [],
-
+        EmitirComprobante::class => [
+            UpdateComprobante::class,
+        ],
     ];
 
     public function boot()

@@ -5,16 +5,17 @@ namespace App\Models;
 
 
 use App\Models\GuiaRemision;
+use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\EnvioResumenDetalle;
 use Illuminate\Database\Eloquent\Model;
 use Luecano\NumeroALetras\NumeroALetras;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Ventas extends Model
 {
@@ -64,6 +65,19 @@ class Ventas extends Model
         'detalle_cuotas' => AsCollection::class,
     ];
 
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+    protected function nota(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => json_decode($nota, true),
+            set: fn ($nota) => json_encode($nota),
+        );
+    }
 
     public function ventaDetalles(): HasMany
     {
@@ -110,6 +124,10 @@ class Ventas extends Model
         return $this->belongsTo(NotaDebito::class);
     }
 
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
     //CREAR ITEM DETALLE VENTA
 
     public static function createItems(Ventas $venta, $ventaItems)

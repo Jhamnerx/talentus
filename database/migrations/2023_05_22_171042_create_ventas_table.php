@@ -53,6 +53,7 @@ return new class extends Migration
             $table->enum('forma_pago', ["CONTADO", "CREDITO"])->default('CONTADO');
             //SUNAT RESPUESTA
             $table->boolean('fe_estado')->default(false);
+            $table->text('estado_texto')->nullable();
             $table->text('fe_codigo_error')->nullable();
             $table->text('fe_mensaje_error')->nullable();
             $table->text('fe_mensaje_sunat')->nullable();
@@ -70,7 +71,7 @@ return new class extends Migration
             $table->boolean('servicios_selva')->default(false);
             $table->boolean('viewed')->default(false);
             $table->boolean('sent')->default(false);
-            $table->text('observacion')->nullable();
+
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
 

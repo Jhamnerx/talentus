@@ -70,7 +70,19 @@ class Index extends Component
 
         $api = new ApiFacturacion();
         $mensaje =  $api->sendInvoiceOnly($venta);
-        dd($mensaje);
+
+        $this->afterGetCdr($mensaje['fe_mensaje_sunat']);
         //return redirect()->route('admin.ventas.index')->with('get-cdr', $mensaje);
+    }
+
+    public function afterGetCdr($mensaje)
+    {
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'COMPROBANTE ENVIADO A SUNAT',
+            mensaje: $mensaje,
+        );
+        $this->render();
     }
 }

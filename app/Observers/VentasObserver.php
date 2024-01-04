@@ -20,6 +20,7 @@ class VentasObserver
     {
         if (!\App::runningInConsole()) {
             $ventas->user_id = auth()->user()->id;
+            $ventas->empresa_id = session('empresa');
         }
     }
     /**

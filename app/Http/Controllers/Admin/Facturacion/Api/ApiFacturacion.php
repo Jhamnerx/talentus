@@ -4,30 +4,21 @@ namespace App\Http\Controllers\Admin\Facturacion\Api;
 
 use DateTime;
 use App\Models\Ventas;
-use App\Models\Empresa;
 use App\Models\plantilla;
-use Illuminate\Http\Request;
-use App\Models\VentasDetalle;
 use Greenter\Model\Sale\Cuota;
 use Greenter\Model\Sale\Charge;
 use Greenter\Model\Sale\Legend;
 use Greenter\Model\Sale\Invoice;
-use App\Events\EmitirComprobante;
-use App\Events\FirmarComprobante;
+use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Address;
-use Greenter\Model\Company\Company;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
-use Greenter\Xml\Builder\InvoiceBuilder;
 use Luecano\NumeroALetras\NumeroALetras;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
-use Greenter\XMLSecLibs\Certificate\X509Certificate;
-use Greenter\XMLSecLibs\Certificate\X509ContentType;
 
 class ApiFacturacion extends Controller
 {
@@ -64,7 +55,7 @@ class ApiFacturacion extends Controller
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
             ->setTipoOperacion('0101')
-            ->setObservacion($venta->observacion)
+            ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
             ->setCorrelativo($venta->correlativo)
@@ -125,7 +116,7 @@ class ApiFacturacion extends Controller
                     ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
             ]);
 
-        //dd($invoice);
+
         // Envio a SUNAT.
         $see = $util->getSee();
 
@@ -146,11 +137,17 @@ class ApiFacturacion extends Controller
 
         /**@var $res BillResult*/
         $cdr = $result->getCdrResponse();
+        //Guardar CDR recibido
         $util->writeCdr($invoice, $result->getCdrZip());
 
         $respuesta = $util->showResponse($invoice, $cdr);
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO');
+
         return $respuesta['fe_mensaje_sunat'];
     }
+
 
     public function sendInvoiceOnly(Ventas $venta)
     {
@@ -169,7 +166,7 @@ class ApiFacturacion extends Controller
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
             ->setTipoOperacion('0101')
-            ->setObservacion($venta->observacion)
+            ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
             ->setCorrelativo($venta->correlativo)
@@ -232,7 +229,7 @@ class ApiFacturacion extends Controller
         // Envio a SUNAT.
         $see = $util->getSee();
 
-        $result = $see->sendXml(get_class($invoice), $invoice->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $venta->nombre_xml));
+        $result = $see->sendXml(get_class($invoice), $invoice->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $venta->nombre_xml . '.xml'));
 
         if (!$result->isSuccess()) {
 
@@ -243,13 +240,16 @@ class ApiFacturacion extends Controller
 
         /**@var $res BillResult*/
         $cdr = $result->getCdrResponse();
+        //Guardar CDR recibido
         $util->writeCdr($invoice, $result->getCdrZip());
 
         $respuesta = $util->showResponse($invoice, $cdr);
-        return $respuesta['fe_mensaje_sunat'];
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update');
+
+        return $respuesta;
     }
-
-
 
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
     public function createXmlInvoice(Ventas $venta)
@@ -264,7 +264,7 @@ class ApiFacturacion extends Controller
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
             ->setTipoOperacion('0101')
-            ->setObservacion($venta->observacion)
+            ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
             ->setCorrelativo($venta->correlativo)
@@ -323,9 +323,34 @@ class ApiFacturacion extends Controller
         //FIRMADO Y GUARDADO DEL XML
         $see = $util->getSee();
         $xml = $see->getXmlSigned($invoice);
-        $util->writeXml($invoice, $xml);
+        $xml_base64 = $util->writeXmlOnly($invoice, $xml);
+
+        $respuesta
+            =  [
+                'estado_texto' => 'ESTADO: SOLO XML CREADO',
+                'fe_mensaje_sunat' => null,
+                'fe_mensaje_error' => null,
+                'nota' => '',
+                'fe_codigo_error' => null,
+                'nombre_xml' => $invoice->getName(),
+                'xml_base64' => $xml_base64,
+                'cdr_base64' => null,
+                'fe_estado' => 0,
+                'hash' => null,
+                'hash_cdr' => null,
+                'code_sunat' => null,
+
+            ];
+
+
+        $this->updateComprobante($venta, $respuesta, 'BORRADOR');
 
         return "El comprobante fue firmado, Pendiente de Envio";
+    }
+
+    public function updateComprobante(Ventas $venta, $respuesta, $estado)
+    {
+        FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado);
     }
 
     //DEVOLVER OBJETO CLIENTE
@@ -388,9 +413,5 @@ class ApiFacturacion extends Controller
         }
 
         return $detalle;
-    }
-
-    public function enviarSunat(Ventas $venta)
-    {
     }
 }

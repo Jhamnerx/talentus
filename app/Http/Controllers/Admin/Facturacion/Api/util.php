@@ -66,8 +66,6 @@ class Util extends Controller
 
         $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
 
-
-        //  dd(Storage::disk('facturacion')->get($ruta_certificado));
         $see = new See();
         if ($this->plantilla->modo = 'local') {
 
@@ -92,30 +90,6 @@ class Util extends Controller
         //$see->setCachePath(__DIR__ . '/../cache');
 
         return $see;
-    }
-
-    public function signXmlFile($nombre)
-    {
-
-        $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
-
-        $signer = new SignedXml();
-        $signer->setCertificateFromFile(Storage::disk('facturacion')->path($ruta_certificado));
-
-        $ruta_archivo_xml = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_xml;
-
-        $xmlSigned = $signer->signFromFile(Storage::disk('facturacion')->path($ruta_archivo_xml . $nombre) . '.XML');
-
-        Storage::disk('facturacion')->put($ruta_archivo_xml . $nombre . '.XML', $xmlSigned);
-
-        $this->xml_base64 = base64_encode($xmlSigned);
-        $this->xml_base64 = base64_encode($xmlSigned);
-        return $xmlSigned;
-    }
-
-    public function getXmlBase64()
-    {
-        return  $this->xml_base64;
     }
 
     public function getSeeApi()
@@ -159,6 +133,7 @@ class Util extends Controller
 
     public function showResponse(DocumentInterface $document, CdrResponse $cdr)
     {
+
         $this->nombre_xml = $document->getName();
         $this->code_sunat = (int)$cdr->getCode();
         $code = (int)$cdr->getCode();
@@ -241,6 +216,13 @@ class Util extends Controller
         $this->writeFile($document->getName() . '.xml', $xml, 'xml');
         $this->xml_base64 = base64_encode($xml);
     }
+
+    public function writeXmlOnly(DocumentInterface $document, ?string $xml)
+    {
+        $this->writeFile($document->getName() . '.xml', $xml, 'xml');
+        return base64_encode($xml);
+    }
+
 
     public function writeCdr(DocumentInterface $document, ?string $zip): void
     {
