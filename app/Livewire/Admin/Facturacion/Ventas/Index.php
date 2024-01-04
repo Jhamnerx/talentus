@@ -67,12 +67,10 @@ class Index extends Component
 
     public function getCdr(Ventas $venta)
     {
-
         $api = new ApiFacturacion();
         $mensaje =  $api->sendInvoiceOnly($venta);
 
         $this->afterGetCdr($mensaje['fe_mensaje_sunat']);
-        //return redirect()->route('admin.ventas.index')->with('get-cdr', $mensaje);
     }
 
     public function afterGetCdr($mensaje)

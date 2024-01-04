@@ -98,11 +98,16 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query
                     ->where('tipo_documento_id', 6)
 
+            )->when(
+                $request->tipo_comprobante == "03" ? true : false,
+                fn (Builder $query) => $query
+                    ->where('tipo_documento_id', 1)
+
             )
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(20)
+                fn (Builder $query) => $query->limit(50)
             )
             ->get();
     }
