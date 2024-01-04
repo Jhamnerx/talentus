@@ -397,8 +397,6 @@
                         </a>
                     </div>
                 </div>
-
-                {{ json_encode($errors->all()) }}
             </div>
 
 

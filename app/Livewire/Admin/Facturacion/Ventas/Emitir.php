@@ -239,15 +239,15 @@ class Emitir extends Component
 
         try {
 
-
             if ($this->items->contains('producto_id', $selected["producto_id"])) {
 
 
-                $this->dispatchBrowserEvent('model', [
-                    'tipo' => 'error',
-                    'titulo' => 'YA ESTA AÑADIDO ',
-                    'texto' => 'El producto o servicio ya esta en la lista'
-                ]);
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'YA ESTA AÑADIDO',
+                    mensaje: 'El producto o servicio ya esta en el carrito'
+                );
             } else {
 
                 $this->items->push([
