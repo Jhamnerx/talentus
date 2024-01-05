@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-
-
+use App\Enums\VentasStatus;
 use App\Models\GuiaRemision;
 use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
@@ -62,6 +61,7 @@ class Ventas extends Model
         'servicios_selva' => 'boolean',
         'viewed' => 'boolean',
         'sent' => 'boolean',
+        'estado' => VentasStatus::class,
         'detalle_cuotas' => AsCollection::class,
     ];
 

@@ -58,16 +58,13 @@
             <!-- Right side -->
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-
-
                 <!-- Search form -->
 
                 <form class="relative">
                     <label for="action-search" class="sr-only">Search</label>
                     <input name="serie_correlativo" id="action-search" class="form-input pl-9 focus:border-slate-300"
-                        type="search" placeholder="Buscar Factura o Boleta…" />
-                    <button wire:model="search" type="button" class="absolute inset-0 right-auto group" type="submit"
-                        aria-label="Search">
+                        type="search" wire:model.live="search" placeholder="Buscar Factura o Boleta…" />
+                    <button type="button" class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                         <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
                             viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <path

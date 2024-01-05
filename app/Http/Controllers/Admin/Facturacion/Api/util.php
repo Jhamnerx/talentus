@@ -149,13 +149,14 @@ class Util extends Controller
                 // Corregir estas observaciones en siguientes emisiones.
                 $this->nota = $cdr->getNotes();
                 $this->mensaje = $cdr->getDescription() . ' CON OBSERVACIONES';
+                $this->fe_estado = '3';
             }
         } else if ($code >= 2000 && $code <= 3999) {
             //SI EL CODIGO ESTA ENTRE ESTOS SE RECOGE EL MENSAJE Y EL CODIGO DE ERROR
             $this->estado = 'ESTADO: RECHAZADA';
             $this->mensaje_error = $cdr->getDescription();
             $this->fe_codigo_error = $code;
-            $this->$this->fe_estado = (int)$cdr->getCode();
+            $this->$this->fe_estado = '2';
         } else {
             /* Esto no debería darse, pero si ocurre, es un CDR inválido que debería tratarse como un error-excepción. */
             /*code: 0100 a 1999 */
