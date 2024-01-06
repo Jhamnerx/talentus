@@ -18,7 +18,7 @@ class EmitirComprobante
     /**
      * Create a new event instance.
      */
-    public function __construct(public Ventas $venta, public $respuesta, public $estado, public $action = 'update', public $invoice)
+    public function __construct(public Ventas $venta, public $respuesta, public $estado, public $action, public $invoice)
     {
     }
 

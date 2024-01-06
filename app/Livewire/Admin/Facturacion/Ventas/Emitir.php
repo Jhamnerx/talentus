@@ -314,15 +314,22 @@ class Emitir extends Component
             $api = new ApiFacturacion();
             $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
 
-            // dd($mensaje);
-            // $this->afterSave();
-            session()->flash('venta-registrada', $mensaje);
+            if ($mensaje['fe_codigo_error']) {
 
-            $this->redirectRoute('admin.ventas.index');
+                session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.ventas.index');
+            } else {
+
+                session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.ventas.index');
+            }
+
+            // $this->afterSave();
+
             //return redirect()->route('admin.ventas.index')->with('store', $mensaje);
         } catch (\Throwable $th) {
 
-            dd($th);
+
             $this->dispatch('error-sunat', $th);
         }
 

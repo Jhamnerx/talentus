@@ -195,7 +195,7 @@ class Util extends Controller
     {
         $results
             =  [
-                'estado_texto' => 'ESTADO: RECHAZADA',
+                'estado_texto' => 'ESTADO: ERROR AL ENVIAR',
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $error->getMessage(),
                 'nota' => $this->nota,
@@ -216,11 +216,14 @@ class Util extends Controller
     {
         $this->writeFile($document->getName() . '.xml', $xml, 'xml');
         $this->xml_base64 = base64_encode($xml);
+        $this->nombre_xml = $document->getName();
+        $this->hash = $this->getHash($document);
     }
 
     public function writeXmlOnly(DocumentInterface $document, ?string $xml)
     {
         $this->writeFile($document->getName() . '.xml', $xml, 'xml');
+        $this->nombre_xml = $document->getName();
         return base64_encode($xml);
     }
 
@@ -308,7 +311,7 @@ class Util extends Controller
 
 
     //OBTENER HASH DE XML INVOICE
-    private function getHash(DocumentInterface $document): ?string
+    public function getHash(DocumentInterface $document): ?string
     {
         $see = $this->getSee('');
         $xml = $see->getXmlSigned($document);
@@ -317,7 +320,7 @@ class Util extends Controller
     }
 
     //OBTENER HASH DE CDR RESPUESTA DE SUNAT
-    private function getHashFromFile($xml): ?string
+    public function getHashFromFile($xml): ?string
     {
         return (new XmlUtils())->getHashSign($xml);
     }

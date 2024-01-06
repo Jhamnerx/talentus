@@ -131,7 +131,7 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-
+            $this->updateComprobante($venta, $msg, 'BORRADOR', 'update', $invoice);
             return $msg;
         }
 
@@ -145,7 +145,7 @@ class ApiFacturacion extends Controller
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
 
-        return $respuesta['fe_mensaje_sunat'];
+        return $respuesta;
     }
 
 
@@ -235,6 +235,8 @@ class ApiFacturacion extends Controller
 
             $msg = $util->getErrorResponse($result->getError());
 
+            //$this->updateComprobante($venta, $msg, 'BORRADOR', 'no_update', $invoice);
+            // dd($msg);
             return $msg;
         }
 
@@ -324,11 +326,12 @@ class ApiFacturacion extends Controller
         $see = $util->getSee();
         $xml = $see->getXmlSigned($invoice);
         $xml_base64 = $util->writeXmlOnly($invoice, $xml);
+        $hash = $util->getHash($invoice);
 
         $respuesta
             =  [
                 'estado_texto' => 'ESTADO: SOLO XML CREADO',
-                'fe_mensaje_sunat' => null,
+                'fe_mensaje_sunat' => "El comprobante fue firmado, Pendiente de Envio",
                 'fe_mensaje_error' => null,
                 'nota' => '',
                 'fe_codigo_error' => null,
@@ -336,7 +339,7 @@ class ApiFacturacion extends Controller
                 'xml_base64' => $xml_base64,
                 'cdr_base64' => null,
                 'fe_estado' => 0,
-                'hash' => null,
+                'hash' => $hash,
                 'hash_cdr' => null,
                 'code_sunat' => null,
 
@@ -345,7 +348,7 @@ class ApiFacturacion extends Controller
 
         $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
 
-        return "El comprobante fue firmado, Pendiente de Envio";
+        return $respuesta;
     }
 
     public function updateComprobante(Ventas $venta, $respuesta, $estado, $action, $invoice)

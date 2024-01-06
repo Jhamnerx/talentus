@@ -70,15 +70,21 @@ class Index extends Component
         $api = new ApiFacturacion();
         $mensaje =  $api->sendInvoiceOnly($venta);
 
-        $this->afterGetCdr($mensaje['fe_mensaje_sunat']);
+        if ($mensaje['fe_codigo_error']) {
+
+            $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR COMPROBANTE', 'error');
+        } else {
+
+            $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'COMPROBANTE ENVIADO A SUNAT', 'success');
+        }
     }
 
-    public function afterGetCdr($mensaje)
+    public function afterGetCdr($mensaje, $titulo, $icono)
     {
         $this->dispatch(
             'notify',
-            icon: 'success',
-            tittle: 'COMPROBANTE ENVIADO A SUNAT',
+            icon: $icono,
+            tittle: $titulo,
             mensaje: $mensaje,
         );
         $this->render();
