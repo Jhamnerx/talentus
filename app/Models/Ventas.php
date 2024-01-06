@@ -152,21 +152,9 @@ class Ventas extends Model
         return $venta->ventaDetalles;
     }
 
+    //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF
     public function getPdf()
     {
-
-        // $emisor = Empresa::first();
-        // $formatter = new NumeroALetras();
-        // view()->share([
-        //     'comprobante' => $this,
-        //     'emisor' => $emisor,
-        //     'formatter' => $formatter,
-
-        // ]);
-
-        // $pdf = Pdf::loadView('pdf.comprobante');
-        // //return view('pdf.comprobante');
-        // return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
 
         $util = Util::getInstance();
 
@@ -174,5 +162,13 @@ class Ventas extends Model
         //return $html;
         $pdf = Pdf::loadHTML($html);
         return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
+    }
+
+    public function downloadXml()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadXml($this);
     }
 }

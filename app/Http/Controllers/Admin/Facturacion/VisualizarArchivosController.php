@@ -21,6 +21,9 @@ class VisualizarArchivosController extends Controller
 
     public function xml($serie_correlativo)
     {
+        $venta = Ventas::where('serie_correlativo', $serie_correlativo)->firstOrFail();
+
+        return $venta->downloadXml();
     }
 
     public function cdr($serie_correlativo)

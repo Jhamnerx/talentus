@@ -321,4 +321,12 @@ class Util extends Controller
     {
         return (new XmlUtils())->getHashSign($xml);
     }
+
+    public function downloadXml(Ventas $venta)
+    {
+        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_xml . $venta->nombre_xml . '.xml';
+
+
+        return Storage::disk('facturacion')->download($ruta, $venta->nombre_xml . '.xml');
+    }
 }
