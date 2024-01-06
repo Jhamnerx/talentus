@@ -18,7 +18,7 @@ use App\Http\Controllers\Admin\Facturacion\VisualizarArchivosController;
 Route::controller(VisualizarArchivosController::class)->group(function () {
 
     Route::get('pdf/{ventas:serie_correlativo}', 'pdf')->name('facturacion.ver.pdf');
-    Route::get('ticket/{ventas:serie_correlativo}', 'ticket')->name('facturacion.ver.ticket');
+    //Route::get('ticket/{ventas:serie_correlativo}', 'ticket')->name('facturacion.ver.ticket');
     Route::get('xml/{ventas:serie_correlativo}', 'xml')->name('facturacion.ver.xml');
     Route::get('cdr/{ventas:serie_correlativo}', 'cdr')->name('facturacion.ver.cdr');
 });
