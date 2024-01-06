@@ -143,7 +143,7 @@ class ApiFacturacion extends Controller
         $respuesta = $util->showResponse($invoice, $cdr);
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateComprobante($venta, $respuesta, 'COMPLETADO');
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
 
         return $respuesta['fe_mensaje_sunat'];
     }
@@ -246,7 +246,7 @@ class ApiFacturacion extends Controller
         $respuesta = $util->showResponse($invoice, $cdr);
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update');
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $invoice);
 
         return $respuesta;
     }
@@ -343,14 +343,14 @@ class ApiFacturacion extends Controller
             ];
 
 
-        $this->updateComprobante($venta, $respuesta, 'BORRADOR');
+        $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
 
         return "El comprobante fue firmado, Pendiente de Envio";
     }
 
-    public function updateComprobante(Ventas $venta, $respuesta, $estado)
+    public function updateComprobante(Ventas $venta, $respuesta, $estado, $action, $invoice)
     {
-        FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado);
+        FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado, $action, $invoice);
     }
 
     //DEVOLVER OBJETO CLIENTE

@@ -12,6 +12,7 @@ use Greenter\Report\HtmlReport;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
+use App\Models\Ventas;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Response\CdrResponse;
@@ -19,7 +20,7 @@ use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\XMLSecLibs\Sunat\SignedXml;
 use Greenter\Validator\XmlErrorCodeProvider;
 use Greenter\Report\Resolver\DefaultTemplateResolver;
-
+use Psy\Readline\Hoa\FileDirectory;
 
 class Util extends Controller
 {
@@ -48,7 +49,6 @@ class Util extends Controller
 
     private function __construct()
     {
-
         $this->plantilla = plantilla::first();
     }
 
@@ -87,7 +87,7 @@ class Util extends Controller
          * Clave   = moddatos
          */
         $see->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
-        //$see->setCachePath(__DIR__ . '/../cache');
+        $see->setCachePath(storage_path('framework/cache/facturacion/see'));
 
         return $see;
     }
@@ -229,8 +229,10 @@ class Util extends Controller
     {
         $this->writeFile('R-' . $document->getName() . '.zip', $zip, 'cdr');
         $this->cdr_base64 = base64_encode($zip);
+        $xml = $this->ExtractXmlCrdZip('R-' . $document->getName());
+        $this->hash_cdr = $this->getHashFromFile($xml);
     }
-
+    //FUNCION PARA GUARDAR ARCHIVOS EN STORAGE
     public function writeFile(?string $filename, ?string $content, $type): void
     {
         if (getenv('GREENTER_NO_FILES')) {
@@ -243,8 +245,6 @@ class Util extends Controller
             $fileDir = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr;
         }
 
-
-
         if (!Storage::disk('facturacion')->exists($fileDir)) {
 
             Storage::makeDirectory($fileDir);
@@ -253,92 +253,61 @@ class Util extends Controller
         Storage::disk('facturacion')->put($fileDir . DIRECTORY_SEPARATOR . $filename, $content);
     }
 
-    public function getPdf(DocumentInterface $document): ?string
+    //EXTRAER XML CDR DEL ZIP
+    public function ExtractXmlCrdZip($nombre_archivo)
     {
-        $html = new HtmlReport('', [
-            'cache' => __DIR__ . '/../cache',
+        $zip = new \ZipArchive();
+
+        try {
+            if ($zip->open(Storage::disk('facturacion')->path($this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr . $nombre_archivo . '.zip')) === true) //rpta es identica existe el archivo
+            {
+                $zip->extractTo(Storage::disk('facturacion')->path($this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr), $nombre_archivo . '.xml');
+                $zip->close();
+
+                return Storage::disk('facturacion')->get($this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr . $nombre_archivo . '.xml');
+            }
+        } catch (\Exception $e) {
+        }
+    }
+
+    //OBTENER Y VISUALIZAR PDF INVOICE
+    public function getPdf(Ventas $venta)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
             'strict_variables' => true,
-        ]);
-        $resolver = new DefaultTemplateResolver();
-        $template = $resolver->getTemplate($document);
-        $html->setTemplate($template);
+        ];
 
-        $render = new PdfReport($html);
-        $render->setOptions([
-            'no-outline',
-            'print-media-type',
-            'viewport-size' => '1280x1024',
-            'page-width' => '21cm',
-            'page-height' => '29.7cm',
-            'footer-html' => __DIR__ . '/../resources/footer.html',
-        ]);
-        $binPath = self::getPathBin();
-        if (file_exists($binPath)) {
-            $render->setBinPath($binPath);
-        }
-        $hash = $this->getHash($document);
-        $params = self::getParametersPdf();
-        $params['system']['hash'] = $hash;
-        $params['user']['footer'] = '<div>consulte en <a href="https://github.com/giansalex/sufel">sufel.com</a></div>';
+        $path = base_path('resources/views/templates/comprobantes');
 
-        $pdf = $render->render($document, $params);
+        // $report = new HtmlReport('', $twigOptions); usa esta linea si deseas usar la plantilla por defecto
+        $report = new HtmlReport($path, $twigOptions);
+        $report->setTemplate('invoice.html.twig');
 
-        if ($pdf === null) {
-            $error = $render->getExporter()->getError();
-            echo 'Error: ' . $error;
-            exit();
-        }
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
+                'hash' => $venta->hash, // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
+                'extras'     => [
+                    // Leyendas adicionales
+                    ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->descripcion],
+                    ['name' => 'VENDEDOR', 'value' => $venta->user->name],
+                ],
+                'footer' => '<p>Nro Resolucion: <b>3232323</b></p>'
+            ]
+        ];
 
-        // Write html
-        $this->writeFile($document->getName() . '.html', $render->getHtml());
+        $html = $report->render($venta->clase, $params);
 
-        return $pdf;
+        return $html;
     }
 
 
-
-    /**
-     * @param SaleDetail $item
-     * @param int $count
-     * @return array<SaleDetail>
-     */
-    public function generator(SaleDetail $item, int $count): array
-    {
-        $items = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $items[] = $item;
-        }
-
-        return $items;
-    }
-
-    public function showPdf(?string $content, ?string $filename): void
-    {
-        $this->writeFile($filename, $content);
-        header('Content-type: application/pdf');
-        header('Content-Disposition: inline; filename="' . $filename . '"');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . strlen($content));
-
-        echo $content;
-    }
-
-    public static function getPathBin(): string
-    {
-        $path = __DIR__ . '/../vendor/bin/wkhtmltopdf';
-        if (self::isWindows()) {
-            $path .= '.exe';
-        }
-
-        return $path;
-    }
-
-    public static function isWindows(): bool
-    {
-        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
-    }
-
+    //OBTENER HASH DE XML INVOICE
     private function getHash(DocumentInterface $document): ?string
     {
         $see = $this->getSee('');
@@ -347,26 +316,9 @@ class Util extends Controller
         return (new XmlUtils())->getHashSign($xml);
     }
 
-    /**
-     * @return array<string, array<string, array<int, array<string, string>>|bool|string>>
-     */
-    private static function getParametersPdf(): array
+    //OBTENER HASH DE CDR RESPUESTA DE SUNAT
+    private function getHashFromFile($xml): ?string
     {
-        $logo = file_get_contents(__DIR__ . '/../resources/logo.png');
-
-        return [
-            'system' => [
-                'logo' => $logo,
-                'hash' => ''
-            ],
-            'user' => [
-                'resolucion' => '212321',
-                'header' => 'Telf: <b>(056) 123375</b>',
-                'extras' => [
-                    ['name' => 'FORMA DE PAGO', 'value' => 'Contado'],
-                    ['name' => 'VENDEDOR', 'value' => 'GITHUB SELLER'],
-                ],
-            ]
-        ];
+        return (new XmlUtils())->getHashSign($xml);
     }
 }

@@ -53,7 +53,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/admin.php'));
 
             Route::middleware('web', 'auth')
-                ->prefix('talentus/fac')
+                ->prefix('invoice')
                 ->group(base_path('routes/facturacion.php'));
         });
 

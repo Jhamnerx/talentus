@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Facturacion\VisualizarArchivosController;
 
-use App\Http\Controllers\Facturacion\VisualizarArchivosController;
 
 /*
 |--------------------------------------------------------------------------

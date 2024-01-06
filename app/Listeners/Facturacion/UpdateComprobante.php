@@ -55,7 +55,8 @@ class UpdateComprobante
                     'hash' => $event->respuesta['hash'],
                     'hash_cdr' => $event->respuesta['hash_cdr'],
                     'code_sunat' => $event->respuesta['code_sunat'],
-                    'estado' => $event->estado
+                    'estado' => $event->estado,
+                    'clase' => $event->invoice,
                 ]
             );
         }

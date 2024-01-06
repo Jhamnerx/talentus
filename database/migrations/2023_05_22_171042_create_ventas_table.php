@@ -71,7 +71,7 @@ return new class extends Migration
             $table->boolean('servicios_selva')->default(false);
             $table->boolean('viewed')->default(false);
             $table->boolean('sent')->default(false);
-
+            $table->longText('clase')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
 

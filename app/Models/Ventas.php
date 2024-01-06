@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\VentasStatus;
+use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use App\Models\GuiaRemision;
 use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
@@ -79,6 +80,14 @@ class Ventas extends Model
         );
     }
 
+    protected function clase(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => unserialize($nota),
+            set: fn ($nota) => serialize($nota),
+        );
+    }
+
     public function ventaDetalles(): HasMany
     {
         return $this->hasMany(VentasDetalle::class);
@@ -141,5 +150,29 @@ class Ventas extends Model
         }
 
         return $venta->ventaDetalles;
+    }
+
+    public function getPdf()
+    {
+
+        // $emisor = Empresa::first();
+        // $formatter = new NumeroALetras();
+        // view()->share([
+        //     'comprobante' => $this,
+        //     'emisor' => $emisor,
+        //     'formatter' => $formatter,
+
+        // ]);
+
+        // $pdf = Pdf::loadView('pdf.comprobante');
+        // //return view('pdf.comprobante');
+        // return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
+
+        $util = Util::getInstance();
+
+        $html = $util->getPdf($this);
+        //return $html;
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
     }
 }

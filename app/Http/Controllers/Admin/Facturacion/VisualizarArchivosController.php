@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Facturacion;
+namespace App\Http\Controllers\Admin\Facturacion;
 
 use App\Http\Controllers\Controller;
 use App\Models\Ventas;
@@ -10,9 +10,7 @@ class VisualizarArchivosController extends Controller
 {
     public function pdf($serie_correlativo)
     {
-
         $venta = Ventas::where('serie_correlativo', $serie_correlativo)->firstOrFail();
-
 
         return $venta->getPdf();
     }

@@ -10,11 +10,15 @@ module.exports = {
         "./resources/views/**/*.blade.php",
         "./resources/views/**/**/*.blade.php",
         "./resources/views/**/**/**/*.blade.php",
-
         "./vendor/wireui/wireui/resources/**/*.blade.php",
         "./vendor/wireui/wireui/ts/**/*.ts",
         "./vendor/wireui/wireui/src/View/**/*.php",
+
+        "./resources/views/**/*.html.twig",
+        "./resources/views/**/**/*.html.twig",
+        "./resources/views/**/**/**/*.html.twig",
     ],
+
     presets: [require("./vendor/wireui/wireui/tailwind.config.js")],
     theme: {
         extend: {
