@@ -211,7 +211,7 @@
                                 </div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">
-                                        {{ $simbolo }} <span>{{ number_format($sub_total, 2) }}</span>
+                                        {{ $simbolo }} <span>{{ round($sub_total, 4) }}</span>
                                     </div>
 
                                 </div>
@@ -222,7 +222,7 @@
                                 </div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">
-                                        {{ $simbolo }} <span>{{ number_format($op_gravadas, 2) }}</span>
+                                        {{ $simbolo }} <span>{{ round($op_gravadas, 4) }}</span>
                                     </div>
 
                                 </div>
@@ -235,7 +235,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ number_format($op_exoneradas, 2) }}</span>
+                                            {{ $simbolo }} <span>{{ round($op_exoneradas, 4) }}</span>
                                         </div>
 
                                     </div>
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ number_format($op_inafectas, 2) }}</span>
+                                            {{ $simbolo }} <span>{{ round($op_inafectas, 4) }}</span>
                                         </div>
 
                                     </div>
@@ -262,7 +262,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ number_format($op_gratuitas, 2) }}</span>
+                                            {{ $simbolo }} <span>{{ round($op_gratuitas, 4) }}</span>
                                         </div>
 
                                     </div>
@@ -275,7 +275,7 @@
                                 </div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">
-                                        {{ $simbolo }} <span>{{ number_format($descuento, 2) }}</span>
+                                        {{ $simbolo }} <span>{{ round($descuento, 2) }}</span>
                                     </div>
 
                                 </div>
@@ -286,7 +286,7 @@
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ number_format($igv, 2) }}</span>
+                                        <span>{{ round($igv, 4) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -307,7 +307,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            {{ $simbolo }}<span>{{ number_format($total, 2) }}</span>
+                                            {{ $simbolo }}<span>{{ round($total, 4) }}</span>
                                         </div>
                                     </div>
                                 </div>

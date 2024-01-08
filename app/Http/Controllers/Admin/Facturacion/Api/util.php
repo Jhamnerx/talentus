@@ -156,7 +156,7 @@ class Util extends Controller
             $this->estado = 'ESTADO: RECHAZADA';
             $this->mensaje_error = $cdr->getDescription();
             $this->fe_codigo_error = $code;
-            $this->$this->fe_estado = '2';
+            $this->fe_estado = '2';
         } else {
             /* Esto no debería darse, pero si ocurre, es un CDR inválido que debería tratarse como un error-excepción. */
             /*code: 0100 a 1999 */
@@ -195,7 +195,7 @@ class Util extends Controller
     {
         $results
             =  [
-                'estado_texto' => 'ESTADO: ERROR AL ENVIAR',
+                'estado_texto' => 'ESTADO: RECHAZADA',
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $error->getMessage(),
                 'nota' => $this->nota,
@@ -203,7 +203,7 @@ class Util extends Controller
                 'nombre_xml' => $this->nombre_xml,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
-                'fe_estado' => 0,
+                'fe_estado' => 2,
                 'hash' => $this->hash,
                 'hash_cdr' => $this->hash_cdr,
                 'code_sunat' => $this->code_sunat,
@@ -277,6 +277,8 @@ class Util extends Controller
     public function getPdf(Ventas $venta)
     {
 
+
+        //dd($venta->clase->getFormaPago()->getTipo());
         $twigOptions = [
             //'cache' => storage_path('framework/cache/facturacion/pdf'),
             'strict_variables' => true,
@@ -300,7 +302,7 @@ class Util extends Controller
                     ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->descripcion],
                     ['name' => 'VENDEDOR', 'value' => $venta->user->name],
                 ],
-                'footer' => '<p>Nro Resolucion: <b>3232323</b></p>'
+                'footer' => view('templates.comprobantes.footer', ['venta' => $venta->toArray()]),
             ]
         ];
 

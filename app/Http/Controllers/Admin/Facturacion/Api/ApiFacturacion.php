@@ -67,11 +67,11 @@ class ApiFacturacion extends Controller
             ->setMtoOperExoneradas($venta->op_exoneradas)
             ->setMtoOperInafectas($venta->op_inafectas)
             ->setMtoIGV($venta->igv)
-            ->setTotalImpuestos($venta->igv)
+            ->setIcbper($venta->icbper)
+            ->setTotalImpuestos($venta->igv + $venta->icbper)
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
-
 
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
@@ -115,7 +115,6 @@ class ApiFacturacion extends Controller
                     ->setCode('1000')
                     ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
             ]);
-
 
         // Envio a SUNAT.
         $see = $util->getSee();
@@ -178,7 +177,8 @@ class ApiFacturacion extends Controller
             ->setMtoOperExoneradas($venta->op_exoneradas)
             ->setMtoOperInafectas($venta->op_inafectas)
             ->setMtoIGV($venta->igv)
-            ->setTotalImpuestos($venta->igv)
+            ->setIcbper($venta->icbper)
+            ->setTotalImpuestos($venta->igv + $venta->icbper)
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
@@ -278,7 +278,8 @@ class ApiFacturacion extends Controller
             ->setMtoOperExoneradas($venta->op_exoneradas)
             ->setMtoOperInafectas($venta->op_inafectas)
             ->setMtoIGV($venta->igv)
-            ->setTotalImpuestos($venta->igv)
+            ->setIcbper($venta->icbper)
+            ->setTotalImpuestos($venta->igv + $venta->icbper)
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);

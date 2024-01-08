@@ -219,7 +219,7 @@ class Emitir extends Component
         switch ($producto->tipoAfectacion->codigo_afectacion) {
             case "1000":
 
-                $igv = round(floatval($producto->valor_unitario), 2) *  $this->plantilla->igv;
+                $igv = round(floatval($producto->valor_unitario), 4) *  $this->plantilla->igv;
 
                 return floatval($igv);
             default:
@@ -489,7 +489,7 @@ class Emitir extends Component
 
         $total = ($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv;
 
-        return round($total, 2,);
+        return round($total, 4);
     }
 
     public function updatedDescuentoMonto()

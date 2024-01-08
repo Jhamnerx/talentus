@@ -168,7 +168,7 @@ class ModalAddProducto extends Component
         $this->selected["igv"] = round($igv, 4);
         $this->selected["porcentaje_igv"] = ($this->tipo_afectacion == 10) ? $this->plantilla->igvbnormal : 0.00;
         $this->selected["total"] = ($this->selected["afecto_icbper"]) ? round($total + $total_icbper, 4) : round($total, 4);
-        $this->selected["precio_unitario"] = ($this->selected["afecto_icbper"]) ? round(floatval($this->calcularPrecioUnitario($this->selected["valor_unitario"])) + $total_icbper, 4) : round(floatval($this->calcularPrecioUnitario($this->selected["valor_unitario"])), 4);
+        $this->selected["precio_unitario"] = ($this->selected["afecto_icbper"]) ? round(floatval($this->calcularPrecioUnitario($this->selected["valor_unitario"])), 4) : round(floatval($this->calcularPrecioUnitario($this->selected["valor_unitario"])), 4);
         $this->selected["total_icbper"] = $total_icbper;
     }
 
