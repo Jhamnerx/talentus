@@ -88,7 +88,7 @@ class Contratos extends Model
 
     public function periodo()
     {
-        return $this->created_at->subDay()->diffInMonths($this->fecha);
+        return $this->created_at->subDay(2)->diffInMonths($this->fecha);
     }
 
     public function getPDFData()
