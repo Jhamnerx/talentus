@@ -1,7 +1,7 @@
 <h6>
     <div>
         <p class="MsoNormal" style="line-height:normal"><span style="font-size: 10.6667px; font-weight: bold;">"FACTURA
-                SUJETA A DETRACCIÓN " {{ $venta['forma_pago'] }}</span></p>
+                SUJETA A DETRACCIÓN "</span></p>
         <p class="MsoNormal" style="line-height:normal"><b style="color: inherit;"><u><span lang="ES-PE"
                         style="font-size:8.0pt;mso-ascii-font-family:Calibri;mso-hansi-font-family:Calibri;mso-bidi-font-family:Calibri">CUENTAS
                         DEL BCP:</span></u></b><br></p>
@@ -50,5 +50,5 @@
             </span>
         </p>
     </div>
-    Consulte su documento electrónico en: http://greenter.dev/
+    Consulte su documento electrónico en:
 </h6>

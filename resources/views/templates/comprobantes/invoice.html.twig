@@ -417,6 +417,31 @@
             text-align: center;
             font-weight: bold
         }
+
+        .tabla-credito th {
+            border: 0.5px solid #052c52;
+            padding: 6px;
+            text-align: center;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            padding-left: 10px;
+        }
+
+        .tabla-credito td{
+            border: 0.5px solid #052c52;
+            padding: 7px;
+            text-align: left;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            padding-left: 10px;
+        }
+    .flex-container{
+        display: inline-block;
+    }
+
+    .tabla_cuotas{
+        margin-left: 10px;
+    }
     </style>
 </head>
 <body style="margin: -5mm -5mm;;" class="white-bg">
@@ -707,8 +732,13 @@
             </tbody>
         </table>
         <br>
-        <br>
 
+        {% if params.user.cuotas is defined %}
+
+
+         {{ params.user.cuotas|raw }}
+
+        {% endif %}
 
         {% if max_items is defined and doc.details|length > max_items %}
             {# <div style="page-break-after:always;"></div> #}

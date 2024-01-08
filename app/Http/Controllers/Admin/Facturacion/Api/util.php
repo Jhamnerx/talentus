@@ -277,8 +277,9 @@ class Util extends Controller
     public function getPdf(Ventas $venta)
     {
 
+        //dd($venta->toArray()['detalle_cuotas'][0]);
 
-        //dd($venta->clase->getFormaPago()->getTipo());
+        // dd($venta->clase->getFormaPago()->getTipo());
         $twigOptions = [
             //'cache' => storage_path('framework/cache/facturacion/pdf'),
             'strict_variables' => true,
@@ -300,11 +301,18 @@ class Util extends Controller
                 'extras'     => [
                     // Leyendas adicionales
                     ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->descripcion],
+                    ['name' => 'FORMA DE PAGO', 'value' => $venta->clase->getFormaPago()->getTipo()],
                     ['name' => 'VENDEDOR', 'value' => $venta->user->name],
                 ],
-                'footer' => view('templates.comprobantes.footer', ['venta' => $venta->toArray()]),
+                //'footer' => 'Resumen',
+                // 'footer' => view('templates.comprobantes.footer'),
             ]
         ];
+
+        if ($venta->clase->getFormaPago()->getTipo() == 'Credito') {
+
+            $params['user']['cuotas'] = view('templates.comprobantes.cuotas', ['venta' => $venta->toArray()]);
+        }
 
         $html = $report->render($venta->clase, $params);
 
