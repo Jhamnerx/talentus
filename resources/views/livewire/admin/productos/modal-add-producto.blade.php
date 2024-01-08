@@ -27,7 +27,6 @@
         <x-form.input wire:model.live="selected.codigo" placeholder="COD-PROD13" />
 
     </div>
-
     <div class="col-span-12 md:col-start-2 md:col-end-5">
 
         <label for="cantidad">Cantidad:</label>
@@ -37,7 +36,8 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.inputs.number name="cantidad" wire:model.live="selected.cantidad" min="1" step="1" />
+        <x-form.inputs.number name="cantidad" wire:model.live="selected.cantidad" value="0" min="1"
+            step="1" />
 
     </div>
 

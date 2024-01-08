@@ -88,7 +88,7 @@ class ModalAddProducto extends Component
         $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($producto->valor_unitario)), 4));
         //$this->selected->put('igv', round(floatval($igv_p), 4));
         $this->selected->put('icbper', ($producto->afecto_icbper) ? round(floatval($this->plantilla->icbper), 4) : 0.00);
-        $this->selected->put('total_icbper', ($producto->afecto_icbper) ? round(floatval($this->plantilla->icbper * $this->selected["cantidad"]), 4) : 0.00);
+        $this->selected->put('total_icbper', ($producto->afecto_icbper) ? round(floatval($this->plantilla->icbper) * floatval($this->selected["cantidad"]), 4) : 0.00);
         // $this->selected->put('total', round(floatval($producto->valor_unitario), 4) + round(floatval($igv_p), 4));
         $this->selected->put('codigo_afectacion', $this->tipo_afectacion);
         $this->selected->put('afecto_icbper', $producto->afecto_icbper);
@@ -131,8 +131,16 @@ class ModalAddProducto extends Component
     //CALCULAR SUB TOTAL DEL ITEM SELECCIONADO
     public function updatedSelected($value, $name)
     {
+
+        if ($name == "cantidad" && $value == "") {
+
+            $this->selected['cantidad'] = 0;
+        }
+
         $this->calcularMontosProducto();
     }
+
+
 
 
     public function calcularMontosProducto()
@@ -147,13 +155,13 @@ class ModalAddProducto extends Component
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
             $igv = round($sub_total * $this->plantilla->igv, 4);
-            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * $this->plantilla->icbper) : 0.00;
+            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * floatval($this->plantilla->icbper)) : 0.00;
             $total = $sub_total + $igv;
         } else {
 
             $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
             $igv = 0.00;
-            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * $this->plantilla->icbper) : 0.00;
+            $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * floatval($this->plantilla->icbper)) : 0.00;
             $total = $sub_total + $igv;
         }
 
