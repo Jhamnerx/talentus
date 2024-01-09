@@ -17,6 +17,7 @@ use App\Models\TipoAfectacion;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
+use App\Models\Ventas;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -110,6 +111,41 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->limit(50)
             )
             ->get();
+    }
+
+    public function invoices(Request $request): Collection
+    {
+
+        return Ventas::query()
+            ->select('id', 'serie_correlativo', 'fecha_emision', 'divisa', 'total', 'cliente_id')
+            ->where('fe_estado', 1)
+            ->orderBy('serie_correlativo')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('serie_correlativo', 'like', "%{$request->search}%")
+            )->when(
+                $request->invoice_type,
+                fn (Builder $query) => $query
+                    ->where('tipo_comprobante_id', $request->invoice_type)
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(50)
+            )
+            ->get()->map(function (Ventas $invoice) {
+
+                if ($invoice->tipo_comprobante_id == '01') {
+                    $invoice->imagen = Storage::url('facturacion/images/factura.png');
+                } else {
+                    $invoice->imagen = Storage::url('facturacion/images/boleta.png');
+                }
+
+                $invoice->option_description = $invoice->cliente->razon_social . ' | ' . $invoice->fecha_emision->format('d-m-Y') . " | " . $invoice->divisa . " " . $invoice->total;
+                return $invoice;
+            });
     }
 
     public function series(Request $request): Collection
