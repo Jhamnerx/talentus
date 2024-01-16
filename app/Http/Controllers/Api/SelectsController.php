@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Api;
 use App\Models\Unit;
 use App\Models\Lineas;
 use App\Models\Series;
+use App\Models\Ventas;
 use App\Models\SimCard;
 use App\Models\Clientes;
 use App\Models\Categoria;
 use App\Models\Productos;
+use App\Models\Sustentos;
 use App\Models\Vehiculos;
 use App\Models\Dispositivos;
 use Illuminate\Http\Request;
@@ -17,7 +19,6 @@ use App\Models\TipoAfectacion;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
-use App\Models\Ventas;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -308,6 +309,26 @@ class SelectsController extends Controller
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
 
+            )
+            ->get();
+    }
+    public function sustentos(Request $request): Collection
+    {
+
+        return Sustentos::query()
+            ->select('id', 'codigo', 'descripcion', 'tipo')
+            ->orderBy('id')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('serie', 'like', "%{$request->search}%")
+
+            )
+            ->where('tipo', $request->tipo_comprobante == "07" ? "C" : "D")
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('serie', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
             )
             ->get();
     }

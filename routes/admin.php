@@ -365,6 +365,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/unit', 'unit')->name('api.unit.index');
     Route::get('api/clientes', 'clientes')->name('api.clientes.index');
     Route::get('api/series', 'series')->name('api.series.index');
+    Route::get('api/invoices', 'invoices')->name('api.invoices.index');
     Route::get('api/productos', 'productos')->name('api.productos.index');
     Route::get('api/documentos', 'documentos')->name('api.documentos.index');
     Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
@@ -372,6 +373,8 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/lineas', 'lineas')->name('api.lineas.index');
     Route::get('api/vehiculos', 'vehiculos')->name('api.vehiculos.index');
     Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
+
+    Route::get('api/sustentos', 'sustentos')->name('api.sustentos.index');
 });
 
 

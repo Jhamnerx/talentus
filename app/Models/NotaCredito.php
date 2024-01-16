@@ -64,4 +64,9 @@ class NotaCredito extends Model
     {
         return $this->belongsTo(\App\Models\Sustentos::class);
     }
+
+    public function comprobante(): BelongsTo
+    {
+        return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo');
+    }
 }
