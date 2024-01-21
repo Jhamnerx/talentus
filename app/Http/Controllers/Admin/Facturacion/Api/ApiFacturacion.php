@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin\Facturacion\Api;
 use DateTime;
 use App\Models\Ventas;
 use App\Models\plantilla;
+use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Cuota;
 use Greenter\Model\Sale\Charge;
 use Greenter\Model\Sale\Legend;
 use Greenter\Model\Sale\Invoice;
-use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Luecano\NumeroALetras\NumeroALetras;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
+use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 
 class ApiFacturacion extends Controller
 {
@@ -35,6 +36,11 @@ class ApiFacturacion extends Controller
         }
     }
 
+
+    public function emitirNotaCredito()
+    {
+        $note = new Note();
+    }
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
     public function emitirComprobante(Ventas $venta)
     {

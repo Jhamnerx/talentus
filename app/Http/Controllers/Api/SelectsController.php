@@ -136,7 +136,12 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(50)
             )
-            ->get()->map(function (Ventas $invoice) {
+            ->when(
+                $request->exists('code_sunat'),
+                fn (Builder $query) => $query->where('code_sunat', $request->input('code_sunat'))
+            )
+            ->get()
+            ->map(function (Ventas $invoice) {
 
                 if ($invoice->tipo_comprobante_id == '01') {
                     $invoice->imagen = Storage::url('facturacion/images/factura.png');

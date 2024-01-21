@@ -9,7 +9,7 @@ class IframeModal extends Component
 {
 
     public $modalFrame = false;
-    public $serie_correlativo = '';
+    public $serie_correlativo = 'F001-132';
     public function render()
     {
         return view('livewire.admin.facturacion.utiles.iframe-modal');

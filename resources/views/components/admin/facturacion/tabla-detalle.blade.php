@@ -28,9 +28,7 @@
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-center">IMPORTE DE VENTA</div>
                 </th>
-                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-semibold text-center">ACCIONES</div>
-                </th>
+
 
             </tr>
         </thead>
@@ -114,14 +112,6 @@
                         @endif
                     </td>
 
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                        <div class="space-x-1">
-
-                            <x-form.button label="Eliminar"
-                                wire:click.prevent="eliminarProducto('{{ $clave }}')" outline red sm
-                                icon="trash" />
-                        </div>
-                    </td>
 
                 </tr>
             @endforeach
