@@ -24,6 +24,11 @@
     <!-- Code block ends -->
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 dark:bg-gray-700 sm:p-6">
+            @error('tipo_cambio')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+            @enderror
             <div class="grid grid-cols-12 gap-2">
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-0 md:pr-4 gap-2">
@@ -390,7 +395,7 @@
                 </div>
             </div>
 
-
+            {{ json_encode($errors->all()) }}
 
         </div>
 

@@ -50,7 +50,6 @@ class UtilesController extends Controller
                 $res = $client->request('GET', '/v2/sunat/tipo-cambio', $parameters);
                 $response = json_decode($res->getBody()->getContents(), true);
 
-
                 if (array_key_exists('precioVenta', $response)) {
 
                     Cache::put(
@@ -69,8 +68,11 @@ class UtilesController extends Controller
                         now()->addHours(4)
                     );
                     return $response["precioVenta"];
+                } else {
+                    return $response['message'];
                 }
             } catch (\Exception $e) {
+
 
                 return $e->getMessage();
             }

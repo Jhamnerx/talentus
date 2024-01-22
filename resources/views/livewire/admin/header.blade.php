@@ -24,16 +24,23 @@
             </div>
 
             <!-- Header: Right side -->
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-4">
 
                 <div class="m-1.5">
-
-
                     <!-- Start -->
-                    <div
-                        class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
-                        TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
-                    </div>
+
+                    @if (!Cache::has('precioVenta'))
+                        Obtener TC <x-form.button.circle wire:click.prevent="getTipoCambio()" spinner="getTipoCambio"
+                            positive icon="refresh" xs />
+                    @else
+                        <div
+                            class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
+                            TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
+
+
+                        </div>
+                    @endif
+
 
                     <!-- End -->
                 </div>

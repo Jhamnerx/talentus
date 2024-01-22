@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\plantilla;
+use App\Http\Controllers\Admin\UtilesController;
 
 class Header extends Component
 {
@@ -39,6 +40,20 @@ class Header extends Component
         //  return redirect($this->page);
     }
 
+    public function getTipoCambio()
+    {
+        $util = new UtilesController;
+        $res = $util->tipoCambio();
+
+        if ($res != "error") {
+            $this->dispatch(
+                'notify-toas',
+                icon: 'success',
+                tittle: 'TIPO CAMBIO CONSULTADO',
+                mensaje: 'El tipo de cambio hoy es: ' . $res
+            );
+        }
+    }
     public function showInfo(Empresa $empresa)
     {
 
