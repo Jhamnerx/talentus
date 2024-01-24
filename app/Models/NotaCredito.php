@@ -26,7 +26,7 @@ class NotaCredito extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'fecha_emision' => 'date',
+        'fecha_emision' => 'date:Y-m-d',
         'tipo_cambio' => 'decimal:2',
         'op_gravadas' => 'decimal:2',
         'op_exoneradas' => 'decimal:2',
@@ -34,15 +34,26 @@ class NotaCredito extends Model
         'op_gratuitas' => 'decimal:2',
         'descuento' => 'decimal:2',
         'igv' => 'decimal:2',
+        'sub_total' => 'decimal:2',
         'total' => 'decimal:2',
         'cliente_id' => 'integer',
         'sustento_id' => 'integer',
-        'fe_estado' => 'boolean',
-    ];
+        'sustento_id' => 'string',
+        'serie_correlativo' => 'string',
+        'user_id' => 'integer',
+        'fe_estado' => 'string',
+        'invoice_id' => 'integer',
 
-    public function ventas(): HasOne
+
+    ];
+    public function getSerie(): BelongsTo
     {
-        return $this->hasOne(Ventas::class);
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+    public function venta(): HasOne
+    {
+        return $this->hasOne(Ventas::class, 'id', 'invoice_id');
     }
 
     public function notaCreditoDetalles(): HasMany

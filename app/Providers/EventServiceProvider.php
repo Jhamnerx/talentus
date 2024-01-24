@@ -60,7 +60,9 @@ use App\Observers\MantenimientoObserver;
 use App\Events\nuevoCertificadoGpsCreado;
 use App\Observers\ComprasFacturasObserver;
 use App\Events\Facturacion\EmitirComprobante;
+use App\Events\Facturacion\EmitirNota;
 use App\Listeners\Facturacion\UpdateComprobante;
+use App\Listeners\Facturacion\UpdateNota;
 use App\Observers\ModelosDispositivosObserver;
 use App\Listeners\nuevaActaCreadaEmailListener;
 use App\Listeners\nuevaActaCreadaAdminsListener;
@@ -71,6 +73,10 @@ use App\Observers\CertificadosVelocimetrosObserver;
 use App\Listeners\nuevoCertificadoGpsAdminsListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
+use App\Models\NotaCredito;
+use App\Models\NotaDebito;
+use App\Observers\NotaCreditoObserver;
+use App\Observers\NotaDebitoObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
@@ -88,6 +94,9 @@ class EventServiceProvider extends ServiceProvider
         EmitirComprobante::class => [
             UpdateComprobante::class,
         ],
+        EmitirNota::class => [
+            UpdateNota::class,
+        ]
     ];
 
     public function boot()
@@ -119,5 +128,7 @@ class EventServiceProvider extends ServiceProvider
         RecibosPagosVarios::observe(RecibosPagosObserver::class);
         Mantenimiento::observe(MantenimientoObserver::class);
         Ventas::observe(VentasObserver::class);
+        NotaCredito::observe(NotaCreditoObserver::class);
+        NotaDebito::observe(NotaDebitoObserver::class);
     }
 }

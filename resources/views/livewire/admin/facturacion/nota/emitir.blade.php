@@ -69,8 +69,8 @@
                             option-label="descripcion" option-value="codigo" hide-empty-message />
                     </div>
                     {{-- sustento escrito --}}
-                    {{ $invoice_type }}
-                    @if ($sustento_id == '02')
+
+                    @if ($sustento_id == '02' && $tipo_comprobante_id == '07')
                         {{-- INVOICE NEW --}}
                         <div
                             class="col-span-12 md:col-span-6  {{ $invoice_id_new ? 'lg:col-span-4' : 'lg:col-span-6' }}  mb-3">
@@ -78,7 +78,7 @@
                                 label="Nueva {{ $titulo_select_new }} Electrónica" wire:model.live="invoice_id_new"
                                 placeholder="Ingrese serie y número" :async-data="[
                                     'api' => route('api.invoices.index'),
-                                    'params' => ['invoice_type' => $invoice_type, 'code_sunat' => '0'],
+                                    'params' => ['tipo_comprobante_ref' => $tipo_comprobante_ref, 'code_sunat' => '0'],
                                 ]" option-label="serie_correlativo"
                                 :template="[
                                     'name' => 'user-option',
@@ -110,7 +110,7 @@
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-3">
 
                         <x-form.select label="Documento a modificar:" :options="[['name' => 'FACTURA', 'id' => '01'], ['name' => 'BOLETA', 'id' => '03']]" option-label="name"
-                            option-value="id" wire:model.live="invoice_type" :clearable="false"
+                            option-value="id" wire:model.live="tipo_comprobante_ref" :clearable="false"
                             x-on:selected="$wire.selectTypeInvoice()" />
                     </div>
 
@@ -122,14 +122,14 @@
                             label="Selecciona un comprobante" wire:model.live="invoice_id"
                             placeholder="Ingrese serie y número" :async-data="[
                                 'api' => route('api.invoices.index'),
-                                'params' => ['invoice_type' => $invoice_type],
+                                'params' => ['tipo_comprobante_ref' => $tipo_comprobante_ref],
                             ]" option-label="serie_correlativo"
                             :template="[
                                 'name' => 'user-option',
                                 'config' => ['src' => 'imagen'],
                             ]" :always-fetch="true" option-value="id"
-                            option-description="option_description" hide-empty-message x-on:clear="$wire.direccion = ''"
-                            x-on:selected="$wire.selectInvoice()" />
+                            option-description="option_description" empty-message="No se encuentran comprobantes"
+                            x-on:clear="$wire.direccion = ''" x-on:selected="$wire.selectInvoice()" />
                     </div>
 
                     @if ($invoice_id)
@@ -161,7 +161,7 @@
                     </div>
 
                     {{-- TIPO DE VENTA --}}
-                    @if ($invoice_type == '01')
+                    @if ($tipo_comprobante_ref == '01')
                         <div class="col-span-12 md:col-span-6 mb-3">
 
                             <x-form.select readonly label="Forma Pago:" :options="[
@@ -354,15 +354,16 @@
 
                 </div>
             </div>
-
+            {{ json_encode($errors->all()) }}
             <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200">
 
                 <div class="grid sm:grid-cols-2 gap-2 content-end">
 
                     <div class="text-right col-span-2 ">
 
-                        <x-form.button wire:click.prevent="save" spinner="save" label="EMITIR COMPROBANTE" black md
-                            icon="shopping-cart" />
+                        <x-form.button wire:click.prevent="save" spinner="save"
+                            label="EMITIR {{ strtoupper($comprobante_slug == 'nota-venta' ? 'NOTA DE VENTA' : str_replace('-', ' DE ', $comprobante_slug)) }}"
+                            black md icon="shopping-cart" />
                     </div>
                 </div>
             </div>

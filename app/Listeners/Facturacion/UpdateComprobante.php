@@ -22,25 +22,6 @@ class UpdateComprobante
     public function handle(EmitirComprobante $event): void
     {
 
-
-        // if ($event->action == 'no_update') {
-        //     $event->venta->update(
-        //         [
-        //             'estado_texto' => 'no_update',
-
-        //         ]
-        //     );
-        // }
-        // if ($event->action == 'update') {
-        //     $event->venta->update(
-        //         [
-        //             'fe_mensaje_sunat' => 'update',
-
-        //         ]
-        //     );
-        // }
-
-        // dd($event->action);
         if ($event->action == 'no_update') {
             $event->venta->update(
                 [
@@ -58,6 +39,7 @@ class UpdateComprobante
                 ]
             );
         }
+
         if ($event->action == 'update') {
 
             $event->venta->update(

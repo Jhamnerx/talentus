@@ -3,7 +3,7 @@
 @section('contenido')
 
 
-    @livewire('admin.facturacion.nota.credito.emitir', ['comprobante_slug' => Request::segment(3)])
+    @livewire('admin.facturacion.nota.emitir', ['comprobante_slug' => Request::segment(3)])
 
 @stop
 

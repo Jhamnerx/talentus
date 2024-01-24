@@ -1,22 +1,29 @@
 <?php
 
-namespace App\Livewire\Admin\Facturacion\Nota\Credito;
+namespace App\Livewire\Admin\Facturacion\Nota;
+
 
 use Carbon\Carbon;
 use App\Models\Series;
 use App\Models\Ventas;
 use Livewire\Component;
 use App\Models\plantilla;
+use App\Models\NotaCredito;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Collection;
+use App\Http\Requests\NotaDeCreditoRequest;
 use App\Http\Controllers\Admin\UtilesController;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Models\NotaDebito;
 
 class Emitir extends Component
 {
     //PROPIEDADES DE NOTA
     public $tipo_comprobante_id, $serie, $correlativo, $serie_correlativo,
-        $fecha_emision, $fecha_hora_emision;
+        $fecha_emision;
     public $sustento_id;
+    public $divisa, $tipo_cambio, $op_gravadas, $op_exoneradas, $op_inafectas, $op_gratuitas, $descuento = 0.00,
+        $sub_total, $icbper, $igv, $total, $cliente_id, $sustento_texto;
 
 
     //PROPIEDAD PARA ASIGNAR EL MINIMO DEL CORRELATIVO
@@ -28,7 +35,7 @@ class Emitir extends Component
     public $invoice_id_new;
     public Ventas $invoice;
 
-    public $serie_correlativo_ref, $invoice_divisa = "PEN", $invoice_fecha_emision, $invoice_fecha_vencimiento, $invoice_metodo_pago_id = "009", $invoice_comentario;
+    public $serie_ref, $correlativo_ref, $serie_correlativo_ref, $invoice_divisa = "PEN", $invoice_fecha_emision, $invoice_fecha_vencimiento, $invoice_metodo_pago_id = "009", $invoice_comentario;
     public $invoice_tipo_descuento = "cantidad", $invoice_descuento_factor, $invoice_forma_pago = "CONTADO";
     public $invoice_cliente_id, $invoice_cliente_razon_social, $invoice_cliente_direccion;
 
@@ -40,7 +47,7 @@ class Emitir extends Component
 
     //PROPIEDADES UTILES
     public $comprobante_slug;
-    public $invoice_type = '01';
+    public $tipo_comprobante_ref = '01';
     public $titulo_select_new = 'Factura';
     public $invoice_descuento_monto = 0.00;
 
@@ -72,8 +79,9 @@ class Emitir extends Component
     public function render()
     {
 
-        return view('livewire.admin.facturacion.nota.credito.emitir');
+        return view('livewire.admin.facturacion.nota.emitir');
     }
+
     public function setSerieMount()
     {
         $serie = Series::where('tipo_comprobante_id', $this->tipo_comprobante_id)->first();
@@ -93,10 +101,66 @@ class Emitir extends Component
         $this->resetItems();
     }
 
+
+    public function updatedTipoComprobanteRef($value)
+    {
+        $this->checkSerie();
+
+        if ($value == '01') {
+
+            $this->validate(
+                [
+                    'serie' => 'starts_with:F',
+                ],
+                [
+                    'serie.starts_with' => 'Al seleccionar factura la serie debe iniciar con "F"'
+                ]
+            );
+        } else {
+
+            $this->validate(
+                [
+                    'serie' => 'starts_with:B',
+                ],
+                [
+                    'serie.starts_with' => 'Al seleccionar boleta la serie debe iniciar con "B"'
+                ]
+            );
+        }
+    }
+
+    public function updated($attr)
+    {
+        $request = new NotaDeCreditoRequest();
+        $this->validateOnly($attr, $request->rules($this->tipo_comprobante_ref), $request->messages());
+    }
+
+    public function checkSerie()
+    {
+        return substr($this->serie, 0, 1);
+    }
+
     public function selectInvoice()
     {
         $this->invoice = Ventas::find($this->invoice_id);
         $this->serie_correlativo_ref = $this->invoice->serie_correlativo;
+        $this->serie_ref = $this->invoice->serie;
+        $this->correlativo_ref = $this->invoice->correlativo;
+
+        //TOTALES
+        $this->divisa = $this->invoice->divisa;
+        $this->tipo_cambio = $this->invoice->tipo_cambio;
+        $this->op_gravadas = $this->invoice->op_gravadas;
+        $this->op_exoneradas = $this->invoice->op_exoneradas;
+        $this->op_inafectas = $this->invoice->op_inafectas;
+        $this->op_gratuitas = $this->invoice->op_gratuitas;
+        $this->descuento = $this->invoice->descuento;
+        $this->icbper = $this->invoice->icbper;
+        $this->igv = $this->invoice->igv;
+        $this->sub_total = $this->invoice->sub_total;
+        $this->total = $this->invoice->total;
+
+        $this->cliente_id = $this->invoice->cliente_id;
 
         $this->setDataInvoice();
         $this->setDataItemsInvoice();
@@ -112,7 +176,7 @@ class Emitir extends Component
         $this->invoice_fecha_emision = Carbon::now()->format('Y-m-d');
         $this->invoice_fecha_vencimiento = Carbon::now()->format('Y-m-d');
 
-        if ($this->invoice_type == '01') {
+        if ($this->tipo_comprobante_ref == '01') {
             $this->titulo_select_new = 'Factura';
         } else {
 
@@ -123,6 +187,7 @@ class Emitir extends Component
     public function setDataInvoice()
     {
 
+        $this->divisa = $this->invoice->divisa;
         $this->invoice_divisa = $this->invoice->divisa;
         $this->invoice_fecha_emision = $this->invoice->fecha_emision;
         $this->invoice_fecha_vencimiento = $this->invoice->fecha_vencimiento;
@@ -306,5 +371,58 @@ class Emitir extends Component
     {
 
         $this->items = collect();
+    }
+
+
+    public function save()
+    {
+
+        if ($this->tipo_comprobante_id == '07') {
+
+            $request = new NotaDeCreditoRequest();
+            $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
+
+            $nota = NotaCredito::create($datos);
+
+            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+            $nota->getSerie->increment('correlativo');
+
+            $api = new ApiFacturacion();
+            $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
+
+            if ($respuesta['fe_codigo_error']) {
+
+                session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.nota.credito.index');
+            } else {
+
+                session()->flash('nota-registrada', $respuesta['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.nota.credito.index');
+            }
+        }
+
+        if ($this->tipo_comprobante_id == '08') {
+
+            $request = new NotaDeCreditoRequest();
+            $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
+
+            $nota = NotaDebito::create($datos);
+
+            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+            $nota->getSerie->increment('correlativo');
+
+            $api = new ApiFacturacion();
+            $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
+
+            if ($respuesta['fe_codigo_error']) {
+
+                session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.nota.debito.index');
+            } else {
+
+                session()->flash('nota-registrada', $respuesta['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.nota.debito.index');
+            }
+        }
     }
 }

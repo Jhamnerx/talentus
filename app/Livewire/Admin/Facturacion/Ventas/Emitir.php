@@ -308,11 +308,12 @@ class Emitir extends Component
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
 
-            //dd($venta->getSerie->correltivo);
             $venta->getSerie->increment('correlativo');
 
             $api = new ApiFacturacion();
+
             $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
+
 
             if ($mensaje['fe_codigo_error']) {
 

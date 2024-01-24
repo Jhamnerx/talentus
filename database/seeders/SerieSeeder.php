@@ -51,8 +51,20 @@ class SerieSeeder extends Seeder
                 'empresa_id' => 1,
             ],
             [
+                'tipo_comprobante_id' => '07',
+                'serie' => 'FN01',
+                'correlativo' => '0',
+                'empresa_id' => 1,
+            ],
+            [
                 'tipo_comprobante_id' => '08',
                 'serie' => 'BD01',
+                'correlativo' => '0',
+                'empresa_id' => 1,
+            ],
+            [
+                'tipo_comprobante_id' => '08',
+                'serie' => 'FD01',
                 'correlativo' => '0',
                 'empresa_id' => 1,
             ],
@@ -102,8 +114,20 @@ class SerieSeeder extends Seeder
                 'empresa_id' => 2,
             ],
             [
+                'tipo_comprobante_id' => '07',
+                'serie' => 'FN01',
+                'correlativo' => '0',
+                'empresa_id' => 2,
+            ],
+            [
                 'tipo_comprobante_id' => '08',
                 'serie' => 'BD01',
+                'correlativo' => '0',
+                'empresa_id' => 2,
+            ],
+            [
+                'tipo_comprobante_id' => '08',
+                'serie' => 'FD01',
                 'correlativo' => '0',
                 'empresa_id' => 2,
             ],

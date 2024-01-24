@@ -126,9 +126,9 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query
                     ->where('serie_correlativo', 'like', "%{$request->search}%")
             )->when(
-                $request->invoice_type,
+                $request->tipo_comprobante_ref,
                 fn (Builder $query) => $query
-                    ->where('tipo_comprobante_id', $request->invoice_type)
+                    ->where('tipo_comprobante_id', $request->tipo_comprobante_ref)
 
             )
             ->when(

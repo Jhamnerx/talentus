@@ -193,6 +193,7 @@ class Util extends Controller
 
     public function getErrorResponse(\Greenter\Model\Response\Error $error)
     {
+
         $results
             =  [
                 'estado_texto' => 'ESTADO: RECHAZADA',
@@ -203,7 +204,7 @@ class Util extends Controller
                 'nombre_xml' => $this->nombre_xml,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
-                'fe_estado' => 2,
+                'fe_estado' => $error->getCode() == 'HTTP' ? '0' : '2',
                 'hash' => $this->hash,
                 'hash_cdr' => $this->hash_cdr,
                 'code_sunat' => $this->code_sunat,

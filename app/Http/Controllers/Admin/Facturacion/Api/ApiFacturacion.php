@@ -20,6 +20,10 @@ use Luecano\NumeroALetras\NumeroALetras;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
+use App\Events\Facturacion\EmitirNota;
+use App\Models\Clientes;
+use App\Models\NotaCredito;
+use App\Models\NotaDebito;
 
 class ApiFacturacion extends Controller
 {
@@ -35,19 +39,190 @@ class ApiFacturacion extends Controller
             return  $this->createXmlInvoice($venta);
         }
     }
-
-
-    public function emitirNotaCredito()
+    //DETERMINAR SI ES NOTA DE DEBITO O CREDITO
+    public function emitirNota($nota, $tipo_comprobante)
     {
-        $note = new Note();
+
+        if ($tipo_comprobante == '07') {
+            return  $this->emitirNotaCredito($nota, $tipo_comprobante);
+        }
+        if ($tipo_comprobante == '08') {
+
+            return $this->emitirNotaDebito($nota, $tipo_comprobante);
+        }
     }
-    //CREAR XML - FIRMADO Y ENVIO A SUNAT
-    public function emitirComprobante(Ventas $venta)
+    //EMITIR NOTA DE CREDITO
+    public function emitirNotaCredito(NotaCredito $nota, $tipo_comprobante)
+    {
+
+        $util = Util::getInstance();
+        $formatter = new NumeroALetras();
+        $cliente = $this->getCliente($nota->cliente);
+
+        $note = new Note();
+        $note
+            ->setUblVersion('2.1')
+            ->setTipoDoc('07')
+            ->setSerie($nota->serie)
+            ->setCorrelativo($nota->correlativo)
+            ->setFechaEmision($nota->fecha_emision)
+            ->setTipDocAfectado($nota->tipo_comprobante_ref) // Tipo Doc: Factura
+            ->setNumDocfectado($nota->serie_correlativo_ref) // Factura: Serie-Correlativo
+            ->setCodMotivo($nota->sustento_id) // Catalogo. 09
+            ->setDesMotivo($nota->sustento->descripcion)
+            ->setTipoMoneda($nota->divisa)
+            // ->setGuias([/* Guias (Opcional) */
+            //     (new Document())
+            //         ->setTipoDoc('09')
+            //         ->setNroDoc('0001-213')
+            // ])
+            ->setCompany($util->getCompany())
+            ->setClient($cliente)
+            ->setMtoOperGravadas($nota->op_gravadas)
+            ->setMtoOperExoneradas($nota->op_exoneradas)
+            ->setMtoOperInafectas($nota->op_inafectas)
+            ->setMtoIGV($nota->igv)
+            ->setIcbper($nota->icbper)
+            ->setTotalImpuestos($nota->igv + $nota->icbper)
+            ->setMtoImpVenta($nota->total);
+
+        //EVALUAR SI LA NOTA ES A CREDITO
+        if ($nota->venta->forma_pago == 'CREDITO') {
+
+            $note->setFormaPago(new FormaPagoCredito($nota->total, $nota->divisa));
+            $cuotas = $this->addCuotas($nota->venta);
+            $note->setCuotas($cuotas);
+        }
+        //ESTABLECER ITEMS DEL COMPROBANTE
+        $items = $this->getItemsInvoice($nota->venta->ventaDetalles);
+
+        $note->setDetails($items)
+            ->setLegends([
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($nota->total, 2, 'soles'))
+            ]);
+
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+        $result = $see->send($note);
+
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($note, $see->getFactory()->getLastXml());
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            return $msg;
+        }
+
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+
+        //Guardar CDR recibido
+        $util->writeCdr($note, $result->getCdrZip());
+
+
+        $respuesta = $util->showResponse($note, $cdr);
+
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+
+        return $respuesta;
+    }
+
+    //EMITIR NOTA DE DEBITO
+    public function emitirNotaDebito(NotaDebito $nota, $tipo_comprobante)
     {
         $util = Util::getInstance();
         $formatter = new NumeroALetras();
-        $cliente = $this->getCliente($venta);
+        $cliente = $this->getCliente($nota->cliente);
 
+        $note = new Note();
+        $note
+            ->setUblVersion('2.1')
+            ->setTipDocAfectado($nota->tipo_comprobante_ref)
+            ->setNumDocfectado($nota->serie_correlativo_ref)
+            ->setCodMotivo($nota->sustento_id)
+            ->setDesMotivo($nota->sustento->descripcion)
+            ->setTipoDoc('08')
+            ->setSerie($nota->serie)
+            ->setFechaEmision($nota->fecha_emision)
+            ->setCorrelativo($nota->correlativo)
+            ->setTipoMoneda($nota->divisa)
+            ->setCompany($util->getCompany())
+            ->setClient($cliente)
+            ->setMtoOperGravadas($nota->op_gravadas)
+            ->setMtoOperExoneradas($nota->op_exoneradas)
+            ->setMtoOperInafectas($nota->op_inafectas)
+            ->setMtoIGV($nota->igv)
+            ->setIcbper($nota->icbper)
+            ->setTotalImpuestos($nota->igv + $nota->icbper)
+            ->setMtoImpVenta($nota->total);
+
+        //EVALUAR SI LA NOTA ES A CREDITO
+        if ($nota->venta->forma_pago == 'CREDITO') {
+
+            $note->setFormaPago(new FormaPagoCredito($nota->total, $nota->divisa));
+            $cuotas = $this->addCuotas($nota->venta);
+            $note->setCuotas($cuotas);
+        }
+
+        //ESTABLECER ITEMS DEL COMPROBANTE
+        $items = $this->getItemsInvoice($nota->venta->ventaDetalles);
+
+        $note->setDetails($items)
+            ->setLegends([
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($nota->total, 2, 'soles'))
+            ]);
+
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+        $result = $see->send($note);
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($note, $see->getFactory()->getLastXml());
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            return $msg;
+        }
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+
+        //Guardar CDR recibido
+        $util->writeCdr($note, $result->getCdrZip());
+
+
+        $respuesta = $util->showResponse($note, $cdr);
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+
+        return $respuesta;
+    }
+
+
+
+    //CREAR XML - FIRMADO Y ENVIO A SUNAT
+    public function emitirComprobante(Ventas $venta)
+    {
+
+        $util = Util::getInstance();
+
+        $formatter = new NumeroALetras();
+        $cliente = $this->getCliente($venta->cliente);
 
         // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
         // $guiaRemision = (new Document())
@@ -158,7 +333,7 @@ class ApiFacturacion extends Controller
     {
         $util = Util::getInstance();
         $formatter = new NumeroALetras();
-        $cliente = $this->getCliente($venta);
+        $cliente = $this->getCliente($venta->cliente);
         $plantilla = plantilla::first();
 
         // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
@@ -265,7 +440,7 @@ class ApiFacturacion extends Controller
         $util = Util::getInstance();
         $formatter = new NumeroALetras();
         // Cliente
-        $cliente = $this->getCliente($venta);
+        $cliente = $this->getCliente($venta->cliente);
 
         $invoice = new Invoice();
         $invoice
@@ -363,18 +538,25 @@ class ApiFacturacion extends Controller
         FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado, $action, $invoice);
     }
 
+    //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
+    public function updateNota($tipo_comprobante, $nota, $respuesta, $action, $note)
+    {
+        EmitirNota::dispatch($tipo_comprobante, $nota, $respuesta, $action, $note);
+    }
+
+
     //DEVOLVER OBJETO CLIENTE
-    public function getCliente(Ventas $venta)
+    public function getCliente(Clientes $cliente)
     {
         // Cliente
         $cliente = (new Client())
-            ->setTipoDoc($venta->cliente->tipo_documento_id)
-            ->setNumDoc($venta->cliente->numero_documento)
-            ->setRznSocial($venta->cliente->razon_social)
+            ->setTipoDoc($cliente->tipo_documento_id)
+            ->setNumDoc($cliente->numero_documento)
+            ->setRznSocial($cliente->razon_social)
             ->setAddress((new Address())
-                ->setDireccion($venta->cliente->direccion))
-            ->setEmail($venta->cliente->email)
-            ->setTelephone($venta->cliente->telefono);
+                ->setDireccion($cliente->direccion))
+            ->setEmail($cliente->email)
+            ->setTelephone($cliente->telefono);
 
         return $cliente;
     }

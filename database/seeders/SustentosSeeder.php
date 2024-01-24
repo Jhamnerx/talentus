@@ -69,11 +69,11 @@ class SustentosSeeder extends Seeder
                 'tipo' => 'C',
                 'descripcion' => 'Ajustes de operaciones de exportación'
             ],
-            [
-                'codigo' => '12',
-                'tipo' => 'C',
-                'descripcion' => 'Ajustes afectos al IVAP'
-            ],
+            // [
+            //     'codigo' => '12',
+            //     'tipo' => 'C',
+            //     'descripcion' => 'Ajustes afectos al IVAP'
+            // ],
             [
                 'codigo' => '01',
                 'tipo' => 'D',
@@ -89,16 +89,16 @@ class SustentosSeeder extends Seeder
                 'tipo' => 'D',
                 'descripcion' => 'Penalidades/ otros conceptos'
             ],
-            [
-                'codigo' => '10',
-                'tipo' => 'D',
-                'descripcion' => 'Ajustes de operaciones de exportación'
-            ],
-            [
-                'codigo' => '11',
-                'tipo' => 'D',
-                'descripcion' => 'Ajustes afectos al IVAP'
-            ]
+            // [
+            //     'codigo' => '10',
+            //     'tipo' => 'D',
+            //     'descripcion' => 'Ajustes de operaciones de exportación'
+            // ],
+            // [
+            //     'codigo' => '11',
+            //     'tipo' => 'D',
+            //     'descripcion' => 'Ajustes afectos al IVAP'
+            // ]
         ];
 
         foreach ($sustentos as $sustento) {

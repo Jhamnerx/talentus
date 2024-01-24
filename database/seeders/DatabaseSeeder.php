@@ -81,5 +81,6 @@ class DatabaseSeeder extends Seeder
         $this->call(tipoDocumentosSeeder::class);
         $this->call(UbigeosSeeder::class);
         $this->call(SerieSeeder::class);
+        $this->call(ClientesSeeder::class);
     }
 }
