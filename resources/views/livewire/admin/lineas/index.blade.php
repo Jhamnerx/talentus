@@ -113,7 +113,6 @@
 
         <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
-                <li><a href="" x-text="clickeado"></a></li>
                 <li class="m-1">
                     <button wire:click.prevent="SetOperador()"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
