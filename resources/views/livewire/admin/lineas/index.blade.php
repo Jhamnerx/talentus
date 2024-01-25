@@ -113,9 +113,11 @@
 
         <div class="mb-4 sm:mb-0 mt-2 sm:mt-0 text-slate-500" x-data="{ clickeado: 0 }">
             <ul class="flex flex-wrap -m-1">
+                <li><a href="" x-text="clickeado"></a></li>
                 <li class="m-1">
                     <button wire:click.prevent="SetOperador()"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
+                        @click="clickeado = 0"
                         class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-smduration-150 ease-in-out">
                         Todas
                     </button>
