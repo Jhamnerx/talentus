@@ -2,6 +2,7 @@
 /public/hot
 /public/build
 /public/storage
+
 /vendor
 /storage/app/public/livewire-tmp/
 .env

@@ -38,7 +38,7 @@
                     <div class="col-span-12 mb-2">
 
                         <x-form.select autocomplete="off" id="cliente_id" name="cliente_id"
-                            label="Selecciona un cliente" wire:model.live="cliente_id"
+                            label="Selecciona un cliente:" wire:model.live="cliente_id"
                             placeholder="Selecciona un cliente" :async-data="[
                                 'api' => route('api.clientes.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
@@ -48,14 +48,15 @@
                     </div>
 
                     <div class="col-span-12 mb-2">
-                        <x-form.input autocomplete="off" id="direccion" label="Direccion:" wire:model.live="direccion"
-                            placeholder="Ingresa direccion" />
+                        <x-form.input autocomplete="off" id="direccion" name="direccion" label="Direccion:"
+                            wire:model.live="direccion" placeholder="Ingresa direccion" />
                     </div>
 
                     {{-- MONEDA --}}
                     <div class="col-span-12 md:col-span-4">
-                        <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
-                            wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
+                        <x-form.select label="Divisa:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                            option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                            icon='currency-dollar' />
                     </div>
 
                     {{-- SERIE --}}
@@ -72,7 +73,7 @@
                     {{-- CORRELATIVO --}}
                     <div class="col-span-12 xs:col-span-4">
 
-                        <x-form.inputs.number readonly name="correlativo" wire:model.live="correlativo"
+                        <x-form.inputs.number readonly id="correlativo" name="correlativo" wire:model.live="correlativo"
                             label="Correlativo:" />
 
                     </div>
@@ -84,18 +85,19 @@
                     <div class="col-span-12 xs:col-span-6 gap-2">
                         <div class="col-span-12 md:col-span-6">
 
-                            <x-form.datetime-picker label="Fecha de Emision:" wire:model.live="fecha_emision"
-                                :min="now()->subDays(1)" :max="now()" without-time parse-format="YYYY-MM-DD"
-                                display-format="DD-MM-YYYY" :clearable="false" />
+                            <x-form.datetime-picker label="Fecha de Emision:" id="fecha_emision" name="fecha_emision"
+                                wire:model.live="fecha_emision" :min="now()->subDays(1)" :max="now()" without-time
+                                parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
 
                         </div>
                     </div>
 
                     {{-- FECHA CADUCIDAD --}}
                     <div class="col-span-12 xs:col-span-6 gap-2">
-                        <x-form.datetime-picker label="Fecha Vencimiento:" wire:model.live="fecha_vencimiento"
-                            :min="now()->subDays(1)" :max="now()->addDays(7)" without-time parse-format="YYYY-MM-DD"
-                            display-format="DD-MM-YYYY" :clearable="false" />
+                        <x-form.datetime-picker label="Fecha Vencimiento:" id="fecha_vencimiento"
+                            name="fecha_vencimiento" wire:model.live="fecha_vencimiento" :min="now()->subDays(1)"
+                            :max="now()->addDays(7)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                            :clearable="false" />
                     </div>
 
 
@@ -104,11 +106,11 @@
                     @if ($tipo_comprobante_id == '01')
                         <div class="col-span-12 md:col-span-6 mb-3">
 
-                            <x-form.select label="Forma Pago:" :options="[
+                            <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[
                                 ['name' => 'CONTADO', 'id' => 'CONTADO'],
                                 ['name' => 'CREDITO', 'id' => 'CREDITO'],
-                            ]" option-label="name" option-value="id"
-                                wire:model.live="forma_pago" :clearable="false" />
+                            ]"
+                                option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
                         </div>
                     @endif
@@ -173,11 +175,10 @@
                                     </div>
 
 
-                                    <x-form.inputs.currency icon="currency-dollar" placeholder="Monto descuento"
+                                    <x-form.inputs.currency id="descuento_monto" name="descuento_monto"
+                                        icon="currency-dollar" placeholder="Monto descuento"
                                         wire:model.live.lazy="descuento_monto" thousands="." decimal="."
                                         precision="2" />
-
-
                                 </div>
 
                             </div>
@@ -185,22 +186,24 @@
                             {{-- FORMA DE PAGO --}}
                             <div class="col-span-12 md:col-span-6">
 
-                                <x-form.select label="MÉTODO DE PAGO:" :options="[
-                                    ['name' => 'En efectivo', 'id' => '009'],
-                                    ['name' => 'Depósito en cuenta', 'id' => '001'],
-                                    ['name' => 'Tarjeta de débito', 'id' => '005'],
-                                    ['name' => 'Tarjeta de crédito', 'id' => '006'],
-                                    ['name' => 'Transferencia bancaria', 'id' => '003'],
-                                    ['name' => 'Giro', 'id' => '002'],
-                                ]" option-label="name"
-                                    option-value="id" wire:model.live="metodo_pago_id" :clearable="false" />
+                                <x-form.select id="metodo_pago_id" name="metodo_pago_id" label="MÉTODO DE PAGO:"
+                                    :options="[
+                                        ['name' => 'En efectivo', 'id' => '009'],
+                                        ['name' => 'Depósito en cuenta', 'id' => '001'],
+                                        ['name' => 'Tarjeta de débito', 'id' => '005'],
+                                        ['name' => 'Tarjeta de crédito', 'id' => '006'],
+                                        ['name' => 'Transferencia bancaria', 'id' => '003'],
+                                        ['name' => 'Giro', 'id' => '002'],
+                                    ]" option-label="name" option-value="id"
+                                    wire:model.live="metodo_pago_id" :clearable="false" />
 
                             </div>
 
                             {{-- COMENTARIO --}}
                             <div class="col-span-12">
 
-                                <x-form.textarea label="Comentario:" placeholder="Escribe tu comentario" />
+                                <x-form.textarea label="Comentario:" id="comentario" name="comentario"
+                                    wire:model.live="comentario" placeholder="Escribe tu comentario" />
                             </div>
 
                         </div>
@@ -326,8 +329,9 @@
                                         </div>
                                         <div class="text-right w-40 pl-3">
 
-                                            <x-form.inputs.currency placeholder="0.00" wire:model.live.lazy="adelanto"
-                                                thousands="." decimal="," precision="4" />
+                                            <x-form.inputs.currency id="adelanto" name="adelanto" placeholder="0.00"
+                                                wire:model.live.lazy="adelanto" thousands="." decimal=","
+                                                precision="4" />
                                         </div>
                                     </div>
                                 </div>
@@ -395,7 +399,7 @@
                 </div>
             </div>
 
-            {{ json_encode($errors->all()) }}
+            {{-- {{ json_encode($errors->all()) }} --}}
 
         </div>
 

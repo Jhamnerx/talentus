@@ -64,6 +64,7 @@ class Ventas extends Model
         'sent' => 'boolean',
         'estado' => VentasStatus::class,
         'detalle_cuotas' => AsCollection::class,
+        'nota' => AsCollection::class,
     ];
 
     //GLOBAL SCOPE EMPRESA

@@ -83,6 +83,11 @@ class Emitir extends Component
             $this->cliente_id = 1;
             $this->cliente = Clientes::find(1);
         }
+
+        if ($this->tipo_comprobante_id == '02') {
+
+            $this->metodo_type = '03';
+        }
         $this->plantilla = plantilla::first();
     }
 
@@ -310,31 +315,30 @@ class Emitir extends Component
 
             $venta->getSerie->increment('correlativo');
 
-            $api = new ApiFacturacion();
+            if (!$this->metodo_type == '03') {
+                $api = new ApiFacturacion();
 
-            $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
+                $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
 
 
-            if ($mensaje['fe_codigo_error']) {
+                if ($mensaje['fe_codigo_error']) {
 
-                session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                $this->redirectRoute('admin.ventas.index');
+                    session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    $this->redirectRoute('admin.ventas.index');
+                } else {
+
+                    session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
+                    $this->redirectRoute('admin.ventas.index');
+                }
             } else {
 
-                session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
+                session()->flash('venta-registrada', 'Nota de venta registrada');
                 $this->redirectRoute('admin.ventas.index');
             }
-
-            // $this->afterSave();
-
-            //return redirect()->route('admin.ventas.index')->with('store', $mensaje);
         } catch (\Throwable $th) {
-
 
             $this->dispatch('error-sunat', $th);
         }
-
-        // dd($venta->ventaDetalles);
     }
 
 

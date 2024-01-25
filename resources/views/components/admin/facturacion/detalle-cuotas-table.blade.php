@@ -13,8 +13,8 @@
                     </div>
                     <div>
 
-                        <x-form.inputs.number autocomplete="false" name="numero_cuotas" wire:model.live="numero_cuotas"
-                            min="0" />
+                        <x-form.inputs.number autocomplete="false" id="numero_cuotas" name="numero_cuotas"
+                            wire:model.live="numero_cuotas" min="0" />
 
                     </div>
 
@@ -23,11 +23,10 @@
                     </div>
                     <div>
 
-                        <x-form.inputs.number name="vence_cuotas" wire:model.live="vence_cuotas" />
+                        <x-form.inputs.number id="vence_cuotas" name="vence_cuotas" wire:model.live="vence_cuotas" />
                     </div>
 
                 </div>
-                {{-- {{ json_encode($cuotas) }} --}}
                 <div class="flex justify-between gap-2 px-4 py-2">
                     <div class="flex justify-center text-center">
                         <div>
@@ -74,7 +73,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {{ json_encode($cuotas) }}
+
                             @if (!$cuotas->isEmpty())
                                 @foreach ($cuotas->all() as $clave => $cuota)
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">

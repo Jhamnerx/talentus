@@ -5,14 +5,15 @@
 
     <div class="col-span-12 md:col-span-7">
 
-        <x-form.select :clearable="false" wire:model.live="product_selected_id" id="productos" name="productos"
-            placeholder="Seleccionar producto o servicio" :async-data="[
+        <x-form.select :clearable="false" wire:model.live="product_selected_id" id="product_selected_id"
+            name="product_selected_id" placeholder="Seleccionar producto o servicio" :async-data="[
                 'api' => route('api.productos.index'),
-            ]" option-label="descripcion" option-value="id"
-            option-description="option_description" :template="[
+            ]"
+            option-label="descripcion" option-value="id" option-description="option_description" :template="[
                 'name' => 'user-option',
                 'config' => ['src' => 'imagen'],
-            ]" :always-fetch="true" x-on:selected="$wire.prueba()">
+            ]"
+            :always-fetch="true" x-on:selected="$wire.prueba()">
 
         </x-form.select>
 
@@ -24,7 +25,7 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.input wire:model.live="selected.codigo" placeholder="COD-PROD13" />
+        <x-form.input id="codigo" name="codigo" wire:model.live="selected.codigo" placeholder="COD-PROD13" />
 
     </div>
 
@@ -37,7 +38,8 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.inputs.number name="cantidad" wire:model.live="selected.cantidad" min="1" step="1" />
+        <x-form.inputs.number id="cantidad" name="cantidad" wire:model.live="selected.cantidad" min="1"
+            step="1" />
 
     </div>
 
@@ -58,7 +60,7 @@
 
     <div class="col-span-12 md:col-start-5 md:col-end-11">
 
-        <x-form.textarea wire:model.live="selected.descripcion" />
+        <x-form.textarea name="descripcion" id="descripcion" wire:model.live="selected.descripcion" />
 
     </div>
 
@@ -70,8 +72,8 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.inputs.currency prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}"
-            wire:model.live="selected.valor_unitario" />
+        <x-form.inputs.currency id="valor_unitario" name="valor_unitario"
+            prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.valor_unitario" />
 
     </div>
 
@@ -96,7 +98,7 @@
     </div>
     <div class="col-start-3 col-span-6 md:col-start-5 md:col-span-3">
 
-        <x-form.inputs.currency precision="4" placeholer="0.00" disabled
+        <x-form.inputs.currency id="igv" name="igv" precision="4" placeholer="0.00" disabled
             prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.igv" />
     </div>
 
@@ -110,14 +112,14 @@
 
         <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-            <x-form.inputs.currency precision="4" placeholer="0.00" disabled
+            <x-form.inputs.currency id="icbper" name="icbper" precision="4" placeholer="0.00" disabled
                 prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.icbper" />
 
         </div>
 
         <div class="col-span-12 md:col-start-9 md:col-span-4">
 
-            <x-form.inputs.currency precision="4" placeholer="0.00" disabled
+            <x-form.inputs.currency id="total_icbper" name="total_icbper" precision="4" placeholer="0.00" disabled
                 prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.total_icbper" />
 
         </div>
@@ -132,7 +134,7 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.inputs.currency precision="4" placeholer="0.00" disabled
+        <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00" disabled
             prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.total" />
 
     </div>

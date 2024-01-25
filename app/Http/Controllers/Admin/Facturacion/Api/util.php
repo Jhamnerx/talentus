@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Facturacion\Api;
 
 use Exception;
 use Greenter\See;
+use App\Models\Ventas;
 use App\Models\Empresa;
 use App\Models\plantilla;
 use Greenter\Report\XmlUtils;
@@ -11,16 +12,17 @@ use Greenter\Report\PdfReport;
 use Greenter\Report\HtmlReport;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
+use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
-use App\Models\Ventas;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Response\CdrResponse;
 use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\XMLSecLibs\Sunat\SignedXml;
 use Greenter\Validator\XmlErrorCodeProvider;
+use Greenter\XMLSecLibs\Certificate\X509Certificate;
+use Greenter\XMLSecLibs\Certificate\X509ContentType;
 use Greenter\Report\Resolver\DefaultTemplateResolver;
-use Psy\Readline\Hoa\FileDirectory;
 
 class Util extends Controller
 {
@@ -140,12 +142,12 @@ class Util extends Controller
 
         if ($code === 0) {
             //SI EL CODIGO ES 0 EL ESTADO DE LA FACTURA ES
-            $this->estado = 'ESTADO: ACEPTADA';
+            $this->estado = 'ACEPTADA';
             $this->fe_estado = '1';
 
             if (count($cdr->getNotes()) > 0) {
 
-                $this->estado = 'ESTADO: OBSERVACIONES:';
+                $this->estado = 'OBSERVACIONES:';
                 // Corregir estas observaciones en siguientes emisiones.
                 $this->nota = $cdr->getNotes();
                 $this->mensaje = $cdr->getDescription() . ' CON OBSERVACIONES';
@@ -153,7 +155,7 @@ class Util extends Controller
             }
         } else if ($code >= 2000 && $code <= 3999) {
             //SI EL CODIGO ESTA ENTRE ESTOS SE RECOGE EL MENSAJE Y EL CODIGO DE ERROR
-            $this->estado = 'ESTADO: RECHAZADA';
+            $this->estado = 'RECHAZADA';
             $this->mensaje_error = $cdr->getDescription();
             $this->fe_codigo_error = $code;
             $this->fe_estado = '2';
@@ -196,7 +198,7 @@ class Util extends Controller
 
         $results
             =  [
-                'estado_texto' => 'ESTADO: RECHAZADA',
+                'estado_texto' => 'RECHAZADA',
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $error->getMessage(),
                 'nota' => $this->nota,
@@ -302,7 +304,7 @@ class Util extends Controller
                 'extras'     => [
                     // Leyendas adicionales
                     ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->descripcion],
-                    ['name' => 'FORMA DE PAGO', 'value' => $venta->clase->getFormaPago()->getTipo()],
+                    ['name' => 'FORMA DE PAGO', 'value' => $venta->clase ? $venta->clase->getFormaPago()->getTipo() : $venta->forma_pago],
                     ['name' => 'VENDEDOR', 'value' => $venta->user->name],
                 ],
                 //'footer' => 'Resumen',
@@ -310,7 +312,7 @@ class Util extends Controller
             ]
         ];
 
-        if ($venta->clase->getFormaPago()->getTipo() == 'Credito') {
+        if ($venta->forma_pago == 'Credito') {
 
             $params['user']['cuotas'] = view('templates.comprobantes.cuotas', ['venta' => $venta->toArray()]);
         }
@@ -342,5 +344,17 @@ class Util extends Controller
 
 
         return Storage::disk('facturacion')->download($ruta, $venta->nombre_xml . '.xml');
+    }
+
+
+    public function convertToPem($ruta_pfx, $password)
+    {
+
+        $pfx = Storage::disk('facturacion')->get($ruta_pfx . '.pfx');
+
+        $certificate = new X509Certificate($pfx, $password);
+        $pem = $certificate->export(X509ContentType::PEM);
+
+        Storage::disk('facturacion')->put($ruta_pfx . '.pem', $pem);
     }
 }

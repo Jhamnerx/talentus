@@ -87,6 +87,7 @@ class SelectsController extends Controller
     public function clientes(Request $request): Collection
     {
 
+
         return Clientes::query()
             ->select('id', 'razon_social', 'numero_documento', 'tipo_documento_id')
             ->orderBy('id')

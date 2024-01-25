@@ -4,15 +4,17 @@
 
         <div class="col-span-12">
             <div class="flex flex-wrap gap-4">
-                <x-form.radio md id="tipo" left-label="Producto" value="producto" wire:model.live="tipo" />
-                <x-form.radio md id="tipo" label="Servicio" value="servicio" wire:model.live="tipo" />
+                <x-form.radio md id="tipo_1" name="tipo" left-label="Producto" value="producto"
+                    wire:model.live="tipo" />
+                <x-form.radio md id="tipo_2" name="tipo" label="Servicio" value="servicio"
+                    wire:model.live="tipo" />
             </div>
 
         </div>
 
         <div class="col-span-12">
 
-            <x-form.textarea name="descripcion" wire:model="descripcion" label="Descripción:"
+            <x-form.textarea id="descripcion" name="descripcion" wire:model="descripcion" label="Descripción:"
                 placeholder="Descripcion del producto" />
 
         </div>
@@ -32,35 +34,37 @@
 
         <div class="col-span-12 md:col-span-3">
 
-            <x-form.input name="codigo" wire:model.live="codigo" label="Codigo:" placeholder="Codigo del producto" />
+            <x-form.input id="codigo" name="codigo" wire:model.live="codigo" label="Codigo:"
+                placeholder="Codigo del producto" />
 
         </div>
 
         <div class="col-span-12 md:col-span-4">
 
-            <x-form.select name="unit_code" label="Unidad:" wire:model.live="unit_code"
+            <x-form.select id="unit_code" name="unit_code" label="Unidad:" wire:model.live="unit_code"
                 placeholder="Selecciona una opcion" :async-data="route('api.unit.index')" option-label="name" option-value="codigo" />
         </div>
 
 
         <div class="col-span-12 md:col-span-3">
 
-            <x-form.inputs.number name="stock" wire:model="stock" label="Stock:" />
+            <x-form.inputs.number id="stock" name="stock" wire:model="stock" label="Stock:" />
 
         </div>
 
         <div class="col-span-12 md:col-span-4">
-            <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id" wire:model="divisa"
-                :clearable="false" icon='currency-dollar' />
+            <x-form.select id="divisa_p" label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
+                wire:model="divisa" :clearable="false" icon='currency-dollar' />
         </div>
 
         <div class="col-span-12 md:col-span-4">
 
-            <x-form.inputs.currency name="valor_unitario" label="Valor unitario:" placeholder="9.99"
+            <x-form.inputs.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
                 icon="currency-dollar" precision="2" wire:model.blur="valor_unitario" />
         </div>
         <div class="col-span-12">
-            <x-form.checkbox id="afecto_icbper" md left-label="Afecto icbper?" wire:model="afecto_icbper" />
+            <x-form.checkbox id="afecto_icbper" name="afecto_icbper" md left-label="Afecto icbper?"
+                wire:model="afecto_icbper" />
         </div>
 
         <div class="col-span-12" wire:ignore>
