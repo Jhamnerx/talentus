@@ -11,6 +11,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -130,5 +131,15 @@ class Presupuestos extends Model
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');
+    }
+
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+    public function tipoComprobante(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\TipoComprobantes::class, 'tipo_comprobante_id', 'codigo');
     }
 }
