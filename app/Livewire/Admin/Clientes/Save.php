@@ -7,6 +7,7 @@ use App\Http\Requests\ClientesRequest;
 use App\Models\Clientes;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\On;
 
 class Save extends Component
 {
@@ -15,13 +16,7 @@ class Save extends Component
 
     public $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
-    protected $listeners = [
-        'openModalSaveCliente'
-    ];
-
     public $errorConsulta;
-
-
 
     protected $messages =
     [
@@ -149,8 +144,10 @@ class Save extends Component
         $this->reset('numero_documento', 'razon_social', 'telefono', 'direccion', 'web_site');
     }
 
-    public function openModalSaveCliente()
+    #[On('open-modal-save-cliente')]
+    public function openModalSaveCliente($busqueda)
     {
+        $this->razon_social = $busqueda;
         $this->modalSave = true;
     }
 }

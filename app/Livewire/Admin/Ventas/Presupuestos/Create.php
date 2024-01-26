@@ -14,7 +14,7 @@ use Illuminate\Validation\Rule;
 
 class Create extends Component
 {
-    public $clientes_id, $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
+    public $clientes_id, $serie, $correlativo, $serie_correlativo, $numero, $fecha, $fecha_caducidad, $divisa = 'PEN', $nota;
     public $sub_total = 0.00, $impuesto = 0.00, $total = 0.00;
     public $sub_total_soles = 0.00, $impuesto_soles = 0.00, $total_soles = 0.00;
     public $features = false;
@@ -23,14 +23,14 @@ class Create extends Component
     public $ConvertirSoles = false;
 
     public Collection $items;
-
     public Collection $selected;
-    public $simbolo = "S/. ";
 
+    public $simbolo = "S/. ";
+    public $productoSelected;
     public function mount()
     {
         $this->tipoCambio  = UtilesController::tipoCambio();
-        $this->numero = PresupuestoController::setNextSequenceNumber();
+        $this->numero = 1;
         $this->fecha = Carbon::now()->format('Y-m-d');
         $this->fecha_caducidad = Carbon::now()->addDays(15)->format('Y-m-d');
         $this->items = collect();
@@ -203,5 +203,11 @@ class Create extends Component
         unset($this->items[$key]);
         $this->items;
         $this->reCalTotal();
+    }
+
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
     }
 }

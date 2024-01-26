@@ -37,26 +37,24 @@
             <div class="grid grid-cols-12 gap-2">
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-4 gap-2">
+
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Cliente <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="flex" wire:ignore>
-                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
-                                required>
-                            </select>
 
-                            @livewire('admin.clientes.button-open-modal')
+                        <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
+                            placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                            option-label="razon_social" option-value="id" hide-empty-message>
 
-                        </div>
+                            <x-slot name="afterOptions" class="p-2 flex justify-center"
+                                x-show="displayOptions.length === 0">
+                                <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
+                                    primary flat full>
+                                    <span x-html="`Crear cliente <b>${search}</b>`"></span>
+                                </x-form.button>
+                            </x-slot>
 
-                        @error('clientes_id')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                        </x-form.select>
+
                     </div>
                     {{-- NUMERO --}}
                     <div class="col-span-12 mb-3">
@@ -139,7 +137,8 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model.live="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+                        <select wire:model.live="divisa" name="divisa" id="moneda"
+                            class="form-select w-full divisa">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -170,7 +169,7 @@
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
                         <div class="col-span-2 sm:col-span-1">
-                            <div class="flex btnAddProducto" wire:ignore>
+                            <div class="flex btnAddProducto">
                                 <button id="productos-button"
                                     class="flex-shrink-0 cursor-default z-10 hidden md:inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
                                     type="button">
@@ -180,7 +179,7 @@
                                     </svg>
                                 </button>
                                 <label for="productos" class="sr-only">Añadir Artículo</label>
-                                <select id="productos" wire:model.live="producto"
+                                <select id="productos" wire:model.live="productoSelected"
                                     class="bg-gray-50 productoSelect border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 dark:border-l-gray-700 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                     <option selected>Añadir Artículo</option>
                                 </select>
@@ -249,7 +248,8 @@
                                         @endif
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
+                                        <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion"
+                                            placeholder="Descripción"></textarea>
                                         @if ($errors->has('selected.descripcion'))
                                             <p class="mt-2  text-pink-600 text-sm">
                                                 {{ $errors->first('selected.descripcion') }}
@@ -327,9 +327,9 @@
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                                 <input required type="number" x-mask="99999"
-                                                    wire:model.live="items.{{ $clave }}.cantidad" min="1"
-                                                    step="1" class="form-input cantidad" placeholder="Cantidad"
-                                                    value="2">
+                                                    wire:model.live="items.{{ $clave }}.cantidad"
+                                                    min="1" step="1" class="form-input cantidad"
+                                                    placeholder="Cantidad" value="2">
                                                 @if ($errors->has('items.' . $clave . '.cantidad'))
                                                     <p class="mt-2  text-pink-600 text-sm">
                                                         {{ $errors->first('items.' . $clave . '.cantidad') }}
@@ -347,7 +347,8 @@
                                                 @endif
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input type="text" wire:model.live="items.{{ $clave }}.total"
+                                                <input type="text"
+                                                    wire:model.live="items.{{ $clave }}.total"
                                                     class="form-input importe subtotal" readonly>
                                             </td>
                                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
@@ -456,123 +457,9 @@
     </div>
 </div>
 
+@push('modals')
+    @livewire('admin.clientes.save')
+@endpush
+
 @section('js')
-    <script>
-        var tipoCambio = parseFloat($(".tipoCambio").text());
-
-        $("#money").maskMoney({
-            'thousands': '.'
-        });
-
-        $(document).ready(function() {
-
-            // INICIALIZAR LOS INPUTS DE FECHA
-            flatpickr('.fechaPresupuesto', {
-                mode: 'single',
-                defaultDate: "today",
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-
-            flatpickr('.fechaFinPresupuesto', {
-                mode: 'single',
-                defaultDate: new Date().fp_incr(15),
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-                },
-            }
-        });
-
-        $('.clientes_id').on('select2:select', function(e) {
-            @this.set('clientes_id', this.value)
-        })
-
-        $('.productoSelect').on('select2:select', function(e) {
-
-            @this.call('selectProduct', this.value)
-
-        });
-
-        $('.productoSelect').select2({
-            placeholder: 'Añadir Artículo',
-            language: "es",
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.productos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        function addAlert() {
-            iziToast.success({
-                position: 'topRight',
-                title: 'AGREGADO',
-                message: 'Se añadio un producto al presupuesto',
-            });
-        }
-    </script>
-
-    <script>
-        window.addEventListener('add-producto', event => {
-            addAlert();
-            $('.productoSelect').val(null).trigger('change');
-        })
-    </script>
 @endsection
