@@ -2,15 +2,16 @@
 
 namespace App\Livewire\Admin\Ventas\Presupuestos;
 
-use App\Http\Controllers\Admin\PresupuestoController;
-use Livewire\Component;
-use App\Http\Controllers\Admin\UtilesController;
-use App\Http\Requests\PresupuestosRequest;
-use App\Models\Presupuestos;
-use App\Models\Productos;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
+use App\Models\Series;
+use Livewire\Component;
+use App\Models\Productos;
+use App\Models\Presupuestos;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Collection;
+use App\Http\Requests\PresupuestosRequest;
+use App\Http\Controllers\Admin\UtilesController;
+use App\Http\Controllers\Admin\PresupuestoController;
 
 class Create extends Component
 {
@@ -27,8 +28,13 @@ class Create extends Component
 
     public $simbolo = "S/. ";
     public $productoSelected;
+
+    public $min_correlativo;
     public function mount()
     {
+        //DEFINIR EL TIPO DE COMPROBANTE
+        $this->setSerieMount();
+
         $this->tipoCambio  = UtilesController::tipoCambio();
         $this->numero = 1;
         $this->fecha = Carbon::now()->format('Y-m-d');
@@ -41,6 +47,36 @@ class Create extends Component
             'cantidad' => 1,
             'total' => ""
         ]);
+    }
+
+    public function setSerieMount()
+    {
+        $serie = Series::where('tipo_comprobante_id', '00')->first();
+        $this->serie = $serie->serie;
+        $this->correlativo = $serie->correlativo + 1;
+        // $this->min_correlativo = $serie->correlativo + 1;
+        $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+    }
+
+    public function updatedSerie($value)
+    {
+        $this->changeSerieUpdate($value);
+    }
+
+    public function changeSerieUpdate($serie)
+    {
+
+        if ($serie) {
+
+            $serie = Series::where('serie', $serie)->first();
+            $this->serie = $serie->serie;
+            $this->correlativo = $serie->correlativo + 1;
+            // $this->min_correlativo = $serie->correlativo + 1;
+            $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+        } else {
+
+            $this->reset('correlativo');
+        }
     }
 
     public function render()

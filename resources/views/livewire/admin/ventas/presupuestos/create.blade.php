@@ -56,113 +56,58 @@
                         </x-form.select>
 
                     </div>
-                    {{-- NUMERO --}}
-                    <div class="col-span-12 mb-3">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Número de Presupuesto <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="relative">
-                            <input required wire:model.live="numero" name="numero" id="numero"
-                                class="form-input w-full md:w-2/4" type="text" />
 
-                        </div>
-                        @error('numero')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                    {{-- SERIE --}}
+                    <div class="col-span-12 md:col-span-6 xl:col-span-4">
+
+                        <x-form.select id="serie" name="serie" label="Serie:" wire:model.live="serie"
+                            placeholder="Selecciona una serie" :async-data="[
+                                'api' => route('api.series.index'),
+                                'params' => ['tipo_comprobante' => '00'],
+                            ]" option-label="serie"
+                            option-value="serie" hide-empty-message />
+                    </div>
+
+                    {{-- CORRELATIVO --}}
+                    <div class="col-span-12 md:col-span-6 xl:col-span-4">
+
+                        <x-form.inputs.number readonly id="correlativo" name="correlativo" wire:model.live="correlativo"
+                            label="Correlativo:" />
+
                     </div>
 
                     {{-- FECHA PRESUPUESTO --}}
 
                     <div class="col-span-6 gap-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Fecha presupuesto <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
 
-                            <input type="text" wire:model.live="fecha"
-                                class="form-input fechaPresupuesto font-base pl-8 py-2 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                placeholder="Seleccion la fecha emisión">
-                        </div>
-                        @error('fecha')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                        <x-form.datetime-picker label="Fecha de Emision:" id="fecha" name="fecha"
+                            wire:model.live="fecha" :min="now()->subDays(1)" :max="now()" without-time
+                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+
                     </div>
 
                     {{-- FECHA CADUCIDAD --}}
                     <div class="col-span-6 gap-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Fecha de caducidad <span class="text-sm text-red-500" style="display: none;"> *
-                                </span>
-                            </div>
-                        </label>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <input name="fecha_caducidad" type="text" wire:model.live="fecha_caducidad"
-                                class="form-input fechaFinPresupuesto font-base pl-8 py-2  block w-full sm:text-sm border-gray-200 rounded-md text-black input"
-                                placeholder="Selecciona la fecha">
-                        </div>
-                        @error('fecha_caducidad')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                        <x-form.datetime-picker label="Fecha de Emision:" id="fecha_caducidad" name="fecha_caducidad"
+                            wire:model.live="fecha_caducidad" :min="now()->subDays(1)" :max="now()->addDays(15)" without-time
+                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+
                     </div>
                 </div>
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6 gap-2">
                     {{-- moneda --}}
                     <div class="col-span-12 md:col-span-6 mb-2">
-                        <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
-                            <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model.live="divisa" name="divisa" id="moneda"
-                            class="form-select w-full divisa">
-                            <option value="PEN">SOLES</option>
-                            <option value="USD">DOLARES</option>
-                        </select>
-
-                        @error('divisa')
-                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                {{ $message }}
-                            </p>
-                        @enderror
+                        <x-form.select label="Moneda:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                            option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                            icon='currency-dollar' />
 
                     </div>
-                    <div class="col-span-12 md:col-span-6 mb-2">
-                        <label class="block text-sm font-medium mb-1 text-gray-800">Tipo de Cambio:
-                            <span class="text-rose-500 tipoCambio"> {{ $tipoCambio }}</span> </label>
 
-                    </div>
                     <div class="col-span-12">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            Nota
-                        </label>
-
-                        <textarea wire:model.live="nota" class="form-input w-full px-4 py-3" name="nota" id="" rows="4"
-                            placeholder="Ingresar nota opcional"></textarea>
+                        <x-form.textarea label="Comentario:" id="nota" name="nota" wire:model.live="nota"
+                            placeholder="Ingresar nota opcional" />
                     </div>
                 </div>
 
