@@ -39,7 +39,8 @@ class PresupuestosIndex extends Component
             $query->where('razon_social', 'like', '%' . $this->search . '%');
         })->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orderBy('numero', 'DESC')
+            ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+            ->orderBy('serie_correlativo', 'DESC')
             ->paginate(15);
 
         $pendientes = Presupuestos::where('estado', '0')->count();
@@ -63,8 +64,9 @@ class PresupuestosIndex extends Component
             })
                 ->orWhere('numero', 'like', '%' . $this->search . '%')
                 ->orWhere('fecha', 'like', '%' . $this->search . '%')
+                ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
                 ->estado($this->estado)
-                ->orderBy('numero', 'DESC')
+                ->orderBy('serie_correlativo', 'DESC')
                 ->paginate(15);
         }
 
