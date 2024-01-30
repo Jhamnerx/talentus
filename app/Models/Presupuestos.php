@@ -130,15 +130,34 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
 
-        if ($action == 1) {
 
-            return $pdf->download('PRE-' . $this->numero . '.pdf');
-        } else {
-            return $pdf->stream('PRE-' . $this->numero . '.pdf');
-        };
+        //ANTIGUA VERSION CON NUMERO
+        if ($this->numero) {
+
+            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+            if ($action == 1) {
+
+                return $pdf->download('PRE-' . $this->numero . '.pdf');
+            } else {
+                return $pdf->stream('PRE-' . $this->numero . '.pdf');
+            };
+        }
+        //NUEVA VERSION CON DATOS ADICIONALES
+        else {
+
+
+            $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+            if ($action == 1) {
+
+                return $pdf->download('PRE-' . $this->numero . '.pdf');
+            } else {
+                return $pdf->stream('PRE-' . $this->numero . '.pdf');
+            };
+        }
     }
+
+
     public function getPDFDataToMail($data)
     {
 
