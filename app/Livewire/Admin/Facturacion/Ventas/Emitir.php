@@ -315,7 +315,7 @@ class Emitir extends Component
 
             $venta->getSerie->increment('correlativo');
 
-            if (!$this->metodo_type == '03') {
+            if ($this->metodo_type != '03') {
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
