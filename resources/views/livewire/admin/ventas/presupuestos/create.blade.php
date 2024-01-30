@@ -439,21 +439,6 @@
                                 </div>
                             </div>
 
-                            @if ($showCredit)
-                                <div class="py-2 border-b ">
-                                    <div class="flex justify-between">
-                                        <div class="text-gray-900 text-right flex-1 font-medium text-sm">
-                                            Adelanto
-                                        </div>
-                                        <div class="text-right w-40 pl-3">
-
-                                            <x-form.inputs.currency id="adelanto" name="adelanto" placeholder="0.00"
-                                                wire:model.live.lazy="adelanto" thousands="." decimal=","
-                                                precision="4" />
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
 
                         </div>
                     </div>
