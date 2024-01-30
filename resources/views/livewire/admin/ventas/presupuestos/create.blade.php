@@ -33,6 +33,11 @@
     <!-- Code block ends -->
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
+            @error('tipo_cambio')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+            @enderror
 
             <div class="grid grid-cols-12 gap-2">
 
@@ -105,30 +110,33 @@
 
                     </div>
 
+                    <div class="col-span-12 md:col-span-6 mb-3">
+
+                        <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                            option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
+
+                    </div>
                     <div class="col-span-12">
-                        <x-form.textarea label="Comentario:" id="nota" name="nota" wire:model.live="nota"
-                            placeholder="Ingresar nota opcional" />
+                        <x-form.textarea label="Comentario:" id="comentario" name="comentario"
+                            wire:model.live="comentario" placeholder="Ingresar nota opcional" />
                     </div>
                 </div>
+
+                {{-- componente venta al credito --}}
+                <div class="grid grid-cols-12 col-span-12">
+
+                    <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                    </x-admin.facturacion.detalle-cuotas-table>
+                </div>
+
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
                     <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
                         <div class="col-span-2 sm:col-span-1">
-                            <div class="flex btnAddProducto">
-                                <button id="productos-button"
-                                    class="flex-shrink-0 cursor-default z-10 hidden md:inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-500 bg-gray-100 border border-gray-300 rounded-l-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600"
-                                    type="button">
-                                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                                        <path
-                                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                                    </svg>
-                                </button>
-                                <label for="productos" class="sr-only">Añadir Artículo</label>
-                                <select id="productos" wire:model.live="productoSelected"
-                                    class="bg-gray-50 productoSelect border border-gray-300 text-gray-900 text-sm rounded-r-lg border-l-gray-100 dark:border-l-gray-700 border-l-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                    <option selected>Añadir Artículo</option>
-                                </select>
-                            </div>
+
+                            <x-form.button wire:click="openModalAddProducto" spinner="openModalAddProducto"
+                                label="AÑADIR" primary md icon="plus" />
+
                         </div>
 
                         <div class="col-span-2 sm:col-span-1">
@@ -150,248 +158,311 @@
                             </div>
                         </div>
                     </div>
+
                     {{-- LISTA DE PRODUCTOS --}}
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <!-- Table header -->
-                            <thead
-                                class="text-xs font-semibold uppercase text-white bg-slate-800  border-t border-b border-slate-200">
-                                <tr>
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Artículo o Servicio</div>
-                                    </th>
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Descripción</div>
-                                    </th>
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Cantidad</div>
-                                    </th>
+                    <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
 
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Precio</div>
-                                    </th>
+                    </x-admin.facturacion.tabla-detalle>
 
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Importe</div>
-                                    </th>
-                                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-semibold text-left">Acciones</div>
-                                    </th>
+                    <div class="block md:flex gap-2">
+                        {{-- LADO IZQUIERDO --}}
+                        <div class="grid grid-cols-12 gap-4 w-full px-4 mx-4 py-2 ml-auto mt-5">
 
-                                </tr>
-                            </thead>
-                            <!-- Table body -->
-                            <tbody class="text-sm divide-y divide-slate-200 listaItems">
-                                <!-- Row -->
-                                <tr class="main bg-slate-50">
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model.live="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
-                                        @if ($errors->has('selected.producto'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.producto') }}
-                                            </p>
-                                        @endif
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion"
-                                            placeholder="Descripción"></textarea>
-                                        @if ($errors->has('selected.descripcion'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.descripcion') }}
-                                            </p>
-                                        @endif
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            {{-- TIPO DESCUENTO --}}
+                            <div class="col-span-12 border-b border-cyan-600">
+                                <h4 class="font-semibold">DESCUENTO</h4>
+                            </div>
 
-                                        <input wire:model.live="selected.cantidad" type="number" min="1"
-                                            value="1" step="1" class="form-input qyt"
-                                            placeholder="Cantidad">
-                                        @if ($errors->has('selected.cantidad'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.cantidad') }}
-                                            </p>
-                                        @endif
-                                    </td>
+                            <div class="col-span-12 md:col-span-12">
 
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <input wire:model.live="selected.precio" type="number" min="0"
-                                            step="0.1" class="form-input importe" placeholder="Importe">
-                                        @if ($errors->has('selected.precio'))
-                                            <p class="mt-2  text-pink-600 text-sm">
-                                                {{ $errors->first('selected.precio') }}
-                                            </p>
-                                        @endif
-                                    </td>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-
-                                            <button type="button" wire:click="addProducto"
-                                                class="text-white btn bg-cyan-500 hover:text-slate-500 ">
-                                                <span class="sr-only">Añadir</span>
+                                <div class="flex flex-wrap gap-4">
+                                    <div class="mt-2 flex gap-5">
+                                        <x-form.radio value="cantidad" id="left-label" md left-label="S/"
+                                            wire:model.live="tipo_descuento" />
+                                        {{-- <x-radio value="porcentaje" id="right-label" md label="%"
+                                            wire:model.live="tipo_descuento" /> --}}
+                                    </div>
 
 
-                                                <svg class="w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 24 24">
-                                                    <g fill="none" class="nc-icon-wrapper">
-                                                        <path
-                                                            d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"
-                                                            fill="currentColor">
-                                                        </path>
-                                                    </g>
-                                                </svg>
-                                            </button>
+                                    <x-form.inputs.currency id="descuento_monto" name="descuento_monto"
+                                        icon="currency-dollar" placeholder="Monto descuento"
+                                        wire:model.live.lazy="descuento_monto" thousands="." decimal="."
+                                        precision="2" />
+                                </div>
+
+                            </div>
+
+                            {{-- FORMA DE PAGO --}}
+                            <div class="col-span-12 md:col-span-6">
+
+                                <x-form.select id="metodo_pago_id" name="metodo_pago_id" label="MÉTODO DE PAGO:"
+                                    :options="[
+                                        ['name' => 'En efectivo', 'id' => '009'],
+                                        ['name' => 'Depósito en cuenta', 'id' => '001'],
+                                        ['name' => 'Tarjeta de débito', 'id' => '005'],
+                                        ['name' => 'Tarjeta de crédito', 'id' => '006'],
+                                        ['name' => 'Transferencia bancaria', 'id' => '003'],
+                                        ['name' => 'Giro', 'id' => '002'],
+                                    ]" option-label="name" option-value="id"
+                                    wire:model.live="metodo_pago_id" :clearable="false" />
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- DIV PARA SUB Y TOTALES SOLES --}}
+                        <div class="py-2 ml-auto mt-5 w-full mx-4 {{ $ConvertirSoles ? '' : 'hidden' }}">
+                            <div class="text-right mb-4 border-b">
+                                <h4 class="font-semibold">RESUMEN SOLES</h4>
+                            </div>
+
+                            <div class="flex justify-between ">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">SUB TOTAL
+                                </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($sub_total_soles, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP. GRAVADAS
+                                </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($op_gravadas_soles, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            @if ($op_exoneradas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        EXONERADAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            S/ <span>{{ round($op_exoneradas_soles, 4) }}</span>
                                         </div>
-                                    </td>
-                                    <p class="mt-2 hidden text-pink-600 text-sm vacio">
-                                        Debes añadir al menos 1 item
-                                    </p>
-                                </tr>
 
-                                {{-- fila para añadir --}}
-                                @if ($items->count() > 0)
-                                    @foreach ($items->all() as $clave => $item)
-                                        <tr wire:key="item-{{ $clave }}-{{ $item['producto_id'] }}">
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model.live="items.{{ $clave }}.producto" class="form-textarea" rows="4">
-
-                                                </textarea>
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4">
-                                                </textarea>
-
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input required type="number" x-mask="99999"
-                                                    wire:model.live="items.{{ $clave }}.cantidad"
-                                                    min="1" step="1" class="form-input cantidad"
-                                                    placeholder="Cantidad" value="2">
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input required type="number" required min="1" step="0.1"
-                                                    wire:model.live="items.{{ $clave }}.precio"
-                                                    class="form-input precio">
-                                                @if ($errors->has('items.' . $clave . '.cantidad'))
-                                                    <p class="mt-2  text-pink-600 text-sm">
-                                                        {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                                    </p>
-                                                @endif
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <input type="text"
-                                                    wire:model.live="items.{{ $clave }}.total"
-                                                    class="form-input importe subtotal" readonly>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                                <div class="space-x-1">
-                                                    <button type="button"
-                                                        wire:click.prevent="eliminarProducto('{{ $clave }}')"
-                                                        class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                        <span class="sr-only">Delete</span>
-                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                            <path
-                                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                        </svg>
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                            <tfoot>
-                                @error('items')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
-                            </tfoot>
-                        </table>
-                    </div>
-
-                    <div class="flex">
-                        <div
-                            class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2 {{ $ConvertirSoles ? '' : 'hidden' }}">
-                            <div class="flex justify-between mb-3">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Sub Total</div>
-                                <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm"> S/.
-                                        <span>{{ number_format($sub_total_soles, 2) }}</span>
                                     </div>
-
                                 </div>
-                            </div>
-                            <div class="flex justify-between mb-4">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%) Soles</div>
+                            @endif
+
+                            @if ($op_inafectas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        INAFECTAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            S/ <span>{{ round($op_inafectas_soles, 4) }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+                            @if ($op_gratuitas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        GRATUITAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            S/ <span>{{ round($op_gratuitas_soles, 4) }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">DESCUENTO
+                                    (-)
+                                </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">S/.
-                                        <span>{{ number_format($impuesto_soles, 2) }}</span>
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($descuento_soles, 2) }}</span>
                                     </div>
 
                                 </div>
                             </div>
 
-                            <div class="py-2 border-t border-b">
+
+                            <div class="flex justify-between mb-4 mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">S/
+                                        <span>{{ round($igv_soles, 4) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between mb-4 mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">ICBPER</div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">S/
+                                        <span>{{ number_format($icbper_soles, 2) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="py-2 border-t border-b border-indigo-500">
                                 <div class="flex justify-between">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total Soles
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Importe Total
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            S/. <span>{{ number_format($total_soles, 2) }}</span></div>
+                                            S/ <span>{{ round($total_soles, 4) }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
 
-                        {{-- DIV PARA SUB Y TOTALES --}}
-                        <div class="py-2 ml-auto mt-5 w-full sm:w-2/4 lg:w-1/4 mr-2">
-                            <div class="flex justify-between mb-3">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">Sub Total</div>
+                        {{-- DIV PARA SUB Y TOTALES DERECHA --}}
+                        <div class="py-2 ml-auto mt-5 w-full mx-4">
+                            <div class="text-right mb-4 border-b">
+                                <h4 class="font-semibold">RESUMEN</h4>
+                            </div>
+
+                            <div class="flex justify-between ">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">SUB TOTAL
+                                </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ number_format($sub_total, 2) }}</span>
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($sub_total, 4) }}</span>
                                     </div>
 
                                 </div>
                             </div>
-                            <div class="flex justify-between mb-4">
+
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP. GRAVADAS
+                                </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($op_gravadas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            @if ($op_exoneradas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        EXONERADAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            {{ $simbolo }} <span>{{ round($op_exoneradas, 4) }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+
+                            @if ($op_inafectas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        INAFECTAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            {{ $simbolo }} <span>{{ round($op_inafectas, 4) }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+                            @if ($op_gratuitas > 0)
+                                <div class="flex justify-between mt-2">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                        GRATUITAS
+                                    </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            {{ $simbolo }} <span>{{ round($op_gratuitas, 4) }}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            @endif
+
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">DESCUENTO
+                                    (-)
+                                </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($descuento, 2) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="flex justify-between mb-4 mt-2">
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ number_format($impuesto, 2) }}</span>
+                                        <span>{{ round($igv, 4) }}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="py-2 border-t border-b">
+
+                            <div class="flex justify-between mb-4 mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">ICBPER</div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
+                                        <span>{{ number_format($icbper, 2) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="py-2 border-t border-b border-indigo-500">
                                 <div class="flex justify-between">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Monto Total
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Importe Total
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            {{ $simbolo }}<span>{{ number_format($total, 2) }}</span>
+                                            {{ $simbolo }}<span>{{ round($total, 4) }}</span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
+                            @if ($showCredit)
+                                <div class="py-2 border-b ">
+                                    <div class="flex justify-between">
+                                        <div class="text-gray-900 text-right flex-1 font-medium text-sm">
+                                            Adelanto
+                                        </div>
+                                        <div class="text-right w-40 pl-3">
+
+                                            <x-form.inputs.currency id="adelanto" name="adelanto" placeholder="0.00"
+                                                wire:model.live.lazy="adelanto" thousands="." decimal=","
+                                                precision="4" />
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                         </div>
                     </div>
+
+
                 </div>
             </div>
+
+            {{ json_encode($errors->all()) }}
             <div class="px-4 py-3 text-right sm:px-6">
                 <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
                     wire:click.prevent="save">Guardar</button>

@@ -147,10 +147,11 @@
                                 <span class="ml-2">Eliminar</span>
                             </button>
                         </div> --}}
+
                     </div>
 
                     {{-- LISTA DE PRODUCTOS --}}
-                    <x-admin.facturacion.tabla-detalle :items="$items">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
 
@@ -396,6 +397,7 @@
                         <x-form.button wire:click.prevent="save" spinner="save" label="EMITIR COMPROBANTE" black md
                             icon="shopping-cart" />
                     </div>
+
                 </div>
             </div>
 

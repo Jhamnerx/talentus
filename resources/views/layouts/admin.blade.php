@@ -144,6 +144,17 @@
 
         });
 
+
+        Livewire.on('error', (event) => {
+            Toast.fire({
+                icon: 'error',
+                title: event.title,
+                html: event.mensaje,
+                showCloseButton: true,
+            });
+
+        });
+
         Livewire.on('notify', (event) => {
             Swal.fire({
                 icon: event.icon,
@@ -185,6 +196,20 @@
             Swal.fire({
                 icon: 'success',
                 title: 'VENTA REGISTRADA',
+                text: '{{ session('venta-registrada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('cotizacion-registrada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'COTIZACION REGISTRADA',
                 text: '{{ session('venta-registrada') }}',
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"

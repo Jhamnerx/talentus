@@ -11,6 +11,7 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,9 +35,38 @@ class Presupuestos extends Model
     protected $table = 'presupuestos';
 
     protected $casts = [
+        'clientes_id' => 'integer',
         'fecha' => 'date:Y/m/d',
         'fecha_caducidad' => 'date:Y/m/d',
+        'tipo_cambio' => 'decimal:2',
+        'metodo_pago_id' => 'integer',
+        'op_gravadas' => 'decimal:2',
+        'op_exoneradas' => 'decimal:2',
+        'op_inafectas' => 'decimal:2',
+        'op_gratuitas' => 'decimal:2',
+        'igv_op' => 'decimal:2',
+        'descuento' => 'decimal:2',
+
+        'op_gravadas_soles' => 'decimal:2',
+        'op_exoneradas_soles' => 'decimal:2',
+        'op_inafectas_soles' => 'decimal:2',
+        'op_gratuitas_soles' => 'decimal:2',
+        'descuento_soles' => 'decimal:2',
+
+        'descuento_factor' => 'decimal:5',
+        'icbper' => 'decimal:2',
+        'igv' => 'decimal:2',
+        'igv_soles' => 'decimal:2',
+        'sub_total' => 'decimal:2',
+        'sub_total_soles' => 'decimal:2',
+        'total' => 'decimal:2',
+        'total_soles' => 'decimal:2',
+        'user_id' => 'integer',
+        'viewed' => 'boolean',
+        'sent' => 'boolean',
+        'detalle_cuotas' => AsCollection::class,
         'estado' => PresupuestosStatus::class,
+
     ];
 
     /**
@@ -74,8 +104,9 @@ class Presupuestos extends Model
     }
 
 
-    public static function createItems($presupuesto, $items)
+    public static function createItems(Presupuestos $presupuesto, $items)
     {
+
 
         foreach ($items as $item) {
 
@@ -83,6 +114,9 @@ class Presupuestos extends Model
 
             $item = $presupuesto->detalles()->create($item);
         }
+
+
+        return $presupuesto->detalles;
     }
 
     public function getPDFData($action)

@@ -4,6 +4,7 @@
         <thead
             class="text-xs font-semibold uppercase text-white  bg-gradient-to-r from-slate-800  to-indigo-500 border-t border-b rounded-lg border-slate-200">
             <tr>
+
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-left">CODIGO</div>
                 </th>
@@ -29,13 +30,16 @@
                     <div class="font-semibold text-center">IMPORTE DE VENTA</div>
                 </th>
 
+                @if ($tipo != '07' && $tipo != '08')
+                    <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-semibold text-center">ACCIONES</div>
+                    </th>
+                @endif
 
             </tr>
         </thead>
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-slate-200 listaItems">
-
-
 
             {{-- fila para añadir --}}
             @foreach ($items->all() as $clave => $item)
@@ -111,6 +115,16 @@
                             </p>
                         @endif
                     </td>
+                    @if ($tipo != '07' && $tipo != '08')
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                            <div class="space-x-1">
+
+                                <x-form.button label="Eliminar"
+                                    wire:click.prevent="eliminarProducto('{{ $clave }}')" outline red sm
+                                    icon="trash" />
+                            </div>
+                        </td>
+                    @endif
 
 
                 </tr>
