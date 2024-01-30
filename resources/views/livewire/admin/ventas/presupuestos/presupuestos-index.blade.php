@@ -177,7 +177,9 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <div class="font-medium text-sky-500">#{{ $presupuesto->numero }}</div>
+                                    <div class="font-medium text-sky-500">
+                                        #{{ $presupuesto->numero ? $presupuesto->numero : $presupuesto->serie_correlativo }}
+                                    </div>
                                 </td>
                                 @can('descargar-cotizaciones')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

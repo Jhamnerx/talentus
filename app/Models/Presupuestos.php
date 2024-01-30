@@ -170,9 +170,14 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+        if ($this->numero) {
+            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+        } else {
+            $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+        }
 
-        //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
+
+
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
     }
 
@@ -181,6 +186,7 @@ class Presupuestos extends Model
     {
         return $this->hasOne(Facturas::class, 'presupuestos_id');
     }
+
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');
