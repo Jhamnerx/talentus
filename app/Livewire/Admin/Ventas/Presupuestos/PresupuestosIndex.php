@@ -13,6 +13,7 @@ use Livewire\WithPagination;
 
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
+use App\Models\Series;
 
 class PresupuestosIndex extends Component
 {
@@ -155,44 +156,80 @@ class PresupuestosIndex extends Component
     public function convertRecibo(Presupuestos $presupuesto)
     {
         if (!$presupuesto->recibo) {
-            $recibosController = new RecibosController();
-            $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
-            $recibo = $presupuesto->recibo()->create([
-                'clientes_id' => $presupuesto->clientes_id,
-                'numero' => $recibosController->setNextSequenceNumber(),
-                'serie' => $plantilla->series["recibo"],
-                'fecha_emision' => $date = Carbon::now(),
-                'fecha_pago' => $date = Carbon::now(),
-                'tipo_pago' => '',
-                'fecha' => $date = Carbon::now(),
-                'divisa' => $presupuesto->divisa,
-                'total' => $presupuesto->sub_total,
-                'estado' => 'COMPLETADO',
-                'pago_estado' => 'UNPAID',
-                'nota' => $presupuesto->nota,
-                'user_id' => auth()->user()->id,
+            try {
 
-            ]);
 
-            foreach ($presupuesto->detalles->toArray() as $item) {
+                $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
-                $item['recibos_id'] = $recibo->id;
-                $recibo->detalles()->create($item);
+                $serie = Series::where('tipo_comprobante_id', 10)->first();
+                $numero = $serie->correlativo + 1;
+
+                $recibo = $presupuesto->recibo()->create([
+                    'clientes_id' => $presupuesto->clientes_id,
+                    'numero' => $numero,
+                    'serie' => $serie->serie,
+                    'serie_numero' => $serie->serie . "-" . $numero,
+                    'fecha_emision' => $date = Carbon::now(),
+                    'fecha_pago' => $date = Carbon::now(),
+                    'tipo_pago' => '',
+                    'fecha' => $date = Carbon::now(),
+                    'divisa' => $presupuesto->divisa,
+                    'total' => $presupuesto->sub_total,
+                    'estado' => 'COMPLETADO',
+                    'pago_estado' => 'UNPAID',
+                    'nota' => $presupuesto->nota,
+                    'user_id' => auth()->user()->id,
+
+                ]);
+
+                foreach ($presupuesto->detalles->toArray() as $item) {
+
+                    $item['recibos_id'] = $recibo->id;
+                    $recibo->detalles()->create(
+                        [
+                            'producto' => $item['descripcion'],
+                            'descripcion' => $item['descripcion'],
+                            'cantidad' => $item['cantidad'],
+                            'precio' => $item['valor_unitario'],
+                            'total' => $item['sub_total'],
+                            'recibos_id' => $item['recibos_id'],
+                            'producto_id' => $item['producto_id'],
+                        ]
+                    );
+                }
+                //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+                $recibo->getSerie->increment('correlativo');
+
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'success',
+                    tittle: 'RECIBO CREADO',
+                    mensaje: 'Se registro el siguiente: ' . $recibo->serie_numero . "."
+                );
+
+                $this->render();
+            } catch (\Throwable $th) {
+
+                $this->dispatch(
+                    'error',
+                    tittle: 'ERROR: ',
+                    mensaje: $th->getMessage(),
+                );
             }
-
-            $this->dispatch('save-recibo', ['numero' => $recibo->numero]);
-            $this->render();
         } else {
 
-            $this->dispatch('save-error', ['mensaje' => 'El recibo de este presupuesto ya fue creado']);
+            $this->dispatch(
+                'error',
+                tittle: 'ERROR: ',
+                mensaje: 'El recibo de este presupuesto ya fue creado',
+            );
         }
     }
 
     public function openModalDelete(Presupuestos $presupuesto)
     {
         //dd($presupuesto);
-        $this->dispatch('openModalDelete', $presupuesto);
         $this->openModalDelete = true;
     }
 
