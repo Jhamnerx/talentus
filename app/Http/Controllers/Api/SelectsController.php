@@ -99,12 +99,12 @@ class SelectsController extends Controller
             )->when(
                 $request->tipo_comprobante == "01" ? true : false,
                 fn (Builder $query) => $query
-                    ->where('tipo_documento_id', 6)
+                    ->tipoDoc(6)
 
             )->when(
                 $request->tipo_comprobante == "03" ? true : false,
                 fn (Builder $query) => $query
-                    ->where('tipo_documento_id', 1)
+                    ->tipoDoc(1)
 
             )
             ->when(

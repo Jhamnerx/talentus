@@ -45,6 +45,12 @@ class Clientes extends Model
     {
         return $query->where('is_active', $status);
     }
+
+    // Scope local de activo
+    public function scopeTipoDoc($query, $tipo)
+    {
+        return $query->where('tipo_documento_id', $tipo);
+    }
     //relacion uno a muchos
 
     public function presupuestos()
