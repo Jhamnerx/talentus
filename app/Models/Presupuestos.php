@@ -39,7 +39,7 @@ class Presupuestos extends Model
         'fecha' => 'date:Y/m/d',
         'fecha_caducidad' => 'date:Y/m/d',
         'tipo_cambio' => 'decimal:2',
-        'metodo_pago_id' => 'integer',
+        'metodo_pago_id' => 'string',
         'op_gravadas' => 'decimal:2',
         'op_exoneradas' => 'decimal:2',
         'op_inafectas' => 'decimal:2',
@@ -187,6 +187,10 @@ class Presupuestos extends Model
         return $this->hasOne(Facturas::class, 'presupuestos_id');
     }
 
+    public function invoice()
+    {
+        return $this->hasOne(Ventas::class, 'presupuestos_id');
+    }
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');

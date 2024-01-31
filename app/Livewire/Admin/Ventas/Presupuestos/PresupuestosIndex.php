@@ -100,51 +100,57 @@ class PresupuestosIndex extends Component
         $this->render();
     }
 
-    public function convertInvoice(Presupuestos $presupuesto)
+    public function convertToInvoice(Presupuestos $presupuesto)
     {
-        $facturasController = new VentasFacturasController();
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
 
-        if (!$presupuesto->factura) {
-            $venta = $presupuesto->factura()->create([
-                'clientes_id' => $presupuesto->clientes_id,
-                'numero' => $facturasController->setNextSequenceNumber(),
-                'serie' => $plantilla->series["factura"],
-                'fecha_emision' => $date = Carbon::now(),
-                'fecha_vencimiento' => $date = Carbon::now(),
-                'divisa' => $presupuesto->divisa,
-                'tipo_pago' => '',
-                'estado' => 'BORRADOR',
-                'pago_estado' => 'UNPAID',
-                'fecha_pago' => NULL,
-
-
-                'sub_total' => $presupuesto->sub_total,
-                'impuesto' => $presupuesto->impuesto,
-                'total' => $presupuesto->total,
-
-
-                'sent' => false,
-                'user_id' => auth()->user()->id,
-                'nota' => $presupuesto->nota,
-            ]);
-
-            foreach ($presupuesto->detalles->toArray() as $item) {
-
-
-
-                $item['facturas_id'] = $venta->id;
-                $item['impuesto'] = "";
-                $venta->detalles()->create($item);
-            }
-
-            $this->dispatch('save-invoice', ['numero' => $venta->numero]);
-            $this->render();
-        } else {
-
-            $this->dispatch('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
-        }
+        $this->dispatch('convert-to-invoice', presupuesto: $presupuesto);
     }
+
+    // public function convertInvoice(Presupuestos $presupuesto)
+    // {
+    //     $facturasController = new VentasFacturasController();
+    //     $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
+
+    //     if (!$presupuesto->factura) {
+    //         $venta = $presupuesto->factura()->create([
+    //             'clientes_id' => $presupuesto->clientes_id,
+    //             'numero' => $facturasController->setNextSequenceNumber(),
+    //             'serie' => $plantilla->series["factura"],
+    //             'fecha_emision' => $date = Carbon::now(),
+    //             'fecha_vencimiento' => $date = Carbon::now(),
+    //             'divisa' => $presupuesto->divisa,
+    //             'tipo_pago' => '',
+    //             'estado' => 'BORRADOR',
+    //             'pago_estado' => 'UNPAID',
+    //             'fecha_pago' => NULL,
+
+
+    //             'sub_total' => $presupuesto->sub_total,
+    //             'impuesto' => $presupuesto->impuesto,
+    //             'total' => $presupuesto->total,
+
+
+    //             'sent' => false,
+    //             'user_id' => auth()->user()->id,
+    //             'nota' => $presupuesto->nota,
+    //         ]);
+
+    //         foreach ($presupuesto->detalles->toArray() as $item) {
+
+
+
+    //             $item['facturas_id'] = $venta->id;
+    //             $item['impuesto'] = "";
+    //             $venta->detalles()->create($item);
+    //         }
+
+    //         $this->dispatch('save-invoice', ['numero' => $venta->numero]);
+    //         $this->render();
+    //     } else {
+
+    //         $this->dispatch('save-error', ['mensaje' => 'La Factura de este presupuesto ya fue creada']);
+    //     }
+    // }
 
     public function convertRecibo(Presupuestos $presupuesto)
     {

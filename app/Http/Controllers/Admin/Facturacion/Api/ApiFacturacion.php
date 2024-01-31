@@ -407,6 +407,7 @@ class ApiFacturacion extends Controller
                     ->setCode('1000')
                     ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
             ]);
+
         // Envio a SUNAT.
         $see = $util->getSee();
 

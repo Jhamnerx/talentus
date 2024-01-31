@@ -11,6 +11,7 @@
 @push('modals')
     @livewire('admin.ventas.presupuestos.send')
     @livewire('admin.ventas.presupuestos.delete')
+    @livewire('admin.ventas.presupuestos.convert-to')
 @endpush
 
 @section('js')

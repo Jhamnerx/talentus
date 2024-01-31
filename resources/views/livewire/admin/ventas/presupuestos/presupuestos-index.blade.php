@@ -148,6 +148,9 @@
                                 <div class="font-semibold text-left">Cliente</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">FORMA PAGO</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Emitido el</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -213,10 +216,104 @@
                                     </div>
 
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                    <div class="font-medium text-slate-900">
                                         {{ $presupuesto->clientes->razon_social }}
                                     </div>
+                                    <div class="font-sm text-slate-700">
+                                        <p class="text-xs">
+                                            {{ $presupuesto->clientes->numero_documento }}
+                                        </p>
+
+                                    </div>
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if ($presupuesto->forma_pago == 'CREDITO')
+                                        <div>
+                                            <div class="relative inline-flex" x-data="{ open: false }">
+                                                <button class="inline-flex justify-center items-center group"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <div class="flex items-center truncate">
+                                                        <span
+                                                            class="truncate ml-2 text-sm font-medium group-hover:text-slate-800">
+                                                            {{ $presupuesto->forma_pago }}
+                                                        </span>
+                                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                                            viewBox="0 0 12 12">
+                                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                                        </svg>
+                                                    </div>
+                                                </button>
+                                                <div class="origin-top-right z-10 absolute top-full left-0 min-w-44 bg-white border border-slate-300 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+                                                    <div class="pt-0.5 pb-2 px-3 mb-1 border-b border-slate-200">
+                                                        <div class="font-medium text-slate-800">Detalle de cuotas.
+                                                        </div>
+                                                        <div class="text-sm text-slate-600">
+                                                            Adelanto:
+                                                            {{ $presupuesto->divisa == 'USD' ? "$ " . $presupuesto->adelanto : 'S/. ' . $presupuesto->adelanto }}
+                                                        </div>
+
+                                                    </div>
+                                                    <table
+                                                        class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                        <thead
+                                                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                            <tr>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    N° Cuota
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Fecha
+                                                                </th>
+                                                                <th scope="col" class="px-6 py-3">
+                                                                    Importe
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+
+                                                            @foreach ($presupuesto->detalle_cuotas as $key => $cuota)
+                                                                <tr
+                                                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                    <th scope="row"
+                                                                        class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+
+                                                                        Cuota-{{ $key + 1 }}
+
+                                                                    </th>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $cuota['fecha'] }}
+                                                                    </td>
+                                                                    <td class="px-6 py-4">
+                                                                        {{ $presupuesto->divisa == 'PEN' ? 'S/ ' : '$ ' }}
+                                                                        {{ $cuota['importe'] }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <!-- End -->
+                                        </div>
+                                    @else
+                                        <div class="font-medium text-slate-800">
+                                            {{ $presupuesto->forma_pago }}
+                                        </div>
+                                    @endif
+
+
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>{{ $presupuesto->fecha->format('Y-m-d') }}</div>
@@ -307,10 +404,10 @@
                                                         </a>
                                                     </li>
                                                     @can('convertir-cotizaciones')
-                                                        @if (!$presupuesto->factura)
+                                                        @if (!$presupuesto->invoice)
                                                             <li @click="open = false">
                                                                 <a href="javascript: void(0)"
-                                                                    wire:click.prevent="convertInvoice({{ $presupuesto->id }})"
+                                                                    wire:click.prevent="convertToInvoice({{ $presupuesto->id }})"
                                                                     class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-30"
                                                                     role="menuitem" tabindex="-1">
@@ -321,12 +418,12 @@
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                                         </path>
-                                                                    </svg> Convertir a Factura
+                                                                    </svg> Convertir a Comprobante
                                                                 </a>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <a wire:click.prevent="convertInvoice({{ $presupuesto->id }})"
+                                                                <a href="javascript: void(0)"
                                                                     class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-30"
                                                                     role="menuitem" tabindex="-1">
@@ -337,7 +434,7 @@
                                                                             stroke-linejoin="round" stroke-width="2"
                                                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                                                         </path>
-                                                                    </svg> Convertir a Factura
+                                                                    </svg> Convertir a Comprobante
                                                                 </a>
                                                             </li>
                                                         @endif

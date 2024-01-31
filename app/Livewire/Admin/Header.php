@@ -47,7 +47,7 @@ class Header extends Component
 
         if ($res != "error") {
             $this->dispatch(
-                'notify-toas',
+                'notify-toast',
                 icon: 'success',
                 tittle: 'TIPO CAMBIO CONSULTADO',
                 mensaje: 'El tipo de cambio hoy es: ' . $res

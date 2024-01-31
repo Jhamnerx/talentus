@@ -41,7 +41,7 @@ class Ventas extends Model
         'fecha_hora_emision' => 'datetime',
         'fecha_vencimiento' => 'date',
         'tipo_cambio' => 'decimal:2',
-        'metodo_pago_id' => 'integer',
+        'metodo_pago_id' => 'string',
         'op_gravadas' => 'decimal:2',
         'op_exoneradas' => 'decimal:2',
         'op_inafectas' => 'decimal:2',

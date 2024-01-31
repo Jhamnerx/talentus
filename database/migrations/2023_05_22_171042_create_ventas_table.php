@@ -74,7 +74,8 @@ return new class extends Migration
             $table->longText('clase')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
-
+            $table->unsignedBigInteger('presupuestos_id')->nullable();
+            $table->foreign('presupuestos_id')->references('id')->on('presupuestos')->onDelete('set null');
             $table->timestamps();
         });
 
