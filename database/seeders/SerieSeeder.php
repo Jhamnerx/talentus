@@ -75,6 +75,13 @@ class SerieSeeder extends Seeder
                 'empresa_id' => 1,
             ],
 
+            [
+                'tipo_comprobante_id' => '10',
+                'serie' => 'R001',
+                'correlativo' => '0',
+                'empresa_id' => 1,
+            ],
+
         ];
         $series2 = [
             [
@@ -134,6 +141,12 @@ class SerieSeeder extends Seeder
             [
                 'tipo_comprobante_id' => '09',
                 'serie' => 'T001',
+                'correlativo' => '0',
+                'empresa_id' => 2,
+            ],
+            [
+                'tipo_comprobante_id' => '10',
+                'serie' => 'R001',
                 'correlativo' => '0',
                 'empresa_id' => 2,
             ],

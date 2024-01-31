@@ -50,6 +50,11 @@ class tipoComprobanteSeeder extends Seeder
                 'slug' => 'guia-remision'
             ],
             [
+                'codigo' => '10',
+                'descripcion' => 'RECIBO',
+                'slug' => 'recibo'
+            ],
+            [
                 'codigo' => 'RA',
                 'descripcion' => 'RESUMEN ANULACIONES',
                 'slug' => 'resumen-anulaciones'
