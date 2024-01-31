@@ -337,7 +337,11 @@ class Emitir extends Component
             }
         } catch (\Throwable $th) {
 
-            $this->dispatch('error-sunat', $th);
+            $this->dispatch(
+                'error',
+                tittle: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
     }
 
