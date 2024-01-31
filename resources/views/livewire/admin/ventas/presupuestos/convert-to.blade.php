@@ -1,4 +1,4 @@
-<x-form.modal.card title="Convertir a Comprobante {{ $presupuesto ? $presupuesto->serie_correlativo : '' }}"
+<x-form.modal.card title="Convertir a Comprobante COTIZACION: {{ $presupuesto ? $presupuesto->serie_correlativo : '' }}"
     wire:model.live="modalConvert" align="center">
     @if ($presupuesto)
         <div class="overflow-x-auto">
@@ -185,7 +185,7 @@
         <div class="col-span-12 md:col-span-4 mb-2">
 
             <x-form.select label="Tipo Comprobante:" id="tipo_comprobante_id" name="tipo_comprobante_id"
-                :options="[['name' => 'FACTURA', 'id' => '01'], ['name' => 'BOLETA', 'id' => '03']]" option-label="name" option-value="id" wire:model.live="tipo_comprobante_id"
+                :options="$docs" option-label="name" option-value="id" wire:model.live="tipo_comprobante_id"
                 :clearable="false" icon="document-search" />
 
         </div>
@@ -217,8 +217,8 @@
             @enderror
 
         </div>
-        {{ $serie_correlativo }}
-        {{ json_encode($errors->all()) }}
+        {{-- {{ $serie_correlativo }}
+        {{ json_encode($errors->all()) }} --}}
     </div>
 
     <x-slot name="footer">

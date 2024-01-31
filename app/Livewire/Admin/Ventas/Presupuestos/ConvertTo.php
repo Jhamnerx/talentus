@@ -21,6 +21,7 @@ class ConvertTo extends Component
     public Presupuestos $presupuesto;
     public $tipo_comprobante_id = '01', $serie, $correlativo, $min_correlativo, $serie_correlativo;
 
+    public $docs = [];
     public function render()
     {
         return view('livewire.admin.ventas.presupuestos.convert-to');
@@ -28,7 +29,7 @@ class ConvertTo extends Component
 
     public function mount()
     {
-        $this->setSerieMount();
+        //$this->setSerieMount();
     }
 
     #[On('convert-to-invoice')]
@@ -36,18 +37,46 @@ class ConvertTo extends Component
     {
         $this->presupuesto = $presupuesto;
         $this->modalConvert = true;
+        $this->verifyTipoDocumento($presupuesto->clientes->tipo_documento_id);
+    }
+
+    public function verifyTipoDocumento($tipo_doc)
+    {
+
+        if ($tipo_doc == '6') {
+
+            $this->docs = [
+                [
+                    'name' => 'FACTURA',
+                    'id' => '01'
+                ]
+            ];
+            $this->tipo_comprobante_id = '01';
+            $this->setSerieMount('01');
+        } else {
+
+            $this->docs = [
+                [
+                    'name' => 'BOLETA',
+
+                    'id' => '03'
+                ]
+            ];
+            $this->tipo_comprobante_id = '03';
+            $this->setSerieMount('03');
+        }
     }
 
     public function updatedTipoComprobanteId($value)
     {
 
-        $this->setSerieMount();
+        $this->setSerieMount($this->tipo_comprobante_id);
     }
 
 
-    public function setSerieMount()
+    public function setSerieMount($tipo_comprobante_id)
     {
-        $serie = Series::where('tipo_comprobante_id', $this->tipo_comprobante_id)->first();
+        $serie = Series::where('tipo_comprobante_id', $tipo_comprobante_id)->first();
         $this->serie = $serie->serie;
         $this->correlativo = $serie->correlativo + 1;
         $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
