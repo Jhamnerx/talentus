@@ -205,7 +205,7 @@
         {{-- CORRELATIVO --}}
         <div class="col-span-12 md:col-span-4 xl:col-span-4">
 
-            <x-form.inputs.number id="correlativo" name="correlativo" wire:model.live="correlativo"
+            <x-form.inputs.number id="correlativo" readonly name="correlativo" wire:model.live="correlativo"
                 label="Correlativo:" />
 
         </div>
