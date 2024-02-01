@@ -28,20 +28,6 @@ class PresupuestoController extends Controller
         return view('admin.ventas.presupuestos.create');
     }
 
-    public static function setNextSequenceNumber()
-    {
-        $plantilla = plantilla::first();
-        $id = IdGenerator::generate(['table' => 'presupuestos', 'field' => 'numero', 'length' => 8, 'prefix' => $plantilla->series["cotizacion"] . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
-        return $id;
-    }
-
-
-    public function show(Presupuestos $presupuesto)
-    {
-        $plantilla = plantilla::where('empresa_id', session('empresa'))->first();
-        return view('admin.ventas.presupuestos.show', compact('presupuesto', 'plantilla'));
-    }
-
     public function edit(Presupuestos $presupuesto)
     {
 

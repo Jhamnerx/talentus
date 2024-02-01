@@ -118,11 +118,10 @@ Route::resource('compras-factura', ComprasFacturasController::class)->names('adm
 
 
 
-// VENTAS
+// VENTAS PRESUPUESTOS
 Route::controller(PresupuestoController::class)->group(function () {
     Route::get('presupuestos', 'index')->name('admin.ventas.presupuestos.index');
     Route::get('presupuestos/crear', 'create')->name('admin.ventas.presupuestos.create');
-    Route::get('presupuestos/{presupuesto}', 'show')->name('admin.ventas.presupuestos.show');
     Route::get('presupuestos/{presupuesto}/editar', 'edit')->name('admin.ventas.presupuestos.edit');
 });
 
