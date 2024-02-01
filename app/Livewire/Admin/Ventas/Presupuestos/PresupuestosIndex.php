@@ -25,10 +25,6 @@ class PresupuestosIndex extends Component
     #[Url(except: 'null')]
     public $estado = 'null';
 
-
-    public $openModalDelete = false;
-    public $modalOpenSend = false;
-
     protected $listeners = [
         'render'
     ];
@@ -229,8 +225,7 @@ class PresupuestosIndex extends Component
 
     public function openModalDelete(Presupuestos $presupuesto)
     {
-        //dd($presupuesto);
-        $this->openModalDelete = true;
+        $this->dispatch('open-modal-delete', presupuesto: $presupuesto);
     }
 
 

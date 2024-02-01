@@ -215,19 +215,17 @@
                     {{ $message }}
                 </p>
             @enderror
-
-        </div>
-        {{-- {{ $serie_correlativo }}
+            {{-- {{ $serie_correlativo }}
         {{ json_encode($errors->all()) }} --}}
-    </div>
-
-    <x-slot name="footer">
-        <div class="flex justify-end gap-x-4">
-
-            <div class="flex">
-                <x-form.button flat label="Cancelar" x-on:click="close" />
-                <x-form.button primary label="Guardar" wire:click.prevent="save" />
-            </div>
         </div>
-    </x-slot>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+
+                <div class="flex">
+                    <x-form.button flat label="Cancelar" x-on:click="close" />
+                    <x-form.button primary label="Guardar" wire:click.prevent="save" />
+                </div>
+            </div>
+        </x-slot>
 </x-form.modal.card>
