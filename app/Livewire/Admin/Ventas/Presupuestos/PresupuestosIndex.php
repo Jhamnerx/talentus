@@ -232,7 +232,6 @@ class PresupuestosIndex extends Component
     public function modalOpenSend(Presupuestos $presupuesto)
     {
 
-
-        $this->dispatch('modalOpenSend', $presupuesto);
+        $this->dispatch('open-modal-send', presupuesto: $presupuesto);
     }
 }

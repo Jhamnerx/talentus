@@ -84,9 +84,10 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             @click="modalOpenSend = false" wire:click="closeModal">Cancelar</button>
-                        <button wire:loading.attr="disabled" wire:target="sendPresupuesto" x-bind:disabled="estado"
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-300 text-white"
-                            wire:click="sendPresupuesto">Enviar</button>
+
+
+                        <x-form.button wire:click="sendPresupuesto" x-bind:disabled="estado"
+                            spinner="sendPresupuesto" loading-delay="short" primary label="Enviar" />
                     </div>
                 </div>
             </div>

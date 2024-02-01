@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Ventas\Presupuestos;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Models\Presupuestos;
 use Exception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Send extends Component
@@ -18,9 +19,6 @@ class Send extends Component
     public $from = "talentus@talentustechnology.com", $to, $asunto = "", $body;
 
 
-    protected $listeners = [
-        'modalOpenSend' => 'openModal'
-    ];
 
     public function resetPropiedades()
     {
@@ -36,6 +34,7 @@ class Send extends Component
         return view('livewire.admin.ventas.presupuestos.send');
     }
 
+    #[On('open-modal-send')]
     public function openModal(Presupuestos $presupuesto)
     {
 
@@ -52,8 +51,6 @@ class Send extends Component
 
             $this->disabled = false;
         }
-        // dd($presupuesto);
-
     }
     public function closeModal()
     {
@@ -65,20 +62,22 @@ class Send extends Component
     public function sendPresupuesto()
     {
 
-        //dd($this->presupuesto);
         $data = array(
             'asunto' => $this->asunto,
             'body' => $this->body,
         );
-        //dd($this->presupuesto);
 
         try {
 
             $pdfPresupuesto = new PresupuestoPdfController();
             $pdfPresupuesto->sendToMail($this->presupuesto, $data);
         } catch (Exception $e) {
-            dd($e);
-            $e->getMessage();
+
+            $this->dispatch(
+                'error',
+                tittle: 'ERROR EN FUNCION: ',
+                mensaje: $e->getMessage(),
+            );
         } finally {
 
             $this->modalOpenSend = false;
