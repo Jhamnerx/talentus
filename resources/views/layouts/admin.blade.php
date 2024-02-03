@@ -210,7 +210,7 @@
             Swal.fire({
                 icon: 'success',
                 title: 'COTIZACION REGISTRADA',
-                text: '{{ session('venta-registrada') }}',
+                text: '{{ session('cotizacion-registrada') }}',
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"
 
@@ -219,5 +219,19 @@
     </script>
 @endif
 
+@if (session('cotizacion-actualizada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'COTIZACION REGISTRADA',
+                text: '{{ session('cotizacion-actualizada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
 
 </html>

@@ -1,4 +1,5 @@
 <div class="overflow-x-auto border border-violet-400 rounded-lg">
+    {{ json_encode($items) }}
     <table class="w-full">
         <!-- Table header -->
         <thead

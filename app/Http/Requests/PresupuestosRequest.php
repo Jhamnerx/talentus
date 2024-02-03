@@ -37,7 +37,6 @@ class PresupuestosRequest extends FormRequest
             'op_exoneradas' => 'required',
             'op_inafectas' => 'required',
             'op_gratuitas' => 'required',
-            'igv_op' => 'nullable',
             'descuento' => 'required',
             'tipo_descuento' => 'required',
             'descuento_factor' => 'nullable',
@@ -88,9 +87,9 @@ class PresupuestosRequest extends FormRequest
 
         if ($presupuesto) {
 
-            $rules['numero'] = [
+            $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('presupuestos', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('presupuestos', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
                     ->ignore($presupuesto->id),
 
             ];
