@@ -216,19 +216,18 @@
                 </p>
             @enderror
 
-            {{ json_encode($errors->all()) }}
         </div>
+        {{-- {{ $serie_correlativo }}
+        {{ json_encode($errors->all()) }} --}}
+    </div>
 
-        <x-slot name="footer">
-            <div class="flex justify-end gap-x-4">
+    <x-slot name="footer">
+        <div class="flex justify-end gap-x-4">
 
-                <div class="flex">
-                    <x-form.button flat label="Cancelar" wire:click='cancelar' />
-
-
-                    <x-form.button type="button" wire:click="converToInvoice" spinner="converToInvoice" primary
-                        label="Guardar" />
-                </div>
+            <div class="flex">
+                <x-form.button flat label="Cancelar" x-on:click="close" />
+                <x-form.button primary label="Guardar" wire:click.prevent="save" />
             </div>
-        </x-slot>
+        </div>
+    </x-slot>
 </x-form.modal.card>

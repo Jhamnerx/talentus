@@ -108,7 +108,7 @@ class ConvertTo extends Component
         $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
     }
 
-    public function converToInvoice()
+    public function save()
     {
 
         $datos = $this->validate(
