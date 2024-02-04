@@ -192,7 +192,7 @@
                         <tbody class="divide-y divide-gray-200">
 
                             @foreach ($factura->detalles as $detalle)
-                                <tr>
+                                <tr wire:key="detallec-{{ $detalle->id }}">
                                     <td class="px-6 py-5 whitespace-nowrap space-x-1 flex items-center">
                                         <div>
                                             <p> {{ $detalle->producto }} </p>

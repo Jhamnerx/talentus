@@ -9,9 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 
 use App\Models\Presupuestos;
-use function PHPSTORM_META\map;
 use Illuminate\Validation\Rule;
-use PhpParser\Node\Stmt\TryCatch;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
 class ConvertTo extends Component
@@ -110,7 +108,7 @@ class ConvertTo extends Component
         $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
     }
 
-    public function save()
+    public function converToInvoice()
     {
 
         $datos = $this->validate(
@@ -233,5 +231,12 @@ class ConvertTo extends Component
                 'serie_correlativo.unique' => 'Esta serie y correlativo ya existen',
             ]
         );
+    }
+
+
+    public function cancelar()
+    {
+
+        dd($this->presupuesto);
     }
 }

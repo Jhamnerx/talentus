@@ -168,7 +168,7 @@
                         <!-- Row -->
 
                         @foreach ($presupuestos as $presupuesto)
-                            <tr>
+                            <tr wire:key="presupuesto-{{ $presupuesto->id }}">
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
