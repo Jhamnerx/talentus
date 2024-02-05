@@ -448,13 +448,18 @@
                 </div>
             </div>
 
-            <div class="px-4 py-3 text-right sm:px-6">
+            <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
 
-                <x-form.button wire:click="actualizarPresupuesto" spinner="actualizarPresupuesto" positive
-                    label="Actualizar" />
+                <div class="grid gap-2 content-end">
 
+                    <div class="text-center md:text-right">
+
+                        <x-form.button wire:click.prevent="actualizarPresupuesto" spinner="actualizarPresupuesto"
+                            label="ACTUALIZAR COTIZACION" black md icon="shopping-cart" />
+                    </div>
+
+                </div>
             </div>
-
         </div>
 
     </div>
