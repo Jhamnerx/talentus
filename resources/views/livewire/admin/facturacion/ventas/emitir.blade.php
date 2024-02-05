@@ -344,7 +344,7 @@
                 </div>
             </div>
 
-            <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-10">
+            <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
 
                 <div class="grid {{ $tipo_comprobante_id == '02' ? '' : 'sm:grid-cols-2' }}  gap-2 content-end">
                     @if ($tipo_comprobante_id == '01' || $tipo_comprobante_id == '03')
