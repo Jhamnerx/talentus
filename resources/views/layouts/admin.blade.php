@@ -224,7 +224,7 @@
         $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
-                title: 'COTIZACION REGISTRADA',
+                title: 'COTIZACION ACTUALIZADA',
                 text: '{{ session('cotizacion-actualizada') }}',
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"
