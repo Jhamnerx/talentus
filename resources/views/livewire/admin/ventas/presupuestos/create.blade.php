@@ -447,7 +447,7 @@
                 </div>
             </div>
 
-            {{ json_encode($errors->all()) }}
+
             <div class="px-4 py-3 text-right sm:px-6">
                 <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
                     wire:click.prevent="save">Guardar</button>
