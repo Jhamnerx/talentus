@@ -61,6 +61,11 @@ class Recibos extends Model
         return $query->where('pago_estado', '=', $this::UNPAID);
     }
 
+    public function scopeEstado($query, $estado)
+    {
+        return $query->where('pago_estado', '=', $estado);
+    }
+
     public function scopeCompletado($query)
     {
         return $query->where('estado', '=', $this::COMPLETADO);
