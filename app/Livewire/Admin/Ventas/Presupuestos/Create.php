@@ -310,7 +310,6 @@ class Create extends Component
             $presupuesto->getSerie->increment('correlativo');
 
             session()->flash('cotizacion-registrada', 'Cotizacion registrada');
-
             $this->redirectRoute('admin.ventas.presupuestos.index');
         } catch (\Throwable $th) {
 

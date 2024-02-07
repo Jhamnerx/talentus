@@ -234,4 +234,19 @@
     </script>
 @endif
 
+@if (session('recibo-registrado'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'GUARDADO',
+                text: '{{ session('recibo-registrado') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+
 </html>

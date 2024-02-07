@@ -10,62 +10,45 @@
                     <div class="font-semibold text-left">Descripción</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-semibold text-left">Cantidad</div>
+                    <div class="font-semibold text-center">Cantidad</div>
                 </th>
 
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-semibold text-left">Precio</div>
+                    <div class="font-semibold text-center">Precio</div>
                 </th>
 
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-semibold text-left">Importe</div>
+                    <div class="font-semibold text-center">Importe</div>
                 </th>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-semibold text-left">Acciones</div>
+                    <div class="font-semibold text-center">Acciones</div>
                 </th>
-
             </tr>
         </thead>
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-slate-200 listaItems">
 
             <!-- Row -->
-            <tr class="main bg-slate-50">
+            <tr class="main bg-sky-100">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <textarea wire:model.live="selected.producto" rows="5" class="form-input descripcion" placeholder="Producto"></textarea>
-                    @if ($errors->has('selected.producto'))
-                        <p class="mt-2  text-pink-600 text-sm">
-                            {{ $errors->first('selected.producto') }}
-                        </p>
-                    @endif
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <textarea wire:model.live="selected.descripcion" rows="5" class="form-input descripcion" placeholder="Descripción"></textarea>
-                    @if ($errors->has('selected.descripcion'))
-                        <p class="mt-2  text-pink-600 text-sm">
-                            {{ $errors->first('selected.descripcion') }}
-                        </p>
-                    @endif
+
+                    <x-form.textarea required wire:model.live="selected.producto" />
+
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <input wire:model.live="selected.cantidad" type="text" min="1" value="1" step="1"
-                        class="form-input qyt" placeholder="Cantidad">
-                    @if ($errors->has('selected.cantidad'))
-                        <p class="mt-2  text-pink-600 text-sm">
-                            {{ $errors->first('selected.cantidad') }}
-                        </p>
-                    @endif
+                    <x-form.textarea required wire:model.live="selected.descripcion" />
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                    <x-form.inputs.number required wire:model.live="selected.cantidad" min="1" step="1"
+                        placeholder="45" />
+
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <input wire:model.live="selected.precio" type="number" min="0" step="0.1"
-                        class="form-input importe" placeholder="Importe">
-                    @if ($errors->has('selected.precio'))
-                        <p class="mt-2  text-pink-600 text-sm">
-                            {{ $errors->first('selected.precio') }}
-                        </p>
-                    @endif
+
+                    <x-form.inputs.currency placeholder="100.00" wire:model.live="selected.precio" />
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -93,36 +76,28 @@
                     Debes añadir al menos 1 item
                 </p>
             </tr>
-
             {{-- fila para añadir --}}
             @if ($items->count() > 0)
                 @foreach ($items->all() as $clave => $item)
                     <tr wire:key="item-{{ $clave }}">
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model.live="items.{{ $clave }}.producto" class="form-textarea" rows="4">
 
-                            </textarea>
-                            @if ($errors->has('items.' . $clave . '.producto'))
-                                <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.producto') }}
-                                </p>
-                            @endif
+                            <x-form.textarea required wire:model.live="items.{{ $clave }}.producto" />
+
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>
+
+                            <x-form.textarea required wire:model.live="items.{{ $clave }}.descripcion" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input required type="number" wire:model.live="items.{{ $clave }}.cantidad"
-                                min="1" step="0.1" class="form-input cantidad" placeholder="Cantidad">
-                            @if ($errors->has('items.' . $clave . '.cantidad'))
-                                <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.cantidad') }}
-                                </p>
-                            @endif
+                            <x-form.inputs.number wire:model.live="items.{{ $clave }}.cantidad" min="1"
+                                step="1" placeholder="Cantidad" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input required type="number" required min="1" step="0.1"
-                                wire:model.live="items.{{ $clave }}.precio" class="form-input precio">
+                            <div class="font-normal text-center">
+                                {{ $items[$clave]['precio'] }}
+                            </div>
+
                             @if ($errors->has('items.' . $clave . '.precio'))
                                 <p class="mt-2  text-pink-600 text-sm">
                                     {{ $errors->first('items.' . $clave . '.precio') }}
@@ -130,20 +105,23 @@
                             @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <input type="text" wire:model.live="items.{{ $clave }}.total"
-                                class="form-input importe subtotal" readonly>
+                            <div class="font-normal text-center">
+                                {{ $items[$clave]['total'] }}
+                            </div>
+
+                            @if ($errors->has('items.' . $clave . '.total'))
+                                <p class="mt-2  text-pink-600 text-sm">
+                                    {{ $errors->first('items.' . $clave . '.total') }}
+                                </p>
+                            @endif
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                             <div class="space-x-1">
-                                <button type="button" wire:click.prevent="eliminarProducto('{{ $clave }}')"
-                                    class="text-rose-500 hover:text-rose-600 rounded-full">
-                                    <span class="sr-only">Delete</span>
-                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                        <path
-                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                    </svg>
-                                </button>
+
+                                <x-form.button label="Eliminar"
+                                    wire:click.prevent="eliminarProducto('{{ $clave }}')" outline red sm
+                                    icon="trash" />
+
                             </div>
                         </td>
                     </tr>
