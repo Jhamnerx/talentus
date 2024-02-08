@@ -116,6 +116,10 @@ class Recibos extends Model
         return $this->morphMany(Payments::class, 'paymentable');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
 
     public static function createItems($recibo, $reciboItems)
