@@ -19,7 +19,7 @@
             x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
             x-cloak>
 
-            <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-1/3 max-h-full"
+            <div class="bg-white rounded shadow-lg overflow-auto w-full md:w-3/4 lg:w-6/12 xl:w-6/12 2xl:w-1/3 max-h-full min-h-96"
                 @keydown.escape.window="openModalReporte = false">
                 <!-- Modal header -->
                 <div class="px-5 py-3 border-b border-slate-200">
@@ -43,56 +43,16 @@
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-6 gap-2">
-                                <label
-                                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                                    <div>Fecha de Inicial: <span class="text-sm text-red-500"> * </span></div>
+                                <x-form.datetime-picker label="Fecha Inicio:" id="fecha_inicio" name="fecha_inicio"
+                                    wire:model.live="fecha_inicio" :min="now()->subDays(90)" :max="now()->addDays(30)" without-time
+                                    parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
 
-                                </label>
-                                <div class="relative">
-                                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <input maxlength="10" name="fecha_inicio" wire:model.live='fecha_inicio' type="text"
-                                        class="form-input valid:border-emerald-300
-                                    required:border-rose-300 invalid:border-rose-300 peer fechaInicio  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                        placeholder="Selecciona la fecha">
-                                </div>
-                                @error('fecha_inicio')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
                             </div>
                             <div class="col-span-6 gap-2">
-                                <label
-                                    class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                                    <div>Fecha de Fin: <span class="text-sm text-red-500"> * </span></div>
 
-                                </label>
-                                <div class="relative">
-                                    <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                            viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                    </div>
-                                    <input maxlength="10" name="fecha_fin" wire:model.live="fecha_fin" type="text"
-                                        class="form-input valid:border-emerald-300
-                                    required:border-rose-300 invalid:border-rose-300 peer fechaFin  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
-                                        placeholder="Selecciona la fecha">
-                                </div>
-                                @error('fecha_fin')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                                <x-form.datetime-picker label="Fecha de Fin:" id="fecha_fin" name="fecha_fin"
+                                    wire:model.live="fecha_fin" :min="now()->subDays(90)" :max="now()->addDays(30)" without-time
+                                    parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                             </div>
 
                             <div class="col-span-12 mt-2">
@@ -106,32 +66,18 @@
                                 <div class="flex flex-wrap items-center -m-3">
 
                                     <div class="m-3">
-                                        <!-- Start -->
-                                        <label class="flex items-center">
-                                            <input checked type="radio" wire:model.live="estado" name="estado"
-                                                value="PAID" class="form-radio" />
-                                            <span class="text-sm ml-2">PAGADO</span>
-                                        </label>
-                                        <!-- End -->
+                                        <x-form.radio id="lg" lg wire:model.live="estado" value="PAID"
+                                            name="estado" label="PAGADO" />
+
                                     </div>
                                     <div class="m-3">
-                                        <!-- Start -->
-                                        <label class="flex items-center">
-                                            <input type="radio" wire:model.live="estado" name="estado" value="UNPAID"
-                                                class="form-radio" />
-                                            <span class="text-sm ml-2">POR PAGAR</span>
-                                        </label>
+
+                                        <x-form.radio id="lg" lg wire:model.live="estado" value="UNPAID"
+                                            name="estado" label="POR PAGAR" />
                                         <!-- End -->
                                     </div>
 
                                 </div>
-
-
-                                @error('tipo_pago')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
 
                             </div>
                         </div>
@@ -143,8 +89,9 @@
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                             wire:click="closeModal">Cerrar</button>
-                        <button wire:click.prevent='ExportReport'
-                            class="btn-sm bg-emerald-500 hover:bg-emerald-600 text-white">Exportar</button>
+
+                        <x-form.button wire:click="ExportReport" spinner="ExportReport" positive label="Exportar" />
+
                     </div>
                 </div>
             </div>
