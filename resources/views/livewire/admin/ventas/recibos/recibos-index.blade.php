@@ -167,15 +167,15 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if ($recibo->estado == 'BORRADOR')
                                         <div class="font-medium text-red-500">
-                                            <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                #{{ $recibo->serie_numero }}
-                                            </a>
+
+                                            #{{ $recibo->serie_numero }}
+
                                         </div>
                                     @else
                                         <div class="font-medium text-sky-600">
-                                            <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                                #{{ $recibo->serie_numero }}
-                                            </a>
+
+                                            #{{ $recibo->serie_numero }}
+
                                         </div>
                                     @endif
 
@@ -302,27 +302,6 @@
                                                                     </path>
                                                                 </svg>
                                                                 Eliminar
-                                                            </a>
-                                                        </li>
-                                                    @endcan
-                                                    @can('ver-recibos')
-                                                        <li>
-                                                            <a href="{{ route('admin.ventas.recibos.show', $recibo) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-29"
-                                                                role="menuitem" tabindex="-1"><svg
-                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                    viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-                                                                    </path>
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                                                    </path>
-                                                                </svg> Ver
                                                             </a>
                                                         </li>
                                                     @endcan

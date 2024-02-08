@@ -137,9 +137,9 @@ Route::controller(VentasFacturasController::class)->group(function () {
 
 
 Route::controller(RecibosController::class)->group(function () {
-    Route::get('recibos', 'index')->name('aadmin.ventas.recibosindex');
-    Route::get('recibos/crear', 'create')->name('aadmin.ventas.reciboscreate');
-    Route::get('recibos/{recibo}/editar', 'edit')->name('aadmin.ventas.recibosedit');
+    Route::get('recibos', 'index')->name('admin.ventas.recibos.index');
+    Route::get('recibos/crear', 'create')->name('admin.ventas.recibos.create');
+    Route::get('recibos/{recibo}/editar', 'edit')->name('admin.ventas.recibos.edit');
 });
 
 
