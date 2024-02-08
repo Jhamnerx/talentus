@@ -31,32 +31,8 @@ class RecibosController extends Controller
     }
 
 
-    public function store(RecibosRequest $request)
-    {
-        $factura = Recibos::create($request->all());
-
-        Recibos::createItems($factura, $request->items);
-
-        return redirect()->route('admin.ventas.recibos.index')->with('store', 'El Recibo se guardo con exito');
-    }
-
-    public function show(Recibos $recibo)
-    {
-        return view('admin.ventas.recibos.show', compact('recibo'));
-    }
-
     public function edit(Recibos $recibo)
     {
         return view('admin.ventas.recibos.edit', compact('recibo'));
-    }
-
-    public function update(RecibosRequest $request, Recibos $recibo)
-    {
-        $recibo->update($request->all());
-        $recibo->detalles()->delete();
-
-        Recibos::createItems($recibo, $request->items);
-
-        return redirect()->route('admin.ventas.recibos.index')->with('update', 'El recibo se actualizo con exito');
     }
 }
