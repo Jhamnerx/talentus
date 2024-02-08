@@ -77,6 +77,7 @@
                 </p>
             </tr>
             {{-- fila para añadir --}}
+            {{ json_encode($items) }}
             @if ($items->count() > 0)
                 @foreach ($items->all() as $clave => $item)
                     <tr wire:key="item-{{ $clave }}">

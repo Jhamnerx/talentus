@@ -248,5 +248,19 @@
         });
     </script>
 @endif
+@if (session('recibo-actualizo'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'ACTUALIZADO',
+                text: '{{ session('recibo-actualizo') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
 
 </html>
