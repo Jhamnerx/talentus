@@ -48,129 +48,12 @@
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
-        <!-- Left side -->
-        <div class="mb-4 sm:mb-0">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $total }}</span></button>
-                </li>
-            </ul>
-        </div>
 
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-            <!-- Eliminar button -->
-            <div class="table-items-action hidden">
-                <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> Items Seleccionados</div>
-                    <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
-                </div>
-            </div>
 
-            <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                        <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Hoy</span>
-                        </button>
-                        <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 7 días</span>
-                        </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Todos</span>
-                        </button>
 
-                    </div>
-                </div>
-            </div>
-
-            <!-- Filter button -->
-            <div class="relative inline-flex">
-                <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                    <span class="sr-only">Filtro</span><wbr>
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                        <path
-                            d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
-                    </svg>
-                </button>
-            </div>
         </div>
 
     </div>
@@ -180,11 +63,11 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Contratos <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $contratos->total() }}</span>
             </h2>
         </header>
 
-        <div x-data="handleSelect">
+        <div>
 
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
@@ -197,14 +80,13 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                     </label>
                                 </div>
                             </th>
                             @can('descargar-contrato')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Descargar</div>
+                                    <div class="font-semibold text-center">Descargar</div>
                                 </th>
                             @endcan
 
@@ -232,6 +114,9 @@
                                 <div class="font-semibold text-left">Emitido el</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Emitido por</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Acciones</div>
                             </th>
                         </tr>
@@ -246,14 +131,13 @@
                                         <div class="flex items-center">
                                             <label class="inline-flex">
                                                 <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
+                                                <input class="table-item form-checkbox" type="checkbox" />
                                             </label>
                                         </div>
                                     </td>
                                     @can('descargar-contrato')
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="space-x-1">
+                                            <div class="space-x-1 text-center">
                                                 <a target="_blank" href="{{ route('admin.pdf.contratos', $contrato) }}">
                                                     <button class="text-talentus-200 hover:text-talentus-100 rounded-full">
                                                         <span class="sr-only">Descargar</span>
@@ -288,9 +172,9 @@
 
 
                                                 </span>
-                                                <svg class="w-4 h-4 fill-current text-slate-400" viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
+                                                <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                                    viewBox="0 0 12 12">
+                                                    <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                                 </svg>
                                             </button>
                                             <div
@@ -399,6 +283,9 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $contrato->created_at->format('d-m-Y') }}</div>
                                     </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $contrato->user->name }}</div>
+                                    </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">
                                             <div class="relative inline-block h-full text-left">
@@ -462,27 +349,6 @@
                                                             </li>
                                                         @endcan
 
-                                                        @can('ver-contrato')
-                                                            <li>
-                                                                <a href="{{ route('admin.ventas.contratos.show', $contrato) }}"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-29"
-                                                                    role="menuitem" tabindex="-1"><svg
-                                                                        xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
-                                                                        </path>
-                                                                        <path stroke-linecap="round"
-                                                                            stroke-linejoin="round" stroke-width="2"
-                                                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
-                                                                        </path>
-                                                                    </svg> Ver
-                                                                </a>
-                                                            </li>
-                                                        @endcan
 
                                                         @can('enviar-contrato')
                                                             <li>

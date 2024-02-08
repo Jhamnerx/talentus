@@ -6,6 +6,7 @@ use App\Models\Cobros;
 use App\Models\Contratos;
 use Carbon\Carbon;
 use Exception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,85 +14,29 @@ class Index extends Component
 {
     use WithPagination;
     public $search;
-    public $from = '';
-    public $to = '';
 
-    public $openModalDelete = false;
-    public $modalOpenSend = false;
 
-    protected $listeners = [
-        'updateTable' => 'render',
-    ];
-
+    #[On('updateTable')]
     public function render()
     {
-        $desde = $this->from;
-        $hasta = $this->to;
 
         $contratos = Contratos::whereHas('cliente', function ($query) {
             $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })->with(['detalle', 'detalle.vehiculos'])->with('cliente')
+        })->with(['detalle', 'detalle.vehiculos', 'cliente'])
             ->orWhere('fecha', 'LIKE', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
-
-        $total = Contratos::all()->count();
-        return view('livewire.admin.ventas.contratos.index', compact('contratos', 'total'));
-
-        if (!empty($desde)) {
-
-
-            $contratos = Contratos::whereRaw(
-                "(created_at >= ? AND created_at <= ?)",
-                [
-                    $desde . " 00:00:00",
-                    $hasta . " 23:59:59"
-                ]
-            )->whereRaw(
-                "(fecha like ?)",
-                [
-                    '%' . $this->search . '%',
-                ]
-            )
-                ->orderBy('id', 'desc')
-                ->paginate(10);
-        }
+        return view('livewire.admin.ventas.contratos.index', compact('contratos'));
     }
-    public function filter($dias)
-    {
-        switch ($dias) {
-            case '1':
-                $this->from = date('Y-m-d');
-                $this->to = date('Y-m-d');
-                break;
-            case '7':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 7 days"));
-                $this->to = date('Y-m-d');
-                break;
-            case '30':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 month"));
-                $this->to = date('Y-m-d');
-                break;
-            case '12':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 year"));
-                $this->to = date('Y-m-d');
-                break;
-            case '0':
-                $this->from = '';
-                $this->to = '';
-                break;
-        }
-    }
+
     public function openModalDelete(Contratos $contrato)
     {
 
         $this->dispatch('openModalDelete', $contrato);
-        $this->openModalDelete = true;
     }
     public function modalOpenSend(Contratos $contrato)
     {
-
 
         $this->dispatch('modalOpenSend', $contrato);
     }
@@ -117,10 +62,21 @@ class Index extends Component
                     'observacion' => "",
                 ]);
             }
-            $this->dispatch('create-cobro');
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'COBRO REGISTRADO',
+                mensaje: 'se creo el cobro de este contrato',
+            );
         } catch (Exception $e) {
 
-            $this->dispatch('error-cobro');
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL CREAR',
+                mensaje: $e->getMessage(),
+            );
         }
     }
 }
