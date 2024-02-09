@@ -126,7 +126,7 @@
                         <!-- Row -->
                         @if ($contratos->count())
                             @foreach ($contratos as $contrato)
-                                <tr>
+                                <tr wire:key="c-{{ $contrato->id }}">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center">
                                             <label class="inline-flex">

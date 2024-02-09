@@ -16,7 +16,7 @@ class Index extends Component
     public $search;
 
 
-    #[On('updateTable')]
+    #[On('update-table')]
     public function render()
     {
 
@@ -32,9 +32,10 @@ class Index extends Component
 
     public function openModalDelete(Contratos $contrato)
     {
-
-        $this->dispatch('openModalDelete', $contrato);
+        $this->dispatch('open-modal-delete', $contrato);
     }
+
+
     public function modalOpenSend(Contratos $contrato)
     {
 

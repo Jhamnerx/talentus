@@ -40,9 +40,9 @@
                         <div class="flex flex-wrap justify-end space-x-2 text-right">
                             <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                                 @click="modalDelete = false">Cancelar</button>
-                            <button wire:click.prevent="delete" class="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
-                                @click="modalDelete = false">
-                                Si, Eliminar</button>
+
+                            <x-form.button label="Si, Eliminar" negative right-icon="trash" wire:click="delete"
+                                spinner="delete" />
                         </div>
                     </div>
                 </div>
