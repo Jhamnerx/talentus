@@ -80,8 +80,9 @@
                         @if ($cliente)
                             <div class="flex">
                                 <div class="m-1 text-center w-full sm:w-2/4">
-                                    <input wire:model.live='search' class="form-input pl-9 w-full focus:border-slate-300"
-                                        type="search" placeholder="Buscar vehiculo…" />
+                                    <input wire:model.live='search'
+                                        class="form-input pl-9 w-full focus:border-slate-300" type="search"
+                                        placeholder="Buscar vehiculo…" />
                                 </div>
 
 
@@ -119,36 +120,36 @@
                                 </thead>
                                 <tbody class="text-sm divide-y divide-slate-200 border-b border-slate-200">
 
-                                    @if ($vehiculos)
-                                        @foreach ($vehiculos as $vehiculo)
-                                            <tr>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                    <div class="font-medium text-blue-500 text-center">
-                                                        {{ $vehiculo->id }}
-                                                    </div>
-                                                </td>
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                    <div class="font-medium text-blue-500 text-center">
-                                                        {{ $vehiculo->placa }}
-                                                    </div>
-                                                </td>
 
-                                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @foreach ($vehiculos as $vehiculo)
+                                        <tr>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <div class="font-medium text-blue-500 text-center">
+                                                    {{ $vehiculo->id }}
+                                                </div>
+                                            </td>
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                <div class="font-medium text-blue-500 text-center">
+                                                    {{ $vehiculo->placa }}
+                                                </div>
+                                            </td>
 
-                                                    <div class="m-3 text-center">
+                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                                        <button type="button"
-                                                            wire:click.prevent="agregarVehiculo({{ $vehiculo->id }})"
-                                                            class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
-                                                            Añadir
-                                                        </button>
+                                                <div class="m-3 text-center">
 
-                                                    </div>
+                                                    <button type="button"
+                                                        wire:click.prevent="agregarVehiculo({{ $vehiculo->id }})"
+                                                        class="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-2 px-4 border border-gray-700 rounded shadow-sm">
+                                                        Añadir
+                                                    </button>
 
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    @else
+                                                </div>
+
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    @if (count($vehiculos) < 1)
                                         <td colspan="10"
                                             class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                             <div class="text-center">No hay Registros</div>
