@@ -13,12 +13,11 @@ use Livewire\Component;
 
 class Save extends Component
 {
-    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false;
-    public $fecha, $vehiculos_id;
+    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false, $fecha;
+
     public $panelVehiculosOpen = false;
 
     public Collection $items;
-
 
     public function mount()
     {
@@ -30,7 +29,6 @@ class Save extends Component
     {
         return view('livewire.admin.ventas.contratos.save');
     }
-
 
     public function openPanelVehiculos()
     {
@@ -61,7 +59,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'PRODUCTO AÑADIDO',
+                tittle: 'VEHICULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
@@ -78,13 +76,6 @@ class Save extends Component
         unset($this->items[$key]);
         $this->items;
     }
-
-    public function veritems()
-    {
-
-        dd(array_key_exists('M7N-710', $this->items->all()));
-    }
-
 
     public function saveContrato()
     {
