@@ -3,49 +3,33 @@
 namespace App\Livewire\Admin\Ventas\Contratos;
 
 
+use Livewire\Component;
 use App\Models\Contratos;
 use App\Models\Vehiculos;
-use Livewire\Component;
+use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
+use App\Http\Requests\ContratosRequest;
 
 class Edit extends Component
 {
     public Contratos $contrato;
 
+    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false, $fecha;
+
     public $panelVehiculosOpen = false;
 
     public Collection $items;
 
-    protected $listeners = [
-        'addVehiculo',
-    ];
 
-
-    protected $rules = [
-        'contrato.clientes_id' => 'required',
-        'contrato.ciudades_id' => 'required',
-        'contrato.fecha' => 'required',
-        'contrato.sello' => 'boolean',
-        'contrato.fondo' => 'boolean',
-        'items' => 'array|between:1,100',
-        'items.*.plan' => 'required|integer',
-        'items.*.placa' => 'required',
-        'items.*.vehiculos_id' => 'required',
-    ];
-
-    protected $messages = [
-        'contrato.clientes_id.required' => 'Debes Seleccionar un Cliente',
-        'contrato.fecha.required' => 'Selecciona una fecha',
-        'ciudades_id.required' => 'Debe seleccionar una ciudad',
-        'items.*.plan.required' => 'Ingresa un plan valido',
-        'items.*.plan.integer' => 'No puedes ingresar letras aqui',
-        'items.array' => 'Ingresa como minimo un vehiculo',
-        'items.between' => 'Ingresa como minimo un vehiculo'
-    ];
-
-    public function mount($contrato)
+    public function mount(Contratos $contrato)
     {
         $this->items = collect();
+        $this->contrato = $contrato;
+        $this->clientes_id = $contrato->clientes_id;
+        $this->ciudades_id = $contrato->ciudades_id;
+        $this->fondo = $contrato->fondo;
+        $this->sello = $contrato->sello;
+        $this->fecha = $contrato->fecha;
 
         foreach ($this->contrato->detalle as $detalle) {
             $this->items[$detalle->vehiculos->placa] = [
@@ -78,16 +62,25 @@ class Edit extends Component
         $this->items;
     }
 
-
+    #[On('add-vehiculo')]
     public function addVehiculo(Vehiculos $vehiculo)
     {
         if (array_key_exists($vehiculo->placa, $this->items->all())) {
 
-            $this->dispatch('error-vehiculo', ['vehiculo' => $vehiculo]);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
+            );
         } else {
 
-
-            $this->dispatch('add-vehiculo', ['vehiculo' => $vehiculo]);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'VEHICULO AÑADIDO',
+                mensaje: 'Añadiste ' . $vehiculo->placa,
+            );
 
             $this->items[$vehiculo->placa] = [
                 'vehiculos_id' => $vehiculo->id,
@@ -97,29 +90,33 @@ class Edit extends Component
         }
     }
 
-    public function veritems()
-    {
-
-        dd(array_key_exists('M7N-710', $this->items->all()));
-    }
-
-
 
     public function updated($field)
     {
-        $this->validateOnly($field);
+        $request = new ContratosRequest();
+
+        $validate = $this->validateOnly($field, $request->rules(), $request->messages());
     }
+
     public function save()
     {
 
-        $this->validate();
+        $request = new ContratosRequest();
 
-        $this->contrato->save();
+        $datos = $this->validate($request->rules(), $request->messages());
+
+        $this->contrato->update($datos);
 
         $this->contrato->detalle()->delete();
 
         Contratos::createItems($this->contrato, $this->items);
 
-        return redirect()->route('admin.ventas.contratos.index')->with('update', 'El contrato de actualizo con exito');
+        session()->flash('update', 'El contrato se actualizo con exito');
+        $this->redirectRoute('admin.ventas.contratos.index');
+    }
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
     }
 }
