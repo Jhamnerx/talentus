@@ -363,6 +363,7 @@ Route::controller(ComprobantesController::class)->group(function () {
 Route::controller(SelectsController::class)->group(function () {
 
     Route::get('api/categorias', 'categorias')->name('api.categorias.index');
+    Route::get('api/ciudades', 'ciudades')->name('api.ciudades.index');
     Route::get('api/tipo-afectacion', 'tipoAfectacion')->name('api.tipo-afectacion.index');
     Route::get('api/unit', 'unit')->name('api.unit.index');
     Route::get('api/clientes', 'clientes')->name('api.clientes.index');

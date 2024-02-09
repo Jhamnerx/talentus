@@ -19,6 +19,7 @@ use App\Models\TipoAfectacion;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
+use App\Models\Ciudades;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -47,6 +48,24 @@ class SelectsController extends Controller
             ->get();
     }
 
+    public function ciudades(Request $request): Collection
+    {
+
+        return Ciudades::query()
+            ->select('id', 'nombre')
+            ->orderBy('nombre')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('nombre', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(30)
+            )
+            ->get();
+    }
     public function tipoAfectacion(Request $request): Collection
     {
         return TipoAfectacion::query()
