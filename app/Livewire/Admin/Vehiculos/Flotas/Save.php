@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Vehiculos\Flotas;
 
 use App\Models\Flotas;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Save extends Component
@@ -16,7 +17,8 @@ class Save extends Component
     protected $listeners = ['ChangeCliente'];
 
     protected $rules = [
-        'nombre' => 'required|unique:flotas,nombre',
+        'nombre' => 'required',
+        'descripcion' => 'nullable',
         'clientes_id' => 'required|exists:clientes,id',
     ];
 
@@ -34,15 +36,11 @@ class Save extends Component
         return view('livewire.admin.vehiculos.flotas.save');
     }
 
+    #[On('open-modal-save')]
     public function openModal()
     {
 
         $this->modalOpen = true;
-    }
-    public function closeModal()
-    {
-
-        $this->modalOpen = false;
     }
 
 
@@ -51,29 +49,48 @@ class Save extends Component
         $this->descripcion = '';
         $this->clientes_id = '';
         $this->nombre = '';
+        $this->descripcion = '';
     }
 
     public function save()
     {
 
         $validatedDate = $this->validate();
-        Flotas::create([
-            'nombre' => $this->nombre,
-            'clientes_id' => $this->clientes_id,
+
+        $flota = Flotas::create([
+            'nombre' => $validatedDate['nombre'],
+            'clientes_id' => $validatedDate['clientes_id'],
+            'descripcion' => $validatedDate['descripcion'],
         ]);
 
 
-        $this->resetInputFields();
-        $this->modalOpen = false;
-        $this->dispatch('render');
-        return redirect()->route('admin.vehiculos.flotas.index')->with('store', 'Se guardo con exito');
+
+
+        $this->afterSave($flota);
     }
 
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
     }
-    public function updatingArray($value, $key)
+
+
+    public function afterSave($flota)
     {
+        $this->closeModal();
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'FLOTA REGISTRADA',
+            mensaje: 'La Flota ' . $flota->nombre . ' fue guardada correctamente'
+        );
+        $this->dispatch('update-table');
+        $this->resetInputFields();
+    }
+
+    public function closeModal()
+    {
+
+        $this->modalOpen = false;
     }
 }

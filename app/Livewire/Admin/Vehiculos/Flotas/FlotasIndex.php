@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Vehiculos\Flotas;
 
 use App\Models\Flotas;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -23,7 +24,20 @@ class FlotasIndex extends Component
         })->orWhere('nombre', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
-        // ->get();
+
         return view('livewire.admin.vehiculos.flotas.flotas-index', compact('flotas'));
+    }
+
+    #[On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+
+    public function openModalSave()
+    {
+
+        $this->dispatch('open-modal-save');
     }
 }

@@ -7,6 +7,10 @@
 
 @stop
 
+
+@push('modals')
+    @livewire('admin.vehiculos.flotas.save')
+@endpush
 {{-- section de js --}}
 @section('js')
 
