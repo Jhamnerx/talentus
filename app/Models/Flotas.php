@@ -58,9 +58,9 @@ class Flotas extends Model
 
     //Relacion uno A UNO POLIMORFICA
 
-    public function delete()
-    {
+    // public function delete()
+    // {
 
-        return $this->morphMany(Eliminados::class, 'delete');
-    }
+    //     return $this->morphMany(Eliminados::class, 'delete');
+    // }
 }

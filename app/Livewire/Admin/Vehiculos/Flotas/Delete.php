@@ -2,37 +2,59 @@
 
 namespace App\Livewire\Admin\Vehiculos\Flotas;
 
-use App\Models\ChangesModels;
-use App\Models\Eliminados;
 use App\Models\Flotas;
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use App\Models\Eliminados;
+use Livewire\Attributes\On;
+use App\Models\ChangesModels;
+use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Component
 {
 
+    public Flotas $flota;
+    public $modalDelete = false;
 
-    public Model $model;
 
-
-    public $field = "eliminado";
-
-    public $eliminado;
+    #[On('open-modal-delete')]
+    public function openModal(Flotas $flota)
+    {
+        $this->flota = $flota;
+        $this->modalDelete = true;
+    }
 
     public function delete()
     {
-        $this->model->setAttribute($this->field, '1')->save();
+        $this->flota->delete();
 
-        ChangesModels::create([
-            'delete_id' => $this->model->id,
-            'delete_type' => Flotas::class,
-            'user_id' => auth()->user()->id,
-        ]);
+        // ChangesModels::create([
+        //     'delete_id' => $this->flota->id,
+        //     'delete_type' => Flotas::class,
+        //     'user_id' => auth()->user()->id,
+        // ]);
 
-        return redirect()->route('admin.vehiculos.flotas.index')->with('delete', 'La flota fue eliminada con exito');
+        $this->afterDelete();
     }
+
     public function render()
     {
         return view('livewire.admin.vehiculos.flotas.delete');
+    }
+    public function closeModal()
+    {
+
+        $this->modalDelete = false;
+    }
+
+    public function afterDelete()
+    {
+        $this->closeModal();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'CATEGORIA ELIMINADA',
+            mensaje: 'se elimino correctamente la categoria'
+        );
+        $this->dispatch('update-table');
     }
 }

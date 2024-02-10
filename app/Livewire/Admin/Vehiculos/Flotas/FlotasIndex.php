@@ -46,4 +46,10 @@ class FlotasIndex extends Component
 
         $this->dispatch('open-modal-edit', flota: $flota);
     }
+
+    public function openModalDelete(Flotas $flota)
+    {
+
+        $this->dispatch('open-modal-delete', flota: $flota);
+    }
 }

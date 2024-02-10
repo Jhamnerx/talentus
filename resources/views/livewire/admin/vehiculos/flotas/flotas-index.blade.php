@@ -177,7 +177,6 @@
                                             @endcan
 
 
-                                            {{-- @livewire('admin.vehiculos.flotas.delete', ['model' => $flota], key('delete' . $flota->id)) --}}
 
                                         </div>
                                     </td>
