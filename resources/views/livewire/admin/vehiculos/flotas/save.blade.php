@@ -62,7 +62,8 @@
                                     class="text-rose-500">*</span></label>
                             <div class="relative">
 
-                                <input wire:model.live="nombre" placeholder="NOMBRE DE FLOTA" name="nombre" id="nombre"
+                                <input wire:model.live="nombre" placeholder="NOMBRE DE FLOTA" name="nombre"
+                                    id="nombre"
                                     class="form-input w-full pl-9 valid:border-emerald-300
                             required:border-rose-300 invalid:border-rose-300 peer"
                                     type="text" />
@@ -145,8 +146,7 @@
                                             <path
                                                 d="M15,33,6.293,30.274a1,1,0,0,0-.255.433l-4,14a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l14-4a.994.994,0,0,0,.433-.255Z"
                                                 fill="#fbe5d5"></path>
-                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z"
-                                                fill="#ff7163">
+                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z" fill="#ff7163">
                                             </path>
                                             <path
                                                 d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
@@ -185,76 +185,4 @@
 
 </div>
 @push('scripts')
-    <script>
-        $('#nombre').caseEnforcer('uppercase');
-    </script>
-    <script>
-        $('.clientes_id').select2({
-            placeholder: 'Selecciona cliente',
-            selectionCssClass: 'pl-9',
-            language: "es",
-            //tags: true,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-
-                    var query = {
-                        term: params.term,
-                        //type: 'public'
-                    }
-
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-
-                        return obj;
-
-                    });
-                    return {
-                        results: suggestions,
-                    };
-                },
-
-
-            },
-            minimumInputLength: 1,
-            templateResult: formatCliente,
-            // templateSelection: formatSelectioncliente,
-        });
-
-        function formatCliente(cliente) {
-            if (cliente.loading) {
-                return cliente.text;
-            }
-
-            var $container = $(
-
-                "<div class='select2-result-clientes clearfix'>" +
-                "<div class='select2-result-clientes__meta'>" +
-                "<div class='select2-result-clientes__title'></div>" +
-                "<div class='select2-result-clientes__description'></div>" +
-                "</div>" +
-                "</div>"
-            );
-
-            $container.find(".select2-result-clientes__title").text(cliente.text);
-            $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
-            // $container.find(".select2-result-clientes__stargazers").append(repo.stargazers_count + " Stars");
-
-            return $container;
-        }
-        $('.clientes_id').on('change', function() {
-
-            @this.set('clientes_id', this.value)
-        })
-    </script>
 @endpush

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Vehiculos\Flotas;
 use App\Models\Flotas;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class FlotasIndex extends Component
 {
     use WithPagination;

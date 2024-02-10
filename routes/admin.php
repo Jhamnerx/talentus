@@ -162,8 +162,10 @@ Route::controller(ContratosController::class)->group(function () {
 });
 
 // VEHICULOS
-Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
+Route::controller(FlotasController::class)->group(function () {
 
+    Route::get('flotas', 'index')->name('admin.vehiculos.flotas.index');
+});
 
 Route::controller(VehiculosController::class)->group(function () {
 
