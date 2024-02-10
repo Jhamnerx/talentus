@@ -10,6 +10,7 @@
 
 @push('modals')
     @livewire('admin.vehiculos.flotas.save')
+    @livewire('admin.vehiculos.flotas.edit')
 @endpush
 {{-- section de js --}}
 @section('js')

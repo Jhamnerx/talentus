@@ -5,33 +5,28 @@ namespace App\Livewire\Admin\Vehiculos\Flotas;
 use App\Models\Flotas;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Edit extends Component
 {
-    public Model $model;
-    public $nombre;
-    public $nombre_cliente, $descripcion;
-    public $empresa_id;
-    public $clientes_id;
-    public $modalOpenEdit = false;
+    public Flotas $flota;
+
+    public $nombre, $descripcion, $clientes_id;
+
+    public $modalOpen = false;
 
     protected $listeners = ['ChangeCliente'];
 
     protected $rules = [
-
-        'nombre' => [
-            'required',
-        ],
-
-        'nombre_cliente' => 'required',
-        'empresa_id' => 'required',
+        'nombre' => 'required',
+        'descripcion' => 'nullable',
         'clientes_id' => 'required|exists:clientes,id',
-
-
     ];
 
+
     protected $messages = [
+
         'nombre.required' => 'El nombre es requerido',
         'nombre.unique' => 'Esta flota ya existe',
         'clientes_id.required' => 'El cliente es requerido',
@@ -39,78 +34,59 @@ class Edit extends Component
 
     ];
 
-
-
-
-    public function mount()
+    public function render()
     {
-        $this->empresa_id = session('empresa');
-        $this->nombre = $this->model->nombre;
-        $this->empresa_id = $this->model->empresa_id;
-        $this->clientes_id = $this->model->clientes_id;
-        $this->descripcion = $this->model->descripcion;
-        $this->nombre_cliente = $this->model->clientes->razon_social;
-    }
-    public function ChangeClienteEdit($id, $nombre)
-    {
-        $this->clientes_id = $id;
-        $this->nombre_cliente = $nombre;
+        return view('livewire.admin.vehiculos.flotas.edit');
     }
 
-
-    public function openModal()
+    #[On('open-modal-edit')]
+    public function openModal(Flotas $flota)
     {
-
-        $this->modalOpenEdit = true;
+        $this->modalOpen = true;
+        $this->flota = $flota;
+        $this->nombre = $flota->nombre;
+        $this->clientes_id = $flota->clientes_id;
+        $this->descripcion = $flota->descripcion;
     }
+
     public function closeModal()
     {
 
-        $this->modalOpenEdit = false;
+        $this->modalOpen = false;
     }
 
-
-    /**
-     * Write code on Method
-     *
-     * @return response()
-     */
     private function resetInputFields()
     {
         $this->descripcion = '';
         $this->clientes_id = '';
         $this->nombre = '';
-        $this->nombre_cliente = '';
     }
 
     public function save()
     {
 
+        $validatedData = $this->validate();
 
-        $validatedDate = $this->validate();
-        // dd($this->clientes_id);
+        $this->flota->update($validatedData);
 
-
-        Flotas::create([
-            'nombre' => $this->nombre,
-            'clientes_id' => $this->clientes_id,
-            'empresa_id' => $this->empresa_id,
-        ]);
-
-
-        $this->resetInputFields();
-        $this->modalOpenEdit = false;
-        $this->dispatch('render');
-        //  return redirect()->route('admin.vehiculos.flotas.index')->with('store', 'Se guardo con exito');
-
+        $this->afterSave($this->flota);
     }
 
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);
     }
-    public function render()
+
+    public function afterSave($flota)
     {
-        return view('livewire.admin.vehiculos.flotas.edit');
+        $this->closeModal();
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'FLOTA ACTUALIZADA',
+            mensaje: 'La Flota ' . $flota->nombre . ' fue actualizada correctamente'
+        );
+        $this->dispatch('update-table');
+        $this->resetInputFields();
     }
 }

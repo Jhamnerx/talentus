@@ -40,4 +40,10 @@ class FlotasIndex extends Component
 
         $this->dispatch('open-modal-save');
     }
+
+    public function openModalEdit(Flotas  $flota)
+    {
+
+        $this->dispatch('open-modal-edit', flota: $flota);
+    }
 }

@@ -9,9 +9,8 @@ use Livewire\Component;
 class Save extends Component
 {
 
-    public $nombre;
-    public $nombre_cliente, $descripcion;
-    public $clientes_id;
+    public $nombre, $descripcion, $clientes_id;
+
     public $modalOpen = false;
 
     protected $listeners = ['ChangeCliente'];
