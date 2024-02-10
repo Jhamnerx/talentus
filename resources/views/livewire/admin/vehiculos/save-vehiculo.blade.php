@@ -178,15 +178,15 @@
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
-                                            <rect x="3" y="3" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="3" y="3" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
                                             <path
                                                 d="M46.138,9.419,38.581,1.862a2.945,2.945,0,0,0-4.162,0L26.862,9.419a2.943,2.943,0,0,0,0,4.162l7.557,7.557a2.948,2.948,0,0,0,4.162,0l7.557-7.557a2.943,2.943,0,0,0,0-4.162Z"
                                                 fill="#c456eb"></path>
-                                            <rect x="28" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
-                                            <rect x="3" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="28" y="28" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
+                                            <rect x="3" y="28" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
                                         </g>
                                     </svg>
                                 </div>
@@ -196,8 +196,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                <input wire:model.live="motor" id="motor" name="motor" placeholder="1GDG066086"
-                                    class="form-input w-full pl-9" type="text" />
+                                <input wire:model.live="motor" id="motor" name="motor"
+                                    placeholder="1GDG066086" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2"
@@ -434,8 +434,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="modelo_id">MODELO GPS:</label>
                             <div class="relative">
-                                <input wire:model.live="modelo_gps" id="modelo_id" name="modelo_id" placeholder="FMB920"
-                                    class="form-input w-full pl-9" type="text" disabled />
+                                <input wire:model.live="modelo_gps" id="modelo_id" name="modelo_id"
+                                    placeholder="FMB920" class="form-input w-full pl-9" type="text" disabled />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -470,8 +470,7 @@
                                             <path
                                                 d="M15,33,6.293,30.274a1,1,0,0,0-.255.433l-4,14a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l14-4a.994.994,0,0,0,.433-.255Z"
                                                 fill="#fbe5d5"></path>
-                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z"
-                                                fill="#ff7163">
+                                            <path d="M28.586,7.981,6.293,30.274,17.707,41.688,40,19.4Z" fill="#ff7163">
                                             </path>
                                             <path
                                                 d="M3.3,40.3l-1.26,4.409a1,1,0,0,0,.688,1.236,1.007,1.007,0,0,0,.548,0l4.409-1.26Z"
@@ -512,191 +511,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            $('#placa').caseEnforcer('uppercase');
-        </script>
-
-        <script>
-            $('.clientes_ids').select2({
-                placeholder: 'Selecciona cliente',
-                language: "es",
-                //tags: true,
-                width: '100%',
-                ajax: {
-                    url: "{{ route('search.clientes') }}",
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                            //type: 'public'
-                        }
-
-                        // Query parameters will be ?search=[term]&type=public
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-
-                            return obj;
-
-                        });
-                        return {
-                            results: suggestions,
-                        };
-                    },
-
-
-                },
-                minimumInputLength: 1,
-                templateResult: formatCliente,
-                // templateSelection: formatSelectioncliente,
-            });
-
-
-            $('.clientes_ids').on('change', function() {
-
-                @this.set('clientes_id', this.value)
-            })
-
-            function formatCliente(cliente) {
-                if (cliente.loading) {
-                    return cliente.text;
-                }
-
-                var $container = $(
-
-                    "<div class='select2-result-clientes clearfix'>" +
-                    "<div class='select2-result-clientes__meta'>" +
-                    "<div class='select2-result-clientes__title'></div>" +
-                    "<div class='select2-result-clientes__description'></div>" +
-                    "</div>" +
-                    "</div>"
-                );
-
-                $container.find(".select2-result-clientes__title").text(cliente.text);
-                $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
-                // $container.find(".select2-result-clientes__stargazers").append(repo.stargazers_count + " Stars");
-
-                return $container;
-            }
-        </script>
-
-
-        <script>
-            $('.numero').devbridgeAutocomplete({
-                lookup: function(query, done) {
-                    $.ajax({
-                        url: "{{ route('search.lineas') }}",
-                        dataType: 'json',
-                        data: {
-                            term: query
-                        },
-                        success: function(data) {
-
-                            done(data);
-
-                        }
-                    })
-
-                },
-                minChars: 2,
-                autoSelectFirst: false,
-                deferRequestBy: 5,
-                onSelect: function(suggestion) {
-
-                    //console.log(suggestion.operador);
-
-                    $('.operador').val(suggestion.operador);
-                    @this.set('operador', suggestion.operador)
-                    @this.set('numero', suggestion.value)
-                    $('.sim_card').val(suggestion.sim_card);
-                    @this.set('sim_card', suggestion.sim_card)
-                    $('.sim_card_id').val(suggestion.sim_card_id);
-                    @this.set('sim_card_id', suggestion.sim_card_id)
-
-                },
-                onHint: function(hint) {
-                    //$('#numero').val(hint);
-                    //console.log(hint);
-                },
-                onSearchComplete: function(query, suggestions) {
-
-                },
-                onInvalidateSelection: function() {
-                    $('#selction-ajax').html('You selected: none');
-                },
-
-            });
-        </script>
-
-
-        <script>
-            $('.dispositivo').devbridgeAutocomplete({
-                lookup: function(query, done) {
-                    $.ajax({
-                        url: "{{ route('search.dispositivos') }}",
-                        dataType: 'json',
-                        data: {
-                            term: query
-                        },
-                        success: function(data) {
-
-                            done(data);
-
-                        }
-                    })
-
-                },
-                minChars: 1,
-                autoSelectFirst: false,
-                deferRequestBy: 5,
-                onSelect: function(suggestion) {
-
-                    $('.modelo').val(suggestion.modelo);
-                    @this.set('modelo_gps', suggestion.modelo)
-                    $('.dispositivos_id').val(suggestion.data);
-                    @this.set('dispositivos_id', suggestion.data)
-                    @this.set('dispositivo_imei', suggestion.value)
-                    //console.log(suggestion.value);
-                    // $('.sim_card').val(suggestion.sim_card);
-
-                },
-                onHint: function(hint) {
-                    //$('#numero').val(hint);
-
-
-                },
-                onSearchComplete: function(query, suggestions) {
-                    // console.log(query);
-
-                },
-                onSearchStart: function(query) {
-
-                    var busqueda = query.query;
-
-                    if (this.value.length < 1) {
-
-                        console.log('false');
-                    }
-
-
-
-                },
-                onInvalidateSelection: function() {
-                    $('#selction-ajax').html('You selected: none');
-                },
-
-            });
-        </script>
-    @endpush
-@endonce

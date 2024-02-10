@@ -170,15 +170,15 @@
                                     <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                         <g class="nc-icon-wrapper">
-                                            <rect x="3" y="3" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="3" y="3" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
                                             <path
                                                 d="M46.138,9.419,38.581,1.862a2.945,2.945,0,0,0-4.162,0L26.862,9.419a2.943,2.943,0,0,0,0,4.162l7.557,7.557a2.948,2.948,0,0,0,4.162,0l7.557-7.557a2.943,2.943,0,0,0,0-4.162Z"
                                                 fill="#c456eb"></path>
-                                            <rect x="28" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
-                                            <rect x="3" y="28" width="17" height="17"
-                                                rx="3" fill="#6cc4f5"></rect>
+                                            <rect x="28" y="28" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
+                                            <rect x="3" y="28" width="17" height="17" rx="3"
+                                                fill="#6cc4f5"></rect>
                                         </g>
                                     </svg>
                                 </div>
@@ -188,8 +188,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="motor">Motor:</label>
                             <div class="relative">
-                                <input wire:model.live="motor" id="motor" name="motor" placeholder="1GDG066086"
-                                    class="form-input w-full pl-9" type="text" />
+                                <input wire:model.live="motor" id="motor" name="motor"
+                                    placeholder="1GDG066086" class="form-input w-full pl-9" type="text" />
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                     <svg class="w-4 h-4 fill-current shrink-0 ml-3 mr-2"
@@ -296,77 +296,3 @@
     </div>
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            $('#placa').caseEnforcer('uppercase');
-        </script>
-
-        <script>
-            $('.clientes_id').select2({
-                placeholder: 'Selecciona cliente',
-                language: "es",
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.clientes') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                        }
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-                            return obj;
-
-                        });
-                        return {
-                            results: suggestions,
-                        };
-                    },
-
-
-                },
-                minimumInputLength: 1,
-                templateResult: formatCliente,
-            });
-
-
-            $('.clientes_id').on('change', function() {
-
-                @this.set('clientes_id', this.value)
-            })
-
-            function formatCliente(cliente) {
-
-                if (cliente.loading) {
-                    return cliente.text;
-                }
-
-                var $container = $(
-
-                    "<div class='select2-result-clientes clearfix'>" +
-                    "<div class='select2-result-clientes__meta'>" +
-                    "<div class='select2-result-clientes__title'></div>" +
-                    "<div class='select2-result-clientes__description'></div>" +
-                    "</div>" +
-                    "</div>"
-                );
-
-                $container.find(".select2-result-clientes__title").text(cliente.text);
-                $container.find(".select2-result-clientes__description").text(cliente.numero_documento);
-
-                return $container;
-            }
-        </script>
-    @endpush
-@endonce
