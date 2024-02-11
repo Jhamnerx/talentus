@@ -135,8 +135,7 @@ class VehiculosIndex extends Component
 
     public function deleteVehiculo(Vehiculos $vehiculo)
     {
-
-        $this->dispatch('deleteVehiculo', $vehiculo);
+        $this->dispatch('open-modal-delete', vehiculo: $vehiculo);
     }
 
     public function suspendVehiculo(Vehiculos $vehiculo)
