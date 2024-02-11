@@ -9,6 +9,7 @@ use App\Models\Mantenimiento;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\MantenimientoController;
+use Livewire\Attributes\On;
 
 class Save extends Component
 {
@@ -22,7 +23,7 @@ class Save extends Component
 
     protected $listeners = [
         'openModalSaveMantenimiento',
-        'updated-numero' => 'listenUpdatedNumero',
+        'create-mantenimiento' => 'listenUpdatedNumero',
     ];
 
 
@@ -110,8 +111,8 @@ class Save extends Component
         $this->reset();
     }
 
+    #[On('open-modal-mantenimiento')]
     public function listenUpdatedNumero($placa)
-
     {
         $ctr = new MantenimientoController();
         $this->numero =  $ctr->setNextSequenceNumber();

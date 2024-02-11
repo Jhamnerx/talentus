@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Vehiculos;
 
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -120,6 +121,11 @@ class VehiculosIndex extends Component
         $this->dispatch('open-modal-save');
     }
 
+    public function openModalEdit(Vehiculos $vehiculo)
+    {
+        $this->dispatch('open-modal-edit', vehiculo: $vehiculo);
+    }
+
     public function openModalImport()
     {
 
@@ -145,5 +151,11 @@ class VehiculosIndex extends Component
     {
 
         $this->dispatch('openModalAddVehiculo');
+    }
+
+    #[On('create-mantenimiento')]
+    public function openModalCreateMantenimiento($placa)
+    {
+        $this->dispatch('open-modal-mantenimiento', placa: $placa);
     }
 }

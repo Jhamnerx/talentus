@@ -297,7 +297,7 @@ class SelectsController extends Controller
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('numero', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(60)
 
             )
@@ -333,7 +333,7 @@ class SelectsController extends Controller
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('imei', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(50)
 
             )

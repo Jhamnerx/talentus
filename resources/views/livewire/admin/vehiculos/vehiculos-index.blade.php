@@ -493,7 +493,8 @@
                                                         </li>
                                                         @can('editar-vehiculos-vehiculos')
                                                             <li>
-                                                                <a href="{{ route('admin.vehiculos.edit', $vehiculo) }}"
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="openModalEdit({{ $vehiculo->id }})"
                                                                     class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-27"
                                                                     role="menuitem" tabindex="-1">
@@ -623,30 +624,3 @@
 
 
 </div>
-@push('scripts')
-    @if (session('updated-numero'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Actualizado',
-                    text: 'La Actualización cambio el numero, deseas registrar una programación de mantenimiento?',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Sí, Registrar!',
-                    cancelButtonText: 'Cerrar!'
-
-                }).then((result) => {
-                    if (result.isConfirmed) {
-
-                        @this.emit('updated-numero', '{{ session('updated-numero') }}')
-                    } else if (result.isDenied) {
-
-                    }
-                })
-            });
-        </script>
-    @endif
-
-@endpush
