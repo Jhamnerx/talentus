@@ -14,7 +14,7 @@ class VehiculosIndex extends Component
     public $to = '';
 
     protected $listeners = [
-        'updateTable' => 'render',
+        'update-table' => 'render',
         'echo:vehiculos,VehiculosImportUpdated' => 'updateVehiculos'
     ];
 
@@ -117,7 +117,7 @@ class VehiculosIndex extends Component
 
     public function openModalSave()
     {
-        $this->dispatch('openModalSave');
+        $this->dispatch('open-modal-save');
     }
 
     public function openModalImport()

@@ -34,7 +34,7 @@
                 <div class="relative inline-flex">
 
                     <!-- Create button -->
-                    <button wire:click="openModalSave" aria-controls="basic-modal"
+                    <button wire:click="openModalSave()" aria-controls="basic-modal"
                         class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                         <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                             <path

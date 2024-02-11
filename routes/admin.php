@@ -376,6 +376,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
     Route::get('api/sim-card', 'sim')->name('api.sim.index');
     Route::get('api/lineas', 'lineas')->name('api.lineas.index');
+    Route::get('api/dispositivos', 'dispositivos')->name('api.dispositivos.index');
     Route::get('api/vehiculos', 'vehiculos')->name('api.vehiculos.index');
     Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
 

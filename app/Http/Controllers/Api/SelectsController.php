@@ -221,7 +221,7 @@ class SelectsController extends Controller
                 $producto->option_description = $producto->codigo . " - Stock: " . $producto->stock . " " . $producto->unit->descripcion . " - Precio: $" . $producto->valor_unitario;
 
                 return $producto;
-            });;
+            });
     }
 
     public function documentos(Request $request): Collection
@@ -284,7 +284,10 @@ class SelectsController extends Controller
     public function lineas(Request $request): Collection
     {
         return Lineas::query()
-            ->select('id', 'numero')
+            ->with(['vehiculo' => function ($query) {
+                $query->select('numero', 'id', 'placa');
+            }])
+            ->select('id', 'numero', 'operador')
             ->when(
                 $request->search,
                 fn (Builder $query) => $query
@@ -295,10 +298,69 @@ class SelectsController extends Controller
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(20)
+                fn (Builder $query) => $query->limit(60)
 
             )
-            ->get();
+            ->get()->map(function (Lineas $linea) {
+
+
+                if ($linea->vehiculo) {
+
+                    $linea->option_description = $linea->operador . " - " . "<b>" . $linea->vehiculo->placa . "</b>";
+                } else {
+
+                    $linea->option_description = $linea->operador . " - " . 'LIBRE';
+                }
+                //
+
+                return $linea;
+            });
+    }
+    public function dispositivos(Request $request): Collection
+    {
+        return Dispositivos::query()
+
+            ->with(['modelo' => function ($query) {
+                $query->select('modelo', 'id');
+            }])
+            ->select('id', 'imei', 'modelo_id')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('imei', 'like', "%{$request->search}%")
+
+            )
+            ->withoutGlobalScopes()
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(50)
+
+            )
+            ->get()->map(function (Dispositivos $dispositivo) {
+
+
+                if ($dispositivo->vehiculos) {
+
+                    if ($dispositivo->modelo) {
+
+                        $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . "<b>" . $dispositivo->vehiculos->placa . "</b>";
+                    } else {
+
+                        $dispositivo->option_description = '';
+                    }
+                } else {
+                    if ($dispositivo->modelo) {
+                        $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . 'LIBRE';
+                    } else {
+
+                        $dispositivo->option_description = '';
+                    }
+                }
+                //
+
+                return $dispositivo;
+            });
     }
     public function vehiculos(Request $request): Collection
     {

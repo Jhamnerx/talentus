@@ -134,4 +134,9 @@ class Vehiculos extends Model
     {
         return $this->hasMany(Mantenimiento::class, 'vehiculo_id')->withoutGlobalScope(EmpresaScope::class);
     }
+
+    public function numero()
+    {
+        return $this->hasOne(Lineas::class, 'numero', 'numero')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+    }
 }
