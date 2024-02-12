@@ -23,8 +23,8 @@ class VehiculosRequest extends FormRequest
     public function rules($dispositivo_id, $numero, $vehicle = null)
     {
 
-        $this->vehiculo = Vehiculos::where('dispositivos_id', $dispositivo_id)->first();
-        $this->vehiculo2 = Vehiculos::where('numero', $numero)->first();
+        $this->vehiculo = Vehiculos::where('dispositivos_id', $dispositivo_id)->withTrashed()->first();
+        $this->vehiculo2 = Vehiculos::where('numero', $numero)->withTrashed()->first();
 
         $rules = [
             'placa' => 'required|unique:vehiculos',
