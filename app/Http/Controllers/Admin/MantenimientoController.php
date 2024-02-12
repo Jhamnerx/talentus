@@ -16,12 +16,6 @@ class MantenimientoController extends Controller
         return view('admin.vehiculos.mantenimiento.index');
     }
 
-    public function show(Mantenimiento $mantenimiento)
-    {
-        return view('admin.vehculos.mantenimiento.show', compact('mantenimiento'));
-    }
-
-
     public function setNextSequenceNumber()
     {
         $id = IdGenerator::generate(

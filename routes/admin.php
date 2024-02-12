@@ -177,9 +177,7 @@ Route::controller(VehiculosController::class)->group(function () {
 
 
 Route::controller(MantenimientoController::class)->group(function () {
-
     Route::get('mantenimiento', 'index')->name('admin.vehiculos.mantenimiento.index');
-    Route::get('mantenimiento/{mantenimiento}', 'show')->name('admin.vehiculos.mantenimiento.show');
 });
 
 
