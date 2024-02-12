@@ -26,9 +26,4 @@ class VehiculosController extends Controller
     {
         return view('admin.vehiculos.edit', compact('vehiculo'));
     }
-
-    public function exportExcel()
-    {
-        return Excel::download(new VehiculosExport, 'vehiculos.xls');
-    }
 }

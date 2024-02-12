@@ -2,10 +2,13 @@
 
 namespace App\Livewire\Admin\Vehiculos;
 
+use Carbon\Carbon;
+use Livewire\Component;
 use App\Models\Vehiculos;
 use Livewire\Attributes\On;
-use Livewire\Component;
 use Livewire\WithPagination;
+use App\Exports\VehiculosExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehiculosIndex extends Component
 {
@@ -157,5 +160,22 @@ class VehiculosIndex extends Component
     public function openModalCreateMantenimiento($placa)
     {
         $this->dispatch('open-modal-mantenimiento', placa: $placa);
+    }
+
+    public function exportVehiculos()
+    {
+        try {
+            $nombre = 'vehiculos_' . Carbon::now()->format('d-m') . '.xls';
+
+            return Excel::download(new VehiculosExport,  $nombre);
+        } catch (\Throwable $th) {
+
+            $this->dispatch(
+                'notify',
+                icon: 'error',
+                tittle: 'ERROR AL EXPORTAR',
+                mensaje: 'No se pudo exportar: ' . $th->getMessage(),
+            );
+        }
     }
 }
