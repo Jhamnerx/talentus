@@ -53,7 +53,7 @@ class VehiculosIndex extends Component
             ->orWhere('old_sim_card', 'like', '%' . $this->search . '%')
             ->orWhere('year', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
-            ->paginate(10);
+            ->paginate(15);
 
 
 
@@ -80,7 +80,7 @@ class VehiculosIndex extends Component
                 ]
             )
                 ->orderBy('id')
-                ->paginate(10);
+                ->paginate(15);
         }
         return view('livewire.admin.vehiculos.vehiculos-index', compact('vehiculos', 'total'));
     }

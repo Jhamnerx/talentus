@@ -247,7 +247,7 @@
 
                             @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Acciones</div>
+                                    <div class="font-semibold text-center">Acciones</div>
                                 </th>
                             @endcanany
                         </tr>
@@ -425,7 +425,8 @@
                                     @if ($vehiculo->sim_card)
                                         @if ($vehiculo->sim_card->linea)
                                             <div class="font-medium text-emerald-600">
-                                                #{{ $vehiculo->sim_card->linea->numero }}
+                                                #{{ $vehiculo->sim_card->linea->numero }} -
+                                                {{ $vehiculo->sim_card->linea->operador }}
                                             </div>
                                         @else
                                             <div class="font-medium text-red-200">
@@ -440,7 +441,7 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
+                                    <div class="font-medium text-slate-800 text-center">
                                         @if ($vehiculo->dispositivos)
                                             {{ $vehiculo->dispositivos->modelo->modelo . ' | ' . $vehiculo->dispositivos->imei }}
                                         @else
