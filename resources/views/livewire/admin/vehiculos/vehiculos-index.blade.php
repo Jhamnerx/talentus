@@ -61,20 +61,10 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Right side -->
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-
-            <!-- Eliminar button -->
-            <div class="table-items-action hidden">
-                <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> Items Seleccionados</div>
-                    <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
-                </div>
-            </div>
+        <div class="grid grid-flow-col sm:auto-cols-max justify-start mb-4 sm:justify-end gap-2">
 
             <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
+            <div class="relative float-right hidden sm:block" x-data="{ open: false, selected: 4 }">
                 <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
@@ -137,8 +127,7 @@
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
