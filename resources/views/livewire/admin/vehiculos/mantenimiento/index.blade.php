@@ -29,8 +29,7 @@
 
             <div class="relative inline-flex">
 
-                <!-- Create button -->
-                <button wire:click="openModalSave" aria-controls="basic-modal"
+                <button wire:click.prevent="openModalSave()" aria-controls="basic-modal"
                     class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
@@ -181,7 +180,7 @@
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="m-1.5">
-                                            <!-- Start -->
+
                                             <a target="_blank"
                                                 href="{{ route('admin.pdf.mantenimiento', $mantenimiento) }}">
                                                 <button type="button"
@@ -225,7 +224,7 @@
                                                     </svg>
                                                 </button>
                                             </a>
-                                            <!-- End -->
+
                                         </div>
                                     </td>
 
@@ -369,7 +368,6 @@
                                         </div>
 
                                     </td>
-
 
                                 </tr>
                             @endforeach

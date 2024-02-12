@@ -104,6 +104,7 @@ class Save extends Component
             mensaje: 'Se registro correctamente el mantenimiento para' . $placa,
         );
         $this->closeModal();
+        $this->dispatch('update-table');
     }
 
 

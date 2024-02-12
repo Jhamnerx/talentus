@@ -8,6 +8,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Mantenimiento;
 use Illuminate\Database\Capsule\Manager;
+use Livewire\Attributes\On;
 
 class Index extends Component
 {
@@ -40,6 +41,13 @@ class Index extends Component
         return view('livewire.admin.vehiculos.mantenimiento.index', compact('mantenimientos'));
     }
 
+    #[On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
+
     function validateDate($date, $format = 'd-m-Y')
     {
         $d = DateTime::createFromFormat($format, $date);
@@ -48,7 +56,7 @@ class Index extends Component
 
     public function openModalSave()
     {
-        $this->dispatch('openModalSaveMantenimiento', 'index');
+        $this->dispatch('open-modal-save-mantenimiento', 'index');
     }
 
     public function createTask(Mantenimiento $mantenimiento)
