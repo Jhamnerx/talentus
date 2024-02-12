@@ -36,10 +36,9 @@
 
                             <div class="col-span-12 sm:col-span-4">
 
-                                <x-form.input wire:model.live="numero" label="Número:" placeholder="MT2-001" />
+                                <x-form.input wire:model.live="numero" readonly label="Número:" placeholder="MT2-001" />
 
                             </div>
-
 
                             <div class="col-span-12 sm:col-span-4 ">
                                 <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculo_id"
