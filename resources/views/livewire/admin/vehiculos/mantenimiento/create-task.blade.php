@@ -153,8 +153,7 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
-                                                    fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -202,14 +201,13 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                     		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;"
-                                                    width="181.135" height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
+                                                    height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                    	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
-                                                r="40.956" />
+                                                                    C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
@@ -272,35 +270,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            window.addEventListener('openModal', event => {
-                initFechaHora(event.detail.fecha_hora);
-            })
-        </script>
-
-
-        <script>
-            $(document).ready(function() {
-
-                initFechaHora('');
-
-            })
-
-            function initFechaHora(fecha) {
-
-                flatpickr('.fecha-tarea', {
-                    enableTime: true,
-                    defaultDate: fecha,
-                    disableMobile: "true",
-                    dateFormat: "Y-m-d H:i",
-                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-                });
-
-            }
-        </script>
-    @endpush
-@endonce
