@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use App\Models\Clientes;
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class SaveQuick extends Component
@@ -14,9 +15,7 @@ class SaveQuick extends Component
     public $flotas_selected = [];
     public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $clientes_id;
 
-    protected $listeners = [
-        'openModalAddVehiculo' => 'openModal',
-    ];
+
     protected function rules()
     {
         return [
@@ -43,10 +42,13 @@ class SaveQuick extends Component
     {
         return view('livewire.admin.vehiculos.save-quick');
     }
+
+    #[On('open-modal-add-vehiculo')]
     public function openModal()
     {
         $this->modalOpen = true;
     }
+
     public function closeModal()
     {
         $this->modalOpen = false;
@@ -63,9 +65,15 @@ class SaveQuick extends Component
         $this->validateOnly($attr);
     }
 
-    public function GuardarVehiculo()
+    public function convertirAMayusculas()
+    {
+        $this->placa = strtoupper($this->placa);
+    }
+
+    public function save()
     {
         $this->validate();
+
         $vehiculo = Vehiculos::create([
             'placa' => $this->placa,
             'marca' => $this->marca,
@@ -82,8 +90,21 @@ class SaveQuick extends Component
         if ($this->flotas_selected) {
             $vehiculo->flotas()->attach($this->flotas_selected);
         }
+
+        $this->afterSave($vehiculo->placa);
+    }
+
+    public function afterSave($placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'VEHICULO REGISTRADO',
+            mensaje: 'Se registro correctamente el vehiculo ' . $placa,
+        );
+
+        $this->closeModal();
+        $this->dispatch('update-table');
         $this->reset();
-        $this->dispatch('updateTable');
-        $this->dispatch('save-quick-vehiculo', ['placa' => $vehiculo->placa]);
     }
 }

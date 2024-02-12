@@ -150,10 +150,11 @@ class VehiculosIndex extends Component
     {
         $this->dispatch('openModalSaveMantenimiento', 'vehiculos-index', $vehiculo);
     }
+
     public function openModalAddVehiculo()
     {
 
-        $this->dispatch('openModalAddVehiculo');
+        $this->dispatch('open-modal-add-vehiculo');
     }
 
     #[On('create-mantenimiento')]
