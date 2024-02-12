@@ -137,8 +137,10 @@
         Livewire.on('notify-toast', (event) => {
             Toast.fire({
                 icon: event.icon,
-                title: event.title,
-                html: event.mensaje,
+                title: `<div  style="font-size: 15px; color: #052c52;"> ` +
+                    event.tittle + `</div`,
+                html: `<div  style="font-size: 14px; color: #056b85;"> ` +
+                    event.mensaje + `</div`,
                 showCloseButton: true,
             });
 
@@ -148,7 +150,7 @@
         Livewire.on('error', (event) => {
             Toast.fire({
                 icon: 'error',
-                title: event.title,
+                title: event.tittle,
                 html: event.mensaje,
                 showCloseButton: true,
             });
