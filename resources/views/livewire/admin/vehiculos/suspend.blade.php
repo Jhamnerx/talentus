@@ -38,7 +38,6 @@
                                     volver activar </p>
                             </div>
                         </div>
-                        {{ $remove }}
                         @if ($vehiculo)
                             @if ($vehiculo->dispositivos)
                                 <div class="mb-2">

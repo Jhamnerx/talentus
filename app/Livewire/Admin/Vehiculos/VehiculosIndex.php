@@ -140,8 +140,9 @@ class VehiculosIndex extends Component
 
     public function suspendVehiculo(Vehiculos $vehiculo)
     {
-        $this->dispatch('suspendVehiculo', $vehiculo);
+        $this->dispatch('open-modal-suspend-vehiculo', $vehiculo);
     }
+
     public function createMantenimiento(Vehiculos $vehiculo)
     {
         $this->dispatch('openModalSaveMantenimiento', 'vehiculos-index', $vehiculo);

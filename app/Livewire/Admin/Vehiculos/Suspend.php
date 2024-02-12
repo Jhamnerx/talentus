@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Vehiculos;
 
 use Livewire\Component;
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 
 class Suspend extends Component
 {
@@ -11,10 +12,6 @@ class Suspend extends Component
 
     public $modalSuspend = false;
     public $remove = false;
-
-    protected $listeners = [
-        'suspendVehiculo' => 'openModal',
-    ];
 
     public function suspend()
     {
@@ -36,17 +33,30 @@ class Suspend extends Component
         $this->vehiculo->setAttribute('estado', 2);
         $this->vehiculo->save();
         // return redirect()->route('admin.vehiculos.index');
-        $this->dispatch('change-status', ['status' => 'suspendido']);
-        $this->remove = false;
-        $this->dispatch('updateTable');
+
+        $this->afterSuspend($this->vehiculo->placa);
     }
 
 
-
+    #[On('open-modal-suspend-vehiculo')]
     public function openModal(Vehiculos $vehiculo)
     {
         $this->modalSuspend = true;
         $this->vehiculo = $vehiculo;
+    }
+
+    public function afterSuspend($placa)
+    {
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'VEHICULO SUSPENDIDO',
+            mensaje: 'se suspendio el vehiculo: ' . $placa,
+        );
+
+        $this->remove = false;
+        $this->dispatch('update-table');
     }
 
 

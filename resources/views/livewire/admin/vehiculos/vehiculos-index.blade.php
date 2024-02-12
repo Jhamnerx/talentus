@@ -256,7 +256,7 @@
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
                         @foreach ($vehiculos as $vehiculo)
-                            <tr>
+                            <tr wire:key='vehi-{{ $vehiculo->id }}'>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
