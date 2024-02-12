@@ -18,14 +18,7 @@ class Save extends Component
 
 
     public $numero, $detalle_trabajo, $fecha_hora_mantenimiento, $notify_admin = true, $notify_client = false, $nota, $estado, $vehiculo_id;
-    public $placa = null, $from;
     public $updates;
-
-    protected $listeners = [
-        'openModalSaveMantenimiento',
-        'create-mantenimiento' => 'listenUpdatedNumero',
-    ];
-
 
     protected function rules()
     {
@@ -63,19 +56,17 @@ class Save extends Component
         return view('livewire.admin.vehiculos.mantenimiento.save');
     }
 
+    #[On('open-modal-save-mantenimiento')]
     public function openModalSaveMantenimiento($from, Vehiculos $vehiculo = null)
     {
-
 
         $ctr = new MantenimientoController();
         $this->numero =  $ctr->setNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
 
         if ($vehiculo) {
-            $this->placa = $vehiculo->placa;
             $this->vehiculo_id = $vehiculo->id;
         }
-        $this->from = $from;
         $this->openModal();;
     }
 
@@ -85,10 +76,12 @@ class Save extends Component
 
         $this->modalOpen = true;
     }
+
     public function updatedNotifyAdmin($value)
     {
         $value == "1" ?  $this->notify_admin = true : $this->notify_admin = false;
     }
+
     public function updatedNotifyClient($value)
     {
         $value == "1" ?  $this->notify_client = true : $this->notify_client = false;
@@ -99,10 +92,21 @@ class Save extends Component
         $values = $this->validate();
 
         $mantenimiento = Mantenimiento::create($values);
-        $this->closeModal();
-        $this->dispatch('mantenimiento-save');
-        $this->dispatch('update-mantenimiento');
+        $this->afterSave($mantenimiento->vehiculo->placa);
     }
+
+    public function afterSave($placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'MANTENIMIENTO REGISTRADO',
+            mensaje: 'Se registro correctamente el mantenimiento para' . $placa,
+        );
+        $this->closeModal();
+    }
+
+
     public function closeModal()
     {
         $this->modalOpen = false;
@@ -111,15 +115,13 @@ class Save extends Component
         $this->reset();
     }
 
-    #[On('open-modal-mantenimiento')]
+    #[On(['open-modal-mantenimiento'])]
     public function listenUpdatedNumero($placa)
     {
         $ctr = new MantenimientoController();
         $this->numero =  $ctr->setNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
         $this->vehiculo_id = Vehiculos::where('placa', $placa)->first()->id;
-        $this->placa = $placa;
-        $this->from = 'vehiculos-index';
         $this->openModal();
     }
 }

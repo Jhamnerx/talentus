@@ -148,7 +148,7 @@ class VehiculosIndex extends Component
 
     public function createMantenimiento(Vehiculos $vehiculo)
     {
-        $this->dispatch('openModalSaveMantenimiento', 'vehiculos-index', $vehiculo);
+        $this->dispatch('open-modal-save-mantenimiento', from: 'vehiculos-index', vehiculo: $vehiculo);
     }
 
     public function openModalAddVehiculo()
@@ -157,6 +157,7 @@ class VehiculosIndex extends Component
         $this->dispatch('open-modal-add-vehiculo');
     }
 
+    //EVENTO QUE ESCUCHA DESDE LA VISTA AL CAMBIAR EL NUMERO Y ABRIR EL MODAL
     #[On('create-mantenimiento')]
     public function openModalCreateMantenimiento($placa)
     {

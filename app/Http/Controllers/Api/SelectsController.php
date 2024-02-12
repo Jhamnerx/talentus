@@ -365,7 +365,10 @@ class SelectsController extends Controller
     public function vehiculos(Request $request): Collection
     {
         return Vehiculos::query()
-            ->select('id', 'placa')
+            ->with(['cliente' => function ($query) {
+                $query->select('razon_social', 'numero_documento', 'id');
+            }])
+            ->select('id', 'placa', 'clientes_id')
             ->when(
                 $request->search,
                 fn (Builder $query) => $query
@@ -379,7 +382,21 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->limit(20)
 
             )
-            ->get();
+            ->get()->map(function (Vehiculos $vehiculo) {
+
+                if ($vehiculo->cliente) {
+
+                    $vehiculo->option_description = $vehiculo->cliente->razon_social . " | " . $vehiculo->cliente->numero_documento;
+                } else {
+
+                    $vehiculo->option_description = "";
+                }
+
+
+                //
+
+                return $vehiculo;
+            });
     }
     public function modelosDispositivos(Request $request): Collection
     {
