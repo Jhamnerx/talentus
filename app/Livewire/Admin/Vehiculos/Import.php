@@ -8,6 +8,7 @@ use Livewire\WithFileUploads;
 use App\Imports\VehiculosImport;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\On;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Validators\ValidationException;
 
@@ -20,14 +21,10 @@ class Import extends Component
 
     public Collection $errorInfo;
 
-    protected $listeners = [
-
-        'openModalImport' => 'openModal',
-    ];
-
     protected $rules = [
         'file' => 'required|file|max:10024|mimes:xlsx,csv,csv,xls',
     ];
+
     protected $messages = [
         'file.required' => 'Debes seleccionar un archivo',
         'file.file' => 'Debes seleccionar un archivo',
@@ -49,7 +46,18 @@ class Import extends Component
     {
         return view('livewire.admin.vehiculos.import');
     }
+    public function afterImport()
+    {
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            tittle: 'IMPORTANDO VEHICULOS',
+            mensaje: 'los vehiculos empezaron a importarse'
+        );
 
+        $this->modalOpenImport = false;
+        $this->reset('file');
+    }
 
     public function importExcel()
     {
@@ -57,10 +65,11 @@ class Import extends Component
 
         try {
 
-            $import = Excel::import(new VehiculosImport(Auth::user()), $this->file);
-            $this->modalOpenImport = false;
-            $this->reset('file');
+            Excel::import(new VehiculosImport(Auth::user()), $this->file);
+
+            $this->afterImport();
         } catch (ValidationException $e) {
+
             $failures = $e->failures();
             foreach ($failures as $failure) {
                 $errores = $failure->errors();
@@ -82,9 +91,9 @@ class Import extends Component
         }
     }
 
+    #[On('open-modal.import')]
     public function openModal()
     {
-
         $this->modalOpenImport = true;
     }
 

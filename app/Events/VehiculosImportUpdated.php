@@ -34,6 +34,5 @@ class VehiculosImportUpdated implements ShouldBroadcast
     {
         //Log::alert("evento");
         return new Channel('vehiculos');
-
     }
 }

@@ -98,19 +98,19 @@
                         <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                     @enderror
                     @foreach ($errorInfo as $error)
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $error['errores'] }} => {{ $error['values'] }}
-                    </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $error['errores'] }} => {{ $error['values'] }}
+                        </p>
                     @endforeach
                     <div>
                         <p class="mt-1 text-slate-500 text-sm">
                             Descargar archivo formato
-                            <a class="text-blue-800" href="{{ Storage::url('excel/clientes.xlsx') }}" download>
+                            <a class="text-blue-800" href="{{ Storage::url('excel/vehiculos.xlsx') }}" download>
                                 Haz click aqui
                             </a>
                         </p>
@@ -120,11 +120,9 @@
                 <!-- Modal footer -->
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
-                        <button @click="modalOpen = false, files = null"
-                            class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                            wire:click="closeModal()">Cerrar</button>
-                        <button @click="files = null" wire:click='importExcel'
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+
+                        <x-form.button flat label="Cancelar" wire:click="closeModal()" x-on:click="close" />
+                        <x-form.button primary label="Importar" spinner="importExcel" wire:click="importExcel" />
                     </div>
                 </div>
             </div>

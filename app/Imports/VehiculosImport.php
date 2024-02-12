@@ -71,8 +71,6 @@ class VehiculosImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvent
 
         foreach ($failures as $failure) {
 
-            // dd($failure->row(), $failure->attribute(), $failure->values()[$failure->attribute()], $failure->errors()[0]);
-
             $errores = [
                 'row' => $failure->row(),
                 'attribute' => $failure->attribute(),

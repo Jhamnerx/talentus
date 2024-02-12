@@ -132,7 +132,7 @@ class VehiculosIndex extends Component
     public function openModalImport()
     {
 
-        $this->dispatch('openModalImport');
+        $this->dispatch('open-modal.import');
     }
 
 
