@@ -15,7 +15,6 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $openModalContactos = false;
-    public $openModalEdit = false;
     public $openModalDelete = false;
     public $openModalDetalle = false;
 
@@ -108,8 +107,7 @@ class Index extends Component
 
     public function openModalEdit(Reportes $reporte)
     {
-        $this->dispatch('editarReporte', $reporte);
-        $this->openModalEdit = true;
+        $this->dispatch('editarReporte', reporte: $reporte);
     }
     public function openModalDelete(Reportes $reporte)
     {
