@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Vehiculos\Mantenimiento;
 use App\Models\Mantenimiento;
 use Livewire\Component;
 use Illuminate\Validation\Rule;
+use Livewire\Attributes\On;
 
 class Edit extends Component
 {
@@ -53,7 +54,7 @@ class Edit extends Component
         return view('livewire.admin.vehiculos.mantenimiento.edit');
     }
 
-
+    #[On('open-modal-edit-mantenimiento')]
     public function openModalEditMantenimiento(Mantenimiento $mantenimiento)
     {
         $this->openModal();
@@ -65,8 +66,6 @@ class Edit extends Component
         $this->notify_client = $mantenimiento->notify_client;
         $this->nota = $mantenimiento->nota;
         $this->vehiculo_id = $mantenimiento->vehiculo_id;
-
-        $this->dispatch('set-vehiculo', ['vehiculo' => $mantenimiento->vehiculo]);
     }
 
     public function openModal()
@@ -83,8 +82,18 @@ class Edit extends Component
         $mantenimiento = Mantenimiento::findOrFail($this->mantenimiento->id);
         $mantenimiento->update($values);
 
+        $this->afterSave($mantenimiento->vehiculo->placa);
+    }
+
+    public function afterSave($placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'MANTENIMIENTO ACTUALIZADO',
+            mensaje: 'Se actualizo correctamente el mantenimiento de' . $placa,
+        );
         $this->closeModal();
-        $this->dispatch('mantenimiento-update');
-        $this->dispatch('update-mantenimiento');
+        $this->dispatch('update-table');
     }
 }

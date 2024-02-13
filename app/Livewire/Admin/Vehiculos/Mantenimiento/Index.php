@@ -68,7 +68,7 @@ class Index extends Component
     public function openModalEdit(Mantenimiento $mantenimiento)
     {
 
-        $this->dispatch('openModalEditMantenimiento', $mantenimiento);
+        $this->dispatch('open-modal-edit-mantenimiento', mantenimiento: $mantenimiento);
     }
 
     public function markAs(Mantenimiento $mantenimiento, $value)
