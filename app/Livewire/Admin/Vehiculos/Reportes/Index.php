@@ -18,7 +18,6 @@ class Index extends Component
     public $openModalEdit = false;
     public $openModalDelete = false;
     public $openModalDetalle = false;
-    public $openModalRecordatorio = false;
 
     protected $listeners = [
         'update-table' => 'render'
@@ -131,7 +130,6 @@ class Index extends Component
     }
     public function openModalRecordatorio(Reportes $reporte)
     {
-        $this->dispatch('crearRecordatorio', $reporte);
-        $this->openModalRecordatorio = true;
+        $this->dispatch('crearRecordatorio', reporte: $reporte);
     }
 }

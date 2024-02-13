@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Vehiculos\Reportes;
 
 use App\Models\Reportes;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Recordatorio extends Component
@@ -14,11 +15,7 @@ class Recordatorio extends Component
     public $nota;
     public $reporte = null;
 
-    protected $listeners = [
-        'crearRecordatorio' => 'openModal'
-    ];
-
-        protected $rules = [
+    protected $rules = [
         'fecha_recordatorio' => 'required',
 
 
@@ -27,7 +24,7 @@ class Recordatorio extends Component
     protected $messages = [
 
         'fecha_recordatorio.required' => 'Debes Ingresar una fecha',
-        
+
     ];
 
     public function render()
@@ -35,13 +32,13 @@ class Recordatorio extends Component
         return view('livewire.admin.vehiculos.reportes.recordatorio');
     }
 
+
+    #[On('crearRecordatorio')]
     public function openModal(Reportes $reporte)
     {
         $this->openModalRecordatorio = true;
         $this->fecha_recordatorio = Carbon::now()->addDays(14)->format('Y-m-d');
         $this->reporte = $reporte;
-              
-        //dd($flota->contactos);
     }
 
     public function closeModal()
@@ -50,7 +47,7 @@ class Recordatorio extends Component
         $this->reset('fecha_recordatorio');
         $this->reset();
     }
-    public function GuardarRecordatorio()
+    public function save()
     {
         $this->validate();
 
@@ -59,22 +56,31 @@ class Recordatorio extends Component
             'data' => $this->nota,
             'fecha' => $this->fecha_recordatorio,
             'user_id' => auth()->user()->id,
-        
+
         ]);
 
         $this->reporte->estado = '2';
         $this->reporte->save();
-        //dd($this->reporte->vehiculos->placa);
-        $this->dispatch('recordatorio-save', ['vehiculo' => $this->reporte->vehiculos->placa]);
-        $this->resetErrorBag();
-        $this->closeModal();
-        $this->dispatch('updateTable');
-
+        $this->afterSave($this->reporte->vehiculos->placa);
     }
 
     public function updated($label)
     {
-    
+
         $this->validateOnly($label);
+    }
+
+
+    public function afterSave($placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'RECORDATORIO CREADO',
+            mensaje: 'Se registro correctamente el recordatoria para la unidad ' . $placa,
+        );
+        $this->closeModal();
+        $this->resetErrorBag();
+        $this->dispatch('update-table');
     }
 }
