@@ -14,8 +14,7 @@ class Index extends Component
     public $search;
     public $from = '';
     public $to = '';
-    public $openModalContactos = false;
-    public $openModalDetalle = false;
+
 
     protected $listeners = [
         'update-table' => 'render'
@@ -98,10 +97,7 @@ class Index extends Component
 
     public function openModalContactos(Clientes $cliente)
     {
-        // dd($cliente);
-
         $this->dispatch('showContactos', $cliente);
-        $this->openModalContactos = true;
     }
 
     public function openModalEdit(Reportes $reporte)
@@ -121,8 +117,7 @@ class Index extends Component
 
     public function openModalShow(Reportes $reporte)
     {
-        $this->dispatch('verDetalleReporte', $reporte);
-        $this->openModalDetalle = true;
+        $this->dispatch('verDetalleReporte', reporte: $reporte);
     }
     public function openModalRecordatorio(Reportes $reporte)
     {

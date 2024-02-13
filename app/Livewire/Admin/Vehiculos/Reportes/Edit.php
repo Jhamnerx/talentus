@@ -88,6 +88,8 @@ class Edit extends Component
             tittle: 'ESTADO ACTUALIZADO',
             mensaje: 'Se cambio el estado del reporte de la unidad: ' . $this->reporte->vehiculos->placa,
         );
+
+        $this->dispatch('update-table');
     }
 
     public function afterSave($placa)

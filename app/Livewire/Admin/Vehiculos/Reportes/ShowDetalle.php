@@ -5,37 +5,29 @@ namespace App\Livewire\Admin\Vehiculos\Reportes;
 use App\Models\DetalleReportes;
 use App\Models\Reportes;
 use Facade\FlareClient\Report;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ShowDetalle extends Component
 {
 
-    public $reporte_id = null;
     public $openModalDetalle = false;
     public $detalle;
-    public $reportes;
-
-    protected $listeners = [
-        'verDetalleReporte' => 'openModal'
-    ];
+    public $detalles = [];
+    public Reportes $reporte;
 
     protected  $rules = [
         'detalle' => 'required',
-
-
-        // "dispositivos_id" => "required|unique:vehiculos",
-
     ];
 
     protected $messages = [
         'detalle.required' => 'Debes rellenar este campo',
 
-
     ];
+
     public function closeModal()
     {
-
-        // $this->openModalDetalle = false;
+        $this->openModalDetalle = false;
         $this->reset();
         $this->resetErrorBag();
     }
@@ -43,38 +35,58 @@ class ShowDetalle extends Component
 
     public function render()
     {
-        $detalles = DetalleReportes::where('reportes_id', $this->reporte_id)->orderBy('id', 'desc')->get();
 
-        return view('livewire.admin.vehiculos.reportes.show-detalle', compact('detalles'));
+
+        return view('livewire.admin.vehiculos.reportes.show-detalle');
     }
 
 
-    public function openModal(Reportes $reportes)
+    #[On('verDetalleReporte')]
+    public function openModal(Reportes $reporte)
     {
+        $this->reporte = $reporte;
+        $this->detalles = DetalleReportes::where('reportes_id', $reporte->id)->orderBy('id', 'desc')->get();
         $this->openModalDetalle = true;
-        $this->reporte_id = $reportes->id;
-        $this->reportes = $reportes;
     }
 
     public function addDetalle()
     {
-        $reporte = Reportes::find($this->reportes->id);
-
         $this->validate();
 
-        $reporte->detalle()->create([
-            'detalle' => $this->detalle,
-            'user_id' => $this->reportes->user_id = auth()->user()->id,
-        ]);
+        try {
 
-        $this->dispatch('detalle-reporte');
+            $this->reporte->detalle()->create([
+                'detalle' => $this->detalle,
+                'user_id' => $this->reporte->user_id = auth()->user()->id,
+            ]);
+            $this->afterSave($this->reporte->vehiculos->placa);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL AÑADIR DETALLE',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
         $this->detalle = "";
+    }
+
+
+    public function afterSave($placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'DETALLE REGISTRADO',
+            mensaje: 'Se registro el detalle del reporte de la placa: ' . $placa,
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 
     public function updated($label)
     {
 
         $this->validateOnly($label);
-        //dd($label);
     }
 }

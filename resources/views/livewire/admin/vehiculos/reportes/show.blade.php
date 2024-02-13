@@ -52,12 +52,12 @@
                         <!-- Body -->
                         <div class="mb-3">
                             <!-- Title -->
-                            <h2 class="font-semibold text-slate-800 mb-1">{{$reporte->vehiculos->placa}}</h2>
+                            <h2 class="font-semibold text-slate-800 mb-1">{{ $reporte->vehiculos->placa }}</h2>
                             <!-- Content -->
                             <div>
-                                <div class="text-sm">#{{$reporte->id}} creado por <a
+                                <div class="text-sm">#{{ $reporte->id }} creado por <a
                                         class="font-medium text-slate-800 hover:underline"
-                                        href="javascript: void(0)">{{$reporte->user->name}}</a>
+                                        href="javascript: void(0)">{{ $reporte->user->name }}</a>
                                 </div>
                             </div>
                         </div>
@@ -67,8 +67,8 @@
                             <div class="flex shrink-0 -space-x-3 -ml-px">
                                 <a class="block" href="javascript: void(0)">
                                     <img class="rounded-full border-2 border-white box-content"
-                                        src="{{$reporte->user->profile_photo_url}}" width="30" height="30"
-                                        alt="{{$reporte->user->name}}" />
+                                        src="{{ $reporte->user->profile_photo_url }}" width="30" height="30"
+                                        alt="{{ $reporte->user->name }}" />
                                 </a>
                             </div>
                             <!-- Right side -->
@@ -111,7 +111,7 @@
                             <!-- Content -->
                             <div>
                                 <div class="text-sm">
-                                    {{$reporte->detalle}}
+                                    {{ $reporte->detalle }}
                                 </div>
                             </div>
                         </div>
@@ -127,8 +127,8 @@
                                         <path
                                             d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
                                     </svg>
-                                    <div class="text-sm text-amber-600">{{ucFirst($reporte->created_at->monthName)}}
-                                        {{$reporte->created_at->format('d')}}</div>
+                                    <div class="text-sm text-amber-600">{{ ucFirst($reporte->created_at->monthName) }}
+                                        {{ $reporte->created_at->format('d') }}</div>
                                 </div>
                                 <!-- Replies button -->
                                 <button class="flex items-center text-slate-400 hover:text-indigo-500 ml-3">
@@ -226,7 +226,7 @@
                             <div class="flex shrink-0 -space-x-3 -ml-px">
                                 <a class="block" href="javascript: void(0)">
                                     <img class="rounded-full border-2 border-white box-content"
-                                        src="{{asset('images/buses.png')}}" width="82" height="82" />
+                                        src="{{ asset('images/buses.png') }}" width="82" height="82" />
                                 </a>
                             </div>
                             <!-- Right side -->
@@ -251,46 +251,49 @@
                         <!-- List -->
                         <ul class="mt-3">
                             @foreach ($reporte->detalle()->get() as $detalle)
-                            <li class="flex items-center border-t border-slate-200 py-2">
-                                <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2" viewBox="0 0 12 12">
-                                    <path
-                                        d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
-                                </svg>
-                                <div class="text-sm text-slate-400">{{$detalle->detalle}}</div>
+                                <li class="flex items-center border-t border-slate-200 py-2">
+                                    <svg class="w-3 h-3 shrink-0 fill-current text-emerald-500 mr-2"
+                                        viewBox="0 0 12 12">
+                                        <path
+                                            d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
+                                    </svg>
+                                    <div class="text-sm text-slate-400">{{ $detalle->detalle }}</div>
 
-                            </li>
-                            <!-- Footer -->
-                            <div class="mb-3 flex items-center justify-between">
-                                <!-- Left side -->
-                                <div></div>
-                                <!-- Right side -->
-                                <div class="flex items-center">
-                                    <!-- Date -->
-                                    <div class="flex items-center text-amber-500 ml-3">
-                                        <svg class="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
-                                            <path
-                                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                                        </svg>
-                                        <div class="text-sm text-amber-600">{{ucFirst($detalle->created_at->monthName)}}
-                                            {{$detalle->created_at->format('d, Y - h:m')}}</div>
-                                    </div>
-                                    <!-- delete button -->
-                                    <button class="text-rose-400 hover:text-rose-500 ml-3">
-                                        <svg class="w-4 h-4 shrink-0 fill-current mr-1.5"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-                                            <g stroke-linecap="square" stroke-width="3" stroke-miterlimit="10"
-                                                fill="none" stroke="currentColor" stroke-linejoin="miter"
-                                                class="nc-icon-wrapper" transform="translate(0.5 0.5)">
-                                                <path d="M22,13V3H42V13"></path>
-                                                <line x1="59" y1="13" x2="5" y2="13"></line>
+                                </li>
+                                <!-- Footer -->
+                                <div class="mb-3 flex items-center justify-between">
+                                    <!-- Left side -->
+                                    <div></div>
+                                    <!-- Right side -->
+                                    <div class="flex items-center">
+                                        <!-- Date -->
+                                        <div class="flex items-center text-amber-500 ml-3">
+                                            <svg class="w-4 h-4 shrink-0 fill-current mr-1.5" viewBox="0 0 16 16">
                                                 <path
-                                                    d="M53,19,50.332,56.356A5,5,0,0,1,45.345,61H18.655a5,5,0,0,1-4.987-4.644L11,19">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </button>
+                                                    d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
+                                            </svg>
+                                            <div class="text-sm text-amber-600">
+                                                {{ ucFirst($detalle->created_at->monthName) }}
+                                                {{ $detalle->created_at->format('d, Y - h:m') }}</div>
+                                        </div>
+                                        <!-- delete button -->
+                                        <button class="text-rose-400 hover:text-rose-500 ml-3">
+                                            <svg class="w-4 h-4 shrink-0 fill-current mr-1.5"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+                                                <g stroke-linecap="square" stroke-width="3" stroke-miterlimit="10"
+                                                    fill="none" stroke="currentColor" stroke-linejoin="miter"
+                                                    class="nc-icon-wrapper" transform="translate(0.5 0.5)">
+                                                    <path d="M22,13V3H42V13"></path>
+                                                    <line x1="59" y1="13" x2="5"
+                                                        y2="13"></line>
+                                                    <path
+                                                        d="M53,19,50.332,56.356A5,5,0,0,1,45.345,61H18.655a5,5,0,0,1-4.987-4.644L11,19">
+                                                    </path>
+                                                </g>
+                                            </svg>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
                             @endforeach
 
 
@@ -299,7 +302,8 @@
                         <!-- Footer -->
                         <div class="flex items-center justify-between">
                             <!-- Left side -->
-                            <button wire:click="openModalShow({{ $reporte->id }})" class="p-2 shrink-0 rounded-full bg-white border border-slate-200 hover:border-slate-300
+                            <button wire:click="openModalShow({{ $reporte->id }})"
+                                class="p-2 shrink-0 rounded-full bg-white border border-slate-200 hover:border-slate-300
                                 text-indigo-500 transition duration-150">
                                 <span class="sr-only">Añadir</span>
                                 <svg class="w-3 h-3 fill-current" viewBox="0 0 12 12">
@@ -343,23 +347,24 @@
                                 <div class="flex shrink-0 -space-x-3 -ml-px mr-2">
                                     <a class="block" href="javascript: void(0)">
                                         <img class="rounded-full border-2 border-white box-content"
-                                            src="{{asset('images/camioneta.png')}}" width="64" height="64" />
+                                            src="{{ asset('images/camioneta.png') }}" width="64"
+                                            height="64" />
                                     </a>
                                 </div>
                                 <div class="grow">
                                     <a class="inline-flex text-slate-800 hover:text-slate-900"
                                         href="javascript: void(0)">
-                                        <h2 class="font-semibold text-slate-800">{{$reporte->vehiculos->placa}}</h2>
+                                        <h2 class="font-semibold text-slate-800">{{ $reporte->vehiculos->placa }}</h2>
                                     </a>
                                     <div class="text-xs font-medium text-slate-500">
-                                        {{$reporte->vehiculos->created_at->format('h:m a, d-m-Y')}}</div>
+                                        {{ $reporte->vehiculos->created_at->format('h:m a, d-m-Y') }}</div>
                                 </div>
                             </div>
                             <!-- Content -->
                             <div>
-                                <div class="text-sm">{{$reporte->vehiculos->descripcion}}
+                                <div class="text-sm">{{ $reporte->vehiculos->descripcion }}
                                     <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="javascript: void(0)">#{{$reporte->vehiculos->tipo}}</a>
+                                        href="javascript: void(0)">#{{ $reporte->vehiculos->tipo }}</a>
                                     🔥
                                 </div>
                                 <!-- Credit Card -->
@@ -380,13 +385,16 @@
                                                     <svg class="w-full h-full" width="398" height="392"
                                                         viewBox="0 0 398 392" xmlns="http://www.w3.org/2000/svg">
                                                         <defs>
-                                                            <filter x="-88.2%" y="-88.2%" width="276.5%" height="276.5%"
-                                                                filterUnits="objectBoundingBox" id="glow-a">
-                                                                <feGaussianBlur stdDeviation="50" in="SourceGraphic" />
+                                                            <filter x="-88.2%" y="-88.2%" width="276.5%"
+                                                                height="276.5%" filterUnits="objectBoundingBox"
+                                                                id="glow-a">
+                                                                <feGaussianBlur stdDeviation="50"
+                                                                    in="SourceGraphic" />
                                                             </filter>
                                                         </defs>
-                                                        <circle class="fill-indigo-100 opacity-60" filter="url(#glow-a)"
-                                                            cx="85" cy="85" r="85" transform="translate(0 216)" />
+                                                        <circle class="fill-indigo-100 opacity-60"
+                                                            filter="url(#glow-a)" cx="85" cy="85"
+                                                            r="85" transform="translate(0 216)" />
                                                     </svg>
                                                 </div>
                                                 <div class="absolute right-0 -top-1/3 w-[398px] aspect-square"
@@ -394,13 +402,16 @@
                                                     <svg class="w-full h-full" width="398" height="392"
                                                         viewBox="0 0 398 392" xmlns="http://www.w3.org/2000/svg">
                                                         <defs>
-                                                            <filter x="-88.2%" y="-88.2%" width="276.5%" height="276.5%"
-                                                                filterUnits="objectBoundingBox" id="glow-b">
-                                                                <feGaussianBlur stdDeviation="50" in="SourceGraphic" />
+                                                            <filter x="-88.2%" y="-88.2%" width="276.5%"
+                                                                height="276.5%" filterUnits="objectBoundingBox"
+                                                                id="glow-b">
+                                                                <feGaussianBlur stdDeviation="50"
+                                                                    in="SourceGraphic" />
                                                             </filter>
                                                         </defs>
                                                         <circle class="fill-sky-400 opacity-60" filter="url(#glow-b)"
-                                                            cx="85" cy="85" r="85" transform="translate(228 0)" />
+                                                            cx="85" cy="85" r="85"
+                                                            transform="translate(228 0)" />
                                                     </svg>
                                                 </div>
                                                 <div class="relative h-full flex flex-col justify-between">
@@ -409,20 +420,21 @@
                                                         xmlns="http://www.w3.org/2000/svg"
                                                         xmlns:xlink="http://www.w3.org/1999/xlink">
                                                         <defs>
-                                                            <linearGradient x1="50%" y1="0%" x2="50%" y2="100%"
-                                                                id="icon1-b">
+                                                            <linearGradient x1="50%" y1="0%"
+                                                                x2="50%" y2="100%" id="icon1-b">
                                                                 <stop stop-color="#A5B4FC" offset="0%" />
                                                                 <stop stop-color="#E0E7FF" offset="100%" />
                                                             </linearGradient>
-                                                            <linearGradient x1="50%" y1="24.537%" x2="50%" y2="100%"
-                                                                id="icon1-c">
+                                                            <linearGradient x1="50%" y1="24.537%"
+                                                                x2="50%" y2="100%" id="icon1-c">
                                                                 <stop stop-color="#4338CA" offset="0%" />
                                                                 <stop stop-color="#6366F1" stop-opacity="0"
                                                                     offset="100%" />
                                                             </linearGradient>
                                                             <path id="icon1-a" d="M16 0l16 32-16-5-16 5z" />
                                                         </defs>
-                                                        <g transform="rotate(90 16 16)" fill="none" fill-rule="evenodd">
+                                                        <g transform="rotate(90 16 16)" fill="none"
+                                                            fill-rule="evenodd">
                                                             <mask id="icon1-d" fill="#fff">
                                                                 <use xlink:href="#icon1-a" />
                                                             </mask>
@@ -435,9 +447,9 @@
 
                                                     <div
                                                         class="flex justify-between text-lg font-bold gap-8 text-slate-200 tracking-widest drop-shadow-sm">
-                                                        <span class="text-xs">{{$reporte->vehiculos->marca}}</span>
-                                                        <span class="text-xs">{{$reporte->vehiculos->modelo}}</span>
-                                                        <span class="text-xs">{{$reporte->vehiculos->tipo}}</span>
+                                                        <span class="text-xs">{{ $reporte->vehiculos->marca }}</span>
+                                                        <span class="text-xs">{{ $reporte->vehiculos->modelo }}</span>
+                                                        <span class="text-xs">{{ $reporte->vehiculos->tipo }}</span>
                                                     </div>
 
                                                     <div
@@ -445,18 +457,19 @@
 
                                                         <div
                                                             class="text-sm font-bold text-slate-200 tracking-widest drop-shadow-sm space-x-3">
-                                                            <span>{{$reporte->vehiculos->color}}</span>
+                                                            <span>{{ $reporte->vehiculos->color }}</span>
                                                             |
                                                             <span>
-                                                                {{$reporte->vehiculos->dispositivos ?
-                                                                $reporte->vehiculos->dispositivos->modelo->modelo : 'SIN
-                                                                GPS'}}
+                                                                {{ $reporte->vehiculos->dispositivos
+                                                                    ? $reporte->vehiculos->dispositivos->modelo->modelo
+                                                                    : 'SIN
+                                                                                                                                                                                                GPS' }}
                                                             </span>
                                                         </div>
                                                     </div>
                                                     <!-- Mastercard logo -->
-                                                    <svg class="absolute bottom-0 right-0" width="48" height="28"
-                                                        viewBox="0 0 48 28">
+                                                    <svg class="absolute bottom-0 right-0" width="48"
+                                                        height="28" viewBox="0 0 48 28">
                                                         <circle fill="#F59E0B" cx="34" cy="14" r="14"
                                                             fill-opacity=".8" />
                                                         <circle fill="#F43F5E" cx="14" cy="14" r="14"
@@ -481,37 +494,36 @@
                                 <div class="flex shrink-0 -space-x-3 -ml-px mr-2">
                                     <a class="block" href="javascript: void(0)">
                                         <img class="rounded-full border-2 border-white box-content"
-                                            src="{{asset('images/logo.png')}}" width="28" height="28" alt="User 12" />
+                                            src="{{ asset('images/logo.png') }}" width="28" height="28"
+                                            alt="User 12" />
                                     </a>
                                 </div>
                                 <div class="grow">
                                     <a class="inline-flex text-slate-800 hover:text-slate-900"
                                         href="javascript: void(0)">
                                         <h2 class="font-semibold text-slate-800">
-                                            {{$reporte->vehiculos->cliente ?
-                                            $reporte->vehiculos->cliente->razon_social : 'REGISTRAR CLIENTE'}}
+                                            {{ $reporte->vehiculos->cliente ? $reporte->vehiculos->cliente->razon_social : 'REGISTRAR CLIENTE' }}
                                         </h2>
                                     </a>
                                     <div class="text-xs font-medium text-slate-500">
-                                        {{$reporte->vehiculos->cliente->created_at->format('h:m a, d-m-Y')}}</div>
+                                        {{ $reporte->vehiculos->cliente->created_at->format('h:m a, d-m-Y') }}</div>
                                 </div>
                             </div>
                             <!-- Content -->
                             @can('editar-cliente')
-                            <div>
-                                <div class="text-sm">
-                                    {{$reporte->vehiculos->cliente ?
-                                    $reporte->vehiculos->cliente->direccion : ''}}
-                                    @if ($reporte->vehiculos->cliente)
-                                    <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                        href="{{route('admin.clientes.edit', $reporte->vehiculos->cliente)}}">#Editar</a>
-                                    @else
-                                    <a class="font-medium text-indigo-400 hover:text-indigo-600"
-                                        href="javascript: void(0)">#Editar</a>
-                                    @endif
+                                <div>
+                                    <div class="text-sm">
+                                        {{ $reporte->vehiculos->cliente ? $reporte->vehiculos->cliente->direccion : '' }}
+                                        @if ($reporte->vehiculos->cliente)
+                                            <a class="font-medium text-indigo-500 hover:text-indigo-600"
+                                                href="{{ route('admin.clientes.edit', $reporte->vehiculos->cliente) }}">#Editar</a>
+                                        @else
+                                            <a class="font-medium text-indigo-400 hover:text-indigo-600"
+                                                href="javascript: void(0)">#Editar</a>
+                                        @endif
 
+                                    </div>
                                 </div>
-                            </div>
                             @endcan
 
                         </div>
