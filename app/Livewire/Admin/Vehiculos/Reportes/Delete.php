@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Vehiculos\Reportes;
 
 use App\Models\Reportes;
 use Illuminate\Database\Eloquent\Model;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Delete extends Component
@@ -12,31 +13,50 @@ class Delete extends Component
     public Reportes $reporte;
 
     public $openModalDelete = false;
-    public $field = "eliminado";
-
-    public $eliminado;
-    protected $listeners = [
-        'EliminarReporte' => 'openModal'
-    ];
-
 
     public function delete()
     {
-        $this->reporte->setAttribute($this->field, '1')->save();
-        $this->reporte->delete();
-        // return redirect()->route('admin.vehiculos.index');
-        $this->dispatch('reporte-delete', ['vehiculo' => $this->reporte->vehiculos->placa]);
 
-        $this->dispatch('updateTable');
+        try {
+            $this->reporte->delete();
+            $this->afterDelete();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL ELIMINAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
     }
     public function render()
     {
         return view('livewire.admin.vehiculos.reportes.delete');
     }
 
-    public function openModal(Reportes $reportes)
+    public function afterDelete()
     {
+        $this->closeModal();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'REPORTE ELIMINADO',
+            mensaje: 'se elimino correctamente el reporte'
+        );
+
+        $this->dispatch('update-table');
+    }
+
+    #[On('EliminarReporte')]
+    public function openModal(Reportes $reporte)
+    {
+
+        $this->reporte = $reporte;
         $this->openModalDelete = true;
-        $this->reporte = $reportes;
+    }
+
+    public function closeModal()
+    {
+        $this->openModalDelete = false;
     }
 }

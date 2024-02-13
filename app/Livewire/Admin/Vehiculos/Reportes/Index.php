@@ -15,7 +15,6 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $openModalContactos = false;
-    public $openModalDelete = false;
     public $openModalDetalle = false;
 
     protected $listeners = [
@@ -111,8 +110,7 @@ class Index extends Component
     }
     public function openModalDelete(Reportes $reporte)
     {
-        $this->dispatch('EliminarReporte', $reporte);
-        $this->openModalDelete = true;
+        $this->dispatch('EliminarReporte', reporte: $reporte);
     }
 
 
