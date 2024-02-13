@@ -15,14 +15,13 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $openModalContactos = false;
-    public $openModalSave = false;
     public $openModalEdit = false;
     public $openModalDelete = false;
     public $openModalDetalle = false;
     public $openModalRecordatorio = false;
 
     protected $listeners = [
-        'updateTable' => 'render'
+        'update-table' => 'render'
     ];
 
     public function render()
@@ -122,8 +121,7 @@ class Index extends Component
 
     public function openModalSave()
     {
-        $this->dispatch('guardarReporte');
-        $this->openModalSave = true;
+        $this->dispatch('open-modal-save');
     }
 
     public function openModalShow(Reportes $reporte)

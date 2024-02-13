@@ -38,8 +38,8 @@
 
                             <label class="block text-sm font-medium mb-1" for="marca">Fecha Recordatorio:</label>
                             <div class="relative">
-                                <input maxlength="10" wire:model.live="fecha_recordatorio" required name="fecha_recordatorio"
-                                    type="text"
+                                <input maxlength="10" wire:model.live="fecha_recordatorio" required
+                                    name="fecha_recordatorio" type="text"
                                     class="form-input fechaRecordatorio pl-8 py-2 outline-none block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                     placeholder="Selecciona la fecha">
                                 <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -104,19 +104,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-    <script>
-        // INICIALIZAR LOS INPUTS DE FECHA
-        $(document).ready(function() {
-            flatpickr('.fechaRecordatorio', {
-                mode: 'single',
-                defaultDate: new Date().fp_incr(14),
-                minDate: "today",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-    </script>
-@endpush
