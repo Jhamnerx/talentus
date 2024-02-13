@@ -2,17 +2,15 @@
 
 namespace App\Livewire\Admin\Vehiculos\Mantenimiento;
 
-use App\Models\Mantenimiento;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Models\Mantenimiento;
 
 class Delete extends Component
 {
     public Mantenimiento $mantenimiento;
-    public $openModalDelete;
+    public $openModalDelete = false;
 
-    protected $listeners = [
-        'EliminarMantenimiento' => 'openModalDelete'
-    ];
 
     public function render()
     {
@@ -23,10 +21,26 @@ class Delete extends Component
     public function delete()
     {
         $this->mantenimiento->delete();
-        $this->dispatch('mantenimiento-delete');
-        $this->dispatch('update-mantenimiento');
+        $this->afterDelete();
     }
 
+    public function closeModal()
+    {
+
+        $this->openModalDelete = false;
+    }
+    public function afterDelete()
+    {
+        $this->closeModal();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'REGISTRO MANTENIMIENTO ELIMINADO',
+            mensaje: 'se elimino correctamente el registro'
+        );
+        $this->dispatch('update-table');
+    }
+    #[On('EliminarMantenimiento')]
     public function openModalDelete(Mantenimiento $mantenimiento)
     {
         $this->openModalDelete = true;
