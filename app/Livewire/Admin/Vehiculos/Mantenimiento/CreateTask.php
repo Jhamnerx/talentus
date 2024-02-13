@@ -13,6 +13,7 @@ class CreateTask extends Component
     public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $fecha_hora, $tecnico_id;
     public $placa;
     public Mantenimiento $mantenimiento;
+
     protected $listeners = [
         'openModalCreateTask'
     ];
@@ -58,7 +59,6 @@ class CreateTask extends Component
         $this->dispositivo = $mantenimiento->vehiculo->dispositivos ?  $mantenimiento->vehiculo->dispositivos->modelo->modelo : 'Actualiza el vehiculo o ingresa el modelo';
         $this->fecha_hora = $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d H:i');
         $this->openModal();
-        $this->dispatch('openModal', ['fecha_hora' => $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d H:i')]);
     }
 
     public function openModal()
@@ -84,7 +84,18 @@ class CreateTask extends Component
 
         $tarea = $this->mantenimiento->tarea()->create($data);
 
+        $this->afterSave($tarea->token, $this->mantenimiento->vehiculo->placa);
+    }
+
+
+    public function afterSave($numero, $placa)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'SERVICIO TECNICO REGISTRADO',
+            mensaje: 'Se registro la tarea ' . $numero . ' para la placa <b>' . $placa . '</b>',
+        );
         $this->closeModal();
-        $this->dispatch('save-task', ['tarea' => $tarea]);
     }
 }

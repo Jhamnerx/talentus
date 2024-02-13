@@ -62,7 +62,7 @@ class Index extends Component
     public function createTask(Mantenimiento $mantenimiento)
     {
 
-        $this->dispatch('openModalCreateTask', $mantenimiento);
+        $this->dispatch('openModalCreateTask', mantenimiento: $mantenimiento);
     }
 
     public function openModalEdit(Mantenimiento $mantenimiento)
@@ -77,7 +77,7 @@ class Index extends Component
         if ($mantenimiento->estado->name !== $value) {
             $mantenimiento->estado = $value;
             $mantenimiento->save();
-            $this->dispatch('mark-as', ['estado' => $value]);
+            $this->dispatch('mark-as', estado: $value);
         }
 
         if ($value = "COMPLETADA") {
