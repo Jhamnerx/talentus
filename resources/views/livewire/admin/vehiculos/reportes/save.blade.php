@@ -177,8 +177,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea title="Hola" wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
-                                        rows="5" placeholder="Ingresar Breve Descripcíon"></textarea>
+                                    <textarea title="Hola" wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion"
+                                        id="descripcion" rows="5" placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -229,81 +229,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            window.addEventListener('close-modal', event => {
-
-                $('.vehiculos_id').val(null).trigger('change');
-
-            })
-
-            $(document).ready(function() {
-
-                flatpickr('.fechaTransmision', {
-                    mode: 'single',
-                    defaultDate: "today",
-                    disableMobile: "true",
-                    dateFormat: "Y-m-d",
-                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-                });
-
-
-                var hoy = new Date();
-
-                var hora = hoy.getHours() + ":" + hoy.getMinutes();
-
-                flatpickr(".hora_t", {
-                    enableTime: true,
-                    noCalendar: true,
-                    disableMobile: "true",
-                    dateFormat: "H:i",
-                    time_24hr: true,
-
-                });
-            });
-        </script>
-        <script>
-            $('.vehiculos_id').select2({
-                placeholder: '    Buscar un Vehiculo',
-                language: "es",
-
-                minimumInputLength: 2,
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.vehiculos') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                        }
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-                            return obj;
-                        });
-                        return {
-                            results: suggestions,
-                        };
-                    },
-                }
-            });
-
-            $('.vehiculos_id').on('select2:select', function(e) {
-                var data = e.params.data;
-
-                @this.set('vehiculos_id', data.id)
-            });
-        </script>
-    @endpush
-@endonce

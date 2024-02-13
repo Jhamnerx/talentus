@@ -43,7 +43,8 @@
                                 <div class="relative" wire:ignore lang="es">
 
 
-                                    <input class="form-input w-full pl-9" type="text" readonly wire:model.live='vehiculo'>
+                                    <input class="form-input w-full pl-9" type="text" readonly
+                                        wire:model.live='vehiculo'>
 
                                     @error('vehiculo')
                                         <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -85,7 +86,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="marca">Fecha Transmision:</label>
                                 <div class="relative">
-                                    <input maxlength="10" wire:model.live="fecha_t" required name="fecha" type="text"
+                                    <input maxlength="10" wire:model.live="fecha_t" required name="fecha"
+                                        type="text"
                                         class="form-input valid:border-emerald-300
                                                             required:border-rose-300 invalid:border-rose-300 peer inputDate font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -172,8 +174,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">Detalle:</label>
                                 <div class="relative">
-                                    <textarea wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="5"
-                                        placeholder="Ingresar Breve Descripcíon"></textarea>
+                                    <textarea wire:model.live="detalle" class="form-input w-full pl-9" name="descripcion" id="descripcion"
+                                        rows="5" placeholder="Ingresar Breve Descripcíon"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -224,55 +226,3 @@
     </div>
     <!-- End -->
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            $('.vehiculos_id').select2({
-                placeholder: '    Buscar un Vehiculo',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                minimumInputLength: 2,
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.vehiculos') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                        }
-
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-
-                            return obj;
-
-                        });
-
-                        return {
-
-                            results: suggestions,
-
-                        };
-
-                    },
-
-
-                }
-            });
-            $('.vehiculos_id').on('select2:select', function(e) {
-                var data = e.params.data;
-                @this.set('vehiculos_id', data.id)
-            });
-        </script>
-    @endpush
-@endonce

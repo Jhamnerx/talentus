@@ -4,21 +4,21 @@
 
 
 
-@livewire('admin.vehiculos.reportes.show', ['reporte' => $reporte])
+    @livewire('admin.vehiculos.reportes.show', ['reporte' => $reporte])
 
 
 @stop
 
 @push('modals')
-@livewire('admin.vehiculos.reportes.show-detalle')
+    @livewire('admin.vehiculos.reportes.show-detalle')
 @endpush
 
 
 
 @section('js')
 
-<script>
-    window.addEventListener('reporte-edit', event => {
+    <script>
+        window.addEventListener('reporte-edit', event => {
             iziToast.success({
                 position: 'topRight',
                 title: 'ACTUALIZADO',
@@ -27,7 +27,7 @@
             $('.vehiculos_id').val(null).trigger('change');
 
         })
-</script>
+    </script>
 
 
 
