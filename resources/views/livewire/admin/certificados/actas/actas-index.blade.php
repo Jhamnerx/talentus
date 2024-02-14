@@ -29,7 +29,7 @@
 
             <!-- Create invoice button -->
 
-            <button wire:click="openModalSave()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+            <button wire:click.prevent="openModalSave()" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                     <path
                         d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -197,7 +197,7 @@
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Actas <span
-                    class="text-slate-400 font-medium">{{ $total }}</span>
+                    class="text-slate-400 font-medium">{{ $actas->total() }}</span>
             </h2>
         </header>
         <div>
@@ -311,26 +311,58 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>{{ $acta->fecha }}</div>
 
-                                    {{-- <div>{{ $acta->created_at->formatLocalized('%d de %B %Y') }}</div> --}}
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                     <div>
                                         <div class="m-3 w-48">
-                                            <!-- Start -->
+                                            <div class="flex items-center mt-2" x-data="{ checked: {{ $acta->sello ? 'true' : 'false' }} }">
+                                                <span class="text-sm mr-3">Sello: </span>
+                                                <div class="form-switch">
+                                                    <input wire:click="toggleSello({{ $acta->id }})"
+                                                        type="checkbox" id="switch-s{{ $acta->id }}"
+                                                        class="sr-only" x-model="checked" />
+                                                    <label class="bg-slate-400" for="switch-s{{ $acta->id }}">
+                                                        <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                        <span class="sr-only">Estado</span>
+                                                    </label>
+                                                </div>
+                                                <div class="text-sm text-slate-400 italic ml-2"
+                                                    x-text="checked ? 'ON' : 'OFF'"></div>
+                                            </div>
+                                            <div class="flex items-center mt-2" x-data="{ checked: {{ $acta->fondo ? 'true' : 'false' }} }">
+                                                <span class="text-sm mr-3">Fondo: </span>
+                                                <div class="form-switch">
+                                                    <input wire:click="toggleFondo({{ $acta->id }})"
+                                                        type="checkbox" id="switch-f{{ $acta->id }}"
+                                                        class="sr-only" x-model="checked" />
+                                                    <label class="bg-slate-400" for="switch-f{{ $acta->id }}">
+                                                        <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                        <span class="sr-only">Estado</span>
+                                                    </label>
+                                                </div>
+                                                <div class="text-sm text-slate-400 italic ml-2"
+                                                    x-text="checked ? 'ON' : 'OFF'"></div>
+                                            </div>
 
-                                            @livewire('admin.certificados.actas.status-sello', ['model' => $acta, 'field' => 'sello'], key('sello' . $acta->id))
-
-                                            @livewire('admin.certificados.actas.status-fondo', ['model' => $acta, 'field' => 'fondo'], key('fondo' . $acta->id))
-                                            <!-- End -->
                                         </div>
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>
                                         <div class="m-3 ">
-                                            @livewire('admin.certificados.actas.change-status', ['model' => $acta, 'field' => 'estado'], key('estado' . $acta->id))
-
-                                            <!-- End -->
+                                            <div class="flex items-center mt-2" x-data="{ checked: {{ $acta->estado ? 'true' : 'false' }} }">
+                                                <div class="form-switch">
+                                                    <input wire:click="toggleStatus({{ $acta->id }})"
+                                                        type="checkbox" id="switch-e{{ $acta->id }}"
+                                                        class="sr-only" x-model="checked" />
+                                                    <label class="bg-slate-400" for="switch-e{{ $acta->id }}">
+                                                        <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                        <span class="sr-only">Estado</span>
+                                                    </label>
+                                                </div>
+                                                <div class="text-sm text-slate-400 italic ml-2"
+                                                    x-text="checked ? 'Aceptado' : 'Anulado'"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </td>

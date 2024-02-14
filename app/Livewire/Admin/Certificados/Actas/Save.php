@@ -8,28 +8,26 @@ use App\Models\Actas;
 use App\Models\Ciudades;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Save extends Component
 {
 
     public $openModalSave = false;
-    public $ciudades;
 
     public $numero, $vehiculos_id, $fecha_instalacion, $inicio_cobertura, $fin_cobertura, $ciudades_id, $fondo = 1, $sello = 1, $plataforma = "basica";
 
-
-    protected $listeners = [
-        'guardarActa' => 'openModal'
-    ];
 
     public function render()
     {
         return view('livewire.admin.certificados.actas.save');
     }
 
+    #[On('guardarActa')]
     public function openModal()
     {
+
         $this->openModalSave = true;
         $newActa = new ActasController();
         $this->numero = $newActa->setNextSequenceNumber();
@@ -41,44 +39,74 @@ class Save extends Component
     public function closeModal()
     {
         $this->openModalSave = false;
-        $this->reset();
-        $this->resetErrorBag();
+        $this->resetProperties(); // Llamada al método para restablecer las propiedades
     }
 
-    public function guardarActa()
+    public function save()
     {
         $actaRequest = new ActasRequest();
         $values = $this->validate($actaRequest->rules(), $actaRequest->messages());
 
+        try {
 
-        $ciudad = Ciudades::find($values["ciudades_id"]);
+            $ciudad = Ciudades::find($values["ciudades_id"]);
+            $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
-        $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
-        $acta =  new Actas();
+            $acta = Actas::create([
+                'vehiculos_id' => $values["vehiculos_id"],
+                'numero' => $values["numero"],
+                'fecha_instalacion' => $values["fecha_instalacion"],
+                'inicio_cobertura' => $values["inicio_cobertura"],
+                'fin_cobertura' => $values["fin_cobertura"],
+                'ciudades_id' => $values["ciudades_id"],
+                'fondo' => $values["fondo"],
+                'sello' => $values["sello"],
+                'plataforma' => $values["plataforma"],
+                'codigo' => $ciudad->prefijo . "-" . $values["numero"],
+                'year' => today()->year,
+                'fecha' => $fecha,
+            ]);
 
-        $acta->vehiculos_id = $values["vehiculos_id"];
-        $acta->numero = $values["numero"];
-        $acta->fecha_instalacion = $values["fecha_instalacion"];
-        $acta->inicio_cobertura = $values["inicio_cobertura"];
-        $acta->fin_cobertura = $values["fin_cobertura"];
-        $acta->ciudades_id = $values["ciudades_id"];
-        $acta->fondo = $values["fondo"];
-        $acta->sello = $values["sello"];
-        $acta->plataforma = $values["plataforma"];
-        $acta->codigo = $ciudad->prefijo . "-" . $values["numero"];
-        $acta->year = today()->year;
-        $acta->fecha = $fecha;
-        $acta->save();
+            $this->afterSave($acta->codigo);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL ACTUALIZAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
+    }
 
-        $this->dispatch('acta-save', ['vehiculo' => $acta->vehiculo->placa]);
-        $this->dispatch('updateTable');
-        $this->reset();
-        $this->resetErrorBag();
+
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'ACTA REGISTRADA',
+            mensaje: 'Se registro correctamente el acta #' . $numero,
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 
     public function updated($label)
     {
         $actaRequest = new ActasRequest();
         $this->validateOnly($label, $actaRequest->rules(), $actaRequest->messages());
+    }
+
+    public function resetProperties()
+    {
+        $this->numero = null;
+        $this->vehiculos_id = null;
+        $this->fecha_instalacion = null;
+        $this->inicio_cobertura = null;
+        $this->fin_cobertura = null;
+        $this->ciudades_id = null;
+        $this->fondo = 1;
+        $this->sello = 1;
+        $this->plataforma = "basica";
     }
 }

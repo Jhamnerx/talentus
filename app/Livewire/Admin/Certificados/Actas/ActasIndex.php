@@ -16,56 +16,36 @@ class ActasIndex extends Component
     public $from = '';
     public $to = '';
 
-    public $openModalSave = false;
-    public $openModalEdit = false;
-    public $openModalDelete = false;
-
-
     protected $listeners = [
-        'updateTable' => 'render',
+        'update-table' => 'render',
     ];
 
     public function render()
     {
-        $desde = $this->from;
-        $hasta = $this->to;
+        $query = Actas::query();
 
-        $actas = Actas::whereHas('ciudades', function ($query) {
+        $query->whereHas('ciudades', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%')
-                ->orwhere('prefijo', 'like', '%' . $this->search . '%');
-        })->orwhereHas('vehiculo', function ($query) {
+                ->orWhere('prefijo', 'like', '%' . $this->search . '%');
+        })->orWhereHas('vehiculo', function ($query) {
             $query->where('placa', 'like', '%' . $this->search . '%');
         })->orWhere('inicio_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('fecha_instalacion', 'like', '%' . $this->search . '%')
             ->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->orWhere('codigo', 'like', '%' . $this->search . '%')
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->orWhere('codigo', 'like', '%' . $this->search . '%');
 
-        $total = Actas::all()->count();
-        if (!empty($desde)) {
-
-            $actas = Actas::whereRaw(
-                "(created_at >= ? AND created_at <= ?)",
-                [
-                    $desde . " 00:00:00",
-                    $hasta . " 23:59:59"
-                ]
-            )->whereRaw(
-                "(inicio_cobertura like ? OR fecha like ? OR fin_cobertura like ?)",
-                [
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                    '%' . $this->search . '%',
-                ]
-            )
-                ->orderBy('created_at', 'desc')
-                ->paginate(10);
+        if (!empty($this->from) && !empty($this->to)) {
+            $query->whereBetween('created_at', [
+                $this->from . " 00:00:00",
+                $this->to . " 23:59:59"
+            ]);
         }
 
-        return view('livewire.admin.certificados.actas.actas-index', compact('actas', 'total'));
+        $actas = $query->orderBy('created_at', 'desc')->paginate(10);
+
+        return view('livewire.admin.certificados.actas.actas-index', compact('actas'));
     }
 
     public function filter($dias)
@@ -97,21 +77,18 @@ class ActasIndex extends Component
     public function openModalSave()
     {
         $this->dispatch('guardarActa');
-        $this->openModalSave = true;
     }
 
     //Enviar datos para editar acta
     public function openModalEdit(Actas $acta)
     {
         $this->dispatch('actualizarActa', $acta);
-        $this->openModalEdit = true;
     }
 
 
     public function openModalDelete(Actas $acta)
     {
         $this->dispatch('EliminarActa', $acta);
-        $this->openModalDelete = true;
     }
 
     public function openModalShow(Actas $acta)
@@ -135,19 +112,21 @@ class ActasIndex extends Component
 
         $this->dispatch('openModalImport');
     }
-    public function test(Actas $acta)
+
+    public function toggleStatus(Actas $acta)
     {
+        $acta->estado = !$acta->estado; // Cambia el estado del toggle
+        $acta->save(); // Guarda el cambio en el modelo
+    }
+    public function toggleSello(Actas $acta)
+    {
+        $acta->sello = !$acta->sello; // Cambia el estado del toggle
+        $acta->save(); // Guarda el cambio en el modelo
+    }
 
-        $hash = Hashids::connection(Actas::class)->encode($acta->id);
-
-
-        dd($hash);
-        // $ctr = new UtilesController();
-
-        // $value = $ctr->test();
-        // dd($value);
-
-
-
+    public function toggleFondo(Actas $acta)
+    {
+        $acta->fondo = !$acta->fondo; // Cambia el estado del toggle
+        $acta->save(); // Guarda el cambio en el modelo
     }
 }

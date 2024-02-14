@@ -9,10 +9,10 @@
 
 @push('modals')
     @livewire('admin.certificados.actas.save')
-    @livewire('admin.certificados.actas.edit')
+    {{-- @livewire('admin.certificados.actas.edit')
     @livewire('admin.certificados.actas.send')
     @livewire('admin.certificados.actas.delete')
-    @livewire('admin.certificados.actas.import')
+    @livewire('admin.certificados.actas.import') --}}
 @endpush
 
 @section('js')
