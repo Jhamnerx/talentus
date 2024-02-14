@@ -12,7 +12,6 @@
     @livewire('admin.certificados.actas.edit')
     @livewire('admin.certificados.actas.send')
     @livewire('admin.certificados.actas.delete')
-    @livewire('admin.certificados.actas.import')
 @endpush
 
 @section('js')

@@ -75,11 +75,7 @@ class ActasIndex extends Component
         $this->dispatch('modalOpenSend', $acta);
     }
 
-    public function openModalImport()
-    {
 
-        $this->dispatch('openModalImport');
-    }
 
     public function toggleStatus(Actas $acta)
     {

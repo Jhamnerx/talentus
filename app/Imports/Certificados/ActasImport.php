@@ -52,11 +52,9 @@ class ActasImport implements ToModel, ShouldQueue, SkipsOnFailure, WithEvents, W
     {
 
         $vehiculos_id = Vehiculos::withoutGlobalScope(EmpresaScope::class)->where('placa', '=', $fila['placa'])->first()->id;
-        //dd($vehiculos_id, $fila['placa']);
         $ciudades_id = Ciudades::where('prefijo', '=', $fila['prefijo_ciudad'])->first()->id;
 
         return new Actas([
-            'id' => $fila['id'],
             'vehiculos_id' => $vehiculos_id,
             'numero' => $fila['numero'],
             'inicio_cobertura' => $fila['inicio_cobertura'],
