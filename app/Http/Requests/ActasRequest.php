@@ -25,6 +25,8 @@ class ActasRequest extends FormRequest
                 "fin_cobertura" => 'required',
                 "ciudades_id" => 'required',
                 "plataforma" => 'required',
+                "fondo" => 'nullable',
+                "sello" => 'nullable',
 
             ];
         } else {

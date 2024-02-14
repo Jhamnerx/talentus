@@ -13,8 +13,6 @@ class ActasIndex extends Component
     use WithPagination;
 
     public $search;
-    public $from = '';
-    public $to = '';
 
     protected $listeners = [
         'update-table' => 'render',
@@ -22,6 +20,7 @@ class ActasIndex extends Component
 
     public function render()
     {
+
         $query = Actas::query();
 
         $query->whereHas('ciudades', function ($query) {
@@ -36,44 +35,13 @@ class ActasIndex extends Component
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%');
 
-        if (!empty($this->from) && !empty($this->to)) {
-            $query->whereBetween('created_at', [
-                $this->from . " 00:00:00",
-                $this->to . " 23:59:59"
-            ]);
-        }
 
         $actas = $query->orderBy('created_at', 'desc')->paginate(10);
 
         return view('livewire.admin.certificados.actas.actas-index', compact('actas'));
     }
 
-    public function filter($dias)
-    {
-        $this->search = null;
-        switch ($dias) {
-            case '1':
-                $this->from = date('Y-m-d');
-                $this->to = date('Y-m-d');
-                break;
-            case '7':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 7 days"));
-                $this->to = date('Y-m-d');
-                break;
-            case '30':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 month"));
-                $this->to = date('Y-m-d');
-                break;
-            case '12':
-                $this->from = date('Y-m-d', strtotime(date('Y-m-d') . "- 1 year"));
-                $this->to = date('Y-m-d');
-                break;
-            case '0':
-                $this->from = '';
-                $this->to = '';
-                break;
-        }
-    }
+
     public function openModalSave()
     {
         $this->dispatch('guardarActa');
@@ -82,7 +50,7 @@ class ActasIndex extends Component
     //Enviar datos para editar acta
     public function openModalEdit(Actas $acta)
     {
-        $this->dispatch('actualizarActa', $acta);
+        $this->dispatch('actualizarActa', acta: $acta);
     }
 
 

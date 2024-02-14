@@ -71,15 +71,27 @@ class Send extends Component
         try {
 
             $pdfActa = new ActaPdfController();
-            $respuesta = $pdfActa->sendToMail($this->acta, $data);
+            $pdfActa->sendToMail($this->acta, $data);
+            $this->afterSend($this->acta->codigo);
         } catch (Exception $e) {
 
-            $this->failMsg = $e->getMessage();
-        } finally {
-
-            //$this->modalOpenSend = false;
-            // $this->dispatch('acta-send', ['acta' => $this->acta]);
-            // $this->resetPropiedades();
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL ENVIAR',
+                mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
+            );
         }
+    }
+
+    public function afterSend($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'ACTA ENVIADA',
+            mensaje: 'Se envio correctamente el acta #' . $numero,
+        );
+        $this->closeModal();
     }
 }
