@@ -190,7 +190,13 @@ Route::controller(ReportesController::class)->group(function () {
 
 
 // CERTIFICADOS
-Route::resource('actas', ActasController::class)->names('admin.certificados.actas');
+
+Route::controller(ActasController::class)->group(function () {
+
+    Route::get('actas', 'index')->name('admin.certificados.actas.index');
+});
+
+
 Route::resource('certificados-gps', CertificadosGpsController::class)->names('admin.certificados.gps')->parameters([
     'certificados-gps' => 'certificado'
 ]);

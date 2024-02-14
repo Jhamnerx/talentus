@@ -23,20 +23,4 @@ class ActasController extends Controller
         $id = IdGenerator::generate(['table' => 'actas', 'field' => 'numero', 'length' => 7, 'prefix' => date('y') . '-', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
         return trim($id);
     }
-
-    public function show(Actas $acta)
-    {
-        return view('admin.certificados.actas.show', compact('acta'));
-    }
-
-    public function update(Request $request, Actas $actas)
-    {
-        //
-    }
-
-    public function destroy(Actas $acta)
-    {
-        $acta->delete();
-        return redirect()->route('admin.certificados.actas.index')->with('eliminar', 'El Acta se elimino con exito');
-    }
 }
