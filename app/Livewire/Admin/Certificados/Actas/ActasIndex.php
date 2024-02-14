@@ -56,7 +56,7 @@ class ActasIndex extends Component
 
     public function openModalDelete(Actas $acta)
     {
-        $this->dispatch('EliminarActa', $acta);
+        $this->dispatch('EliminarActa', acta: $acta);
     }
 
     public function openModalShow(Actas $acta)
