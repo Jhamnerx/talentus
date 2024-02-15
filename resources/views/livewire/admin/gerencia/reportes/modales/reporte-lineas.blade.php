@@ -76,21 +76,22 @@
 
                                 </div>
                             </div>
-                            <div class="col-span-12">
+                            <div class="col-span-12 mt-2">
                                 <label
                                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                                     <div>OPCIONES PARA EXPORTAR: </div>
 
                                 </label>
-                                <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3">
-                                    <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToPdf"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">PDF</button>
-                                    </div>
+                                <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3 mt-2">
+                                    {{-- <div class="flex flex-wrap pt-2 -space-x-px gap-3">
+                                        <x-form.button wire:click.prevent="exportToPdf" spinner="exportToPdf"
+                                            label="PDF" red icon="document-download" />
+
+                                    </div> --}}
 
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToExcel"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">EXCEL</button>
+                                        <x-form.button label="EXCEL" wire:click.prevent="exportToExcel"
+                                            spinner="exportToExcel" emerald icon="document-download" />
                                     </div>
                                 </div>
 

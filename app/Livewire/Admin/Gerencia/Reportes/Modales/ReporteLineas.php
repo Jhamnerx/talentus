@@ -47,41 +47,62 @@ class ReporteLineas extends Component
     {
 
         //$this->validate();
-        if ($this->suspencion) {
 
-            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->whereNotNull('fecha_suspencion')->where('baja', false)->get();
-        } else {
+        try {
+            //code...
 
-            $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->where('baja', false)->get();
+            if ($this->suspencion) {
+
+                $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->whereNotNull('fecha_suspencion')->where('baja', false)->get();
+            } else {
+
+                $lineas = Lineas::with('sim_card', 'sim_card.vehiculos')->where('baja', false)->get();
+            }
+
+
+            if ($this->operador !== "todos") {
+
+                $lineas = Lineas::Operador($this->operador)->with('sim_card')->where('baja', false)->get();
+            }
+
+            if ($this->suspencion == true && $this->operador !== "todos") {
+
+                $lineas = Lineas::Operador($this->operador)->whereNotNull('fecha_suspencion')->where('baja', false)->with('sim_card')->get();
+            }
+
+
+
+            $operadores = $this->getOperadoresCount();
+
+            $pdfContent = PDF::loadView('pdf.reportes.gerenciales.lineas', ['lineas' => $lineas, 'operadores' => $operadores])
+                ->setPaper('Legal', 'landscape')->output();
+
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "reporte_lineas.pdf"
+            );
+        } catch (\Throwable $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL EXPORTAR',
+                mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
+            );
         }
-
-
-        if ($this->operador !== "todos") {
-
-            $lineas = Lineas::Operador($this->operador)->with('sim_card')->where('baja', false)->get();
-        }
-
-        if ($this->suspencion == true && $this->operador !== "todos") {
-
-            $lineas = Lineas::Operador($this->operador)->whereNotNull('fecha_suspencion')->where('baja', false)->with('sim_card')->get();
-        }
-
-        //$operadores = Lineas::select('operador')->distinct()->get();
-
-        $operadores = $this->getOperadoresCount();
-
-        $pdfContent = PDF::loadView('pdf.reportes.gerenciales.lineas', ['lineas' => $lineas, 'operadores' => $operadores])
-            ->setPaper('Legal', 'landscape')->output();
-
-        return response()->streamDownload(
-            fn () => print($pdfContent),
-            "reporte_lineas.pdf"
-        );
     }
 
     public function exportToExcel()
     {
-        return Excel::download(new LineasExport($this->suspencion, $this->operador), 'reporte_lineas.xlsx');
+        try {
+            return Excel::download(new LineasExport($this->suspencion, $this->operador), 'reporte_lineas.xlsx');
+        } catch (\Throwable $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL EXPORTAR',
+                mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
+            );
+        }
     }
 
     public function getOperadoresCount()

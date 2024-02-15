@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Categoria;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
+use App\View\Components\Admin\Ventas\TablaDetalleVenta;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -96,7 +97,7 @@ class Productos extends Model
     public function detalle_facturas()
     {
 
-        return  $this->hasMany(DetalleFacturas::class, 'producto_id');
+        return  $this->hasMany(VentasDetalle::class, 'producto_id');
     }
     public function detalle_recibos()
     {

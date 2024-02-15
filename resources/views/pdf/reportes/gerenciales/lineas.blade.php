@@ -225,10 +225,10 @@
                                 </td>
                             </tr>
                             @foreach ($operadores as $operador)
-                            <tr>
-                                <td>{{$operador->operador}}</td>
-                                <td>#{{$operador->count_row}}</td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $operador->operador }}</td>
+                                    <td>#{{ $operador->count_row }}</td>
+                                </tr>
                             @endforeach
 
                         </tbody>
@@ -273,96 +273,96 @@
 
             <!-- Row -->
             @if ($lineas->count())
-            @foreach ($lineas as $linea)
-            <tr>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="flex items-center">
-                        @if (!empty($linea->numero))
-                        <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
-                        @else
-                        <div class="font-medium text-slate-800"></div>
-                        @endif
-                    </div>
-                </td>
+                @foreach ($lineas as $linea)
+                    <tr>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="flex items-center">
+                                @if (!empty($linea->numero))
+                                    <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
+                                @else
+                                    <div class="font-medium text-slate-800"></div>
+                                @endif
+                            </div>
+                        </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-center">{{ $linea->operador }}</div>
+                            <div class="text-center">{{ $linea->operador }}</div>
 
-                </td>
+                        </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    @if (!empty($linea->sim_card))
-                    <div class="text-center font-medium text-slate-800">
-                        {{ $linea->sim_card->sim_card }}</div>
-                    @else
-                    <div class="text-center font-medium text-red-300">SIN ASIGNAR</div>
-                    @endif
-
-
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center font-medium text-slate-800">
-
-                    </div>
-                    @if (!empty($linea->sim_card))
-                    <div class="text-center font-medium text-slate-800">
-                        @if (!empty($linea->sim_card->vehiculos))
-                        {{ $linea->sim_card->vehiculos->cliente->razon_social }}
-                        @endif
-                    </div>
-                    @else
-                    <div class="text-center font-medium text-red-300"></div>
-                    @endif
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            @if (!empty($linea->sim_card))
+                                <div class="text-center font-medium text-slate-800">
+                                    {{ $linea->sim_card->sim_card }}</div>
+                            @else
+                                <div class="text-center font-medium text-red-300">SIN ASIGNAR</div>
+                            @endif
 
 
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center font-medium text-slate-800">
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center font-medium text-slate-800">
 
-                    </div>
-                    @if (!empty($linea->sim_card))
-                    <div class="text-center font-medium text-slate-800">
-                        @if (!empty($linea->sim_card->vehiculos))
-                        {{ $linea->sim_card->vehiculos->placa }}
-                        @endif
-                    </div>
-                    @else
-                    <div class="text-center font-medium text-red-300"></div>
-                    @endif
+                            </div>
+                            @if (!empty($linea->sim_card))
+                                <div class="text-center font-medium text-slate-800">
+                                    @if (!empty($linea->sim_card->vehiculos))
+                                        {{ $linea->sim_card->vehiculos->cliente->razon_social }}
+                                    @endif
+                                </div>
+                            @else
+                                <div class="text-center font-medium text-red-300"></div>
+                            @endif
 
 
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center font-medium text-slate-800">
 
-                    @if ($linea->estado->name == 'SUSPENDIDA')
-                    <div class="font-medium text-red-500">
-                        @php
-                        $dias = $linea->now->diffInDays($linea->date_to_suspend);
-                        @endphp
+                            </div>
+                            @if (!empty($linea->sim_card))
+                                <div class="text-center font-medium text-slate-800">
+                                    @if (!empty($linea->sim_card->vehiculos))
+                                        {{ $linea->sim_card->vehiculos->placa }}
+                                    @endif
+                                </div>
+                            @else
+                                <div class="text-center font-medium text-red-300"></div>
+                            @endif
 
-                        Suspendido <br>
 
-                        @if ($dias > 0)
-                        {{ $dias }} Dias Restantes
-                        @else
-                        -
-                        @endif
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    </div>
-                    @else
-                    <div class="font-medium text-emerald-500 text-center">
-                        {{ $linea->estado->name }}
-                    </div>
-                    @endif
-                </td>
+                            @if ($linea->estado->name == 'SUSPENDIDA')
+                                <div class="font-medium text-red-500">
+                                    @php
+                                        $dias = $linea->now->diffInDays($linea->date_to_suspend);
+                                    @endphp
 
-            </tr>
-            @endforeach
+                                    Suspendido <br>
+
+                                    @if ($dias > 0)
+                                        {{ $dias }} Dias Restantes
+                                    @else
+                                        -
+                                    @endif
+
+                                </div>
+                            @else
+                                <div class="font-medium text-emerald-500 text-center">
+                                    {{ $linea->estado->name }}
+                                </div>
+                            @endif
+                        </td>
+
+                    </tr>
+                @endforeach
             @else
-            <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                <div class="text-center">No hay Registros</div>
-            </td>
+                <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                    <div class="text-center">No hay Registros</div>
+                </td>
             @endif
 
 

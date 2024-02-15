@@ -36,8 +36,6 @@ class ReporteProductos extends Component
 
     public function exportToPdf()
     {
-        //$this->validate();
-
         $productos = Productos::get();
 
         if ($this->tipo !== "null") {

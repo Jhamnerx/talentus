@@ -61,9 +61,10 @@
 
                                 </label>
                                 <div class="flex flex-wrap items-center justify-center -m-1.5">
+
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToExcel"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">EXCEL</button>
+                                        <x-form.button label="EXCEL" wire:click.prevent="exportToExcel"
+                                            spinner="exportToExcel" emerald icon="document-download" />
                                     </div>
                                 </div>
 

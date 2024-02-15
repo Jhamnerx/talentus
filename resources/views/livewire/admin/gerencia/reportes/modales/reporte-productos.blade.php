@@ -69,8 +69,8 @@
                                 </label>
                                 <div class="flex flex-wrap items-center -m-1.5">
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToPdf"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">PDF</button>
+                                        <x-form.button wire:click.prevent='exportToPdf' spinner="exportToPdf"
+                                            label="PDF" red icon="document-download" />
                                     </div>
                                 </div>
 
