@@ -59,8 +59,7 @@ class VelocimetrosIndex extends Component
 
     public function openModalAddVehiculo()
     {
-
-        $this->dispatch('openModalAddVehiculo');
+        $this->dispatch('open-modal-add-vehiculo');
     }
 
     public function cambiarEstado(CertificadosVelocimetros $certificado, $field, $value)

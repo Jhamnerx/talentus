@@ -76,7 +76,7 @@
         <div class="flex justify-end gap-x-4">
 
             <div class="flex">
-                <x-form.button flat label="Cancelar" x-on:click="close" wire:click="close" />
+                <x-form.button flat label="Cancelar" x-on:click="close" wire:click="closeModal" />
                 <x-form.button primary label="Guardar" wire:click="save" />
             </div>
         </div>
