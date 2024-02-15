@@ -182,7 +182,7 @@
                     class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
 
             <!-- Table -->
             <div class="overflow-x-auto">
@@ -191,15 +191,7 @@
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
-                                    </label>
-                                </div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Nombres</div>
                             </th>
@@ -227,16 +219,8 @@
 
                         @foreach ($usuarios as $usuario)
                             @if ($usuario->email !== 'jhamnerx1x@gmail.com')
-                                <tr>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input class="table-item form-checkbox" type="checkbox"
-                                                    @click="uncheckParent" />
-                                            </label>
-                                        </div>
-                                    </td>
+                                <tr wire:key='u-{{ $usuario->id }}'>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-blue-500">{{ $usuario->name }}</div>
                                     </td>
@@ -261,7 +245,8 @@
                                                             <input wire:click="toggleStatus({{ $usuario->id }})"
                                                                 type="checkbox" id="switch-e{{ $usuario->id }}"
                                                                 class="sr-only" x-model="checked" />
-                                                            <label class="bg-slate-400" for="switch-e{{ $usuario->id }}">
+                                                            <label class="bg-slate-400"
+                                                                for="switch-e{{ $usuario->id }}">
                                                                 <span class="bg-white shadow-sm"
                                                                     aria-hidden="true"></span>
                                                                 <span class="sr-only">Estado</span>
