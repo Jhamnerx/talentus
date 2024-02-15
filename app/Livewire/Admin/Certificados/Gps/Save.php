@@ -9,6 +9,7 @@ use App\Models\Ciudades;
 use Carbon\Carbon;
 use Livewire\Component;
 use Illuminate\Support\Str;
+use Livewire\Attributes\On;
 
 class Save extends Component
 {
@@ -20,16 +21,12 @@ class Save extends Component
     public $accesorios = [];
 
 
-    protected $listeners = [
-        'guardarCertificado' => 'openModal'
-    ];
-
-
     public function render()
     {
         return view('livewire.admin.certificados.gps.save');
     }
 
+    #[On('guardarCertificado')]
     public function openModal()
     {
         $this->openModalSave = true;
@@ -47,9 +44,9 @@ class Save extends Component
     public function closeModal()
     {
         $this->openModalSave = false;
-        $this->reset();
-        $this->resetErrorBag();
+        $this->resetProperties(); // Llamada al método para restablecer las propiedades
     }
+
 
     public function guardarCertificado()
     {
@@ -61,32 +58,63 @@ class Save extends Component
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
+        try {
 
-        $certificado = new Certificados();
+            $certificado = new Certificados();
+            $certificado->vehiculos_id = $values["vehiculos_id"];
+            $certificado->numero = $values["numero"];
+            $certificado->fin_cobertura = $values["fin_cobertura"];
+            $certificado->fecha_instalacion = $values["fecha_instalacion"];
+            $certificado->ciudades_id = $values["ciudades_id"];
+            $certificado->fondo = $values["fondo"];
+            $certificado->sello = $values["sello"];
+            $certificado->accesorios = $this->accesorios;
+            $certificado->year = today()->year;
+            $codigo = $ciudad->prefijo . "-" . $certificado->numero;
+            $certificado->codigo = $codigo;
+            $certificado->fecha = $fecha;
+            $certificado->save();
 
-        $certificado->vehiculos_id = $values["vehiculos_id"];
-        $certificado->numero = $values["numero"];
-        $certificado->fin_cobertura = $values["fin_cobertura"];
-        $certificado->fecha_instalacion = $values["fecha_instalacion"];
-        $certificado->ciudades_id = $values["ciudades_id"];
-        $certificado->fondo = $values["fondo"];
-        $certificado->sello = $values["sello"];
-        $certificado->accesorios = $this->accesorios;
-        $certificado->year = today()->year;
-        $codigo = $ciudad->prefijo . "-" . $certificado->numero;
-        $certificado->codigo = $codigo;
-        $certificado->fecha = $fecha;
-        $certificado->save();
 
-        //$this->openModalSave = false;
-        $this->dispatch('certificado-save', ['vehiculo' => $certificado->vehiculo->placa]);
-        $this->closeModal();
-        $this->dispatch('updateTable');
+            $certificado = Certificados::create(
+                []
+            );
+            $this->afterSave($certificado->codigo);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL ACTUALIZAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
     }
-
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'CERTIFICADO REGISTRADO',
+            mensaje: 'Se registro correctamente el certificado #' . $numero,
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
+    }
     public function updated($label)
     {
         $certificadoRequest = new CertificadosGpsRequest();
         $this->validateOnly($label, $certificadoRequest->rules(), $certificadoRequest->messages());
+    }
+
+    public function resetProperties()
+    {
+        $this->numero = null;
+        $this->vehiculos_id = null;
+        $this->fecha_instalacion = null;
+        $this->fin_cobertura = null;
+        $this->ciudades_id = null;
+        $this->accesorios = [];
+        $this->fondo = 1;
+        $this->sello = 1;
     }
 }

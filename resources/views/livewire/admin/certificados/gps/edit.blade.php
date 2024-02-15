@@ -146,8 +146,7 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
-                                                    fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -187,8 +186,7 @@
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
-                                                    fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -269,8 +267,8 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model.live="accesorios" value="CORTE DE MOTOR"
-                                                class="form-checkbox" />
+                                            <input type="checkbox" wire:model.live="accesorios"
+                                                value="CORTE DE MOTOR" class="form-checkbox" />
                                             <span class="text-sm ml-2">CORTE DE MOTOR</span>
                                         </label>
                                         <!-- End -->
@@ -278,8 +276,8 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model.live="accesorios" value="BOTON DE PANICO"
-                                                class="form-checkbox" />
+                                            <input type="checkbox" wire:model.live="accesorios"
+                                                value="BOTON DE PANICO" class="form-checkbox" />
                                             <span class="text-sm ml-2">BOTON DE PANICO</span>
                                         </label>
                                         <!-- End -->
@@ -296,8 +294,8 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="checkbox" wire:model.live="accesorios" value="CIERRE DE PUERTA"
-                                                class="form-checkbox" />
+                                            <input type="checkbox" wire:model.live="accesorios"
+                                                value="CIERRE DE PUERTA" class="form-checkbox" />
                                             <span class="text-sm ml-2">CIERRE DE PUERTAS</span>
                                         </label>
                                         <!-- End -->
@@ -333,129 +331,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            $('.vehiculos_id').select2({
-                placeholder: '    Buscar un Vehiculo',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                minimumInputLength: 2,
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.vehiculos') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                            //type: 'public'
-                        }
-
-                        // Query parameters will be ?search=[term]&type=public
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        // console.log(data.suggestions);
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
-                            return obj;
-
-                        });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
-                        return {
-
-                            results: suggestions,
-
-                        };
-
-                    },
-
-
-                }
-            });
-            $('.ciudadesEdit').select2({
-                placeholder: 'Selecciona una ciudad',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.ciudades') }}',
-                    dataType: 'json',
-
-                    cache: true,
-                    data: function(params) {
-
-                        var query = {
-                            term: params.term,
-                            //type: 'public'
-                        }
-
-                        // Query parameters will be ?search=[term]&type=public
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        // console.log(data.suggestions);
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value; // replace pk with your identifier
-                            obj.text = obj.data; // replace pk with your identifier
-
-                            return obj;
-
-                        });
-                        //console.log(data);
-                        // Transforms the top-level key of the response object from 'items' to 'results'
-                        return {
-
-                            results: suggestions,
-
-                        };
-
-                    },
-
-
-                }
-            });
-
-            $('.vehiculos_id').on('select2:select', function(e) {
-                var data = e.params.data;
-                //console.log(data.id);
-                @this.set('vehiculos_id', data.id)
-            });
-
-
-            $('.ciudadesEdit').on('select2:select', function(e) {
-                var data = e.params.data;
-                //console.log(data.id);
-                @this.set('ciudades_id', data.id)
-            });
-        </script>
-
-
-        <script>
-            window.addEventListener('set-vehiculo', event => {
-                //ESTABLECER EL VEHICULO PARA EDITAR ACTA
-                var placa = event.detail.vehiculo.placa;
-                var id = event.detail.vehiculo.id
-                var vehiculo = new Option(placa, id, true, true);
-                $('.vehiculosEdit').append(vehiculo).trigger('change');
-
-
-                // ESTABLECER LA CIUDAD EN EDITAR
-                var ciudad = new Option(event.detail.ciudad.nombre, event.detail.ciudad.id, true, true);
-
-                $('.ciudadesEdit').append(ciudad).trigger('change');
-            })
-        </script>
-    @endpush
-@endonce

@@ -200,6 +200,7 @@ Route::controller(ActasController::class)->group(function () {
 Route::resource('certificados-gps', CertificadosGpsController::class)->names('admin.certificados.gps')->parameters([
     'certificados-gps' => 'certificado'
 ]);
+
 Route::resource('certificados-velocimetros', CertificadosVelocimetrosController::class)->names('admin.certificados.velocimetros')->parameters([
     'certificados-velocimetros' => 'certificado'
 ]);
