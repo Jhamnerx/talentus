@@ -1,4 +1,4 @@
-<x-form.modal.card title="EMITIR ACTA" wire:model.live="openModalSave" align="center">
+<x-form.modal.card title="REGISTRAR CERTIFICADO GPS" wire:model.live="openModalSave" align="center">
 
     <div class="grid grid-cols-12 gap-6">
 
