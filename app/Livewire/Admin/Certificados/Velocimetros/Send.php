@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Certificados\Velocimetros;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Models\CertificadosVelocimetros;
 use Exception;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Send extends Component
@@ -20,9 +21,6 @@ class Send extends Component
 
     public $failMsg;
 
-    protected $listeners = [
-        'modalOpenSend' => 'openModal'
-    ];
 
     public function resetPropiedades()
     {
@@ -38,6 +36,7 @@ class Send extends Component
         return view('livewire.admin.certificados.velocimetros.send');
     }
 
+    #[On('modalOpenSend')]
     public function openModal(CertificadosVelocimetros $certificado)
     {
 
@@ -72,15 +71,28 @@ class Send extends Component
         try {
 
             $pdfCertificado = new CertificadoVelocimetroPdfController();
-            $respuesta = $pdfCertificado->sendToMail($this->certificado, $data);
+            $pdfCertificado->sendToMail($this->certificado, $data);
+            $this->afterSend($this->acta->codigo);
         } catch (Exception $e) {
 
             $this->failMsg = $e->getMessage();
-        } finally {
-
-            $this->modalOpenSend = false;
-            $this->dispatch('certificado-send', ['certificado' => $this->certificado]);
-            $this->resetPropiedades();
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL ENVIAR',
+                mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
+            );
         }
+    }
+
+    public function afterSend($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'ACTA ENVIADA',
+            mensaje: 'Se envio correctamente el acta #' . $numero,
+        );
+        $this->closeModal();
     }
 }

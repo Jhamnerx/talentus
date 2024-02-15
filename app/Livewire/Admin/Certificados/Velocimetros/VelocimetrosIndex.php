@@ -69,7 +69,7 @@ class VelocimetrosIndex extends Component
     }
     public function modalOpenSend(CertificadosVelocimetros $certificado)
     {
-        $this->dispatch('modalOpenSend', $certificado);
+        $this->dispatch('modalOpenSend', certificado: $certificado);
     }
 
     public function toggleSello(CertificadosVelocimetros $certificado)
