@@ -48,37 +48,40 @@ class Save extends Component
     }
 
 
-    public function guardarCertificado()
+    public function save()
     {
-        $certificadoRequest = new CertificadosGpsRequest();
+        $request = new CertificadosGpsRequest();
 
-        $values = $this->validate($certificadoRequest->rules(), $certificadoRequest->messages());
+        $data = $this->validate($request->rules(), $request->messages());
 
-        $ciudad = Ciudades::find($values["ciudades_id"]);
+        $ciudad = Ciudades::find($data["ciudades_id"]);
 
         $fecha = $ciudad->nombre . ", " . today()->day . " de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
         try {
-
-            $certificado = new Certificados();
-            $certificado->vehiculos_id = $values["vehiculos_id"];
-            $certificado->numero = $values["numero"];
-            $certificado->fin_cobertura = $values["fin_cobertura"];
-            $certificado->fecha_instalacion = $values["fecha_instalacion"];
-            $certificado->ciudades_id = $values["ciudades_id"];
-            $certificado->fondo = $values["fondo"];
-            $certificado->sello = $values["sello"];
-            $certificado->accesorios = $this->accesorios;
-            $certificado->year = today()->year;
-            $codigo = $ciudad->prefijo . "-" . $certificado->numero;
-            $certificado->codigo = $codigo;
-            $certificado->fecha = $fecha;
-            $certificado->save();
-
+            $codigo = $ciudad->prefijo . "-" . $data["numero"];
 
             $certificado = Certificados::create(
-                []
+
+                [
+                    'numero' => $data["numero"],
+                    'fecha_instalacion' => $data["fecha_instalacion"],
+                    'fin_cobertura' => $data["fin_cobertura"],
+                    'fecha' => $fecha,
+                    'year' => today()->year,
+                    'sello' => $data["sello"],
+                    'fondo' => $data["fondo"],
+                    'vehiculos_id' => $data["vehiculos_id"],
+                    'ciudades_id' => $data["ciudades_id"],
+                    'codigo' =>  $codigo,
+                    'accesorios' => $this->accesorios,
+
+
+
+                ]
             );
+
+
             $this->afterSave($certificado->codigo);
         } catch (\Throwable $th) {
             $this->dispatch(
