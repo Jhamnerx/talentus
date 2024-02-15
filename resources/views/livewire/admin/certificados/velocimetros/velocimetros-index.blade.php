@@ -128,8 +128,7 @@
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
+                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -465,43 +464,9 @@
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $certificados->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
+
 
     </div>
 
 
 </div>
-
-@push('scripts')
-    @if (session('eliminar'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire(
-                    'Eliminada!',
-                    'Certificado eliminado correctamente.',
-                    'success'
-                )
-            });
-        </script>
-    @endif
-
-    <script>
-        $('.formularioEliminar').submit(function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Estas Seguro?',
-                text: "Se eliminara el certificado seleccionada!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si, Eliminar!',
-                cancelButtonText: 'Cancelar!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.submit();
-                }
-            })
-        })
-    </script>
-@endpush

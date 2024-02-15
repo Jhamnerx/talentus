@@ -129,8 +129,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative" wire:ignore>
 
-                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id"
-                                        id="">
+                                    <select class="form-input w-full pl-9 ciudades" name="ciudades_id" id="">
                                     </select>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -295,94 +294,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            $('.vehiculos_id').select2({
-                placeholder: '    Buscar un Vehiculo',
-                language: "es",
-                minimumInputLength: 2,
-                selectionCssClass: 'pl-9',
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.vehiculos') }}',
-                    dataType: 'json',
-                    delay: 250,
-                    cache: true,
-                    data: function(params) {
-                        var query = {
-                            term: params.term,
-                        }
-                        return query;
-                    },
-                    processResults: function(data, params) {
-
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-                            return obj;
-                        });
-                        return {
-                            results: suggestions,
-                        };
-
-                    },
-
-
-                }
-            });
-            $('.ciudades').select2({
-                placeholder: '    Selecciona una ciudad',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                width: '100%',
-                ajax: {
-                    url: '{{ route('search.ciudades') }}',
-                    dataType: 'json',
-
-                    cache: true,
-                    data: function(params) {
-                        var query = {
-                            term: params.term,
-                        }
-
-                        return query;
-                    },
-                    processResults: function(data, params) {
-                        var suggestions = $.map(data.suggestions, function(obj) {
-
-                            obj.id = obj.id || obj.value;
-                            obj.text = obj.data;
-                            return obj;
-                        });
-                        return {
-                            results: suggestions,
-                        };
-
-                    },
-
-
-                }
-            });
-
-            $('.vehiculos_id').on('select2:select', function(e) {
-                var data = e.params.data;
-                @this.set('vehiculos_id', data.id)
-            });
-
-
-            $('.ciudades').on('select2:select', function(e) {
-                var data = e.params.data;
-                @this.set('ciudades_id', data.id)
-            });
-        </script>
-        <script>
-            window.addEventListener('close-modal', event => {
-                $('.vehiculos_id').val(null).trigger('change');
-                $('.ciudades').val(null).trigger('change');
-            })
-        </script>
-    @endpush
-@endonce
