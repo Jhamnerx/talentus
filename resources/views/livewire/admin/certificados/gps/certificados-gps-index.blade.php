@@ -289,12 +289,39 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                         <div>
                                             <div class="m-3 w-48">
-                                                <!-- Start -->
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $certificado->sello ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Sello: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleSello({{ $certificado->id }})"
+                                                            type="checkbox" id="switch-s{{ $certificado->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400"
+                                                            for="switch-s{{ $certificado->id }}">
+                                                            <span class="bg-white shadow-sm"
+                                                                aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ON' : 'OFF'"></div>
+                                                </div>
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $certificado->fondo ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Fondo: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleFondo({{ $certificado->id }})"
+                                                            type="checkbox" id="switch-f{{ $certificado->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400"
+                                                            for="switch-f{{ $certificado->id }}">
+                                                            <span class="bg-white shadow-sm"
+                                                                aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ON' : 'OFF'"></div>
+                                                </div>
 
-                                                @livewire('admin.certificados.gps.status-sello', ['model' => $certificado, 'field' => 'sello'], key('sello' . $certificado->id))
-
-                                                @livewire('admin.certificados.gps.status-fondo', ['model' => $certificado, 'field' => 'fondo'], key('fondo' . $certificado->id))
-                                                <!-- End -->
                                             </div>
                                         </div>
                                     </td>

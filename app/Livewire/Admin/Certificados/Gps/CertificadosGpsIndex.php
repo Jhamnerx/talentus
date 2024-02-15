@@ -71,4 +71,16 @@ class CertificadosGpsIndex extends Component
     {
         $this->dispatch('modalOpenSend', $certificado);
     }
+
+    public function toggleSello(Certificados $certificado)
+    {
+        $certificado->sello = !$certificado->sello; // Cambia el estado del toggle
+        $certificado->save(); // Guarda el cambio en el modelo
+    }
+
+    public function toggleFondo(Certificados $certificado)
+    {
+        $certificado->fondo = !$certificado->fondo; // Cambia el estado del toggle
+        $certificado->save(); // Guarda el cambio en el modelo
+    }
 }
