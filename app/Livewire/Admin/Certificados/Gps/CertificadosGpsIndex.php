@@ -52,7 +52,7 @@ class CertificadosGpsIndex extends Component
 
     public function openModalDelete(Certificados $certificado)
     {
-        $this->dispatch('EliminarCertificado', $certificado);
+        $this->dispatch('EliminarCertificado', certificado: $certificado);
     }
 
 
