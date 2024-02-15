@@ -17,14 +17,31 @@ class Delete extends Component
     public function delete()
     {
         $this->certificado->delete();
-        $this->dispatch('certificado-delete');
-        $this->dispatch('updateTable');
+        $this->afterDelete();
     }
     public function openModalDelete(CertificadosVelocimetros $certificado)
     {
         $this->openModalDelete = true;
         $this->certificado = $certificado;
     }
+
+    public function afterDelete()
+    {
+        $this->closeModal();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'CERTIFICADO ELIMINADO',
+            mensaje: 'se elimino correctamente el certificado'
+        );
+        $this->dispatch('update-table');
+    }
+    public function closeModal()
+    {
+
+        $this->openModalDelete = false;
+    }
+
     public function render()
     {
         return view('livewire.admin.certificados.velocimetros.delete');
