@@ -72,7 +72,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ACTUALIZAR',
+                tittle: 'ERROR AL GUARDAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }

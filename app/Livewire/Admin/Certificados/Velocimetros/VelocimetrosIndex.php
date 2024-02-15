@@ -25,6 +25,7 @@ class VelocimetrosIndex extends Component
             $query->where('nombre', 'like', '%' . $this->search . '%');
         })
             ->orWhere('numero', 'like', '%' . $this->search . '%')
+            ->orWhere('codigo', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
             ->orderBy('numero', 'desc')
             ->paginate(10);

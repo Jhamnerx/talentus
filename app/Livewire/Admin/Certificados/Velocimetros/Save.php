@@ -41,34 +41,55 @@ class Save extends Component
         $this->resetErrorBag();
     }
 
-    public function guardarCertificado()
+    public function save()
     {
         $certificadoRequest = new CertificadosVelocimetrosRequest();
         $values = $this->validate($certificadoRequest->rules(), $certificadoRequest->messages());
 
-        $ciudad = Ciudades::find($values["ciudades_id"]);
+        try {
 
-        $fecha = $ciudad->nombre . " a los " . today()->day . " del mes de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
+            $ciudad = Ciudades::find($values["ciudades_id"]);
 
-        $certificado = new CertificadosVelocimetros();
-        $certificado->vehiculos_id = $values["vehiculos_id"];
-        $certificado->numero = $values["numero"];
-        $certificado->velocimetro_modelo = $values["velocimetro_modelo"];
-        $certificado->ciudades_id = $values["ciudades_id"];
-        $certificado->fondo = $values["fondo"];
-        $certificado->sello = $values["sello"];
+            $fecha = $ciudad->nombre . " a los " . today()->day . " del mes de " . Str::ucfirst(today()->monthName) . " del " . today()->year;
 
-        $codigo = $ciudad->prefijo . "-" . $certificado->numero;
-        $certificado->year = today()->year;
-        $certificado->codigo = $codigo;
-        $certificado->fecha = $fecha;
-        $certificado->observacion = $values["observacion"];
-        $certificado->save();
+            $certificado = new CertificadosVelocimetros();
+            $certificado->vehiculos_id = $values["vehiculos_id"];
+            $certificado->numero = $values["numero"];
+            $certificado->velocimetro_modelo = $values["velocimetro_modelo"];
+            $certificado->ciudades_id = $values["ciudades_id"];
+            $certificado->fondo = $values["fondo"];
+            $certificado->sello = $values["sello"];
 
-        $this->dispatch('certificado-velocimetro-save', ['vehiculo' => $certificado->vehiculo->placa]);
-        $this->dispatch('updateTable');
-        $this->reset();
+            $codigo = $ciudad->prefijo . "-" . $certificado->numero;
+            $certificado->year = today()->year;
+            $certificado->codigo = $codigo;
+            $certificado->fecha = $fecha;
+            $certificado->observacion = $values["observacion"];
+            $certificado->save();
+
+            $this->afterSave($certificado->codigo);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR AL GUARDAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
     }
+
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            tittle: 'CERTIFICADO REGISTRADO',
+            mensaje: 'Se registro correctamente el certificado #' . $numero,
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
+    }
+
 
     public function updated($label)
     {
