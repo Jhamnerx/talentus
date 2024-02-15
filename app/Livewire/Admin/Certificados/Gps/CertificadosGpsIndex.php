@@ -69,7 +69,7 @@ class CertificadosGpsIndex extends Component
 
     public function modalOpenSend(Certificados $certificado)
     {
-        $this->dispatch('modalOpenSend', $certificado);
+        $this->dispatch('modalOpenSend', certificado: $certificado);
     }
 
     public function toggleSello(Certificados $certificado)
