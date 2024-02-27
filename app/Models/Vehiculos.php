@@ -139,4 +139,9 @@ class Vehiculos extends Model
     {
         return $this->hasOne(Lineas::class, 'numero', 'numero')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
+
+    public function detalleCobro()
+    {
+        return $this->belongsTo(DetalleCobros::class, 'vehiculo_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+    }
 }

@@ -63,9 +63,9 @@
                                     </div>
                                 </div>
                                 @error('tipo_pago')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -92,9 +92,9 @@
                                     </div>
                                 </div>
                                 @error('tipo_pago')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -126,9 +126,9 @@
                                     </div>
                                 </div>
                                 @error('paymentable_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -139,11 +139,12 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <select id="payment_method" name="payment_method" wire:model.live="payment_method_id"
+                                    <select id="payment_method" name="payment_method"
+                                        wire:model.live="payment_method_id"
                                         class="payment_method w-full form-input pl-9">
 
                                         @foreach ($paymentsMethods as $methods)
-                                        <option value="{{ $methods->id }}">{{ $methods->name }}</option>
+                                            <option value="{{ $methods->id }}">{{ $methods->name }}</option>
                                         @endforeach
 
                                     </select>
@@ -160,9 +161,9 @@
                                     </div>
                                 </div>
                                 @error('payment_method_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-12">
@@ -195,9 +196,9 @@
                                     </div>
                                 </div>
                                 @error('monto')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -207,14 +208,15 @@
 
                                 <div class="relative">
 
-                                    <input wire:model.live="numero_operacion" type="text" class="form-input w-full pl-12"
-                                        placeholder="45474001">
+                                    <input wire:model.live="numero_operacion" type="text"
+                                        class="form-input w-full pl-12" placeholder="45474001">
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 fill-current text-slate-600 shrink-0 ml-3 mr-2"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                             <g stroke-linecap="square" stroke-miterlimit="10" fill="none"
-                                                stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper">
+                                                stroke="currentColor" stroke-linejoin="miter"
+                                                class="nc-icon-wrapper">
                                                 <line x1="10" y1="33" x2="24" y2="33">
                                                 </line>
                                                 <line x1="32" y1="33" x2="38" y2="33">
@@ -224,7 +226,8 @@
                                                 </path>
                                                 <path d="M31.189,23.392a3.933,3.933,0,0,0,0-4.784"></path>
                                                 <path d="M35.991,26.993a9.943,9.943,0,0,0,0-11.986"></path>
-                                                <circle cx="26" cy="21" r="2" stroke="none" fill="currentColor">
+                                                <circle cx="26" cy="21" r="2" stroke="none"
+                                                    fill="currentColor">
                                                 </circle>
                                                 <rect x="10" y="17" width="7" height="6">
                                                 </rect>
@@ -233,16 +236,16 @@
                                     </div>
                                 </div>
                                 @error('numero_operacion')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12">
                                 @error('divisa')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- nota --}}
@@ -252,8 +255,8 @@
                                 </label>
 
                                 <div class="relative">
-                                    <textarea class="w-full form-input pl-9" wire:model.live="nota" name="nota" id=""
-                                        rows="4" placeholder="Ingresa una nota">
+                                    <textarea class="w-full form-input pl-9" wire:model.live="nota" name="nota" id="" rows="4"
+                                        placeholder="Ingresa una nota">
                                     </textarea>
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -281,9 +284,9 @@
                                     </div>
                                 </div>
                                 @error('documentos')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -307,81 +310,8 @@
 
 </div>
 @section('js')
-<script>
-    window.addEventListener('dataDocumentos', event => {
-
-            // $('.vehiculos_id').select2('destroy');
-            // console.log(event.detail.data);
-            data = []
-            data = event.detail.data;
-            //  $('.vehiculos_id').innerHTML = "";
-
-            $(".documentos option").remove();
-
-            $('.documentos').select2({
-                placeholder: '    Buscar un documento',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                width: '100%',
-                // minimumInputLength: 2,
-                templateResult: formatDocumento,
-                data: data,
-                "language": {
-                    "noResults": function() {
-                        return 'No hay documentos sin pagar...';
-                    }
-                },
-                escapeMarkup: function(markup) {
-                    return markup;
-                }
-            });
-
-            $('.documentos').val(null).trigger('change');
-
-        })
-
-        function formatDocumento(documentos) {
-            console.log(documentos);
-            if (documentos.loading) {
-                return documentos.text;
-            }
-
-            var $container = $(
-
-                "<div class='select2-result-documentos clearfix'>" +
-                "<div class='select2-result-documentos__meta'>" +
-                "<div class='select2-result-documentos__title border-b text-sm font-semibold'></div>" +
-                "<div class='select2-result-repository__statistics'>" +
-                "<div class='select2-result-repository__forks text-xs'><i class='fal fa-money-bill'></i> </div>" +
-                "</div>" +
-                "</div>" +
-                "</div>"
-            );
-
-            $container.find(".select2-result-documentos__title").text(documentos.text);
-            $container.find(".select2-result-repository__forks").append(documentos
-                .divisa + " " + documentos.monto);
-
-
-            return $container;
-        }
-
-
-
-        $('.documentos').on('select2:select', function(e) {
-            var data = e.params.data;
-            //console.log(data.paymentable_type);
-
-            @this.set('paymentable_type', data.paymentable_type)
-            @this.set('paymentable_id', data.paymentable_id)
-            @this.set('monto', data.monto)
-            @this.set('divisaDoc', data.divisa)
-        });
-</script>
-
-
-<script>
-    window.addEventListener('savePayment', event => {
+    <script>
+        window.addEventListener('savePayment', event => {
             Swal.fire({
                 icon: 'success',
                 title: 'Guardado',
@@ -391,5 +321,5 @@
             })
 
         })
-</script>
+    </script>
 @endsection

@@ -1,5 +1,7 @@
-<div class="px-4 py-2 bg-gray-50 sm:p-6">
-    <form autocomplete="off">
+<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen').live }"
+    @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
+    <div class="px-4 py-2 bg-gray-50 sm:p-6">
+
         <div class="grid grid-cols-12 gap-2">
 
 
@@ -7,54 +9,24 @@
                 {{-- CLIENTE --}}
 
                 <div class="col-span-12 mb-2">
-                    <div wire:ignore>
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Cliente <span class="text-sm text-red-500"> * </span></div>
-                        </label>
 
-                        <select required name="clientes_id" id="" class="form-select w-full clientes_id pl-3">
+                    <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
+                        placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                        option-label="razon_social" option-value="id" hide-empty-message />
 
-                        </select>
-                    </div>
-
-
-                    @error('cliente')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
-                <!-- ... -->
+                {{-- FECHA INICIO --}}
+                <div class="col-span-6 gap-2">
+                    <x-form.datetime-picker label="Fecha de Inicio: " id="fecha_inicio" name="fecha_inicio"
+                        wire:model.live="fecha_inicio" without-time parse-format="YYYY-MM-DD"
+                        display-format="DD-MM-YYYY" :clearable="false" />
+                </div>
                 {{-- FECHA CADUCIDAD --}}
                 <div class="col-span-6 gap-2">
-
-                    <label
-                        class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>Fecha de vencimiento: <span class="text-sm text-red-500" style="display: none;"> *
-                            </span>
-                        </div>
-                        <!---->
-                        <!---->
-                    </label>
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path fill-rule="evenodd"
-                                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                    clip-rule="evenodd"></path>
-                            </svg>
-                        </div>
-                        <input required wire:model.live="fecha_vencimiento" name="fecha_vencimiento" type="text"
-                            class="form-input fechaVencimiento  pl-9 py-2 w-full" placeholder="Selecciona la fecha">
-                    </div>
-                    @error('fecha_vencimiento')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
+                    <x-form.datetime-picker label="Fecha de vencimiento: " id="fecha_vencimiento"
+                        name="fecha_vencimiento" wire:model.live="fecha_vencimiento" without-time
+                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                 </div>
 
             </div>
@@ -62,169 +34,29 @@
             <div class="col-span-12 grid grid-cols-12 gap-3 md:col-span-6 border-red-600 lg:pl-6">
 
                 <div class="col-span-12 sm:col-span-6 mb-2">
-                    <label class="block text-sm font-medium mb-1" for="vehiculos_id">Vehiculo: <span
-                            class="text-rose-500">*</span></label>
 
-                    <div class="relative" lang="es" wire:ignore>
-
-
-                        <select id="vehiculos_id" name="vehiculos_id" class="vehiculos_id w-full form-input pl-9 "
-                            required></select>
-
-
-
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                            <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                <g class="nc-icon-wrapper">
-                                    <path d="M11,45H5a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,11,45Z"
-                                        fill="#363636"></path>
-                                    <path
-                                        d="M43,45H37a1,1,0,0,1-1-1V36a1,1,0,0,1,1-1h6a1,1,0,0,1,1,1v8A1,1,0,0,1,43,45Z"
-                                        fill="#363636"></path>
-                                    <path d="M42,21,40.415,7.533A4,4,0,0,0,36.443,4H11.557A4,4,0,0,0,7.585,7.533L6,21Z"
-                                        fill="#e3e3e3"></path>
-                                    <path
-                                        d="M42,22a1,1,0,0,1-.992-.883L39.422,7.649A3,3,0,0,0,36.442,5H11.558a3,3,0,0,0-2.98,2.649L6.993,21.117a1,1,0,0,1-1.986-.234L6.592,7.415A5,5,0,0,1,11.558,3H36.442a5,5,0,0,1,4.966,4.415l1.585,13.468a1,1,0,0,1-.876,1.11A.945.945,0,0,1,42,22Z"
-                                        fill="#38a838"></path>
-                                    <path
-                                        d="M46,38H2a1,1,0,0,1-1-1V26a6,6,0,0,1,6-6H41a6,6,0,0,1,6,6V37A1,1,0,0,1,46,38Z"
-                                        fill="#78d478"></path>
-                                    <circle cx="40" cy="27" r="3" fill="#fff">
-                                    </circle>
-                                    <circle cx="8" cy="27" r="3" fill="#fff">
-                                    </circle>
-                                    <path d="M31,31H17a2,2,0,0,1,0-4H31a2,2,0,0,1,0,4Z" fill="#363636">
-                                    </path>
-                                    <path d="M1,34H47a0,0,0,0,1,0,0v3a1,1,0,0,1-1,1H2a1,1,0,0,1-1-1V34A0,0,0,0,1,1,34Z"
-                                        fill="#49c549"></path>
-                                    <circle cx="8" cy="34" r="2" fill="#f7bf26">
-                                    </circle>
-                                    <circle cx="40" cy="34" r="2" fill="#f7bf26">
-                                    </circle>
-                                </g>
-                            </svg>
-                        </div>
-                    </div>
-                    @error('vehiculos_id')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
+                    <x-form.select label="Periodo:" wire:model.live='periodo' name="periodo" id="periodo"
+                        placeholder="selecciona un periodo" :options="[
+                            ['name' => 'MENSUAL', 'id' => 'MENSUAL'],
+                            ['name' => 'BIMENSUAL', 'id' => 'BIMENSUAL'],
+                            ['name' => 'TRIMESTRAL', 'id' => 'TRIMESTRAL'],
+                            ['name' => 'SEMESTRAL', 'id' => 'SEMESTRAL'],
+                            ['name' => 'ANUAL', 'id' => 'ANUAL'],
+                        ]" option-label="name" option-value="id" />
                 </div>
-
 
                 <div class="col-span-12 sm:col-span-6 mb-2">
+                    <x-form.select label="Tipo Pago: " wire:model.live='tipo_pago' name="tipo_pago" id="tipo_pago"
+                        placeholder="selecciona" :options="[['name' => 'RECIBO', 'id' => 'RECIBO'], ['name' => 'FACTURA', 'id' => 'FACTURA']]" option-label="name" option-value="id" />
 
-                    <label
-                        class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>
-                            Periodo:
-                        </div>
-                        <!---->
-                    </label>
-                    <select wire:model.live="periodo" name="periodo" id="periodo" class="w-full form-input pl-2" required>
-
-                        <option value="MENSUAL" selected>MENSUAL</option>
-                        <option value="BIMENSUAL">BIMENSUAL</option>
-                        <option value="TRIMESTRAL">TRIMESTRAL</option>
-                        <option value="SEMESTRAL">SEMESTRAL</option>
-                        <option value="ANUAL">ANUAL</option>
-
-                    </select>
-                    @error('periodo')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
+                <div class="col-span-12 sm:col-span-4 mb-2">
+                    <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
+                        wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
 
-                <div class="col-span-12 sm:col-span-6 mb-2">
-
-                    <label
-                        class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>
-                            Tipo Pago:
-                        </div>
-                        <!---->
-                    </label>
-                    <select wire:model.live="tipo_pago" name="tipo_pago" id="tipo_pago" class="w-full form-input pl-2"
-                        required>
-
-                        <option value="RECIBO">RECIBO</option>
-                        <option value="FACTURA">FACTURA</option>
-
-                    </select>
-                    @error('tipo_pago')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
                 </div>
 
-                <div class="col-span-12 sm:col-span-3 mb-2">
-
-                    <label
-                        class="flex text-sm not-italic items-center mb-1 font-medium text-gray-800 whitespace-nowrap justify-between">
-                        <div>
-                            Divisa:
-                        </div>
-                    </label>
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-
-                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24">
-                                <g fill="none" class="nc-icon-wrapper">
-                                    <path
-                                        d="M11.5 17.1c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79z"
-                                        fill="currentColor"></path>
-                                </g>
-                            </svg>
-                        </div>
-                        <select name="divisa" wire:model.live="divisa" id="divisa"
-                            class="form-select pl-9 py-2 w-full">
-                            <option value="PEN">SOLES</option>
-                            <option value="USD">DOLARES</option>
-                        </select>
-
-                    </div>
-
-                    @error('divisa')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
-                <div class="col-span-12 sm:col-span-3 mb-2">
-
-                    <label class="block text-sm font-medium mb-1" for="monto_unidad">Monto: <span
-                            class="text-rose-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-
-                            <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 24 24">
-                                <g fill="none" class="nc-icon-wrapper">
-                                    <path
-                                        d="M11.5 17.1c-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79z"
-                                        fill="currentColor"></path>
-                                </g>
-                            </svg>
-                        </div>
-                        <input required value="30" type="number" step="0.1" wire:model.live="monto_unidad"
-                            class="form-input pl-9 py-2 w-full">
-                    </div>
-
-                    @error('monto_unidad')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                    @enderror
-                </div>
             </div>
             <div class="col-span-12">
 
@@ -232,22 +64,177 @@
                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                     <div>Nota
                     </div>
-                    <!---->
+
                 </label>
                 <textarea wire:model.live="nota" class="form-input w-full px-4 py-3" name="nota" id="" cols="30"
                     rows="5" placeholder="Ingresar nota (opcional)"></textarea>
             </div>
-            <!-- ... -->
 
+
+            <div class="col-span-12 sm:col-span-12 mt-4 lg:flex lg:items-center lg:justify-between">
+                <div class="flex-1 min-w-0">
+                    <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                        Lista de Vehiculos
+                    </h2>
+
+                    <div class="mt-1 flex flex-col sm:flex-row sm:flex-wrap sm:mt-0 sm:space-x-6">
+                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                    d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v3.57A22.952 22.952 0 0110 13a22.95 22.95 0 01-8-1.43V8a2 2 0 012-2h2zm2-1a1 1 0 011-1h2a1 1 0 011 1v1H8V5zm1 5a1 1 0 011-1h.01a1 1 0 110 2H10a1 1 0 01-1-1z"
+                                    clip-rule="evenodd" />
+                                <path
+                                    d="M2 13.692V16a2 2 0 002 2h12a2 2 0 002-2v-2.308A24.974 24.974 0 0110 15c-2.796 0-5.487-.46-8-1.308z" />
+                            </svg>
+                            Cantidad: {{ $items->count() }}
+                        </div>
+
+                        <div class="mt-2 flex items-center text-sm text-gray-500">
+                            <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path
+                                    d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Monto plan: $
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-span-12 mt-10 pt-4 border-2 bg-white shadow-lg rounded-lg px-3 mb-5">
+
+                <div class="flex -mx-1 border-b px-2 py-2 ">
+                    <div class="flex-auto px-5 xl:w-32 text-center">
+
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">PLACA</span>
+                        </p>
+                    </div>
+                    <div class="flex-auto xl:w-28 text-center">
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">MONTO
+                                PLAN</span>
+                        </p>
+                    </div>
+                    <div class="flex-auto xl:w-28 text-center">
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">
+                                FECHA VENC.
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="flex-auto xl:w-20 text-center">
+                        <p class="leading-none">
+                            <span class="block uppercase tracking-wide text-sm font-bold text-gray-800">ACCIONES</span>
+                        </p>
+                    </div>
+                </div>
+
+
+
+
+                <div class="flex justify-between items-center" aria-hidden="true">
+                    <svg class="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
+                    </svg>
+                    <div class="grow w-full h-5 bg-white flex flex-col justify-center">
+                        <div class="h-px w-full border-t border-dashed border-slate-200"></div>
+                    </div>
+                    <svg class="w-5 h-5 fill-white rotate-180" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
+                    </svg>
+                </div>
+                <div class="detallesvehiculos">
+
+                    @if ($items->count() > 0)
+                        @foreach ($items->all() as $placa => $vehiculo)
+                            <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
+
+                                <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+
+                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
+
+                                </div>
+
+                                <div class="flex-auto xl:w-28 text-center">
+
+                                    <input wire:model.live="items.{{ $placa }}.plan"
+                                        class="form-input w-16 md:w-28 lg:w-28" type="text">
+
+                                    @if ($errors->has('items.' . $placa . '.plan'))
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('items.' . $placa . '.plan') }}
+                                        </p>
+                                    @endif
+
+                                </div>
+                                <div class="flex-auto xl:w-28 text-center">
+
+                                    <x-form.datetime-picker id="fecha_vencimiento_i" name="fecha_vencimiento_i"
+                                        wire:model.live="items.{{ $placa }}.fecha" without-time
+                                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                                </div>
+
+                                <div class="flex-auto xl:w-20 text-center">
+
+                                    <x-form.button label="Eliminar"
+                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')" outline red sm
+                                        icon="trash" />
+                                </div>
+
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
+                            <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+
+                                <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
+                                @if ($errors->has('items'))
+                                    <p class="mt-2  text-pink-600 text-sm">
+                                        {{ $errors->first('items') }}
+                                    </p>
+                                @endif
+
+                            </div>
+
+                        </div>
+
+                    @endif
+
+
+                </div>
+
+
+                <div class="py-3 text-left">
+                    @if ($clientes_id)
+                        <x-form.button spinner="openPanelVehiculos" rounded positive label="Añadir Vehiculo"
+                            wire:click.prevent="openPanelVehiculos" />
+                    @endif
+
+                </div>
+            </div>
         </div>
-    </form>
-    <div class="px-4 py-3 text-right sm:px-6">
-        <button type="button" wire:click="GuardarCobro"
-            class="btn bg-emerald-500 hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-600 text-white">
-            GUARDAR
-        </button>
 
+        <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200">
+
+            <div class="grid sm:grid-cols-2 gap-2 content-end">
+
+                <div class="text-right col-span-2 ">
+
+                    <x-form.button wire:click.prevent="save" spinner="save" label="GUARDAR" emerald md />
+                </div>
+            </div>
+        </div>
+        @livewire('admin.ventas.contratos.items-vehiculo')
     </div>
+
+
+    {{ json_encode($errors->all()) }}
 </div>
 
 
@@ -255,110 +242,4 @@
 
 
 @section('js')
-    <script>
-        // INICIALIZAR LOS INPUTS DE FECHA
-        $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
-            flatpickr('.fechaVencimiento', {
-                mode: 'single',
-                defaultDate: new Date().fp_incr(30),
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-
-                    var query = {
-                        term: params.term,
-                        //type: 'public'
-                    }
-
-                    // Query parameters will be ?search=[term]&type=public
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    // console.log(data.suggestions);
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value; // replace pk with your identifier
-                        obj.text = obj.data; // replace pk with your identifier
-
-                        return obj;
-
-                    });
-                    // console.log(suggestions);
-                    // Transforms the top-level key of the response object from 'items' to 'results'
-                    return {
-
-                        results: suggestions,
-
-                    };
-
-                },
-
-
-            }
-        });
-        $('.vehiculos_id').select2({
-            placeholder: '    Buscar un Vehiculo',
-            language: "es",
-            selectionCssClass: 'pl-9',
-            width: '100%',
-
-        });
-
-        window.addEventListener('dataVehiculos', event => {
-            // $('.vehiculos_id').select2('destroy');
-            data = []
-            data = event.detail.data;
-            //  $('.vehiculos_id').innerHTML = "";
-
-            $(".vehiculos_id option").remove();
-
-            $('.vehiculos_id').select2({
-                placeholder: '    Buscar un Vehiculo',
-                language: "es",
-                selectionCssClass: 'pl-9',
-                width: '100%',
-                // minimumInputLength: 2,
-                data: data
-            });
-            $('.vehiculos_id').val(null).trigger('change');
-
-        })
-
-
-
-
-
-        $('.clientes_id').on('select2:select', function(e) {
-            var data = e.params.data;
-
-            @this.set('cliente', data.id)
-        });
-
-
-        $('.vehiculos_id').on('select2:select', function(e) {
-            var data = e.params.data;
-
-            @this.set('vehiculos_id', data.id)
-        });
-    </script>
 @endsection

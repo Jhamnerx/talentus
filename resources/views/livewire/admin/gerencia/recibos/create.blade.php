@@ -47,7 +47,8 @@
                             <div>Cliente <span class="text-sm text-red-500"> * </span></div>
                         </label>
                         <div class="flex" wire:ignore>
-                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
+                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3"
+                                required>
                             </select>
 
                             @livewire('admin.clientes.button-open-modal')
@@ -55,15 +56,15 @@
                         </div>
 
                         @error('clientes_id')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
                     @if ($cliente)
-                    <x-admin.ventas.cliente-selected :cliente="$cliente">
-                    </x-admin.ventas.cliente-selected>
+                        <x-admin.ventas.cliente-selected :cliente="$cliente">
+                        </x-admin.ventas.cliente-selected>
                     @endif
 
 
@@ -81,9 +82,9 @@
 
                         </div>
                         @error('serie_numero')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
                     <div class="col-span-12 xs:col-span-6 mb-2">
@@ -98,9 +99,9 @@
 
                         </div>
                         @error('numero')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
                     {{-- FECHA --}}
@@ -124,9 +125,9 @@
                                 placeholder="Selecciona la fecha">
                         </div>
                         @error('fecha_emision')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
@@ -152,9 +153,9 @@
                                 placeholder="Selecciona la fecha">
                         </div>
                         @error('fecha_pago')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
                     </div>
 
@@ -167,16 +168,17 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model.live="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+                        <select wire:model.live="divisa" name="divisa" id="moneda"
+                            class="form-select w-full divisa">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
 
 
                         @error('divisa')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
 
                     </div>
@@ -185,17 +187,18 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Forma de Pago
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model.live="forma_pago" name="forma_pago" id="forma_pago" class="form-select w-full">
+                        <select wire:model.live="forma_pago" name="forma_pago" id="forma_pago"
+                            class="form-select w-full">
                             @foreach ($payments_methods as $key => $method)
-                            <option value="{{ $key }}"> {{ $method }}</option>
+                                <option value="{{ $key }}"> {{ $method }}</option>
                             @endforeach
                         </select>
 
 
                         @error('divisa')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
 
                     </div>
@@ -217,15 +220,15 @@
 
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input checked type="radio" wire:model.live="tipo_pago" name="tipo_pago" value="CONTADO"
-                                        class="form-radio " />
+                                    <input checked type="radio" wire:model.live="tipo_pago" name="tipo_pago"
+                                        value="CONTADO" class="form-radio " />
                                     <span class="text-sm ml-2">CONTADO</span>
                                 </label>
                             </div>
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input type="radio" wire:model.live="tipo_pago" name="tipo_pago" value="CREDITO"
-                                        class="form-radio" />
+                                    <input type="radio" wire:model.live="tipo_pago" name="tipo_pago"
+                                        value="CREDITO" class="form-radio" />
                                     <span class="text-sm ml-2">CREDITO</span>
                                 </label>
                             </div>
@@ -233,9 +236,9 @@
                         </div>
 
                         @error('tipo_pago')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
+                            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                {{ $message }}
+                            </p>
                         @enderror
 
                     </div>
@@ -285,120 +288,4 @@
 
 </div>
 @section('js')
-<script>
-    $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
-            flatpickr('.fechaEmision', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-            flatpickr('.fechaVencimiento', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-                },
-            }
-        });
-
-        $('.clientes_id').on('select2:select', function(e) {
-            @this.set('clientes_id', this.value)
-
-        })
-
-        $('.productoSelect').on('select2:select', function(e) {
-
-            @this.call('selectProduct', this.value)
-
-        });
-
-
-        $('.productoSelect').select2({
-            placeholder: 'Añadir Artículo',
-            language: "es",
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.productos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        function addAlert() {
-            iziToast.success({
-                position: 'topRight',
-                title: 'AGREGADO',
-                message: 'Se añadio un producto al recibo',
-            });
-        }
-</script>
-<script>
-    window.addEventListener('unselect-cliente', event => {
-
-            $('.clientes_id').val(null).trigger('change');
-
-        })
-        window.addEventListener('add-producto', event => {
-
-            addAlert();
-
-        })
-</script>
 @endsection

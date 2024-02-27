@@ -51,7 +51,7 @@
                                         </option>
 
                                         @foreach ($tipo_tareas as $key => $tarea)
-                                        <option value="{{$key}}">{{$tarea}}</option>
+                                            <option value="{{ $key }}">{{ $tarea }}</option>
                                         @endforeach
                                     </select>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -75,9 +75,9 @@
                                     </div>
                                 </div>
                                 @error('tipo_tarea_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -85,7 +85,7 @@
                             {{-- titulo --}}
                             <div class="col-span-12">
                                 <div class="text-center font-semibold text-slate-800">
-                                    SERVICIO: {{$titulo}}.
+                                    SERVICIO: {{ $titulo }}.
                                 </div>
                             </div>
 
@@ -96,7 +96,8 @@
                                 </label>
                                 <div class="relative">
 
-                                    <input type="text" wire:model.live="placa" disabled class="form-input w-full pl-9">
+                                    <input type="text" wire:model.live="placa" disabled
+                                        class="form-input w-full pl-9">
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -138,20 +139,20 @@
                                     </div>
                                 </div>
                                 @error('vehiculos_id')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                                 @if ($ErrorMsgVehiculo)
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $ErrorMsgVehiculo }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $ErrorMsgVehiculo }}
+                                    </p>
                                 @endif
                             </div>
 
                             {{-- dispositivo --}}
-                            <div class="col-span-12 sm:col-span-6 dispositivo {{$tipo_tarea_id ==2 ||$tipo_tarea_id ==4  ? 'hidden' : 'cambio'
-                                }}">
+                            <div
+                                class="col-span-12 sm:col-span-6 dispositivo {{ $tipo_tarea_id == 2 || $tipo_tarea_id == 4 ? 'hidden' : 'cambio' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Dispositivo:
                                 </label>
@@ -178,21 +179,20 @@
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                    	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                                                    C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
                                             <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
                                 @error('dispositivo')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             {{-- velocimetro --}}
-                            <div class="col-span-12 sm:col-span-6 {{$tipo_tarea_id==4 ? 'velocimetro' : 'hidden'
-                                                            }}">
+                            <div class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 ? 'velocimetro' : 'hidden' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Modelo Velocimetro:
                                 </label>
@@ -202,8 +202,8 @@
                                         wire:model.live="modelo_velocimetro" id="modelo_velocimetro">
                                         <option value="0" disabled selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
-                                        <option value="{{ $velocimetro->nombre }}">
-                                            {{ $velocimetro->nombre }}</option>
+                                            <option value="{{ $velocimetro->nombre }}">
+                                                {{ $velocimetro->nombre }}</option>
                                         @endforeach
                                     </select>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -224,26 +224,26 @@
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                                                	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                                                                                C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
                                             <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
                                 @error('modelo_velocimetro')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- numero --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5 ? 'hidden' : 'velo'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 || $tipo_tarea_id == 5 ? 'hidden' : 'velo' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Número:
                                 </label>
                                 <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full numero" wire:model.live="numero"
-                                        placeholder="Ingresa o busca un numero">
+                                    <input type="text" class="form-input pl-9 w-full numero"
+                                        wire:model.live="numero" placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -262,14 +262,14 @@
                                     </div>
                                 </div>
                                 @error('numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- sim card --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id ==4 || $tipo_tarea_id ==5  ? 'hidden' : 'velo'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 || $tipo_tarea_id == 5 ? 'hidden' : 'velo' }}">
                                 <label class="block text-sm font-medium mb-1" for="sim_card">
                                     Sim Card:
                                 </label>
@@ -303,14 +303,14 @@
                                     </div>
                                 </div>
                                 @error('sim_card')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             {{-- numero nuevo --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id == 2 && $tipo_tarea_id !==4 ? 'cambio' : 'hidden'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 4 ? 'cambio' : 'hidden' }}">
                                 <label class="block text-sm font-medium mb-1" for="nuevo_numero">
                                     Número Nuevo:
                                 </label>
@@ -335,15 +335,15 @@
                                     </div>
                                 </div>
                                 @error('nuevo_numero')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
                             {{-- nuevo sim card --}}
                             <div
-                                class="col-span-12 sm:col-span-6 {{$tipo_tarea_id == 2 && $tipo_tarea_id !==5  ? 'cambio' : 'hidden'}}">
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 5 ? 'cambio' : 'hidden' }}">
                                 <label class=" block text-sm font-medium mb-1" for="nuevo_sim_card">
                                     Sim Card Nuevo:
                                 </label>
@@ -377,9 +377,9 @@
                                     </div>
                                 </div>
                                 @error('nuevo_sim_card')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
@@ -418,19 +418,19 @@
                                     </div>
                                 </div>
                                 @error('fecha_hora')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
 
-                            @if ($tipo_tarea_id == "0")
-                            <div class="col-span-12">
+                            @if ($tipo_tarea_id == '0')
+                                <div class="col-span-12">
 
-                                <div class="text-center font-medium text-rose-600">
-                                    SELECCIONA EL TIPO DE TAREA.
+                                    <div class="text-center font-medium text-rose-600">
+                                        SELECCIONA EL TIPO DE TAREA.
+                                    </div>
                                 </div>
-                            </div>
                             @endif
 
                         </div>
@@ -455,139 +455,31 @@
 </div>
 
 @once
-@push('scripts')
+    @push('scripts')
 
-<script>
-    window.addEventListener('edit-task', event => {
-        $('.selectVehiculo').val(null).trigger('change');
-        $('.selectModelDispositivo').val(null).trigger('change');
+        <script>
+            window.addEventListener('edit-task', event => {
+                $('.selectVehiculo').val(null).trigger('change');
+                $('.selectModelDispositivo').val(null).trigger('change');
 
-        iziToast.show({
-            theme: 'dark',
-            icon: 'far fa-envelope-open',
-            title: 'TAREA EDITADA',
-            timeout: 2500,
-            message: 'Se ha actualizado la tarea <b>'+event.detail.tarea.token+'</b>',
-            position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-            progressBarColor: 'rgb(5, 44, 82)'
-        });
+                iziToast.show({
+                    theme: 'dark',
+                    icon: 'far fa-envelope-open',
+                    title: 'TAREA EDITADA',
+                    timeout: 2500,
+                    message: 'Se ha actualizado la tarea <b>' + event.detail.tarea.token + '</b>',
+                    position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                    progressBarColor: 'rgb(5, 44, 82)'
+                });
 
-    })
+            })
+        </script>
+        <script>
+            window.addEventListener('put-items', event => {
 
-</script>
-<script>
-    window.addEventListener('put-items', event => {
+                var newOption = new Option(event.detail.dispositivo, event.detail.dispositivo, true, true);
+                $('.selectModelDispositivo').append(newOption).trigger('change');
 
-        var newOption = new Option(event.detail.dispositivo, event.detail.dispositivo, true, true);
-        $('.selectModelDispositivo').append(newOption).trigger('change');
-
-    })
-
-</script>
-<script>
-    $(document).ready(function() {
-        //selects();
-        autocompleteNumero();
-        initFechaHora();
-
-    })
-    window.addEventListener('change-tipo-tarea', event => {
-        if(event.detail.value == 4){
-            $('.dispositivo').hide()
-        }
-        selects();
-        autocompleteNumero();
-        initFechaHora();
-
-    })
-
-    function selectsEdit() {
-        $('.selectVehiculo').select2({
-            placeholder: 'Buscar un Vehiculo',
-            language: "es",
-            minimumInputLength: 2,
-            selectionCssClass: 'pl-9',
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.vehiculos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        $('.selectVehiculo').on('select2:select', function(e) {
-
-            var data = e.params.data;
-            @this.set('vehiculos_id', data.id)
-
-        });
-
-        $('.selectModelDispositivo').select2({
-            placeholder: 'Buscar un Dispositivo',
-            language: "es",
-            selectionCssClass: 'pl-9',
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.dispositivos.modelos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-                        return obj;
-                    });
-
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        $('.selectModelDispositivo').on('select2:select', function(e) {
-
-            var data = e.params.data;
-            @this.set('dispositivo', data.modelo)
-
-        });
-    }
-
-
-</script>
-
-@endpush
-@endonce
+            })
+        </script>
+        <script>

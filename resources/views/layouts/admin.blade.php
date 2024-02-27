@@ -208,6 +208,20 @@
         });
     </script>
 @endif
+@if (session('cobro-registrado'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'REGISTRO DE COBRO REGISTRADO',
+                text: '{{ session('cobro-registrado') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
 @if (session('cotizacion-registrada'))
     <script>
         $(document).ready(function() {

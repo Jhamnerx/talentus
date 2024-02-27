@@ -119,7 +119,8 @@
                             Periodo:
                         </div>
                     </label>
-                    <select wire:model.live="periodo" name="periodo" id="periodo" class="w-full form-input pl-2" required>
+                    <select wire:model.live="periodo" name="periodo" id="periodo" class="w-full form-input pl-2"
+                        required>
 
                         <option value="MENSUAL" selected>MENSUAL</option>
                         <option value="BIMENSUAL">BIMENSUAL</option>
@@ -246,96 +247,3 @@
 
     </div>
 </div>
-
-
-
-
-
-@section('js')
-    <script>
-        // INICIALIZAR LOS INPUTS DE FECHA
-        $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
-            flatpickr('.fechaVencimiento', {
-                mode: 'single',
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-        var dataCliente = {
-            id: {{ $cobro->clientes->id }},
-            text: '{{ $cobro->clientes->razon_social }}'
-        };
-        var OptionCliente = new Option(dataCliente.text, dataCliente.id, false, false);
-        $('.clientes_id').append(OptionCliente).trigger('change');
-
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            disabled: true,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-
-                    var query = {
-                        term: params.term,
-                        //type: 'public'
-                    }
-
-                    // Query parameters will be ?search=[term]&type=public
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    // console.log(data.suggestions);
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value; // replace pk with your identifier
-                        obj.text = obj.data; // replace pk with your identifier
-
-                        return obj;
-
-                    });
-                    // console.log(suggestions);
-                    // Transforms the top-level key of the response object from 'items' to 'results'
-                    return {
-
-                        results: suggestions,
-
-                    };
-
-                },
-
-
-            }
-        });
-
-
-        $('.vehiculos_id').select2({
-            placeholder: '    Buscar un Vehiculo',
-            language: "es",
-            selectionCssClass: 'pl-9 disabled',
-            disabled: true,
-            width: '100%',
-
-        });
-
-
-        var dataVehiculo = {
-            id: {{ $cobro->vehiculo->id }},
-            text: '{{ $cobro->vehiculo->placa }}'
-        };
-        var OptionVehiculo = new Option(dataVehiculo.text, dataVehiculo.id, false, false);
-        $('.vehiculos_id').append(OptionVehiculo).trigger('change');
-    </script>
-@endsection

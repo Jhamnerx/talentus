@@ -73,7 +73,7 @@
                                 {!! Form::text('nombre', null, [
                                     'placeholder' => 'Escribe el nombre',
                                     'class' => 'form-input w-full valid:border-emerald-300 required:border-rose-300 invalid:border-rose-300
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            peer',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            peer',
                                     'required',
                                 ]) !!}
 
@@ -93,8 +93,8 @@
 
                                 {!! Form::select('clientes_id', [], $contacto->clientes_id, [
                                     'class' => 'pr-6 clientes_id
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            clientes-ajax
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            clientes-ajax
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            w-full',
                                 ]) !!}
 
 
@@ -178,7 +178,7 @@
                             <div class="col-span-12">
                                 {!! Form::label('descripcion', 'Descripción:', [
                                     'class' => 'block text-sm font-medium
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            mb-1',
                                 ]) !!}
                                 {!! Form::textarea('descripcion', null, [
                                     'placeholder' => 'Escribe la direccion...',
@@ -195,8 +195,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-2 focus:ring-offset-2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>
@@ -213,76 +213,4 @@
         $('#cargo').caseEnforcer('uppercase');
         $('#email').caseEnforcer('lowercase');
 
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-
-                    var query = {
-                        term: params.term,
-                        //type: 'public'
-                    }
-
-                    // Query parameters will be ?search=[term]&type=public
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    // console.log(data.suggestions);
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value; // replace pk with your identifier
-                        obj.text = obj.data; // replace pk with your identifier
-
-                        return obj;
-
-                    });
-                    // console.log(suggestions);
-                    // Transforms the top-level key of the response object from 'items' to 'results'
-                    return {
-
-                        results: suggestions,
-
-                    };
-
-                },
-
-
-            }
-        });
-        // INICIALIZAR LOS INPUTS DE FECHA
-        $(document).ready(function() {
-
-            flatpickr('#birthday', {
-                mode: 'single',
-
-                disableMobile: "true",
-                dateFormat: "d/m/Y",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-
-        })
-
-        $(document).ready(function() {
-            var clienteSelect = $('.clientes-ajax');
-
-            var name = "{{ $contacto->clientes->razon_social }}";
-
-            var option = new Option(name, {{ $contacto->clientes_id }}, true, true);
-            clienteSelect.append(option).trigger('change');
-
-        });
-    </script>
-
-    <script>
-        var estado = $(".gerente").checked = true | false;
-    </script>
-@stop
+    @stop

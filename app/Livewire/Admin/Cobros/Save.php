@@ -2,24 +2,33 @@
 
 namespace App\Livewire\Admin\Cobros;
 
-use App\Http\Requests\CobrosRequest;
-use App\Models\Clientes;
+use Carbon\Carbon;
 use App\Models\Cobros;
 use Livewire\Component;
-use Carbon\Carbon;
+use App\Models\Clientes;
+use App\Models\Vehiculos;
+use Livewire\Attributes\On;
+use Illuminate\Support\Collection;
+use App\Http\Requests\CobrosRequest;
 
 class Save extends Component
 {
 
 
-    public $cliente, $vehiculos_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
-    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
+    public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
+    public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
     public $dataVehiculos = [];
     public $nota;
 
+
+    public $panelVehiculosOpen = false;
+
+    public Collection $items;
+
     public function mount()
     {
-
+        $this->items = collect();
+        $this->fecha_inicio = Carbon::now()->format('Y-m-d');
         $this->fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
     }
 
@@ -78,26 +87,92 @@ class Save extends Component
         $this->validateOnly($label, $requestCobros->rules(), $requestCobros->messages());
     }
 
-    public function GuardarCobro()
+    public function save()
     {
-        // dd($this->imei);
         $requestCobros = new CobrosRequest();
 
-        $values = $this->validate($requestCobros->rules(), $requestCobros->messages());
+        $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
 
-        Cobros::create([
-            'clientes_id' => $values["cliente"],
-            'vehiculos_id' => $values["vehiculos_id"],
-            'comentario' => $values["comentario"],
-            'periodo' => $values["periodo"],
-            'monto_unidad' => $values["monto_unidad"],
-            'divisa' => $values["divisa"],
-            'fecha_vencimiento' => $values["fecha_vencimiento"],
-            'tipo_pago' => $values["tipo_pago"],
-            'nota' => $values["nota"],
-            'observacion' => $values["observacion"],
-        ]);
+        $this->cantidad_unidades = $this->items->count();
 
-        return redirect()->route('admin.cobros.index')->with('store', 'Se guardo con exito');
+
+        try {
+            $cobro = Cobros::create([
+                'clientes_id' => $datos["clientes_id"],
+                'comentario' => $datos["comentario"],
+                'periodo' => $datos["periodo"],
+                'monto_unidad' => $datos["monto_unidad"],
+                'divisa' => $datos["divisa"],
+                'fecha_vencimiento' => $datos["fecha_vencimiento"],
+                'tipo_pago' => $datos["tipo_pago"],
+                'fecha_inicio' => $datos["fecha_inicio"],
+                'nota' => $datos["nota"],
+                'observacion' => $datos["observacion"],
+            ]);
+
+            Cobros::createItems($cobro, $datos["items"]);
+
+            // $this->dispatch(
+            //     'notify-toast',
+            //     icon: 'success',
+            //     tittle: 'COBRO REGISTRADO',
+            //     mensaje: 'Se registro con existo el cobro',
+            // );
+            session()->flash('cobro-registrado', 'Se registro con existo el cobro');
+            $this->redirectRoute('admin.cobros.index');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'VENTA REGISTRADA',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
+    public function updatedClientesId($cliente)
+    {
+        $this->panelVehiculosOpen = true;
+        $this->dispatch('open-panel-vehiculos', $cliente);
+    }
+
+    public function openPanelVehiculos()
+    {
+        $this->panelVehiculosOpen = true;
+        $this->dispatch('open-panel-vehiculos', $this->clientes_id);
+    }
+
+    #[On('add-vehiculo')]
+    public function addVehiculo(Vehiculos $vehiculo)
+    {
+        if (array_key_exists($vehiculo->placa, $this->items->all())) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
+            );
+        } else {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'VEHICULO AÑADIDO',
+                mensaje: 'Añadiste ' . $vehiculo->placa,
+            );
+
+            $this->items[$vehiculo->placa] = [
+                'vehiculo_id' => $vehiculo->id,
+                'placa' => $vehiculo->placa,
+                'plan' => 30,
+                'fecha' => $this->fecha_vencimiento,
+            ];
+        }
+    }
+    public function eliminarVehiculo($key)
+    {
+        unset($this->items[$key]);
+        $this->items;
     }
 }

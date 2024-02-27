@@ -55,6 +55,7 @@ class Index extends Component
                     'vehiculos_id' => $detalle["vehiculos_id"],
                     'contratos_id' => $contrato["id"],
                     'comentario' => "",
+                    'divisa' => "PEN",
                     'periodo' => "MENSUAL",
                     'monto_unidad' => $detalle["plan"],
                     'fecha_vencimiento' => Carbon::now()->addYear(1)->format('Y-m-d'),
