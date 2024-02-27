@@ -12,8 +12,6 @@ class Index extends Component
     use WithPagination;
     public $search;
     public $estado;
-    public $openModalDelete = false;
-
 
     protected $listeners = [
         'render'
@@ -77,7 +75,7 @@ class Index extends Component
         return view('livewire.admin.cobros.index', compact('cobros'));
     }
 
-    public function estado($estado = null)
+    public function setEstado($estado = null)
     {
         $this->estado = $estado;
     }
@@ -91,8 +89,6 @@ class Index extends Component
 
     public function openModalDelete(Cobros $cobro)
     {
-        //dd($factura);
         $this->dispatch('openModalDelete', $cobro);
-        $this->openModalDelete = true;
     }
 }

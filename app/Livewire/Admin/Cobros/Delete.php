@@ -16,10 +16,9 @@ class Delete extends Component
 
     public function delete()
     {
-
         $this->cobro->delete();
-        $this->dispatch('cobro-delete');
-        $this->dispatch('render');
+
+        $this->afterDelete();
     }
 
     public function openModalDelete(Cobros $cobro)
@@ -29,6 +28,18 @@ class Delete extends Component
         $this->cobro = $cobro;
     }
 
+    public function afterDelete()
+    {
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            tittle: 'COBRO ELIMINADO',
+            mensaje: 'Se elimino el cobro'
+        );
+
+        $this->dispatch('render');
+    }
     public function render()
     {
         return view('livewire.admin.cobros.delete');

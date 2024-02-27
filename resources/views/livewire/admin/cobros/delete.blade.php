@@ -1,7 +1,5 @@
 <div class="m-1.5 flex">
 
-
-
     <div x-data="{ modalDelete: @entangle('openModalDelete').live }">
 
         <!-- Modal backdrop -->
@@ -31,13 +29,13 @@
                     <div>
                         <!-- Modal header -->
                         <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800">Eliminar Reporte</div>
+                            <div class="text-lg font-semibold text-slate-800">Eliminar Cobro</div>
 
                         </div>
                         <!-- Modal content -->
                         <div class="text-sm mb-10">
                             <div class="space-y-2">
-                                <p> Estas seguro de eliminar este Reporte?. </p>
+                                <p> Estas seguro de eliminar este Cobro?. </p>
                             </div>
                         </div>
                         <!-- Modal footer -->
