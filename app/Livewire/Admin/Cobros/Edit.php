@@ -2,33 +2,43 @@
 
 namespace App\Livewire\Admin\Cobros;
 
-use App\Http\Requests\CobrosRequest;
-use App\Models\Clientes;
 use Carbon\Carbon;
+use App\Models\Cobros;
 use Livewire\Component;
+use App\Models\Clientes;
+use App\Models\Vehiculos;
+use Livewire\Attributes\On;
+use Illuminate\Support\Collection;
+use App\Http\Requests\CobrosRequest;
 use Symfony\Component\Mailer\Transport\Dsn;
 
 class Edit extends Component
 {
-    public $cliente, $vehiculos_id, $comentario, $periodo, $monto_unidad;
-    public $fecha_vencimiento,  $cantidad_unidades, $tipo_pago, $observacion, $divisa;
+    public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
+    public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
     public $dataVehiculos = [];
     public $nota;
-    public $cobro;
 
+
+    public $panelVehiculosOpen = false;
+
+    public Collection $items;
+
+    public Cobros $cobro;
     public function mount()
     {
         $this->fecha_vencimiento = $this->cobro->fecha_vencimiento->format('Y-m-d');
+        $this->fecha_inicio = $this->cobro->fecha_inicio->format('Y-m-d');
         $this->periodo = $this->cobro->periodo;
         $this->tipo_pago = $this->cobro->tipo_pago;
         $this->divisa = $this->cobro->divisa;
         $this->monto_unidad = $this->cobro->monto_unidad;
         $this->nota = $this->cobro->nota;
-        $this->cliente = $this->cobro->clientes_id;
+        $this->clientes_id = $this->cobro->clientes_id;
         $this->observacion = $this->cobro->observacion;
         $this->comentario = $this->cobro->comentario;
-        $this->vehiculos_id = $this->cobro->vehiculos_id;
-        $this->dataVehiculos = $this->LoadDataVehiculos($this->cobro->clientes_id);
+        $this->items = collect();
+        $this->LoadDataVehiculos($this->cobro->detalle);
     }
 
     public function render()
@@ -37,27 +47,86 @@ class Edit extends Component
     }
 
 
-
-    public function LoadDataVehiculos($id)
+    public function updatedCliente($id)
     {
-
 
         $cliente = Clientes::where('id', $id)->first();
 
-        $data = [];
-        foreach ($cliente->flotas as $flota) {
-            foreach ($flota->vehiculos as $vehiculo) {
 
-                if ($vehiculo->is_active) {
-                    $data[] = [
-                        'id' => $vehiculo->id,
-                        'text' => $vehiculo->placa,
-                    ];
-                }
+        $data = [];
+
+        foreach ($cliente->vehiculos as $vehiculo) {
+
+            if ($vehiculo->is_active) {
+                $data[] = [
+                    'id' => $vehiculo->id,
+                    'text' => $vehiculo->placa,
+                ];
             }
         }
 
-        return $data;
+        $this->dispatch('dataVehiculos', ['data' => $data]);
+        $this->dataVehiculos = $data;
+    }
+
+    public function updatedClientesId($cliente)
+    {
+        $this->panelVehiculosOpen = true;
+        $this->dispatch('open-panel-vehiculos', $cliente);
+    }
+
+    public function openPanelVehiculos()
+    {
+        $this->panelVehiculosOpen = true;
+        $this->dispatch('open-panel-vehiculos', $this->clientes_id);
+    }
+
+    #[On('add-vehiculo')]
+    public function addVehiculo(Vehiculos $vehiculo)
+    {
+        if (array_key_exists($vehiculo->placa, $this->items->all())) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                tittle: 'ERROR EL AÑADIR',
+                mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
+            );
+        } else {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'VEHICULO AÑADIDO',
+                mensaje: 'Añadiste ' . $vehiculo->placa,
+            );
+
+            $this->items[$vehiculo->placa] = [
+                'vehiculo_id' => $vehiculo->id,
+                'placa' => $vehiculo->placa,
+                'plan' => 30,
+                'fecha' => $this->fecha_vencimiento,
+            ];
+        }
+    }
+
+    public function eliminarVehiculo($key)
+    {
+        unset($this->items[$key]);
+        $this->items;
+    }
+
+    public function LoadDataVehiculos($items)
+    {
+        foreach ($items as $item) {
+
+            $this->items[$item->vehiculo->placa] = [
+                'vehiculo_id' => $item->vehiculo_id,
+                'placa' => $item->vehiculo->placa,
+                'plan' => $item->plan,
+                'fecha' => $item->fecha,
+            ];
+        }
     }
 
     public function updatedPeriodo($periodo)
@@ -106,5 +175,44 @@ class Edit extends Component
         ]);
 
         return redirect()->route('admin.cobros.index')->with('update', 'Se actualizo con exito');
+    }
+
+    public function save()
+    {
+        $requestCobros = new CobrosRequest();
+
+        $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
+
+        $this->cantidad_unidades = $this->items->count();
+
+        try {
+
+            $this->cobro->update([
+                'clientes_id' => $datos["clientes_id"],
+                'comentario' => $datos["comentario"],
+                'periodo' => $datos["periodo"],
+                'monto_unidad' => $datos["monto_unidad"],
+                'divisa' => $datos["divisa"],
+                'fecha_vencimiento' => $datos["fecha_vencimiento"],
+                'tipo_pago' => $datos["tipo_pago"],
+                'fecha_inicio' => $datos["fecha_inicio"],
+                'nota' => $datos["nota"],
+                'observacion' => $datos["observacion"],
+            ]);
+
+            $this->cobro->detalle()->delete();
+
+            Cobros::createItems($this->cobro, $datos["items"]);
+
+            session()->flash('cobro-actualizado', 'Se Actualizo con exito el cobro');
+            $this->redirectRoute('admin.cobros.index');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'VENTA REGISTRADA',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 }

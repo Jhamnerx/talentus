@@ -31,6 +31,10 @@ class Cobros extends Model
     protected $table = 'cobros';
     protected $casts = [
 
+        'clientes_id' => 'integer',
+        'vehiculos_id' => 'integer',
+        'contratos_id' => 'integer',
+        'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'vencido' => 'boolean',
 

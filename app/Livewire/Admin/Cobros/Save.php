@@ -118,7 +118,7 @@ class Save extends Component
             //     tittle: 'COBRO REGISTRADO',
             //     mensaje: 'Se registro con existo el cobro',
             // );
-            session()->flash('cobro-registrado', 'Se registro con existo el cobro');
+            session()->flash('cobro-registrado', 'Se registro con exito el cobro');
             $this->redirectRoute('admin.cobros.index');
         } catch (\Throwable $th) {
             $this->dispatch(
@@ -150,7 +150,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR EL AÑADIR',
+                tittle: 'ERROR EL AÑADIR',
                 mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
             );
         } else {
