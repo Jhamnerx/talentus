@@ -39,9 +39,4 @@ class CobrosController extends Controller
     {
         return view('admin.cobros.edit', compact('cobro'));
     }
-
-    public function cobrosClientes(Clientes $cliente)
-    {
-        return view('admin.cobros.list', compact('cliente'));
-    }
 }

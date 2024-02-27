@@ -222,7 +222,6 @@ Route::controller(CobrosController::class)->group(function () {
     Route::get('cobros', 'index')->name('admin.cobros.index');
     Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
     Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
-    Route::get('cobros/clientes/{cliente}', 'cobrosClientes')->name('admin.cobros.list.clientes');
 });
 
 

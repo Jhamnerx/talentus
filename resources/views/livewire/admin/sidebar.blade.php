@@ -910,7 +910,7 @@
                                         </li>
                                     @endcan
 
-                                    @can('admin.payments.index')
+                                    {{-- @can('admin.payments.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
@@ -923,7 +923,7 @@
                                                     Pagos</span>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endcan --}}
 
                                     {{-- añadir permiso --}}
                                     <li class="mb-1 last:mb-0">
