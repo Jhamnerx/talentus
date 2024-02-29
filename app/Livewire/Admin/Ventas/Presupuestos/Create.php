@@ -92,8 +92,7 @@ class Create extends Component
 
     public function render()
     {
-        $payments_methods = MetodoPago::pluck('descripcion', 'codigo');
-        return view('livewire.admin.ventas.presupuestos.create', compact('payments_methods'));
+        return view('livewire.admin.ventas.presupuestos.create');
     }
 
 
@@ -263,6 +262,7 @@ class Create extends Component
                     'cantidad' => $selected["cantidad"],
                     'unit' => $selected["unit"],
                     'unit_name' => $selected["unit_name"],
+                    'producto' => $selected["producto"],
                     'descripcion' => $selected["descripcion"],
                     'valor_unitario' => $selected["valor_unitario"],
                     'precio_unitario' => $selected["precio_unitario"],

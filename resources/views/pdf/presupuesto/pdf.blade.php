@@ -194,7 +194,7 @@
                         @foreach ($presupuesto->detalles as $detalle)
                             <tr>
                                 <td>
-                                    <p class="producto-titulo"><b>{{ $detalle->producto }}</b>.</p>
+                                    <p class="producto-titulo"><b>{{ $detalle->info_producto->descripcion }}</b>.</p>
                                     <p class="descripcion">{{ $detalle->descripcion }}</p>
                                 </td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>

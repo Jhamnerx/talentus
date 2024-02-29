@@ -30,6 +30,7 @@ class ModalAddProducto extends Component
             'cantidad' => 1,
             'unit' => "NIU",
             'unit_name' => "UNIDAD",
+            'producto' => "",
             'descripcion' => "",
             'valor_unitario' => 0.00,
             'precio_unitario' => 0.00,
@@ -83,6 +84,7 @@ class ModalAddProducto extends Component
         $this->selected->put('codigo', $producto->codigo);
         $this->selected->put('unit', $producto->unit_code);
         $this->selected->put('unit_name', $producto->unit->descripcion);
+        $this->selected->put('producto', $producto->producto);
         $this->selected->put('descripcion', $producto->descripcion);
         $this->selected->put('valor_unitario', round(floatval($producto->valor_unitario), 4));
         $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($producto->valor_unitario)), 4));
@@ -181,6 +183,7 @@ class ModalAddProducto extends Component
             'cantidad' => 1,
             'unit' => "NIU",
             'unit_name' => "UNIDAD",
+            'producto' => "",
             'descripcion' => "",
             'valor_unitario' => 0.00,
             'igv' => 0.00,
@@ -203,6 +206,7 @@ class ModalAddProducto extends Component
             'selected.codigo' => 'required',
             'selected.cantidad' => 'required|integer|min:1',
             'selected.unit' => 'required|exists:units,codigo',
+            'selected.producto' => 'required',
             'selected.descripcion' => 'required',
             'selected.valor_unitario' => 'required|',
             'selected.igv' => 'required',

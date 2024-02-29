@@ -51,7 +51,6 @@ class CreateModal extends Component
         $request = new ProductosRequest();
 
         $datos = $this->validate($request->rules());
-        // dd($datos);
         $producto = Productos::create($datos);
 
         //save imagen
