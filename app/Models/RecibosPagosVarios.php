@@ -67,7 +67,10 @@ class RecibosPagosVarios extends Model
     {
         return $query->where('estado', '=', $this::BORRADOR);
     }
-
+    public function scopeStatus($query, $estado)
+    {
+        return $query->where('pago_estado', '=', $estado);
+    }
     //GLOBAL SCOPES
 
     protected static function booted()

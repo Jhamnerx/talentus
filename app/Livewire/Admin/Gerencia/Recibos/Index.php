@@ -54,7 +54,18 @@ class Index extends Component
 
         if ($estado != null) {
 
-            $recibos = RecibosPagosVarios::Where('pago_estado', $estado)->paginate(10);
+            // $recibos = RecibosPagosVarios::Where('pago_estado', $estado)->paginate(10);
+            $recibos = RecibosPagosVarios::whereHas('clientes', function ($query) {
+                $query->where('razon_social', 'like', '%' . $this->search . '%');
+            })->orWhere('numero', 'like', '%' . $this->search . '%')
+                ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
+                ->orWhere('serie', 'like', '%' . $this->search . '%')
+                ->orWhere('serie_numero', 'like', '%' . $this->search . '%')
+                ->orWhere('divisa', 'like', '%' . $this->search . '%')
+                ->orWhere('total', 'like', '%' . $this->search . '%')
+                ->status($estado)
+                ->orderBy('id', 'desc')
+                ->paginate(10);
         }
 
         if (!empty($desde)) {
@@ -78,7 +89,6 @@ class Index extends Component
                 ->orderBy('id', 'desc')
                 ->paginate(10);
         }
-
 
         return view('livewire.admin.gerencia.recibos.index', compact('recibos', 'totales'));
     }
@@ -109,9 +119,10 @@ class Index extends Component
         }
     }
 
-    public function status($status = null)
+    public function setStatus($status = null)
     {
         $this->status = $status;
+
         // $this->render();
 
     }
