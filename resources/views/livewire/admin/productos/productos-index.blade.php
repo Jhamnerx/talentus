@@ -175,10 +175,22 @@
 
                                 @can('cambiar.estado-producto')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
-
-                                                @livewire('admin.productos.change-status', ['model' => $producto, 'field' => 'is_active'], key('active' . $producto->id))
+                                        <div class="text-center">
+                                            <div class="m-3 w-48">
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $producto->is_active ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Activo: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleStatus({{ $producto->id }})"
+                                                            type="checkbox" id="switch-f{{ $producto->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400" for="switch-f{{ $producto->id }}">
+                                                            <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ON' : 'OFF'"></div>
+                                                </div>
 
                                             </div>
                                         </div>

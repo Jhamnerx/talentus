@@ -50,4 +50,10 @@ class ProductosIndex extends Component
     {
         $this->render();
     }
+
+    public function toggleStatus(Productos $producto)
+    {
+        $producto->is_active = !$producto->is_active; // Cambia el estado del toggle
+        $producto->save(); // Guarda el cambio en el modelo
+    }
 }

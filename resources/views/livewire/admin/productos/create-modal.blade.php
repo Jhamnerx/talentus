@@ -3,6 +3,7 @@
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-12">
+
             <div class="flex flex-wrap gap-4">
                 <x-form.radio md id="tipo_1" name="tipo" left-label="Producto" value="producto"
                     wire:model.live="tipo" />
@@ -16,7 +17,6 @@
 
             <x-form.textarea id="descripcion" name="descripcion" wire:model="descripcion" label="Descripción:"
                 placeholder="Descripcion del producto" />
-
         </div>
 
         <div class="col-span-12 md:col-span-5">

@@ -40,7 +40,7 @@ class CreateModal extends Component
 
     public function generateCodeProduct($categoria_id)
     {
-        $producto =  Productos::where('categoria_id', $categoria_id)->latest()->first();
+        $producto =  Productos::where('categoria_id', $categoria_id)->withTrashed()->latest()->first();
 
         $this->codigo = $producto ? 'PROD-' . $categoria_id . str_replace('PROD-', '', $producto["codigo"]) + 1 : $categoria_id . "000";
     }
