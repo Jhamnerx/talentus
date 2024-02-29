@@ -10,25 +10,21 @@ use Livewire\Component;
 class Show extends Component
 {
     public $search;
-    public $openModalSave = false;
-    public $openModalEdit = false;
-
 
     public function render()
     {
 
-        $roles = Role::where('name', 'like', '%' . $this->search . '%')->paginate(5);
+        $roles = Role::where('name', 'like', '%' . $this->search . '%')->paginate(10);
         return view('livewire.admin.ajustes.roles.show', compact('roles'));
     }
 
-    
-    public function openModalSave(){
-        $this->dispatch('openModalSave');
-        $this->openModalSave = true;
 
+    public function openModalSave()
+    {
+        $this->dispatch('openModalSave');
     }
-    public function openModalEdit($id){
+    public function openModalEdit($id)
+    {
         $this->dispatch('openModalEdit', $id);
-        $this->openModalEdit = true;
     }
 }

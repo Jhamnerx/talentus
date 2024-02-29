@@ -16,7 +16,7 @@ return new class extends Migration
 
         Schema::table('productos', function (Blueprint $table) {
             $table->dropColumn('nombre');
-            $table->decimal('valor_unitario', 10, 4);
+            $table->decimal('valor_unitario', 18, 4);
             //$table->dropColumn('precio');
 
         });
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->boolean('estado')->default(true)->after('afecto_icbper');
-            $table->string('ventas')->after('estado');
+            $table->string('ventas')->after('estado')->default(0);
         });
     }
 

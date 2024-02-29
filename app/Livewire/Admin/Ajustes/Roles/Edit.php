@@ -36,10 +36,10 @@ class Edit extends Component
 
     public function openModal(Role $rol)
     {
-       // dd($rol);
+        // dd($rol);
         $this->openModalEdit = true;
         $this->permission = $rol->permissions->pluck('name')->toArray();
-       // array_push($this->permission, $rol->permissions->pluck('name'));
+        // array_push($this->permission, $rol->permissions->pluck('name'));
         $this->name = $rol->name;
         $this->rol = $rol;
         // $this->permission = DB::table('role_has_permissions')->where('role_has_permissions.role_id', $rol->id)
@@ -56,7 +56,7 @@ class Edit extends Component
 
     public function updated($label)
     {
-       
+
         $rolRequest = new RolesRequest();
         $this->validateOnly($label, $rolRequest->rules($this->rol), $rolRequest->messages());
     }
@@ -66,8 +66,9 @@ class Edit extends Component
         return view('livewire.admin.ajustes.roles.edit');
     }
 
-    public function update(){
-        
+    public function update()
+    {
+
         $rol = Role::find($this->rol->id);
         $rol->name = $this->name;
         $rol->save();
@@ -76,57 +77,50 @@ class Edit extends Component
         return redirect()->route('admin.ajustes.roles')->with('update', 'rol actualizado satisfactoriamente');
     }
 
-    public function checkAll(){
+    public function checkAll()
+    {
 
         $permisos = Permission::get();
         //dd($permisos);
         foreach ($permisos as $permiso) {
 
 
-            if(array_search($permiso->name, $this->permission) === false){
-                
+            if (array_search($permiso->name, $this->permission) === false) {
+
                 array_push($this->permission, $permiso->name);
                 //dd($permiso->name);
 
             }
-
         }
-       
-
     }
-    public function uncheckAll(){
+    public function uncheckAll()
+    {
         $this->permission = [];
     }
 
-    public function checkCategory($categoria){
+    public function checkCategory($categoria)
+    {
 
         $permisos = Permission::get();
         //dd($permisos);
         foreach ($permisos as $permiso) {
 
-            if(strpos($permiso->name, $categoria)){
+            if (strpos($permiso->name, $categoria)) {
 
 
                 //array_push($this->permission, $permiso->name);
-                if($this->permission !== NULL){
+                if ($this->permission !== NULL) {
 
                     $valor = array_search($permiso->name, $this->permission);
-                    
-                    if(array_search($permiso->name, $this->permission) === false){
-                    
+
+                    if (array_search($permiso->name, $this->permission) === false) {
+
                         array_push($this->permission, $permiso->name);
                         //dd($permiso->name);
 
                     }
                 }
-                
-
-
             }
-            
-
         }
-
-
     }
 }

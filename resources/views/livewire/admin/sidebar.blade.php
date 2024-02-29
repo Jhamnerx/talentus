@@ -482,7 +482,7 @@
                                         <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                            @if (Route::is('admin.ventas.recibos.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                            @if (Route::is('admin.ventas.recibos.index', 'admin.ventas.recibos.create', 'admin.ventas.recibos.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
                                             href="{{ route('admin.ventas.recibos.index') }}">
                                             <span
@@ -885,7 +885,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.users.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.users.index', 'admin.users.create', 'admin.users.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.users.index') }}">
                                                 <span
@@ -900,7 +900,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.cobros.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span
@@ -930,7 +930,7 @@
                                         <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                            @if (Route::is('admin.gerencia.recibos.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                            @if (Route::is('admin.gerencia.recibos.index', 'admin.gerencia.recibos.create', 'admin.gerencia.recibos.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
                                             href="{{ route('admin.gerencia.recibos.index') }}">
                                             <span
@@ -945,7 +945,14 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.ajustes.cuenta')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is(
+                                                        'admin.ajustes.cuenta',
+                                                        'admin.ajustes.notificaciones',
+                                                        'admin.ajustes.roles',
+                                                        'admin.ajustes.roles.store',
+                                                        'admin.ajustes.series',
+                                                        'admin.ajustes.plantilla',
+                                                        'admin.ajustes.ciudades')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.ajustes.cuenta') }}">
                                                 <span
