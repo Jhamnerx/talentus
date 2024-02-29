@@ -3,20 +3,22 @@
 namespace App\Livewire\Admin\Gerencia\Recibos;
 
 use Carbon\Carbon;
+use App\Models\Series;
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\Productos;
 use App\Models\PaymentMethods;
-use Illuminate\Support\Collection;
-use App\Http\Controllers\Admin\RecibosPagosVariosController;
-use App\Http\Requests\RecibosPagosRequest;
 use App\Models\RecibosPagosVarios;
+use Illuminate\Support\Collection;
+use App\Http\Requests\RecibosPagosRequest;
+use App\Http\Controllers\Admin\RecibosPagosVariosController;
 
 class Create extends Component
 {
 
     public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa = 'PEN', $estado = "BORRADOR";
-    public $forma_pago = 1, $total = 0.0;
-    public $tipo_pago = "CONTADO", $nota;
+    public $forma_pago = "009", $total = 0.0;
+    public $tipo_venta = "CONTADO", $nota;
 
 
     public $showCredit = false;
@@ -25,42 +27,81 @@ class Create extends Component
     public Collection $selected;
     public $simbolo = "S/. ";
     public $cliente;
+    public $product_selected_id;
+
+    public Collection $detalle_cuotas;
 
 
     public function mount()
     {
-        $reciboController = new RecibosPagosVariosController();
-        $this->numero = $reciboController->setNextSequenceNumber();
-        $this->serie = "RB";
-        $this->serie_numero = $this->serie . "-" . $this->numero;
+        $this->setSerieMount();
+
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_pago = Carbon::now()->format('Y-m-d');
         $this->items = collect();
+
         $this->selected = collect([
+            'producto_id' => null,
             'producto' => "",
             'descripcion' => "",
-            'cantidad' => 1,
-            'total' => ""
+            'cantidad' => "1",
+            'precio' => 0.00
         ]);
     }
 
 
     public function render()
     {
-        $payments_methods = PaymentMethods::pluck('name', 'id');
-        return view('livewire.admin.gerencia.recibos.create', compact('payments_methods'));
+
+        return view('livewire.admin.gerencia.recibos.create');
+    }
+
+    public function setSerieMount()
+    {
+        $serie = Series::where('tipo_comprobante_id', '11')->first();
+        $this->serie = $serie->serie;
+        $this->numero = $serie->correlativo + 1;
+        $this->serie_numero = $this->serie . "-" . $this->numero;
+    }
+
+    public function updatedSerie($value)
+    {
+        $this->changeSerieUpdate($value);
+    }
+
+    public function updatedNumero($value)
+    {
+
+        $this->serie_numero = $this->serie . "-" . $this->numero;
+    }
+
+    public function changeSerieUpdate($serie)
+    {
+
+        if ($serie) {
+
+            $serie = Series::where('serie', $serie)->first();
+            $this->serie = $serie->serie;
+            $this->numero = $serie->correlativo + 1;
+            $this->serie_numero = $this->serie . "-" . $this->numero;
+        } else {
+
+            $this->reset('numero');
+        }
     }
 
     function addProducto()
     {
 
         $this->validate([
+            'selected.producto_id' => 'required',
             'selected.producto' => 'required',
             'selected.descripcion' => 'nullable',
             'selected.cantidad' => 'required',
             'selected.precio' => 'required',
 
         ], [
+            'selected.producto_id.required' => 'Seleccion una producto',
             'selected.producto.required' => 'Por favor ingresa un producto',
             'selected.cantidad.required' => 'Por favor ingresa una cantidad',
             'selected.precio.required' => 'Por favor ingresa un precio',
@@ -68,8 +109,10 @@ class Create extends Component
 
         try {
 
+            // $igv = round(round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2) * 18 / 100, 2);
             $total = round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2);
             $this->items->push([
+                'producto_id' => $this->selected["producto_id"],
                 'producto' => $this->selected->get('producto'),
                 'descripcion' => $this->selected["descripcion"],
                 'cantidad' => $this->selected["cantidad"],
@@ -78,17 +121,37 @@ class Create extends Component
             ]);
 
             $this->selected = collect();
-
+            $this->reset('product_selected_id');
 
             //calcular los totales al añadir un producto
             $this->total = $this->calcularTotal();
-            $this->dispatch('add-producto');
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'PRODUCTO AÑADIDO',
+                mensaje: 'añadiste el producto ' . $this->selected->get('producto'),
+            );
         } catch (\Exception $e) {
-            throw $e;
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: $e->getMessage(),
+            );
         }
     }
+    function updatedProductSelectedId(Productos $producto)
+    {
 
-
+        $this->selected = collect([
+            'producto_id' => $producto->id,
+            'producto' => $producto->descripcion,
+            'descripcion' => $producto->descripcion,
+            'cantidad' => "1",
+            'precio' => $producto->valor_unitario
+        ]);
+    }
     public function updatedItems($name, $value)
     {
         $this->items = $this->items->map(function ($item, $key) {
@@ -105,6 +168,7 @@ class Create extends Component
     {
         $this->total =  $this->calcularTotal();
     }
+
 
 
     public function calcularTotal()
@@ -140,6 +204,7 @@ class Create extends Component
         $this->dispatch('unselect-cliente');
     }
 
+
     public function updated($name, $value)
     {
         $request = new RecibosPagosRequest();
@@ -152,11 +217,23 @@ class Create extends Component
         $request = new RecibosPagosRequest();
         $data = $this->validate($request->rules(), $request->messages());
 
-        $factura = RecibosPagosVarios::create($data);
+        try {
+            $recibo = RecibosPagosVarios::create($data);
 
-        RecibosPagosVarios::createItems($factura, $data["items"]);
+            //CREAR ITEMS DE LA VENTA
+            RecibosPagosVarios::createItems($recibo, $data["items"]);
 
-        return redirect()->route('admin.gerencia.recibos.index')->with('store', 'El Recibo se registro con exito');
+            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+            $recibo->getSerie->increment('correlativo');
+            return redirect()->route('admin.gerencia.recibos.index')->with('recibog-store', 'El Recibo se registro con exito');
+        } catch (\Throwable $th) {
+
+            $this->dispatch(
+                'error',
+                tittle: 'ERROR EN FUNCION: ',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
     public function eliminarProducto($key)

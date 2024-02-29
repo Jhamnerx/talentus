@@ -53,8 +53,8 @@ class Create extends Component
 
     public function render()
     {
-        $payments_methods = PaymentMethods::pluck('name', 'id');
-        return view('livewire.admin.ventas.recibos.create', compact('payments_methods'));
+
+        return view('livewire.admin.ventas.recibos.create');
     }
 
     public function setSerieMount()
@@ -64,6 +64,7 @@ class Create extends Component
         $this->numero = $serie->correlativo + 1;
         $this->serie_numero = $this->serie . "-" . $this->numero;
     }
+
     public function updatedSerie($value)
     {
         $this->changeSerieUpdate($value);

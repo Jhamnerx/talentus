@@ -9,6 +9,7 @@ use App\Models\DetalleRecibosPagos;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class RecibosPagosVarios extends Model
@@ -74,6 +75,14 @@ class RecibosPagosVarios extends Model
         //
         static::addGlobalScope(new EmpresaScope);
     }
+
+
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+
     //Relacion uno a muchos inversa
 
     public function clientes()

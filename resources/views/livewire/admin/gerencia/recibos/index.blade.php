@@ -61,7 +61,7 @@
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
+                <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
@@ -72,7 +72,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -133,7 +134,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -143,21 +145,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Export button -->
-
-            <div class="relative inline-flex">
-                <button wire:click="OpenModalReporte"
-                    class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
-                    <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
-                        <path
-                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Reportes</span>
-                </button>
-
-            </div>
-
-
 
         </div>
         <!-- Left side -->
@@ -167,21 +154,21 @@
                     <button wire:click="status()"
                         :class="clickeado === 0 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 0"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Todas
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm  duration-150 ease-in-out">Todas
                         <span class="ml-1 text-indigo-200">{{ $totales['total'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click="status('PAID')"
                         :class="clickeado === 1 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 1"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Pagadas
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm  duration-150 ease-in-out">Pagadas
                         <span class="ml-1 text-slate-400">{{ $totales['pagadas'] }}</span></button>
                 </li>
                 <li class="m-1">
                     <button wire:click="status('UNPAID')"
                         :class="clickeado === 2 && 'border-transparent shadow-sm bg-indigo-500 text-white'"
                         @click="clickeado = 2"
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm bg-white duration-150 ease-in-out">Vencidas
+                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-slate-200 hover:border-slate-300 shadow-sm  duration-150 ease-in-out">Vencidas
                         <span class="ml-1 text-slate-400">{{ $totales['vencidas'] }}</span></button>
                 </li>
             </ul>
@@ -194,11 +181,11 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Recibos <span class="text-slate-400 font-medium">{{
-                    $totales['total'] }}</span>
+            <h2 class="font-semibold text-slate-800">Recibos <span
+                    class="text-slate-400 font-medium">{{ $totales['total'] }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
@@ -210,8 +197,7 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                     </label>
                                 </div>
                             </th>
@@ -254,245 +240,251 @@
 
                         <!-- Row -->
                         @if ($recibos->count())
-                        @foreach ($recibos as $recibo)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @if ($recibo->estado == 'BORRADOR')
-                                <div class="font-medium text-red-500">
-                                    <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                        #{{ $recibo->serie_numero }}
-                                    </a>
-                                </div>
-                                @else
-                                <div class="font-medium text-sky-600">
-                                    <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                        #{{ $recibo->serie_numero }}
-                                    </a>
-                                </div>
-                                @endif
+                            @foreach ($recibos as $recibo)
+                                <tr wire:key='recp-{{ $recibo->id }}'>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($recibo->estado == 'BORRADOR')
+                                            <div class="font-medium text-red-500">
+
+                                                #{{ $recibo->serie_numero }}
+
+                                            </div>
+                                        @else
+                                            <div class="font-medium text-sky-600">
+
+                                                #{{ $recibo->serie_numero }}
+
+                                            </div>
+                                        @endif
 
 
-                            </td>
+                                    </td>
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="space-x-1">
-                                    <a target="_blank" href="{{ route('admin.pdf.recibo.pagos', $recibo) }}">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                            <span class="sr-only">Descargar</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <path
-                                                    d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
-                                            </svg>
-                                        </button>
-                                    </a>
-                                </div>
-                            </td>
-
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-slate-800">{{ $recibo->clientes->razon_social }}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-emerald-500">
-                                    @if ($recibo->divisa == 'PEN')
-                                    S/. {{ $recibo->total }}
-                                    @else
-                                    ${{ $recibo->total }}
-                                    @endif
-
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                @switch($recibo->pago_estado)
-                                @case('UNPAID')
-                                <div
-                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
-                                    Por Pagar</div>
-                                @break
-
-                                @case('PAID')
-                                <div
-                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
-                                    Pagado</div>
-                                @break
-                                @endswitch
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="space-x-1">
+                                            <a target="_blank" href="{{ route('admin.pdf.recibo.pagos', $recibo) }}">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    <span class="sr-only">Descargar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </td>
 
 
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{ $recibo->fecha_emision->format('d-m-Y') }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>
-                                    @if ($recibo->fecha_pago)
-                                    {{ $recibo->fecha_pago->format('d-m-Y') }}
-                                    @endif
-
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>{{ $recibo->tipo_venta }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="relative inline-flex" x-data="{ open: false }">
-                                    <div class="relative inline-block h-full text-left">
-                                        <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                            :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                            @click.prevent="open = !open" :aria-expanded="open">
-                                            <span class="sr-only">Menu</span>
-                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                <circle cx="16" cy="16" r="2" />
-                                                <circle cx="10" cy="16" r="2" />
-                                                <circle cx="22" cy="16" r="2" />
-                                            </svg>
-                                        </button>
-                                        <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
-                                            @click.outside="open = false" @keydown.escape.window="open = false"
-                                            x-show="open"
-                                            x-transition:enter="transition ease-out duration-200 transform"
-                                            x-transition:enter-start="opacity-0 -translate-y-2"
-                                            x-transition:enter-end="opacity-100 translate-y-0"
-                                            x-transition:leave="transition ease-out duration-200"
-                                            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                                            x-cloak>
-
-                                            <ul>
-
-                                                <li>
-
-                                                    <a href="{{ route('admin.gerencia.recibos.edit', $recibo) }}"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-27" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
-                                                            </path>
-                                                        </svg> Editar
-
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="openModalDelete({{ $recibo->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-28" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
-                                                            </path>
-                                                        </svg>
-                                                        Eliminar
-                                                    </a>
-                                                </li>
-
-                                                @if ($recibo->pago_estado == 'PAID')
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="markPaid({{ $recibo->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                        disabled="true" id="headlessui-menu-item-33" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-300">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        Marcar como Pagada
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript: void(0)" @click.prevent="open = !open"
-                                                        wire:click.prevent="markUnPaid({{ $recibo->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-34" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg> Marcar como No Pagada
-                                                    </a>
-                                                </li>
-                                                @else
-                                                <li>
-                                                    <a href="javascript: void(0)" @click.prevent="open = !open"
-                                                        wire:click.prevent="markPaid({{ $recibo->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                        disabled="false" id="headlessui-menu-item-33" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg>
-                                                        Marcar como Pagada
-                                                    </a>
-                                                </li>
-
-                                                <li>
-                                                    <a href="javascript: void(0)"
-                                                        wire:click.prevent="markUnPaid({{ $recibo->id }})"
-                                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
-                                                        disabled="true" id="headlessui-menu-item-34" role="menuitem"
-                                                        tabindex="-1">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor"
-                                                            class="h-5 w-5  mr-3 text-gray-300">
-                                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                                stroke-width="2"
-                                                                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                            </path>
-                                                        </svg> Marcar como No Pagada
-                                                    </a>
-                                                </li>
-                                                @endif
-
-
-
-                                            </ul>
-
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-slate-800">{{ $recibo->clientes->razon_social }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="font-medium text-emerald-500">
+                                            @if ($recibo->divisa == 'PEN')
+                                                S/. {{ $recibo->total }}
+                                            @else
+                                                ${{ $recibo->total }}
+                                            @endif
 
                                         </div>
-                                    </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @switch($recibo->pago_estado)
+                                            @case('UNPAID')
+                                                <div
+                                                    class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
+                                                    Por Pagar</div>
+                                            @break
 
-                                </div>
+                                            @case('PAID')
+                                                <div
+                                                    class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                                    Pagado</div>
+                                            @break
+                                        @endswitch
 
-                            </td>
-                        </tr>
-                        @endforeach
+
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $recibo->fecha_emision->format('d-m-Y') }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>
+                                            @if ($recibo->fecha_pago)
+                                                {{ $recibo->fecha_pago->format('d-m-Y') }}
+                                            @endif
+
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>{{ $recibo->tipo_venta }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="relative inline-flex" x-data="{ open: false }">
+                                            <div class="relative inline-block h-full text-left">
+                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                    :class="{ 'bg-slate-100 text-slate-500': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
+                                                    <span class="sr-only">Menu</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <circle cx="16" cy="16" r="2" />
+                                                        <circle cx="10" cy="16" r="2" />
+                                                        <circle cx="22" cy="16" r="2" />
+                                                    </svg>
+                                                </button>
+                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                    @click.outside="open = false"
+                                                    @keydown.escape.window="open = false" x-show="open"
+                                                    x-transition:enter="transition ease-out duration-200 transform"
+                                                    x-transition:enter-start="opacity-0 -translate-y-2"
+                                                    x-transition:enter-end="opacity-100 translate-y-0"
+                                                    x-transition:leave="transition ease-out duration-200"
+                                                    x-transition:leave-start="opacity-100"
+                                                    x-transition:leave-end="opacity-0" x-cloak>
+
+                                                    <ul>
+
+                                                        <li>
+
+                                                            <a href="{{ route('admin.gerencia.recibos.edit', $recibo) }}"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                    </path>
+                                                                </svg> Editar
+
+                                                            </a>
+                                                        </li>
+
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalDelete({{ $recibo->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-28"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke="currentColor"
+                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                                                    </path>
+                                                                </svg>
+                                                                Eliminar
+                                                            </a>
+                                                        </li>
+
+                                                        @if ($recibo->pago_estado == 'PAID')
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
+                                                                    disabled="true" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Marcar como Pagada
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    @click.prevent="open = !open"
+                                                                    wire:click.prevent="markUnPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-34"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-red-400">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg> Marcar como No Pagada
+                                                                </a>
+                                                            </li>
+                                                        @else
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    @click.prevent="open = !open"
+                                                                    wire:click.prevent="markPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    disabled="false" id="headlessui-menu-item-33"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-lime-500">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg>
+                                                                    Marcar como Pagada
+                                                                </a>
+                                                            </li>
+
+                                                            <li>
+                                                                <a href="javascript: void(0)"
+                                                                    wire:click.prevent="markUnPaid({{ $recibo->id }})"
+                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal cursor-default"
+                                                                    disabled="true" id="headlessui-menu-item-34"
+                                                                    role="menuitem" tabindex="-1">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                                        fill="none" viewBox="0 0 24 24"
+                                                                        stroke="currentColor"
+                                                                        class="h-5 w-5  mr-3 text-gray-300">
+                                                                        <path stroke-linecap="round"
+                                                                            stroke-linejoin="round" stroke-width="2"
+                                                                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                                        </path>
+                                                                    </svg> Marcar como No Pagada
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
+
+
+                                                    </ul>
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            @endforeach
                         @else
-                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

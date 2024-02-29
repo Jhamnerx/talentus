@@ -266,6 +266,20 @@
         });
     </script>
 @endif
+@if (session('recibog-store'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'GUARDADO',
+                text: '{{ session('recibog-store') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
 @if (session('recibo-actualizo'))
     <script>
         $(document).ready(function() {
@@ -273,6 +287,20 @@
                 icon: 'success',
                 title: 'ACTUALIZADO',
                 text: '{{ session('recibo-actualizo') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('recibog-actualizo'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'ACTUALIZADO',
+                text: '{{ session('recibog-actualizo') }}',
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"
 

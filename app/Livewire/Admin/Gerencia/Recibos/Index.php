@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\RecibosPagosVarios;
+use Illuminate\Support\Collection;
 
 class Index extends Component
 {
@@ -14,9 +15,6 @@ class Index extends Component
     public $from = '';
     public $to = '';
     public $status = null;
-    public $openModalReporte = false;
-    public $modalOpenSend = false;
-    public $openModalDelete = false;
 
     protected $listeners = [
         'render'
@@ -69,7 +67,7 @@ class Index extends Component
                     $hasta . " 23:59:59"
                 ]
             )->whereRaw(
-                "(divisa like ? OR numero like  ? OR fecha like ? OR total like ?)",
+                "(divisa like ? OR numero like  ? OR total like ? OR serie_numero like ?)",
                 [
                     '%' . $this->search . '%',
                     '%' . $this->search . '%',
@@ -145,7 +143,6 @@ class Index extends Component
     public function OpenModalReporte()
     {
 
-        $this->openModalReporte = true;
         $this->dispatch('openModalReporte');
     }
 
@@ -157,8 +154,7 @@ class Index extends Component
     }
     public function openModalDelete(RecibosPagosVarios $recibo)
     {
-        //dd($presupuesto);
+
         $this->dispatch('openModalDelete', $recibo);
-        $this->openModalDelete = true;
     }
 }

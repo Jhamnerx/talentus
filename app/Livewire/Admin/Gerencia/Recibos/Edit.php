@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Gerencia\Recibos;
 
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\Productos;
 use App\Models\PaymentMethods;
 use App\Models\RecibosPagosVarios;
 use Illuminate\Support\Collection;
@@ -13,7 +14,7 @@ class Edit extends Component
 {
     public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa, $estado;
     public $forma_pago, $total = 0.0;
-    public $tipo_pago, $nota;
+    public $tipo_venta = "CREDITO", $nota;
 
 
     public $showCredit = false;
@@ -25,6 +26,7 @@ class Edit extends Component
     public Collection $selected;
     public $simbolo = "S/. ";
     public $cliente;
+    public $product_selected_id;
 
     public function mount()
     {
@@ -38,41 +40,45 @@ class Edit extends Component
         $this->estado = $this->recibo->estado;
         $this->forma_pago = $this->recibo->forma_pago;
         $this->total = $this->recibo->total;
-        $this->tipo_pago = $this->recibo->tipo_pago;
+        $this->tipo_venta = $this->recibo->tipo_venta;
 
         $this->nota = $this->recibo->nota;
 
-        $this->items = collect($this->recibo->detalles);
+        $this->items = collect($this->recibo->detalles->toArray());
 
         $this->selected = collect([
+            'producto_id' => "",
             'producto' => "",
             'descripcion' => "",
             'cantidad' => 1,
-            'total' => ""
+            'total' => "",
+            'precio' => 0.00
         ]);
 
-        if ($this->recibo->tipo_pago == "CREDITO") {
+        if ($this->recibo->tipo_venta == "CREDITO") {
             $this->showCredit = true;
         }
+
         $this->cliente = Clientes::find($this->clientes_id);
     }
 
     public function render()
     {
-        $payments_methods = PaymentMethods::pluck('name', 'id');
 
-        return view('livewire.admin.gerencia.recibos.edit', compact('payments_methods'));
+        return view('livewire.admin.gerencia.recibos.edit');
     }
     function addProducto()
     {
 
         $this->validate([
+            'selected.producto_id' => 'required',
             'selected.producto' => 'required',
             'selected.descripcion' => 'nullable',
             'selected.cantidad' => 'required',
             'selected.precio' => 'required',
 
         ], [
+            'selected.producto_id.required' => 'Seleccion una producto',
             'selected.producto.required' => 'Por favor ingresa un producto',
             'selected.cantidad.required' => 'Por favor ingresa una cantidad',
             'selected.precio.required' => 'Por favor ingresa un precio',
@@ -80,9 +86,10 @@ class Edit extends Component
 
         try {
 
-            $igv = round(round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2) * 18 / 100, 2);
+            // $igv = round(round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2) * 18 / 100, 2);
             $total = round((floatval($this->selected["cantidad"]) * floatval($this->selected["precio"])), 2);
             $this->items->push([
+                'producto_id' => $this->selected["producto_id"],
                 'producto' => $this->selected->get('producto'),
                 'descripcion' => $this->selected["descripcion"],
                 'cantidad' => $this->selected["cantidad"],
@@ -91,18 +98,37 @@ class Edit extends Component
             ]);
 
             $this->selected = collect();
+            $this->reset('product_selected_id');
 
             //calcular los totales al añadir un producto
-            /// $this->sub_total = $this->calcularSubTotal();
-            //$this->impuesto = $this->calcularImpuesto();
             $this->total = $this->calcularTotal();
 
-            $this->dispatch('add-producto');
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                tittle: 'PRODUCTO AÑADIDO',
+                mensaje: 'añadiste el producto ' . $this->selected->get('producto'),
+            );
         } catch (\Exception $e) {
-            throw $e;
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: $e->getMessage(),
+            );
         }
     }
+    function updatedProductSelectedId(Productos $producto)
+    {
 
+        $this->selected = collect([
+            'producto_id' => $producto->id,
+            'producto' => $producto->descripcion,
+            'descripcion' => $producto->descripcion,
+            'cantidad' => "1",
+            'precio' => $producto->valor_unitario
+        ]);
+    }
 
     public function updatedItems($name, $value)
     {
@@ -121,8 +147,6 @@ class Edit extends Component
         $this->total =  $this->calcularTotal();
     }
 
-
-
     public function calcularTotal()
     {
         $sub_total = $this->items->map(function ($item, $key) {
@@ -135,8 +159,6 @@ class Edit extends Component
 
         return $sub_total->sum();
     }
-
-
 
     public function updatedDivisa($value)
     {
@@ -161,22 +183,31 @@ class Edit extends Component
     public function updated($name, $value)
     {
         $request = new RecibosPagosRequest();
-        $error = $this->validateOnly($name, $request->rules(), $request->messages());
+        $error = $this->validateOnly($name, $request->rules($this->recibo), $request->messages());
     }
-    public function actualizarRecibo()
+    public function save()
     {
 
-        $request = new RecibosPagosRequest();
+        try {
+            $request = new RecibosPagosRequest();
 
-        $data = $this->validate($request->rules($this->recibo), $request->messages());
+            $data = $this->validate($request->rules($this->recibo), $request->messages());
 
-        $this->recibo->update($data);
+            $this->recibo->update($data);
 
-        $this->recibo->detalles()->delete();
+            $this->recibo->detalles()->delete();
 
-        RecibosPagosVarios::createItems($this->recibo, $data["items"]);
+            RecibosPagosVarios::createItems($this->recibo, $data["items"]);
 
-        return redirect()->route('admin.gerencia.recibos.index')->with('update', 'El Recibo se actualizo con exito');
+            return redirect()->route('admin.gerencia.recibos.index')->with('recibog-actualizo', 'El Recibo se actualizo con exito');
+        } catch (\Throwable $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL ACTUALIZAR',
+                mensaje: $e->getMessage(),
+            );
+        }
     }
 
     public function eliminarProducto($key)

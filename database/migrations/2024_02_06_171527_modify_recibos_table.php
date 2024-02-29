@@ -30,6 +30,34 @@ return new class extends Migration
                 $table->foreign('forma_pago')->references('codigo')->on('metodo_pago')->onDelete('cascade')->onUpdate('cascade');
             }
         );
+
+
+        //recibos gerencia
+
+        Schema::table('recibos_pagos', function (Blueprint $table) {
+            $table->dropForeign('recibos_pagos_forma_pago_foreign');
+            $table->enum('tipo_venta', ['CONTADO', 'CREDITO'])->default('CONTADO');
+        });
+
+        Schema::table('recibos_pagos', function (Blueprint $table) {
+
+            $table->string('forma_pago')->nullable()->change();
+        });
+
+        DB::table('recibos_pagos')->update(['forma_pago' => null]);
+
+        Schema::table(
+            'recibos_pagos',
+            function (Blueprint $table) {
+
+                $table->foreign('forma_pago')->references('codigo')->on('metodo_pago')->onDelete('cascade')->onUpdate('cascade');
+            }
+        );
+
+        Schema::table('detalle_recibos_pagos', function (Blueprint $table) {
+            $table->unsignedBigInteger('producto_id')->unsigned()->nullable();
+            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
+        });
     }
 
     /**
