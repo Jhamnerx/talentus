@@ -73,7 +73,15 @@
 
             <x-form.select label="Selecciona una linea:" name="numero" wire:model.live="numero"
                 placeholder="Selecciona una linea" option-description="option_description" :async-data="route('api.lineas.index')"
-                option-label="numero" option-value="numero" hide-empty-message />
+                option-label="numero" option-value="numero">
+
+                <x-slot name="afterOptions" class="p-2 flex justify-center" x-show="displayOptions.length === 0">
+                    <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
+                        <span x-html="`Crear Linea <b>${search}</b>`"></span>
+                    </x-form.button>
+                </x-slot>
+
+            </x-form.select>
         </div>
         <div class="col-span-12 sm:col-span-6">
 

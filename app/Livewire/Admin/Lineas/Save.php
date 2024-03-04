@@ -111,4 +111,13 @@ class Save extends Component
         $this->closeModal();
         $this->dispatch('update-table');
     }
+    #[On('add-linea-modal')]
+    public function addLinea($numero)
+    {
+        $this->items->push([
+            'numero' => $numero,
+            'operador' => '',
+        ]);
+        $this->openModal();
+    }
 }

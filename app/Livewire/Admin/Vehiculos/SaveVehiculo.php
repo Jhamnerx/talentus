@@ -151,4 +151,9 @@ class SaveVehiculo extends Component
         $this->closeModal();
         $this->reset();
     }
+
+    public function addLinea($numero)
+    {
+        $this->dispatch('add-linea-modal', numero: $numero);
+    }
 }

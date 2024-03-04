@@ -4,6 +4,12 @@
 
     <!-- Table -->
     @livewire('admin.vehiculos.vehiculos-index')
+
+
+@stop
+
+
+@push('modals')
     @livewire('admin.vehiculos.save-vehiculo')
     @livewire('admin.vehiculos.edit-vehiculo')
 
@@ -13,10 +19,8 @@
     @livewire('admin.vehiculos.suspend')
     @livewire('admin.vehiculos.mantenimiento.save', ['update' => session('updated-numero')])
     @livewire('admin.vehiculos.save-quick')
-
-
-@stop
-
+    @livewire('admin.lineas.save')
+@endpush
 @section('js')
     <script>
         Livewire.on('updated-numero', (event) => {
