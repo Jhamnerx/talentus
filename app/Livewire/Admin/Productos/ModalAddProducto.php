@@ -84,7 +84,7 @@ class ModalAddProducto extends Component
         $this->selected->put('codigo', $producto->codigo);
         $this->selected->put('unit', $producto->unit_code);
         $this->selected->put('unit_name', $producto->unit->descripcion);
-        $this->selected->put('producto', $producto->producto);
+        $this->selected->put('producto', $producto->descripcion);
         $this->selected->put('descripcion', $producto->descripcion);
         $this->selected->put('valor_unitario', round(floatval($producto->valor_unitario), 4));
         $this->selected->put('precio_unitario', round(floatval($this->calcularPrecioUnitario($producto->valor_unitario)), 4));
@@ -199,37 +199,42 @@ class ModalAddProducto extends Component
 
     public function addProducto()
     {
+        try {
+            $this->validate([
+                'selected.producto_id' => 'required',
+                'selected.codigo' => 'required',
+                'selected.cantidad' => 'required|integer|min:1',
+                'selected.unit' => 'required|exists:units,codigo',
+                'selected.producto' => 'required',
+                'selected.descripcion' => 'required',
+                'selected.valor_unitario' => 'required|',
+                'selected.igv' => 'required',
+                'selected.icbper' => 'required',
+                'selected.total' => 'required',
 
+            ], [
+                'selected.producto_id.required' => 'Seleccion una producto',
+                'selected.codigo.required' => 'Seleccion una producto',
+                'selected.cantidad.required' => 'Por favor ingresa una cantidad',
+                'selected.cantidad.integer' => 'Debe ser un numero entero',
+                'selected.cantidad.min' => 'La cantidad debe ser mayor a 1',
+                'selected.unit.required' => 'Seleccion una producto',
+                'selected.unit.exists' => 'Error no existe la unidad',
+                'selected.descripcion.required' => 'Seleccion una producto',
+                'selected.valor_unitario.required' => 'Valor unitario requerido',
 
-        $this->validate([
-            'selected.producto_id' => 'required',
-            'selected.codigo' => 'required',
-            'selected.cantidad' => 'required|integer|min:1',
-            'selected.unit' => 'required|exists:units,codigo',
-            'selected.producto' => 'required',
-            'selected.descripcion' => 'required',
-            'selected.valor_unitario' => 'required|',
-            'selected.igv' => 'required',
-            'selected.icbper' => 'required',
-            'selected.total' => 'required',
+                'selected.total.required' => 'Sub Total requerido',
 
-        ], [
-            'selected.producto_id.required' => 'Seleccion una producto',
-            'selected.codigo.required' => 'Seleccion una producto',
-            'selected.cantidad.required' => 'Por favor ingresa una cantidad',
-            'selected.cantidad.integer' => 'Debe ser un numero entero',
-            'selected.cantidad.min' => 'La cantidad debe ser mayor a 1',
-            'selected.unit.required' => 'Seleccion una producto',
-            'selected.unit.exists' => 'Error no existe la unidad',
-            'selected.descripcion.required' => 'Seleccion una producto',
-            'selected.valor_unitario.required' => 'Valor unitario requerido',
-
-            'selected.total.required' => 'Sub Total requerido',
-
-        ]);
-
-        $this->dispatch('add-producto', selected: $this->selected);
-
-        $this->closeModal();
+            ]);
+            $this->dispatch('add-producto-selected', selected: $this->selected);
+            $this->closeModal();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Error: ' . $th->getMessage(),
+            );
+        }
     }
 }

@@ -39,7 +39,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'PRESUPUESTO ELIMINADO',
+            title: 'PRESUPUESTO ELIMINADO',
             mensaje: 'Se elimino el presupuesto: ' . $this->presupuesto->serie_correlativo . "."
         );
 

@@ -104,7 +104,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'SIM CARDS REGISTRADO',
+            title: 'SIM CARDS REGISTRADO',
             mensaje: 'se guardo correctamente los sim cards'
         );
         $this->closeModal();

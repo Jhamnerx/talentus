@@ -115,7 +115,7 @@ class Save extends Component
             // $this->dispatch(
             //     'notify-toast',
             //     icon: 'success',
-            //     tittle: 'COBRO REGISTRADO',
+            //     title: 'COBRO REGISTRADO',
             //     mensaje: 'Se registro con existo el cobro',
             // );
             session()->flash('cobro-registrado', 'Se registro con exito el cobro');
@@ -124,7 +124,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'VENTA REGISTRADA',
+                title: 'VENTA REGISTRADA',
                 mensaje: $th->getMessage(),
             );
         }
@@ -150,7 +150,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR EL AÑADIR',
+                title: 'ERROR EL AÑADIR',
                 mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
             );
         } else {
@@ -158,7 +158,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'VEHICULO AÑADIDO',
+                title: 'VEHICULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 

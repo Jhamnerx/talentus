@@ -95,7 +95,7 @@ class Import extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'DISPOSITIVOS IMPORTADOS',
+            title: 'DISPOSITIVOS IMPORTADOS',
             mensaje: 'se completo la importacion de dispositivos'
         );
         $this->closeModal();

@@ -64,7 +64,7 @@ class ShowDetalle extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL AÑADIR DETALLE',
+                title: 'ERROR AL AÑADIR DETALLE',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -77,7 +77,7 @@ class ShowDetalle extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'DETALLE REGISTRADO',
+            title: 'DETALLE REGISTRADO',
             mensaje: 'Se registro el detalle del reporte de la placa: ' . $placa,
         );
         $this->closeModal();

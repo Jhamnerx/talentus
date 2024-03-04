@@ -47,8 +47,8 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">DNI/RUC: <span
                                         class="text-rose-500">*</span></label>
                                 <input x-mask="99999999999" placeholder="Escribe el N° de documento"
-                                    class="form-input w-full" required type="text" wire:model.live.blur="numero_documento"
-                                    maxlength="11">
+                                    class="form-input w-full" required type="text"
+                                    wire:model.live.blur="numero_documento" maxlength="11">
                                 @if ($errorConsulta)
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $errorConsulta }}
@@ -133,24 +133,17 @@
 
 </div>
 
-@once
-    @push('scripts')
-        <script>
-            $('#razon_social').caseEnforcer('uppercase');
-            $('#direccion').caseEnforcer('uppercase');
-            $('#email').caseEnforcer('lowercase');
-        </script>
 
-        <script>
-            window.addEventListener('save-cliente', event => {
-                $(document).ready(function() {
-                    iziToast.success({
-                        position: 'topRight',
-                        title: 'CLIENTE REGISTRADO',
-                        message: 'Cliente ' + event.detail.razon_social + ' Registrado correctamente!',
-                    });
+@push('scripts')
+    <script>
+        window.addEventListener('save-cliente', event => {
+            $(document).ready(function() {
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'CLIENTE REGISTRADO',
+                    message: 'Cliente ' + event.detail.razon_social + ' Registrado correctamente!',
                 });
-            })
-        </script>
-    @endpush
-@endonce
+            });
+        })
+    </script>
+@endpush

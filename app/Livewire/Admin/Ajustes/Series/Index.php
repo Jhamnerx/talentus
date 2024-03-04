@@ -64,7 +64,7 @@ class Index extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'SERIE CREADA',
+            title: 'SERIE CREADA',
             mensaje: 'La serie: ' . $serie . ' de ' . $comprobante . ' fue creada',
         );
     }

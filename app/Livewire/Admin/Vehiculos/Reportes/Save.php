@@ -111,7 +111,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'REPORTE REGISTRADO',
+            title: 'REPORTE REGISTRADO',
             mensaje: 'Se registro el reporte de la unidad: ' . $placa,
         );
         $this->closeModal();

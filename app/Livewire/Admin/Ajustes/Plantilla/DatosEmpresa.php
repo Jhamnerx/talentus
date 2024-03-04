@@ -141,7 +141,7 @@ class DatosEmpresa extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'INFORMACION ACTUALIZADA',
+            title: 'INFORMACION ACTUALIZADA',
             mensaje: 'se actualizo la informacion'
         );
     }

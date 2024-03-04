@@ -99,7 +99,7 @@ class DispositivosIndex extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'SE HA CONSULTADO A FOTA WEB',
+            title: 'SE HA CONSULTADO A FOTA WEB',
             mensaje: 'se ha completado la consulta correctamente a la api de fota web'
         );
 

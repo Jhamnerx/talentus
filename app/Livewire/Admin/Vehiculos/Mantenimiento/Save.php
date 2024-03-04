@@ -100,7 +100,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'MANTENIMIENTO REGISTRADO',
+            title: 'MANTENIMIENTO REGISTRADO',
             mensaje: 'Se registro correctamente el mantenimiento para' . $placa,
         );
         $this->closeModal();

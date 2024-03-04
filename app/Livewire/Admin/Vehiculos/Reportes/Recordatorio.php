@@ -76,7 +76,7 @@ class Recordatorio extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'RECORDATORIO CREADO',
+            title: 'RECORDATORIO CREADO',
             mensaje: 'Se registro correctamente el recordatoria para la unidad ' . $placa,
         );
         $this->closeModal();

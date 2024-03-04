@@ -44,7 +44,7 @@ class CreateModal extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'CATEGORIA REGISTRADA',
+            title: 'CATEGORIA REGISTRADA',
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
         );
         $this->dispatch('update-table');

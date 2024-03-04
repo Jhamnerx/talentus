@@ -89,7 +89,7 @@ class EditVehiculo extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR: ',
+                title: 'ERROR: ',
                 mensaje: $th->getMessage(),
             );
         }
@@ -117,7 +117,7 @@ class EditVehiculo extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'VEHICULO ACTUALIZADO',
+            title: 'VEHICULO ACTUALIZADO',
             mensaje: 'Se registro correctamente el vehiculo ' . $placa,
         );
         $this->closeModal();

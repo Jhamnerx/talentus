@@ -85,7 +85,7 @@ class ReporteLineas extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL EXPORTAR',
+                title: 'ERROR AL EXPORTAR',
                 mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
             );
         }
@@ -99,7 +99,7 @@ class ReporteLineas extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL EXPORTAR',
+                title: 'ERROR AL EXPORTAR',
                 mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
             );
         }

@@ -133,7 +133,7 @@ class AsignLinea extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'LINEA ASIGNADA A SIM CARD',
+            title: 'LINEA ASIGNADA A SIM CARD',
             mensaje: 'Se asigno la linea ' . $this->linea->numero . ' al sim card: ' . $this->sim_card->sim_card
         );
         $this->reset('sim_card', 'linea', 'sim_card_id', 'lineas_id');

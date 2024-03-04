@@ -64,7 +64,7 @@ class UnAsign extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'SE ELIMINO EL NUMERO',
+            title: 'SE ELIMINO EL NUMERO',
             mensaje: 'El sim card fisico se encuentra sin numero'
         );
 

@@ -138,7 +138,7 @@
             Toast.fire({
                 icon: event.icon,
                 title: `<div  style="font-size: 15px; color: #052c52;"> ` +
-                    event.tittle + `</div`,
+                    event.title + `</div`,
                 html: `<div  style="font-size: 14px; color: #056b85;"> ` +
                     event.mensaje + `</div`,
                 showCloseButton: true,
@@ -150,7 +150,7 @@
         Livewire.on('error', (event) => {
             Toast.fire({
                 icon: 'error',
-                title: event.tittle,
+                title: event.title,
                 html: event.mensaje,
                 showCloseButton: true,
             });
@@ -160,7 +160,7 @@
         Livewire.on('notify', (event) => {
             Swal.fire({
                 icon: event.icon,
-                title: event.tittle,
+                title: event.title,
                 text: event.mensaje,
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"

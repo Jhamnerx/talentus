@@ -66,7 +66,7 @@ class Presupuestos extends Model
         'sent' => 'boolean',
         'detalle_cuotas' => AsCollection::class,
         'estado' => PresupuestosStatus::class,
-
+        'terminos' => AsCollection::class,
     ];
 
     /**

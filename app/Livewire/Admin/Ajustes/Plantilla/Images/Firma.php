@@ -51,7 +51,7 @@ class Firma extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'IMAGEN GUARDADA',
+            title: 'IMAGEN GUARDADA',
             mensaje: 'Imagen De la Firma Guardada Correctamente.'
         );
     }

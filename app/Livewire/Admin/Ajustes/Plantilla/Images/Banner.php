@@ -51,7 +51,7 @@ class Banner extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'IMAGEN GUARDADA',
+            title: 'IMAGEN GUARDADA',
             mensaje: 'Imagen Banner Guardada Correctamente.'
         );
     }

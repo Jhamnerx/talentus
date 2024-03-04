@@ -80,7 +80,7 @@ class AsignToPlaca extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'LINEA ASIGNADA A VEHICULO',
+            title: 'LINEA ASIGNADA A VEHICULO',
             mensaje: 'se asigno la linea: ' . $this->linea->numero . ' a la placa: ' . $vehiculo->placa
         );
         $this->closeModal();

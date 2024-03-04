@@ -52,6 +52,8 @@ return new class extends Migration
 
 
             $table->string('numero')->nullable()->change();
+
+            $table->text('terminos')->nullable();
         });
 
 

@@ -93,7 +93,7 @@ class CreateTask extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'SERVICIO TECNICO REGISTRADO',
+            title: 'SERVICIO TECNICO REGISTRADO',
             mensaje: 'Se registro la tarea ' . $numero . ' para la placa <b>' . $placa . '</b>',
         );
         $this->closeModal();

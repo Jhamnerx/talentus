@@ -92,7 +92,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'DISPOSITIVOS REGISTRADOS',
+            title: 'DISPOSITIVOS REGISTRADOS',
             mensaje: 'se ha registrado correctamente los imei'
         );
         $this->closeModal();

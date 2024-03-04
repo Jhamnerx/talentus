@@ -29,7 +29,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'SERIE ELIMINADA',
+            title: 'SERIE ELIMINADA',
             mensaje: 'La serie: ' . $this->serie->serie . ' de ' . $this->serie->tipoComprobante->descripcion . ' fue eliminada',
         );
 

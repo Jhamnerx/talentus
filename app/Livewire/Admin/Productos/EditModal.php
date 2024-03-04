@@ -121,7 +121,7 @@ class EditModal extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'PRODUCTO ACTUALIZADO',
+            title: 'PRODUCTO ACTUALIZADO',
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();

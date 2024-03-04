@@ -82,6 +82,7 @@ class PresupuestosRequest extends FormRequest
             'items.*.afecto_icbper' => 'required',
 
             'features' => 'required',
+            'terminos' => 'nullable',
 
         ];
 

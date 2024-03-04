@@ -69,7 +69,7 @@ class Create extends Component
     //PROPIEDAD PARA ASIGNAR EL MINIMO DEL CORRELATIVO
     public $min_correlativo;
 
-
+    public Collection $terminos;
 
     public function mount()
     {
@@ -87,6 +87,14 @@ class Create extends Component
         $this->tipo_cambio = $util->tipoCambio();
 
         $this->plantilla = plantilla::first();
+
+
+        $this->terminos = collect(
+            [
+                'Esta cotización es valida hasta su fecha de caducidad',
+                'El tiempo de entrega es inmediata previa solicitud con anticipación'
+            ]
+        );
     }
 
 
@@ -239,7 +247,7 @@ class Create extends Component
 
 
     //AÑADIR ITEM SELECCIONADO A LA LISTA DE ITEMS
-    #[On('add-producto')]
+    #[On('add-producto-selected')]
     function addProducto($selected)
     {
 
@@ -286,7 +294,12 @@ class Create extends Component
                 $this->calcularCuotas($this->numero_cuotas);
             }
         } catch (\Exception $e) {
-            throw $e;
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'Error: ' . $e->getMessage(),
+            );
         }
     }
 
@@ -295,8 +308,6 @@ class Create extends Component
 
         $request = new PresupuestosRequest();
         $datos = $this->validate($request->rules(), $request->messages());
-
-
 
         try {
 
@@ -315,7 +326,7 @@ class Create extends Component
 
             $this->dispatch(
                 'error',
-                tittle: 'ERROR EN FUNCION: ',
+                title: 'ERROR EN FUNCION: ',
                 mensaje: $th->getMessage(),
             );
         }
@@ -328,7 +339,7 @@ class Create extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'VENTA REGISTRADA',
+            title: 'VENTA REGISTRADA',
             mensaje: $mensaje,
         );
     }
@@ -555,5 +566,16 @@ class Create extends Component
     public function openModalAddProducto()
     {
         $this->dispatch('openModalAddProducto');
+    }
+
+    #[On('terminos-save')]
+    public function setTerminos($terminos)
+    {
+        $this->terminos = collect($terminos);
+    }
+
+    public function openModalTerminos()
+    {
+        $this->dispatch('open-modal-terminos', terminos: $this->terminos);
     }
 }

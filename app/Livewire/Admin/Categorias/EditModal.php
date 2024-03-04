@@ -49,7 +49,7 @@ class EditModal extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'CATEGORIA ACTUALIZADA',
+            title: 'CATEGORIA ACTUALIZADA',
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'
         );
         $this->dispatch('update-table');

@@ -87,7 +87,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ACTUALIZAR',
+                title: 'ERROR AL ACTUALIZAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -97,7 +97,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'CERTIFICADO REGISTRADO',
+            title: 'CERTIFICADO REGISTRADO',
             mensaje: 'Se registro correctamente el certificado #' . $numero,
         );
         $this->closeModal();

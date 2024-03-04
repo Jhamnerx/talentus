@@ -80,7 +80,7 @@ class Save extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'FLOTA REGISTRADA',
+            title: 'FLOTA REGISTRADA',
             mensaje: 'La Flota ' . $flota->nombre . ' fue guardada correctamente'
         );
         $this->dispatch('update-table');

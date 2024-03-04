@@ -183,14 +183,14 @@ class ConvertTo extends Component
                 $this->dispatch(
                     'notify-toast',
                     icon: 'success',
-                    tittle: 'COMPROBANTE REGISTRADO',
+                    title: 'COMPROBANTE REGISTRADO',
                     mensaje: $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato',
                 );
             } else {
                 $this->dispatch(
                     'notify-toast',
                     icon: 'success',
-                    tittle: 'COMPROBANTE REGISTRADO',
+                    title: 'COMPROBANTE REGISTRADO',
                     mensaje: $mensaje["fe_mensaje_sunat"],
                 );
             }
@@ -199,7 +199,7 @@ class ConvertTo extends Component
 
             $this->dispatch(
                 'error',
-                tittle: 'ERROR: ',
+                title: 'ERROR: ',
                 mensaje: $th->getMessage(),
             );
         }

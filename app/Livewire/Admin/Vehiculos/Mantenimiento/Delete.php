@@ -35,7 +35,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'REGISTRO MANTENIMIENTO ELIMINADO',
+            title: 'REGISTRO MANTENIMIENTO ELIMINADO',
             mensaje: 'se elimino correctamente el registro'
         );
         $this->dispatch('update-table');

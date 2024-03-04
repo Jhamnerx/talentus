@@ -37,7 +37,7 @@ class DeleteModelo extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'MODELO ELIMINADO',
+            title: 'MODELO ELIMINADO',
             mensaje: 'se elimino correctamente'
         );
         $this->dispatch('update-table');

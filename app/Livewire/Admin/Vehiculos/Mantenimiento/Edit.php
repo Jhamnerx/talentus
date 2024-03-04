@@ -90,7 +90,7 @@ class Edit extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'MANTENIMIENTO ACTUALIZADO',
+            title: 'MANTENIMIENTO ACTUALIZADO',
             mensaje: 'Se actualizo correctamente el mantenimiento de' . $placa,
         );
         $this->closeModal();

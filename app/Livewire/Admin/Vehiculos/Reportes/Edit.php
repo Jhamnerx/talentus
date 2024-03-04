@@ -63,7 +63,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ACTUALIZAR',
+                title: 'ERROR AL ACTUALIZAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -85,7 +85,7 @@ class Edit extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'ESTADO ACTUALIZADO',
+            title: 'ESTADO ACTUALIZADO',
             mensaje: 'Se cambio el estado del reporte de la unidad: ' . $this->reporte->vehiculos->placa,
         );
 
@@ -97,7 +97,7 @@ class Edit extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'REPORTE ACTUALIZADO',
+            title: 'REPORTE ACTUALIZADO',
             mensaje: 'Se actualizo el reporte de la unidad: ' . $placa,
         );
         $this->closeModal();

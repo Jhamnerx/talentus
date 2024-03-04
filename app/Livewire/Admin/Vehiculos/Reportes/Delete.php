@@ -24,7 +24,7 @@ class Delete extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ELIMINAR',
+                title: 'ERROR AL ELIMINAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -40,7 +40,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'REPORTE ELIMINADO',
+            title: 'REPORTE ELIMINADO',
             mensaje: 'se elimino correctamente el reporte'
         );
 

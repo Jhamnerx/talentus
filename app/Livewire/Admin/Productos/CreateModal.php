@@ -89,7 +89,7 @@ class CreateModal extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'PRODUCTO REGISTRADO',
+            title: 'PRODUCTO REGISTRADO',
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();

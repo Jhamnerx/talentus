@@ -68,7 +68,7 @@ class Index extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'COBRO REGISTRADO',
+                title: 'COBRO REGISTRADO',
                 mensaje: 'se creo el cobro de este contrato',
             );
         } catch (Exception $e) {

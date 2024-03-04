@@ -175,7 +175,7 @@ class VehiculosIndex extends Component
             $this->dispatch(
                 'notify',
                 icon: 'error',
-                tittle: 'ERROR AL EXPORTAR',
+                title: 'ERROR AL EXPORTAR',
                 mensaje: 'No se pudo exportar: ' . $th->getMessage(),
             );
         }

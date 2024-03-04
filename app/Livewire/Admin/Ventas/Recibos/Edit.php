@@ -106,7 +106,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'PRODUCTO AÑADIDO',
+                title: 'PRODUCTO AÑADIDO',
                 mensaje: 'añadiste el producto ' . $this->selected->get('producto'),
             );
         } catch (\Exception $e) {

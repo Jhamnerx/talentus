@@ -74,7 +74,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ACTUALIZAR',
+                title: 'ERROR AL ACTUALIZAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -84,7 +84,7 @@ class Edit extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'CERTIFICADO ACTUALIZADO',
+            title: 'CERTIFICADO ACTUALIZADO',
             mensaje: 'Se actualizo correctamente el certificado #' . $numero,
         );
         $this->closeModal();

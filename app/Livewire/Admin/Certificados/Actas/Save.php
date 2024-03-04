@@ -72,7 +72,7 @@ class Save extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL GUARDAR',
+                title: 'ERROR AL GUARDAR',
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
@@ -84,7 +84,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'ACTA REGISTRADA',
+            title: 'ACTA REGISTRADA',
             mensaje: 'Se registro correctamente el acta #' . $numero,
         );
         $this->closeModal();

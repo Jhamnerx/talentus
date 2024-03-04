@@ -78,7 +78,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'VEHICULO AÑADIDO',
+                title: 'VEHICULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 

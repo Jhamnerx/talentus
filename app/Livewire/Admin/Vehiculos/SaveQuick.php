@@ -99,7 +99,7 @@ class SaveQuick extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'VEHICULO REGISTRADO',
+            title: 'VEHICULO REGISTRADO',
             mensaje: 'Se registro correctamente el vehiculo ' . $placa,
         );
 

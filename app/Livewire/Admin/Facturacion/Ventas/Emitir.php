@@ -238,7 +238,7 @@ class Emitir extends Component
 
 
     //AÑADIR ITEM SELECCIONADO A LA LISTA DE ITEMS
-    #[On('add-producto')]
+    #[On('add-producto-selected')]
     function addProducto($selected)
     {
 
@@ -339,7 +339,7 @@ class Emitir extends Component
 
             $this->dispatch(
                 'error',
-                tittle: 'ERROR: ',
+                title: 'ERROR: ',
                 mensaje: $th->getMessage(),
             );
         }
@@ -352,7 +352,7 @@ class Emitir extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'VENTA REGISTRADA',
+            title: 'VENTA REGISTRADA',
             mensaje: $mensaje,
         );
     }

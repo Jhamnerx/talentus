@@ -49,7 +49,7 @@ class Header extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'TIPO CAMBIO CONSULTADO',
+                title: 'TIPO CAMBIO CONSULTADO',
                 mensaje: 'El tipo de cambio hoy es: ' . $res
             );
         }

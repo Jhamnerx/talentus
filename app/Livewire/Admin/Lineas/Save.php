@@ -105,7 +105,7 @@ class Save extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'LINEAS REGISTRADAS',
+            title: 'LINEAS REGISTRADAS',
             mensaje: 'se guardo correctamente las lineas'
         );
         $this->closeModal();

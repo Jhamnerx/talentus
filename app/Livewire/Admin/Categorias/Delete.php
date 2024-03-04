@@ -38,7 +38,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'CATEGORIA ELIMINADA',
+            title: 'CATEGORIA ELIMINADA',
             mensaje: 'se elimino correctamente la categoria'
         );
         $this->dispatch('update-table');

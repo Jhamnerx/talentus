@@ -34,7 +34,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'COBRO ELIMINADO',
+            title: 'COBRO ELIMINADO',
             mensaje: 'Se elimino el cobro'
         );
 

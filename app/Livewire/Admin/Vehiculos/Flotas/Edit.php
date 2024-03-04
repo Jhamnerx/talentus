@@ -83,7 +83,7 @@ class Edit extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'FLOTA ACTUALIZADA',
+            title: 'FLOTA ACTUALIZADA',
             mensaje: 'La Flota ' . $flota->nombre . ' fue actualizada correctamente'
         );
         $this->dispatch('update-table');

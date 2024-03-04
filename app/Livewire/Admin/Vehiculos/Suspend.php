@@ -51,7 +51,7 @@ class Suspend extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'VEHICULO SUSPENDIDO',
+            title: 'VEHICULO SUSPENDIDO',
             mensaje: 'se suspendio el vehiculo: ' . $placa,
         );
 

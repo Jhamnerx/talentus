@@ -89,7 +89,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR EL AÑADIR',
+                title: 'ERROR EL AÑADIR',
                 mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
             );
         } else {
@@ -97,7 +97,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'VEHICULO AÑADIDO',
+                title: 'VEHICULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
@@ -210,7 +210,7 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                tittle: 'VENTA REGISTRADA',
+                title: 'VENTA REGISTRADA',
                 mensaje: $th->getMessage(),
             );
         }

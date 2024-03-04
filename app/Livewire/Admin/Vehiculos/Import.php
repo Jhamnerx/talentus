@@ -51,7 +51,7 @@ class Import extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            tittle: 'IMPORTANDO VEHICULOS',
+            title: 'IMPORTANDO VEHICULOS',
             mensaje: 'los vehiculos empezaron a importarse'
         );
 

@@ -34,7 +34,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'CERTIFICADO ELIMINADO',
+            title: 'CERTIFICADO ELIMINADO',
             mensaje: 'se elimino correctamente el certificado'
         );
         $this->dispatch('update-table');

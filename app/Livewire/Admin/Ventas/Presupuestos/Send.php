@@ -75,7 +75,7 @@ class Send extends Component
 
             $this->dispatch(
                 'error',
-                tittle: 'ERROR EN FUNCION: ',
+                title: 'ERROR EN FUNCION: ',
                 mensaje: $e->getMessage(),
             );
         } finally {

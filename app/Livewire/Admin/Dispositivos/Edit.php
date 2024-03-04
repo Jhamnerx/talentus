@@ -53,7 +53,7 @@ class Edit extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'DISPOSITIVO ACTUALIZADO',
+            title: 'DISPOSITIVO ACTUALIZADO',
             mensaje: 'se ha actualizado correctamente el dispositivo'
         );
         $this->closeModal();

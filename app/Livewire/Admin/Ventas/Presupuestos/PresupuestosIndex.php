@@ -155,7 +155,7 @@ class PresupuestosIndex extends Component
                 $this->dispatch(
                     'notify-toast',
                     icon: 'success',
-                    tittle: 'RECIBO CREADO',
+                    title: 'RECIBO CREADO',
                     mensaje: 'Se registro el siguiente: ' . $recibo->serie_numero . "."
                 );
 
@@ -164,7 +164,7 @@ class PresupuestosIndex extends Component
 
                 $this->dispatch(
                     'error',
-                    tittle: 'ERROR: ',
+                    title: 'ERROR: ',
                     mensaje: $th->getMessage(),
                 );
             }
@@ -172,7 +172,7 @@ class PresupuestosIndex extends Component
 
             $this->dispatch(
                 'error',
-                tittle: 'ERROR: ',
+                title: 'ERROR: ',
                 mensaje: 'El recibo de este presupuesto ya fue creado',
             );
         }

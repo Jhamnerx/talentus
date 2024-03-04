@@ -21,7 +21,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'CONTRATO ELIMINADO',
+            title: 'CONTRATO ELIMINADO',
             mensaje: 'Eliminaste el # contrato',
         );
 

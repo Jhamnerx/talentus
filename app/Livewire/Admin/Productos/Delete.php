@@ -47,7 +47,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'PRODUCTO ELIMINADO',
+            title: 'PRODUCTO ELIMINADO',
             mensaje: 'se elimino correctamente el producto'
         );
 

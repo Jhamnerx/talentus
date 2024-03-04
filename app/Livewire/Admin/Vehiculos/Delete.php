@@ -50,7 +50,7 @@ class Delete extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'error',
-            tittle: 'VEHICULO ELIMINADO',
+            title: 'VEHICULO ELIMINADO',
             mensaje: 'se elimino correctamente el vehiculo'
         );
 

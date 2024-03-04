@@ -84,7 +84,7 @@ class Index extends Component
         $this->dispatch(
             'notify',
             icon: $icono,
-            tittle: $titulo,
+            title: $titulo,
             mensaje: $mensaje,
         );
         $this->render();

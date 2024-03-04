@@ -79,7 +79,7 @@ class Send extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                tittle: 'ERROR AL ENVIAR',
+                title: 'ERROR AL ENVIAR',
                 mensaje: 'Ocurrio el sgte error: ' . $e->getMessage(),
             );
         }
@@ -90,7 +90,7 @@ class Send extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'CERTIFICADO ENVIADO',
+            title: 'CERTIFICADO ENVIADO',
             mensaje: 'Se envio correctamente el certificado #' . $numero,
         );
         $this->closeModal();

@@ -53,7 +53,7 @@ class Contrato extends Component
         $this->dispatch(
             'notify-toast',
             icon: 'success',
-            tittle: 'IMAGEN GUARDADA',
+            title: 'IMAGEN GUARDADA',
             mensaje: 'Imagen Fondo Contrato Guardada Correctamente.'
         );
     }
