@@ -45,6 +45,7 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(30)
             )
+            ->active(1)
             ->get();
     }
 
@@ -64,6 +65,7 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(30)
             )
+            ->active(1)
             ->get();
     }
     public function tipoAfectacion(Request $request): Collection
@@ -131,6 +133,7 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(50)
             )
+            ->active(1)
             ->get();
     }
 
@@ -214,7 +217,7 @@ class SelectsController extends Controller
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
-            )
+            )->active(1)
             ->get()->map(function (Productos $producto) {
 
                 $producto->imagen = $producto->image ? Storage::url($producto->image->url) : Storage::url('productos/default.jpg');
