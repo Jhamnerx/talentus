@@ -131,8 +131,8 @@
 
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
-                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
-                        <div class="col-span-2 sm:col-span-1">
+                    <div class="grid grid-cols-4 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+                        <div class="col-span-2 sm:col-span-2">
 
                             <x-form.button wire:click="openModalAddProducto" spinner="openModalAddProducto"
                                 label="AÑADIR" primary md icon="plus" />
@@ -142,7 +142,7 @@
                         <div class="col-span-2 sm:col-span-1">
                             <div class="m-2 w-full mt-1">
                                 <label for="features">Mostrar Hoja Caracteristicas:</label>
-                                <!-- Start -->
+
                                 <div class="flex items-center">
                                     <div class="form-switch">
                                         <input wire:model.live="features" type="checkbox" id="features-1"
@@ -154,6 +154,14 @@
                                     </div>
 
                                 </div>
+
+                            </div>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <div class="m-2 w-full mt-1">
+
+                                <x-form.button wire:click.prevent='openModalTerminos' label="Editar Terminos" outline
+                                    blue icon="pencil" />
 
                             </div>
                         </div>
@@ -467,6 +475,7 @@
 
 @push('modals')
     @livewire('admin.clientes.save')
+    @livewire('admin.ventas.presupuestos.modal-terminos', ['terminos' => $terminos])
 @endpush
 
 @section('js')

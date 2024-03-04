@@ -61,6 +61,8 @@ class Edit extends Component
     //PROPIEDAD PARA ASIGNAR EL MINIMO DEL CORRELATIVO
     public $min_correlativo;
 
+    public Collection $terminos;
+
     public function mount()
     {
         $this->serie = $this->presupuesto->serie;
@@ -126,6 +128,10 @@ class Edit extends Component
             $this->icbper_soles = $this->presupuesto->icbper_soles;
             $this->total_soles = $this->presupuesto->total_soles;
         }
+
+        $this->terminos = collect(
+            $this->presupuesto->terminos
+        );
     }
 
     public function render()
@@ -570,5 +576,17 @@ class Edit extends Component
     public function openModalAddProducto()
     {
         $this->dispatch('openModalAddProducto');
+    }
+
+    #[On('terminos-save')]
+    public function setTerminos($terminos)
+    {
+        $this->terminos = collect($terminos);
+    }
+
+
+    public function openModalTerminos()
+    {
+        $this->dispatch('open-modal-terminos', terminos: $this->terminos);
     }
 }
