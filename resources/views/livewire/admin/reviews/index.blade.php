@@ -26,7 +26,7 @@
                 <!-- Search form -->
                 <form class="relative" autocomplete="off">
                     <label for="action-search" class="sr-only">Buscar</label>
-                    <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
+                    <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                         placeholder="Buscar Solicitud" />
 
                     <button class="absolute inset-0 right-auto group" type="button" aria-label="Search">
@@ -80,7 +80,7 @@
                 </h2>
 
             </header>
-            <div x-data="handleSelect">
+            <div>
                 <!-- Table -->
                 <div class="overflow-x-auto">
                     <table class="table-auto w-full">
@@ -92,8 +92,7 @@
                                     <div class="flex items-center">
                                         <label class="inline-flex">
                                             <span class="sr-only">Seleccionar Todo</span>
-                                            <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                                @click="toggleAll" />
+                                            <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                         </label>
                                     </div>
                                 </th>
@@ -118,7 +117,9 @@
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Respuestas</div>
                                 </th>
-
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Fecha Registro</div>
+                                </th>
                             </tr>
                         </thead>
                         <!-- Table body -->
@@ -126,7 +127,7 @@
                             <!-- Row -->
                             @if ($reviews->count())
                                 @foreach ($reviews as $review)
-                                    <tr>
+                                    <tr wire:key='review-{{ $review->id }}'>
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                             <div class="flex items-center">
                                                 <label class="inline-flex">
@@ -193,6 +194,10 @@
                                                     {{ $review->question['q5_why'] }}.</p>
 
                                             </div>
+                                        </td>
+                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                            <div class="text-left uppercase">
+                                                {{ $review->created_at->format('d-m-Y') }}</div>
                                         </td>
 
                                     </tr>

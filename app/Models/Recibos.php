@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\Ventas\EnviarReciboCliente;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Recibos extends Model
@@ -60,6 +61,11 @@ class Recibos extends Model
         return $query->where('pago_estado', '=', $this::UNPAID);
     }
 
+    public function scopeEstado($query, $estado)
+    {
+        return $query->where('pago_estado', '=', $estado);
+    }
+
     public function scopeCompletado($query)
     {
         return $query->where('estado', '=', $this::COMPLETADO);
@@ -76,6 +82,15 @@ class Recibos extends Model
         //
         static::addGlobalScope(new EmpresaScope);
     }
+
+
+
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+
     //Relacion uno a muchos inversa
 
     public function clientes()
@@ -101,6 +116,10 @@ class Recibos extends Model
         return $this->morphMany(Payments::class, 'paymentable');
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
 
     public static function createItems($recibo, $reciboItems)

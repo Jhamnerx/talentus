@@ -1,11 +1,6 @@
 <div>
 
-    <!-- Basic Modal -->
-
-    <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpenImport') }">
-
-        <!-- Modal backdrop -->
+    <div x-data="{ modalOpen: @entangle('modalOpenImport').live }">
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
@@ -40,13 +35,13 @@
 
                     <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
 
-                    <div x-data="{ file: @entangle('file'), files: null }"
+                    <div x-data="{ file: @entangle('file').live, files: null }"
                         class="mt-1 cursor-pointer relative flex justify-center px-6 pt-5 pb-6 border-2  border-gray-300 border-dashed rounded-md"
                         x-on:dragover="$el.classList.add('border-emerald-400')"
                         x-on:dragleave="$el.classList.remove('border-emerald-400')">
-                        <input wire:model="file" type="file"
+                        <input wire:model.live="file" type="file"
                             class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer"
-                            id="file" x-on:change="files = $event.target.files; console.log($event.target.files);"
+                            id="file" x-on:change="files = $event.target.files"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                         <div class="space-y-1 text-center">
                             <svg x-show="!file" class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor"
@@ -69,23 +64,17 @@
                                 <label for="file"
                                     class="relative cursor-pointer z-60 bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Subir Archivo</span>
-                                    {{-- <input id="file-upload" name="file-upload" type="file" class="sr-only"
-                                        accept="image/*"> --}}
-
-
-
                                 </label>
                                 <p class="pl-1">o arrastra y suelta</p>
                             </div>
                             <template x-if="file !== null">
-                                <template x-for="(_,index) in Array.from({ length: files.length })">
 
-                                    <div class="flex text-sm text-gray-600">
-                                        Archivo Selecionado:
-                                        <p class="pl-1" x-text="files[index].name">Subiendo</p>
+                                <div class="flex text-sm text-gray-600">
+                                    Archivo Selecionado:
+                                    <p class="pl-1" x-text="files[0].name">Subiendo</p>
 
-                                    </div>
-                                </template>
+                                </div>
+
 
                             </template>
 
@@ -98,9 +87,9 @@
                         <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                     @enderror
 
                     <div>

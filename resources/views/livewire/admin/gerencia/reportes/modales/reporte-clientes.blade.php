@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalReporte: @entangle('modalReporte') }">
+    <div x-data="{ modalReporte: @entangle('modalReporte').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -46,7 +46,7 @@
                                     <div class="">
                                         <label class=" flex items-center">
                                             <input type="checkbox" name="radio-buttons" class="form-radio w-6 h-6"
-                                                wire:model="is_active" value="true" />
+                                                wire:model.live="is_active" value="true" />
                                             {{-- <span class="text-sm ml-2">{{$tecnico->name}}</span> --}}
                                         </label>
                                     </div>
@@ -61,9 +61,10 @@
 
                                 </label>
                                 <div class="flex flex-wrap items-center justify-center -m-1.5">
+
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToExcel"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">EXCEL</button>
+                                        <x-form.button label="EXCEL" wire:click.prevent="exportToExcel"
+                                            spinner="exportToExcel" emerald icon="document-download" />
                                     </div>
                                 </div>
 

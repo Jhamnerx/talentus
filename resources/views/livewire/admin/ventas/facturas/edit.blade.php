@@ -77,7 +77,7 @@
                         </label>
                         <div class="relative">
 
-                            <input required readonly wire:model="serie" name="serie" id="serie"
+                            <input required readonly wire:model.live="serie" name="serie" id="serie"
                                 class="form-input w-full" type="text" />
 
                         </div>
@@ -95,7 +95,7 @@
                         </label>
                         <div class="relative">
 
-                            <input required readonly wire:model="numero" name="numero" id="numero"
+                            <input required readonly wire:model.live="numero" name="numero" id="numero"
                                 class="form-input w-full" type="text" />
 
                         </div>
@@ -121,7 +121,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_emision" wire:model="fecha_emision" type="text"
+                            <input name="fecha_emision" wire:model.live="fecha_emision" type="text"
                                 class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
                                 placeholder="Selecciona la fecha">
                         </div>
@@ -149,7 +149,7 @@
                                         clip-rule="evenodd"></path>
                                 </svg>
                             </div>
-                            <input name="fecha_vencimiento" wire:model="fecha_vencimiento" type="text"
+                            <input name="fecha_vencimiento" wire:model.live="fecha_vencimiento" type="text"
                                 class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
                                 placeholder="Selecciona la fecha">
                         </div>
@@ -169,7 +169,8 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
+                        <select wire:model.live="divisa" name="divisa" id="moneda"
+                            class="form-select w-full divisa">
                             <option value="PEN">SOLES</option>
                             <option value="USD">DOLARES</option>
                         </select>
@@ -187,7 +188,7 @@
                         <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Forma de Pago
                             <span class="text-rose-500">*</span> </label>
 
-                        <select wire:model="forma_pago" name="forma_pago" id="forma_pago"
+                        <select wire:model.live="forma_pago" name="forma_pago" id="forma_pago"
                             class="form-select w-full">
                             @foreach ($payments_methods as $key => $method)
                                 <option value="{{ $key }}"> {{ $method }}</option>
@@ -208,7 +209,7 @@
                             <div>Nota
                             </div>
                         </label>
-                        <textarea class="form-input w-full px-4 py-3" name="nota" wire:model="nota" id="" cols="30"
+                        <textarea class="form-input w-full px-4 py-3" name="nota" wire:model.live="nota" id="" cols="30"
                             rows="4" placeholder="Ingresar nota (opcional)"></textarea>
                     </div>
                     <div class="col-span-12 md:col-span-6">
@@ -220,15 +221,15 @@
 
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input checked type="radio" wire:model="tipo_venta" name="tipo_venta"
+                                    <input checked type="radio" wire:model.live="tipo_venta" name="tipo_venta"
                                         value="CONTADO" class="form-radio " />
                                     <span class="text-sm ml-2">CONTADO</span>
                                 </label>
                             </div>
                             <div class="mx-3">
                                 <label class="flex items-center hover:cursor-pointer">
-                                    <input type="radio" wire:model="tipo_venta" name="tipo_venta" value="CREDITO"
-                                        class="form-radio" />
+                                    <input type="radio" wire:model.live="tipo_venta" name="tipo_venta"
+                                        value="CREDITO" class="form-radio" />
                                     <span class="text-sm ml-2">CREDITO</span>
                                 </label>
                             </div>
@@ -320,7 +321,8 @@
                                             Adelanto
                                         </div>
                                         <div class="text-right w-40 px-3">
-                                            <input type="text" class="form-input w-full" wire:model='adelanto'>
+                                            <input type="text" class="form-input w-full"
+                                                wire:model.live='adelanto'>
                                         </div>
                                     </div>
                                 </div>
@@ -342,120 +344,4 @@
 
 </div>
 @section('js')
-    <script>
-        $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
-            flatpickr('.fechaEmision', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-            flatpickr('.fechaVencimiento', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-                },
-            }
-        });
-
-        $('.clientes_id').on('select2:select', function(e) {
-            @this.set('clientes_id', this.value)
-
-        })
-
-        $('.productoSelect').on('select2:select', function(e) {
-
-            @this.call('selectProduct', this.value)
-
-        });
-
-
-        $('.productoSelect').select2({
-            placeholder: 'Añadir Artículo',
-            language: "es",
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.productos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        function addAlert() {
-            iziToast.success({
-                position: 'topRight',
-                title: 'AGREGADO',
-                message: 'Se añadio un producto a la factura',
-            });
-        }
-    </script>
-    <script>
-        window.addEventListener('unselect-cliente', event => {
-
-            $('.clientes_id').val(null).trigger('change');
-
-        })
-        window.addEventListener('add-producto', event => {
-
-            addAlert();
-
-        })
-    </script>
 @endsection

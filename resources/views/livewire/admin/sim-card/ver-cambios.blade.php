@@ -55,7 +55,7 @@
                             <h2 class="font-semibold text-slate-800">{{ $sim_card->sim_card }} <span
                                     class="text-slate-400 font-medium"></span></h2>
                         </header>
-                        <div x-data="handleSelect">
+                        <div>
 
                             <!-- Table -->
                             <div class="overflow-x-auto">
@@ -116,7 +116,8 @@
                                                             <div class="text-left font-medium text-rose-500">+51
                                                                 {{ $cambio->linea_old->numero }}</div>
                                                         @else
-                                                            <div class="text-left font-medium text-rose-500">Asignado 1°
+                                                            <div class="text-left font-medium text-rose-500">Asignado
+                                                                por 1° vez
                                                             </div>
                                                         @endif
 

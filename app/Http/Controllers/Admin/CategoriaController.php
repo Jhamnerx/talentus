@@ -21,27 +21,4 @@ class CategoriaController extends Controller
         $categorias = Categoria::all();
         return view('admin.almacen.categorias.index', compact('categorias'));
     }
-
-    public function create()
-    {
-        return view('admin.almacen.categorias.create');
-    }
-    public function store(CategoriaRequest $request)
-    {
-
-        $categoria = Categoria::create($request->all());
-        return redirect()->route('admin.almacen.categorias.index')->with('store', 'La categoria se guardo con exito');
-    }
-
-    public function edit(Categoria $categoria)
-    {
-        return view('admin.almacen.categorias.edit', compact('categoria'));
-    }
-
-
-    public function update(CategoriaRequest $request, Categoria $categoria)
-    {
-        $categoria->update($request->all());
-        return redirect()->route('admin.almacen.categorias.index')->with('update', 'La categoria se actualizo con exito');
-    }
 }

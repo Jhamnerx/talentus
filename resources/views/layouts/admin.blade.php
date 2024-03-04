@@ -5,52 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta http-equiv="Content-Security-Policy" content="frame-src 'self'">
     <link rel="icon" href="{{ asset('images/favicon2023.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Styles -->
 
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    @vite('resources/css/app.css')
+    @vite('resources/css/style.scss')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
-    {{-- dataTables --}}
-    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/datatables/css/jquery.dataTables.min.css') }}">
 
-    {{--
-    <link rel="stylesheet" href="{{ asset('plugins/jquery-ui/jquery-ui.min.css') }}"> --}}
-    <!-- Scripts -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-    {{--
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
-    <script src="{{asset('plugins/tw-elements/index.min.js')}}"></script> --}}
-    <script src="{{ mix('js/app.js') }}" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+
+    @vite('resources/js/app.js')
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     {{-- CKEDITOR --}}
     <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
-    {{-- dataTables --}}
-    <script src="{{ asset('plugins/datatables/js/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('plugins/jquery.mockjax.js') }}"></script>
-    {{-- <script src="{{asset('plugins/jquery-ui/jquery-ui.min.js')}}"></script> --}}
-    <script src="{{ asset('plugins/jquery.autocomplete.js') }}"></script>
-    <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
-
-
-    {{-- VenoBox IMAGEN VIEWER --}}
-    <link rel="stylesheet" href="{{ asset('plugins/veno-box/venobox.css') }}" type="text/css" media="screen" />
-    {{-- <script src="{{ asset('plugins/veno-box/venobox.esm.js') }}"></script> --}}
-    {{-- Select2 --}}
-
-    <script src="{{ asset('plugins/select2/select2.min.js') }}"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"
-        integrity="sha512-Rdk63VC+1UYzGSgd3u2iadi0joUrcwX0IWp2rTh6KXFoAmgOjRS99Vynz1lJPT8dLjvo6JZOqpAHJyfCEZ5KoA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 
     @livewireStyles
-
+    <wireui:scripts />
 </head>
 
 <body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
@@ -76,7 +49,25 @@
 
             <!-- Site header -->
             @livewire('admin.header', ['page' => request()->fullUrl()])
+
             <x-jet-banner />
+
+            <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
+                <div class="px-4 sm:px-6 lg:px-8">
+                    <div class="flex items-center h-16 -mb-px">
+
+                        <div class="hover text-left mx-2">
+                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
+                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <x-admin.comprobantes />
+
             <main>
 
 
@@ -92,39 +83,259 @@
 
     @livewireScripts
 
-    @yield('js')
 
-    @stack('scripts')
-
-
-    {{-- <script src="{{ mix('js/app.js') }}"></script> --}}
 </body>
 <script>
     $(document).ready(function() {
-
+        var Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            //width: 600,
+            //padding: "3em",
+            showConfirmButton: false,
+            timer: 2200,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener("mouseenter", Swal.stopTimer);
+                toast.addEventListener("mouseleave", Swal.resumeTimer);
+            },
+        });
         Echo.private('App.Models.User.' + {{ Auth::user()->id }})
             .notification((notification) => {
                 Livewire.emit('notificaciones-update');
 
             });
 
-        // Echo.channel('clientes')
-        //     .listen('ClientesImportUpdated', (e) => {
-        //         console.log("evento recibido");
-        //     });
-
-        // Echo.channel('clientes')
-        //     .listen('ClientesImportUpdated', (e) => {
-        //         console.log("evento recibido");
-        //     });
-
     });
 </script>
 <script>
-    Livewire.onPageExpired((response, message) => {
-        console.log('pagina expirada')
+    // Livewire.onPageExpired((response, message) => {
+    //     console.log('pagina expirada')
 
-    })
+    // })
 </script>
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        //success
+        //question
+        //info
+        //warning
+        //error
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+
+
+        Livewire.on('notify-toast', (event) => {
+            Toast.fire({
+                icon: event.icon,
+                title: `<div  style="font-size: 15px; color: #052c52;"> ` +
+                    event.title + `</div`,
+                html: `<div  style="font-size: 14px; color: #056b85;"> ` +
+                    event.mensaje + `</div`,
+                showCloseButton: true,
+            });
+
+        });
+
+
+        Livewire.on('error', (event) => {
+            Toast.fire({
+                icon: 'error',
+                title: event.title,
+                html: event.mensaje,
+                showCloseButton: true,
+            });
+
+        });
+
+        Livewire.on('notify', (event) => {
+            Swal.fire({
+                icon: event.icon,
+                title: event.title,
+                text: event.mensaje,
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+
+        });
+
+        Livewire.on('suspend-save', (event) => {
+            iziToast.success({
+                maxWidth: 500,
+                position: 'center',
+                title: 'Se ha guardado el registro de suspencion!',
+                message: 'Las siguientes Lineas: ' + event.lista,
+                position: 'topRight',
+                transitionIn: 'bounceInLeft',
+                // iconText: 'star',
+                onOpened: function(instance, toast) {},
+                onClosed: function(instance, toast, closedBy) {
+                    console.info('closedBy: ' + closedBy);
+                }
+            });
+
+        });
+
+
+
+    });
+</script>
+@yield('js')
+
+@stack('scripts')
+
+@if (session('venta-registrada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'VENTA REGISTRADA',
+                text: '{{ session('venta-registrada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('cobro-registrado'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'REGISTRO DE COBRO REGISTRADO',
+                text: '{{ session('cobro-registrado') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('cotizacion-registrada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'COTIZACION REGISTRADA',
+                text: '{{ session('cotizacion-registrada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+
+@if (session('cotizacion-actualizada'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'COTIZACION ACTUALIZADA',
+                text: '{{ session('cotizacion-actualizada') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+
+@if (session('recibo-registrado'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'GUARDADO',
+                text: '{{ session('recibo-registrado') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('recibog-store'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'GUARDADO',
+                text: '{{ session('recibog-store') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('recibo-actualizo'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'ACTUALIZADO',
+                text: '{{ session('recibo-actualizo') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('recibog-actualizo'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'ACTUALIZADO',
+                text: '{{ session('recibog-actualizo') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+@if (session('store'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Guardado',
+                text: '{{ session('store') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
+
+@if (session('update'))
+    <script>
+        $(document).ready(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Actualizado',
+                text: '{{ session('update') }}',
+                showConfirmButton: true,
+                confirmButtonText: "Cerrar"
+
+            })
+        });
+    </script>
+@endif
 
 </html>

@@ -4,7 +4,7 @@
     </label>
     <div class="relative">
 
-        <input required wire:model="numero" name="numero" id="numero"
+        <input required wire:model.live="numero" name="numero" id="numero"
             class="form-input w-full sm:w-2/4 valid:border-emerald-300
                                                                 required:border-rose-300 invalid:border-rose-300 peer pl-3"
             type="text" />

@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpen') }">
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
 
         <div class="relative inline-flex">
 
@@ -63,7 +63,7 @@
                                             Form::label('imei', 'Imei <span class="text-rose-500">*</span>', ['class' => 'block text-sm font-medium mb-1']),
                                         ) !!}
 
-                                        <input type="text" wire:model="imei" class="form-input w-full"
+                                        <input type="text" wire:model.live="imei" class="form-input w-full"
                                             placeholder="Ingresa el imei">
                                         @error('imei')
                                             <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -76,7 +76,7 @@
 
                                         {!! Form::label('modelo_id', 'Modelo:', ['class' => 'block text-sm font-medium mb-1']) !!}
 
-                                        <select name="modelo_id" id="modelo_id" wire:model="modelo_id"
+                                        <select name="modelo_id" id="modelo_id" wire:model.live="modelo_id"
                                             class="form-select w-full">
                                             <option>Selecciona un modelo</option>
                                             @foreach ($modelos as $key => $modelo)
@@ -106,7 +106,7 @@
                                             <div class="m-3">
                                                 <!-- Start -->
                                                 <label class="flex items-center">
-                                                    <input type="checkbox" name="of_client" wire:model="of_client"
+                                                    <input type="checkbox" name="of_client" wire:model.live="of_client"
                                                         class="form-checkbox" />
                                                     <span class="text-sm ml-2">SI</span>
                                                 </label>

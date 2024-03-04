@@ -13,8 +13,8 @@
                     <polyline points="38 14 38 59 26 59 26 14"></polyline>
                 </g>
             </svg>
-            </x-slot>
-            REPORTE PRODUCTOS
+        </x-slot>
+        REPORTE PRODUCTOS
     </x-admin.gerencia.reportes.cards>
 
     <x-admin.gerencia.reportes.cards color-initial="from-teal-400" color-final="to-teal-600" cantidad="1"
@@ -30,8 +30,8 @@
                     <path d="M47,29A12,12,0,0,0,35,17"></path>
                 </g>
             </svg>
-            </x-slot>
-            REPORTE LINEAS
+        </x-slot>
+        REPORTE LINEAS
     </x-admin.gerencia.reportes.cards>
 
     <x-admin.gerencia.reportes.cards color-initial="from-cyan-400" color-final="to-cyan-600" cantidad="1"
@@ -46,8 +46,8 @@
                         stroke-linecap="square" stroke-miterlimit="10"></path>
                 </g>
             </svg>
-            </x-slot>
-            REPORTES CLIENTES
+        </x-slot>
+        REPORTES CLIENTES
     </x-admin.gerencia.reportes.cards>
 
     {{-- <x-admin.gerencia.reportes.cards color-initial="from-blue-400" color-final="to-blue-600" cantidad="1"
@@ -93,8 +93,7 @@
             REPORTES DISPOSITIVOS
     </x-admin.gerencia.reportes.cards> --}}
 
-    <x-admin.gerencia.reportes.cards color-initial="from-orange-400" color-final="to-orange-600" cantidad="1"
-        wire:click="openModalReporteGuias">
+    <x-admin.gerencia.reportes.cards color-initial="from-orange-400" color-final="to-orange-600" cantidad="1">
         <x-slot:icono>
 
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -108,43 +107,43 @@
                     <line x1="19" y1="19" x2="30" y2="19"></line>
                 </g>
             </svg>
-            </x-slot>
-            REPORTES GUIAS
+        </x-slot>
+        REPORTES GUIAS
     </x-admin.gerencia.reportes.cards>
-    <x-admin.gerencia.reportes.cards color-initial="from-red-400" color-final="to-red-600" cantidad="1"
+    {{-- <x-admin.gerencia.reportes.cards color-initial="from-red-400" color-final="to-red-600" cantidad="1"
         wire:click="openModalReporteComprasVentas">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-width="2" fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
-                    <circle data-color="color-2" cx="10.5" cy="54.5" r="5.5" fill="none" stroke-linecap="square"
-                        stroke-miterlimit="10"></circle>
-                    <circle data-color="color-2" cx="53.5" cy="54.5" r="5.5" fill="none" stroke-linecap="square"
-                        stroke-miterlimit="10"></circle>
+                    <circle data-color="color-2" cx="10.5" cy="54.5" r="5.5" fill="none"
+                        stroke-linecap="square" stroke-miterlimit="10"></circle>
+                    <circle data-color="color-2" cx="53.5" cy="54.5" r="5.5" fill="none"
+                        stroke-linecap="square" stroke-miterlimit="10"></circle>
                     <polyline points="4 4 9 10 9 34 4 43 60 43" fill="none" stroke="currentColor"
                         stroke-linecap="square" stroke-miterlimit="10"></polyline>
                     <polyline data-cap="butt" points="9 10 56 10 48 34 9 34" fill="none" stroke="currentColor"
                         stroke-miterlimit="10"></polyline>
                 </g>
             </svg>
-            </x-slot>
-            COMPRAS VS VENTAS
-    </x-admin.gerencia.reportes.cards>
-    <x-admin.gerencia.reportes.cards color-initial="from-emerald-400" color-final="to-emerald-600" cantidad="1"
+        </x-slot>
+        COMPRAS VS VENTAS
+    </x-admin.gerencia.reportes.cards> --}}
+    {{-- <x-admin.gerencia.reportes.cards color-initial="from-emerald-400" color-final="to-emerald-600" cantidad="1"
         wire:click="openModalReporteVentas">
         <x-slot:icono>
             <svg class="w-full fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
                 <g stroke-width="2" fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
-                    <circle data-color="color-2" cx="10.5" cy="54.5" r="5.5" fill="none" stroke-linecap="square"
-                        stroke-miterlimit="10"></circle>
-                    <circle data-color="color-2" cx="53.5" cy="54.5" r="5.5" fill="none" stroke-linecap="square"
-                        stroke-miterlimit="10"></circle>
+                    <circle data-color="color-2" cx="10.5" cy="54.5" r="5.5" fill="none"
+                        stroke-linecap="square" stroke-miterlimit="10"></circle>
+                    <circle data-color="color-2" cx="53.5" cy="54.5" r="5.5" fill="none"
+                        stroke-linecap="square" stroke-miterlimit="10"></circle>
                     <polyline points="4 4 9 10 9 34 4 43 60 43" fill="none" stroke="currentColor"
                         stroke-linecap="square" stroke-miterlimit="10"></polyline>
                     <polyline data-cap="butt" points="9 10 56 10 48 34 9 34" fill="none" stroke="currentColor"
                         stroke-miterlimit="10"></polyline>
                 </g>
             </svg>
-            </x-slot>
-            REPORTES VENTAS
-    </x-admin.gerencia.reportes.cards>
+        </x-slot>
+        REPORTES VENTAS
+    </x-admin.gerencia.reportes.cards> --}}
 </div>

@@ -15,6 +15,7 @@ use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\ImportFailed;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Maatwebsite\Excel\Concerns\SkipsOnError;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
 use Maatwebsite\Excel\Concerns\SkipsOnFailure;
@@ -25,9 +26,9 @@ use Maatwebsite\Excel\Concerns\WithGroupedHeadingRow;
 use Maatwebsite\Excel\Concerns\RegistersEventListeners;
 use App\Notifications\Imports\ImportHasFailedNotification;
 
-class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFailure, WithEvents, WithValidation, WithHeadingRow, WithGroupedHeadingRow, SkipsEmptyRows
+class LineasImport implements ToModel, WithChunkReading, SkipsOnError, ShouldQueue, SkipsOnFailure, WithEvents, WithValidation, WithHeadingRow, WithGroupedHeadingRow, SkipsEmptyRows
 {
-    use Queueable, RegistersEventListeners, Importable;
+    use RegistersEventListeners, Importable;
 
     protected $importedBy;
 
@@ -40,51 +41,36 @@ class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFai
     public function model(array $fila)
     {
 
-        $linea = Lineas::create([
-            'numero'    => $fila['numero'],
-            'operador'    => $fila['operador'],
-            'empresa_id'    => 1,
-        ]);
+        if ($fila['numero'] != "no") {
 
+            $linea = Lineas::create([
+                'numero'    => $fila['numero'],
+                'operador'    => $fila['operador'],
+                'empresa_id'    => 1,
+            ]);
 
-        if ($linea) {
+            if ($linea) {
+
+                SimCard::create([
+                    'sim_card'    => $fila['sim_card'],
+                    'operador'    => $fila['operador'],
+                    'lineas_id' => $linea->id,
+                    'empresa_id'    => 1,
+                ]);
+            }
+        } else {
 
             SimCard::create([
                 'sim_card'    => $fila['sim_card'],
                 'operador'    => $fila['operador'],
-                'lineas_id' => $linea->id,
                 'empresa_id'    => 1,
             ]);
         }
     }
-    // public function collection(Collection $rows)
-    // {
-
-    //     foreach ($rows as $row) {
-
-    //         $linea = Lineas::create([
-    //             'numero'    => $row['numero'],
-    //             'operador'    => $row['operador'],
-    //             'empresa_id'    => 1,
-    //         ]);
-
-    //         if ($linea) {
-
-    //             SimCard::create([
-    //                 'sim_card'    => $row['sim_card'],
-    //                 'operador'    => $row['operador'],
-    //                 'lineas_id' => $linea->id,
-    //                 'empresa_id'    => 1,
-    //             ]);
-    //         }
-    //     }
-    // }
-
     public function rules(): array
     {
         $rules = [
-
-            'numero' => 'required|unique:lineas,numero',
+            'numero' => 'required',
             'operador' => 'required',
             'sim_card' => 'required|unique:sim_card,sim_card',
             // 'empresa_id' => 'required',
@@ -92,15 +78,6 @@ class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFai
 
         return $rules;
     }
-    // public function model(array $row)
-    // {
-    //     //dd($row);
-    //     return new SimCard([
-    //         'sim_card'    => $row[0],
-    //         'operador'    => $row[1],
-    //         'empresa_id'    => 1 ,
-    //     ]);
-    // }
 
     public function chunkSize(): int
     {
@@ -130,5 +107,9 @@ class LineasImport implements ToModel, WithChunkReading, ShouldQueue, SkipsOnFai
 
     public static function importFailed(ImportFailed $event)
     {
+    }
+    public function onError(\Throwable $e)
+    {
+        // Handle the exception how you'd like.
     }
 }

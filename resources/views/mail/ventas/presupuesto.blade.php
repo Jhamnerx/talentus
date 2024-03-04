@@ -188,7 +188,7 @@
 
                                                             <h1
                                                                 style="margin: 0px; line-height: 140%; text-align: center; word-wrap: break-word; font-weight: normal; font-family: 'Raleway',sans-serif; font-size: 24px;">
-                                                                COTIZACION: #{{ $presupuesto->numero }}
+                                                                COTIZACION: #{{ $presupuesto->serie_correlativo }}
                                                             </h1>
 
                                                         </td>

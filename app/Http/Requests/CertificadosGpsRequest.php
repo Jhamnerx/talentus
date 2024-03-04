@@ -22,6 +22,9 @@ class CertificadosGpsRequest extends FormRequest
                 "fecha_instalacion" => 'required',
                 "fin_cobertura" => 'required',
                 "ciudades_id" => 'required',
+                "accesorios" => 'nullable',
+                "fondo" => 'nullable',
+                "sello" => 'nullable',
             ];
         } else {
 
@@ -33,8 +36,10 @@ class CertificadosGpsRequest extends FormRequest
                 "ciudades_id" => 'required',
                 "fondo" => 'nullable',
                 "sello" => 'nullable',
+                "accesorios" => 'nullable',
             ];
         }
+
         return $rules;
     }
 

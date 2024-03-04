@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalEdit: @entangle('modalEdit') }">
+    <div x-data="{ modalEdit: @entangle('modalEdit').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalEdit"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -45,7 +45,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input wire:model="nombre" placeholder="Introduce el nombre" name="nombre"
+                                    <input wire:model.live="nombre" placeholder="Introduce el nombre" name="nombre"
                                         id="nombre" class="form-input w-full pl-9 valid:border-emerald-300
                             required:border-rose-300 invalid:border-rose-300 peer" type="text" required />
 
@@ -77,7 +77,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input wire:model="costo" placeholder="Introduce el costo" name="costo" id="costo"
+                                    <input wire:model.live="costo" placeholder="Introduce el costo" name="costo" id="costo"
                                         class="form-input w-full pl-9 valid:border-emerald-300
                                                     required:border-rose-300 invalid:border-rose-300 peer" type="text"
                                         required />

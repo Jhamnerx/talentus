@@ -12,7 +12,7 @@ import "chartjs-adapter-moment";
 
 // Import TailwindCSS variables
 import resolveConfig from "tailwindcss/resolveConfig";
-import tailwindConfig from "../../../tailwind.config";
+import { tailwindConfig, formatValue } from "../utils";
 
 // Tailwind config
 const fullConfig = resolveConfig(tailwindConfig);
@@ -34,16 +34,16 @@ const CardVentas = () => {
                     label: "Top Countries",
                     data: [35, 30, 35],
                     backgroundColor: [
-                        fullConfig.theme.colors.indigo[500],
-                        fullConfig.theme.colors.blue[400],
-                        fullConfig.theme.colors.indigo[800],
+                        tailwindConfig().theme.colors.indigo[500],
+                        tailwindConfig().theme.colors.blue[400],
+                        tailwindConfig().theme.colors.indigo[800],
                     ],
                     hoverBackgroundColor: [
-                        fullConfig.theme.colors.indigo[600],
-                        fullConfig.theme.colors.blue[500],
-                        fullConfig.theme.colors.indigo[900],
+                        tailwindConfig().theme.colors.indigo[600],
+                        tailwindConfig().theme.colors.blue[500],
+                        tailwindConfig().theme.colors.indigo[900],
                     ],
-                    hoverBorderColor: fullConfig.theme.colors.white,
+                    hoverBorderColor: tailwindConfig().theme.colors.white,
                 },
             ],
         },
@@ -88,18 +88,20 @@ const CardVentas = () => {
                         c.options.plugins.legend.labels.generateLabels(c);
                     items.forEach((item) => {
                         const li = document.createElement("li");
-                        li.style.margin = fullConfig.theme.margin[1];
+                        li.style.margin = tailwindConfig().theme.margin[1];
                         // Button element
                         const button = document.createElement("button");
                         button.classList.add("btn-xs");
                         button.style.backgroundColor =
-                            fullConfig.theme.colors.white;
+                            tailwindConfig().theme.colors.white;
                         button.style.borderWidth =
-                            fullConfig.theme.borderWidth[1];
+                            tailwindConfig().theme.borderWidth[1];
                         button.style.borderColor =
-                            fullConfig.theme.colors.slate[200];
-                        button.style.color = fullConfig.theme.colors.slate[500];
-                        button.style.boxShadow = fullConfig.theme.boxShadow.md;
+                            tailwindConfig().theme.colors.slate[200];
+                        button.style.color =
+                            tailwindConfig().theme.colors.slate[500];
+                        button.style.boxShadow =
+                            tailwindConfig().theme.boxShadow.md;
                         button.style.opacity = item.hidden ? ".3" : "";
                         button.onclick = () => {
                             c.toggleDataVisibility(item.index, !item.index);
@@ -108,12 +110,13 @@ const CardVentas = () => {
                         // Color box
                         const box = document.createElement("span");
                         box.style.display = "block";
-                        box.style.width = fullConfig.theme.width[2];
-                        box.style.height = fullConfig.theme.height[2];
+                        box.style.width = tailwindConfig().theme.width[2];
+                        box.style.height = tailwindConfig().theme.height[2];
                         box.style.backgroundColor = item.fillStyle;
                         box.style.borderRadius =
-                            fullConfig.theme.borderRadius.sm;
-                        box.style.marginRight = fullConfig.theme.margin[1];
+                            tailwindConfig().theme.borderRadius.sm;
+                        box.style.marginRight =
+                            tailwindConfig().theme.margin[1];
                         box.style.pointerEvents = "none";
                         // Label
                         const label = document.createElement("span");

@@ -217,7 +217,7 @@
     }
 
     .contact-two::after {
-        background-image: url(../images/cliente/shapes/contact-shape-1.png);
+        background-image: url(../../images/cliente/shapes/contact-shape-1.png);
         background-position: center center;
     }
 

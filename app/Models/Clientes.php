@@ -11,6 +11,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Clientes extends Model
 {
@@ -44,6 +45,12 @@ class Clientes extends Model
     public function scopeActive($query, $status)
     {
         return $query->where('is_active', $status);
+    }
+
+    // Scope local de activo
+    public function scopeTipoDoc($query, $tipo)
+    {
+        return $query->where('tipo_documento_id', $tipo);
     }
     //relacion uno a muchos
 
@@ -79,7 +86,7 @@ class Clientes extends Model
     }
 
 
-    public function vehiculos()
+    public function vehiculos(): HasMany
     {
         return $this->hasMany(Vehiculos::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }

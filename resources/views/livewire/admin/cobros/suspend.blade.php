@@ -3,7 +3,7 @@
         <label class="block text-sm font-medium mb-1" for="observacion">Observacion: </label>
         <div class="text-sm text-slate-400 italic">opcional</div>
     </div>
-    <textarea wire:model="observacion" placeholder="Ingresa una observación" name="observacion" rows="5" id="observacion"
+    <textarea wire:model.live="observacion" placeholder="Ingresa una observación" name="observacion" rows="5" id="observacion"
         class="form-input w-full mb-2"></textarea>
 
     @if ($cobro->suspendido)

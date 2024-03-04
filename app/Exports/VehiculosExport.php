@@ -35,7 +35,9 @@ class VehiculosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder i
             'AÑO',
             'FLOTA',
             'SIM',
+            'NUMERO',
             'DISPOSITIVO IMEI',
+            'MODELO GPS',
         ];
     }
 
@@ -49,8 +51,10 @@ class VehiculosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder i
             $vehiculos->tipo,
             $vehiculos->year,
             ($vehiculos->cliente) ? $vehiculos->cliente->razon_social : "",
-            ($vehiculos->sim_card) ? $vehiculos->sim_card->linea->numero : "",
+            ($vehiculos->sim_card) ? $vehiculos->sim_card->sim_card : "",
+            ($vehiculos->numero) ? $vehiculos->numero : "",
             ($vehiculos->dispositivos) ? $vehiculos->dispositivos->imei : "",
+            ($vehiculos->dispositivos) ? $vehiculos->dispositivos->modelo->modelo : "",
         ];
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Categoria;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
+use App\View\Components\Admin\Ventas\TablaDetalleVenta;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
@@ -29,6 +32,15 @@ class Productos extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $casts = [
+        'id' => 'integer',
+        'categoria_id' => 'integer',
+        'stock' => 'integer',
+        'valor_unitario' => 'decimal:2',
+        'user_id' => 'integer',
+        'ventas' => 'integer',
+        'afecto_icbper' => 'boolean',
+    ];
 
     // Scope local de activo
     public function scopeActive($query, $status)
@@ -61,11 +73,10 @@ class Productos extends Model
         return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();
     }
 
-    public function unit()
+    public function unit(): BelongsTo
     {
-        return $this->belongsTo(Unit::class, 'unit_code');
+        return $this->belongsTo(Unit::class, 'unit_code', 'codigo');
     }
-
 
     //Relacion uno a muchos inversa
 
@@ -86,7 +97,7 @@ class Productos extends Model
     public function detalle_facturas()
     {
 
-        return  $this->hasMany(DetalleFacturas::class, 'producto_id');
+        return  $this->hasMany(VentasDetalle::class, 'producto_id');
     }
     public function detalle_recibos()
     {

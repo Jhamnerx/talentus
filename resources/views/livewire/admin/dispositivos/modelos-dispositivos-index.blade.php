@@ -23,7 +23,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Modelo Dispositivo" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
@@ -83,18 +83,7 @@
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Selecionar Todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
-                                    </label>
-                                </div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <span class="sr-only">Favorito</span>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">MODELO</div>
                             </th>
@@ -113,27 +102,8 @@
                         <!-- Row -->
 
                         @foreach ($modelos as $modelo)
-                            <tr>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center">
-                                        <label class="inline-flex">
-                                            <span class="sr-only">Select</span>
-                                            <input class="table-item form-checkbox" type="checkbox"
-                                                @click="uncheckParent" />
-                                        </label>
-                                    </div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center relative">
-                                        <button>
-                                            <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500"
-                                                viewBox="0 0 16 16">
-                                                <path
-                                                    d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
+                            <tr wire:key='modelo-{{ $modelo->id }}'>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div
@@ -167,7 +137,8 @@
                                                     d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
                                             </svg>
                                         </button>
-                                        <button class="text-rose-500 hover:text-rose-600 rounded-full">
+                                        <button wire:click.prevent='openModalDelete({{ $modelo->id }})'
+                                            class="text-rose-500 hover:text-rose-600 rounded-full">
                                             <span class="sr-only">Eliminar</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                 <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />

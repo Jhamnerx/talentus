@@ -1,6 +1,8 @@
 /node_modules
 /public/hot
+/public/build
 /public/storage
+
 /vendor
 /storage/app/public/livewire-tmp/
 .env
@@ -15,3 +17,4 @@ yarn-error.log
 /.vscode
 *.zip
 /storage\app\public\profile-photos/
+/storage\app\facturacion/

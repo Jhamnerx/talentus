@@ -1,4 +1,4 @@
-<div x-data="{ openModal: @entangle('modalNotificacion') }">
+<div x-data="{ openModal: @entangle('modalNotificacion').live }">
 
     <div x-show="openModal"
         class="fixed z-60 bottom-0 sm:bottom-2 right-0 w-full sm:max-w-[340px] mx-auto sm:mx-5 bg-white rounded-lg  border-t-2 border-r-2 border-gray-200 shadow-2xl"

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ openModalReporte: @entangle('openModalReporte') }">
+    <div x-data="{ openModalReporte: @entangle('openModalReporte').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -52,7 +52,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <input maxlength="10" wire:model='fecha_inicial' type="text"
+                                    <input maxlength="10" wire:model.live='fecha_inicial' type="text"
                                         class="form-input valid:border-emerald-300
                                     required:border-rose-300 invalid:border-rose-300 peer fechaInicio  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -78,7 +78,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <input maxlength="10" wire:model="fecha_final" type="text"
+                                    <input maxlength="10" wire:model.live="fecha_final" type="text"
                                         class="form-input valid:border-emerald-300
                                     required:border-rose-300 invalid:border-rose-300 peer fechaFin  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -104,7 +104,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="estado" class="form-select w-full pl-9" id="">
+                                    <select wire:model.live="estado" class="form-select w-full pl-9" id="">
                                         <option value="PENDIENT">PENDIENTE</option>
                                         <option value="UNREAD">SIN LEER</option>
                                         <option value="COMPLETE" selected>COMPLETADAS</option>
@@ -121,7 +121,7 @@
                                         <div class="m-3">
                                             <label class="flex items-center">
                                                 <input type="radio" name="radio-buttons" class="form-radio"
-                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
                                                 <span class="text-sm ml-2">{{ $tecnico->name }}</span>
                                             </label>
                                         </div>

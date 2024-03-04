@@ -45,32 +45,32 @@ return [
     'connections' => [
         Actas::class => [
             'salt' => Actas::class . config('app.key'),
-            'length' => '20',
+            'length' => 20,
             'alphabet' => 'XKyIAR7mgt8jD2vbqPrOSVenNGpiYLx4M61T',
         ],
         Certificados::class => [
             'salt' => Certificados::class . config('app.key'),
-            'length' => '20',
+            'length' => 20,
             'alphabet' => 'yLJWP79M8rYVqbn1NXjulO6IUDdvekRQGo40',
         ],
         CertificadosVelocimetros::class => [
             'salt' => CertificadosVelocimetros::class . config('app.key'),
-            'length' => '20',
+            'length' => 20,
             'alphabet' => 'asqtW3eDRIxB65GYl7UVLS1dybn9XrKTZ4zO',
         ],
         Contratos::class => [
             'salt' => Contratos::class . config('app.key'),
-            'length' => '20',
+            'length' => 20,
             'alphabet' => 'ADyQWE8mgt7jF2vbnPrKLJenHVpiUIq4M12T',
         ],
         Recibos::class => [
             'salt' => Recibos::class . config('app.key'),
-            'length' => '20',
+            'length' => 20,
             'alphabet' => 's0DxOFtEYEnuKPmP08Ch6A1iHlLmBTBVWms5',
         ],
         Payments::class => [
-            'salt' => Payments::class.config('app.key'),
-            'length' => '20',
+            'salt' => Payments::class . config('app.key'),
+            'length' => 20,
             'alphabet' => 'BRAMEz5str5UVe9oCqzoYY2oKgUi8wQQSmrR',
         ],
         'main' => [

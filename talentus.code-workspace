@@ -6,7 +6,9 @@
         }
     ],
     "settings": {
-        "editor.fontSize": 11,
-        "files.autoSave": "onFocusChange"
+        "editor.fontSize": 13,
+        "files.autoSave": "onFocusChange",
+        "typescript.locale": "es",
+        "vscode-yaml-sort.locale": "es"
     }
 }

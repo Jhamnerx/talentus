@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ openModalExport: @entangle('openModalExport') }">
+    <div x-data="{ openModalExport: @entangle('openModalExport').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalExport"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -53,7 +53,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <input maxlength="10" name="fecha_inicio" wire:model='fecha_inicio' type="text"
+                                    <input maxlength="10" name="fecha_inicio" wire:model.live='fecha_inicio' type="text"
                                         class="form-input valid:border-emerald-300
                                     required:border-rose-300 invalid:border-rose-300 peer fechaInicio  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -79,7 +79,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <input maxlength="10" name="fecha_fin" wire:model="fecha_fin" type="text"
+                                    <input maxlength="10" name="fecha_fin" wire:model.live="fecha_fin" type="text"
                                         class="form-input valid:border-emerald-300
                                     required:border-rose-300 invalid:border-rose-300 peer fechaFin  font-base pl-8 py-2 outline-none focus:ring-primary-400 focus:outline-none focus:border-primary-400 block sm:text-sm border-gray-200 rounded-md text-black input w-full"
                                         placeholder="Selecciona la fecha">
@@ -104,7 +104,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input checked type="radio" wire:model="estado" name="estado"
+                                            <input checked type="radio" wire:model.live="estado" name="estado"
                                                 value="COMPLETADA" class="form-radio" />
                                             <span class="text-sm ml-2">COMPLETADA</span>
                                         </label>
@@ -113,7 +113,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="radio" wire:model="estado" name="estado" value="PENDIENTE"
+                                            <input type="radio" wire:model.live="estado" name="estado" value="PENDIENTE"
                                                 class="form-radio" />
                                             <span class="text-sm ml-2">PENDIENTE</span>
                                         </label>
@@ -122,7 +122,7 @@
                                     <div class="m-3">
                                         <!-- Start -->
                                         <label class="flex items-center">
-                                            <input type="radio" wire:model="estado" name="estado" value="CANCELADO"
+                                            <input type="radio" wire:model.live="estado" name="estado" value="CANCELADO"
                                                 class="form-radio" />
                                             <span class="text-sm ml-2">CANCELADO</span>
                                         </label>

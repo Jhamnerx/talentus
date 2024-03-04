@@ -1,6 +1,6 @@
 <div class="m-1.5 flex">
 
-    <div x-data="{ modalDelete: @entangle('modalDelete') }">
+    <div x-data="{ modalDelete: @entangle('modalDelete').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalDelete"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"

@@ -36,15 +36,15 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         //Storage::deleteDirectory("productos");
-        $this->call(EmpresasSeeder::class);
-        $this->call(PlantillaSeeder::class);
+
+        //$this->call(PlantillaSeeder::class);
         //Storage::makeDirectory("productos");
 
         //Categoria::factory(100)->create();
         // Lineas::factory(60)->create();
         // SimCard::factory(100)->create();
-        $this->call(ProductoSeeder::class);
-        $this->call(ModelosDispositivoSeeder::class);
+        // $this->call(ProductoSeeder::class);
+        //$this->call(ModelosDispositivoSeeder::class);
         //Clientes::factory(5000)->create();
         //  Proveedores::factory(20)->create();
         // Dispositivos::factory(100)->create();
@@ -58,16 +58,29 @@ class DatabaseSeeder extends Seeder
         // Contactos::factory(2)->create();
         // Vehiculos::factory(10)->create();
         // Reportes::factory(2)->create();
-        $this->call(CiudadesSeeder::class);
+        // $this->call(CiudadesSeeder::class);
         //Actas::factory(1)->create();
         //Certificados::factory(1)->create();
         // CertificadosVelocimetros::factory(1)->create();
         // $this->call(ContratoSeeder::class);
-        $this->call(PermisosSeeder::class);
-        $this->call(UserSeeder::class);
-        $this->call(MotivosTrasladoSeeder::class);
-        $this->call(PaymentMethodsSeeder::class);
+        // $this->call(PermisosSeeder::class);
+        // $this->call(UserSeeder::class);
+        // $this->call(MotivosTrasladoSeeder::class);
+        // $this->call(PaymentMethodsSeeder::class);
+        // $this->call(UbigeosSeeder::class);
+        // $this->call(TipoTareasSeeder::class);
+
+        $this->call(PlantillaSeeder::class);
+        $this->call(ProductoSeeder::class);
+        $this->call(MetodoPagoSeeder::class);
+        $this->call(ModalidadTransporteSeeder::class);
+        $this->call(MotivoTrasladoSeeder::class);
+        $this->call(SustentosSeeder::class);
+        $this->call(TipoAfectacionSeeder::class);
+        $this->call(tipoComprobanteSeeder::class);
+        $this->call(tipoDocumentosSeeder::class);
         $this->call(UbigeosSeeder::class);
-        $this->call(TipoTareasSeeder::class);
+        $this->call(SerieSeeder::class);
+        $this->call(ClientesSeeder::class);
     }
 }

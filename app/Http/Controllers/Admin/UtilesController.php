@@ -32,7 +32,7 @@ class UtilesController extends Controller
 
             try {
 
-                $token = env('TOKEN_API_SUNAT');
+                $token = env('TOKEN_API_CONSULTA_SUNAT');
 
                 $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -47,17 +47,32 @@ class UtilesController extends Controller
                     ],
                 ];
 
-                $res = $client->request('GET', '/v1/tipo-cambio-sunat', $parameters);
+                $res = $client->request('GET', '/v2/sunat/tipo-cambio', $parameters);
                 $response = json_decode($res->getBody()->getContents(), true);
 
-                Cache::put(
-                    'cambio',
-                    $response["venta"],
-                    now()->addMinutes(1)
-                );
+                if (array_key_exists('precioVenta', $response)) {
 
-                return $response["venta"];
+                    Cache::put(
+                        'cambio',
+                        $response["precioVenta"],
+                        now()->addHours(4)
+                    );
+                    Cache::put(
+                        'precioVenta',
+                        $response["precioVenta"],
+                        now()->addHours(4)
+                    );
+                    Cache::put(
+                        'precioCompra',
+                        $response["precioCompra"],
+                        now()->addHours(4)
+                    );
+                    return $response["precioVenta"];
+                } else {
+                    return $response['message'];
+                }
             } catch (\Exception $e) {
+
 
                 return $e->getMessage();
             }
@@ -313,5 +328,19 @@ class UtilesController extends Controller
         }, 200, [
             'Content-Type' => 'application/pdf',
         ]);
+    }
+
+    public function setEnvironmentValue($envKey, $envValue)
+    {
+
+        $envFile = app()->environmentFilePath();
+        $str = file_get_contents($envFile);
+
+        $oldValue = env($envKey);
+
+        $str = str_replace("{$envKey}={$oldValue}", "{$envKey}={$envValue}", $str);
+        $fp = fopen($envFile, 'w');
+        fwrite($fp, $str);
+        fclose($fp);
     }
 }

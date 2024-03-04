@@ -1,12 +1,10 @@
 <div>
-    <div x-data="{ modalReporte: @entangle('modalReporte') }">
-        <!-- Modal backdrop -->
+    <div x-data="{ modalReporte: @entangle('modalReporte').live }">
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
         </div>
-        <!-- Modal dialog -->
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
             role="dialog" aria-modal="true" x-show="modalReporte"
@@ -53,7 +51,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="operador" class="form-select w-full pl-9" id="">
+                                    <select wire:model.live="operador" class="form-select w-full pl-9" id="">
                                         <option value="todos">Todos</option>
                                         @foreach ($operadores as $operador)
                                             <option value="{{ $operador->operador }}">{{ $operador->operador }}</option>
@@ -70,29 +68,30 @@
                                     <div class="">
                                         <label class=" flex items-center">
                                             <input type="checkbox" name="radio-buttons" class="form-radio w-6 h-6"
-                                                wire:model="suspencion" value="true" />
-                                            {{-- <span class="text-sm ml-2">{{$tecnico->name}}</span> --}}
+                                                wire:model.live="suspencion" value="true" />
+
                                         </label>
                                     </div>
 
 
                                 </div>
                             </div>
-                            <div class="col-span-12">
+                            <div class="col-span-12 mt-2">
                                 <label
                                     class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
                                     <div>OPCIONES PARA EXPORTAR: </div>
 
                                 </label>
-                                <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3">
-                                    <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToPdf"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">PDF</button>
-                                    </div>
+                                <div class="flex flex-wrap items-center justify-center -m-1.5 gap-3 mt-2">
+                                    {{-- <div class="flex flex-wrap pt-2 -space-x-px gap-3">
+                                        <x-form.button wire:click.prevent="exportToPdf" spinner="exportToPdf"
+                                            label="PDF" red icon="document-download" />
+
+                                    </div> --}}
 
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToExcel"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">EXCEL</button>
+                                        <x-form.button label="EXCEL" wire:click.prevent="exportToExcel"
+                                            spinner="exportToExcel" emerald icon="document-download" />
                                     </div>
                                 </div>
 

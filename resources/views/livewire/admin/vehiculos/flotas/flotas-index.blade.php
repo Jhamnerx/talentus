@@ -24,7 +24,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
                     placeholder="Buscar Flota..." />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
@@ -54,7 +54,14 @@
 
             <!-- Add button -->
             @can('crear-vehiculos-flotas')
-            @livewire('admin.vehiculos.flotas.save')
+                <button wire:click="openModalSave" aria-controls="basic-modal"
+                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Añadir Flota</span>
+                </button>
             @endcan
 
 
@@ -65,12 +72,12 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total Flotas <span class="text-slate-400 font-medium">{{
-                    $flotas->total() }}</span>
+            <h2 class="font-semibold text-slate-800">Total Flotas <span
+                    class="text-slate-400 font-medium">{{ $flotas->total() }}</span>
             </h2>
 
         </header>
-        <div x-data="handleSelect">
+        <div>
             <!-- Table -->
             <div class="overflow-x-auto">
                 <table class="table-auto w-full">
@@ -82,8 +89,7 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Seleccionar Todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                     </label>
                                 </div>
                             </th>
@@ -98,84 +104,89 @@
                                 <div class="font-semibold text-left">Cant/Unidades</div>
                             </th>
                             @role('admin')
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Estado</div>
-                            </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Estado</div>
+                                </th>
                             @endrole
                             @canany(['editar-vehiculos-flotas', 'eliminar-vehiculos-flotas'])
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Accioness</div>
-                            </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Accioness</div>
+                                </th>
                             @endcanany
                         </tr>
                     </thead>
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
-                        @if ($flotas->count())
+
                         @foreach ($flotas as $flota)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                <div class="flex items-center">
-                                    <div class="font-medium text-slate-800">{{ strtoupper($flota->nombre) }}
+                            <tr wire:key='flota-{{ $flota->id }}'>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input class="table-item form-checkbox" type="checkbox" />
+                                        </label>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="text-left">{{ $flota->clientes->razon_social }}</div>
+                                </td>
 
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-red-800">
-
-                                    {{ $flota->vehiculos->count() > 1
-                                    ? $flota->vehiculos->count() . ' Vehiculos'
-                                    : $flota->vehiculos->count() . ' Vehiculo' }}
-                                </div>
-                            </td>
-                            @role('admin')
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div>
-                                    <div class="m-3 ">
-
-
-                                        @livewire('admin.vehiculos.flotas.change-status', ['model' => $flota, 'field' =>
-                                        'is_active'], key('active' . $flota->id))
-                                        <!-- End -->
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 ">
+                                    <div class="flex items-center">
+                                        <div class="font-medium text-slate-800">{{ strtoupper($flota->nombre) }}
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            @endrole
-                            @canany(['editar-vehiculos-flotas', 'eliminar-vehiculos-flotas'])
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="space-x-1">
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                    <div class="text-left">{{ $flota->clientes->razon_social }}</div>
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left font-medium text-red-800">
+
+                                        {{ $flota->vehiculos->count() > 1
+                                            ? $flota->vehiculos->count() . ' Vehiculos'
+                                            : $flota->vehiculos->count() . ' Vehiculo' }}
+                                    </div>
+                                </td>
+                                @role('admin')
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div>
+                                            <div class="m-3 ">
+
+
+                                                @livewire('admin.vehiculos.flotas.change-status', ['model' => $flota, 'field' => 'is_active'], key('active' . $flota->id))
+                                                <!-- End -->
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endrole
+                                @canany(['editar-vehiculos-flotas', 'eliminar-vehiculos-flotas'])
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="space-x-1">
+
+
+                                            @can('editar-vehiculos-flotas')
+                                                <x-form.button wire:click.prevent='openModalEdit({{ $flota->id }})' outline
+                                                    slate icon="pencil" />
+                                            @endcan
+
+                                            @can('eliminar-vehiculos-flotas')
+                                                <x-form.button spinner="openModalDelete"
+                                                    wire:click.prevent='openModalDelete({{ $flota->id }})' outline negative
+                                                    icon="trash" />
+                                            @endcan
 
 
 
-                                    @livewire('admin.vehiculos.flotas.delete', ['model' => $flota], key('delete' .
-                                    $flota->id))
-
-
-
-                                </div>
-                            </td>
-                            @endcanany
-                        </tr>
+                                        </div>
+                                    </td>
+                                @endcanany
+                            </tr>
                         @endforeach
-                        @else
-                        <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                        @if ($flotas->count() < 1)
+                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
 
 

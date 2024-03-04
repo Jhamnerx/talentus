@@ -4,10 +4,15 @@
 
     <!-- Table -->
     @livewire('admin.ventas.presupuestos.presupuestos-index')
-    @livewire('admin.ventas.presupuestos.send')
-    @livewire('admin.ventas.presupuestos.delete')
+
 
 @stop
+
+@push('modals')
+    @livewire('admin.ventas.presupuestos.send')
+    @livewire('admin.ventas.presupuestos.delete')
+    @livewire('admin.ventas.presupuestos.convert-to')
+@endpush
 
 @section('js')
     @if (session('store'))

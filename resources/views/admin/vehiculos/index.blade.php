@@ -4,139 +4,48 @@
 
     <!-- Table -->
     @livewire('admin.vehiculos.vehiculos-index')
+
+
+@stop
+
+
+@push('modals')
     @livewire('admin.vehiculos.save-vehiculo')
+    @livewire('admin.vehiculos.edit-vehiculo')
+
+
     @livewire('admin.vehiculos.delete')
     @livewire('admin.vehiculos.import')
     @livewire('admin.vehiculos.suspend')
     @livewire('admin.vehiculos.mantenimiento.save', ['update' => session('updated-numero')])
     @livewire('admin.vehiculos.save-quick')
-
-
-@stop
-
+    @livewire('admin.lineas.save')
+    @livewire('admin.dispositivos.save')
+@endpush
 @section('js')
-
     <script>
-        window.addEventListener('mantenimiento-save', event => {
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Guardado',
-                    text: 'Tarea Mantenimiento guardada',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
+        Livewire.on('updated-numero', (event) => {
 
-                })
-            });
-            $('.vehiculos_id').val(null).trigger('change');
-        })
-    </script>
-    <script>
-        window.addEventListener('change-status', event => {
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Actualizado',
-                    text: event.detail.status,
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
+            Swal.fire({
+                icon: 'success',
+                title: 'VEHICULO ACTUALIZADO',
+                text: 'La Actualización cambio el numero, deseas registrar una programación de mantenimiento?',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, Registrar!',
+                cancelButtonText: 'Cerrar!'
+            }).then((result) => {
+                if (result.isConfirmed) {
 
-                })
-            });
-        })
-    </script>
+                    Livewire.dispatch('create-mantenimiento', {
+                        placa: event.placa
+                    })
+                } else if (result.isDenied) {
 
-    <script>
-        window.addEventListener('vehiculo-delete', event => {
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Eliminado',
-                    text: 'Vehiculo Eliminado',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
-
-                })
-            });
-        })
-    </script>
-
-
-    @if (session('store'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Guardado',
-                    text: '{{ session('store') }}',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
-
-                })
-            });
-        </script>
-    @endif
-
-    @if (session('update'))
-        <script>
-            $(document).ready(function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Actualizado',
-                    text: '{{ session('update') }}',
-                    showConfirmButton: true,
-                    confirmButtonText: "Cerrar"
-
-                })
-            });
-        </script>
-    @endif
-
-    <script>
-        window.addEventListener('vehiculos-import', event => {
-            iziToast.success({
-                position: 'topRight',
-                title: 'IMPORTE COMPLETO',
-                message: 'se importo los vehiculos correctamente',
-            });
-
-        })
-    </script>
-
-    <script>
-        // A basic demo function to handle "select all" functionality
-        document.addEventListener('alpine:init', () => {
-            Alpine.data('handleSelect', () => ({
-                selectall: false,
-                selectAction() {
-                    countEl = document.querySelector('.table-items-action');
-                    if (!countEl) return;
-                    checkboxes = document.querySelectorAll('input.table-item:checked');
-                    document.querySelector('.table-items-count').innerHTML = checkboxes.length;
-                    if (checkboxes.length > 0) {
-                        countEl.classList.remove('hidden');
-                    } else {
-                        countEl.classList.add('hidden');
-                    }
-                },
-                toggleAll() {
-                    this.selectall = !this.selectall;
-                    checkboxes = document.querySelectorAll('input.table-item');
-                    [...checkboxes].map((el) => {
-                        el.checked = this.selectall;
-                    });
-                    this.selectAction();
-                },
-                uncheckParent() {
-                    this.selectall = false;
-                    document.getElementById('parent-checkbox').checked = false;
-                    this.selectAction();
                 }
-            }))
-        })
+            })
+
+        });
     </script>
-
-
-
-
 @stop

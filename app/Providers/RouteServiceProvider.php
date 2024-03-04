@@ -39,7 +39,7 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->routes(function () {
             Route::prefix('api')
-                ->middleware('api')
+                ->middleware('api', 'auth:sanctum')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
@@ -51,6 +51,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->prefix('admin')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/admin.php'));
+
+            Route::middleware('web', 'auth')
+                ->prefix('invoice')
+                ->group(base_path('routes/facturacion.php'));
         });
 
         Route::resourceVerbs([

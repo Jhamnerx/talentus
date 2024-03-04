@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ openModal: @entangle('openModal') }">
+    <div x-data="{ openModal: @entangle('openModal').live }">
 
 
         <!-- Modal backdrop -->

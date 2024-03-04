@@ -3,9 +3,10 @@
 namespace App\Models;
 
 
-use App\Scopes\onlyTareas;
+
 use App\Enums\TareasStatus;
 use App\Scopes\EmpresaScope;
+use App\Scopes\OnlyTareasScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,7 @@ class Tareas extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
-        static::addGlobalScope(new onlyTareas);
+        static::addGlobalScope(new OnlyTareasScope);
     }
 
     //relacion con tipo de tareas

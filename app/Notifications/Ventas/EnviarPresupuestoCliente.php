@@ -25,7 +25,6 @@ class EnviarPresupuestoCliente extends Notification
         $this->presupuesto = $presupuesto;
         $this->pdf = $pdf;
         $this->data = $data;
-       
     }
 
     /**
@@ -44,11 +43,11 @@ class EnviarPresupuestoCliente extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->attachData($this->pdf->output(), 'COTIZACIÓN-'.$this->presupuesto->numero.'.pdf', [
-                        'mime' => 'application/pdf',
-                    ])
-                    ->subject($this->data["asunto"])
-                    ->view('mail.ventas.presupuesto', ['presupuesto' => $this->presupuesto, 'data' => $this->data]);
+            ->attachData($this->pdf->output(), 'COTIZACIÓN-' . $this->presupuesto->serie_correlativo . '.pdf', [
+                'mime' => 'application/pdf',
+            ])
+            ->subject($this->data["asunto"])
+            ->view('mail.ventas.presupuesto', ['presupuesto' => $this->presupuesto, 'data' => $this->data]);
     }
 
     /**

@@ -1,152 +1,48 @@
-<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen') }"
+<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen').live }"
     @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
     <div class="px-4 py-5 bg-white sm:p-6">
         <div class="grid grid-cols-12 gap-6">
             <div class="col-span-12 sm:col-span-4">
 
-                <label for="clientes_id" class="block text-sm font-medium mb-1">
-                    Cliente: <span class="text-rose-500">*</span>
-                </label>
-                <div class="flex" wire:ignore>
+                <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
+                    placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                    option-label="razon_social" option-value="id" hide-empty-message>
 
-                    <select class="w-full clientes_id pl-3" name="clientes_id">
-                        <option selected value="{{ $contrato->clientes_id }}">{{ $contrato->cliente->razon_social }}
-                        </option>
-                    </select>
-
-                    @livewire('admin.clientes.button-open-modal')
-                </div>
-
-
-                @error('clientes_id')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
-                @enderror
+                    <x-slot name="afterOptions" class="p-2 flex justify-center" x-show="displayOptions.length === 0">
+                        <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close" primary
+                            flat full>
+                            <span x-html="`Crear cliente <b>${search}</b>`"></span>
+                        </x-form.button>
+                    </x-slot>
+                </x-form.select>
 
             </div>
 
             <div class="col-span-12 sm:col-span-4">
 
-                <label class="block text-sm font-medium mb-1" for="fecha">Fecha fin Contrato:
-                    <span class="text-rose-500">*</span></label>
-                <div class="relative">
-
-
-                    <input wire:model="contrato.fecha" type="text" class="form-input fechaContrato pl-8 py-2 w-full"
-                        maxlength="10" required>
-
-                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                            <g class="nc-icon-wrapper">
-                                <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
-                                </path>
-                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
-                                </path>
-                                <path
-                                    d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
-                                    fill="#aeaeae"></path>
-                                <path
-                                    d="M24.7,32.155q0-4.62,1.954-6.877A7.319,7.319,0,0,1,32.5,23.021a10.653,10.653,0,0,1,2.087.16V25.81a8.524,8.524,0,0,0-1.874-.213c-1.8,0-3.517.431-4.364,2.023a6.926,6.926,0,0,0-.628,2.842,4.211,4.211,0,0,1,3.513-1.809c2.937,0,4.449,2.015,4.449,4.929,0,3.271-1.916,5.4-5.3,5.4C26.6,38.979,24.7,36.12,24.7,32.155Zm5.621,4.194c1.545,0,2.182-1.16,2.182-2.725,0-1.461-.651-2.448-2.118-2.448a2.318,2.318,0,0,0-2.417,2.161C27.965,34.856,28.82,36.349,30.318,36.349Z"
-                                    fill="#aeaeae"></path>
-                                <path d="M11.5,12A1.5,1.5,0,0,1,10,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,11.5,12Z"
-                                    fill="#363636"></path>
-                                <path d="M36.5,12A1.5,1.5,0,0,1,35,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,36.5,12Z"
-                                    fill="#363636"></path>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-                @error('fecha')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
-                @enderror
+                <x-form.datetime-picker label="Fecha Fin Contrato:" id="fecha" name="fecha"
+                    wire:model.live="fecha" :min="now()->subDays(90)" without-time parse-format="YYYY-MM-DD"
+                    display-format="DD-MM-YYYY" :clearable="false" />
             </div>
+
             <div class="col-span-12 sm:col-span-4">
-                <label class="block text-sm font-medium mb-1" for="ciudades_id">Ciudad: <span
-                        class="text-rose-500">*</span></label>
-                <div class="relative" wire:ignore>
+                <x-form.select label="Ciudad:" wire:model.live="ciudades_id" placeholder="Selecciona una ciudad"
+                    :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id">
 
-
-                    {!! Form::select(
-                        'ciudades_id',
-                        [$contrato->ciudades->id => $contrato->ciudades->nombre],
-                        $contrato->ciudades_id,
-                        [
-                            'class' => 'form-select w-full
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    pl-9 ciudades',
-                        ],
-                    ) !!}
-
-                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                        <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
-                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                            <g class="nc-icon-wrapper">
-                                <path d="M8,18V7A1,1,0,0,1,9,6h4a1,1,0,0,1,1,1v6.091Z" fill="#f74b3b">
-                                </path>
-                                <path d="M24,3,7,18.111V44a2,2,0,0,0,2,2H39a2,2,0,0,0,2-2V18.111Z" fill="#e3e3e3">
-                                </path>
-                                <path
-                                    d="M46,24a1,1,0,0,1-.673-.26L24,4.351,2.673,23.74a1,1,0,0,1-1.346-1.481l22-20a1,1,0,0,1,1.346,0l22,20A1,1,0,0,1,46,24Z"
-                                    fill="#ff7163"></path>
-                                <path d="M28,33H20a1,1,0,0,0-1,1V46H29V34A1,1,0,0,0,28,33Z" fill="#bf8c5a">
-                                </path>
-                                <path d="M28,27H20a1,1,0,0,1-1-1V20a1,1,0,0,1,1-1h8a1,1,0,0,1,1,1v6A1,1,0,0,1,28,27Z"
-                                    fill="#3aace9"></path>
-                                <path d="M14.314,46A7,7,0,1,0,1,43a6.932,6.932,0,0,0,.686,3Z" fill="#78d478"></path>
-                                <path d="M46.314,46a7,7,0,1,0-12.628,0Z" fill="#78d478"></path>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-                @error('ciudades_id')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
-                @enderror
+                </x-form.select>
             </div>
             <div class="col-span-12 sm:col-span-12 mt-4">
                 <span class="text-bold text-center mb-2">Caracteristicas:</span>
                 <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
 
-
                     <div class="m-2 w-full mt-2">
-                        <label for="fondo">Fondo:</label>
-                        <!-- Start -->
-                        <div class="flex items-center">
-                            <div class="form-switch">
-                                <input wire:model="contrato.fondo" type="checkbox" id="fondo-1"
-                                    class="sr-only fondo" />
-                                <label class="bg-slate-400" for="fondo-1">
-                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                    <span class="sr-only">fondo switch</span>
-                                </label>
-                            </div>
 
-                        </div>
-                        <!-- End -->
+                        <x-form.toggle left-label="Fondo" lg wire:model.live="fondo" />
                     </div>
 
-
                     <div class="m-2 w-full">
-                        <label for="sello">Sello:</label>
-                        <!-- Start -->
-                        <div class="flex items-center">
-                            <div class="form-switch">
-                                <input wire:model="contrato.sello" name="sello" type="checkbox" id="sello-1"
-                                    class="sr-only" />
-                                <label class="bg-slate-400" for="sello-1">
-                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                    <span class="sr-only">sello switch</span>
-                                </label>
-                            </div>
 
-                        </div>
-                        <!-- End -->
+                        <x-form.toggle left-label="Sello" lg wire:model.live="sello" />
                     </div>
                 </div>
             </div>
@@ -223,7 +119,7 @@
 
                                 <div class="flex-auto xl:w-28 text-center">
 
-                                    <input wire:model="items.{{ $placa }}.plan"
+                                    <input wire:model.live="items.{{ $placa }}.plan"
                                         class="form-input w-16 md:w-28 lg:w-28" type="text">
 
                                     @if ($errors->has('items.' . $placa . '.plan'))
@@ -236,9 +132,9 @@
                                 </div>
 
                                 <div class="flex-auto xl:w-20 text-center">
-                                    <button type="button"
-                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')"
-                                        class="text-red-500 hover:text-red-600 text-sm font-semibold">Eliminar</button>
+                                    <x-form.button label="Eliminar"
+                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')" outline red sm
+                                        icon="trash" />
                                 </div>
 
 
@@ -281,7 +177,7 @@
         <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
 
             <button class="btnGuardarContrato cursor-pointer btn bg-emerald-500 hover:bg-emerald-600 text-white"
-                wire:click.prevent="save">GUARDAR</button>
+                wire:click.prevent="save">ACTUALIZAR</button>
 
 
         </div>
@@ -292,131 +188,3 @@
 @push('modals')
     @livewire('admin.clientes.save')
 @endpush
-@section('js')
-    <script>
-        $(document).ready(function() {
-            flatpickr('.fechaContrato', {
-                mode: 'single',
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-
-        });
-    </script>
-    <script>
-        window.addEventListener('add-vehiculo', event => {
-            addAlert(event.detail.vehiculo.placa);
-        })
-
-        window.addEventListener('error-vehiculo', event => {
-            errorAdd(event.detail.vehiculo.placa);
-        })
-
-        function addAlert(placa) {
-            console.log(placa);
-            iziToast.success({
-                position: 'topRight',
-                title: 'AGREGADO',
-                message: 'Añadiste el vehiculo ' + placa,
-                timeout: 1000,
-            });
-        }
-
-        function errorAdd(placa) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Ya existe',
-                text: 'El vehiculo ' + placa + ' ya esta agregado',
-                showConfirmButton: true,
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Cerrar"
-
-            })
-        }
-    </script>
-
-
-    <script>
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-
-                        return obj;
-
-                    });
-                    return {
-
-                        results: suggestions,
-
-                    };
-
-                },
-
-            }
-        });
-        $('.clientes_id').on('change', function() {
-
-            @this.set('contrato.clientes_id', this.value)
-        })
-
-
-        $('.ciudades').select2({
-            placeholder: 'Selecciona una ciudad',
-            language: "es",
-            width: '100%',
-            selectionCssClass: 'pl-9',
-            ajax: {
-                url: '{{ route('search.ciudades') }}',
-                dataType: 'json',
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        $('.ciudades').on('change', function() {
-            @this.set('contrato.ciudades_id', this.value)
-        })
-    </script>
-@endsection

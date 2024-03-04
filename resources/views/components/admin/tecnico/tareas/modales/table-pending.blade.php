@@ -8,7 +8,7 @@
 
             <div class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 w-full focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 w-full focus:border-slate-300" type="search"
                     placeholder="Buscar tarea" />
 
                 <button type="button" class="absolute inset-0 right-auto group" type="button" aria-label="Search">
@@ -242,7 +242,7 @@
                             @else
                             <div x-show="!isUploading" class="flex px-2 gap-2 justify-center hover:cursor-pointer">
                                 <label class="block hover:cursor-pointer">
-                                    <input type="file" wire:model="imagen.{{$tarea->id}}"
+                                    <input type="file" wire:model.live="imagen.{{$tarea->id}}"
                                         class=" hover:cursor-pointer  text-sm font-normal text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
                                 </label>
                             </div>

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalCreateTask: @entangle('modalCreateTask') }">
+    <div x-data="{ modalCreateTask: @entangle('modalCreateTask').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalCreateTask"
@@ -45,7 +45,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9" id="tipo_tarea_id"
-                                        wire:model="tipo_tarea_id">
+                                        wire:model.live="tipo_tarea_id">
 
                                         <option value="5">MANTENIMIENTO</option>
 
@@ -91,7 +91,7 @@
                                 </label>
                                 <div class="relative" wire:ignore>
 
-                                    <input type="text" wire:model="placa" placeholder="PLACA" disabled readonly
+                                    <input type="text" wire:model.live="placa" placeholder="PLACA" disabled readonly
                                         class="form-input w-full pl-9">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
@@ -141,42 +141,11 @@
 
                             {{-- fecha --}}
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="fecha_hora">
-                                    Fecha y Hora de la Tarea:
-                                </label>
-                                <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full fecha-tarea"
-                                        wire:model="fecha_hora" placeholder="2023-05-12 03:00">
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                        <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
-                                                </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
-                                                    fill="#ff7163">
-                                                </path>
-                                                <path
-                                                    d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
-                                                    fill="#aeaeae"></path>
-                                                <path
-                                                    d="M24.7,32.155q0-4.62,1.954-6.877A7.319,7.319,0,0,1,32.5,23.021a10.653,10.653,0,0,1,2.087.16V25.81a8.524,8.524,0,0,0-1.874-.213c-1.8,0-3.517.431-4.364,2.023a6.926,6.926,0,0,0-.628,2.842,4.211,4.211,0,0,1,3.513-1.809c2.937,0,4.449,2.015,4.449,4.929,0,3.271-1.916,5.4-5.3,5.4C26.6,38.979,24.7,36.12,24.7,32.155Zm5.621,4.194c1.545,0,2.182-1.16,2.182-2.725,0-1.461-.651-2.448-2.118-2.448a2.318,2.318,0,0,0-2.417,2.161C27.965,34.856,28.82,36.349,30.318,36.349Z"
-                                                    fill="#aeaeae"></path>
-                                                <path
-                                                    d="M11.5,12A1.5,1.5,0,0,1,10,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,11.5,12Z"
-                                                    fill="#363636"></path>
-                                                <path
-                                                    d="M36.5,12A1.5,1.5,0,0,1,35,10.5v-7a1.5,1.5,0,0,1,3,0v7A1.5,1.5,0,0,1,36.5,12Z"
-                                                    fill="#363636"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @error('fecha_hora')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+
+
+                                <x-form.datetime-picker label=" Fecha y Hora de la Tarea:" id="fecha_hora"
+                                    name="fecha_hora" wire:model.live="fecha_hora" parse-format="YYYY-MM-DD"
+                                    display-format="DD-MM-YYYY" :clearable="false" />
                             </div>
 
 
@@ -187,7 +156,7 @@
                                 </label>
                                 <div class="relative" wire:ignore>
 
-                                    <input type="text" placeholder="FMB920" wire:model="dispositivo"
+                                    <input type="text" placeholder="FMB920" wire:model.live="dispositivo"
                                         class="form-input w-full pl-9">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" version="1.1" id="Layer_1"
@@ -202,14 +171,13 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                     		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;"
-                                                    width="181.135" height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
+                                                    height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                    	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
-                                                r="40.956" />
+                                                                    C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
@@ -228,7 +196,7 @@
                                         <div class="m-3">
                                             <label class="flex items-center">
                                                 <input type="radio" name="radio-buttons" class="form-radio"
-                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
                                                 <span class="text-sm ml-2">{{ $tecnico->name }}</span>
                                             </label>
                                         </div>
@@ -272,35 +240,3 @@
     <!-- End -->
 
 </div>
-
-@once
-    @push('scripts')
-        <script>
-            window.addEventListener('openModal', event => {
-                initFechaHora(event.detail.fecha_hora);
-            })
-        </script>
-
-
-        <script>
-            $(document).ready(function() {
-
-                initFechaHora('');
-
-            })
-
-            function initFechaHora(fecha) {
-
-                flatpickr('.fecha-tarea', {
-                    enableTime: true,
-                    defaultDate: fecha,
-                    disableMobile: "true",
-                    dateFormat: "Y-m-d H:i",
-                    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-                });
-
-            }
-        </script>
-    @endpush
-@endonce

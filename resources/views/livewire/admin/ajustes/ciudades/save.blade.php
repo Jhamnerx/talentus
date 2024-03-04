@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ openModalSave: @entangle('openModalSave') }">
+    <div x-data="{ openModalSave: @entangle('openModalSave').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="openModalSave"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -49,7 +49,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input wire:model="nombre" placeholder="Introduce el nombre" name="nombre"
+                                    <input wire:model.live="nombre" placeholder="Introduce el nombre" name="nombre"
                                         id="nombre" class="form-input w-full pl-9 valid:border-emerald-300
                             required:border-rose-300 invalid:border-rose-300 peer" type="text" required />
 
@@ -81,7 +81,7 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input wire:model="prefijo" placeholder="Introduce el prefijo" name="prefijo"
+                                    <input wire:model.live="prefijo" placeholder="Introduce el prefijo" name="prefijo"
                                         id="prefijo" class="form-input w-full pl-9 valid:border-emerald-300
                                                     required:border-rose-300 invalid:border-rose-300 peer" type="text"
                                         required />

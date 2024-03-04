@@ -5,3 +5,66 @@
 /* @import "contact.css"; */
 
 @import "iziToast.css";
+
+@import "filepond/dist/filepond.min.css";
+@import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+
+[x-cloak=""] {
+    display: none;
+}
+
+@media screen and (max-width: theme("screens.lg")) {
+    [x-cloak="lg"] {
+        display: none;
+    }
+}
+
+.contenedor-estados-sunat .sunat-estado {
+    font-weight: 600;
+}
+.contenedor-estados-sunat div {
+    position: relative;
+    padding: 2px;
+    padding-left: 23px;
+    margin: 5px;
+}
+.contenedor-estados-sunat .estadosunat {
+    background-image: url(../images/facturacion/sunat_logo.png) !important;
+    background-size: 1.3em 1.3em !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.contenedor-estados-sunat .aceptado {
+    background-image: url(../images/facturacion/success.svg) !important;
+    background-size: 1.3em 1.3em !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+
+.contenedor-estados-sunat .rechazado {
+    background-image: url(../images/facturacion/rechazo.svg) !important;
+    background-size: 1.3em 1.3em !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+.contenedor-estados-sunat .noenviado {
+    background-image: url(../images/facturacion/get_cdr.svg) !important;
+    background-size: 1.3em 1.3em !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+.contenedor-estados-sunat .baja {
+    background-image: url(../images/facturacion/error.svg) !important;
+    background-size: 1.3em 1.3em !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}
+.contenedor-estados-sunat label {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    padding: 5px;
+    width: 1.3em;
+    height: 1.3em;
+}

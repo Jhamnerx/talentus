@@ -3,7 +3,7 @@
     <!-- Basic Modal -->
 
     <!-- Start -->
-    <div x-data="{ modalOpen: @entangle('modalOpenImport') }">
+    <div x-data="{ modalOpen: @entangle('modalOpenImport').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
@@ -40,11 +40,11 @@
 
                     <label class="block text-sm font-medium text-gray-700"> Elegir Archivo </label>
 
-                    <div x-data="{ file: @entangle('file'), files: null }"
+                    <div x-data="{ file: @entangle('file').live, files: null }"
                         class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
                         x-on:dragover="$el.classList.add('border-emerald-400')"
                         x-on:dragleave="$el.classList.remove('border-emerald-400')">
-                        <input wire:model="file" type="file"
+                        <input wire:model.live="file" type="file"
                             class="absolute inset-0 z-50 m-0 p-0 w-full h-full outline-none opacity-0 cursor-pointer"
                             id="file" x-on:change="files = $event.target.files; console.log($event.target.files);"
                             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -98,19 +98,19 @@
                         <span class="text-emerald-500">Cargando...</span>
                     </div>
                     @error('file')
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $message }}
-                    </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $message }}
+                        </p>
                     @enderror
                     @foreach ($errorInfo as $error)
-                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                        {{ $error['errores'] }} => {{ $error['values'] }}
-                    </p>
+                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                            {{ $error['errores'] }} => {{ $error['values'] }}
+                        </p>
                     @endforeach
                     <div>
                         <p class="mt-1 text-slate-500 text-sm">
                             Descargar archivo formato
-                            <a class="text-blue-800" href="{{ Storage::url('excel/clientes.xlsx') }}" download>
+                            <a class="text-blue-800" href="{{ Storage::url('excel/vehiculos.xlsx') }}" download>
                                 Haz click aqui
                             </a>
                         </p>
@@ -120,11 +120,9 @@
                 <!-- Modal footer -->
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
-                        <button @click="modalOpen = false, files = null"
-                            class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                            wire:click="closeModal()">Cerrar</button>
-                        <button @click="files = null" wire:click='importExcel'
-                            class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
+
+                        <x-form.button flat label="Cancelar" wire:click="closeModal()" x-on:click="close" />
+                        <x-form.button primary label="Importar" spinner="importExcel" wire:click="importExcel" />
                     </div>
                 </div>
             </div>

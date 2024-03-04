@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalInforme: @entangle('openModal') }">
+    <div x-data="{ modalInforme: @entangle('openModal').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalInforme"

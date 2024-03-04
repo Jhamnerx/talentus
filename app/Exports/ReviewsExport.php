@@ -33,6 +33,7 @@ class ReviewsExport extends StringValueBinder implements FromQuery, WithMapping,
             '¿TIENE ALGÚN INCONVENIENTE EN EL MANEJO DE NUESTRAS PLATAFORMAS DE MONITOREO?',
             '¿TIENE ALGUNA SOLICITUD PENDIENTE QUE NO SE HAYA ATENDIDO?',
             '¿RECOMENDARÍA NUESTRO SERVICIO A UN FAMILIAR O AMIGO?',
+            'Fecha Registro'
         ];
     }
 
@@ -49,6 +50,7 @@ class ReviewsExport extends StringValueBinder implements FromQuery, WithMapping,
             $review->question["q3"],
             $review->question["q4"],
             $review->question["q5"] . ", " . $review->question["q5_why"],
+            $review->created_at->format('d-m-Y')
         ];
     }
 }

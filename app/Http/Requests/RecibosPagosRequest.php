@@ -7,22 +7,13 @@ use Illuminate\Validation\Rule;
 
 class RecibosPagosRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
     public function rules($recibo = null)
     {
         $rules = [
             'clientes_id' => 'required',
             'serie_numero' => [
-                'required', Rule::unique('recibos', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required', Rule::unique('recibos_pagos', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'serie' => 'required',
             'numero' => 'required',
@@ -31,9 +22,10 @@ class RecibosPagosRequest extends FormRequest
             'divisa' => 'required',
             'forma_pago' => 'required',
             'total' => 'required',
-            'tipo_pago' => 'required',
+            'tipo_venta' => 'required',
             'nota' => 'nullable',
             'items' => 'array|between:1,100',
+            'items.*.producto_id' => 'required',
             'items.*.producto' => 'required',
             'items.*.descripcion' => 'nullable',
             'items.*.cantidad' => 'required|gte:1',
@@ -69,7 +61,7 @@ class RecibosPagosRequest extends FormRequest
             'divisa.required' => 'Debe seleccionar una divisa',
             'forma_pago.required' => 'Selecciona una forma de pago',
             'total.required' => 'Error al calcular el total',
-            'tipo_pago.required' => 'Selecciona una opción',
+            'tipo_venta.required' => 'Selecciona una opción',
 
             'items.*.producto.required' => 'Ingresa el producto',
             'items.*.cantidad.required' => 'Ingresa la cantidad',

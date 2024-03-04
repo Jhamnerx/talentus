@@ -4,7 +4,7 @@
         <div class="pt-2 relative mx-auto text-gray-600">
             <div class="d-flex justify-content-center h-100">
                 <div class="search box-border w-full bg-white">
-                    <input wire:model="codigo" id="codigo" autocapitalize="on"
+                    <input wire:model.live="codigo" id="codigo" autocapitalize="on"
                         class=" border-2 w-full border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
                         type="text" name="" placeholder="C-22-02">
                     <div class="absolute inset-0 leading-10 left-auto flex items-center">

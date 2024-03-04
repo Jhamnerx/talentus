@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Productos;
+use App\Scopes\EliminadoScope;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalSave: @entangle('modalSave') }">
+    <div x-data="{ modalSave: @entangle('modalSave').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSave"
@@ -45,7 +45,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9" id="tipo_tarea_id"
-                                        wire:model="tipo_tarea_id">
+                                        wire:model.live="tipo_tarea_id">
 
                                         <option class="text-slate-400" value="0" disabled selected>Selecciona una
                                             opción...
@@ -174,14 +174,13 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                     		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;"
-                                                    width="181.135" height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
+                                                    height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                    	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
-                                                r="40.956" />
+                                                                    C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
@@ -201,7 +200,7 @@
                                 <div class="relative">
 
                                     <select class="form-select w-full pl-9 select-modelo-velocimetro"
-                                        wire:model="modelo_velocimetro" id="modelo_velocimetro">
+                                        wire:model.live="modelo_velocimetro" id="modelo_velocimetro">
                                         <option value="0" disabled selected>Selecciona un modelo</option>
                                         @foreach ($velocimetros as $velocimetro)
                                             <option value="{{ $velocimetro->nombre }}">
@@ -221,14 +220,13 @@
                                                 <polygon style="fill:#999999;"
                                                     points="342.808,461.946 143.384,461.946 103.24,421.803 21.893,421.803 21.893,405.858
                                                                                                 		109.842,405.858 149.985,446.001 342.808,446.001 	" />
-                                                <rect x="165.444" y="496.07" style="fill:#999999;"
-                                                    width="181.135" height="15.946" />
+                                                <rect x="165.444" y="496.07" style="fill:#999999;" width="181.135"
+                                                    height="15.946" />
                                             </g>
                                             <path style="fill:#E21B1B;"
                                                 d="M256.008,365.419l-15.467-20.426c-11.377-14.917-111.006-147.872-111.006-214.135
-                                                                                                	C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
-                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727"
-                                                r="40.956" />
+                                                                                                C129.535,51.369,179.15,0,256.008,0s126.473,51.369,126.473,130.858c0,66.175-99.661,199.154-110.918,214.143L256.008,365.419z" />
+                                            <circle style="fill:#FFFFFF;" cx="255.936" cy="131.727" r="40.956" />
                                         </svg>
                                     </div>
                                 </div>
@@ -245,8 +243,8 @@
                                     Número:
                                 </label>
                                 <div class="relative">
-                                    <input type="text" class="form-input pl-9 w-full numero" wire:model="numero"
-                                        placeholder="Ingresa o busca un numero">
+                                    <input type="text" class="form-input pl-9 w-full numero"
+                                        wire:model.live="numero" placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -278,7 +276,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full sim_card"
-                                        placeholder="Ingresa o busca un sim card" wire:model="sim_card">
+                                        placeholder="Ingresa o busca un sim card" wire:model.live="sim_card">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -319,7 +317,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full nuevo_numero"
-                                        wire:model="nuevo_numero" placeholder="Ingresa o busca un numero">
+                                        wire:model.live="nuevo_numero" placeholder="Ingresa o busca un numero">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -352,7 +350,7 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full nuevo_sim_card"
-                                        placeholder="Ingresa o busca un sim card" wire:model="nuevo_sim_card">
+                                        placeholder="Ingresa o busca un sim card" wire:model.live="nuevo_sim_card">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
@@ -395,15 +393,14 @@
                                 </label>
                                 <div class="relative">
                                     <input type="text" class="form-input pl-9 w-full fecha-tarea"
-                                        wire:model="fecha_hora" placeholder="2023-05-12 03:00">
+                                        wire:model.live="fecha_hora" placeholder="2023-05-12 03:00">
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
                                         <svg class="w-4 h-4 shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 48 48">
                                             <g class="nc-icon-wrapper">
                                                 <path d="M2,41a5,5,0,0,0,5,5H41a5,5,0,0,0,5-5V16H2Z" fill="#e3e3e3">
                                                 </path>
-                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z"
-                                                    fill="#ff7163">
+                                                <path d="M41,6H7a5,5,0,0,0-5,5v5H46V11A5,5,0,0,0,41,6Z" fill="#ff7163">
                                                 </path>
                                                 <path
                                                     d="M23.239,38.894H12.359V36.6c2.891-2.922,5.36-5.363,6.175-6.414,1.382-1.784,1.136-3.3.484-3.88-1.287-1.142-3.435-.085-4.913,1.139l-1.788-2.119a7.62,7.62,0,0,1,5.557-2.225c2.88,0,4.928,1.662,4.928,4.216a6.047,6.047,0,0,1-1.549,3.949c-.826,1.032-4.8,4.855-4.8,4.855h6.781Z"
@@ -437,7 +434,7 @@
                                         <div class="m-3">
                                             <label class="flex items-center">
                                                 <input type="radio" name="radio-buttons" class="form-radio"
-                                                    wire:model="tecnico_id" value="{{ $tecnico->id }}" />
+                                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
                                                 <span class="text-sm ml-2">{{ $tecnico->name }}</span>
                                             </label>
                                         </div>
@@ -483,168 +480,5 @@
 </div>
 
 @once
-    @push('scripts')
-        <script>
-            window.addEventListener('save-task', event => {
-                $('.selectVehiculo').val(null).trigger('change');
-                $('.selectModelDispositivo').val(null).trigger('change');
-            })
-        </script>
 
-        <script>
-            $(document).ready(function() {
-                selects();
-                autocompleteNumero();
-                initFechaHora();
-
-            })
-            window.addEventListener('change-tipo-tarea', event => {
-                if (event.detail.value == 4) {
-                    $('.dispositivo').hide()
-                }
-                selects();
-                autocompleteNumero();
-                initFechaHora();
-
-            })
-
-            function selects() {
-                $('.selectVehiculo').select2({
-                    placeholder: 'Buscar un Vehiculo',
-                    language: "es",
-                    minimumInputLength: 2,
-                    selectionCssClass: 'pl-9',
-                    width: '100%',
-                    ajax: {
-                        url: '{{ route('search.vehiculos') }}',
-                        dataType: 'json',
-                        delay: 250,
-                        cache: true,
-                        data: function(params) {
-                            var query = {
-                                term: params.term,
-                            }
-                            return query;
-                        },
-                        processResults: function(data, params) {
-
-                            var suggestions = $.map(data.suggestions, function(obj) {
-                                obj.id = obj.id || obj.value;
-                                obj.text = obj.data;
-                                return obj;
-                            });
-
-                            return {
-                                results: suggestions,
-                            };
-
-                        },
-
-
-                    }
-                });
-
-                $('.selectVehiculo').on('select2:select', function(e) {
-
-                    var data = e.params.data;
-                    @this.set('vehiculos_id', data.id)
-
-                });
-
-                $('.selectModelDispositivo').select2({
-                    placeholder: 'Buscar un Dispositivo',
-                    language: "es",
-                    selectionCssClass: 'pl-9',
-                    width: '100%',
-                    ajax: {
-                        url: '{{ route('search.dispositivos.modelos') }}',
-                        dataType: 'json',
-                        delay: 250,
-                        cache: true,
-                        data: function(params) {
-                            var query = {
-                                term: params.term,
-                            }
-                            return query;
-                        },
-                        processResults: function(data, params) {
-
-                            var suggestions = $.map(data.suggestions, function(obj) {
-                                obj.id = obj.id || obj.data;
-                                obj.text = obj.value;
-                                return obj;
-                            });
-
-                            return {
-                                results: suggestions,
-                            };
-
-                        },
-
-
-                    }
-                });
-
-                $('.selectModelDispositivo').on('select2:select', function(e) {
-
-                    var data = e.params.data;
-                    @this.set('dispositivo', data.modelo)
-
-                });
-            }
-        </script>
-
-        <script>
-            function autocompleteNumero() {
-                $('.numero').devbridgeAutocomplete({
-                    lookup: function(query, done) {
-                        $.ajax({
-                            url: "{{ route('search.lineas') }}",
-                            dataType: 'json',
-                            data: {
-                                term: query
-                            },
-                            success: function(data) {
-                                done(data);
-                            }
-                        })
-
-                    },
-                    minChars: 2,
-                    autoSelectFirst: false,
-                    deferRequestBy: 10,
-                    onSelect: function(suggestion) {
-
-                        // $('.operador').val(suggestion.operador);
-                        // @this.set('operador', suggestion.operador)
-                        @this.set('numero', suggestion.value)
-                        // $('.sim_card').val(suggestion.sim_card);
-                        @this.set('sim_card', suggestion.sim_card)
-                        // $('.sim_card_id').val(suggestion.sim_card_id);
-                        // @this.set('sim_card_id', suggestion.sim_card_id)
-
-                    },
-                    onHint: function(hint) {
-                        //console.log(hint);
-                    },
-                    onSearchComplete: function(query, suggestions) {
-
-                    }
-
-                });
-            }
-
-            function initFechaHora() {
-                $(document).ready(function() {
-                    flatpickr('.fecha-tarea', {
-                        enableTime: true,
-                        disableMobile: "true",
-                        dateFormat: "Y-m-d H:i",
-                        prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                        nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-                    });
-                })
-            }
-        </script>
-    @endpush
 @endonce

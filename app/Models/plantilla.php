@@ -11,13 +11,21 @@ class plantilla extends Model
 {
     use HasFactory;
     protected $table = 'plantilla';
-
+    protected $primaryKey = 'id';
     protected $guarded = ['id', 'created_at', 'updated_at'];
-    // protected $casts = [
-    //     'sunat' => 'json',
-    //     'direccion' => 'json',
-    //     'series' => 'json',
-    // ];
+
+    protected $casts = [
+        'id' => 'integer',
+        'afecto_igv' => 'boolean',
+        'bienes_selva' => 'boolean',
+        'servicios_selva' => 'boolean',
+        'mail_config' => 'array',
+        'direccion' => 'array',
+        'sunat_datos' => 'json',
+        'igv' => 'integer',
+        'igv_base' => 'string',
+        //'sunat_datos' => AsArrayObject::class,
+    ];
 
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
@@ -25,11 +33,11 @@ class plantilla extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
-    protected function sunat(): Attribute
+    protected function mailConfig(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => json_decode($value, true),
-            set: fn ($value) => json_encode($value),
+            get: fn ($mail_config) => json_decode($mail_config, true),
+            set: fn ($mail_config) => json_encode($mail_config),
         );
     }
     protected function direccion(): Attribute
@@ -40,15 +48,35 @@ class plantilla extends Model
         );
     }
 
-    protected function series(): Attribute
+    protected function sunatDatos(): Attribute
     {
         return new Attribute(
-            get: fn ($series) => json_decode($series, true),
-            set: fn ($series) => json_encode($series),
+            get: fn ($sunat_datos) => json_decode($sunat_datos, true),
+            set: fn ($sunat_datos) => json_encode($sunat_datos),
         );
     }
 
+    protected  function igvbase(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes["igv"] / 100) + 1,
+        );
+    }
 
+    protected  function igvbnormal(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => ($attributes["igv"]),
+        );
+    }
+
+    //+ IGV
+    protected  function igv(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => $attributes["igv"] / 100,
+        );
+    }
 
 
     public function empresa()

@@ -2,6 +2,7 @@
 
 use Maatwebsite\Excel\Row;
 use App\Models\Dispositivos;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\GpsController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ActasController;
 use App\Http\Controllers\Admin\GuiasController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Admin\CobrosController;
 use App\Http\Controllers\Admin\FlotasController;
 use App\Http\Controllers\Admin\LineasController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\RecibosController;
+use App\Http\Controllers\Admin\SimCardController;
 use App\Http\Controllers\Admin\ClientesController;
 use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\ReportesController;
@@ -31,6 +34,8 @@ use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProveedoresController;
 use App\Http\Controllers\Admin\SolicitudesController;
 use App\Http\Controllers\Admin\UserProfileController;
+use App\Http\Controllers\Admin\PDF\TareaPdfController;
+use App\Http\Controllers\Admin\MantenimientoController;
 use App\Http\Controllers\Admin\PDF\ReciboPdfController;
 use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PDF\FacturaPdfController;
@@ -39,73 +44,45 @@ use App\Http\Controllers\Admin\CertificadosGpsController;
 use App\Http\Controllers\Admin\ComprasFacturasController;
 use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
+use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
-use App\Http\Controllers\Admin\MantenimientoController;
-use App\Http\Controllers\Admin\PDF\TareaPdfController;
-use App\Http\Controllers\Admin\SimCardController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
 
-
 // ALMACEN
-
-
-
 Route::controller(CategoriaController::class)->group(function () {
-
     Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
-    Route::get('categorias/create', 'create')->name('admin.almacen.categorias.create');
-    Route::post('categorias', 'store')->name('admin.almacen.categorias.store');
-    Route::get('categorias/{categoria}/editar', 'edit')->name('admin.almacen.categorias.edit');
-    Route::put('categorias/{categoria}', 'update')->name('admin.almacen.categorias.update');
 });
 
-
-
-
 Route::controller(ProductosController::class)->group(function () {
-
     Route::get('productos', 'index')->name('admin.almacen.productos.index');
-    Route::get('productos/create', 'create')->name('admin.almacen.productos.create');
-    Route::post('productos', 'store')->name('admin.almacen.productos.store');
-    Route::get('productos/{producto}/editar', 'edit')->name('admin.almacen.productos.edit');
-    Route::put('productos/{producto}', 'update')->name('admin.almacen.productos.update');
 });
 
 
 Route::controller(SimCardController::class)->group(function () {
 
     Route::get('sim-card', 'index')->name('admin.almacen.sim-card.index');
-    Route::get('sim-card/crear', 'create')->name('admin.almacen.sim-card.create');
-    Route::get('asignar/sim-card', 'asign')->name('admin.almacen.sim-card.asign');
-    Route::post('asignar/sim-card/store', 'asignSimCardStore')->name('admin.almacen.sim-card.asign.store');
 });
 
 
 Route::controller(LineasController::class)->group(function () {
     //lineas
     Route::get('lineas', 'index')->name('admin.almacen.lineas.index');
-    Route::get('lineas/crear', 'create')->name('admin.almacen.lineas.create');
-    Route::get('asignar/linea', 'asign')->name('admin.almacen.lineas.asign');
-    Route::post('asignar/linea/store', 'asignLineaStore')->name('admin.almacen.lineas.simcard.store');
 });
 
-Route::get('modelos/dispositivos', [GpsController::class, 'showModels'])->name('admin.almacen.modelos-dispositivos');
-
-Route::resource('dispositivos', GpsController::class)->names('admin.almacen.dispositivos')->parameters([
-    'dispositivos' => 'dispositivo'
-]);
-
+Route::controller(GpsController::class)->group(function () {
+    Route::get('dispositivos', 'index')->name('admin.almacen.dispositivos.index');
+    Route::get('modelos/dispositivos', 'showModels')->name('admin.almacen.modelos-dispositivos');
+});
 
 
-// Route::resource('guias', GuiaRemisionController::class)->names('admin.almacen.guias');
 Route::controller(GuiaRemisionController::class)->group(function () {
     Route::get('guias', 'index')->name('admin.almacen.guias.index');
     Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');
@@ -141,11 +118,10 @@ Route::resource('compras-factura', ComprasFacturasController::class)->names('adm
 
 
 
-// VENTAS
+// VENTAS PRESUPUESTOS
 Route::controller(PresupuestoController::class)->group(function () {
     Route::get('presupuestos', 'index')->name('admin.ventas.presupuestos.index');
     Route::get('presupuestos/crear', 'create')->name('admin.ventas.presupuestos.create');
-    Route::get('presupuestos/{presupuesto}', 'show')->name('admin.ventas.presupuestos.show');
     Route::get('presupuestos/{presupuesto}/editar', 'edit')->name('admin.ventas.presupuestos.edit');
 });
 
@@ -160,8 +136,11 @@ Route::controller(VentasFacturasController::class)->group(function () {
 });
 
 
-
-Route::resource('recibos', RecibosController::class)->names('admin.ventas.recibos');
+Route::controller(RecibosController::class)->group(function () {
+    Route::get('recibos', 'index')->name('admin.ventas.recibos.index');
+    Route::get('recibos/crear', 'create')->name('admin.ventas.recibos.create');
+    Route::get('recibos/{recibo}/editar', 'edit')->name('admin.ventas.recibos.edit');
+});
 
 
 Route::controller(RecibosPagosVariosController::class)->group(function () {
@@ -178,13 +157,15 @@ Route::controller(ContratosController::class)->group(function () {
 
     Route::get('contratos/crear', 'create')->name('admin.ventas.contratos.create');
     Route::get('contratos', 'index')->name('admin.ventas.contratos.index');
-    Route::get('contratos/{contrato}', 'show')->name('admin.ventas.contratos.show');
+    // Route::get('contratos/{contrato}', 'show')->name('admin.ventas.contratos.show');
     Route::get('contratos/{contrato}/editar', 'edit')->name('admin.ventas.contratos.edit');
 });
 
 // VEHICULOS
-Route::resource('flotas', FlotasController::class)->names('admin.vehiculos.flotas');
+Route::controller(FlotasController::class)->group(function () {
 
+    Route::get('flotas', 'index')->name('admin.vehiculos.flotas.index');
+});
 
 Route::controller(VehiculosController::class)->group(function () {
 
@@ -196,9 +177,7 @@ Route::controller(VehiculosController::class)->group(function () {
 
 
 Route::controller(MantenimientoController::class)->group(function () {
-
     Route::get('mantenimiento', 'index')->name('admin.vehiculos.mantenimiento.index');
-    Route::get('mantenimiento/{mantenimiento}', 'show')->name('admin.vehiculos.mantenimiento.show');
 });
 
 
@@ -211,10 +190,17 @@ Route::controller(ReportesController::class)->group(function () {
 
 
 // CERTIFICADOS
-Route::resource('actas', ActasController::class)->names('admin.certificados.actas');
+
+Route::controller(ActasController::class)->group(function () {
+
+    Route::get('actas', 'index')->name('admin.certificados.actas.index');
+});
+
+
 Route::resource('certificados-gps', CertificadosGpsController::class)->names('admin.certificados.gps')->parameters([
     'certificados-gps' => 'certificado'
 ]);
+
 Route::resource('certificados-velocimetros', CertificadosVelocimetrosController::class)->names('admin.certificados.velocimetros')->parameters([
     'certificados-velocimetros' => 'certificado'
 ]);
@@ -236,7 +222,6 @@ Route::controller(CobrosController::class)->group(function () {
     Route::get('cobros', 'index')->name('admin.cobros.index');
     Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
     Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
-    Route::get('cobros/clientes/{cliente}', 'cobrosClientes')->name('admin.cobros.list.clientes');
 });
 
 
@@ -252,6 +237,7 @@ Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.
 Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');
 Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'])->name('admin.ajustes.notificaciones');
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
+Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
 Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
@@ -267,23 +253,23 @@ Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(fu
 
 Route::controller(SearchController::class)->prefix('search')->group(function () {
 
-    Route::get('clientes', 'clientes')->name('search.clientes');
-    Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
-    Route::get('proveedores', 'proveedores')->name('search.proveedores');
-    Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
-    Route::get('flotas', 'flotas')->name('search.flotas');
-    Route::get('flota', 'flota')->name('search.flota');
+    // Route::get('clientes', 'clientes')->name('search.clientes');
+    //Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
+    //Route::get('proveedores', 'proveedores')->name('search.proveedores');
+    //Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
+    //Route::get('flotas', 'flotas')->name('search.flotas');
+    // Route::get('flota', 'flota')->name('search.flota');
 
-    Route::get('sim_card', 'sim_card')->name('search.sim_card');
-    Route::get('lineas', 'lineas')->name('search.lineas');
-    Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
-    Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
-    Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
-    Route::get('ciudades', 'ciudades')->name('search.ciudades');
-    Route::get('productos', 'productos')->name('search.productos');
-    Route::get('facturas', 'facturas')->name('search.facturas');
-    Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
-    Route::get('users', 'users')->name('search.users');
+    // Route::get('sim_card', 'sim_card')->name('search.sim_card');
+    // Route::get('lineas', 'lineas')->name('search.lineas');
+    // Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
+    // //Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
+    // Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
+    // Route::get('ciudades', 'ciudades')->name('search.ciudades');
+    // Route::get('productos', 'productos')->name('search.productos');
+    // Route::get('facturas', 'facturas')->name('search.facturas');
+    // Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
+    // Route::get('users', 'users')->name('search.users');
 });
 
 
@@ -361,3 +347,48 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin
 
 Route::get('/json-data-ventas', [HomeController::class, 'getDataVentas'])->name('json_data_feed');
 Route::get('/test/sunat', [UtilesController::class, 'sunatConsulta'])->name('sunat.consulta');
+
+
+
+Route::controller(ComprobantesController::class)->group(function () {
+
+    Route::get('ventas', 'index')->name('admin.ventas.index');
+    Route::get('emitir/factura', 'emitirFactura')->name('admin.factura.create');
+    Route::get('emitir/boleta', 'emitirBoleta')->name('admin.boleta.create');
+    Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
+    Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
+    Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');
+});
+
+
+
+//SELECTS
+
+
+
+Route::controller(SelectsController::class)->group(function () {
+
+    Route::get('api/categorias', 'categorias')->name('api.categorias.index');
+    Route::get('api/ciudades', 'ciudades')->name('api.ciudades.index');
+    Route::get('api/tipo-afectacion', 'tipoAfectacion')->name('api.tipo-afectacion.index');
+    Route::get('api/unit', 'unit')->name('api.unit.index');
+    Route::get('api/clientes', 'clientes')->name('api.clientes.index');
+    Route::get('api/series', 'series')->name('api.series.index');
+    Route::get('api/invoices', 'invoices')->name('api.invoices.index');
+    Route::get('api/productos', 'productos')->name('api.productos.index');
+    Route::get('api/documentos', 'documentos')->name('api.documentos.index');
+    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/sim-card', 'sim')->name('api.sim.index');
+    Route::get('api/lineas', 'lineas')->name('api.lineas.index');
+    Route::get('api/dispositivos', 'dispositivos')->name('api.dispositivos.index');
+    Route::get('api/vehiculos', 'vehiculos')->name('api.vehiculos.index');
+    Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
+
+    Route::get('api/sustentos', 'sustentos')->name('api.sustentos.index');
+});
+
+
+Route::controller(UtilesController::class)->group(function () {
+
+    Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
+});

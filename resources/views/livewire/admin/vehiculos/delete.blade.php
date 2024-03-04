@@ -1,6 +1,6 @@
 <div class="m-1.5 flex">
 
-    <div x-data="{ modalDelete: @entangle('modalDelete') }">
+    <div x-data="{ modalDelete: @entangle('modalDelete').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalDelete"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -40,7 +40,7 @@
                         <!-- Modal footer -->
                         <div class="flex flex-wrap justify-end space-x-2 text-right">
                             <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                                @click="modalDelete = false">Cancelar</button>
+                                @click="modalDelete = false" wire:click="close">Cancelar</button>
                             <button wire:click="delete" class="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
                                 @click="modalDelete = false">
                                 Si, Eliminar</button>

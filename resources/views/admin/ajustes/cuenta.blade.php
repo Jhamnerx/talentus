@@ -37,7 +37,7 @@
                                 <img class="w-20 h-20 rounded-full" src="images/user-avatar-80.png" width="80"
                                     height="80" alt="User upload" />
                             </div>
-                            <input type="file" class="hidden" wire:model="photo" x-ref="photo" x-on:change="
+                            <input type="file" class="hidden" wire:model.live="photo" x-ref="photo" x-on:change="
                                                                             photoName = $refs.photo.files[0].name;
                                                                             const reader = new FileReader();
                                                                             reader.onload = (e) => {

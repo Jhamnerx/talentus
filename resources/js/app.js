@@ -1,17 +1,7 @@
-require("./bootstrap");
-require("./main");
-require("./utils");
-require("./slider");
-
-import Alpine from "alpinejs";
-
-window.Alpine = Alpine;
-
-import mask from "@alpinejs/mask";
-
-Alpine.plugin(mask);
-
-Alpine.start();
+import "./bootstrap";
+import "./main";
+import "./utils";
+import "./slider";
 
 import VenoBox from "venobox";
 
@@ -36,9 +26,13 @@ window.Swal = Swal;
 import iziToast from "izitoast";
 window.iziToast = iziToast;
 
-import DataTable from "datatables.net-dt";
-import Sortable from "sortablejs";
-window.DataTable = DataTable;
+//FILE POND IMAGE DROP AND DRAG
+import * as FilePond from "filepond";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+
+FilePond.registerPlugin(FilePondPluginImagePreview);
+
+window.FilePond = FilePond;
 
 // import DecoupledEditor from "@ckeditor/ckeditor5-build-decoupled-document";
 // window.DecoupledEditor = DecoupledEditor;

@@ -67,7 +67,7 @@
 
                                 {!! Form::text('nombre', null, [
                                     'class' => 'form-input w-full valid:border-emerald-300
-                                                            required:border-rose-300 invalid:border-rose-300 peer',
+                                                                                            required:border-rose-300 invalid:border-rose-300 peer',
                                     'placeholder' => 'Escribe el nombre...',
                                 ]) !!}
 
@@ -95,8 +95,8 @@
                     <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                         {!! Form::submit('GUARDAR', [
                             'class' => 'btn hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                            focus:ring-2 focus:ring-offset-2
-                                            focus:ring-emerald-600 text-white',
+                                                                    focus:ring-2 focus:ring-offset-2
+                                                                    focus:ring-emerald-600 text-white',
                         ]) !!}
 
                     </div>

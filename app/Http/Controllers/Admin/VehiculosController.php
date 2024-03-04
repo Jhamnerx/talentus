@@ -26,40 +26,4 @@ class VehiculosController extends Controller
     {
         return view('admin.vehiculos.edit', compact('vehiculo'));
     }
-
-
-    public function update(Request $request, Vehiculos $vehiculo)
-    {
-
-        $requestVehiculo = new VehiculosRequest();
-        $request->validate($requestVehiculo->rules($request->dispositivos_id, $request->numero, $vehiculo), $requestVehiculo->messages());
-
-        $this->setDispositivoVendido($request->dispositivo_imei);
-
-        $updates = $vehiculo->update($request->all());
-
-        $changes =  $vehiculo->getChanges();
-
-        if (array_key_exists('numero', $changes)) {
-            return redirect()->route('admin.vehiculos.index')->with('updated-numero', $vehiculo->placa);
-        } else {
-            return redirect()->route('admin.vehiculos.index')->with('update', 'El vehiculo se actualizo con exito');
-        }
-        //
-    }
-
-    public function setDispositivoVendido($imei)
-    {
-
-        $dispositivo = Dispositivos::where('imei', $imei)->firstOrFail();
-        if ($dispositivo && $dispositivo != "VENDIDO") {
-            $dispositivo->estado = "VENDIDO";
-            $dispositivo->save();
-        }
-    }
-
-    public function exportExcel()
-    {
-        return Excel::download(new VehiculosExport, 'vehiculos.xls');
-    }
 }

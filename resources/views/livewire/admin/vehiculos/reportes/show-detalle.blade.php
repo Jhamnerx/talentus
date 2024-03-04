@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalContacto: @entangle('openModalDetalle') }">
+    <div x-data="{ modalContacto: @entangle('openModalDetalle').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalContacto = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->
@@ -38,75 +38,74 @@
                         <!-- Options -->
                         <ul class="space-y-2 mb-4">
 
-                            @if (count($detalles) > 0)
                             @foreach ($detalles as $detalle)
-                            <li>
-                                <div
-                                    class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
-                                    <div class="flex items-center">
-                                        {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
+                                <li>
+                                    <div
+                                        class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
+                                        <div class="flex items-center">
+                                            {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
                                         --}}
-                                        <div class="grow">
-                                            <div class="flex flex-wrap items-center justify-between mb-0.5">
-                                                <span
-                                                    class="font-medium text-slate-800">{{$detalle->reporte->vehiculos->placa}}
-                                                    |<span
-                                                        class="text-xs italic text-slate-500 align-top">{{$detalle->detalle}}</span></span>
-                                                <span><span
-                                                        class="font-medium text-emerald-600">{{$detalle->updated_at}}</span></span>
+                                            <div class="grow">
+                                                <div class="flex flex-wrap items-center justify-between mb-0.5">
+                                                    <span
+                                                        class="font-medium text-slate-800">{{ $detalle->reporte->vehiculos->placa }}
+                                                        |<span
+                                                            class="text-xs italic text-slate-500 align-top">{{ $detalle->detalle }}</span></span>
+                                                    <span><span
+                                                            class="font-medium text-emerald-600">{{ $detalle->updated_at }}</span></span>
+                                                </div>
+                                                <div class="text-sm">Usuario: <span
+                                                        class="text-xs italic text-indigo-500 align-top">{{ $detalle->user->name }}
+                                                        ✨</span></div>
                                             </div>
-                                            <div class="text-sm">Usuario: <span
-                                                    class="text-xs italic text-indigo-500 align-top">{{$detalle->user->name}}
-                                                    ✨</span></div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
+                                </li>
                             @endforeach
-                            @else
+                            @if (count($detalles) < 1)
+                                <li>
+                                    <div
+                                        class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
+                                        <div class="flex items-center">
+                                            {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
+                                        --}}
+                                            <div class="grow">
+                                                <div class="flex flex-wrap items-center justify-between mb-0.5">
+
+                                                    <span>SIN INFORMACION ADICIONAL</span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            @endif
                             <li>
                                 <div
                                     class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
                                     <div class="flex items-center">
-                                        {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
-                                        --}}
+
                                         <div class="grow">
                                             <div class="flex flex-wrap items-center justify-between mb-0.5">
 
-                                                <span>SIN INFORMACION ADICIONAL</span>
+                                                <textarea wire:model.live="detalle" class="form-input w-full" placeholder="Ingresar informacion adicional"
+                                                    name="detalle" id="" rows="3"></textarea>
                                             </div>
 
                                         </div>
-                                    </div>
-                                </div>
-                            </li @endif <li>
-                            <div
-                                class="w-full h-full text-left py-3 px-4 rounded bg-white border-2 border-indigo-400 shadow-sm duration-150 ease-in-out">
-                                <div class="flex items-center">
-                                    {{-- <div class="w-4 h-4 border-4 border-indigo-500 rounded-full mr-3"></div>
-                                    --}}
-                                    <div class="grow">
-                                        <div class="flex flex-wrap items-center justify-between mb-0.5">
-
-                                            <textarea wire:model="detalle" class="form-input w-full"
-                                                placeholder="Ingresar informacion adicional" name="detalle" id=""
-                                                rows="3"></textarea>
-                                        </div>
 
                                     </div>
-
+                                    @error('detalle')
+                                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                            {{ $message }}
+                                        </p>
+                                    @enderror
                                 </div>
-                                @error('detalle')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
-                                @enderror
-                            </div>
                             </li>
-                            <div class="text-xs text-slate-500">Aqui se muestran los reportes añadidos adicionalmente al
+                            <div class="text-xs text-slate-500">Aqui se muestran los reportes añadidos
+                                adicionalmente al
                                 original</div>
+                        </ul>
                     </div>
                 </div>
                 <!-- Modal footer -->

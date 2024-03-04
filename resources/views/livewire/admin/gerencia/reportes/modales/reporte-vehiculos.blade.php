@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalReporte: @entangle('modalReporte') }">
+    <div x-data="{ modalReporte: @entangle('modalReporte').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -46,7 +46,7 @@
                                     <div class="">
                                         <label class=" flex items-center">
                                             <input type="checkbox" name="radio-buttons" class="form-radio w-6 h-6"
-                                                wire:model="is_active" value="true" />
+                                                wire:model.live="is_active" value="true" />
                                             {{-- <span class="text-sm ml-2">{{$tecnico->name}}</span> --}}
                                         </label>
                                     </div>

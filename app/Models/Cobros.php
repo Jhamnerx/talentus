@@ -31,6 +31,10 @@ class Cobros extends Model
     protected $table = 'cobros';
     protected $casts = [
 
+        'clientes_id' => 'integer',
+        'vehiculos_id' => 'integer',
+        'contratos_id' => 'integer',
+        'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'vencido' => 'boolean',
 
@@ -84,5 +88,24 @@ class Cobros extends Model
     public function payments()
     {
         return $this->hasMany(Payments::class, 'cobros_id');
+    }
+
+    //relacion uno a muchos
+    public function detalle()
+    {
+        return $this->hasMany(DetalleCobros::class, 'cobros_id');
+    }
+
+
+    public static function createItems(Cobros $cobro, $cobroItems)
+    {
+
+        foreach ($cobroItems as $cobroItem) {
+
+            $cobroItem['cobros_id'] = $cobro->id;
+            $cobro->detalle()->create($cobroItem);
+        }
+
+        return $cobro->ventaDetalles;
     }
 }

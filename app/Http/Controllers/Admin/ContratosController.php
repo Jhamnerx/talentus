@@ -25,15 +25,9 @@ class ContratosController extends Controller
 
     public function create()
     {
-        $vehiculos = Vehiculos::all();
-        return view('admin.ventas.contratos.create', compact('vehiculos'));
-    }
 
-    public function show(Contratos $contrato)
-    {
-        return view('admin.ventas.contratos.show', compact('contrato'));
+        return view('admin.ventas.contratos.create');
     }
-
 
     public function edit(Contratos $contrato)
     {

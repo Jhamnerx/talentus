@@ -11,6 +11,8 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -33,9 +35,38 @@ class Presupuestos extends Model
     protected $table = 'presupuestos';
 
     protected $casts = [
+        'clientes_id' => 'integer',
         'fecha' => 'date:Y/m/d',
         'fecha_caducidad' => 'date:Y/m/d',
+        'tipo_cambio' => 'decimal:2',
+        'metodo_pago_id' => 'string',
+        'op_gravadas' => 'decimal:2',
+        'op_exoneradas' => 'decimal:2',
+        'op_inafectas' => 'decimal:2',
+        'op_gratuitas' => 'decimal:2',
+        'igv_op' => 'decimal:2',
+        'descuento' => 'decimal:2',
+
+        'op_gravadas_soles' => 'decimal:2',
+        'op_exoneradas_soles' => 'decimal:2',
+        'op_inafectas_soles' => 'decimal:2',
+        'op_gratuitas_soles' => 'decimal:2',
+        'descuento_soles' => 'decimal:2',
+
+        'descuento_factor' => 'decimal:5',
+        'icbper' => 'decimal:2',
+        'igv' => 'decimal:2',
+        'igv_soles' => 'decimal:2',
+        'sub_total' => 'decimal:2',
+        'sub_total_soles' => 'decimal:2',
+        'total' => 'decimal:2',
+        'total_soles' => 'decimal:2',
+        'user_id' => 'integer',
+        'viewed' => 'boolean',
+        'sent' => 'boolean',
+        'detalle_cuotas' => AsCollection::class,
         'estado' => PresupuestosStatus::class,
+        'terminos' => AsCollection::class,
     ];
 
     /**
@@ -73,8 +104,9 @@ class Presupuestos extends Model
     }
 
 
-    public static function createItems($presupuesto, $items)
+    public static function createItems(Presupuestos $presupuesto, $items)
     {
+
 
         foreach ($items as $item) {
 
@@ -82,6 +114,9 @@ class Presupuestos extends Model
 
             $item = $presupuesto->detalles()->create($item);
         }
+
+
+        return $presupuesto->detalles;
     }
 
     public function getPDFData($action)
@@ -95,15 +130,34 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
 
-        if ($action == 1) {
 
-            return $pdf->download('PRE-' . $this->numero . '.pdf');
-        } else {
-            return $pdf->stream('PRE-' . $this->numero . '.pdf');
-        };
+        //ANTIGUA VERSION CON NUMERO
+        if ($this->numero) {
+
+            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+            if ($action == 1) {
+
+                return $pdf->download('PRE-' . $this->numero . '.pdf');
+            } else {
+                return $pdf->stream('PRE-' . $this->numero . '.pdf');
+            };
+        }
+        //NUEVA VERSION CON DATOS ADICIONALES
+        else {
+
+
+            $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+            if ($action == 1) {
+
+                return $pdf->download('PRE-' . $this->numero . '.pdf');
+            } else {
+                return $pdf->stream('PRE-' . $this->numero . '.pdf');
+            };
+        }
     }
+
+
     public function getPDFDataToMail($data)
     {
 
@@ -116,9 +170,12 @@ class Presupuestos extends Model
             'plantilla' => $plantilla,
         ]);
 
-        $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+        if ($this->numero) {
+            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+        } else {
+            $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+        }
 
-        //$this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
     }
 
@@ -127,8 +184,23 @@ class Presupuestos extends Model
     {
         return $this->hasOne(Facturas::class, 'presupuestos_id');
     }
+
+    public function invoice()
+    {
+        return $this->hasOne(Ventas::class, 'presupuestos_id');
+    }
     public function recibo()
     {
         return $this->hasOne(Recibos::class, 'presupuestos_id');
+    }
+
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+    public function tipoComprobante(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\TipoComprobantes::class, 'tipo_comprobante_id', 'codigo');
     }
 }

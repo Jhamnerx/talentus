@@ -1,6 +1,6 @@
 <div class="m-1.5 flex">
 
-    <div x-data="{ modalSuspend: @entangle('modalSuspend') }">
+    <div x-data="{ modalSuspend: @entangle('modalSuspend').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSuspend"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -38,14 +38,13 @@
                                     volver activar </p>
                             </div>
                         </div>
-                        {{ $remove }}
                         @if ($vehiculo)
                             @if ($vehiculo->dispositivos)
                                 <div class="mb-2">
                                     <label class="block text-sm mb-1 text-talentus-100 font-semibold"
                                         for="remove">Remover
                                         IMEI del Gps</label>
-                                    <input wire:model="remove" name="remove" type="checkbox" value="true"
+                                    <input wire:model.live="remove" name="remove" type="checkbox" value="true"
                                         class="form-checkbox px-2 py-1">
 
                                 </div>

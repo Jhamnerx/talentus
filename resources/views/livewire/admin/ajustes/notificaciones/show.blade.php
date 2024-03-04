@@ -7,11 +7,11 @@
             <div class="space-y-3">
 
                 <!-- Start -->
-
+                {{--
 
                 @foreach (auth()->user()->notifications as $notification)
                 {{ $notification->data['asunto'] }}
-                @endforeach
+                @endforeach --}}
                 {{-- <div x-show="open" x-data="{ open: true }">
                     <div
                         class="inline-flex flex-col max-w-lg px-4 py-2 rounded-sm text-sm bg-white shadow-lg border border-slate-200 text-slate-600">

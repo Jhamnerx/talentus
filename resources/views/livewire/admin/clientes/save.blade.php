@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalSave: @entangle('modalSave') }">
+    <div x-data="{ modalSave: @entangle('modalSave').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSave"
@@ -47,8 +47,8 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">DNI/RUC: <span
                                         class="text-rose-500">*</span></label>
                                 <input x-mask="99999999999" placeholder="Escribe el N° de documento"
-                                    class="form-input w-full" required type="text" wire:model.lazy="numero_documento"
-                                    maxlength="11">
+                                    class="form-input w-full" required type="text"
+                                    wire:model.live.blur="numero_documento" maxlength="11">
                                 @if ($errorConsulta)
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
                                         {{ $errorConsulta }}
@@ -64,7 +64,7 @@
                                 <label class="block text-sm font-medium mb-1" for="numero">Razon Social o Nombre:
                                     <span class="text-rose-500">*</span></label>
                                 <input id="razon_social" placeholder="Razon Social o Nombre" class="form-input w-full"
-                                    required type="text" wire:model.defer="razon_social">
+                                    required type="text" wire:model.live="razon_social">
 
                                 @error('razon_social')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -76,7 +76,7 @@
                                 <label class="block text-sm font-medium mb-1" for="telefono">Telefono: </label>
 
                                 <input x-mask="999999999" type="tel" placeholder="987654321"
-                                    class="form-input w-full" type="text" wire:model="telefono" maxlength="9">
+                                    class="form-input w-full" type="text" wire:model.live="telefono" maxlength="9">
 
                                 @error('telefono')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -88,7 +88,7 @@
                                 <label class="block text-sm font-medium mb-1" for="email">Correo: </label>
 
                                 <input id="email" placeholder="clientes@correo.com" class="form-input w-full"
-                                    type="email" wire:model="email">
+                                    type="email" wire:model.live="email">
 
                                 @error('email')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -101,7 +101,7 @@
                                 <label class="block text-sm font-medium mb-1" for="email">Dirección: </label>
 
                                 <input id="direccion" placeholder="Escribe la direccion..." class="form-input w-full"
-                                    type="email" wire:model="direccion">
+                                    type="email" wire:model.live="direccion">
 
                                 @error('direccion')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -133,24 +133,17 @@
 
 </div>
 
-@once
-    @push('scripts')
-        <script>
-            $('#razon_social').caseEnforcer('uppercase');
-            $('#direccion').caseEnforcer('uppercase');
-            $('#email').caseEnforcer('lowercase');
-        </script>
 
-        <script>
-            window.addEventListener('save-cliente', event => {
-                $(document).ready(function() {
-                    iziToast.success({
-                        position: 'topRight',
-                        title: 'CLIENTE REGISTRADO',
-                        message: 'Cliente ' + event.detail.razon_social + ' Registrado correctamente!',
-                    });
+@push('scripts')
+    <script>
+        window.addEventListener('save-cliente', event => {
+            $(document).ready(function() {
+                iziToast.success({
+                    position: 'topRight',
+                    title: 'CLIENTE REGISTRADO',
+                    message: 'Cliente ' + event.detail.razon_social + ' Registrado correctamente!',
                 });
-            })
-        </script>
-    @endpush
-@endonce
+            });
+        })
+    </script>
+@endpush

@@ -1,5 +1,5 @@
 <div>
-    <div x-data="{ modalReporte: @entangle('modalReporte') }">
+    <div x-data="{ modalReporte: @entangle('modalReporte').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalReporte"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -53,7 +53,7 @@
                                                 clip-rule="evenodd"></path>
                                         </svg>
                                     </div>
-                                    <select wire:model="tipo" class="form-select w-full pl-9" id="">
+                                    <select wire:model.live="tipo" class="form-select w-full pl-9" id="">
                                         <option value="null" selected>TODOS</option>
                                         <option value="SERVICIO">SERVICIO</option>
                                         <option value="PRODUCTO">PRODUCTO</option>
@@ -69,8 +69,8 @@
                                 </label>
                                 <div class="flex flex-wrap items-center -m-1.5">
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
-                                        <button wire:click.prevent="exportToPdf"
-                                            class="btn bg-white border-slate-200 hover:bg-slate-50 text-slate-600 hover:text-indigo-600 rounded-none first:rounded-l last:rounded-r">PDF</button>
+                                        <x-form.button wire:click.prevent='exportToPdf' spinner="exportToPdf"
+                                            label="PDF" red icon="document-download" />
                                     </div>
                                 </div>
 

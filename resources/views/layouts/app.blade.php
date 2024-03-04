@@ -13,23 +13,15 @@
 
     <!-- Styles -->
 
-    <link rel="stylesheet" href="{{ mix('css/cliente/cliente.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <link rel="stylesheet" href="{{ mix('css/style.css') }}">
+    @vite('resources/css/cliente.css')
+    @vite('resources/css/app.css')
+    @vite('resources/css/style.scss')
 
 
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
 
 
     @livewireStyles
-
-    <!-- Scripts -->
-
-    <!-- Alpine Plugins -->
-    <script src="https://cdn.jsdelivr.net/npm/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
-
-    <!-- Alpine Core -->
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
 </head>
 
@@ -62,7 +54,7 @@
 
 
 
-    <script src="{{ mix('js/cliente.js') }}"></script>
+    @vite('resources/js/cliente.js')
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-datepicker.min.js') }}"></script>
@@ -76,7 +68,8 @@
     <script src="{{ asset('plugins/TweenMax.min.js') }}"></script>
     <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
     <script src="{{ asset('plugins/wow.js') }}"></script>
-    <script src="{{ asset('js/theme.js') }}"></script>
+
+    @vite('resources/js/cliente/theme.js')
 
     @stack('scripts')
 

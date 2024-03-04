@@ -30,7 +30,8 @@ class CertificadosVelocimetrosRequest extends FormRequest
                 'velocimetro_modelo' => 'required',
                 "ciudades_id" => 'required',
                 "observacion" => 'nullable',
-
+                "fondo" => 'nullable',
+                "sello" => 'nullable',
             ];
         } else {
             $rules = [

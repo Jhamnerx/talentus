@@ -6,45 +6,34 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DispositivosRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules($dispositivo = null)
     {
-        $dispositivo = $this->route()->parameter('dispositivo');
 
         $rules = [
-            'imei' => 'required|unique:dispositivos'
+            'items.*.imei' => 'required|unique:dispositivos|numeric|distinct',
+            'items.*.modelo_id' => 'required'
         ];
-
 
         if ($dispositivo) {
 
             $rules['imei'] = 'required|unique:dispositivos,imei,' . $dispositivo->id;
         }
-        // if ($this->status == 2) {
-
-        //     $rules = array_merge($rules, [
-
-        //         'categoria_id' => 'required',
-        //         'tags' => 'required',
-        //         'extract' => 'required',
-        //         'body' => 'required'
-        //     ]);
-        // }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        $messages = [
+            'items.*.imei.required' => 'El imei es requerido',
+            'items.*.imei.unique' => 'El imei ingresaso ya existe',
+            'items.*.imei.distinct' => 'ya estas registrando este imei',
+            'items.*.imei.numeric' => 'El campo no debe contener letras',
+            'items.*.modelo_id.required' => 'El operador es requerido',
+
+        ];
+
+        return $messages;
     }
 }

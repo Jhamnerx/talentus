@@ -21,13 +21,13 @@ class CategoriaRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($categoria = null)
     {
 
-        $categoria = $this->route()->parameter('categoria');
 
         $rules = [
-            'nombre' => 'required|unique:categorias'
+            'nombre' => 'required|unique:categorias',
+            'descripcion' => 'nullable',
         ];
 
 
@@ -35,16 +35,7 @@ class CategoriaRequest extends FormRequest
 
             $rules['nombre'] = 'required|unique:categorias,nombre,' . $categoria->id;
         }
-        // if ($this->status == 2) {
 
-        //     $rules = array_merge($rules, [
-
-        //         'categoria_id' => 'required',
-        //         'tags' => 'required',
-        //         'extract' => 'required',
-        //         'body' => 'required'
-        //     ]);
-        // }
 
         return $rules;
     }

@@ -37,6 +37,7 @@ class Certificados extends Model
         'fondo' => 'boolean',
         'estado' => 'boolean',
         'eliminado' => 'boolean',
+        'year' => 'string',
         'accesorios' => AsCollection::class,
         'fecha_instalacion' => 'date:Y/m/d',
         'fin_cobertura' => 'date:Y/m/d',

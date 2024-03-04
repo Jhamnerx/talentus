@@ -8,7 +8,7 @@
 
             <div class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model="search" class="form-input pl-9 w-full focus:border-slate-300" type="search"
+                <input wire:model.live="search" class="form-input pl-9 w-full focus:border-slate-300" type="search"
                     placeholder="Buscar tarea" />
 
                 <button type="button" class="absolute inset-0 right-auto group" type="button" aria-label="Search">

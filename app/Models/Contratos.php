@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\Ventas\EnviarContratoCliente;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Contratos extends Model
@@ -76,6 +77,12 @@ class Contratos extends Model
     }
 
 
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public static function createItems($contrato, $contratoItems)
     {
         foreach ($contratoItems as $contratoItem) {
@@ -88,7 +95,7 @@ class Contratos extends Model
 
     public function periodo()
     {
-        return $this->created_at->subDay()->diffInMonths($this->fecha);
+        return $this->created_at->subDay(2)->diffInMonths($this->fecha);
     }
 
     public function getPDFData()

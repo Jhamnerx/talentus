@@ -30,33 +30,6 @@ class GpsController extends Controller
         return view('admin.almacen.dispositivos.modelos-index');
     }
 
-    public function create()
-    {
-
-        $modelos = ModelosDispositivo::pluck('modelo', 'id');
-
-        return view('admin.almacen.dispositivos.create', compact('modelos'));
-    }
-
-    public function store(DispositivosRequest $request)
-    {
-
-        Dispositivos::create($request->all());
-        return redirect()->route('admin.almacen.dispositivos.index')->with('store', 'El dispositivo se guardo con exito');;
-    }
-
-    public function edit(Dispositivos $dispositivo)
-    {
-        $modelos = ModelosDispositivo::pluck('modelo', 'id');
-        return view('admin.almacen.dispositivos.edit', compact('dispositivo', 'modelos'));
-    }
-
-    public function update(DispositivosRequest $request, Dispositivos $dispositivo)
-    {
-        $dispositivo->update($request->all());
-        return redirect()->route('admin.almacen.dispositivos.index')->with('update', 'El dispositivo se actualizo con exito');
-    }
-
     public function exportExcel()
     {
         return Excel::download(new DispositivosExport, 'dispositivos.xls');

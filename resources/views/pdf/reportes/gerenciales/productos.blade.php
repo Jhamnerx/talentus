@@ -200,45 +200,6 @@
         </div>
 
 
-        {{-- <div class="flex-auto">
-
-            <div class="relative">
-                <div class="m-1.5">
-                    <!-- Start -->
-                    <table class="detalle">
-                        <tbody class="text-sm divide-y divide-slate-200">
-                            <tr>
-                                <td colspan="2">
-                                    <div class="text-center">
-                                        {{$tecnico->name}}
-                                    </div>
-
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Fecha Inicial</td>
-                                <td>{{$fechas['fecha_inicial']}}</td>
-                            </tr>
-                            <tr>
-                                <td>Fecha Final</td>
-                                <td>{{$fechas['fecha_final']}}</td>
-                            </tr>
-
-                            <tr>
-                                <td>Total:</td>
-                                <td>S/. {{number_format($total_costo, 2)}}</td>
-                            </tr>
-                        </tbody>
-
-
-
-                    </table>
-                    <!-- End -->
-                </div>
-            </div>
-        </div> --}}
-
-
     </header>
 
     <table class="styled-table">
@@ -249,10 +210,10 @@
 
                 </td>
                 <td>
-                    <div class="font-semibold text-center">NOMBRE</div>
+                    <div class="font-semibold text-center">DESCRIPCION</div>
                 </td>
                 <td>
-                    <div class="font-semibold text-left"> PRECIO</div>
+                    <div class="font-semibold text-left"> VALOR UNITARIO</div>
                 </td>
                 <td>
                     <div class="font-semibold text-center">STOCK</div>
@@ -267,52 +228,52 @@
 
             <!-- Row -->
             @if ($productos->count())
-            @foreach ($productos as $producto)
-            <tr>
+                @foreach ($productos as $producto)
+                    <tr>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-blue-700">
-                        {{ $producto->codigo }}
-                    </div>
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-blue-700">
+                                {{ $producto->codigo }}
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <div class="text-slate-800" style="max-width: 720px">
+                            <div class="text-slate-800" style="max-width: 720px">
 
-                        {{ $producto->nombre }}
-                    </div>
+                                {{ $producto->descripcion }}
+                            </div>
 
-                </td>
+                        </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-medium text-slate-800">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-medium text-slate-800">
 
-                        {{$producto->precio}}
-                    </div>
-                </td>
+                                {{ $producto->valor_unitario }}
+                            </div>
+                        </td>
 
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center">
-                        {{$producto->stock}}
-                    </div>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center">
+                                {{ $producto->stock }}
+                            </div>
 
-                </td>
-                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="text-center text-slate-800">
-                        Facturas: {{$producto->detalle_facturas->count()}}
-                        <br>
-                        Recibos {{$producto->detalle_recibos->count()}}
-                    </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="text-center text-slate-800">
+                                Comprobantes: {{ $producto->detalle_facturas->count() }}
+                                <br>
+                                Recibos {{ $producto->detalle_recibos->count() }}
+                            </div>
 
-                </td>
+                        </td>
 
-            </tr>
-            @endforeach
+                    </tr>
+                @endforeach
             @else
-            <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                <div class="text-center">No hay Registros</div>
-            </td>
+                <td colspan="4" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                    <div class="text-center">No hay Registros</div>
+                </td>
             @endif
 
 

@@ -14,7 +14,7 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
                     type="search" placeholder="Buscar certificados" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
                     <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
@@ -69,105 +69,8 @@
                 </div>
             </div>
 
-            <!-- Dropdown -->
-            <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                        <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Hoy</span>
-                        </button>
-                        <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 7 días</span>
-                        </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Todos</span>
-                        </button>
 
-                    </div>
-                </div>
-            </div>
 
-            <!-- Filter button -->
-            <div class="relative inline-flex">
-                <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                    <span class="sr-only">Filtro</span><wbr>
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                        <path
-                            d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
-                    </svg>
-                </button>
-            </div>
         </div>
 
     </div>
@@ -386,12 +289,39 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 w-48">
                                         <div>
                                             <div class="m-3 w-48">
-                                                <!-- Start -->
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $certificado->sello ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Sello: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleSello({{ $certificado->id }})"
+                                                            type="checkbox" id="switch-s{{ $certificado->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400"
+                                                            for="switch-s{{ $certificado->id }}">
+                                                            <span class="bg-white shadow-sm"
+                                                                aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ON' : 'OFF'"></div>
+                                                </div>
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $certificado->fondo ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Fondo: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleFondo({{ $certificado->id }})"
+                                                            type="checkbox" id="switch-f{{ $certificado->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400"
+                                                            for="switch-f{{ $certificado->id }}">
+                                                            <span class="bg-white shadow-sm"
+                                                                aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ON' : 'OFF'"></div>
+                                                </div>
 
-                                                @livewire('admin.certificados.gps.status-sello', ['model' => $certificado, 'field' => 'sello'], key('sello' . $certificado->id))
-
-                                                @livewire('admin.certificados.gps.status-fondo', ['model' => $certificado, 'field' => 'fondo'], key('fondo' . $certificado->id))
-                                                <!-- End -->
                                             </div>
                                         </div>
                                     </td>

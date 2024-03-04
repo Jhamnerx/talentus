@@ -8,10 +8,12 @@ class TablaDetalleVenta extends Component
 {
 
     public $items;
+    public $selected;
 
-    public function __construct($items)
+    public function __construct($items, $selected)
     {
         $this->items = $items;
+        $this->selected = $selected;
     }
 
     public function render()

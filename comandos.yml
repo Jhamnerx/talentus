@@ -24,3 +24,7 @@ docker-compose run --rm app npm run dev
 docker-compose run --rm artisan migrate
 docker-compose run --rm artisan migrate:fresh --seed
 docker-compose run --rm artisan storage:link
+
+
+
+UPDATE clientes SET tipo_documento_id = 1 WHERE LENGTH(numero_documento) = 8;

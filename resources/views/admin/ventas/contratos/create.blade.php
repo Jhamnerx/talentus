@@ -53,3 +53,7 @@
 
 
 @endsection
+
+@push('modals')
+    @livewire('admin.clientes.save')
+@endpush

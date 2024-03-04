@@ -42,202 +42,103 @@
 
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2 selectCliente">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Cliente <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="flex" wire:ignore>
-                            <select name="clientes_id" id="" class="form-select w-full clientes_id pl-3" required>
-                            </select>
 
-                            @livewire('admin.clientes.button-open-modal')
+                        <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
+                            placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                            option-label="razon_social" option-value="id" hide-empty-message>
 
-                        </div>
+                            <x-slot name="afterOptions" class="p-2 flex justify-center"
+                                x-show="displayOptions.length === 0">
+                                <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
+                                    primary flat full>
+                                    <span x-html="`Crear cliente <b>${search}</b>`"></span>
+                                </x-form.button>
+                            </x-slot>
+                        </x-form.select>
 
-                        @error('clientes_id')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
                     </div>
 
                     @if ($cliente)
-                    <x-admin.ventas.cliente-selected :cliente="$cliente">
-                    </x-admin.ventas.cliente-selected>
+                        <x-admin.ventas.cliente-selected :cliente="$cliente">
+                        </x-admin.ventas.cliente-selected>
                     @endif
 
 
+                    {{-- SERIE --}}
+                    <div class="col-span-12 md:col-span-6 xl:col-span-4">
 
-                    {{-- NUMERO --}}
-                    <div class="col-span-12 xs:col-span-6 mb-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Serie Recibo <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="relative">
-
-                            <input required readonly wire:model="serie" name="serie" id="serie"
-                                class="form-input w-full" type="text" />
-
-                        </div>
-                        @error('serie_numero')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
+                        <x-form.select id="serie" name="serie" label="Serie:" wire:model.live="serie"
+                            placeholder="Selecciona una serie" :async-data="[
+                                'api' => route('api.series.index'),
+                                'params' => ['tipo_comprobante' => '11'],
+                            ]" option-label="serie"
+                            option-value="serie" hide-empty-message />
                     </div>
-                    <div class="col-span-12 xs:col-span-6 mb-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Número Recibo <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="relative">
 
-                            <input required readonly wire:model="numero" name="numero" id="numero"
-                                class="form-input w-full" type="text" />
+                    {{-- CORRELATIVO --}}
+                    <div class="col-span-12 md:col-span-6 xl:col-span-4">
 
-                        </div>
-                        @error('numero')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
+                        <x-form.inputs.number id="correlativo" readonly name="numero" wire:model.live="numero"
+                            label="Número Recibo:" />
+
                     </div>
+
                     {{-- FECHA --}}
                     <div class="col-span-12 xs:col-span-6 gap-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Fecha de Emisión: <span class="text-sm text-red-500"> * </span></div>
 
-                        </label>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <input name="fecha_emision" wire:model="fecha_emision" type="text"
-                                class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
-                                placeholder="Selecciona la fecha">
-                        </div>
-                        @error('fecha_emision')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
+                        <x-form.datetime-picker label="Fecha de Emision:" id="fecha_emision" name="fecha_emision"
+                            wire:model.live="fecha_emision" :min="now()->subDays(10)" :max="now()" without-time
+                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
 
-                    {{-- FECHA CADUCIDAD --}}
+                    {{-- FECHA PAGO --}}
                     <div class="col-span-12 xs:col-span-6 gap-2">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Fecha de pago: <span class="text-sm text-red-500" style="display: none;"> *
-                                </span>
-                            </div>
-                        </label>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                                <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
-                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                            <input name="fecha_pago" wire:model="fecha_pago" type="text"
-                                class="form-input  fechaEmision font-base pl-8 py-2 sm:text-sm w-full"
-                                placeholder="Selecciona la fecha">
-                        </div>
-                        @error('fecha_pago')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
+
+                        <x-form.datetime-picker label="Fecha de Pago:" id="fecha_pago" name="fecha_pago"
+                            wire:model.live="fecha_pago" :min="now()->subDays(15)" :max="now()->addDays(30)" without-time
+                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+
                     </div>
 
                 </div>
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6 mb-2 gap-2">
                     {{-- moneda --}}
+                    <div class="col-span-12 md:col-span-6 mb-2">
+
+                        <x-form.select label="Moneda:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                            option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                            icon='currency-dollar' />
+
+                    </div>
+
+
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Moneda
-                            <span class="text-rose-500">*</span> </label>
-
-                        <select wire:model="divisa" name="divisa" id="moneda" class="form-select w-full divisa">
-                            <option value="PEN">SOLES</option>
-                            <option value="USD">DOLARES</option>
-                        </select>
-
-
-                        @error('divisa')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
+                        <x-form.select id="tipo_venta" name="tipo_venta" label="Forma Pago:" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                            option-label="name" option-value="id" wire:model.live="tipo_venta" :clearable="false" />
 
                     </div>
 
-                    <div class="col-span-12 md:col-span-6 mb-3">
-                        <label class="text-gray-800 block text-sm font-medium mb-1" for="moneda">Forma de Pago
-                            <span class="text-rose-500">*</span> </label>
-
-                        <select wire:model="forma_pago" name="forma_pago" id="forma_pago" class="form-select w-full">
-                            @foreach ($payments_methods as $key => $method)
-                            <option value="{{ $key }}"> {{ $method }}</option>
-                            @endforeach
-                        </select>
-
-
-                        @error('divisa')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
-
-                    </div>
-                    <div class="col-span-12">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Nota
-                            </div>
-                        </label>
-                        <textarea class="form-input w-full px-4 py-3" name="nota" wire:model="nota" id="" cols="30"
-                            rows="4" placeholder="Ingresar nota (opcional)"></textarea>
-                    </div>
+                    {{-- FORMA DE PAGO --}}
                     <div class="col-span-12 md:col-span-6">
-                        <label
-                            class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
-                            <div>Tipo de venta <span class="text-sm text-red-500"> * </span></div>
-                        </label>
-                        <div class="flex flex-wrap items-center -m-3 mt-1">
 
-                            <div class="mx-3">
-                                <label class="flex items-center hover:cursor-pointer">
-                                    <input checked type="radio" wire:model="tipo_pago" name="tipo_pago" value="CONTADO"
-                                        class="form-radio " />
-                                    <span class="text-sm ml-2">CONTADO</span>
-                                </label>
-                            </div>
-                            <div class="mx-3">
-                                <label class="flex items-center hover:cursor-pointer">
-                                    <input type="radio" wire:model="tipo_pago" name="tipo_pago" value="CREDITO"
-                                        class="form-radio" />
-                                    <span class="text-sm ml-2">CREDITO</span>
-                                </label>
-                            </div>
+                        <x-form.select id="forma_pago" name="forma_pago" label="MÉTODO DE PAGO:" :options="[
+                            ['name' => 'En efectivo', 'id' => '009'],
+                            ['name' => 'Depósito en cuenta', 'id' => '001'],
+                            ['name' => 'Tarjeta de débito', 'id' => '005'],
+                            ['name' => 'Tarjeta de crédito', 'id' => '006'],
+                            ['name' => 'Transferencia bancaria', 'id' => '003'],
+                            ['name' => 'Giro', 'id' => '002'],
+                        ]"
+                            option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
-                        </div>
+                    </div>
 
-                        @error('tipo_pago')
-                        <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                            {{ $message }}
-                        </p>
-                        @enderror
 
+                    <div class="col-span-12">
+                        <x-form.textarea label="Nota:" id="nota" name="nota" wire:model.live="nota"
+                            placeholder="Ingresar nota opcional" />
                     </div>
 
                 </div>
@@ -245,8 +146,32 @@
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
+                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+                        <div class="col-span-2 sm:col-span-1">
+                            <div class="flex" wire:ignore>
+                                <x-form.select :clearable="false" wire:model.live="product_selected_id"
+                                    id="product_selected_id" name="product_selected_id"
+                                    placeholder="Seleccionar producto o servicio" :async-data="[
+                                        'api' => route('api.productos.index'),
+                                    ]"
+                                    option-label="descripcion" option-value="id"
+                                    option-description="option_description" :template="[
+                                        'name' => 'user-option',
+                                        'config' => ['src' => 'imagen'],
+                                    ]" :always-fetch="true">
+
+                                </x-form.select>
+                            </div>
+                        </div>
+
+                        <div class="col-span-2 sm:col-span-1">
+
+                        </div>
+                    </div>
+
                     {{-- LISTA DE PRODUCTOS --}}
-                    <x-admin.ventas.tabla-detalle-venta :items="$items">
+
+                    <x-admin.ventas.tabla-detalle-venta :items="$items" :selected="$selected">
 
                     </x-admin.ventas.tabla-detalle-venta>
 
@@ -272,9 +197,17 @@
 
                 </div>
             </div>
-            <div class="px-4 py-3 text-right sm:px-6">
-                <button class="btn bg-emerald-500 hover:cursor-pointer hover:bg-emerald-600 text-white"
-                    wire:click.prevent="save">Guardar</button>
+            <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
+
+                <div class="grid gap-2 content-end">
+
+                    <div class="text-center md:text-right">
+
+                        <x-form.button wire:click.prevent="save" spinner="save" label="CREAR RECIBO" black md
+                            icon="shopping-cart" />
+                    </div>
+
+                </div>
             </div>
 
 
@@ -285,120 +218,4 @@
 
 </div>
 @section('js')
-<script>
-    $(document).ready(function() {
-            cont = 0;
-            detalles = 0;
-            flatpickr('.fechaEmision', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-            flatpickr('.fechaVencimiento', {
-                mode: 'single',
-                minDate: "today",
-                disableMobile: "true",
-                dateFormat: "Y-m-d",
-                prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-                nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-            });
-        })
-
-        $('.clientes_id').select2({
-            placeholder: 'Buscar Cliente',
-            language: "es",
-            minimumInputLength: 2,
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.clientes') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-                        obj.id = obj.id || obj.value;
-                        obj.text = obj.data;
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-                },
-            }
-        });
-
-        $('.clientes_id').on('select2:select', function(e) {
-            @this.set('clientes_id', this.value)
-
-        })
-
-        $('.productoSelect').on('select2:select', function(e) {
-
-            @this.call('selectProduct', this.value)
-
-        });
-
-
-        $('.productoSelect').select2({
-            placeholder: 'Añadir Artículo',
-            language: "es",
-            width: '100%',
-            ajax: {
-                url: '{{ route('search.productos') }}',
-                dataType: 'json',
-                delay: 250,
-                cache: true,
-                data: function(params) {
-                    var query = {
-                        term: params.term,
-                    }
-                    return query;
-                },
-                processResults: function(data, params) {
-                    var suggestions = $.map(data.suggestions, function(obj) {
-
-                        obj.id = obj.id || obj.data;
-                        obj.text = obj.value;
-
-                        return obj;
-                    });
-                    return {
-                        results: suggestions,
-                    };
-
-                },
-
-
-            }
-        });
-
-        function addAlert() {
-            iziToast.success({
-                position: 'topRight',
-                title: 'AGREGADO',
-                message: 'Se añadio un producto al recibo',
-            });
-        }
-</script>
-<script>
-    window.addEventListener('unselect-cliente', event => {
-
-            $('.clientes_id').val(null).trigger('change');
-
-        })
-        window.addEventListener('add-producto', event => {
-
-            addAlert();
-
-        })
-</script>
 @endsection

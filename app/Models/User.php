@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Http\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
+use App\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;

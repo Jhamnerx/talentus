@@ -1,7 +1,7 @@
 <!-- Send Feedback -->
 <div class="m-1.5">
     <!-- Start -->
-    <div x-data="{ modalOpenSend: @entangle('modalOpenSend') }">
+    <div x-data="{ modalOpenSend: @entangle('modalOpenSend').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpenSend"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -43,24 +43,24 @@
                             <label class="block text-sm font-medium mb-1" for="from">De: <span
                                     class="text-rose-500">*</span></label>
                             <input id="name" class="form-input w-full px-2 py-1 disabled:bg-slate-100" readonly
-                                wire:model="from" type="email" required disabled />
+                                wire:model.live="from" type="email" required disabled />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1" for="to">Para: <span
                                     class="text-rose-500">*</span></label>
                             <input id="to" class="form-input w-full px-2 py-1 disabled:bg-slate-100"
-                                wire:model="to" type="email" required disabled />
+                                wire:model.live="to" type="email" required disabled />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1" for="asunto">Asunto: <span
                                     class="text-rose-500">*</span></label>
-                            <input id="asunto" class="form-input w-full px-2 py-1" wire:model="asunto"
+                            <input id="asunto" class="form-input w-full px-2 py-1" wire:model.live="asunto"
                                 type="text" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium mb-1" for="body">Mensaje:
                             </label>
-                            <textarea id="body" class="form-textarea w-full px-2 py-1" wire:model="body" rows="5" required></textarea>
+                            <textarea id="body" class="form-textarea w-full px-2 py-1" wire:model.live="body" rows="5" required></textarea>
                         </div>
 
 

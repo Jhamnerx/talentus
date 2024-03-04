@@ -1,6 +1,6 @@
 <div>
     <!-- Start -->
-    <div x-data="{ modalContacto: @entangle('openModalContactos') }">
+    <div x-data="{ modalContacto: @entangle('openModalContactos').live }">
         {{-- <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white" @click.prevent="modalContacto = true"
             aria-controls="plan-modal">Change your Plan</button> --}}
         <!-- Modal backdrop -->
