@@ -52,7 +52,7 @@ class WReading extends Component
         $this->openModal = true;
         $this->refreshComponent();
     }
-    #[On('render-cancel')]
+    #[On(['render-cancel', 'update-table-save-task'])]
     public function updateTo()
     {
         $this->refreshComponent();

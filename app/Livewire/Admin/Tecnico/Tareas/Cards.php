@@ -12,6 +12,7 @@ class Cards extends Component
         'updateIndex' => 'render',
         'update-unread' => 'render',
         'render-cancel' => 'render',
+        'update-table-save-task' => 'render',
     ];
 
     public function render()

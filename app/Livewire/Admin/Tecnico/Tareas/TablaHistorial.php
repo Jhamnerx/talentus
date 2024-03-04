@@ -19,7 +19,8 @@ class TablaHistorial extends Component
 
     protected $listeners = [
         'updateIndex' => 'render',
-        'update-unread' => 'render'
+        'update-unread' => 'render',
+        'update-table-save-task' => 'render'
     ];
 
     public function render()
@@ -138,7 +139,7 @@ class TablaHistorial extends Component
         $this->render();
     }
 
-    #[On('render-cancel', 'update-unread')]
+    #[On(['render-cancel', 'update-unread', 'update-table-save-task'])]
     public function updateTo()
     {
         $this->refreshComponent();

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
 use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
+use Livewire\Attributes\On;
 
 class Pending extends Component
 {
@@ -92,7 +93,7 @@ class Pending extends Component
 
         $this->dispatch('save-imagen', ['tarea' => $tarea->token]);
     }
-
+    #[On('update-table-save-task')]
     public function refreshComponent()
     {
         $this->render();

@@ -19,7 +19,7 @@ class TablaTipoTarea extends Component
     public function render()
     {
         $tareas = tipoTareas::where('nombre', 'LIKE', '%' . $this->search . '%')
-            ->orWhere('costo', $this->search)->paginate(5, ['*'], 'tipoTaskPage');
+            ->orWhere('costo', $this->search)->paginate($this->pages, ['*'], 'tipoTaskPage');
 
         return view('livewire.admin.tecnico.tareas.tabla-tipo-tarea', compact('tareas'));
     }
@@ -40,6 +40,14 @@ class TablaTipoTarea extends Component
 
 
         $this->dispatch('update-task', ['titulo' => 'TIPO TAREA ELIMINADA', 'message' => 'Se elimino el tipo tarea',  'token' => '', 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            title: 'TIPO TAREA ELIMINADA',
+            mensaje: 'Se elimino el tipo tarea'
+        );
+
         $task->delete();
         $this->render();
         $this->resetPage();
