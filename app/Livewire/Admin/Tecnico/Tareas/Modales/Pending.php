@@ -55,15 +55,7 @@ class Pending extends Component
         $this->openModal = false;
     }
 
-    public function cancelTask(Tareas $task)
-    {
-        $task->estado = "CANCELED";
-        $task->fecha_termino = Carbon::now();
-        $task->save();
-        $this->dispatch('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-        $this->render();
-        $this->dispatch('update-unread');
-    }
+
     public function markComplete(Tareas $task)
     {
         $task->estado = "COMPLETE";
@@ -115,5 +107,11 @@ class Pending extends Component
     public function openModalNotificationClient(Tareas $tarea)
     {
         $this->dispatch('send-notificacion-client', $tarea);
+    }
+
+    public function cancelTask(Tareas $task)
+    {
+
+        $this->dispatch('open-modal-cancel', tarea: $task);
     }
 }

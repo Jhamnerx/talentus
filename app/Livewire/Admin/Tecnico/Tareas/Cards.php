@@ -11,6 +11,7 @@ class Cards extends Component
     protected $listeners = [
         'updateIndex' => 'render',
         'update-unread' => 'render',
+        'render-cancel' => 'render',
     ];
 
     public function render()

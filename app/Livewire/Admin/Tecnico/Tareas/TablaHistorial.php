@@ -18,7 +18,8 @@ class TablaHistorial extends Component
     public $pages = 10;
 
     protected $listeners = [
-        'updateIndex' => 'render'
+        'updateIndex' => 'render',
+        'update-unread' => 'render'
     ];
 
     public function render()
@@ -137,7 +138,7 @@ class TablaHistorial extends Component
         $this->render();
     }
 
-    #[On('render-cancel')]
+    #[On('render-cancel', 'update-unread')]
     public function updateTo()
     {
         $this->refreshComponent();
