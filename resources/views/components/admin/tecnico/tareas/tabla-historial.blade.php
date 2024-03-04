@@ -55,7 +55,7 @@
                     <!-- Row -->
                     @if ($tareas->count())
                         @foreach ($tareas as $tarea)
-                            <tr>
+                            <tr wire:key='th-{{ $tarea->id }}'>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
@@ -124,7 +124,8 @@
                                                 </a>
                                             @endcan
                                             @can('tecnico.tareas.edit')
-                                                <button type="button" wire:click.prevent="openModalInform({{ $tarea->id }})"
+                                                <button type="button"
+                                                    wire:click.prevent="openModalInform({{ $tarea->id }})"
                                                     class="btn bg-white hover:bg-slate-300 text-black">
                                                     <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 64 64">

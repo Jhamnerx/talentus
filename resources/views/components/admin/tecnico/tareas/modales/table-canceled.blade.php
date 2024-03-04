@@ -69,7 +69,7 @@
                     <!-- Row -->
 
                     @foreach ($tareas as $tarea)
-                        <tr>
+                        <tr wire:key='tc-{{ $tarea->id }}'>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
                                     {{ $tarea->token }}

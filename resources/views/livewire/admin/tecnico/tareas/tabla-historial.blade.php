@@ -26,13 +26,13 @@
             </div>
             {{-- button save --}}
             @can('tecnico.tareas.create')
-            <button type="button" wire:click.prevent="addTask" class="btn bg-teal-600 hover:bg-teal-700 text-white">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                    <path
-                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span class="hidden xs:block ml-2">Crear Tarea</span>
-            </button>
+                <button type="button" wire:click.prevent="addTask" class="btn bg-teal-600 hover:bg-teal-700 text-white">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Crear Tarea</span>
+                </button>
             @endcan
 
         </div>
@@ -56,7 +56,7 @@
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 1 }">
-                <button
+                <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
@@ -67,7 +67,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -128,7 +129,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -141,30 +143,30 @@
 
             <!-- tecnico button -->
             @can('tecnico.tareas.tecnicos.admin')
-            <div class="relative inline-flex">
+                <div class="relative inline-flex">
 
-                <button wire:click.prevent="showTecnicos"
-                    class="btn bg-cyan-500 hover:bg-cyan-600 text-white btn border-slate-200 hover:border-slate-300">
-                    <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                        <g class="nc-icon-wrapper">
-                            <path
-                                d="M43.989,35.373,30.167,23.437,23,30.389l12.373,13.6q.1.115.213.225a6.1,6.1,0,0,0,8.627,0h0c.073-.073.144-.148.213-.224A6.1,6.1,0,0,0,43.989,35.373Z"
-                                fill="#ff7163"></path>
-                            <path
-                                d="M8.414,14H11l8.847,8.847L23,20l-9-9V8.414a1,1,0,0,0-.293-.707L8,2,2,8l5.707,5.707A1,1,0,0,0,8.414,14Z"
-                                fill="#949494"></path>
-                            <path
-                                d="M35.629,24.383A11.321,11.321,0,0,0,45.977,14.034a12.35,12.35,0,0,0-.485-4.291L39.48,15.754,32.251,8.525l6.011-6.012a12.342,12.342,0,0,0-4.29-.477,11.321,11.321,0,0,0-10.35,10.348,12.345,12.345,0,0,0,.479,4.295L3.046,35.688a3.171,3.171,0,0,0-.226,4.478c.036.04.072.078.11.115l4.793,4.794a3.17,3.17,0,0,0,4.483-.008c.037-.036.072-.074.107-.112L31.333,23.9A12.353,12.353,0,0,0,35.629,24.383Z"
-                                fill="#c8c8c8"></path>
-                            <path d="M39,40a1,1,0,0,1-.707-.293l-7-7a1,1,0,0,1,1.414-1.414l7,7A1,1,0,0,1,39,40Z"
-                                fill="#f74b3b">
-                            </path>
-                        </g>
-                    </svg>
-                    <span class="hidden xs:block ml-2">Administrar Tecnicos</span>
-                </button>
+                    <button wire:click.prevent="showTecnicos"
+                        class="btn bg-cyan-500 hover:bg-cyan-600 text-white btn border-slate-200 hover:border-slate-300">
+                        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                            <g class="nc-icon-wrapper">
+                                <path
+                                    d="M43.989,35.373,30.167,23.437,23,30.389l12.373,13.6q.1.115.213.225a6.1,6.1,0,0,0,8.627,0h0c.073-.073.144-.148.213-.224A6.1,6.1,0,0,0,43.989,35.373Z"
+                                    fill="#ff7163"></path>
+                                <path
+                                    d="M8.414,14H11l8.847,8.847L23,20l-9-9V8.414a1,1,0,0,0-.293-.707L8,2,2,8l5.707,5.707A1,1,0,0,0,8.414,14Z"
+                                    fill="#949494"></path>
+                                <path
+                                    d="M35.629,24.383A11.321,11.321,0,0,0,45.977,14.034a12.35,12.35,0,0,0-.485-4.291L39.48,15.754,32.251,8.525l6.011-6.012a12.342,12.342,0,0,0-4.29-.477,11.321,11.321,0,0,0-10.35,10.348,12.345,12.345,0,0,0,.479,4.295L3.046,35.688a3.171,3.171,0,0,0-.226,4.478c.036.04.072.078.11.115l4.793,4.794a3.17,3.17,0,0,0,4.483-.008c.037-.036.072-.074.107-.112L31.333,23.9A12.353,12.353,0,0,0,35.629,24.383Z"
+                                    fill="#c8c8c8"></path>
+                                <path d="M39,40a1,1,0,0,1-.707-.293l-7-7a1,1,0,0,1,1.414-1.414l7,7A1,1,0,0,1,39,40Z"
+                                    fill="#f74b3b">
+                                </path>
+                            </g>
+                        </svg>
+                        <span class="hidden xs:block ml-2">Administrar Tecnicos</span>
+                    </button>
 
-            </div>
+                </div>
             @endcan
 
         </div>
@@ -172,20 +174,20 @@
     </div>
 
     @can('tecnico.tareas.tabla-historial')
-    <x-admin.tecnico.tareas.tabla-historial :tareas="$tareas">
-    </x-admin.tecnico.tareas.tabla-historial>
+        <x-admin.tecnico.tareas.tabla-historial :tareas="$tareas">
+        </x-admin.tecnico.tareas.tabla-historial>
 
 
-    <div class="mt-8 w-full">
-        {{ $tareas->links() }}
+        <div class="mt-8 w-full">
+            {{ $tareas->links() }}
 
-    </div>
+        </div>
     @endcan
     @cannot('tecnico.tareas.tabla-historial')
-    <div class="mt-8 w-full">
-        <h5>No tienes permisos para ver esta tabla</h5>
+        <div class="mt-8 w-full">
+            <h5>No tienes permisos para ver esta tabla</h5>
 
-    </div>
+        </div>
     @endcannot
 
 </div>
