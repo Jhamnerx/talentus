@@ -180,4 +180,19 @@ class EditVehiculo extends Component
         $this->closeModal();
         $this->reset();
     }
+
+    public function addLinea($numero)
+    {
+        $this->dispatch('add-linea-modal', numero: $numero);
+    }
+
+    public function registarImei($imei)
+    {
+        $this->dispatch('add-imei-modal', imei: $imei);
+    }
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
+    }
 }
