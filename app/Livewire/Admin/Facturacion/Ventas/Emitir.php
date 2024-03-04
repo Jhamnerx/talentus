@@ -573,4 +573,9 @@ class Emitir extends Component
     {
         $this->dispatch('openModalAddProducto');
     }
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
+    }
 }

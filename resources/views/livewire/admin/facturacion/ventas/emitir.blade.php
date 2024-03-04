@@ -44,7 +44,17 @@
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]" option-label="razon_social"
                             option-value="id" option-description="numero_documento" hide-empty-message
-                            x-on:clear="$wire.direccion = ''" />
+                            x-on:clear="$wire.direccion = ''">
+
+                            <x-slot name="afterOptions" class="p-2 flex justify-center"
+                                x-show="displayOptions.length === 0">
+                                <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
+                                    primary flat full>
+                                    <span x-html="`Crear cliente <b>${search}</b>`"></span>
+                                </x-form.button>
+                            </x-slot>
+
+                        </x-form.select>
                     </div>
 
                     <div class="col-span-12 mb-2">
