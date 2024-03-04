@@ -80,7 +80,10 @@ class Complete extends Component
 
         $this->dispatch('save-imagen', ['tarea' => $tarea->token]);
     }
-
+    public function refreshComponent()
+    {
+        $this->render();
+    }
     public function openModalNotificationClient(Tareas $tarea)
     {
         $this->dispatch('send-notificacion-client', $tarea);

@@ -73,42 +73,18 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
                                     <div class="text-left font-medium text-slate-800">
-                                        @switch($tarea->tipo_tarea_id)
-                                            @case(1)
-                                                Instalación de GPS {{ $tarea->dispositivo }} en vehículo:
-                                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                                instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                            @break
+                                        @php
+                                            $datos = [
+                                                '%placa%' => '<b>' . $tarea->vehiculo->placa . '</b>',
+                                                '%velo_modelo%' => '<b>' . $tarea->modelo_velocimetro . '</b>',
+                                                '%fecha%' => '<b>' . $tarea->fecha_hora->format('d/m/Y') . '</b>',
+                                                '%modelo_gps%' => '<b>' . $tarea->dispositivo . '</b>',
+                                                '%hora%' => '<b>' . $tarea->fecha_hora->format('h:i A') . '</b>',
+                                            ];
 
-                                            @case(2)
-                                                Cambio de chip en el vehículo: <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                            @break
-
-                                            @case(3)
-                                                Desinstalación de GPS {{ $tarea->dispositivo }} en el vehículo:
-                                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha Tarea:
-                                                <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                            @break
-
-                                            @case(4)
-                                                Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> en el
-                                                vehículo:
-                                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                            @break
-
-                                            @case(5)
-                                                Mantenimiento GPS {{ $tarea->dispositivo }} en el vehículo:
-                                                <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                                Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                                <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                            @break
-                                        @endswitch
+                                            $info = strtr($tarea->tipo_tarea->descripcion, $datos);
+                                        @endphp
+                                        {!! $info !!}
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -148,8 +124,7 @@
                                                 </a>
                                             @endcan
                                             @can('tecnico.tareas.edit')
-                                                <button type="button"
-                                                    wire:click.prevent="openModalInform({{ $tarea->id }})"
+                                                <button type="button" wire:click.prevent="openModalInform({{ $tarea->id }})"
                                                     class="btn bg-white hover:bg-slate-300 text-black">
                                                     <svg class="w-6 h-6 shrink-0" xmlns="http://www.w3.org/2000/svg"
                                                         viewBox="0 0 64 64">

@@ -1,7 +1,7 @@
 <div class="bg-white shadow-lg rounded-sm border  border-slate-200 mt-6 ">
     <header class="px-5 py-4 block md:flex">
         <h2 class="font-semibold text-slate-800 flex-auto">Total Tareas: <span class="text-slate-400 font-medium">
-                {{$tareas->total()}}
+                {{ $tareas->total() }}
             </span>
         </h2>
         <div class="">
@@ -26,7 +26,7 @@
 
     </header>
 
-    <div x-data="handleSelect">
+    <div>
 
         <!-- Table -->
         <div class="overflow-x-auto">
@@ -51,9 +51,9 @@
                             <div class="font-semibold text-center">Estado</div>
                         </th>
                         @can('tecnico.tareas.cards.sin-leer.actions')
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-center">Acciones</div>
-                        </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-center">Acciones</div>
+                            </th>
                         @endcan
 
                     </tr>
@@ -61,95 +61,74 @@
                 <!-- Table body -->
                 <tbody class="text-sm divide-y divide-slate-200">
                     <!-- Row -->
-                    @if ($tareas->count())
+
                     @foreach ($tareas as $tarea)
-                    <tr>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
-                                {{$tarea->token}}
-                            </div>
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-center">
-                                {{$tarea->tipo_tarea->nombre}}
-                            </div>
-                        </td>
-
-                        <td class="px-2 first:pl-5 last:pr-5 py-3">
-                            <div class="text-left font-medium text-slate-800">
-                                @switch($tarea->tipo_tarea_id)
-                                @case(1)
-
-                                Instalación de GPS {{$tarea->dispositivo}} en vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                instalación: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-
-                                @break
-
-                                @case(2)
-                                Cambio de chip en el vehículo: <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(3)
-                                Desinstalación de GPS {{$tarea->dispositivo}} en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha Tarea:
-                                <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(4)
-                                Instalación de Velocimetro <b>{{$tarea->modelo_velocimetro}}</b> en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-                                @case(5)
-                                Mantenimiento GPS {{$tarea->dispositivo}} en el vehículo:
-                                <b>{{$tarea->vehiculo->placa}}</b>, Fecha
-                                Tarea: <b> {{$tarea->fecha_hora->format('d/m/Y')}}</b> - Hora:
-                                <b>{{$tarea->fecha_hora->format('h:i A')}}</b>
-                                @break
-
-                                @endswitch
-                            </div>
-                        </td>
-
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-center">
-                                {{$tarea->vehiculo->placa}}
-                            </div>
-                        </td>
-
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="text-left">
-
-                                <div
-                                    class="text-sm inline-flex font-medium bg-{{$tarea->estado->color()}}-100 text-{{$tarea->estado->color()}}-600 rounded-full text-center px-2.5 py-1">
-                                    {{$tarea->estado->name()}}
+                        <tr>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
+                                    {{ $tarea->token }}
                                 </div>
-                            </div>
-                        </td>
-                        @can('tecnico.tareas.cards.sin-leer.actions')
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="flex gap-2 justify-center">
-                                <button type="button" wire:click.prevent="cancelTask({{$tarea->id}})"
-                                    class="btn bg-rose-600 hover:bg-rose-700 text-white">
-                                    <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
-                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                        <path
-                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </td>
-                        @endcan
-                    </tr>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-center">
+                                    {{ $tarea->tipo_tarea->nombre }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="text-left font-medium text-slate-800">
+                                    @php
+                                        $datos = [
+                                            '%placa%' => '<b>' . $tarea->vehiculo->placa . '</b>',
+                                            '%velo_modelo%' => '<b>' . $tarea->modelo_velocimetro . '</b>',
+                                            '%fecha%' => '<b>' . $tarea->fecha_hora->format('d/m/Y') . '</b>',
+                                            '%modelo_gps%' => '<b>' . $tarea->dispositivo . '</b>',
+                                            '%hora%' => '<b>' . $tarea->fecha_hora->format('h:i A') . '</b>',
+                                        ];
+
+                                        $info = strtr($tarea->tipo_tarea->descripcion, $datos);
+                                    @endphp
+                                    {!! $info !!}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-center">
+                                    {{ $tarea->vehiculo->placa }}
+                                </div>
+                            </td>
+
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-left">
+
+                                    <div
+                                        class="text-sm inline-flex font-medium bg-{{ $tarea->estado->color() }}-100 text-{{ $tarea->estado->color() }}-600 rounded-full text-center px-2.5 py-1">
+                                        {{ $tarea->estado->name() }}
+                                    </div>
+                                </div>
+                            </td>
+                            @can('tecnico.tareas.cards.sin-leer.actions')
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="flex gap-2 justify-center">
+                                        <button wire:click.prevent="cancelTask({{ $tarea->id }})"
+                                            aria-controls="danger-modal"
+                                            class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            <span class="sr-only">Eliminar</span>
+                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                <path
+                                                    d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </td>
+                            @endcan
+                        </tr>
                     @endforeach
-                    @else
-                    <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                        <div class="text-center">No hay Registros</div>
-                    </td>
+                    @if ($tareas->count() < 1)
+                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
                     @endif
 
 

@@ -28,7 +28,7 @@ class Cards extends Component
 
     public function openWithoutReading()
     {
-        $this->dispatch('openModalWReading');
+        $this->dispatch('open-modal-unread');
     }
     public function openTaskComplete()
     {

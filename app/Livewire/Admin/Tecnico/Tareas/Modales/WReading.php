@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Tecnico\Tareas\Modales;
 
 use Carbon\Carbon;
 use App\Models\Tareas;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -14,9 +15,6 @@ class WReading extends Component
     public $openModal = false;
     public $search = '';
 
-    protected $listeners = [
-        'openModalWReading' => 'openModal',
-    ];
 
     public function render()
     {
@@ -30,22 +28,38 @@ class WReading extends Component
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
         })->orWhere('dispositivo', 'LIKE', '%' . $this->search . '%')
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
+            ->orWhere('token', 'LIKE', '%' . $this->search . '%')
             ->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
-            ->estado('UNREAD')->with('vehiculo', 'cliente', 'user', 'tipo_tarea')
+            ->estado('UNREAD')->with('vehiculo:id,placa', 'cliente:id,razon_social', 'user:id,name', 'tipo_tarea:id,nombre,descripcion')
             ->paginate(5, ['*'], 'unreadPage');
+
         return view('livewire.admin.tecnico.tareas.modales.w-reading', compact('tareas'));
     }
+
     public function updatingSearch()
     {
         $this->resetPage('unreadPage');
     }
+
+    public function refreshComponent()
+    {
+        $this->render();
+    }
+
+    #[On('open-modal-unread')]
     public function openModal()
     {
         $this->openModal = true;
+        $this->refreshComponent();
+    }
+    #[On('render-cancel')]
+    public function updateTo()
+    {
+        $this->refreshComponent();
     }
     public function closeModal()
     {
-        $tareas = Tareas::estado('UNREAD')->update(array('estado' => 'PENDIENT'));
+        //$tareas = Tareas::estado('UNREAD')->update(array('estado' => 'PENDIENT'));
 
         $this->openModal = false;
         $this->dispatch('update-unread');
@@ -53,10 +67,7 @@ class WReading extends Component
 
     public function cancelTask(Tareas $task)
     {
-        $task->estado = "CANCELED";
-        $task->fecha_termino = Carbon::now();
-        $task->save();
-        $this->dispatch('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-        $this->render();
+
+        $this->dispatch('open-modal-cancel', tarea: $task);
     }
 }

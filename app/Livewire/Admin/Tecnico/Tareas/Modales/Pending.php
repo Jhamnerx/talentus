@@ -101,7 +101,10 @@ class Pending extends Component
         $this->dispatch('save-imagen', ['tarea' => $tarea->token]);
     }
 
-
+    public function refreshComponent()
+    {
+        $this->render();
+    }
     public function sendWhatsApp(Tareas $task)
     {
         $util = new UtilesController();

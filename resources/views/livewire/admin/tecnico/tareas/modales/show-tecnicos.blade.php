@@ -37,8 +37,7 @@
                     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
                         <header class="px-5 py-4">
                             <h2 class="font-semibold text-slate-800">Usuarios <span
-                                    class="text-slate-400 font-medium">{{
-                                    $usuarios->total() }}</span>
+                                    class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
                             </h2>
                         </header>
                         <div x-data="handleSelect">
@@ -80,67 +79,86 @@
                                     <tbody class="text-sm divide-y divide-slate-200">
                                         <!-- Row -->
                                         @if ($usuarios->count())
-                                        @foreach ($usuarios as $usuario)
-                                        @if ($usuario->email !== 'jhamnerx1x@gmail.com')
-                                        <tr>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                                <div class="flex items-center">
-                                                    <label class="inline-flex">
-                                                        <span class="sr-only">Select</span>
-                                                        <input class="table-item form-checkbox" type="checkbox"
-                                                            @click="uncheckParent" />
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-medium text-blue-500">{{ $usuario->name }}</div>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-medium text-slate-800">{{ $usuario->email }}</div>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-medium text-slate-800">
-                                                    @if (!empty($usuario->getRoleNames()))
-                                                    @foreach ($usuario->getRoleNames() as $rolName)
-                                                    {{ $rolName }}
-                                                    @endforeach
-                                                    @endif
-                                                </div>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div>
-                                                    <div class="m-3 ">
+                                            @foreach ($usuarios as $usuario)
+                                                @if ($usuario->email !== 'jhamnerx1x@gmail.com')
+                                                    <tr>
+                                                        <td
+                                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                                            <div class="flex items-center">
+                                                                <label class="inline-flex">
+                                                                    <span class="sr-only">Select</span>
+                                                                    <input class="table-item form-checkbox"
+                                                                        type="checkbox" @click="uncheckParent" />
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div class="font-medium text-blue-500">{{ $usuario->name }}
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div class="font-medium text-slate-800">
+                                                                {{ $usuario->email }}</div>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div class="font-medium text-slate-800">
+                                                                @if (!empty($usuario->getRoleNames()))
+                                                                    @foreach ($usuario->getRoleNames() as $rolName)
+                                                                        {{ $rolName }}
+                                                                    @endforeach
+                                                                @endif
+                                                            </div>
+                                                        </td>
+                                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                            <div>
+                                                                <div class="m-3 ">
+                                                                    <div class="flex items-center mt-2"
+                                                                        x-data="{ checked: {{ $usuario->is_active ? 'true' : 'false' }} }">
+                                                                        <div class="form-switch">
+                                                                            <input
+                                                                                wire:click="toggleStatus({{ $usuario->id }})"
+                                                                                type="checkbox"
+                                                                                id="switch-e{{ $usuario->id }}"
+                                                                                class="sr-only" x-model="checked" />
+                                                                            <label class="bg-slate-400"
+                                                                                for="switch-e{{ $usuario->id }}">
+                                                                                <span class="bg-white shadow-sm"
+                                                                                    aria-hidden="true"></span>
+                                                                                <span class="sr-only">Estado</span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="text-sm text-slate-400 italic ml-2"
+                                                                            x-text="checked ? 'Activo' : 'Inactivo'">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td
+                                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                                            <div class="space-x-1">
 
-                                                        @livewire('admin.usuarios.change-status', ['model' => $usuario,
-                                                        'field' =>
-                                                        'is_active'], key('active' . $usuario->id))
-                                                        <!-- End -->
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                                <div class="space-x-1">
-
-                                                    <a href="{{ route('admin.users.edit', $usuario) }}">
-                                                        <button
-                                                            class="text-slate-400 hover:text-slate-500 rounded-full">
-                                                            <span class="sr-only">Editar</span>
-                                                            <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                                <path
-                                                                    d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                                            </svg>
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        @endif
-                                        @endforeach
+                                                                <a href="{{ route('admin.users.edit', $usuario) }}">
+                                                                    <button
+                                                                        class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                                        <span class="sr-only">Editar</span>
+                                                                        <svg class="w-8 h-8 fill-current"
+                                                                            viewBox="0 0 32 32">
+                                                                            <path
+                                                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                                        </svg>
+                                                                    </button>
+                                                                </a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            @endforeach
                                         @else
-                                        <td colspan="10"
-                                            class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                            <div class="text-center">No hay Registros</div>
-                                        </td>
+                                            <td colspan="10"
+                                                class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                                <div class="text-center">No hay Registros</div>
+                                            </td>
                                         @endif
 
 
@@ -174,7 +192,6 @@
 </div>
 
 @once
-@push('scripts')
-
-@endpush
+    @push('scripts')
+    @endpush
 @endonce

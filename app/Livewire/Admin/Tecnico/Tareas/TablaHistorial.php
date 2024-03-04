@@ -4,10 +4,11 @@ namespace App\Livewire\Admin\Tecnico\Tareas;
 
 use App\Models\Tareas;
 use Livewire\Component;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use App\Http\Controllers\Admin\UtilesController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Admin\WhatsAppApi;
+use App\Http\Controllers\Admin\UtilesController;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class TablaHistorial extends Component
@@ -129,5 +130,16 @@ class TablaHistorial extends Component
     public function openModalInform(Tareas $tarea)
     {
         $this->dispatch('open-modal-inform', $tarea);
+    }
+
+    public function refreshComponent()
+    {
+        $this->render();
+    }
+
+    #[On('render-cancel')]
+    public function updateTo()
+    {
+        $this->refreshComponent();
     }
 }

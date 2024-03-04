@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Tecnico\Tareas\Modales;
 
 use App\Models\Tareas;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 
 class Canceled extends Component
@@ -44,6 +45,15 @@ class Canceled extends Component
     public function closeModal()
     {
         $this->openModal = false;
+    }
+    public function refreshComponent()
+    {
+        $this->render();
+    }
+    #[On('render-cancel')]
+    public function updateTo()
+    {
+        $this->refreshComponent();
     }
 
     public function deleteTask(Tareas $task)

@@ -192,7 +192,8 @@
                             </div>
 
                             {{-- velocimetro --}}
-                            <div class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 ? 'velocimetro' : 'hidden' }}">
+                            <div
+                                class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 4 ? 'velocimetro' : 'hidden' }}">
                                 <label class="block text-sm font-medium mb-1" for="modelo_dispositivo_id">
                                     Modelo Velocimetro:
                                 </label>
@@ -454,32 +455,31 @@
 
 </div>
 
-@once
-    @push('scripts')
 
-        <script>
-            window.addEventListener('edit-task', event => {
-                $('.selectVehiculo').val(null).trigger('change');
-                $('.selectModelDispositivo').val(null).trigger('change');
+@push('scripts')
+    <script>
+        window.addEventListener('edit-task', event => {
+            $('.selectVehiculo').val(null).trigger('change');
+            $('.selectModelDispositivo').val(null).trigger('change');
 
-                iziToast.show({
-                    theme: 'dark',
-                    icon: 'far fa-envelope-open',
-                    title: 'TAREA EDITADA',
-                    timeout: 2500,
-                    message: 'Se ha actualizado la tarea <b>' + event.detail.tarea.token + '</b>',
-                    position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
-                    progressBarColor: 'rgb(5, 44, 82)'
-                });
+            iziToast.show({
+                theme: 'dark',
+                icon: 'far fa-envelope-open',
+                title: 'TAREA EDITADA',
+                timeout: 2500,
+                message: 'Se ha actualizado la tarea <b>' + event.detail.tarea.token + '</b>',
+                position: 'topRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                progressBarColor: 'rgb(5, 44, 82)'
+            });
 
-            })
-        </script>
-        <script>
-            window.addEventListener('put-items', event => {
+        })
+    </script>
+    <script>
+        window.addEventListener('put-items', event => {
 
-                var newOption = new Option(event.detail.dispositivo, event.detail.dispositivo, true, true);
-                $('.selectModelDispositivo').append(newOption).trigger('change');
+            var newOption = new Option(event.detail.dispositivo, event.detail.dispositivo, true, true);
+            $('.selectModelDispositivo').append(newOption).trigger('change');
 
-            })
-        </script>
-        <script>
+        })
+    </script>
+@endpush
