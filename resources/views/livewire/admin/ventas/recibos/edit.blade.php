@@ -43,7 +43,7 @@
                     <div class="col-span-12 mb-2 selectCliente">
                         <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
                             placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                            option-label="razon_social" option-value="id" hide-empty-message>
+                            option-label="razon_social" option-value="id">
 
                             <x-slot name="afterOptions" class="p-2 flex justify-center"
                                 x-show="displayOptions.length === 0">
@@ -67,7 +67,7 @@
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => '10'],
                             ]"
-                            option-label="serie" option-value="serie" hide-empty-message />
+                            option-label="serie" option-value="serie" />
                     </div>
 
                     <div class="col-span-12 xs:col-span-6 mb-2">

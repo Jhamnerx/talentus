@@ -43,8 +43,7 @@
                                 'api' => route('api.clientes.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]" option-label="razon_social"
-                            option-value="id" option-description="numero_documento" hide-empty-message
-                            x-on:clear="$wire.direccion = ''">
+                            option-value="id" option-description="numero_documento" x-on:clear="$wire.direccion = ''">
 
                             <x-slot name="afterOptions" class="p-2 flex justify-center"
                                 x-show="displayOptions.length === 0">
@@ -77,7 +76,7 @@
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]" option-label="serie"
-                            option-value="serie" hide-empty-message />
+                            option-value="serie" />
                     </div>
 
                     {{-- CORRELATIVO --}}

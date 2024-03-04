@@ -26,7 +26,7 @@
                 wire:model.live="categoria_id" placeholder="Selecciona una categoria" :async-data="[
                     'api' => route('api.categorias.index'),
                 ]"
-                option-label="nombre" option-value="id" hide-empty-message />
+                option-label="nombre" option-value="id" />
         </div>
 
 

@@ -36,7 +36,7 @@
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]"
-                            option-label="serie" option-value="serie" hide-empty-message />
+                            option-label="serie" option-value="serie" />
                     </div>
 
                     {{-- CORRELATIVO --}}
@@ -66,7 +66,7 @@
                                 'api' => route('api.sustentos.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]"
-                            option-label="descripcion" option-value="codigo" hide-empty-message />
+                            option-label="descripcion" option-value="codigo" />
                     </div>
                     {{-- sustento escrito --}}
 
@@ -84,7 +84,7 @@
                                     'name' => 'user-option',
                                     'config' => ['src' => 'imagen'],
                                 ]" :always-fetch="true" option-value="id"
-                                option-description="option_description" hide-empty-message />
+                                option-description="option_description" />
                         </div>
 
                         @if ($invoice_id_new)
