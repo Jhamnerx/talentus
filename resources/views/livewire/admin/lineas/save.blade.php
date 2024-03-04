@@ -33,6 +33,7 @@
             </thead>
 
             <tbody class="text-sm divide-y divide-slate-200">
+
                 @foreach ($items->all() as $clave => $item)
                     <tr wire:key="{{ $clave }}">
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

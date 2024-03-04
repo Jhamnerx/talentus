@@ -98,4 +98,22 @@ class Save extends Component
         $this->closeModal();
         $this->dispatch('update-table');
     }
+
+    #[On('add-imei-modal')]
+    public function registrarImei($imei)
+    {
+        $this->items = collect(
+            [
+
+                [
+                    'imei' => $imei,
+                    'modelo_id' => '',
+                    'of_client' => false,
+                ]
+            ]
+        );
+
+
+        $this->openModal();
+    }
 }

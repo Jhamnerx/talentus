@@ -91,14 +91,24 @@ class Save extends Component
 
     public function save()
     {
-        $validatedDate = $this->validate();
 
-        foreach ($this->items as $item) {
+        try {
+            $validatedDate = $this->validate();
 
-            $numero = Lineas::create($item);
+            foreach ($this->items as $item) {
+
+                $numero = Lineas::create($item);
+            }
+
+            $this->afterSave();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'mensaje: ' . $th->getMessage(),
+            );
         }
-
-        $this->afterSave();
     }
     public function afterSave()
     {
@@ -114,10 +124,17 @@ class Save extends Component
     #[On('add-linea-modal')]
     public function addLinea($numero)
     {
-        $this->items->push([
-            'numero' => $numero,
-            'operador' => '',
-        ]);
+        $this->items = collect(
+            [
+
+                [
+                    'numero' => $numero,
+                    'operador' => '',
+                ]
+            ]
+        );
+
+
         $this->openModal();
     }
 }

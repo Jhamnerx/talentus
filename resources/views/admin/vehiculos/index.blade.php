@@ -20,6 +20,7 @@
     @livewire('admin.vehiculos.mantenimiento.save', ['update' => session('updated-numero')])
     @livewire('admin.vehiculos.save-quick')
     @livewire('admin.lineas.save')
+    @livewire('admin.dispositivos.save')
 @endpush
 @section('js')
     <script>

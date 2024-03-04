@@ -75,9 +75,9 @@
                 placeholder="Selecciona una linea" option-description="option_description" :async-data="route('api.lineas.index')"
                 option-label="numero" option-value="numero">
 
-                <x-slot name="afterOptions" class="p-2 flex justify-center" x-show="displayOptions.length === 0">
+                <x-slot name="beforeOptions" class="p-2 flex justify-center">
                     <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
-                        <span x-html="`Crear Linea <b>${search}</b>`"></span>
+                        <span x-html="`Registrar Linea <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>
 
@@ -103,7 +103,15 @@
 
             <x-form.select label="IMEI GPS:" name="dispositivo_imei" wire:model.live="dispositivo_imei"
                 placeholder="357073292893290" option-description="option_description" :async-data="route('api.dispositivos.index')"
-                option-label="imei" option-value="imei" hide-empty-message />
+                option-label="imei" option-value="imei">
+
+                <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat full>
+                        <span x-html="`Registrar Imei <b>${search}</b>`"></span>
+                    </x-form.button>
+                </x-slot>
+
+            </x-form.select>
 
             @error('dispositivos_id')
                 <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">

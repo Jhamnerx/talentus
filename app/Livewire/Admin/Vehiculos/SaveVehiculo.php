@@ -156,4 +156,9 @@ class SaveVehiculo extends Component
     {
         $this->dispatch('add-linea-modal', numero: $numero);
     }
+
+    public function registarImei($imei)
+    {
+        $this->dispatch('add-imei-modal', imei: $imei);
+    }
 }
