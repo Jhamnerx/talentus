@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('numero_cuotas')->nullable()->after('divisa');
             $table->decimal('adelanto', 15, 4)->default(0.00)->after('divisa');
             $table->decimal('igv', 11, 4)->nullable()->after('divisa');
+            $table->decimal('comision', 11, 4)->nullable()->after('igv');
             $table->decimal('icbper', 11, 4)->nullable()->after('divisa');
             $table->decimal('descuento_factor', 11, 5)->nullable()->after('divisa');
             $table->string('tipo_descuento')->nullable()->after('divisa');

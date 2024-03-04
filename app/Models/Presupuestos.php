@@ -150,9 +150,9 @@ class Presupuestos extends Model
             $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
             if ($action == 1) {
 
-                return $pdf->download('PRE-' . $this->numero . '.pdf');
+                return $pdf->download($this->serie_correlativo . '.pdf');
             } else {
-                return $pdf->stream('PRE-' . $this->numero . '.pdf');
+                return $pdf->stream($this->serie_correlativo . '.pdf');
             };
         }
     }
