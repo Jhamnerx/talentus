@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Productos;
 use Livewire\Component;
 use App\Models\Productos;
 use Livewire\Attributes\On;
+use Intervention\Image\ImageManager;
 use App\Http\Requests\ProductosRequest;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -90,9 +91,9 @@ class EditModal extends Component
 
         if ($this->file_name != "default.jpg") {
 
-            $img = Image::make($this->file)->encode('jpg');
+            //$img = Image::make($this->file)->encode('jpg');
             $url = 'productos/' . $producto->codigo . '.png';
-            Storage::disk('public')->put($url, $img);
+            Storage::disk('public')->put($url, $this->resizeImagen($this->file));
 
             $producto->image()->create([
                 'url' => $url
@@ -101,6 +102,20 @@ class EditModal extends Component
 
         return true;
     }
+
+    public static function resizeImagen($img)
+    {
+        // create new image manager with gd driver
+        $manager = ImageManager::gd();
+
+        $image = $manager->read($img);
+
+        //$image->scale(height: 800);
+        // $image->resize(400, 400);
+
+        return $image->encode();
+    }
+
 
     public function removeImage(Productos $producto)
     {
@@ -125,6 +140,7 @@ class EditModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
+        $this->reset('file');
         $this->dispatch('update-table');
     }
     public function closeModal()

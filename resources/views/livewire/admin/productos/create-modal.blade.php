@@ -117,7 +117,7 @@
                         .replace('data:', '')
                         .replace(/^.+,/, '');
 
-                    console.log(base64String);
+                    //console.log(base64String);
                     @this.set('file', base64String);
 
                     img.SRC = base64String;

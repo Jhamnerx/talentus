@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Productos;
 use Livewire\Component;
 use App\Models\Productos;
 use Livewire\Attributes\On;
+use Intervention\Image\ImageManager;
 use App\Http\Requests\ProductosRequest;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -63,16 +64,27 @@ class CreateModal extends Component
 
     public function saveImage(Productos $producto): bool
     {
-
-        $img = Image::make($this->file)->encode('jpg');
         $url = 'public/productos/' . $producto->codigo . '.png';
-        Storage::disk('public')->put($url, $img, 'public');
+        Storage::disk('public')->put($url, $this->resizeImagen($this->file), 'public');
 
         $producto->image()->create([
             'url' => $url
         ]);
 
         return true;
+    }
+
+    public static function resizeImagen($img)
+    {
+        // create new image manager with gd driver
+        $manager = ImageManager::gd();
+
+        $image = $manager->read($img);
+
+        //$image->scale(height: 800);
+        // $image->resize(400, 400);
+
+        return $image->encode();
     }
 
     public function updated($atributo, $value)
@@ -93,6 +105,7 @@ class CreateModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
+        $this->reset('file');
         $this->dispatch('update-table');
     }
 }
