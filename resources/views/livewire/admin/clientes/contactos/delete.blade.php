@@ -36,7 +36,7 @@
                                 <p> Estas seguro de eliminar este Contacto?. </p>
                             </div>
                         </div>
-
+                        {{ $modo }}
                         <div class="text-sm mb-10">
                             <div class="space-y-2">
                                 <x-form.toggle left-label="Eliminar permanentemente" lg wire:model.live="modo"

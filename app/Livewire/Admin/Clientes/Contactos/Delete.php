@@ -12,12 +12,12 @@ class Delete extends Component
     public Contactos $contacto;
     public $modalDelete = false;
 
-    public $modo = 0;
+    public $modo = false;
 
     public function delete()
     {
 
-        if ($this->modo == 0) {
+        if ($this->modo == false) {
 
             $this->contacto->delete();
         } else {
@@ -57,5 +57,7 @@ class Delete extends Component
             mensaje: 'se elimino correctamente el contacto'
         );
         $this->dispatch('update-table');
+        $this->reset('modo');
+        $this->render();
     }
 }

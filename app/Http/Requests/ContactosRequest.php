@@ -22,7 +22,7 @@ class ContactosRequest extends FormRequest
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'birthday' => 'date',
             'cargo' => 'nullable',
-            'email' => 'nullable',
+            'email' => 'nullable|email',
             'descripcion' => 'nullable',
             'is_gerente' => 'boolean',
 
@@ -41,10 +41,11 @@ class ContactosRequest extends FormRequest
     {
         return [
             'nombre.required' => 'No dejes vacio este campo',
-            'clientes_id.required' => 'Ingresa un cliente',
+            'clientes_id.required' => 'Selecciona un cliente',
             'numero_documento.required' => 'Ingresa un numero de documento',
             'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
             'telefono.numeric' => 'El numero de telefono debe ser un numero',
+            'is_gerente.boolean' => 'Debe ser un valor falso o verdadero',
 
         ];
     }

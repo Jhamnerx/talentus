@@ -15,7 +15,7 @@ class Edit extends Component
 
     public $modalEdit = false;
 
-    public $nombre, $clientes_id, $numero_documento, $cargo, $telefono, $email, $birthday, $is_gerente, $descripcion;
+    public $nombre, $clientes_id, $numero_documento, $cargo, $telefono, $email, $birthday, $is_gerente = false, $descripcion;
 
 
     public function render()
