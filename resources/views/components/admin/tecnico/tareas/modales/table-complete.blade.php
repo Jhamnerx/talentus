@@ -51,6 +51,9 @@
                             <div class="font-semibold text-center">Vehiculo</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-center">Cliente</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Estado</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -110,6 +113,11 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-center">
                                     {{ $tarea->vehiculo->placa }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="text-center">
+                                    {{ $tarea->vehiculo->cliente ? $tarea->vehiculo->cliente->razon_social : '' }}
                                 </div>
                             </td>
 
@@ -212,7 +220,7 @@
                         </tr>
                     @endforeach
                     @if ($tareas->count() < 1)
-                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                             <div class="text-center">No hay Registros</div>
                         </td>
                     @endif

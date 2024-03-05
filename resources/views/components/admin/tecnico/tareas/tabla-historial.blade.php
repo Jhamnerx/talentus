@@ -31,6 +31,9 @@
                             <div class="font-semibold text-center">Vehiculo</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-center">CLIENTE</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Estado</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -89,6 +92,11 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-center">
                                     {{ $tarea->vehiculo->placa }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 ">
+                                <div class="text-center">
+                                    {{ $tarea->vehiculo->cliente ? $tarea->vehiculo->cliente->razon_social : '' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
