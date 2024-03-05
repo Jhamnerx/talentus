@@ -13,8 +13,6 @@ class ContactosController extends Controller
     function __construct()
     {
         $this->middleware('permission:ver-contacto', ['only' => ['index']]);
-        $this->middleware('permission:crear-contacto', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-contacto', ['only' => ['edit', 'update']]);
     }
 
     public function index()
@@ -23,12 +21,6 @@ class ContactosController extends Controller
         $date = Carbon::createFromDate(1970, 19, 12)->age;
 
         return view('admin.clientes.contactos.index');
-    }
-
-
-    public function create()
-    {
-        return view('admin.clientes.contactos.create');
     }
 
 

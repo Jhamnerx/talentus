@@ -31,17 +31,21 @@ class ContactosIndex extends Component
         return view('livewire.admin.clientes.contactos.contactos-index', compact('contactos'));
     }
 
-
-    public function openModalDelete(Contactos $contacto)
-    {
-        $this->dispatch('open-modal-delete', contacto: $contacto);
-    }
-
     #[On('update-table')]
     public function updateTable()
     {
 
         $this->render();
         $this->resetPage();
+    }
+
+    public function openModalDelete(Contactos $contacto)
+    {
+        $this->dispatch('open-modal-delete', contacto: $contacto);
+    }
+
+    public function openModalSave()
+    {
+        $this->dispatch('open-modal-save');
     }
 }

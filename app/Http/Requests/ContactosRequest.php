@@ -6,30 +6,19 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class ContactosRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
 
     /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
-    public function rules()
+    public function rules($contacto = null)
     {
-
-        $contacto = $this->route()->parameter('contacto');
 
         $rules = [
             'nombre' => 'required',
             'clientes_id' => 'required',
-            'numero_documento' => 'required',
+            'numero_documento' => 'required|unique:contactos,numero_documento,' . $contacto,
             'telefono' => 'nullable|digits_between:6,9|numeric',
 
         ];

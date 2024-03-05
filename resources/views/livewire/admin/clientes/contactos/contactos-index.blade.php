@@ -54,15 +54,13 @@
 
             <!-- Add customer button -->
             @can('crear-contacto')
-                <a href="{{ route('admin.clientes.contactos.create') }}">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Añadir Contacto</span>
-                    </button>
-                </a>
+                <button wire:click.prevent='openModalSave' class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Añadir Contacto</span>
+                </button>
             @endcan
 
 
@@ -181,7 +179,7 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="space-x-1">
-                                        {{-- @livewire('admin.clientes.contactos.delete', ['contacto' => $contacto], key('delete' . $contacto->id)) --}}
+
                                         @can('editar-contacto')
                                             <a href="{{ route('admin.clientes.contactos.edit', $contacto) }}">
                                                 <button class="text-slate-400 hover:text-slate-500 rounded-full">

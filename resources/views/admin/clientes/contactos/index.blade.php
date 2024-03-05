@@ -10,6 +10,7 @@
 @stop
 
 @push('modals')
+    @livewire('admin.clientes.contactos.save')
     @livewire('admin.clientes.contactos.delete')
 @endpush
 
