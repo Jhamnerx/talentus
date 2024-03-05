@@ -82,7 +82,7 @@
                     class="text-slate-400 font-medium">{{ $certificados->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div >
 
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">

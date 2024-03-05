@@ -176,7 +176,7 @@
                     class="text-slate-400 font-medium">{{$total}}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
 
             <!-- Table -->
             <div class="overflow-x-auto">

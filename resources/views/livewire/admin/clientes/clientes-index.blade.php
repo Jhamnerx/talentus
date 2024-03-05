@@ -209,7 +209,7 @@
                     $clientes->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div >
 
             <!-- Table -->
             <div class="overflow-x-auto">
@@ -223,7 +223,7 @@
                                     <label class="inline-flex">
                                         <span class="sr-only">Select all</span>
                                         <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                            />
                                     </label>
                                 </div>
                             </th>
@@ -269,7 +269,7 @@
                                     <label class="inline-flex">
                                         <span class="sr-only">Select</span>
                                         <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
+                                             />
                                     </label>
                                 </div>
                             </td>
