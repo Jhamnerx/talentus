@@ -106,8 +106,9 @@ class CreateTask extends Component
     }
     public function updatedTipoTareaId($id)
     {
-        $this->titulo = tipoTareas::find($id)->nombre;
-        $this->dispatch('change-tipo-tarea', ['value' => $id]);
+        if ($id) {
+            $this->titulo = tipoTareas::find($id)->nombre;
+        }
     }
     public function updatedVehiculosId($value)
     {

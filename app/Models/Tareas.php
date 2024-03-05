@@ -39,6 +39,7 @@ class Tareas extends Model
         'fecha_termino' => 'datetime',
         'fecha_validacion' => 'datetime',
         'respuesta' => 'boolean',
+        'tipo_tarea_id' => 'string'
     ];
 
 
@@ -75,7 +76,10 @@ class Tareas extends Model
     {
         return $this->belongsTo(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
     }
-
+    public function model_dispositivo()
+    {
+        return $this->belongsTo(ModelosDispositivo::class, 'dispositivo', 'modelo')->withoutGlobalScope(EmpresaScope::class);
+    }
     public function tecnico()
     {
         return $this->belongsTo(User::class, 'tecnico_id')->withoutGlobalScope(EmpresaScope::class);

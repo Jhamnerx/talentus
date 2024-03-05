@@ -23,6 +23,10 @@ class tipoTareas extends Model
         // Chain fluent methods for configuration options
     }
 
+    protected $casts = [
+        'id' => 'integer',
+    ];
+
     protected $guarded = ['id', 'created_at', 'updated_at'];
     //relacion tareas
 

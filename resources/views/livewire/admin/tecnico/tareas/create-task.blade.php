@@ -5,7 +5,7 @@
         <div class="col-span-12">
 
             <x-form.select label="Seleccionar Tipo de Tarea:" wire:model.live='tipo_tarea_id' full
-                placeholder="Selecciona una opción..." wire:model.defer="model">
+                placeholder="Selecciona una opción...">
 
                 @foreach ($tipo_tareas as $key => $tarea)
                     <x-form.select.option label="{{ $tarea }}" value="{{ $key }}" />
@@ -25,7 +25,8 @@
         {{-- vehiculo --}}
         <div class="col-span-12 sm:col-span-6">
             <x-form.select label="Selecciona un Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" />
+                placeholder="Selecciona una placa" :clearable="false" :async-data="route('api.vehiculos.index')" option-label="placa"
+                option-value="id" />
         </div>
 
         {{-- dispositivo --}}

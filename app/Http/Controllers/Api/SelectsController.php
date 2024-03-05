@@ -403,7 +403,7 @@ class SelectsController extends Controller
     }
     public function modelosDispositivos(Request $request): Collection
     {
-        return ModelosDispositivo::query()
+        $modelos = ModelosDispositivo::query()
             ->select('id', 'modelo', 'marca')
             ->when(
                 $request->search,
@@ -411,13 +411,23 @@ class SelectsController extends Controller
                     ->where('modelo', 'like', "%{$request->search}%")
 
             )
-            ->withoutGlobalScopes()
-            ->when(
+            ->withoutGlobalScopes();
+        if ($request->input('modelo')) {
+
+            $modelos->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('modelo', $request->input('selected', [])),
+
+            );
+        } else {
+            $modelos->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
 
-            )
-            ->get();
+            );
+        }
+
+        return $modelos->get();
     }
     public function sustentos(Request $request): Collection
     {

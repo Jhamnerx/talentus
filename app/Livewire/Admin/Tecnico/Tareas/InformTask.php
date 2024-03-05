@@ -36,7 +36,7 @@ class InformTask extends Component
     public function save()
     {
 
-        // dd($this->tarea);
+
         $informe = $this->tarea->informe()->updateOrCreate([
             'tarea_id' => $this->tarea->id
         ], [
