@@ -50,6 +50,9 @@
 
     {{-- ckeditpor --}}
     @livewire('admin.tecnico.tareas.inform-task')
+
+    {{-- iframe --}}
+    @livewire('admin.tecnico.tareas.modales.iframe')
 @endpush
 
 @section('js')

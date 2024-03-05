@@ -185,9 +185,8 @@
                                 x-on:livewire-upload-progress="progress = $event.detail.progress">
 
                                 @if ($tarea->image)
-                                    {{-- <button wire:click="verImagen" class="btn bg-emerald-700 text-white">VER</button> --}}
-                                    <a class="image-task btn bg-emerald-700 text-white" data-gall="gallery01"
-                                        href="{{ Storage::url($tarea->image->url) }}">VER</a>
+                                    <x-form.button wire:click.prevent='verModalImagen({{ $tarea->id }})'
+                                        label="VER" emerald />
                                 @else
                                     <div x-show="!isUploading" class="flex gap-2 justify-center hover:cursor-pointer">
                                         <label class="block hover:cursor-pointer">
