@@ -19,13 +19,14 @@
                 <!-- Image + name -->
                 <div class="flex items-center">
                     <a class="inline-flex items-start mr-3" href="#0">
-                        <img class="rounded-full" src="{{asset('images/logo.png')}}" width="48" height="48"
+                        <img class="rounded-full" src="{{ asset('images/logo.png') }}" width="48" height="48"
                             alt="Lauren Marsano" />
                     </a>
                     <div class="pr-1 whitespace-nowrap">
                         <a class="inline-flex text-gray-800 hover:text-gray-900" href="#0">
-                            <h2 class="text-xl leading-snug font-bold">{{$tarea ? $tarea->cliente->razon_social :
-                                'Selecciona'}}</h2>
+                            <h2 class="text-xl leading-snug font-bold">
+                                {{ $tarea ? $tarea->cliente->razon_social : 'Selecciona' }}
+                            </h2>
                         </a>
                     </div>
                 </div>
@@ -50,7 +51,7 @@
                     </svg>
                     <span class="text-sm ml-2 w-full">
                         @if ($tarea)
-                        {{$tarea->cliente->direccion ? $tarea->cliente->direccion : 'Sin dirección'}}
+                            {{ $tarea->cliente->direccion ? $tarea->cliente->direccion : 'Sin dirección' }}
                         @endif
 
                     </span>
@@ -63,7 +64,7 @@
                     <a class="text-sm font-medium whitespace-nowrap text-indigo-500 hover:text-indigo-600 ml-2 w-full"
                         href="#0">
                         @if ($tarea)
-                        {{$tarea->cliente->email ? $tarea->cliente->email : 'notiene@.com'}}
+                            {{ $tarea->cliente->email ? $tarea->cliente->email : 'notiene@.com' }}
                         @endif
                     </a>
                 </div>
@@ -78,35 +79,34 @@
                 <!-- User -->
                 @if ($tarea)
 
-                @foreach ($tarea->cliente->contactos as $contacto)
-                <button wire:click="setSelected({{$contacto->id}})"
-                    class="w-full text-left py-2 px-1 focus:outline-none {{$contacto->id == $selected ? 'bg-indigo-100': '' }} hover:bg-indigo-50 focus-visible:bg-indigo-50">
-                    <div class="flex items-center">
-                        <img class="rounded-full items-start flex-shrink-0 mr-3"
-                            src="{{asset('images/auth-decoration.png')}}" width="32" height="32" alt="Marie Zulfikar" />
-                        <div>
-                            <h4 class="text-sm font-semibold text-gray-900">{{$contacto->nombre}}</h4>
-                            <div class="text-[13px]">{{$contacto->telefono}}</div>
-                        </div>
-                    </div>
-                </button>
-                @endforeach
-
+                    @foreach ($tarea->cliente->contactos as $contacto)
+                        <button wire:click="setSelected({{ $contacto->id }})"
+                            class="w-full text-left py-2 px-1 focus:outline-none {{ $contacto->id == $selected ? 'bg-indigo-100' : '' }} hover:bg-indigo-50 focus-visible:bg-indigo-50">
+                            <div class="flex items-center">
+                                <img class="rounded-full items-start flex-shrink-0 mr-3"
+                                    src="{{ asset('images/auth-decoration.png') }}" width="32" height="32"
+                                    alt="Marie Zulfikar" />
+                                <div>
+                                    <h4 class="text-sm font-semibold text-gray-900">{{ $contacto->nombre }}</h4>
+                                    <div class="text-[13px]">{{ $contacto->telefono }}</div>
+                                </div>
+                            </div>
+                        </button>
+                    @endforeach
                 @else
-
                 @endif
 
             </div>
             <div>
                 @if ($selected)
-                <a wire:click="setSelectedNull"
-                    class="mt-2 w-full hover:cursor-pointer peer-invalid:visible text-pink-600 text-sm">
-                    Deseleccionar
-                </a>
+                    <a wire:click="setSelectedNull"
+                        class="mt-2 w-full hover:cursor-pointer peer-invalid:visible text-pink-600 text-sm">
+                        Deseleccionar
+                    </a>
                 @else
-                <p class="mt-2 w-full peer-invalid:visible text-pink-600 text-sm">
-                    Selecciona un contacto para enviar el mensaje
-                </p>
+                    <p class="mt-2 w-full peer-invalid:visible text-pink-600 text-sm">
+                        Selecciona un contacto para enviar el mensaje
+                    </p>
                 @endif
 
             </div>

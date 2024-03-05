@@ -48,18 +48,30 @@ class ClienteContactos extends Component
 
     public function sendConfirmationClient()
     {
+
         if ($this->selected) {
 
-            $contacto = Contactos::findOrFail($this->selected);
-            $whatsApp = new WhatsAppApi();
+            try {
+                $contacto = Contactos::findOrFail($this->selected);
 
-            if ($contacto->telefono) {
+                $whatsApp = new WhatsAppApi();
 
-                $respuesta = $whatsApp->sendConfirmationClient($this->tarea, $contacto);
-                $this->mensajeRespuesta($respuesta, $this->tarea);
-            } else {
+                if ($contacto->telefono) {
 
-                $this->dispatch('not-number');
+                    $respuesta = $whatsApp->sendConfirmationClient($this->tarea, $contacto);
+
+                    $this->mensajeRespuesta($respuesta, $this->tarea);
+                } else {
+
+                    $this->dispatch('not-number');
+                }
+            } catch (\Throwable $th) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR AL GUARDAR',
+                    mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+                );
             }
         }
     }
@@ -69,13 +81,23 @@ class ClienteContactos extends Component
 
         if ($respuesta->httpStatusCode() == 200) {
 
-            $this->dispatch('mensaje-enviado');
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'MENSAJE ENVIADO',
+                mensaje: 'Se envio correctamente el mensaje al contacto',
+            );
             $tarea->sent_message = true;
             $tarea->save();
             return true;
         } else {
 
-            $this->dispatch('error-mensaje-whatsapp', ['error' => $respuesta->responseData()['error']['message']]);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL ENVIAR MENSAJE',
+                mensaje: 'Ocurrio el sgte error: ' . $respuesta->responseData()['error']['message'],
+            );
             return false;
         }
     }
