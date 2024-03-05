@@ -34,6 +34,7 @@ class Save extends Component
     public function closeModal()
     {
         $this->modalSave = false;
+        $this->resetProperties();
     }
 
 
@@ -55,7 +56,18 @@ class Save extends Component
             );
         }
     }
-
+    public function resetProperties()
+    {
+        $this->nombre = null;
+        $this->clientes_id = null;
+        $this->numero_documento = null;
+        $this->cargo = null;
+        $this->telefono = null;
+        $this->email = null;
+        $this->birthday = null;
+        $this->is_gerente = null;
+        $this->descripcion = null;
+    }
 
     public function afterSave()
     {

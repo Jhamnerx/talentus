@@ -104,8 +104,10 @@ Route::controller(ClientesController::class)->group(function () {
 
 
 
+Route::controller(ContactosController::class)->group(function () {
+    Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
+});
 
-Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
 
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');

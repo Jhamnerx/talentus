@@ -20,6 +20,12 @@ class ContactosRequest extends FormRequest
             'clientes_id' => 'required',
             'numero_documento' => 'required|unique:contactos,numero_documento,' . $contacto,
             'telefono' => 'nullable|digits_between:6,9|numeric',
+            'birthday' => 'date',
+            'cargo' => 'nullable',
+            'email' => 'nullable',
+            'descripcion' => 'nullable',
+            'is_gerente' => 'boolean',
+
 
         ];
 

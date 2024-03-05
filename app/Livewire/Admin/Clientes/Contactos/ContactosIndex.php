@@ -48,4 +48,9 @@ class ContactosIndex extends Component
     {
         $this->dispatch('open-modal-save');
     }
+    public function openModalEdit(Contactos $contacto)
+    {
+
+        $this->dispatch('open-modal-edit', contacto: $contacto);
+    }
 }
