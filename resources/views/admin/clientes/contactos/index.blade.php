@@ -9,6 +9,10 @@
 
 @stop
 
+@push('modals')
+    @livewire('admin.clientes.contactos.delete')
+@endpush
+
 @section('js')
     @if (session('store'))
         <script>
