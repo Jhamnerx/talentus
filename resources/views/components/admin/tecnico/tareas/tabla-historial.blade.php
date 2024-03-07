@@ -24,6 +24,11 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="font-semibold text-left">#</div>
                         </th>
+                        @role('admin')
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="font-semibold text-left">Tecnico</div>
+                            </th>
+                        @endrole
                         <th class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="font-semibold text-center">Descripción</div>
                         </th>
@@ -36,9 +41,11 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Estado</div>
                         </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-center">Costo</div>
-                        </th>
+                        @role('admin')
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-center">Costo</div>
+                            </th>
+                        @endrole
                         @canany(['tecnico.tareas.edit', 'tecnico.tareas.delete', 'tecnico.tareas.action.pdf'])
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Acciones</div>
@@ -73,6 +80,12 @@
                                     {{ $tarea->token }}
                                 </div>
                             </td>
+                            @role('admin')
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <x-form.badge flat black label="  {{ $tarea->tecnico->name }}" />
+
+                                </td>
+                            @endrole
                             <td class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="text-left font-medium text-slate-800">
                                     @php
@@ -108,11 +121,13 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">
-                                    {{ $tarea->tipo_tarea->costo }}
-                                </div>
-                            </td>
+                            @role('admin')
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-center">
+                                        {{ $tarea->tipo_tarea->costo }}
+                                    </div>
+                                </td>
+                            @endrole
                             @canany(['tecnico.tareas.edit', 'tecnico.tareas.delete', 'tecnico.tareas.action.pdf'])
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex gap-2 justify-center">

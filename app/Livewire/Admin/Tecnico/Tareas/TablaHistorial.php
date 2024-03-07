@@ -30,7 +30,7 @@ class TablaHistorial extends Component
             $vehiculo->where('placa', 'LIKE', '%' . $this->search . '%');
         })->orWhereHas('cliente', function ($cliente) {
             $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })->orWhereHas('user', function ($user) {
+        })->orWhereHas('tecnico', function ($user) {
             $user->where('name', 'LIKE', '%' . $this->search . '%');
         })->orWhereHas('tipo_tarea', function ($user) {
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
