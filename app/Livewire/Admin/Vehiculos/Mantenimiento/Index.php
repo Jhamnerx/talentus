@@ -35,7 +35,7 @@ class Index extends Component
             ->orwhereDate('fecha_hora_mantenimiento', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '')
             ->orderby('id', 'desc')
             ->with('vehiculo')
-            ->paginate(10);;
+            ->paginate(12);;
 
 
         return view('livewire.admin.vehiculos.mantenimiento.index', compact('mantenimientos'));

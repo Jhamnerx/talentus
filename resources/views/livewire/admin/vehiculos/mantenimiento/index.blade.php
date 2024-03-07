@@ -109,6 +109,9 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Vehiculo</div>
                             </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="font-semibold text-left">Cliente</div>
+                            </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Detalle</div>
                             </th>
@@ -154,6 +157,32 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-medium text-sky-500">
+                                        @if ($mantenimiento->vehiculo->cliente)
+                                            <a
+                                                href="{{ route('admin.clientes.edit', $mantenimiento->vehiculo->cliente) }}">
+                                                {{ $mantenimiento->vehiculo->cliente->razon_social }}
+
+                                            </a>
+                                        @else
+                                            Sin Cliente Registrado
+                                        @endif
+
+
+
+
+                                    </div>
+                                    @if ($mantenimiento->vehiculo->cliente)
+                                        <div class="font-sm text-slate-900">
+                                            <p class="text-xs">
+                                                {{ $mantenimiento->vehiculo->cliente->numero_documento }}
+                                            </p>
+
+                                        </div>
+                                    @endif
+
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 ">
                                     <div class="font-medium text-slate-800">{{ $mantenimiento->detalle_trabajo }}
                                     </div>
                                 </td>
