@@ -31,7 +31,7 @@
         <div
             class="col-span-12 sm:col-span-6 dispositivo {{ $tipo_tarea_id == 2 || $tipo_tarea_id == 4 ? 'hidden' : 'cambio' }}">
 
-            <x-form.select label="Dipositivo:" name="modelo_id" wire:model.live="dispositivo"
+            <x-form.select label="Dipositivo:" name="dispositivo" wire:model.live="dispositivo"
                 placeholder="Selecciona un modelo" :async-data="[
                     'api' => route('api.dispositivos.modelos.index'),
                     'params' => ['modelo' => true], // default is []

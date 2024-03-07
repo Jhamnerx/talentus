@@ -34,7 +34,7 @@
         <div
             class="col-span-12 sm:col-span-6 dispositivo {{ $tipo_tarea_id == 2 || $tipo_tarea_id == 4 ? 'hidden' : 'cambio' }}">
 
-            <x-form.select label="Dipositivo:" name="modelo_id" wire:model.live="dispositivo"
+            <x-form.select label="Dipositivo:" name="dispositivo" wire:model.live="dispositivo"
                 placeholder="Selecciona un modelo" :async-data="[
                     'api' => route('api.dispositivos.modelos.index'),
                 ]" option-label="modelo" option-value="modelo"
@@ -194,29 +194,31 @@
             <x-form.datetime-picker label="Fecha y Hora de la Tarea:" placeholder="Fecha y Hora"
                 parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" wire:model.live="fecha_hora" />
         </div>
+        {{ json_encode($errors->all()) }}
+        @role('admin')
+            <div class="col-span-12">
+                <label class="block text-sm font-medium mb-1" for="plataforma">Selecciona El Tecnico:
+                    <span class="text-rose-500">*</span></label>
+                <div class="flex flex-wrap items-center">
 
-        <div class="col-span-12">
-            <label class="block text-sm font-medium mb-1" for="plataforma">Selecciona El Tecnico:
-                <span class="text-rose-500">*</span></label>
-            <div class="flex flex-wrap items-center">
+                    @foreach ($tecnicos as $tecnico)
+                        <div class="m-3">
+                            <label class="flex items-center">
+                                <input type="radio" name="radio-buttons" class="form-radio"
+                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
+                                <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                            </label>
+                        </div>
+                    @endforeach
 
-                @foreach ($tecnicos as $tecnico)
-                    <div class="m-3">
-                        <label class="flex items-center">
-                            <input type="radio" name="radio-buttons" class="form-radio"
-                                wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
-                            <span class="text-sm ml-2">{{ $tecnico->name }}</span>
-                        </label>
-                    </div>
-                @endforeach
-
+                </div>
+                @error('tecnico_id')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
             </div>
-            @error('tecnico_id')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
-            @enderror
-        </div>
+        @endrole
 
 
         @if ($tipo_tarea_id == '0')

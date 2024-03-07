@@ -45,7 +45,7 @@ class CreateTask extends Component
     }
     protected function rules()
     {
-        return [
+        $rules =  [
             'tipo_tarea_id' => 'required|gt:0',
             'vehiculos_id' => 'required',
             'tecnico_id' => 'required',
@@ -58,6 +58,12 @@ class CreateTask extends Component
             'modelo_velocimetro' => 'required_if:tipo_tarea_id,4',
             'fecha_hora' => 'required',
         ];
+
+        if (auth()->user()->hasRole('tecnico')) {
+            $rules['tecnico_id'] = 'nullable';
+        }
+
+        return $rules;
     }
 
     protected function messages()
@@ -150,7 +156,12 @@ class CreateTask extends Component
 
     public function save()
     {
+
         $data = $this->validate();
+
+        if (auth()->user()->hasRole('tecnico')) {
+            $data['tecnico_id'] = auth()->user()->id;
+        }
 
         try {
             $tarea = Tareas::create($data);
