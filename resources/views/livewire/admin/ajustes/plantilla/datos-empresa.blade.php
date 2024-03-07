@@ -151,7 +151,6 @@
 
         </div>
     </div>
-
     {{-- MAIL CONFIG --}}
     <div class="col-span-12 mx-3 rounded bg-white overflow-hidden shadow-2xl">
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 px-3 mb-2">
@@ -199,3 +198,12 @@
         </div>
     </div>
 </div>
+@push('scripts')
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+
+
+
+        });
+    </script>
+@endpush

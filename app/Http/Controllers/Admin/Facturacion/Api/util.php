@@ -347,14 +347,21 @@ class Util extends Controller
     }
 
 
-    public function convertToPem($ruta_pfx, $password)
+    public function convertToPem($ruta, $password)
     {
 
-        $pfx = Storage::disk('facturacion')->get($ruta_pfx . '.pfx');
+        try {
 
-        $certificate = new X509Certificate($pfx, $password);
-        $pem = $certificate->export(X509ContentType::PEM);
+            $pfx = Storage::disk('facturacion')->get($ruta);
 
-        Storage::disk('facturacion')->put($ruta_pfx . '.pem', $pem);
+            $certificate = new X509Certificate($pfx, $password);
+            $pem = $certificate->export(X509ContentType::PEM);
+            Storage::disk('facturacion')->put('talentus/certificado/certificado_talentus.pem', $pem);
+
+            return "exito";
+        } catch (\Throwable $th) {
+
+            return $th->getMessage();
+        }
     }
 }

@@ -13,6 +13,7 @@ class DatosEmpresa extends Component
     public $ruc, $razon_social, $nombre_comercial, $telefono, $igv, $icbper, $modo;
     public $sunat;
     public $mail_config;
+    public $cdt;
 
     public function mount()
     {
@@ -33,7 +34,10 @@ class DatosEmpresa extends Component
     {
         return view('livewire.admin.ajustes.plantilla.datos-empresa');
     }
-
+    public function test()
+    {
+        dd($this->cdt);
+    }
 
 
     public function saveInfo()

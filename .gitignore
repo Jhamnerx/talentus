@@ -17,4 +17,4 @@ yarn-error.log
 /.vscode
 *.zip
 /storage\app\public\profile-photos/
-/storage\app\facturacion/
+/storage/app/facturacion

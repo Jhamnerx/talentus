@@ -241,6 +241,7 @@ Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
 Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
 Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
+Route::get('ajustes/sunat', [AjustesController::class, 'sunat'])->name('admin.ajustes.sunat');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
 Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
@@ -393,4 +394,5 @@ Route::controller(SelectsController::class)->group(function () {
 Route::controller(UtilesController::class)->group(function () {
 
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
+    Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
 });

@@ -607,4 +607,13 @@ class ApiFacturacion extends Controller
 
         return $detalle;
     }
+
+    public function convertCertificado($ruta, $password)
+    {
+        $util = Util::getInstance();
+
+        $respuesta = $util->convertToPem($ruta, $password);
+
+        return $respuesta;
+    }
 }

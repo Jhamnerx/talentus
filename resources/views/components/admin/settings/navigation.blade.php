@@ -100,6 +100,23 @@
                     </a>
                 </li>
             @endcan
+            @can('admin.settings.plantilla.index')
+                <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                    <a href="{{ route('admin.ajustes.sunat') }}"
+                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
+                        :class="settingsPanel === 'sunat' && 'bg-indigo-50'">
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
+                            :class="settingsPanel === 'sunat' && 'text-indigo-400'" viewBox="0 0 16 16">
+                            <path
+                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                        </svg>
+                        <span class="text-sm font-medium text-slate-600"
+                            :class="settingsPanel === 'sunat' ? 'text-indigo-500' : 'hover:text-slate-700'">
+                            Ajustes Sunat
+                        </span>
+                    </a>
+                </li>
+            @endcan
 
         </ul>
     </div>
