@@ -7,6 +7,9 @@
                 #
             </th>
             <th>
+                EMPRESA
+            </th>
+            <th>
                 VEHICULO
             </th>
             <th>
@@ -25,9 +28,7 @@
             <th>
                 Registrada por
             </th>
-            <th>
-                fecha registro
-            </th>
+
         </tr>
     </thead>
     <!-- Table body -->
@@ -46,10 +47,13 @@
 
                         </div>
 
-
-
                     </td>
 
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-medium text-slate-800">
+                            {{ $mantenimiento->vehiculo->cliente ? $mantenimiento->vehiculo->cliente->razon_social : '' }}
+                        </div>
+                    </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-medium text-slate-800">
                             {{ $mantenimiento->vehiculo->placa }}
@@ -85,9 +89,7 @@
 
                         </div>
                     </td>
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div>{{ $mantenimiento->created_at }}</div>
-                    </td>
+
                 </tr>
             @endforeach
         @else

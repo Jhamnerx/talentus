@@ -14,7 +14,8 @@ class Export extends Component
 
     public $fecha_inicio;
     public $fecha_fin;
-    public $estado;
+    public $estado = "TODAS";
+    public $clientes_id;
 
 
 
@@ -26,6 +27,7 @@ class Export extends Component
         'fecha_inicio' => 'required',
         'fecha_fin' => 'required',
         "estado" => 'required',
+        "clientes_id" => 'required',
 
 
     ];
@@ -34,6 +36,7 @@ class Export extends Component
         'fecha_inicio.required' => 'La fecha es requerida',
         'fecha_fin.required' => 'La fecha es requerida',
         'estado.required' => 'El estado es requerido',
+        'clientes_id.required' => 'Selecciona un cliente',
 
 
     ];
@@ -43,7 +46,7 @@ class Export extends Component
 
         $this->fecha_inicio = Carbon::now()->format('Y-m-d');
         $this->fecha_fin = Carbon::now()->addMonth()->format('Y-m-d');
-        $this->estado = 'PENDIENTE';
+        $this->estado = 'TODAS';
     }
 
     public function render()
@@ -63,11 +66,11 @@ class Export extends Component
         $this->resetErrorBag();
     }
 
-    public function ExportReport()
+    public function exportReport()
     {
 
         $this->validate();
-        return Excel::download(new MantenimientosExport($this->estado, $this->fecha_inicio, $this->fecha_fin), 'mantenimientos_reportes.xlsx');
+        return Excel::download(new MantenimientosExport($this->estado, $this->fecha_inicio, $this->fecha_fin, $this->clientes_id), 'mantenimientos_reportes.xlsx');
     }
 
     public function updated($label)
