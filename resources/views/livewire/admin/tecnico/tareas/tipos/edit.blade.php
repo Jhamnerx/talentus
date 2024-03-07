@@ -101,6 +101,13 @@
                                     </p>
                                 @enderror
                             </div>
+                            <div class="col-span-12 sm:col-span-3">
+
+                                <label class="block text-sm font-medium mb-1" for="afecta_mantenimiento">Afecta
+                                    mantenimiento? </label>
+                                <x-form.toggle left-label="" lg wire:model.live="afecta_mantenimiento"
+                                    value="1" />
+                            </div>
                             <div class="col-span-12">
                                 <x-form.badge flat positive label="%modelo_gps%" />
                                 <x-form.badge flat negative label="%placa%" />

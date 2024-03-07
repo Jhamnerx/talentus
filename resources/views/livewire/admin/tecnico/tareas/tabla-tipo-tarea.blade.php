@@ -175,9 +175,11 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-center">Descripción</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-center">Costo</div>
-                            </th>
+                            @role('admin')
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Costo</div>
+                                </th>
+                            @endrole
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Total Tareas</div>
                             </th>
@@ -209,14 +211,16 @@
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-center">
-                                        {{ $tarea->costo }}
+                                        {{ $tarea->descripcion }}
                                     </div>
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-center">
-                                        {{ $tarea->costo }}
-                                    </div>
-                                </td>
+                                @role('admin')
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-center">
+                                            {{ $tarea->costo }}
+                                        </div>
+                                    </td>
+                                @endrole
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-center">
                                         {{ $tarea->tareas->count() }}

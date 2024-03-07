@@ -25,6 +25,7 @@ class tipoTareas extends Model
 
     protected $casts = [
         'id' => 'integer',
+        'afecta_mantenimiento' => 'boolean',
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

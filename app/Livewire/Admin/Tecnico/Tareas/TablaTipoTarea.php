@@ -38,9 +38,6 @@ class TablaTipoTarea extends Component
     public function deleteTipoTask(tipoTareas $task)
     {
 
-
-        $this->dispatch('update-task', ['titulo' => 'TIPO TAREA ELIMINADA', 'message' => 'Se elimino el tipo tarea',  'token' => '', 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-
         $this->dispatch(
             'notify-toast',
             icon: 'error',

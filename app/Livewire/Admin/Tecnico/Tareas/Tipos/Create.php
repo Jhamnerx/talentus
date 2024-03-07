@@ -12,6 +12,8 @@ class Create extends Component
 
     public $nombre, $costo = 0, $descripcion = "Instalación de GPS %modelo_gps% en vehículo: %placa%, Fecha instalación: %fecha% - Hora: %hora%";
 
+    public $afecta_mantenimiento = false;
+
     protected $listeners = [
         'addTipoTask',
     ];
@@ -22,6 +24,7 @@ class Create extends Component
             'nombre' => 'required',
             'costo' => 'required',
             'descripcion' => 'required',
+            'afecta_mantenimiento' => 'boolean',
         ];
     }
     protected function messages()

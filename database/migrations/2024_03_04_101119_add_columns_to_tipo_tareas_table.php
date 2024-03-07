@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('tipo_tareas', function (Blueprint $table) {
             $table->text('descripcion')->nullable()->after('nombre');
+            $table->boolean('afecta_mantenimiento')->default(false)->nullable()->after('descripcion');
         });
     }
 
