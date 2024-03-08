@@ -311,8 +311,7 @@
                                             </div>
                                             <!-- End -->
                                             <div class="font-medium text-sky-500">
-                                                <a
-                                                    href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{ $sim_card->vehiculos->placa }}</a>
+                                                {{ $sim_card->vehiculos->placa }}
                                             </div>
                                         </div>
                                     @else

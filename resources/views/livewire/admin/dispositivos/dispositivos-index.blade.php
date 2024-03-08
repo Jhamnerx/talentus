@@ -277,8 +277,7 @@
 
                                     @if (!empty($dispositivo->vehiculos))
                                         <div class="font-medium text-sky-500">
-                                            <a
-                                                href="{{ route('admin.vehiculos.edit', $dispositivo->vehiculos) }}">{{ $dispositivo->vehiculos->placa }}</a>
+                                            {{ $dispositivo->vehiculos->placa }}
                                         </div>
                                     @else
                                         <div class="font-medium text-emerald-500">
