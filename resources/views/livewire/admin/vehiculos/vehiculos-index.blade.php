@@ -150,18 +150,21 @@
                 </div>
             </div>
             <!-- Export button -->
-            <div class="relative inline-flex">
+            @can('exportar-vehiculos-vehiculos')
+                <div class="relative inline-flex">
 
 
-                <x-form.button wire:click.prevent='exportVehiculos()' spinner="exportVehiculos" label="Exportar"
-                    positive md icon="download" />
-            </div>
-
+                    <x-form.button wire:click.prevent='exportVehiculos()' spinner="exportVehiculos" label="Exportar"
+                        positive md icon="download" />
+                </div>
+            @endcan
             <!-- Import button -->
-            <div class="relative inline-flex">
+            @can('importar-vehiculos-vehiculos')
+                <div class="relative inline-flex">
 
-                <x-form.button wire:click="openModalImport()" label="Importar" info md icon="upload" />
-            </div>
+                    <x-form.button wire:click="openModalImport()" label="Importar" info md icon="upload" />
+                </div>
+            @endcan
         </div>
         <!-- Left side -->
         <div class="mb-4 sm:mb-0">

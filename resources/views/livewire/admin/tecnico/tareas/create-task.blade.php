@@ -194,7 +194,7 @@
             <x-form.datetime-picker label="Fecha y Hora de la Tarea:" placeholder="Fecha y Hora"
                 parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" wire:model.live="fecha_hora" />
         </div>
-        {{ json_encode($errors->all()) }}
+        {{-- {{ json_encode($errors->all()) }} --}}
         @role('admin')
             <div class="col-span-12">
                 <label class="block text-sm font-medium mb-1" for="plataforma">Selecciona El Tecnico:

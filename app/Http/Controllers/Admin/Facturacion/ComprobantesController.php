@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class ComprobantesController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:ver-comprobantes', ['only' => ['index']]);
+        $this->middleware('permission:comprobantes-emitir-factura', ['only' => ['emitirFactura']]);
+        $this->middleware('permission:comprobantes-emitir-boleta', ['only' => ['emitirBoleta']]);
+        $this->middleware('permission:comprobantes-emitir-nota-venta', ['only' => ['emitirNotaVenta']]);
+        $this->middleware('permission:comprobantes-emitir-nota-credito', ['only' => ['emitirNotaCredito']]);
+        $this->middleware('permission:comprobantes-emitir-nota-debito', ['only' => ['emitirNotaDebito']]);
+    }
+
+
     public function index()
     {
         return view('admin.comprobantes.index');
