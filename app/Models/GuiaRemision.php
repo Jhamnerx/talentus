@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\ModalidadTraslado;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class GuiaRemision extends Model
 {
@@ -29,6 +30,7 @@ class GuiaRemision extends Model
         'venta_id' => 'integer',
         'fecha_inicio_traslado' => 'date',
         'user_id' => 'integer',
+        'modalidad_traslado' => ModalidadTraslado::class,
     ];
 
     public function cliente(): BelongsTo

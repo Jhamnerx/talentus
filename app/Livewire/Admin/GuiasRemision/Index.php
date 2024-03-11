@@ -20,14 +20,15 @@ class Index extends Component
 
     public function render()
     {
-        $guias = GuiaRemision::whereHas('motivo', function ($query) {
+        $guias = GuiaRemision::whereHas('motivoTraslado', function ($query) {
             $query->where('descripcion', 'like', '%' . $this->search . '%');
-        })->orWhere('serie_numero', 'like', '%' . $this->search . '%')
-            ->orWhere('razon_social', 'like', '%' . $this->search . '%')
+        })
+            ->orWhereHas('cliente', function ($cliente) {
+                $cliente->where('razon_social', 'like', '%' . $this->search . '%')
+                    ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
+            })
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('numero_documento', 'like', '%' . $this->search . '%')
             ->orWhere('code_puerto', 'like', '%' . $this->search . '%')
-            ->orWhere('numero_contenedor', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_partida', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_llegada', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'DESC')
