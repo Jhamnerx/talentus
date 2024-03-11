@@ -84,26 +84,59 @@ class Save extends Component
 
     public function checkCategory($categoria)
     {
-
         $permisos = Permission::get();
-        //dd($permisos);
+
         foreach ($permisos as $permiso) {
             if (strpos($permiso->name, $categoria)) {
 
-                //dd(strpos($permiso->name, $categoria));
-                //array_push($this->permission, $permiso->name);
+                // $valor = array_search($permiso->name, $this->permission);
 
-                $valor = array_search($permiso->name, $this->permission);
-
-                //var_dump($valor);
-                //dd($valor);
                 if (array_search($permiso->name, $this->permission) === false) {
-
                     array_push($this->permission, $permiso->name);
-                    //dd($permiso->name);
-
                 }
             }
+        }
+    }
+
+    public function checkComprobantesPermisos()
+    {
+        $perms = [
+            'ver-comprobantes',
+            'comprobantes-emitir-factura',
+            'comprobantes-emitir-boleta',
+            'comprobantes-emitir-nota-venta',
+            'comprobantes-emitir-nota-credito',
+            'comprobantes-emitir-nota-debito',
+            'comprobantes-descargar-pdf',
+            'comprobantes-descargar-xml',
+            'comprobantes-ver-nota-credito',
+            'comprobantes-ver-nota-debito',
+            'comprobantes-nota-credito-pdf',
+            'comprobantes-nota-credito-xml',
+            'comprobantes-nota-debito-pdf',
+            'comprobantes-nota-debito-xml',
+        ];
+
+        foreach ($perms  as $perm) {
+            array_push($this->permission, $perm);
+        }
+    }
+
+    public function checkMantenimiento()
+    {
+
+        $perms = [
+            'ver-mantenimientos-vehiculos',
+            'crear-mantenimientos-vehiculos',
+            'editar-mantenimientos-vehiculos',
+            'eliminar-mantenimientos-vehiculos',
+            'task-mantenimientos-vehiculos',
+            'mark-mantenimientos-vehiculos',
+            'exportar-mantenimientos-vehiculos',
+        ];
+
+        foreach ($perms  as $perm) {
+            array_push($this->permission, $perm);
         }
     }
 }

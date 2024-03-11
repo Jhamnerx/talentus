@@ -15,7 +15,7 @@ class VehiculosController extends Controller
     function __construct()
     {
         $this->middleware('permission:ver-vehiculos-vehiculos', ['only' => ['index']]);
-        $this->middleware('permission:show-vehiculo-vehiculos', ['only' => ['show']]);
+        $this->middleware('permission:show-vehiculos-vehiculos', ['only' => ['show']]);
     }
 
 

@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermisosUpdateSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class PermisosUpdateSeeder extends Seeder
             'exportar-vehiculos-vehiculos',
             'importar-vehiculos-vehiculos',
 
-            'show-vehiculo-vehiculos',
+            'show-vehiculos-vehiculos',
             'ver-mantenimientos-vehiculos',
             'crear-mantenimientos-vehiculos',
             'editar-mantenimientos-vehiculos',
@@ -42,6 +43,14 @@ class PermisosUpdateSeeder extends Seeder
             'comprobantes-nota-credito-xml',
             'comprobantes-nota-debito-pdf',
             'comprobantes-nota-debito-xml',
+
+
+            'descargar-recibos',
+            'convertir-recibos',
         ];
+
+        foreach ($permisos as $permiso) {
+            Permission::create(['name' => $permiso]);
+        }
     }
 }
