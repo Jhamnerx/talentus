@@ -7,6 +7,7 @@ use App\Models\Lineas;
 use App\Models\Series;
 use App\Models\Ventas;
 use App\Models\SimCard;
+use App\Models\Ciudades;
 use App\Models\Clientes;
 use App\Models\Categoria;
 use App\Models\Productos;
@@ -15,11 +16,15 @@ use App\Models\Vehiculos;
 use App\Models\Dispositivos;
 use Illuminate\Http\Request;
 use App\Models\TipoDocumento;
+use App\Models\MotivoTraslado;
 use App\Models\TipoAfectacion;
+use App\Models\MotivosTraslado;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
-use App\Models\Ciudades;
+use App\Models\ModalidadTransporte;
+use App\Models\Ubigeos;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -246,7 +251,7 @@ class SelectsController extends Controller
             )
             ->get();
     }
-    public function comprobantes(Request $request): Collection
+    public function tipoComprobantes(Request $request): Collection
     {
 
         return TipoComprobantes::query()
@@ -265,9 +270,10 @@ class SelectsController extends Controller
             )
             ->get();
     }
+
     public function sim(Request $request): Collection
     {
-        return SimCard::query()
+        $sim = SimCard::query()
             ->select('id', 'sim_card')
             ->orderBy('id')
             ->withoutGlobalScopes()
@@ -276,13 +282,24 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query
                     ->where('sim_card', 'like', "%{$request->search}%")
 
-            )
-            ->when(
+            );
+
+        if ($request->input('of') == '01') {
+            $sim->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('sim_card', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            );
+        } else {
+            $sim->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
-            )
-            ->get();
+            );
+        }
+
+
+        return $sim->get();
     }
     public function lineas(Request $request): Collection
     {
@@ -429,6 +446,7 @@ class SelectsController extends Controller
 
         return $modelos->get();
     }
+
     public function sustentos(Request $request): Collection
     {
 
@@ -447,6 +465,124 @@ class SelectsController extends Controller
                 fn (Builder $query) => $query->whereIn('serie', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
             )
+            ->get();
+    }
+
+    public function motivosTraslado(Request $request): Collection
+    {
+
+        return MotivoTraslado::query()
+            ->select('codigo', 'descripcion')
+            ->orderBy('codigo')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('descripcion', 'like', "%{$request->search}%")
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->get();
+    }
+
+    public function modalidadTraslado(Request $request): Collection
+    {
+
+        return ModalidadTransporte::query()
+            ->select('codigo', 'descripcion')
+            ->orderBy('codigo')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('descripcion', 'like', "%{$request->search}%")
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->get();
+    }
+
+    public function ubigeos(Request $request): Collection
+    {
+
+        return Ubigeos::query()
+            ->select('id', 'ubigeo_inei', 'departamento', 'provincia', 'distrito')
+            ->orderBy('departamento')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('ubigeo_inei', 'like', "%{$request->search}%")
+                    ->orwhere('departamento', 'like', "%{$request->search}%")
+                    ->orwhere('provincia', 'like', "%{$request->search}%")
+                    ->orwhere('distrito', 'like', "%{$request->search}%")
+
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('ubigeo_inei', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->get()->map(function (Ubigeos $ubigeo) {
+
+                $ubigeo->option_description = '<b>' . $ubigeo->ubigeo_inei . '</b> - ' . $ubigeo->departamento . ' - ' . $ubigeo->provincia . ' - ' . $ubigeo->distrito;
+
+                return $ubigeo;
+            });
+    }
+
+    public function comprobantes(Request $request): Collection
+    {
+
+        return Ventas::query()
+
+
+            ->with(['cliente' => function ($query) {
+                $query->select('razon_social', 'id', 'numero_documento');
+            }])
+            ->select('id', 'serie_correlativo', 'cliente_id')
+            ->orderBy('serie_correlativo')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('serie_correlativo', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('serie_correlativo', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->get()->map(function (Ventas $venta) {
+
+                $venta->option_description = '<b>' . $venta->serie_correlativo . '</b> - ' . $venta->cliente->razon_social . ' - ';
+
+                return $venta;
+            });
+    }
+
+    public function user(Request $request): Collection
+    {
+
+        return User::query()
+
+            ->select('id', 'name')
+            ->orderBy('id')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('name', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
+                fn (Builder $query) => $query->limit(20)
+            )
+            ->role('tecnico')
             ->get();
     }
 }

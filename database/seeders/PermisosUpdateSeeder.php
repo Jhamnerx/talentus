@@ -15,7 +15,7 @@ class PermisosUpdateSeeder extends Seeder
     {
         $permisos = [
             //VEHICULOS
-            'exportar-vehiculos-vehiculos',
+            'exportar.vehiculos-vehiculos',
             'importar-vehiculos-vehiculos',
 
             'show-vehiculos-vehiculos',
@@ -44,8 +44,6 @@ class PermisosUpdateSeeder extends Seeder
             'comprobantes-nota-debito-pdf',
             'comprobantes-nota-debito-xml',
 
-
-            'descargar-recibos',
             'convertir-recibos',
         ];
 

@@ -16,26 +16,32 @@ class GuiaRemisionRequest extends FormRequest
     {
 
         $rules = [
-            'serie_numero' => [
-                'required', Rule::unique('guia_remision', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+            'serie_correlativo' => [
+                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
+            'serie' => 'required',
+            'correlativo' => 'required',
             'fecha_emision' => 'required|date',
+            'cliente_id' => 'required',
             'tipo_documento' => 'required',
             'numero_documento' => 'required',
             'razon_social' => 'required',
-            'motivo_traslado' => 'required',
-            'modalidad_traslado' => 'required',
+            'motivo_traslado_id' => 'required',
+            'modalidad_transporte_id' => 'required',
             'fecha_inicio_traslado' => 'required|date',
             'peso' => 'required',
             'cantidad_items' => 'required|gte:1',
             'numero_contenedor' => 'nullable',
             'code_puerto' => 'nullable',
+            'observacion' => 'nullable',
+
             'direccion_partida' => 'required',
             'ubigeo_partida' => 'required',
             'direccion_llegada' => 'required',
             'ubigeo_llegada' => 'required',
-            'factura_id' => 'nullable',
+            'venta_id' => 'nullable',
             'asignarTecnico' => 'nullable',
+
             'items' => 'array|between:1,100',
             'items.*.producto_id' => 'required',
             'items.*.codigo' => 'required',
@@ -43,16 +49,16 @@ class GuiaRemisionRequest extends FormRequest
             'items.*.unidad_medida' => 'required',
             'items.*.descripcion' => 'required',
 
-            'imeis_add' => 'exclude_if:asignarTecnico,false|array',
-            'sim_add' => 'exclude_if:asignarTecnico,false|array',
-            'users_id' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
+            'items_dispositivos' => 'exclude_if:asignarTecnico,false|array',
+            'items_sim_card' => 'exclude_if:asignarTecnico,false|array',
+            'tecnico_id' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
         ];
 
         if ($guia) {
 
-            $rules['serie_numero'] = [
+            $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('guia_remision', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
                     ->ignore($guia->id),
 
             ];
@@ -75,6 +81,7 @@ class GuiaRemisionRequest extends FormRequest
             'users_id.required_if' => 'Debe seleccionar un usuario de rol Tecnico',
 
             'imeis_add.min' => 'Ingresa como minimo un imei',
+            'tecnico_id.required_if' => 'Selecciona un tecnico'
         ];
 
         return $messages;

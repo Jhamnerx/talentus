@@ -168,7 +168,7 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Guias Remision <span
+            <h2 class="font-semibold text-slate-800">Guias Remision: <span
                     class="text-slate-400 font-medium">{{ $guias->total() }}</span>
             </h2>
         </header>
@@ -185,8 +185,7 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                     </label>
                                 </div>
                             </th>
@@ -196,9 +195,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Fecha Emision</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Destinario T/Doc</div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Destinatario</div>
                             </th>
@@ -227,7 +224,8 @@
                             @foreach ($guias as $guia)
                                 <tr class="hover:cursor-pointer hover:shadow-md">
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
+                                        <div class="flex items-
+                                        center">
                                             <label class="inline-flex">
                                                 <span class="sr-only">Select</span>
                                                 <input class="table-item form-checkbox" type="checkbox"
@@ -241,7 +239,7 @@
 
                                         <div class="font-medium text-sky-600">
 
-                                            {{ $guia->serie_numero }}
+                                            {{ $guia->serie_correlativo }}
 
                                         </div>
 
@@ -254,11 +252,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
-                                            {{ $guia->tipo_documento }}: {{ $guia->numero_documento }}
-                                        </div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $guia->razon_social }}
+                                            {{ $guia->cliente->razon_social }}
                                         </div>
                                     </td>
 
@@ -266,15 +260,15 @@
 
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 ">
 
-                                        <div>{{ $guia->motivo->descripcion }}</div>
+                                        <div>{{ $guia->motivoTraslado->descripcion }}</div>
 
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
 
                                         <div
-                                            class="inline-flex font-medium bg-{{ $guia->modalidad_traslado->color() }}-100 text-{{ $guia->modalidad_traslado->color() }}-600 rounded-full text-center px-2.5 py-0.5">
-                                            {{ $guia->modalidad_traslado->name() }}
+                                            class="inline-flex font-medium bg-{{ $guia->modalidadTransporte->codigo == '01' ? 'emerald' : 'rose' }}-100 text-{{ $guia->modalidadTransporte->codigo == '01' ? 'emerald' : 'rose' }}-600 rounded-full text-center px-2.5 py-0.5">
+                                            {{ $guia->modalidadTransporte->descripcion }}
                                         </div>
 
 

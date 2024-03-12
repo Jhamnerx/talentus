@@ -563,7 +563,7 @@
 
 
                 <x-admin.settings.permiso-input name='permission[]' model="permission"
-                    value='exportar-vehiculos-vehiculos' label='exportar vehiculos' />
+                    value='exportar.vehiculos-vehiculos' label='exportar vehiculos' />
 
                 <x-admin.settings.permiso-input name='permission[]' model="permission"
                     value='importar-vehiculos-vehiculos' label='importar vehiculos' />

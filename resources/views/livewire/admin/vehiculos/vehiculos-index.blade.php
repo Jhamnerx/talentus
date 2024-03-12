@@ -150,7 +150,7 @@
                 </div>
             </div>
             <!-- Export button -->
-            @can('exportar-vehiculos-vehiculos')
+            @can('exportar.vehiculos-vehiculos')
                 <div class="relative inline-flex">
 
 

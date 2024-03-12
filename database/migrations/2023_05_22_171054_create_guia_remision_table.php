@@ -18,8 +18,10 @@ return new class extends Migration
             $table->foreignId('cliente_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('serie');
             $table->string('correlativo');
+            $table->string('serie_correlativo');
             $table->date('fecha_emision');
-            $table->foreignId('venta_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+
+            $table->foreignId('venta_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('terceros_tipo_documento')->nullable();
             $table->string('terceros_num_doc')->nullable();
             $table->text('terceros_razon_social')->nullable();
@@ -39,7 +41,7 @@ return new class extends Migration
             $table->string('cantidad_items')->nullable();
             $table->string('numero_contenedor')->nullable();
             $table->string('code_puerto')->nullable();
-            $table->text('direccion_partidad')->nullable();
+            $table->text('direccion_partida')->nullable();
             $table->string('ubigeo_partida')->nullable();
             $table->text('direccion_llegada')->nullable();
             $table->string('ubigeo_llegada')->nullable();
@@ -50,7 +52,9 @@ return new class extends Migration
             $table->text('xml_base64')->nullable();
             $table->text('cdr_base64')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();
+            $table->unsignedBigInteger('tecnico_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
+            $table->foreign('tecnico_id')->references('id')->on('users')->onDelete('set null');
 
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->timestamps();

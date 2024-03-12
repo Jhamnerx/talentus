@@ -69,7 +69,7 @@
                                         class="h-5 w-5 text-gray-400 dark:text-gray-600" />
                                 @endif
 
-                                @if (!$withoutItemsCount)
+                                @if ($withoutItemsCount)
                                     <span class="inline-flex text-secondary-700 dark:text-secondary-400 text-sm"
                                         x-show="selectedOptions.length" x-text="selectedOptions.length">
                                     </span>

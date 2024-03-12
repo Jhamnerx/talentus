@@ -25,7 +25,7 @@
                         <x-form.select id="tipo_comprobante_id" name="tipo_comprobante_id" :searchable="false"
                             :clearable="false" wire:model="tipo_comprobante_id" placeholder="Tipo de documento"
                             :async-data="[
-                                'api' => route('api.comprobantes.index'),
+                                'api' => route('api.tipo.comprobantes.index'),
                             ]" option-label="descripcion" option-value="codigo" />
 
                     </div>

@@ -378,7 +378,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/invoices', 'invoices')->name('api.invoices.index');
     Route::get('api/productos', 'productos')->name('api.productos.index');
     Route::get('api/documentos', 'documentos')->name('api.documentos.index');
-    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/tipo-comprobantes', 'tipoComprobantes')->name('api.tipo.comprobantes.index');
     Route::get('api/sim-card', 'sim')->name('api.sim.index');
     Route::get('api/lineas', 'lineas')->name('api.lineas.index');
     Route::get('api/dispositivos', 'dispositivos')->name('api.dispositivos.index');
@@ -386,6 +386,11 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
 
     Route::get('api/sustentos', 'sustentos')->name('api.sustentos.index');
+    Route::get('api/motivos-traslado', 'motivosTraslado')->name('api.motivos.traslado.index');
+    Route::get('api/modalidad-traslado', 'modalidadTraslado')->name('api.modalidad.traslado.index');
+    Route::get('api/ubigeos', 'ubigeos')->name('api.ubigeos.index');
+    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/user', 'user')->name('api.user.index');
 });
 
 

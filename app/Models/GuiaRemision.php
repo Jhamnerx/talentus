@@ -16,7 +16,7 @@ class GuiaRemision extends Model
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'guia_remision';
     /**
      * The attributes that should be cast to native types.
@@ -30,7 +30,7 @@ class GuiaRemision extends Model
         'venta_id' => 'integer',
         'fecha_inicio_traslado' => 'date',
         'user_id' => 'integer',
-        'modalidad_traslado' => ModalidadTraslado::class,
+
     ];
 
     public function cliente(): BelongsTo
@@ -56,5 +56,34 @@ class GuiaRemision extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    public function getSerie(): BelongsTo
+    {
+        return $this->belongsTo(Series::class, 'serie', 'serie');
+    }
+
+    public function detalle()
+    {
+        return $this->hasMany(detalleGuiaRemision::class, 'guia_remision_id');
+    }
+
+    public static function createItems($guia, $items)
+    {
+        foreach ($items as $item) {
+
+            $item['guia_remision_id'] = $guia->id;
+
+            $guia->detalle()->create($item);
+        }
+    }
+
+    public function dispositivos()
+    {
+        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', null, 'imei')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function sim_cards()
+    {
+        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', null, 'sim_card')->withoutGlobalScope(EmpresaScope::class);
     }
 }
