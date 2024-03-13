@@ -66,8 +66,7 @@
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                     <div class="space-x-1">
-                        <x-form.button.circle wire:click="addProducto" spinner="addProducto" teal icon="check"
-                            spinner />
+                        <x-form.button.circle wire:click="addProducto" spinner="addProducto" teal icon="check" />
                     </div>
                 </td>
                 <p class="mt-2 hidden text-pink-600 text-sm vacio">

@@ -2,17 +2,19 @@
 
 namespace App\Models;
 
-use App\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Scopes\EmpresaScope;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Jetstream\HasProfilePhoto;
+use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 //Spatie Permisos
-use Spatie\Permission\Traits\HasRoles;
+use App\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class User extends Authenticatable
 {
@@ -104,13 +106,16 @@ class User extends Authenticatable
         return $this->hasMany(Payments::class, 'user_id');
     }
 
-    public function dispositivos()
+    public function dispositivos(): BelongsToMany
     {
-        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'user_id', 'imei', null, 'imei');
+        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'tecnico_id', 'imei', 'id', 'imei')->using(DispositivosUsers::class)
+            ->withPivot('user_id', 'guia_remision_id ', 'created_at')->withTimestamps();
     }
-    public function sim_card()
+
+    public function sim_cards(): BelongsToMany
     {
-        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'user_id', 'sim_card', null, 'sim_card');
+        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'tecnico_id', 'sim_card', 'id', 'sim_card')->using(SimCardUsers::class)
+            ->withPivot('user_id', 'guia_remision_id ', 'created_at')->withTimestamps();
     }
     //relacion uno a muchos
 

@@ -85,8 +85,8 @@ class Edit extends Component
 
     public function render()
     {
-        $motivos = MotivosTraslado::pluck('descripcion', 'codigo');
-        return view('livewire.admin.guias-remision.edit', compact('motivos'));
+
+        return view('livewire.admin.guias-remision.edit');
     }
 
     function addProducto()

@@ -20,7 +20,10 @@ class ServicioTecnicoController extends Controller
     {
         return view('admin.tecnico.tareas.index');
     }
-
+    public function tecnicos()
+    {
+        return view('admin.tecnico.index');
+    }
     public static function setNextSequenceNumber()
     {
 

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Dispositivos extends Model
 {
@@ -96,10 +97,15 @@ class Dispositivos extends Model
     }
 
     //relacion many to many dipositivos
-    public function users()
+    // public function users()
+    // {
+    //     //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
+    //     return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    // }
+
+    public function users(): BelongsToMany
     {
-        //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
-        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsToMany(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class)->using(DispositivosUsers::class);
     }
 
     public function user()
