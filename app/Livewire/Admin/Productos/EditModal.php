@@ -80,18 +80,28 @@ class EditModal extends Component
 
         $datos = $this->validate($request->rules($this->producto));
 
-        $this->producto->update($datos);
 
-        //save imagen
-        if ($this->file) {
+        try {
+            $this->producto->update($datos);
 
-            $this->saveImage($this->producto);
-        } else {
+            //save imagen
+            if ($this->file) {
 
-            $this->removeImage($this->producto);
+                $this->saveImage($this->producto);
+            } else {
+
+                $this->removeImage($this->producto);
+            }
+
+            $this->afterUpdate();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
         }
-
-        $this->afterUpdate();
     }
 
     public function saveImage(Productos $producto): bool
@@ -158,6 +168,6 @@ class EditModal extends Component
     }
     public function resetProps()
     {
-        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper');
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
     }
 }
