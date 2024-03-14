@@ -48,5 +48,11 @@ class CreateModal extends Component
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
         );
         $this->dispatch('update-table');
+        $this->resetProp();
+    }
+
+    public function resetProp()
+    {
+        $this->reset(['nombre', 'descripcion']);
     }
 }

@@ -248,7 +248,7 @@ Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin
 Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
     Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
-    Route::get('tareas/tecnicos', 'tecnicos')->name('admin.tecnico.tecnico.index');
+    Route::get('index', 'tecnicos')->name('admin.tecnico.tecnico.index');
 });
 
 

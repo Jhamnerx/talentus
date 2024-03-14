@@ -105,7 +105,7 @@
                     <!-- Almacen -->
                     @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo', 'ver-guias'])
                         <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias']) ? 1 : 0 }} }">
+                            x-data="{ open: {{ in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos']) ? 1 : 0 }} }">
 
 
                             <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150"
@@ -215,7 +215,7 @@
                                     @endcan
                                     @can('ver-dispositivo')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.dispositivos.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.dispositivos.index', 'admin.almacen.modelos-dispositivos')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
                                                 href="{{ route('admin.almacen.dispositivos.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dispositivos</span>
@@ -281,7 +281,7 @@
                                 <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
                                     @can('ver-cliente')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.clientes.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.clientes.index', 'admin.clientes.create', 'admin.clientes.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
                                                 href="{{ route('admin.clientes.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Clientes
@@ -702,7 +702,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.vehiculos.reportes.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.vehiculos.reportes.index', 'admin.vehiculos.reportes.show')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.vehiculos.reportes.index') }}">
                                                 <span
@@ -918,7 +918,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit', 'admin.cobros.show')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span
@@ -970,7 +970,8 @@
                                                         'admin.ajustes.roles.store',
                                                         'admin.ajustes.series',
                                                         'admin.ajustes.plantilla',
-                                                        'admin.ajustes.ciudades')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                        'admin.ajustes.ciudades',
+                                                        'admin.ajustes.sunat')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.ajustes.cuenta') }}">
                                                 <span
@@ -1038,9 +1039,7 @@
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
                                             @if (Route::is('admin.tecnico.tareas.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
-                                            href="{{ route('admin.tecnico.tareas.index') }}"
-                                            :class="page === 'tecnico-tareas-index' &&
-                                                '!text-blue-800'">
+                                            href="{{ route('admin.tecnico.tareas.index') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                                 Modulo Tareas
@@ -1053,9 +1052,7 @@
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
                                             @if (Route::is('admin.tecnico.tecnico.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
-                                            href="{{ route('admin.tecnico.tecnico.index') }}"
-                                            :class="page === 'tecnico-tareas-index' &&
-                                                '!text-blue-800'">
+                                            href="{{ route('admin.tecnico.tecnico.index') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                                 Administrar Tecnicos

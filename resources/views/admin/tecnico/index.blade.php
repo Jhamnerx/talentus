@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('ruta', 'tecnico-tareas-index')
+@section('ruta', 'tecnico-tecnicos-index')
 @section('contenido')
 
     @livewire('admin.tecnico.index')

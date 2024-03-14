@@ -28,7 +28,7 @@ class Edit extends Component
     public function mount()
     {
         $this->fecha_vencimiento = $this->cobro->fecha_vencimiento->format('Y-m-d');
-        $this->fecha_inicio = $this->cobro->fecha_inicio->format('Y-m-d');
+        $this->fecha_inicio = $this->cobro->fecha_inicio ? $this->cobro->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d');
         $this->periodo = $this->cobro->periodo;
         $this->tipo_pago = $this->cobro->tipo_pago;
         $this->divisa = $this->cobro->divisa;

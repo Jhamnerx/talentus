@@ -90,15 +90,6 @@
                             class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                             <tr>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center">
-                                        <label class="inline-flex">
-                                            <span class="sr-only">Seleccionar Todo</span>
-                                            <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                                disabled />
-                                        </label>
-                                    </div>
-                                </th>
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <span class="sr-only">Favorito</span>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -123,15 +114,7 @@
 
                             @foreach ($categorias as $categoria)
                                 <tr wire:key="{{ $categoria->id }}">
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="flex items-center">
-                                            <label class="inline-flex">
-                                                <span class="sr-only">Select</span>
-                                                <input wire:model.live="selected" value="{{ $categoria->id }}"
-                                                    class="table-item form-checkbox" type="checkbox" />
-                                            </label>
-                                        </div>
-                                    </td>
+
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center relative">
                                             <button>
@@ -157,18 +140,28 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="text-left">{{ $categoria->descripcion }}</div>
                                     </td>
+
                                     @can('cambiar.estado-categoria')
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                            <div class="text-center">
+                                                <div class="m-3 w-48">
+                                                    <div class="flex items-center mt-2" x-data="{ checked: {{ $categoria->is_active ? 'true' : 'false' }} }">
+                                                        <span class="text-sm mr-3">Activo: </span>
+                                                        <div class="form-switch">
+                                                            <input wire:click="toggleStatus({{ $categoria->id }})"
+                                                                type="checkbox" id="switch-f{{ $categoria->id }}"
+                                                                class="sr-only" x-model="checked" />
+                                                            <label class="bg-slate-400" for="switch-f{{ $categoria->id }}">
+                                                                <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                                <span class="sr-only">Estado</span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="text-sm text-slate-400 italic ml-2"
+                                                            x-text="checked ? 'ACTIVO' : 'INACTIVO'"></div>
+                                                    </div>
 
-                                            <div>
-                                                <div class="m-3 ">
-
-
-                                                    @livewire('admin.categorias.change-status', ['model' => $categoria, 'field' => 'is_active'], key('active' . $categoria->id))
-                                                    <!-- End -->
                                                 </div>
                                             </div>
-
                                         </td>
                                     @endcan
 
@@ -200,7 +193,14 @@
                                     </td>
                                 </tr>
                             @endforeach
-
+                            @if ($categorias->count() < 1)
+                                <tr>
+                                    <td colspan="6"
+                                        class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                        <div class="text-center">No hay Registros</div>
+                                    </td>
+                                </tr>
+                            @endif
 
 
                         </tbody>

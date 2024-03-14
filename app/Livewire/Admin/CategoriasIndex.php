@@ -62,4 +62,10 @@ class CategoriasIndex extends Component
         $this->selected = collect();
         $this->render();
     }
+
+    public function toggleStatus(Categoria $categoria)
+    {
+        $categoria->is_active = !$categoria->is_active; // Cambia el estado del toggle
+        $categoria->save(); // Guarda el cambio en el modelo
+    }
 }

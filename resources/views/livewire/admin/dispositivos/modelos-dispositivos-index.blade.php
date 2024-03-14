@@ -151,7 +151,14 @@
                             </tr>
                         @endforeach
 
-
+                        @if ($modelos->count() < 1)
+                            <tr>
+                                <td colspan="4"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
+                        @endif
 
 
 

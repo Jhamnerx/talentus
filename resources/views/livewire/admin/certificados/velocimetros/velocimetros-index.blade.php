@@ -346,10 +346,14 @@
 
                             </tr>
                         @endforeach
+
                         @if ($certificados->count() < 1)
-                            <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                            <tr>
+                                <td colspan="9"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
                         @endif
 
 
