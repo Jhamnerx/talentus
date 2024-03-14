@@ -140,7 +140,7 @@ class Ventas extends Model
     }
     //CREAR ITEM DETALLE VENTA
 
-    public static function createItems(Ventas $venta, $ventaItems)
+    public static function createItems(Ventas $venta, $ventaItems, $decrease_stock = false)
     {
 
         foreach ($ventaItems as $ventaItem) {
@@ -148,6 +148,11 @@ class Ventas extends Model
             $ventaItem['ventas_id'] = $venta->id;
 
             $item = $venta->ventaDetalles()->create($ventaItem);
+
+            if ($decrease_stock && $ventaItem['tipo'] == 'producto') {
+
+                $item->producto->decrement('stock', $ventaItem['cantidad']);
+            }
         }
 
         return $venta->ventaDetalles;
