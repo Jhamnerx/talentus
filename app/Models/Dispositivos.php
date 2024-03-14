@@ -69,14 +69,26 @@ class Dispositivos extends Model
     public static function asignarDispositivos(User $user, $items, GuiaRemision $guia)
     {
 
-        $user->dispositivos()->attach($items, ['guia_remision_id' => $guia->id]);
+        $user->dispositivos()->attach(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id
+            ]
+        );
     }
 
     public static function updateAsignarDispositivos(User $user, $items, GuiaRemision $guia)
     {
 
         //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
-        $guia->dispositivos()->syncWithPivotValues($items, ['guia_remision_id' => $guia->id, 'user_id' => $user->id]);
+        $guia->dispositivos()->syncWithPivotValues(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id,
+            ]
+        );
     }
 
 

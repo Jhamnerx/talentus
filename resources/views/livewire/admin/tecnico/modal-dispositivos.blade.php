@@ -21,6 +21,9 @@
                             <div class="font-semibold text-left">VEHICULO</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-center">VENDIDO</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ENVIADO POR:</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -35,6 +38,7 @@
                 <!-- Table body -->
                 <tbody class="text-sm divide-y divide-slate-200">
                     <!-- Row -->
+
                     @if ($user)
 
                         @foreach ($dispositivos as $dispositivo)
@@ -85,6 +89,26 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div>
+                                        <div class="m-3 ">
+                                            <div class="flex items-center mt-2" x-data="{ checked: {{ $dispositivo->selled ? 'true' : 'false' }} }">
+                                                <div class="form-switch">
+                                                    <input wire:click="toggleStatus({{ $dispositivo->id }})"
+                                                        type="checkbox" id="switch-e{{ $dispositivo->id }}"
+                                                        class="sr-only" x-model="checked" />
+                                                    <label class="bg-slate-400" for="switch-e{{ $dispositivo->id }}">
+                                                        <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                        <span class="sr-only">Estado</span>
+                                                    </label>
+                                                </div>
+                                                <div class="text-sm text-slate-400 italic ml-2"
+                                                    x-text="checked ? 'Vendido por tecnico' : 'Disponible'">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left text-slate-800 text-sm">
                                         {{ $dispositivo->pivot->user->name }}
 
@@ -104,14 +128,15 @@
                                 </td>
 
                             </tr>
-
-                            @if ($dispositivos->count() < 1)
+                        @endforeach
+                        @if (count($dispositivos) < 1)
+                            <tr>
                                 <td colspan="7"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                     <div class="text-center">No hay Registros</div>
                                 </td>
-                            @endif
-                        @endforeach
+                            <tr>
+                        @endif
                     @endif
 
                 </tbody>

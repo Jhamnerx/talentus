@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Tecnico;
 
+use App\Models\Dispositivos;
 use App\Models\User;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\On;
@@ -19,7 +20,7 @@ class ModalDispositivos extends Component
             $dispositivos = $this->user->dispositivos()->paginate(5, pageName: 'dispositivo-page');
         } else {
 
-            $dispositivos = null;
+            $dispositivos = [];
         }
         return view('livewire.admin.tecnico.modal-dispositivos', compact('dispositivos'));
     }
@@ -30,5 +31,11 @@ class ModalDispositivos extends Component
         $this->openModal = true;
         $this->user = $user;
         // $this->dispositivos = $user->dispositivos;
+    }
+
+    public function toggleStatus(Dispositivos $dispositivo)
+    {
+        $dispositivo->selled = !$dispositivo->selled; // Cambia el estado del toggle
+        $dispositivo->save(); // Guarda el cambio en el modelo
     }
 }

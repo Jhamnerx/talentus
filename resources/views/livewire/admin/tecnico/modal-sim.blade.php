@@ -33,7 +33,7 @@
                 </thead>
                 <!-- Table body -->
                 <tbody class="text-sm divide-y divide-slate-200">
-                    @if ($sim_cards)
+                    @if ($user)
 
 
                         @foreach ($sim_cards as $sim_card)
@@ -137,10 +137,13 @@
 
                             </tr>
                         @endforeach
-                        @if ($sim_cards->count() < 1)
-                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                        @if (count($sim_cards) < 1)
+                            <tr>
+                                <td colspan="7"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
                         @endif
                     @endif
 

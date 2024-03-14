@@ -15,7 +15,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('tecnico_id')->nullable()->after('sim_card')->unsigned();
 
-            $table->foreign('sim_card')->references('sim_card')->on('dispositivos');
+            $table->foreign('sim_card')->references('sim_card')->on('sim_card');
             $table->foreign('tecnico_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
