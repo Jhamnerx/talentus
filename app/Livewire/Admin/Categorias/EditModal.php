@@ -39,15 +39,26 @@ class EditModal extends Component
     {
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules($this->categoria), $request->messages());
-        $this->categoria->update($datos);
-        $this->afterSave($this->categoria);
+
+        try {
+            $this->categoria->update($datos);
+            $this->afterSave($this->categoria);
+        } catch (\Throwable $th) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
     public function afterSave($categoria)
     {
         $this->closeModal();
         $this->dispatch(
-            'notify',
+            'notify-toast',
             icon: 'success',
             title: 'CATEGORIA ACTUALIZADA',
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'

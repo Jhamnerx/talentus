@@ -110,7 +110,7 @@ class CreateModal extends Component
     public function afterSave()
     {
         $this->dispatch(
-            'notify',
+            'notify-toast',
             icon: 'success',
             title: 'PRODUCTO REGISTRADO',
             mensaje: 'se guardo correctamente el producto o servicio'
