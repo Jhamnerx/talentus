@@ -7,6 +7,7 @@ use App\Models\Productos;
 use Livewire\Attributes\On;
 use Intervention\Image\ImageManager;
 use App\Http\Requests\ProductosRequest;
+use App\Models\Categoria;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -16,7 +17,7 @@ class CreateModal extends Component
 
     public $descripcion, $categoria_id, $codigo, $unit_code = "NIU",
         $stock = 1,  $valor_unitario = 0.00, $ventas = 0, $divisa = 'PEN',
-        $tipo = 'producto';
+        $tipo = '';
     public $afecto_icbper = false;
     public $file;
 
@@ -39,27 +40,39 @@ class CreateModal extends Component
         $this->generateCodeProduct($value);
     }
 
+    // Generar el código del producto
     public function generateCodeProduct($categoria_id)
     {
-        $producto =  Productos::where('categoria_id', $categoria_id)->withTrashed()->latest()->first();
-
-        $this->codigo = $producto ? 'PROD-' . $categoria_id . str_replace('PROD-', '', $producto["codigo"]) + 1 : $categoria_id . "000";
+        $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
+        $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
+        $lastNumber = intval(substr($lastCode, -4));
+        $newNumber = $lastNumber + 1;
+        $newCode = 'PROD-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+        $this->codigo = $newCode;
     }
 
     public function save()
     {
         //GUARDAR PRODUCTO
         $request = new ProductosRequest();
-
         $datos = $this->validate($request->rules());
-        $producto = Productos::create($datos);
 
-        //save imagen
-        if ($this->file) {
-            $this->saveImage($producto);
+        try {
+            $producto = Productos::create($datos);
+            //save imagen
+            if ($this->file) {
+                $this->saveImage($producto);
+            }
+
+            $this->afterSave();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
         }
-
-        $this->afterSave();
     }
 
     public function saveImage(Productos $producto): bool
@@ -92,8 +105,6 @@ class CreateModal extends Component
 
         $request = new ProductosRequest();
         $this->validateOnly($atributo, $request->rules());
-
-        //  $this->redondeoPrecios($atributo, $value);
     }
 
     public function afterSave()
@@ -105,7 +116,13 @@ class CreateModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
+        $this->resetProps();
         $this->reset('file');
         $this->dispatch('update-table');
+    }
+
+    public function resetProps()
+    {
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper');
     }
 }

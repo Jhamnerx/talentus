@@ -33,13 +33,21 @@ class EditModal extends Component
         $this->generateCodeProduct($value);
     }
 
+    // Generar el código del producto
     public function generateCodeProduct($categoria_id)
     {
-        $producto =  Productos::where('categoria_id', $categoria_id)->latest()->first();
+        if ($categoria_id != $this->producto->categoria_id) {
+            $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
+            $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
+            $lastNumber = intval(substr($lastCode, -4));
+            $newNumber = $lastNumber + 1;
+            $newCode = 'PROD-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+            $this->codigo = $newCode;
+        } else {
 
-        $this->codigo = $producto ? 'PROD-' . $categoria_id . str_replace('PROD-', '', $producto["codigo"]) + 1 : $categoria_id . "000";
+            $this->codigo = $this->producto->codigo;
+        }
     }
-
 
     #[On('open-modal-edit')]
     public function openModal(Productos $producto)
@@ -140,11 +148,16 @@ class EditModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
+        $this->resetProps();
         $this->reset('file');
         $this->dispatch('update-table');
     }
     public function closeModal()
     {
         $this->modalEdit = false;
+    }
+    public function resetProps()
+    {
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper');
     }
 }
