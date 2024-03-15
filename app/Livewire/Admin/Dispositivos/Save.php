@@ -77,15 +77,28 @@ class Save extends Component
     public function save()
     {
         $request = new DispositivosRequest();
-        $this->validate($request->rules(), $request->messages());
+        $data = $this->validate($request->rules(), $request->messages());
 
-        foreach ($this->items as $item) {
+        try {
+            $this->saveItems($data['items']);
+            $this->afterSave();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
 
+    public function saveItems($items)
+    {
+        foreach ($items as $item) {
             Dispositivos::create($item);
         }
-
-        $this->afterSave();
     }
+
 
     public function afterSave()
     {
