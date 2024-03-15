@@ -63,6 +63,7 @@ class Edit extends Component
     {
 
         $data = $this->validate();
+
         try {
             $this->dispositivo->update($data);
             $this->afterSave();

@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
 use App\Enums\ModalidadTraslado;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class GuiaRemision extends Model
 {
@@ -77,13 +79,15 @@ class GuiaRemision extends Model
         }
     }
 
-    public function dispositivos()
+    public function dispositivos(): BelongsToMany
     {
-        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', null, 'imei')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsToMany(Dispositivos::class, 'dispositivos_users', 'guia_remision_id', 'imei', 'id', 'imei')->using(DispositivosUsers::class)
+            ->withPivot('user_id', 'guia_remision_id ', 'created_at')->withTimestamps();
     }
 
-    public function sim_cards()
+    public function sim_cards(): BelongsToMany
     {
-        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', null, 'sim_card')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', 'id', 'sim_card')->using(SimCardUsers::class)
+            ->withPivot('user_id', 'guia_remision_id ', 'created_at')->withTimestamps();
     }
 }

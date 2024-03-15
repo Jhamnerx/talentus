@@ -554,7 +554,7 @@ class SelectsController extends Controller
             )
             ->when(
                 $request->exists('selected'),
-                fn (Builder $query) => $query->whereIn('serie_correlativo', $request->input('selected', [])),
+                fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
                 fn (Builder $query) => $query->limit(20)
             )
             ->get()->map(function (Ventas $venta) {

@@ -192,7 +192,7 @@
 
 
         </div>
-        {{ json_encode($errors->all()) }}
+
         <div class="border-solid border-b-2 border-gray-200 mb-3">
             <span class="font-semibold  text-base leading-tight font-sans text-gray-800 dark:text-gray-100">
                 DOCUMENTO DE REFERENCIA:
@@ -218,7 +218,7 @@
                 </label>
                 <div class="relative">
 
-                    <div class="flex items-center" x-data="{ checked: false }">
+                    <div class="flex items-center" x-data="{ checked: {{ $asignarTecnico ? true : false }} }">
                         <div class="form-switch">
                             <input value="true" wire:model.live='asignarTecnico' role="switch" type="checkbox"
                                 id="switch-asign" class="sr-only" x-model="checked" />
@@ -247,8 +247,8 @@
 
         </div>
 
-        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-2 py-2">
-            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2" wire:ignore>
+        <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-2 py-2 border border-sky-600">
+            <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
                 <div class="col-span-2 sm:col-span-1">
                     <x-form.select :clearable="false" wire:model.live="selected_id" id="selected_id"
                         name="selected_id" placeholder="Seleccionar producto o servicio" :async-data="[
@@ -301,7 +301,8 @@
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                        <ul class="bg-white shadow-xl overflow-hidden rounded sm:rounded-md max-w-sm mx-auto">
+                        <ul
+                            class="bg-white shadow-xl overflow-hidden rounded sm:rounded-md max-w-sm mx-auto border-2 border-yellow-600">
 
                             @foreach ($items_dispositivos->all() as $item)
                                 <li>
@@ -341,7 +342,8 @@
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">
-                        <ul class="bg-white shadow-xl overflow-hidden rounded sm:rounded-md max-w-sm mx-auto">
+                        <ul
+                            class="bg-white shadow-xl overflow-hidden rounded sm:rounded-md max-w-sm mx-auto border-2 border-emerald-600">
 
                             @foreach ($items_sim_card->all() as $item)
                                 <li>

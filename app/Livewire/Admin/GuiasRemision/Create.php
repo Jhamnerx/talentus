@@ -124,6 +124,7 @@ class Create extends Component
                 'unidad_medida' => $this->selected["unidad_medida"],
                 'descripcion' => $this->selected["descripcion"],
             ]);
+
             $this->addedProducto();
         } catch (\Exception $e) {
             $this->dispatch(

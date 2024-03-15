@@ -82,7 +82,7 @@ class SimCard extends Model
     {
 
         //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
-        $guia->sim_cards()->syncWithPivotValues(
+        $user->sim_cards()->syncWithPivotValues(
             $items,
             [
                 'guia_remision_id' => $guia->id,

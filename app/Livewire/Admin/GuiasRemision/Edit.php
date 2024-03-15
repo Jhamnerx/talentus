@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\GuiasRemision;
 
 use Exception;
 use App\Models\User;
+use App\Models\Series;
 use App\Models\SimCard;
 use Livewire\Component;
 use App\Models\Clientes;
@@ -17,38 +18,43 @@ use App\Http\Requests\GuiaRemisionRequest;
 class Edit extends Component
 {
     public GuiaRemision $guia;
-    public $imei_list = [];
-    public $imeis_add = [];
+    public Collection $items_dispositivos;
+    public Collection $items_sim_card;
 
-    public $sim_list = [];
-    public $sim_add = [];
+    public $tipo_documento = '6';
+    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento, $razon_social, $codigo_traslado,
+        $motivo_traslado_id = '01',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
+        $code_puerto;
 
-    public $events = [];
-
-    public $error_msg;
-
-    public $serie_numero, $fecha_emision;
-    public $tipo_documento, $numero_documento, $razon_social;
-    public $motivo_traslado, $modalidad_traslado, $fecha_inicio_traslado, $peso, $cantidad_items, $numero_contenedor, $code_puerto;
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
-    public $factura_id, $asignarTecnico = false;
-    public $users_id;
-    public Collection $items;
+    public $observacion = '';
 
+    public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
+
+    public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
+    public $asignarTecnico = false;
+
+    public $tecnico_id;
+
+    public Collection $items;
     public Collection $selected;
+    public $selected_id;
 
 
     public function mount()
     {
-
-        $this->serie_numero = $this->guia->serie_numero;
-        $this->fecha_emision = $this->guia->fecha_emision->format('Y-m-d');
-        $this->tipo_documento = $this->guia->tipo_documento;
-        $this->numero_documento = $this->guia->numero_documento;
-        $this->razon_social = $this->guia->razon_social;
-        $this->motivo_traslado = $this->guia->motivo_traslado;
-        $this->modalidad_traslado = $this->guia->modalidad_traslado;
-        $this->fecha_inicio_traslado = $this->guia->fecha_inicio_traslado->format('Y-m-d');
+        $this->serie = $this->guia->serie;
+        $this->correlativo = $this->guia->correlativo;
+        $this->serie_correlativo = $this->guia->serie_correlativo;
+        $this->fecha_emision = $this->guia->fecha_emision;
+        $this->venta_id = $this->guia->venta_id;
+        $this->cliente_id = $this->guia->cliente_id;
+        $this->numero_documento = $this->guia->cliente->numero_documento;
+        $this->razon_social = $this->guia->cliente->razon_social;
+        $this->codigo_traslado = $this->guia->codigo_traslado;
+        $this->motivo_traslado_id = $this->guia->motivo_traslado_id;
+        $this->modalidad_transporte_id = $this->guia->modalidad_transporte_id;
+        $this->fecha_inicio_traslado = $this->guia->fecha_inicio_traslado;
         $this->peso = $this->guia->peso;
         $this->cantidad_items = $this->guia->cantidad_items;
         $this->numero_contenedor = $this->guia->numero_contenedor;
@@ -57,15 +63,21 @@ class Edit extends Component
         $this->ubigeo_partida = $this->guia->ubigeo_partida;
         $this->direccion_llegada = $this->guia->direccion_llegada;
         $this->ubigeo_llegada = $this->guia->ubigeo_llegada;
-        $this->factura_id = $this->guia->factura_id;
-        $this->users_id = $this->guia->users_id;
+        $this->observacion = $this->guia->observacion;
 
-        if ($this->guia->dispositivos->count() > 0) {
+
+
+
+        if ($this->guia->tecnico_id) {
+
             $this->asignarTecnico = true;
-            $this->dispatch('asignar-tecnico');
+            $this->tecnico_id = $this->guia->tecnico_id;
+            $this->items = collect($this->guia->detalle->toArray());
+            $this->items_dispositivos = collect($this->guia->dispositivos->pluck('imei')->toArray());
+            $this->items_sim_card = collect($this->guia->sim_cards->pluck('sim_card')->toArray());
         }
 
-        $this->items = collect($this->guia->detalles);
+
         $this->selected = collect([
             'producto_id' => "",
             'codigo' => "",
@@ -73,13 +85,6 @@ class Edit extends Component
             'unidad_medida' => "",
             'descripcion' => "",
         ]);
-
-        $this->imeis_add = $this->guia->dispositivos->pluck('imei')->toArray();
-        $this->imei_list = Dispositivos::stock()->pluck('imei')->toArray();
-
-
-        $this->sim_add = $this->guia->sim_cards->pluck('sim_card')->toArray();
-        $this->sim_list = SimCard::pluck('sim_card')->toArray();
     }
 
 
@@ -87,6 +92,26 @@ class Edit extends Component
     {
 
         return view('livewire.admin.guias-remision.edit');
+    }
+
+    public function changeSerieUpdate($serie)
+    {
+
+        if ($serie) {
+
+            $serie = Series::where('serie', $serie)->first();
+            $this->serie = $serie->serie;
+            $this->correlativo = $serie->correlativo + 1;
+            $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+        } else {
+
+            $this->reset('correlativo');
+        }
+    }
+
+    public function updatedSerie($value)
+    {
+        $this->changeSerieUpdate($value);
     }
 
     function addProducto()
@@ -117,12 +142,63 @@ class Edit extends Component
                 'descripcion' => $this->selected["descripcion"],
             ]);
 
-            $this->selected = collect();
-            $this->dispatch('add-producto');
+            $this->addedProducto();
         } catch (\Exception $e) {
-            throw $e;
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'ERROR: ' . $e->getMessage(),
+            );
         }
     }
+
+
+    public function addedProducto()
+    {
+
+        $this->selected = collect();
+        $this->reset('selected_id');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'PRODUCTO AÑADIDO',
+            mensaje: 'se añadio correctamente',
+        );
+    }
+
+    function updatedSelectedId(Productos $producto)
+    {
+
+        $this->selected = collect([
+            'producto_id' => $producto->id,
+            'codigo' => $producto->codigo,
+            'cantidad' => "1",
+            'unidad_medida' => $producto->unit->codigo,
+            'descripcion' => $producto->descripcion
+        ]);
+    }
+    public function searchCliente()
+    {
+        try {
+
+            $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
+            $this->razon_social = $cliente->razon_social;
+            $this->cliente_id = $cliente->id;
+        } catch (Exception $e) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL BUSCAR',
+                mensaje: 'No se encontro resultados: ' . $e->getMessage(),
+            );
+
+            report($e);
+        }
+    }
+
 
     function selectProduct(Productos $producto)
     {
@@ -134,97 +210,64 @@ class Edit extends Component
             'descripcion' => $producto->nombre
         ]);
     }
-    public function handleOnSortOrderChanged($sortOrder, $previousSortOrder, $name, $from, $to)
+
+    public function registarImei($imei)
     {
-
-        $this->$name = $sortOrder;
-
-        $this->events = collect($this->events)
-            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
-            ->toArray();
+        $this->dispatch('add-imei-modal', imei: $imei);
     }
 
-    public function handleOnSortOrderChangedSim($sortOrder, $previousSortOrder, $name, $from, $to)
-    {
 
-        // dd($from, $to);
-        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
-        //     unset($arr[$key]);
-        // }
 
-        $this->$name = $sortOrder;
-
-        $this->events = collect($this->events)
-            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
-            ->toArray();
-    }
-    public function searchCliente()
-    {
-        try {
-            $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
-            $this->razon_social = $cliente->razon_social;
-            $this->numero_documento = $cliente->numero_documento;
-            //  $this->error_msg->reset();
-        } catch (Exception $e) {
-
-            $this->error_msg = $e->getMessage();
-            report($e);
-            return false;
-        }
-    }
-
-    public function updatedNumeroDocumento()
-    {
-        if ($this->error_msg) {
-            $this->reset('error_msg');
-        }
-    }
-
-    public function updatedAsignarTecnico($value)
-    {
-
-        if ($value) {
-            $this->dispatch('asignar-tecnico');
-        }
-    }
     public function updated($name, $value)
     {
         $request = new GuiaRemisionRequest();
-        $error = $this->validateOnly($name, $request->rules($this->guia), $request->messages());
-    }
-    public function updatedUsersId($value)
-    {
+        $this->validateOnly($name, $request->rules($this->guia), $request->messages());
     }
 
-    public function update()
+    public function eliminarProducto($key)
+    {
+        unset($this->items[$key]);
+        $this->items;
+    }
+
+    public function save()
     {
 
         $request = new GuiaRemisionRequest();
         $data = $this->validate($request->rules($this->guia), $request->messages());
 
-        $guia = $this->guia->update($data);
+        try {
 
-        $this->guia->detalles()->delete();
+            $this->guia->update($data);
 
-        GuiaRemision::createItems($this->guia, $data["items"]);
+            $this->guia->detalle()->delete();
 
-        //$this->guia->dispositivos()->delete();
+            GuiaRemision::createItems($this->guia, $data["items"]);
 
-        if ($this->asignarTecnico) {
+            //$this->guia->dispositivos()->delete();
+
+            if ($this->asignarTecnico) {
 
 
 
-            if (count($data["imeis_add"]) > 0) {
+                if (count($data["items_dispositivos"]) > 0) {
 
-                $respuesta = Dispositivos::updateAsignarDispositivos(User::find($this->users_id), $data["imeis_add"], $this->guia);
+                    Dispositivos::updateAsignarDispositivos(User::find($this->tecnico_id), $data["items_dispositivos"], $this->guia);
+                }
+
+                if (count($data["items_sim_card"]) > 0) {
+
+                    SimCard::updateAsignarSimCard(User::find($this->tecnico_id), $data["items_sim_card"], $this->guia);
+                }
             }
 
-            if (count($data["sim_add"]) > 0) {
-
-                $respuesta = SimCard::updateAsignarSimCard(User::find($this->users_id), $data["sim_add"], $this->guia);
-            }
+            return redirect()->route('admin.almacen.guias.index')->with('update', 'La guia se registro con exito');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
-
-        return redirect()->route('admin.almacen.guias.index')->with('update', 'La guia se registro con exito');
     }
 }

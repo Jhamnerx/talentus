@@ -82,7 +82,7 @@ class Dispositivos extends Model
     {
 
         //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
-        $guia->dispositivos()->syncWithPivotValues(
+        $user->dispositivos()->syncWithPivotValues(
             $items,
             [
                 'guia_remision_id' => $guia->id,
