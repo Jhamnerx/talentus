@@ -90,7 +90,6 @@ class Save extends Component
 
             $this->afterSave();
         } catch (\Throwable $th) {
-            dd($th);
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',

@@ -164,6 +164,12 @@ class Index extends Component
     {
         $this->dispatch('open-modal-create');
     }
+
+    public function openModalEdit(Lineas $linea)
+    {
+        $this->dispatch('open-modal-edit', linea: $linea);
+    }
+
     public function openModalAsign()
     {
         $this->dispatch('open-modal-asign');

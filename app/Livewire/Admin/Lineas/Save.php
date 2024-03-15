@@ -59,6 +59,7 @@ class Save extends Component
     public function closeModal()
     {
         $this->modalCreate = false;
+        $this->resetprops();
     }
 
     public function render()
@@ -91,13 +92,13 @@ class Save extends Component
 
     public function save()
     {
-
+        $data = $this->validate();
         try {
-            $validatedDate = $this->validate();
 
-            foreach ($this->items as $item) {
 
-                $numero = Lineas::create($item);
+            foreach ($data['items'] as $item) {
+
+                Lineas::create($item);
             }
 
             $this->afterSave();
@@ -110,6 +111,15 @@ class Save extends Component
             );
         }
     }
+
+    public function convertirAMayusculas()
+    {
+        $this->items = $this->items->map(function ($item) {
+            $item['operador'] = strtoupper($item['operador']);
+            return $item;
+        });
+    }
+
     public function afterSave()
     {
         $this->dispatch(
@@ -121,6 +131,11 @@ class Save extends Component
         $this->closeModal();
         $this->dispatch('update-table');
     }
+    public function resetprops()
+    {
+        $this->inicializarItems();
+    }
+
     #[On('add-linea-modal')]
     public function addLinea($numero)
     {
