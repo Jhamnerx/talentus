@@ -33,7 +33,9 @@ class ClientesRequest extends FormRequest
                 'required',
                 'digits_between:8,11',
                 'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                Rule::unique('clientes', 'numero_documento')->where(fn ($query) =>
+                $query->where('empresa_id', session('empresa')
+                    ->whereNull('deleted_at'))),
             ],
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable'
@@ -46,7 +48,9 @@ class ClientesRequest extends FormRequest
                 'required',
                 'digits_between:8,11',
                 'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('clientes', 'numero_documento')->where(fn ($query) =>
+                $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at'))
                     ->ignore($cliente->id),
             ];
         }
