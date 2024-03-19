@@ -518,10 +518,11 @@ class SelectsController extends Controller
                 $request->search,
                 fn (Builder $query) => $query
                     ->where('ubigeo_inei', 'like', "%{$request->search}%")
-                    ->orwhere('departamento', 'like', "%{$request->search}%")
-                    ->orwhere('provincia', 'like', "%{$request->search}%")
-                    ->orwhere('distrito', 'like', "%{$request->search}%")
-
+                    ->orWhere('departamento', 'like', "%{$request->search}%")
+                    ->orWhere('provincia', 'like', "%{$request->search}%")
+                    ->orWhere('distrito', 'like', "%{$request->search}%")
+                    ->orWhereRaw("CONCAT(departamento, ' ', provincia, ' ', distrito) LIKE '%{$request->search}%'")
+                    ->orWhereRaw("CONCAT(provincia, ' ', distrito) LIKE '%{$request->search}%'")
             )
             ->when(
                 $request->exists('selected'),

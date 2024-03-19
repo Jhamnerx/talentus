@@ -28,7 +28,9 @@ class Index extends Component
                     ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
             })
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('code_puerto', 'like', '%' . $this->search . '%')
+            ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+            ->orWhere('serie', 'like', '%' . $this->search . '%')
+            ->orWhere('correlativo', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_partida', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_llegada', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'DESC')

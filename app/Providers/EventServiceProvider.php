@@ -20,6 +20,8 @@ use App\Models\Contactos;
 use App\Models\Contratos;
 use App\Models\Productos;
 use App\Models\Vehiculos;
+use App\Models\NotaDebito;
+use App\Models\NotaCredito;
 use App\Models\Certificados;
 use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
@@ -48,8 +50,12 @@ use App\Observers\ContratosObserver;
 use App\Observers\VehiculosObserver;
 use App\Events\ClientesImportUpdated;
 use App\Observers\CategoriasObserver;
+use App\Observers\NotaDebitoObserver;
 use Illuminate\Support\Facades\Event;
+use App\Events\Facturacion\EmitirGuia;
+use App\Events\Facturacion\EmitirNota;
 use App\Events\nuevoCertificadoCreado;
+use App\Observers\NotaCreditoObserver;
 use Illuminate\Auth\Events\Registered;
 use App\Observers\CertificadosObserver;
 use App\Observers\DispositivosObserver;
@@ -58,13 +64,13 @@ use App\Observers\PresupuestosObserver;
 use App\Observers\RecibosPagosObserver;
 use App\Observers\MantenimientoObserver;
 use App\Events\nuevoCertificadoGpsCreado;
+use App\Listeners\Facturacion\UpdateGuia;
+use App\Listeners\Facturacion\UpdateNota;
 use App\Observers\ComprasFacturasObserver;
 use App\Events\Facturacion\EmitirComprobante;
-use App\Events\Facturacion\EmitirNota;
-use App\Listeners\Facturacion\UpdateComprobante;
-use App\Listeners\Facturacion\UpdateNota;
 use App\Observers\ModelosDispositivosObserver;
 use App\Listeners\nuevaActaCreadaEmailListener;
+use App\Listeners\Facturacion\UpdateComprobante;
 use App\Listeners\nuevaActaCreadaAdminsListener;
 use App\Listeners\nuevoCertificadoEmailListener;
 use App\Listeners\nuevoCertificadoAdminsListener;
@@ -73,10 +79,6 @@ use App\Observers\CertificadosVelocimetrosObserver;
 use App\Listeners\nuevoCertificadoGpsAdminsListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
-use App\Models\NotaCredito;
-use App\Models\NotaDebito;
-use App\Observers\NotaCreditoObserver;
-use App\Observers\NotaDebitoObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
@@ -96,7 +98,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         EmitirNota::class => [
             UpdateNota::class,
-        ]
+        ],
+        EmitirGuia::class => [
+            UpdateGuia::class,
+        ],
     ];
 
     public function boot()

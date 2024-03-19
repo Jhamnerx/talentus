@@ -36,6 +36,14 @@ class GuiaRemision extends Model
 
     ];
 
+    protected function clase(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => unserialize($nota),
+            set: fn ($nota) => serialize($nota),
+        );
+    }
+
     protected function dataPuerto(): Attribute
     {
         return Attribute::make(

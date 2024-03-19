@@ -317,7 +317,7 @@
 
                 </div>
             </div>
-            {{ json_encode($items) }}
+
             {{-- tabla de items --}}
             <x-admin.guias-remision.tabla-detalle :items="$items"></x-admin.guias-remision.tabla-detalle>
             @error('items')
@@ -327,7 +327,7 @@
             @enderror
         </div>
         {{-- asignacion de imeis --}}
-        {{ json_encode($errors->all()) }}
+
         @if ($asignarTecnico)
             <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3 ">
 

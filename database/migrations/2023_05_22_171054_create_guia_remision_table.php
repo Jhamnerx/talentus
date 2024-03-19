@@ -54,11 +54,20 @@ return new class extends Migration
             $table->string('docu_rel_numero')->nullable();
 
             $table->text('observacion')->nullable();
-            $table->string('fe_estado')->nullable();
+            //SUNAT RESPUESTA
+            $table->boolean('fe_estado')->default(false);
+            $table->text('estado_texto')->nullable();
             $table->text('fe_codigo_error')->nullable();
+            $table->text('fe_mensaje_error')->nullable();
             $table->text('fe_mensaje_sunat')->nullable();
+            $table->text('nota')->nullable();
+            $table->text('nombre_xml')->nullable();
             $table->text('xml_base64')->nullable();
             $table->text('cdr_base64')->nullable();
+            $table->text('hash')->nullable();
+            $table->text('hash_cdr')->nullable();
+            $table->text('code_sunat')->nullable();
+            $table->longText('clase')->nullable();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->unsignedBigInteger('tecnico_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');

@@ -6,6 +6,7 @@ use DateTime;
 use App\Models\Ventas;
 use App\Models\Clientes;
 use App\Models\plantilla;
+use App\Events\EmitirGuia;
 use App\Models\NotaDebito;
 use App\Models\NotaCredito;
 use App\Models\GuiaRemision;
@@ -16,6 +17,7 @@ use Greenter\Model\Sale\Legend;
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Client\Client;
 use Greenter\Model\Company\Address;
+use Greenter\Model\Despatch\Puerto;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +33,7 @@ use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-use Greenter\Model\Despatch\Puerto;
+use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 
 class ApiFacturacion extends Controller
 {
@@ -732,7 +734,17 @@ class ApiFacturacion extends Controller
 
         $respuesta = $util->showResponse($despatch, $cdr);
 
+        dd($respuesta);
+
+        $this->updateGuiaRemision($guia, $respuesta, $despatch);
+
         return $respuesta;
+    }
+
+    public function updateGuiaRemision($guia, $respuesta, $despatch)
+    {
+
+        FacturacionEmitirGuia::dispatch($guia, $respuesta, $despatch);
     }
 
     //ESTABLECER ITEMS DE LA GUIA DE REMISION
