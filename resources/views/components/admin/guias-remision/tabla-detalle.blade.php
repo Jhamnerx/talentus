@@ -27,7 +27,7 @@
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-slate-200 listaItems">
             <!-- Seleccionado -->
-            <tr class="main bg-slate-50">
+            <tr class="main bg-slate-50 pt-4">
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -54,6 +54,7 @@
                             {{ $errors->first('selected.unidad_medida') }}
                         </p>
                     @endif
+
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <textarea rows="4" wire:model.live="selected.descripcion" class="form-input descripcion"
@@ -93,13 +94,11 @@
                             step="1" placeholder="Cantidad" />
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <input type="text" wire:model.live="items.{{ $clave }}.unidad_medida"
-                            class="form-input" readonly>
-                        @if ($errors->has('items.' . $clave . '.unidad_medida'))
-                            <p class="mt-2  text-pink-600 text-sm">
-                                {{ $errors->first('items.' . $clave . '.unidad_medida') }}
-                            </p>
-                        @endif
+
+                        <x-form.select wire:model.live="items.{{ $clave }}.unidad_medida" :async-data="[
+                            'api' => route('api.unidades.index'),
+                        ]"
+                            option-label="descripcion" option-value="codigo" :clearable="false" class="z-6" />
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <textarea required wire:model.live="items.{{ $clave }}.descripcion" class="form-textarea" rows="4"></textarea>

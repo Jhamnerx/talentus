@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('codigo_traslado')->nullable();
             $table->string('motivo_traslado_id')->nullable();
             $table->foreign('motivo_traslado_id')->references('codigo')->on('motivo_traslado')->onDelete('cascade')->onUpdate('cascade');
+            $table->text('descripcion_motivo_traslado')->nullable();
             $table->string('modalidad_transporte_id')->nullable();
             $table->foreign('modalidad_transporte_id', 'fk_guia_modalidad_t')->references('codigo')->on('modalidad_transporte')->onDelete('cascade')->onUpdate('cascade');
             $table->date('fecha_inicio_traslado')->nullable();
@@ -40,11 +41,18 @@ return new class extends Migration
             $table->string('peso')->nullable();
             $table->string('cantidad_items')->nullable();
             $table->string('numero_contenedor')->nullable();
-            $table->string('code_puerto')->nullable();
+            $table->text('datos_puerto')->nullable();
             $table->text('direccion_partida')->nullable();
             $table->string('ubigeo_partida')->nullable();
             $table->text('direccion_llegada')->nullable();
             $table->string('ubigeo_llegada')->nullable();
+            $table->string('codigo_establecimiento_llegada')->nullable();
+            $table->string('codigo_establecimiento_partida')->nullable();
+
+
+            $table->string('docu_rel_tipo')->nullable();
+            $table->string('docu_rel_numero')->nullable();
+
             $table->text('observacion')->nullable();
             $table->string('fe_estado')->nullable();
             $table->text('fe_codigo_error')->nullable();

@@ -13,12 +13,14 @@ use App\Models\Productos;
 use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
 use App\Models\MotivosTraslado;
+use PhpParser\Builder\Function_;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\ModelosDispositivo;
 use Illuminate\Support\Collection;
 use App\Http\Requests\GuiaRemisionRequest;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
-use PhpParser\Builder\Function_;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Models\plantilla;
 
 class Create extends Component
 {
@@ -26,11 +28,12 @@ class Create extends Component
     public Collection $items_sim_card;
 
     public $tipo_documento = '6';
-    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento, $razon_social, $codigo_traslado,
-        $motivo_traslado_id = '01',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
-        $code_puerto;
+    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento = '', $razon_social = '', $codigo_traslado,
+        $motivo_traslado_id = '01', $descripcion_motivo_traslado = '',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
+        $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
+    public $codigo_establecimiento_partida, $codigo_establecimiento_llegada;
     public $observacion = '';
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
@@ -38,14 +41,19 @@ class Create extends Component
     public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
     public $asignarTecnico = false;
 
+    public $docu_rel_tipo = '50', $docu_rel_numero =  '000-0000-10-000000';
+
     public $tecnico_id;
 
     public Collection $items;
     public Collection $selected;
     public $selected_id;
 
+    public plantilla $plantilla;
+
     public function mount()
     {
+        $this->plantilla = plantilla::first();
         $this->setSerieMount();
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
@@ -188,7 +196,7 @@ class Create extends Component
     {
 
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo), $request->messages());
 
         try {
             $guia = GuiaRemision::create($data);
@@ -210,14 +218,40 @@ class Create extends Component
                 }
             }
 
-            return redirect()->route('admin.almacen.guias.index')->with('store', 'La guia se registro con exito');
+            $api = new ApiFacturacion();
+
+            $mensaje = $api->emitirGuia($guia);
+            dd($mensaje);
+
+            if ($mensaje['fe_codigo_error']) {
+
+                session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.almacen.guias.index');
+            } else {
+
+                session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.almacen.guias.index');
+            }
         } catch (\Throwable $th) {
 
-            $this->dispatch(
-                'error',
-                title: 'ERROR: ',
-                mensaje: $th->getMessage(),
-            );
+            dd($th);
+            // $this->dispatch(
+            //     'error',
+            //     title: 'ERROR: ',
+            //     mensaje: $th->getMessage(),
+            // );
+        }
+    }
+    public function updatedMotivoTrasladoId($value)
+    {
+
+        if ($value == '04' || '02' || '07') {
+
+            $cliente = Clientes::where('numero_documento', $this->plantilla->ruc)->first();
+            $this->cliente_id = $cliente->id;
+            $this->tipo_documento = $cliente->tipo_documento_id;
+            $this->numero_documento = $cliente->numero_documento;
+            $this->razon_social = $cliente->razon_social;
         }
     }
 
@@ -230,5 +264,15 @@ class Create extends Component
     {
         unset($this->items[$key]);
         $this->items;
+    }
+
+    public function updatedCodePuerto($value)
+    {
+        list($code_puerto, $nombre_puerto, $ubigeo_puerto) = explode('-', $value);
+        $this->data_puerto = [
+            'code_puerto' => $code_puerto,
+            'nombre_puerto' => $nombre_puerto,
+            'ubigeo_puerto' => $ubigeo_puerto,
+        ];
     }
 }

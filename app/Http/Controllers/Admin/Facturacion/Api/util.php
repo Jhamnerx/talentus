@@ -96,23 +96,59 @@ class Util extends Controller
 
     public function getSeeApi()
     {
-        $api = new \Greenter\Api([
-            'auth' => 'https://gre-test.nubefact.com/v1',
-            'cpe' => 'https://gre-test.nubefact.com/v1',
-        ]);
-        $certificate = file_get_contents(__DIR__ . '/../resources/cert.pem');
-        if ($certificate === false) {
-            throw new Exception('No se pudo cargar el certificado');
+
+        $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
+
+
+        if ($this->plantilla->modo = 'local') {
+
+            $api = new \Greenter\Api([
+                'auth' => 'https://gre-test.nubefact.com/v1',
+                'cpe' => 'https://gre-test.nubefact.com/v1',
+            ]);
+
+            $certificate = Storage::disk('facturacion')->get($ruta_certificado);
+            if ($certificate === false) {
+                throw new Exception('No se pudo cargar el certificado');
+            }
+
+            $api->setBuilderOptions([
+                'strict_variables' => true,
+                'optimizations' => 0,
+                'debug' => true,
+                'cache' => false,
+            ])
+                ->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret'])
+                ->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat'])
+                ->setCertificate($certificate);
+
+            return $api;
+        } else {
+
+            $see = new \Greenter\Api([
+                'auth' => 'https://api-seguridad.sunat.gob.pe/v1',
+                'cpe' => 'https://api-cpe.sunat.gob.pe/v1',
+            ]);
+
+            $certificate = Storage::disk('facturacion')->get($ruta_certificado);
+            if ($certificate === false) {
+                throw new Exception('No se pudo cargar el certificado');
+            }
+
+
+            $see->setBuilderOptions([
+                'strict_variables' => true,
+                'optimizations' => 0,
+                'debug' => true,
+                'cache' => false,
+            ]);
+
+            $see->setCertificate($certificate);
+            $see->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+            $see->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret']);
+
+            return $see;
         }
-        return $api->setBuilderOptions([
-            'strict_variables' => true,
-            'optimizations' => 0,
-            'debug' => true,
-            'cache' => false,
-        ])
-            ->setApiCredentials('test-85e5b0ae-255c-4891-a595-0b98c65c9854', 'test-Hty/M6QshYvPgItX2P0+Kw==')
-            ->setClaveSOL('20161515648', 'MODDATOS', 'MODDATOS')
-            ->setCertificate($certificate);
     }
 
     public function getCompany(): \Greenter\Model\Company\Company

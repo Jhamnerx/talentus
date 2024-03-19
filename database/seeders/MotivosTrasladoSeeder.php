@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\MotivosTraslado;
+use App\Models\MotivoTraslado;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -35,28 +35,28 @@ class MotivosTrasladoSeeder extends Seeder
                 'codigo' => '04',
                 'descripcion' => 'Traslado entre establecimientos de la misma empresa'
             ],
-            [
-                'codigo' => '18',
-                'descripcion' => 'Traslado emisor itinerante CP'
-            ],
-            [
-                'codigo' => '08',
-                'descripcion' => 'Importación'
-            ],
-            [
-                'codigo' => '09',
-                'descripcion' => 'Exportación'
-            ],
-            [
-                'codigo' => '19',
-                'descripcion' => 'Traslado a zona primaria'
-            ],
+            // [
+            //     'codigo' => '18',
+            //     'descripcion' => 'Traslado emisor itinerante CP'
+            // ],
+            // [
+            //     'codigo' => '08',
+            //     'descripcion' => 'Importación'
+            // ],
+            // [
+            //     'codigo' => '09',
+            //     'descripcion' => 'Exportación'
+            // ],
+            // [
+            //     'codigo' => '19',
+            //     'descripcion' => 'Traslado a zona primaria'
+            // ],
             [
                 'codigo' => '13',
                 'descripcion' => 'Otros'
             ],
         ];
 
-        MotivosTraslado::create($motivos);
+        MotivoTraslado::create($motivos);
     }
 }

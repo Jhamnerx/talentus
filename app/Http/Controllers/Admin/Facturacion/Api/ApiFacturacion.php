@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin\Facturacion\Api;
 
 use DateTime;
 use App\Models\Ventas;
+use App\Models\Clientes;
 use App\Models\plantilla;
+use App\Models\NotaDebito;
+use App\Models\NotaCredito;
+use App\Models\GuiaRemision;
 use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Cuota;
 use Greenter\Model\Sale\Charge;
@@ -15,15 +19,19 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Greenter\Model\Despatch\Despatch;
+use Greenter\Model\Despatch\Shipment;
+use App\Events\Facturacion\EmitirNota;
+use Greenter\Model\Despatch\Direction;
 use Illuminate\Support\Facades\Storage;
+use Greenter\Model\Sale\DetailAttribute;
 use Luecano\NumeroALetras\NumeroALetras;
+use Greenter\Model\Despatch\AdditionalDoc;
+use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-use App\Events\Facturacion\EmitirNota;
-use App\Models\Clientes;
-use App\Models\NotaCredito;
-use App\Models\NotaDebito;
+use Greenter\Model\Despatch\Puerto;
 
 class ApiFacturacion extends Controller
 {
@@ -615,5 +623,171 @@ class ApiFacturacion extends Controller
         $respuesta = $util->convertToPem($ruta, $password);
 
         return $respuesta;
+    }
+
+    //EMITIR GUIA DE REMISION
+    public function emitirGuia(GuiaRemision $guia)
+    {
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+        $cliente = $this->getCliente($guia->cliente);
+
+        //ESTABLECER DATOS DE LA GUIA DE REMISION
+        $envio = new Shipment();
+        $envio
+            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
+            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
+            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
+            ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
+            ->setPesoTotal($guia->peso)
+            ->setUndPesoTotal('KGM')
+            ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
+
+            ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $envio->setContenedores([$guia->numero_contenedor]);
+
+            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
+                ->setNombre($guia->data_puerto['nombre_puerto']);
+
+            $envio->setPuerto($puerto);
+        }
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
+        if ($guia->motivo_traslado_id == '13') {
+
+            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
+        }
+        //ESTABLECER GUIA DE REMISION
+        $despatch = new Despatch();
+        $despatch->setVersion('2022')
+            ->setTipoDoc('09')
+            ->setSerie($guia->serie)
+            ->setCorrelativo($guia->correlativo)
+            ->setFechaEmision(new DateTime($guia->fecha_emision))
+            ->setCompany($util->getCompany())
+            ->setDestinatario($cliente) // misma empresa
+            ->setEnvio($envio);
+
+        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $relDoc = (new AdditionalDoc())
+                ->setTipo($guia->docu_rel_tipo)
+                ->setTipoDesc('Declaración Aduanera de Mercancías')
+                ->setNro($guia->docu_rel_numero);
+            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
+            $despatch->setAddDocs([$relDoc]);
+        } else {
+
+            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
+            if ($guia->venta) {
+
+                $relDoc = (new AdditionalDoc())
+                    ->setTipo($guia->venta->tipo_comprobante_id)
+                    ->setTipoDesc('Factura')
+                    ->setNro($guia->venta->serie_correlativo);
+
+                $despatch->setAddDocs([$relDoc]);
+            }
+        }
+
+
+
+        //ESTABLECER ITEMS DE LA GUIA DE REMISION
+        $despatch->setDetails($this->getItemsGuia($guia->detalle));
+
+
+
+        // Envio a SUNAT.
+        $api = $util->getSeeApi();
+        $res = $api->send($despatch);
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($despatch, $api->getLastXml());
+        // dd($despatch);
+        if (!$res->isSuccess()) {
+            $msg = $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        /**@var $res SummaryResult*/
+        $ticket = $res->getTicket();
+
+        $res = $api->getStatus($ticket);
+
+        if (!$res->isSuccess()) {
+            $msg = $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        $cdr = $res->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($despatch, $res->getCdrZip());
+
+        $respuesta = $util->showResponse($despatch, $cdr);
+
+        return $respuesta;
+    }
+
+    //ESTABLECER ITEMS DE LA GUIA DE REMISION
+    public function getItemsGuia($items)
+    {
+        $detalle = [];
+
+        foreach ($items as $item) {
+
+            $detalle[] = (new DespatchDetail())
+                ->setCantidad($item->cantidad)
+                ->setUnidad($item->unidad_medida)
+                ->setDescripcion($item->descripcion)
+                ->setCodigo($item->codigo)
+                ->setCodProdSunat('50161509'); // Catalogo 25
+            // ->setAtributos([
+            //     (new DetailAttribute())
+            //         ->setCode('7020')
+            //         ->setName('Partida arancelaria')
+            //         ->setValue('1701130000'),
+            //     (new DetailAttribute())
+            //         ->setCode('7022')
+            //         ->setName('Indicador de bien normalizado')
+            //         ->setValue('1')
+            // ]);
+        }
+
+        return $detalle;
+    }
+
+    //ESTABLECER DIRECCION DE LLEGADA
+    public function getDirectionGuiaLLegada($guia, $ruc): Direction
+    {
+
+        $direction = new Direction($guia->ubigeo_llegada, $guia->direccion_llegada);
+
+        if ($guia->motivo_traslado_id == '04') {
+
+            $direction->setRuc($ruc)
+                ->setCodLocal('00001'); // Código de establecimiento anexo
+        }
+
+        return $direction;
+    }
+    //ESTABLECER DIRECCION DE PARTIDA
+    public function getDirectionGuiaPartida($guia, $ruc): Direction
+    {
+        $direction = new Direction($guia->ubigeo_partida, $guia->direccion_partida);
+
+        if ($guia->motivo_traslado_id == '04') {
+
+            $direction->setRuc($ruc)
+                ->setCodLocal('00002'); // Código de establecimiento anexo
+        }
+
+        return $direction;
     }
 }

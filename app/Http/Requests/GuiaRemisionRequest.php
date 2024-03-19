@@ -12,21 +12,23 @@ class GuiaRemisionRequest extends FormRequest
         return true;
     }
 
-    public function rules($guia = null)
+    public function rules($guia = null, $motivo_traslado_id = null, $docu_rel_tipo = null)
     {
 
         $rules = [
             'serie_correlativo' => [
-                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'nullable'
+                // 'nullable', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'serie' => 'required',
-            'correlativo' => 'required',
+            'correlativo' => 'nullable',
             'fecha_emision' => 'required|date',
             'cliente_id' => 'required',
             'tipo_documento' => 'required',
             'numero_documento' => 'required',
             'razon_social' => 'required',
             'motivo_traslado_id' => 'required',
+            'descripcion_motivo_traslado' => 'required_if:motivo_traslado_id,13',
             'modalidad_transporte_id' => 'required',
             'fecha_inicio_traslado' => 'required|date',
             'peso' => 'required',
@@ -42,6 +44,12 @@ class GuiaRemisionRequest extends FormRequest
             'venta_id' => 'nullable',
             'asignarTecnico' => 'nullable',
 
+            'codigo_establecimiento_partida' => 'nullable',
+            'codigo_establecimiento_llegada' => 'nullable',
+
+            'docu_rel_tipo' => 'nullable',
+            'docu_rel_numero' => 'nullable',
+
             'items' => 'array|between:1,100',
             'items.*.producto_id' => 'required',
             'items.*.codigo' => 'required',
@@ -53,6 +61,21 @@ class GuiaRemisionRequest extends FormRequest
             'items_sim_card' => 'exclude_if:asignarTecnico,false|array',
             'tecnico_id' => 'exclude_if:asignarTecnico,false|required_if:asignarTecnico,"true"'
         ];
+
+        if ($motivo_traslado_id == '08' || $motivo_traslado_id == '09') {
+            $rules['docu_rel_tipo'] = 'required';
+            $rules['numero_contenedor'] = 'required';
+            $rules['data_puerto'] = 'required';
+
+            if ($docu_rel_tipo == '50') {
+                $rules['docu_rel_numero'] = 'required|regex:([0-9]{3}-[0-9]{4}-10-[0-9]{1,6})|regex:/^\S*$/u';
+            }
+            if ($docu_rel_tipo == '52') {
+                $rules['docu_rel_numero'] = 'required|regex:([0-9]{3}-[0-9]{4}-18-[0-9]{1,6})|regex:/^\S*$/u';
+            }
+        }
+
+
 
         if ($guia) {
 
@@ -81,7 +104,10 @@ class GuiaRemisionRequest extends FormRequest
             'users_id.required_if' => 'Debe seleccionar un usuario de rol Tecnico',
 
             'imeis_add.min' => 'Ingresa como minimo un imei',
-            'tecnico_id.required_if' => 'Selecciona un tecnico'
+            'tecnico_id.required_if' => 'Selecciona un tecnico',
+            'descripcion_motivo_traslado.required_if' => 'Ingresa una descripción del motivo de traslado',
+            'docu_rel_numero.regex' => 'El número de documento debe tener el formato 000-0000-10-000000 o 000-0000-18-000000',
+            'numero_contenedor.required' => 'El número de contenedor es requerido',
         ];
 
         return $messages;

@@ -392,6 +392,9 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/ubigeos', 'ubigeos')->name('api.ubigeos.index');
     Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
     Route::get('api/user', 'user')->name('api.user.index');
+    Route::get('api/prueba', 'prueba')->name('api.prueba.index');
+    Route::get('api/puertos', 'puertosPeru')->name('api.puertos.index');
+    Route::get('api/unidades', 'codesProductosGre')->name('api.unidades.index');
 });
 
 

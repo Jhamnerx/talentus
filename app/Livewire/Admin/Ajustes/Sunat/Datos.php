@@ -35,11 +35,37 @@ class Datos extends Component
                 'usuario_sol_sunat' => $data['sunat']['usuario_sol_sunat'],
                 'clave_sol_sunat' => $data['sunat']['clave_sol_sunat'],
                 'clave_certificado_cdt' => $data['sunat']['clave_certificado_cdt'],
+                'guia_cliente_id' => $data['sunat']['guia_cliente_id'],
+                'guia_secret' => $data['sunat']['guia_secret'],
             ]
         ]);
 
         $this->afterSave();
     }
+
+    public function saveApiSunat()
+    {
+        $data = $this->validate([
+            'sunat.usuario_sol_sunat' => 'required',
+            'sunat.clave_sol_sunat' => 'required',
+            'sunat.clave_certificado_cdt' => 'nullable',
+            'sunat.guia_cliente_id' => 'required',
+            'sunat.guia_secret' => 'required',
+        ]);
+
+        $this->plantilla->update([
+            'sunat_datos' => [
+                'usuario_sol_sunat' => $data['sunat']['usuario_sol_sunat'],
+                'clave_sol_sunat' => $data['sunat']['clave_sol_sunat'],
+                'clave_certificado_cdt' => $data['sunat']['clave_certificado_cdt'],
+                'guia_cliente_id' => $data['sunat']['guia_cliente_id'],
+                'guia_secret' => $data['sunat']['guia_secret'],
+            ]
+        ]);
+
+        $this->afterSave();
+    }
+
 
 
     public function afterSave()

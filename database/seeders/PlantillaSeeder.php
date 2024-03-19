@@ -46,6 +46,8 @@ class PlantillaSeeder extends Seeder
                         "usuario_sol_sunat" => "MODDATOS",
                         "clave_sol_sunat" => "MODDATOS",
                         "clave_certificado_cdt" => "admin",
+                        'guia_cliente_id' => 'test-85e5b0ae-255c-4891-a595-0b98c65c9854',
+                        'guia_secret' => 'test-Hty/M6QshYvPgItX2P0+Kw==',
                     ],
                     'correo' => 'administracion@talentustechnology.com',
                     'mail_config' => [
@@ -97,6 +99,8 @@ class PlantillaSeeder extends Seeder
                         "usuario_sol_sunat" => "MODDATOS",
                         "clave_sol_sunat" => "MODDATOS",
                         "clave_certificado_cdt" => "admin",
+                        'guia_cliente_id' => 'test-85e5b0ae-255c-4891-a595-0b98c65c9854',
+                        'guia_secret' => 'test-Hty/M6QshYvPgItX2P0+Kw==',
                     ],
                     'correo' => 'administracion@katary.com',
                     'mail_config' => [
