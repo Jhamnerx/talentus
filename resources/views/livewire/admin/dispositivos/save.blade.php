@@ -44,11 +44,11 @@
                                 wire:model.live="items.{{ $clave }}.imei" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap  text-left">
-                            <x-form.select name="modelo_id" wire:model.live="items.{{ $clave }}.modelo_id"
-                                placeholder="Selecciona un modelo" :async-data="[
+                            <x-form.select autocomplete='off' name="modelo_id"
+                                wire:model.live="items.{{ $clave }}.modelo_id" placeholder="Selecciona un modelo"
+                                :async-data="[
                                     'api' => route('api.dispositivos.modelos.index'),
-                                ]" option-label="modelo"
-                                option-value="id" option-description="marca" />
+                                ]" option-label="modelo" option-value="id" option-description="marca" />
 
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

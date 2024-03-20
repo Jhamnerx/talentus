@@ -198,8 +198,7 @@
                 placeholder="Selecciona una serie" :async-data="[
                     'api' => route('api.series.index'),
                     'params' => ['tipo_comprobante' => $tipo_comprobante_id],
-                ]" option-label="serie" option-value="serie"
-                hide-empty-message />
+                ]" option-label="serie" option-value="serie" />
         </div>
 
         {{-- CORRELATIVO --}}

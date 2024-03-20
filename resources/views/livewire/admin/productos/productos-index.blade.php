@@ -63,7 +63,7 @@
     <!-- Table -->
     <div class="bg-white shadow-lg rounded-sm border border-slate-200">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total Productos.
+            <h2 class="font-semibold text-slate-800">Total Productos:
                 <span class="text-slate-400 font-medium">{{ $productos->total() }}</span>
             </h2>
         </header>
@@ -271,7 +271,14 @@
                                 </td>
                             </tr>
                         @endforeach
-
+                        @if ($productos->count() < 1)
+                            <tr>
+                                <td colspan="8"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
 

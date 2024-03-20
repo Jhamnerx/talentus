@@ -25,9 +25,7 @@
                     <div class="p-6 space-y-6">
 
                         @livewire('admin.ajustes.ciudades.show')
-                        @livewire('admin.ajustes.ciudades.save')
-                        @livewire('admin.ajustes.ciudades.edit')
-                        @livewire('admin.ajustes.ciudades.delete')
+
                     </div>
 
 
@@ -41,28 +39,13 @@
 
 
 @stop
+@push('modals')
+    @livewire('admin.ajustes.ciudades.save')
+    @livewire('admin.ajustes.ciudades.edit')
+    @livewire('admin.ajustes.ciudades.delete')
+@endpush
 
 
 @section('js')
-    <script>
-        window.addEventListener('ciudad-save', event => {
-            iziToast.success({
-                position: 'topRight',
-                title: 'GUARDADO',
-                message: 'Creaste la ciudad ' + event.detail.ciudad,
-            });
 
-        })
-    </script>
-
-    <script>
-        window.addEventListener('ciudad-edit', event => {
-            iziToast.success({
-                position: 'topRight',
-                title: 'ACTUALIZADO',
-                message: 'Editaste la ciudad ' + event.detail.ciudad,
-            });
-
-        })
-    </script>
 @endsection

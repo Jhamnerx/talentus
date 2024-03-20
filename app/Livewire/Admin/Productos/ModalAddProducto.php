@@ -40,7 +40,8 @@ class ModalAddProducto extends Component
             'total' => 0.00,
             'porcentaje_igv' => 18,
             'codigo_afectacion' => $this->tipo_afectacion,
-            'afecto_icbper' => false
+            'afecto_icbper' => false,
+            'tipo' => 'producto',
         ]);
     }
 
@@ -94,6 +95,7 @@ class ModalAddProducto extends Component
         // $this->selected->put('total', round(floatval($producto->valor_unitario), 4) + round(floatval($igv_p), 4));
         $this->selected->put('codigo_afectacion', $this->tipo_afectacion);
         $this->selected->put('afecto_icbper', $producto->afecto_icbper);
+        $this->selected->put('tipo', $producto->tipo);
         $this->calcularMontosProducto();
     }
 

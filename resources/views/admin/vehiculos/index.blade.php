@@ -21,6 +21,7 @@
     @livewire('admin.vehiculos.save-quick')
     @livewire('admin.lineas.save')
     @livewire('admin.dispositivos.save')
+    @livewire('admin.clientes.save')
 @endpush
 @section('js')
     <script>

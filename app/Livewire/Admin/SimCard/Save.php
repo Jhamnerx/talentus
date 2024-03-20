@@ -38,6 +38,7 @@ class Save extends Component
     public function closeModal()
     {
         $this->modalCreate = false;
+        $this->cancel();
     }
     public function cancel()
     {
@@ -78,16 +79,35 @@ class Save extends Component
 
     public function save()
     {
-        $validatedDate = $this->validate();
+        $data = $this->validate();
 
-        foreach ($this->items as $item) {
+        try {
 
-            $sim_card = SimCard::create($item);
+            foreach ($data['items'] as $item) {
+
+                SimCard::create($item);
+            }
+
+            $this->afterSave();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
         }
-
-
-        $this->afterSave();
     }
+
+    public function convertirAMayusculas()
+    {
+        $this->items = $this->items->map(function ($item) {
+            $item['operador'] = strtoupper($item['operador']);
+            return $item;
+        });
+    }
+
+
 
     public function render()
     {

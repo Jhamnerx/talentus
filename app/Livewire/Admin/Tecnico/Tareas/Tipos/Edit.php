@@ -9,8 +9,8 @@ class Edit extends Component
 {
 
     public $modalEdit = false;
-    public $nombre, $costo = 0;
-
+    public $nombre, $costo = 0, $descripcion = "";
+    public $afecta_mantenimiento = false;
 
     public tipoTareas $tipo_tarea;
     protected $listeners = [
@@ -22,6 +22,8 @@ class Edit extends Component
         return [
             'nombre' => 'required',
             'costo' => 'required',
+            'descripcion' => 'required',
+            'afecta_mantenimiento' => 'boolean',
         ];
     }
     protected function messages()
@@ -45,6 +47,8 @@ class Edit extends Component
         $this->nombre = $tipo_tarea->nombre;
         $this->costo = $tipo_tarea->costo;
         $this->tipo_tarea = $tipo_tarea;
+        $this->descripcion = $tipo_tarea->descripcion;
+        $this->afecta_mantenimiento = $tipo_tarea->afecta_mantenimiento;
         $this->modalEdit = true;
     }
     public function closeModal()
@@ -61,8 +65,17 @@ class Edit extends Component
     public function save()
     {
         $data = $this->validate();
-        $this->tipo_tarea->update($data);
-        $this->closeModal();
-        $this->dispatch('updateIndex');
+        try {
+            $this->tipo_tarea->update($data);
+            $this->closeModal();
+            $this->dispatch('updateIndex');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Mensaje: ' . $th->getMessage() . "."
+            );
+        }
     }
 }

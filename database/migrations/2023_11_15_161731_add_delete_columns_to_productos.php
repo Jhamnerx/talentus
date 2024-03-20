@@ -28,9 +28,12 @@ return new class extends Migration
             //$table->boolean('afecto_icbper')->default(false);
             $table->string('serie')->nullable()->after('codigo');
             $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('modelo_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('set null');
             $table->boolean('estado')->default(true)->after('afecto_icbper');
             $table->string('ventas')->after('estado')->default(0);
+
+            $table->foreign('modelo_id')->references('id')->on('modelos_dispositivos')->onDelete('set null');
         });
     }
 

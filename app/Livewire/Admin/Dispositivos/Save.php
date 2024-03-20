@@ -3,10 +3,12 @@
 namespace App\Livewire\Admin\Dispositivos;
 
 use Livewire\Component;
+use App\Models\Productos;
 use Livewire\Attributes\On;
+use App\Models\Dispositivos;
+use App\Models\ModelosDispositivo;
 use Illuminate\Support\Collection;
 use App\Http\Requests\DispositivosRequest;
-use App\Models\Dispositivos;
 
 class Save extends Component
 {
@@ -77,15 +79,63 @@ class Save extends Component
     public function save()
     {
         $request = new DispositivosRequest();
-        $this->validate($request->rules(), $request->messages());
+        $data = $this->validate($request->rules(), $request->messages());
 
-        foreach ($this->items as $item) {
+        try {
 
-            Dispositivos::create($item);
+            $this->updateStock($data['items']);
+            $this->saveItems($data['items']);
+            $this->afterSave();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
+
+    public function updateStock($items)
+    {
+
+        $countedItems = array_count_values(array_column($items, 'modelo_id'));
+
+        $modelosWithCount = [];
+        foreach ($countedItems as $modeloId => $count) {
+            $modelosWithCount[$modeloId] = [
+                'id' => $modeloId,
+                'count' => $count
+            ];
         }
 
-        $this->afterSave();
+        $productos = Productos::whereIn('modelo_id', array_column($modelosWithCount, 'id'))->get();
+
+        if ($productos->isEmpty()) {
+            throw new \Exception('No se encontraron productos con los modelos seleccionados');
+        }
+
+        foreach ($productos as $producto) {
+
+            $modeloId = $producto->modelo_id;
+            $count = $modelosWithCount[$modeloId]['count'];
+            $producto->increment('stock', $count);
+        }
     }
+
+    public function resetProps()
+    {
+        $this->inicializarItems();
+    }
+
+    public function saveItems($items)
+    {
+        foreach ($items as $item) {
+            Dispositivos::create($item);
+        }
+    }
+
 
     public function afterSave()
     {
@@ -96,6 +146,7 @@ class Save extends Component
             mensaje: 'se ha registrado correctamente los imei'
         );
         $this->closeModal();
+        $this->resetProps();
         $this->dispatch('update-table');
     }
 

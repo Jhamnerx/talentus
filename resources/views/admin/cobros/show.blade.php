@@ -67,6 +67,13 @@
                         </div>
                     </div>
                 @endforeach
+                @if ($cobro->detalle->count() < 1)
+                    <div class="max-w-sm mx-auto lg:max-w-none">
+                        <div class="bg-white p-5 shadow-lg rounded-sm border border-slate-200 lg:w-72 xl:w-96">
+                            <span>NO HAY DETALLE</span>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

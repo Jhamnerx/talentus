@@ -46,6 +46,8 @@ class PlantillaSeeder extends Seeder
                         "usuario_sol_sunat" => "MODDATOS",
                         "clave_sol_sunat" => "MODDATOS",
                         "clave_certificado_cdt" => "admin",
+                        'guia_cliente_id' => 'test-85e5b0ae-255c-4891-a595-0b98c65c9854',
+                        'guia_secret' => 'test-Hty/M6QshYvPgItX2P0+Kw==',
                     ],
                     'correo' => 'administracion@talentustechnology.com',
                     'mail_config' => [
@@ -65,6 +67,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '1',
+                    'terminos' => '["Esta cotizaci\u00f3n es valida hasta su fecha de caducidad","El tiempo de entrega es inmediata previa solicitud con anticipaci\u00f3n"]',
                 ]
             );
 
@@ -75,7 +78,7 @@ class PlantillaSeeder extends Seeder
             ->update(
                 [
                     'razon_social' => 'KATARY SERVICIOS GENERALES S.A.C',
-                    'ruc' => '20605873783 ',
+                    'ruc' => '20605873783',
                     'img_documentos' => 'talentus/imagenes/img_documento.png',
                     'fondo_contrato' => 'talentus/imagenes/fondo_contrato.png',
                     'img_firma' => 'talentus/imagenes/img_firma.png',
@@ -97,6 +100,8 @@ class PlantillaSeeder extends Seeder
                         "usuario_sol_sunat" => "MODDATOS",
                         "clave_sol_sunat" => "MODDATOS",
                         "clave_certificado_cdt" => "admin",
+                        'guia_cliente_id' => 'test-85e5b0ae-255c-4891-a595-0b98c65c9854',
+                        'guia_secret' => 'test-Hty/M6QshYvPgItX2P0+Kw==',
                     ],
                     'correo' => 'administracion@katary.com',
                     'mail_config' => [
@@ -116,6 +121,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '2',
+                    'terminos' => '["Esta cotizaci\u00f3n es valida hasta su fecha de caducidad","El tiempo de entrega es inmediata previa solicitud con anticipaci\u00f3n"]',
                 ]
             );
     }

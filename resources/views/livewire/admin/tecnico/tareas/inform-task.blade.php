@@ -68,7 +68,7 @@
         let ck;
 
         $(document).ready(function() {
-            console.log(DecoupledDocumentEditor);
+            //console.log(DecoupledDocumentEditor);
             DecoupledDocumentEditor
                 .create(document.querySelector('.document-editor__editable'))
                 .then(editor => {

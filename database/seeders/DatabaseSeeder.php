@@ -82,5 +82,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UbigeosSeeder::class);
         $this->call(SerieSeeder::class);
         $this->call(ClientesSeeder::class);
+        $this->call(PermisosUpdateSeeder::class);
     }
 }

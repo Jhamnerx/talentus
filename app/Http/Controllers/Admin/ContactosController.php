@@ -13,44 +13,11 @@ class ContactosController extends Controller
     function __construct()
     {
         $this->middleware('permission:ver-contacto', ['only' => ['index']]);
-        $this->middleware('permission:crear-contacto', ['only' => ['create', 'store']]);
-        $this->middleware('permission:editar-contacto', ['only' => ['edit', 'update']]);
     }
 
     public function index()
     {
-
         $date = Carbon::createFromDate(1970, 19, 12)->age;
-
         return view('admin.clientes.contactos.index');
-    }
-
-
-    public function create()
-    {
-        return view('admin.clientes.contactos.create');
-    }
-
-
-    public function store(ContactosRequest $request)
-    {
-
-        Contactos::create($request->all());
-        return redirect()->route('admin.clientes.contactos.index')->with('store', 'El contacto se guardo con exito');
-    }
-
-    public function show(Contactos $contactos)
-    {
-        return view('admin.clientes.contactos.show');
-    }
-    public function edit(Contactos $contacto)
-    {
-        return view('admin.clientes.contactos.edit', compact('contacto'));
-    }
-
-    public function update(ContactosRequest $request, Contactos $contacto)
-    {
-        $contacto->update($request->all());
-        return redirect()->route('admin.clientes.contactos.index')->with('update', 'El contacto se actualizo con exito');
     }
 }

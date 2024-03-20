@@ -6,7 +6,10 @@
             <span class="font-medium">¡Alerta de información!</span> Si no generas un número de serie para cada
             documento, no podrás emitir todos los comprobantes de pago disponibles.
         </div>
-
+        <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-red-800 dark:text-red-400" role="alert">
+            <span class="font-medium">¡Alerta de series!</span> Si la serie empieza en 1 Debes registrarla con 0: Ejemplo
+            si debe continuar la 10, registra 9.
+        </div>
         <div class="flex items-center mb-8">
             <hr class="w-12">
 
@@ -25,7 +28,7 @@
                         <x-form.select id="tipo_comprobante_id" name="tipo_comprobante_id" :searchable="false"
                             :clearable="false" wire:model="tipo_comprobante_id" placeholder="Tipo de documento"
                             :async-data="[
-                                'api' => route('api.comprobantes.index'),
+                                'api' => route('api.tipo.comprobantes.index'),
                             ]" option-label="descripcion" option-value="codigo" />
 
                     </div>

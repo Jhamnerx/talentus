@@ -26,13 +26,14 @@
             </div>
             {{-- button save --}}
             @can('tecnico.tareas.tipo.create')
-            <button type="button" wire:click.prevent="addTipoTask" class="btn bg-teal-600 hover:bg-teal-700 text-white">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                    <path
-                        d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span class="hidden xs:block ml-2">Crear Tipo Tarea</span>
-            </button>
+                <button type="button" wire:click.prevent="addTipoTask"
+                    class="btn bg-teal-600 hover:bg-teal-700 text-white">
+                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Crear Tipo Tarea</span>
+                </button>
             @endcan
 
 
@@ -57,7 +58,7 @@
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 1 }">
-                <button
+                <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
@@ -68,7 +69,8 @@
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7" viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
+                        viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
@@ -129,7 +131,8 @@
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                :class="selected !== 4 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -146,10 +149,10 @@
     <div class="bg-white shadow-lg rounded-sm border  border-slate-200 mt-6 ">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Total Tareas: <span
-                    class="text-slate-400 font-medium">{{$tareas->total()}}</span>
+                    class="text-slate-400 font-medium">{{ $tareas->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
 
             <!-- Table -->
             <div class="overflow-x-auto">
@@ -162,8 +165,7 @@
                                 <div class="flex items-center">
                                     <label class="inline-flex">
                                         <span class="sr-only">Select all</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox"
-                                            @click="toggleAll" />
+                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
                                     </label>
                                 </div>
                             </th>
@@ -173,108 +175,109 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-center">Descripción</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-center">Costo</div>
-                            </th>
+                            @role('admin')
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Costo</div>
+                                </th>
+                            @endrole
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Total Tareas</div>
                             </th>
                             @canany(['tecnico.tareas.tipo.edit', 'tecnico.tareas.tipo.delete'])
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-center">Acciones</div>
-                            </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-center">Acciones</div>
+                                </th>
                             @endcanany
                         </tr>
                     </thead>
-                    <!-- Table body -->
+
                     <tbody class="text-sm divide-y divide-slate-200">
-                        <!-- Row -->
-                        @if ($tareas->count())
                         @foreach ($tareas as $tarea)
-                        <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" id-tarea="{{$tarea->id}}"
-                                            type="checkbox" @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
-                                    {{$tarea->nombre}}
-                                </div>
-                            </td>
+                            <tr wire:key='tt-{{ $tarea->id }}'>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="flex items-center">
+                                        <label class="inline-flex">
+                                            <span class="sr-only">Select</span>
+                                            <input class="table-item form-checkbox" id-tarea="{{ $tarea->id }}"
+                                                type="checkbox" @click="uncheckParent" />
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left text-sky-700 hover:cursor-pointer hover:text-sky-800">
+                                        {{ $tarea->nombre }}
+                                    </div>
+                                </td>
 
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">
-                                    {{$tarea->costo}}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">
-                                    {{$tarea->costo}}
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">
-                                    {{$tarea->tareas->count()}}
-                                </div>
-                            </td>
-                            @canany(['tecnico.tareas.tipo.edit', 'tecnico.tareas.tipo.delete'])
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex gap-2 justify-center">
-                                    @can('tecnico.tareas.tipo.edit')
-                                    <button type="button" wire:click.prevent="editTipoTask({{$tarea->id}})"
-                                        class="btn bg-emerald-600 hover:bg-emerald-700 text-white">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-center">
+                                        {{ $tarea->descripcion }}
+                                    </div>
+                                </td>
+                                @role('admin')
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-center">
+                                            {{ $tarea->costo }}
+                                        </div>
+                                    </td>
+                                @endrole
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-center">
+                                        {{ $tarea->tareas->count() }}
+                                    </div>
+                                </td>
+                                @canany(['tecnico.tareas.tipo.edit', 'tecnico.tareas.tipo.delete'])
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="flex gap-2 justify-center">
+                                            @can('tecnico.tareas.tipo.edit')
+                                                <button type="button" wire:click.prevent="editTipoTask({{ $tarea->id }})"
+                                                    class="btn bg-emerald-600 hover:bg-emerald-700 text-white">
 
-                                        <svg class="w-6 h-6 fill-current shrink-0" xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 48 48">
-                                            <g stroke-linecap="square" stroke-width="2" fill="none"
-                                                stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper"
-                                                stroke-miterlimit="10">
-                                                <line x1="29" y1="9" x2="39" y2="19"></line>
-                                                <path
-                                                    d="M17,41,3,45,7,31,34.121,3.879a3,3,0,0,1,4.243,0l5.757,5.757a3,3,0,0,1,0,4.243Z">
-                                                </path>
-                                            </g>
-                                        </svg>
-                                    </button>
-                                    @endcan
+                                                    <svg class="w-6 h-6 fill-current shrink-0"
+                                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                                                        <g stroke-linecap="square" stroke-width="2" fill="none"
+                                                            stroke="currentColor" stroke-linejoin="miter"
+                                                            class="nc-icon-wrapper" stroke-miterlimit="10">
+                                                            <line x1="29" y1="9" x2="39"
+                                                                y2="19"></line>
+                                                            <path
+                                                                d="M17,41,3,45,7,31,34.121,3.879a3,3,0,0,1,4.243,0l5.757,5.757a3,3,0,0,1,0,4.243Z">
+                                                            </path>
+                                                        </g>
+                                                    </svg>
+                                                </button>
+                                            @endcan
 
-                                    @can('tecnico.tareas.tipo.delete')
-                                    <button type="button" wire:click.prevent="deleteTipoTask({{$tarea->id}})"
-                                        class="btn bg-rose-600 hover:bg-rose-700 text-white">
-                                        <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
-                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                            <path
-                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                        </svg>
-                                    </button>
-                                    @endcan
+                                            @can('tecnico.tareas.tipo.delete')
+                                                <button type="button"
+                                                    wire:click.prevent="deleteTipoTask({{ $tarea->id }})"
+                                                    class="btn bg-rose-600 hover:bg-rose-700 text-white">
+                                                    <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 32 32">
+                                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                        <path
+                                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
 
-                                </div>
-                            </td>
-                            @endcanany
+                                        </div>
+                                    </td>
+                                @endcanany
 
-                        </tr>
+                            </tr>
                         @endforeach
-                        @else
-                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
-                        </td>
+                        @if ($tareas->count() < 1)
+                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                <div class="text-center">No hay Registros</div>
+                            </td>
                         @endif
-
-
-
                     </tbody>
+
                 </table>
 
             </div>
         </div>
     </div>
-
 
     <div class="mt-8 w-full">
         {{ $tareas->links() }}

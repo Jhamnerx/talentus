@@ -60,7 +60,6 @@
 </div>
 
 @once
-@push('scripts')
-
-@endpush
+    @push('scripts')
+    @endpush
 @endonce

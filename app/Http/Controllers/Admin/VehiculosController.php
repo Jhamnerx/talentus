@@ -12,6 +12,13 @@ use App\Http\Requests\VehiculosRequest;
 
 class VehiculosController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-vehiculos-vehiculos', ['only' => ['index']]);
+        $this->middleware('permission:show-vehiculos-vehiculos', ['only' => ['show']]);
+    }
+
+
     public function index()
     {
         return view('admin.vehiculos.index');
@@ -19,11 +26,5 @@ class VehiculosController extends Controller
     public function show(Vehiculos $vehiculo)
     {
         return view('admin.vehiculos.show', compact('vehiculo'));
-    }
-
-
-    public function edit(Vehiculos $vehiculo)
-    {
-        return view('admin.vehiculos.edit', compact('vehiculo'));
     }
 }

@@ -14,6 +14,7 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
+use App\Models\GuiaRemision;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Response\CdrResponse;
@@ -88,7 +89,7 @@ class Util extends Controller
          * Usuario = MODDATOS
          * Clave   = moddatos
          */
-        $see->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+        $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
         $see->setCachePath(storage_path('framework/cache/facturacion/see'));
 
         return $see;
@@ -96,23 +97,59 @@ class Util extends Controller
 
     public function getSeeApi()
     {
-        $api = new \Greenter\Api([
-            'auth' => 'https://gre-test.nubefact.com/v1',
-            'cpe' => 'https://gre-test.nubefact.com/v1',
-        ]);
-        $certificate = file_get_contents(__DIR__ . '/../resources/cert.pem');
-        if ($certificate === false) {
-            throw new Exception('No se pudo cargar el certificado');
+
+        $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
+
+
+        if ($this->plantilla->modo = 'local') {
+
+            $api = new \Greenter\Api([
+                'auth' => 'https://gre-test.nubefact.com/v1',
+                'cpe' => 'https://gre-test.nubefact.com/v1',
+            ]);
+
+            $certificate = Storage::disk('facturacion')->get($ruta_certificado);
+            if ($certificate === false) {
+                throw new Exception('No se pudo cargar el certificado');
+            }
+
+            $api->setBuilderOptions([
+                'strict_variables' => true,
+                'optimizations' => 0,
+                'debug' => true,
+                'cache' => false,
+            ])
+                ->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret'])
+                ->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat'])
+                ->setCertificate($certificate);
+
+            return $api;
+        } else {
+
+            $see = new \Greenter\Api([
+                'auth' => 'https://api-seguridad.sunat.gob.pe/v1',
+                'cpe' => 'https://api-cpe.sunat.gob.pe/v1',
+            ]);
+
+            $certificate = Storage::disk('facturacion')->get($ruta_certificado);
+            if ($certificate === false) {
+                throw new Exception('No se pudo cargar el certificado');
+            }
+
+
+            $see->setBuilderOptions([
+                'strict_variables' => true,
+                'optimizations' => 0,
+                'debug' => true,
+                'cache' => false,
+            ]);
+
+            $see->setCertificate($certificate);
+            $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+            $see->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret']);
+
+            return $see;
         }
-        return $api->setBuilderOptions([
-            'strict_variables' => true,
-            'optimizations' => 0,
-            'debug' => true,
-            'cache' => false,
-        ])
-            ->setApiCredentials('test-85e5b0ae-255c-4891-a595-0b98c65c9854', 'test-Hty/M6QshYvPgItX2P0+Kw==')
-            ->setClaveSOL('20161515648', 'MODDATOS', 'MODDATOS')
-            ->setCertificate($certificate);
     }
 
     public function getCompany(): \Greenter\Model\Company\Company
@@ -323,6 +360,37 @@ class Util extends Controller
     }
 
 
+    public function getPdfGuia(GuiaRemision $guia)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+
+        $report->setTemplate($resolver->getTemplate($guia->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo),
+                'hash' => $guia->hash,
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono
+
+            ]
+        ];
+
+
+        $html = $report->render($guia->clase, $params);
+
+        return $html;
+    }
+
+
     //OBTENER HASH DE XML INVOICE
     public function getHash(DocumentInterface $document): ?string
     {
@@ -338,23 +406,30 @@ class Util extends Controller
         return (new XmlUtils())->getHashSign($xml);
     }
 
-    public function downloadXml(Ventas $venta)
+    public function downloadXml($clase)
     {
-        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_xml . $venta->nombre_xml . '.xml';
+        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_xml . $clase->nombre_xml . '.xml';
 
 
-        return Storage::disk('facturacion')->download($ruta, $venta->nombre_xml . '.xml');
+        return Storage::disk('facturacion')->download($ruta, $clase->nombre_xml . '.xml');
     }
 
 
-    public function convertToPem($ruta_pfx, $password)
+    public function convertToPem($ruta, $password)
     {
 
-        $pfx = Storage::disk('facturacion')->get($ruta_pfx . '.pfx');
+        try {
 
-        $certificate = new X509Certificate($pfx, $password);
-        $pem = $certificate->export(X509ContentType::PEM);
+            $pfx = Storage::disk('facturacion')->get($ruta);
 
-        Storage::disk('facturacion')->put($ruta_pfx . '.pem', $pem);
+            $certificate = new X509Certificate($pfx, $password);
+            $pem = $certificate->export(X509ContentType::PEM);
+            Storage::disk('facturacion')->put('talentus/certificado/certificado_talentus.pem', $pem);
+
+            return "exito";
+        } catch (\Throwable $th) {
+
+            return $th->getMessage();
+        }
     }
 }

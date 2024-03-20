@@ -11,6 +11,8 @@ class Cards extends Component
     protected $listeners = [
         'updateIndex' => 'render',
         'update-unread' => 'render',
+        'render-cancel' => 'render',
+        'update-table-save-task' => 'render',
     ];
 
     public function render()
@@ -28,7 +30,7 @@ class Cards extends Component
 
     public function openWithoutReading()
     {
-        $this->dispatch('openModalWReading');
+        $this->dispatch('open-modal-unread');
     }
     public function openTaskComplete()
     {

@@ -367,7 +367,7 @@
                                                                         fill="#aeaeae"></path>
                                                                 </g>
                                                             </svg>
-                                                            Recordatorio
+                                                            Crear Recordatorio
 
                                                         </a>
                                                     </li>

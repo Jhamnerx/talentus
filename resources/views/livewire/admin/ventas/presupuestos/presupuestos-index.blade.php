@@ -110,7 +110,7 @@
                     class="text-slate-400 font-medium">{{ $presupuestos->total() }}</span>
             </h2>
         </header>
-        <div x-data="handleSelect">
+        <div>
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">

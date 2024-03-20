@@ -311,8 +311,7 @@
                                             </div>
                                             <!-- End -->
                                             <div class="font-medium text-sky-500">
-                                                <a
-                                                    href="{{ route('admin.vehiculos.edit', $sim_card->vehiculos) }}">{{ $sim_card->vehiculos->placa }}</a>
+                                                {{ $sim_card->vehiculos->placa }}
                                             </div>
                                         </div>
                                     @else
@@ -384,7 +383,14 @@
 
                             </tr>
                         @endforeach
-
+                        @if ($sim_cards->count() < 1)
+                            <tr>
+                                <td colspan="6"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
+                        @endif
 
                     </tbody>
                 </table>

@@ -34,8 +34,18 @@ class CreateModal extends Component
     {
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules(), $request->messages());
-        $categoria = Categoria::create($datos);
-        $this->afterSave($categoria);
+
+        try {
+            $categoria = Categoria::create($datos);
+            $this->afterSave($categoria);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
     public function afterSave($categoria)
@@ -48,5 +58,11 @@ class CreateModal extends Component
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
         );
         $this->dispatch('update-table');
+        $this->resetProp();
+    }
+
+    public function resetProp()
+    {
+        $this->reset(['nombre', 'descripcion']);
     }
 }

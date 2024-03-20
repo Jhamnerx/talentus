@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Productos;
 use Livewire\Component;
 use App\Models\Productos;
 use Livewire\Attributes\On;
+use Intervention\Image\ImageManager;
 use App\Http\Requests\ProductosRequest;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -22,6 +23,8 @@ class EditModal extends Component
     public $file;
     public $file_name;
 
+    public $modelo_id = null;
+
     public function render()
     {
         return view('livewire.admin.productos.edit-modal');
@@ -30,15 +33,27 @@ class EditModal extends Component
     public function updatedCategoriaId($value)
     {
         $this->generateCodeProduct($value);
+
+        if ($value != 1) {
+            $this->modelo_id = null;
+        }
     }
 
+    // Generar el código del producto
     public function generateCodeProduct($categoria_id)
     {
-        $producto =  Productos::where('categoria_id', $categoria_id)->latest()->first();
+        if ($categoria_id != $this->producto->categoria_id) {
+            $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
+            $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
+            $lastNumber = intval(substr($lastCode, strlen('PROD-')));
+            $newNumber = $lastNumber + 1;
+            $newCode = 'PROD-' . $categoria_id . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+            $this->codigo = $newCode;
+        } else {
 
-        $this->codigo = $producto ? 'PROD-' . $categoria_id . str_replace('PROD-', '', $producto["codigo"]) + 1 : $categoria_id . "000";
+            $this->codigo = $this->producto->codigo;
+        }
     }
-
 
     #[On('open-modal-edit')]
     public function openModal(Productos $producto)
@@ -57,6 +72,7 @@ class EditModal extends Component
         $this->afecto_icbper = $producto->afecto_icbper;
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
+        $this->modelo_id = $producto->modelo_id;
 
         if ($producto->image) {
             $this->dispatch('set-imagen-file', imagen: Storage::url($producto->image->url));
@@ -69,20 +85,30 @@ class EditModal extends Component
         //GUARDAR PRODUCTO
         $request = new ProductosRequest();
 
-        $datos = $this->validate($request->rules($this->producto));
+        $datos = $this->validate($request->rules($this->producto), $request->messages());
 
-        $this->producto->update($datos);
 
-        //save imagen
-        if ($this->file) {
+        try {
+            $this->producto->update($datos);
 
-            $this->saveImage($this->producto);
-        } else {
+            //save imagen
+            if ($this->file) {
 
-            $this->removeImage($this->producto);
+                $this->saveImage($this->producto);
+            } else {
+
+                $this->removeImage($this->producto);
+            }
+
+            $this->afterUpdate();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
         }
-
-        $this->afterUpdate();
     }
 
     public function saveImage(Productos $producto): bool
@@ -90,9 +116,9 @@ class EditModal extends Component
 
         if ($this->file_name != "default.jpg") {
 
-            $img = Image::make($this->file)->encode('jpg');
+            //$img = Image::make($this->file)->encode('jpg');
             $url = 'productos/' . $producto->codigo . '.png';
-            Storage::disk('public')->put($url, $img);
+            Storage::disk('public')->put($url, $this->resizeImagen($this->file));
 
             $producto->image()->create([
                 'url' => $url
@@ -101,6 +127,20 @@ class EditModal extends Component
 
         return true;
     }
+
+    public static function resizeImagen($img)
+    {
+        // create new image manager with gd driver
+        $manager = ImageManager::gd();
+
+        $image = $manager->read($img);
+
+        //$image->scale(height: 800);
+        // $image->resize(400, 400);
+
+        return $image->encode();
+    }
+
 
     public function removeImage(Productos $producto)
     {
@@ -114,7 +154,7 @@ class EditModal extends Component
     {
 
         $request = new ProductosRequest();
-        $this->validateOnly($atributo, $request->rules($this->producto));
+        $this->validateOnly($atributo, $request->rules($this->producto), $request->messages());
     }
     public function afterUpdate()
     {
@@ -125,10 +165,16 @@ class EditModal extends Component
             mensaje: 'se guardo correctamente el producto o servicio'
         );
         $this->closeModal();
+        $this->resetProps();
+        $this->reset('file');
         $this->dispatch('update-table');
     }
     public function closeModal()
     {
         $this->modalEdit = false;
+    }
+    public function resetProps()
+    {
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
     }
 }

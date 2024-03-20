@@ -277,8 +277,7 @@
 
                                     @if (!empty($dispositivo->vehiculos))
                                         <div class="font-medium text-sky-500">
-                                            <a
-                                                href="{{ route('admin.vehiculos.edit', $dispositivo->vehiculos) }}">{{ $dispositivo->vehiculos->placa }}</a>
+                                            {{ $dispositivo->vehiculos->placa }}
                                         </div>
                                     @else
                                         <div class="font-medium text-emerald-500">
@@ -373,7 +372,14 @@
                                 </td>
                             </tr>
                         @endforeach
-
+                        @if ($dispositivos->count() < 1)
+                            <tr>
+                                <td colspan="8"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
 

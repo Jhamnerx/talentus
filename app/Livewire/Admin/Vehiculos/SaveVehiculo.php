@@ -161,4 +161,9 @@ class SaveVehiculo extends Component
     {
         $this->dispatch('add-imei-modal', imei: $imei);
     }
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
+    }
 }

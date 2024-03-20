@@ -3,13 +3,14 @@
 namespace App\Livewire\Admin\Clientes\Contactos;
 
 use App\Models\Contactos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class ContactosIndex extends Component
 {
     use WithPagination;
-    public $search;
+    public $search = '';
     public $sort = "id";
     public $direction = "desc";
 
@@ -28,5 +29,28 @@ class ContactosIndex extends Component
             ->paginate(10);
         // ->get();
         return view('livewire.admin.clientes.contactos.contactos-index', compact('contactos'));
+    }
+
+    #[On('update-table')]
+    public function updateTable()
+    {
+
+        $this->render();
+        $this->resetPage();
+    }
+
+    public function openModalDelete(Contactos $contacto)
+    {
+        $this->dispatch('open-modal-delete', contacto: $contacto);
+    }
+
+    public function openModalSave()
+    {
+        $this->dispatch('open-modal-save');
+    }
+    public function openModalEdit(Contactos $contacto)
+    {
+
+        $this->dispatch('open-modal-edit', contacto: $contacto);
     }
 }

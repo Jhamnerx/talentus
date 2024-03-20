@@ -70,6 +70,7 @@ class VentasRequest extends FormRequest
             'items.*.total' => 'required',
             'items.*.codigo_afectacion' => 'required',
             'items.*.afecto_icbper' => 'required',
+            'items.*.tipo' => 'required',
 
             //  'total_cuotas' => 'exclude_if:forma_pago,CONTADO|required|same:total',
             //'detalle_cuotas.*.importe' => 'required',

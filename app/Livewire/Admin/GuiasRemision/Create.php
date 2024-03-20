@@ -2,57 +2,67 @@
 
 namespace App\Livewire\Admin\GuiasRemision;
 
-use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
-use App\Http\Requests\GuiaRemisionRequest;
+use Exception;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Series;
+use App\Models\SimCard;
+use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\Productos;
 use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
-use App\Models\ModelosDispositivo;
 use App\Models\MotivosTraslado;
-use App\Models\Productos;
-use App\Models\SimCard;
-use App\Models\User;
-use Carbon\Carbon;
-use Exception;
-use Illuminate\Support\Collection;
-use Livewire\Component;
+use PhpParser\Builder\Function_;
 use PhpParser\Node\Stmt\TryCatch;
+use App\Models\ModelosDispositivo;
+use Illuminate\Support\Collection;
+use App\Http\Requests\GuiaRemisionRequest;
+use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Models\plantilla;
 
 class Create extends Component
 {
-    public $imei_list = [];
-    public $imeis_add = [];
+    public Collection $items_dispositivos;
+    public Collection $items_sim_card;
 
-    public $sim_list = [];
-    public $sim_add = [];
+    public $tipo_documento = '6';
+    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id,
+        $numero_documento = null, $razon_social = '', $codigo_traslado,
+        $motivo_traslado_id = '01', $descripcion_motivo_traslado = '',  $modalidad_transporte_id =  '02',
+        $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
+        $code_puerto, $data_puerto = [];
 
-    public $events = [];
-
-    public $error_msg;
-
-    public $serie_numero, $fecha_emision;
-    public $tipo_documento = "RUC", $numero_documento, $razon_social;
-    public $motivo_traslado = "01", $modalidad_traslado = "02", $fecha_inicio_traslado, $peso, $cantidad_items, $numero_contenedor, $code_puerto;
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
-    public $factura_id, $asignarTecnico = false;
-    public $users_id;
+    public $codigo_establecimiento_partida, $codigo_establecimiento_llegada;
+    public $observacion = '';
+
+    public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
+
+    public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
+    public $asignarTecnico = false;
+
+    public $docu_rel_tipo = '50', $docu_rel_numero =  '000-0000-10-000000';
+
+    public $tecnico_id;
+
     public Collection $items;
-
     public Collection $selected;
+    public $selected_id;
 
-
-    public $search;
+    public plantilla $plantilla;
 
     public function mount()
     {
-        $controller = new GuiaRemisionController();
-        $this->serie_numero = $controller->setNextSequenceNumber();
+        $this->plantilla = plantilla::first();
+        $this->setSerieMount();
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_inicio_traslado = Carbon::now()->format('Y-m-d');
-        $this->imei_list = Dispositivos::stock()->pluck('imei')->toArray();
-        $this->sim_list = SimCard::pluck('sim_card')->toArray();
 
         $this->items = collect();
+        $this->items_dispositivos = collect();
+        $this->items_sim_card = collect();
         $this->selected = collect([
             'producto_id' => "",
             'codigo' => "",
@@ -62,30 +72,41 @@ class Create extends Component
         ]);
     }
 
-    public function updatedSearch($value)
-    {
-        // $this->imei_list = $this->lista_imei2;
-        // $result = array_filter($this->imei_list, function ($item) use ($value) {
-        //     if (stripos($item, $value) !== false) {
-        //         return true;
-        //     }
-        //     return false;
-        // });
-
-        // $this->render();
-
-        // $this->imei_list = $result;
-
-        //dd($this->imei_list, $result);
-
-        // dd(array_search($value, $this->imei_list));
-    }
 
     public function render()
     {
-        $motivos = MotivosTraslado::pluck('descripcion', 'codigo');
-        return view('livewire.admin.guias-remision.create', compact('motivos'));
+
+        return view('livewire.admin.guias-remision.create');
     }
+
+    public function setSerieMount()
+    {
+        $serie = Series::where('tipo_comprobante_id', '09')->first();
+        $this->serie = $serie->serie;
+        $this->correlativo = $serie->correlativo + 1;
+        $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+    }
+
+    public function changeSerieUpdate($serie)
+    {
+
+        if ($serie) {
+
+            $serie = Series::where('serie', $serie)->first();
+            $this->serie = $serie->serie;
+            $this->correlativo = $serie->correlativo + 1;
+            $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+        } else {
+
+            $this->reset('correlativo');
+        }
+    }
+
+    public function updatedSerie($value)
+    {
+        $this->changeSerieUpdate($value);
+    }
+
     function addProducto()
     {
 
@@ -114,114 +135,145 @@ class Create extends Component
                 'descripcion' => $this->selected["descripcion"],
             ]);
 
-            $this->selected = collect();
-            $this->dispatch('add-producto');
+            $this->addedProducto();
         } catch (\Exception $e) {
-            throw $e;
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'ERROR: ' . $e->getMessage(),
+            );
         }
     }
 
-    function selectProduct(Productos $producto)
+    public function addedProducto()
     {
+
+        $this->selected = collect();
+        $this->reset('selected_id');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'PRODUCTO AÑADIDO',
+            mensaje: 'se añadio correctamente',
+        );
+    }
+
+    function updatedSelectedId(Productos $producto)
+    {
+
         $this->selected = collect([
             'producto_id' => $producto->id,
             'codigo' => $producto->codigo,
             'cantidad' => "1",
             'unidad_medida' => $producto->unit->codigo,
-            'descripcion' => $producto->nombre
+            'descripcion' => $producto->descripcion
         ]);
-    }
-    public function handleOnSortOrderChanged($sortOrder, $previousSortOrder, $name, $from, $to)
-    {
-
-        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
-        //     unset($arr[$key]);
-        // }
-
-        $this->$name = $sortOrder;
-
-        $this->events = collect($this->events)
-            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
-            ->toArray();
-    }
-    public function handleOnSortOrderChangedSim($sortOrder, $previousSortOrder, $name, $from, $to)
-    {
-
-        // dd($from, $to);
-        // if (($key = array_search($this->$name, $this->lista_imei2)) !== false) {
-        //     unset($arr[$key]);
-        // }
-
-        $this->$name = $sortOrder;
-
-        $this->events = collect($this->events)
-            ->push("{$name}. Dragged from $from to $to. Previous:" . collect($previousSortOrder)->join(','))
-            ->toArray();
     }
 
 
     public function searchCliente()
     {
         try {
+
             $cliente = Clientes::where('numero_documento', '=', $this->numero_documento)->firstOrFail();
             $this->razon_social = $cliente->razon_social;
-            $this->numero_documento = $cliente->numero_documento;
+            $this->cliente_id = $cliente->id;
         } catch (Exception $e) {
 
-            $this->error_msg = $e->getMessage();
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL BUSCAR',
+                mensaje: 'No se encontro resultados: ' . $e->getMessage(),
+            );
+
             report($e);
-            return false;
         }
     }
 
-    public function updatedNumeroDocumento()
-    {
-        if ($this->error_msg) {
-            $this->reset('error_msg');
-        }
-    }
-
-    public function updatedAsignarTecnico($value)
-    {
-
-        if ($value) {
-            $this->dispatch('asignar-tecnico');
-        }
-    }
-    public function updated($name, $value)
-    {
-        $request = new GuiaRemisionRequest();
-        $error = $this->validateOnly($name, $request->rules(), $request->messages());
-    }
-    public function updatedUsersId($value)
-    {
-    }
 
     public function save()
     {
-
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc), $request->messages());
 
-        $guia = GuiaRemision::create($data);
+        try {
+            $guia = GuiaRemision::create($data);
 
-        //dd($data["sim_add"], $data["imeis_add"]);
+            GuiaRemision::createItems($guia, $data["items"]);
 
-        GuiaRemision::createItems($guia, $data["items"]);
+            $guia->getSerie->increment('correlativo');
 
-        if ($this->asignarTecnico) {
+            if ($this->asignarTecnico) {
 
-            if (count($data["imeis_add"]) > 0) {
+                if (count($data["items_dispositivos"]) > 0) {
 
-                $respuesta = Dispositivos::asignarDispositivos(User::find($this->users_id), $data["imeis_add"], $guia);
+                    Dispositivos::asignarDispositivos(User::find($this->tecnico_id), $data["items_dispositivos"], $guia);
+                }
+
+                if (count($data["items_sim_card"]) > 0) {
+
+                    SimCard::asignarSimCard(User::find($this->tecnico_id), $data["items_sim_card"], $guia);
+                }
             }
 
-            if (count($data["sim_add"]) > 0) {
+            $api = new ApiFacturacion();
 
-                $respuesta = SimCard::asignarSimCard(User::find($this->users_id), $data["sim_add"], $guia);
+            $mensaje = $api->emitirGuia($guia);
+
+
+            if ($mensaje['fe_codigo_error']) {
+
+                session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.almacen.guias.index');
+            } else {
+
+                session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.almacen.guias.index');
             }
+        } catch (\Throwable $th) {
+
+
+            $this->dispatch(
+                'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
+    }
+    public function updatedMotivoTrasladoId($value)
+    {
 
-        return redirect()->route('admin.almacen.guias.index')->with('store', 'La guia se registro con exito');
+        if ($value == '04' || '02' || '07') {
+
+            $cliente = Clientes::where('numero_documento', $this->plantilla->ruc)->first();
+            $this->cliente_id = $cliente->id;
+            $this->tipo_documento = $cliente->tipo_documento_id;
+            $this->numero_documento = $cliente->numero_documento;
+            $this->razon_social = $cliente->razon_social;
+        }
+    }
+
+    public function registarImei($imei)
+    {
+        $this->dispatch('add-imei-modal', imei: $imei);
+    }
+
+    public function eliminarProducto($key)
+    {
+        unset($this->items[$key]);
+        $this->items;
+    }
+
+    public function updatedCodePuerto($value)
+    {
+        list($code_puerto, $nombre_puerto, $ubigeo_puerto) = explode('-', $value);
+        $this->data_puerto = [
+            'code_puerto' => $code_puerto,
+            'nombre_puerto' => $nombre_puerto,
+            'ubigeo_puerto' => $ubigeo_puerto,
+        ];
     }
 }

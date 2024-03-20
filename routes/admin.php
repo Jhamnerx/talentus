@@ -86,7 +86,6 @@ Route::controller(GpsController::class)->group(function () {
 Route::controller(GuiaRemisionController::class)->group(function () {
     Route::get('guias', 'index')->name('admin.almacen.guias.index');
     Route::get('guias/crear', 'create')->name('admin.almacen.guias.create');
-    Route::get('guias/{guia}', 'show')->name('admin.almacen.guias.show');
     Route::get('guias/{guia}/editar', 'edit')->name('admin.almacen.guias.edit');
 });
 
@@ -104,8 +103,10 @@ Route::controller(ClientesController::class)->group(function () {
 
 
 
+Route::controller(ContactosController::class)->group(function () {
+    Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
+});
 
-Route::resource('contactos', ContactosController::class)->names('admin.clientes.contactos');
 
 //Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
 Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
@@ -171,8 +172,6 @@ Route::controller(VehiculosController::class)->group(function () {
 
     Route::get('vehiculos', 'index')->name('admin.vehiculos.index');
     Route::get('vehiculos/{vehiculo}', 'show')->name('admin.vehiculos.show');
-    Route::get('vehiculos/{vehiculo}/editar', 'edit')->name('admin.vehiculos.edit');
-    Route::put('vehiculos/{vehiculo}', 'update')->name('admin.vehiculos.update');
 });
 
 
@@ -239,6 +238,7 @@ Route::get('ajustes/notificaciones', [AjustesController::class, 'notificaciones'
 Route::get('ajustes/roles', [AjustesController::class, 'roles'])->name('admin.ajustes.roles');
 Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
 Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
+Route::get('ajustes/sunat', [AjustesController::class, 'sunat'])->name('admin.ajustes.sunat');
 
 //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
 Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
@@ -247,6 +247,7 @@ Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin
 Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(function () {
 
     Route::get('tareas', 'index')->name('admin.tecnico.tareas.index');
+    Route::get('index', 'tecnicos')->name('admin.tecnico.tecnico.index');
 });
 
 
@@ -377,7 +378,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/invoices', 'invoices')->name('api.invoices.index');
     Route::get('api/productos', 'productos')->name('api.productos.index');
     Route::get('api/documentos', 'documentos')->name('api.documentos.index');
-    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/tipo-comprobantes', 'tipoComprobantes')->name('api.tipo.comprobantes.index');
     Route::get('api/sim-card', 'sim')->name('api.sim.index');
     Route::get('api/lineas', 'lineas')->name('api.lineas.index');
     Route::get('api/dispositivos', 'dispositivos')->name('api.dispositivos.index');
@@ -385,10 +386,19 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/modelos/dispositivos', 'modelosDispositivos')->name('api.dispositivos.modelos.index');
 
     Route::get('api/sustentos', 'sustentos')->name('api.sustentos.index');
+    Route::get('api/motivos-traslado', 'motivosTraslado')->name('api.motivos.traslado.index');
+    Route::get('api/modalidad-traslado', 'modalidadTraslado')->name('api.modalidad.traslado.index');
+    Route::get('api/ubigeos', 'ubigeos')->name('api.ubigeos.index');
+    Route::get('api/comprobantes', 'comprobantes')->name('api.comprobantes.index');
+    Route::get('api/user', 'user')->name('api.user.index');
+    Route::get('api/prueba', 'prueba')->name('api.prueba.index');
+    Route::get('api/puertos', 'puertosPeru')->name('api.puertos.index');
+    Route::get('api/unidades', 'codesProductosGre')->name('api.unidades.index');
 });
 
 
 Route::controller(UtilesController::class)->group(function () {
 
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
+    Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
 });

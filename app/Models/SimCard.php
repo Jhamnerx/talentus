@@ -69,13 +69,25 @@ class SimCard extends Model
     public static function asignarSimCard(User $user, $items, GuiaRemision $guia)
     {
 
-        $user->sim_card()->attach($items, ['guia_remision_id' => $guia->id]);
+        $user->sim_card()->attach(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id
+            ]
+        );
     }
 
     public static function updateAsignarSimCard(User $user, $items, GuiaRemision $guia)
     {
 
         //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
-        $guia->sim_cards()->syncWithPivotValues($items, ['guia_remision_id' => $guia->id, 'user_id' => $user->id]);
+        $user->sim_cards()->syncWithPivotValues(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id
+            ]
+        );
     }
 }

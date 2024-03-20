@@ -4,10 +4,11 @@ namespace App\Livewire\Admin\Tecnico\Tareas;
 
 use App\Models\Tareas;
 use Livewire\Component;
-use Barryvdh\DomPDF\Facade\Pdf;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use App\Http\Controllers\Admin\UtilesController;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Admin\WhatsAppApi;
+use App\Http\Controllers\Admin\UtilesController;
 use PhpOffice\PhpSpreadsheet\Calculation\Logical\Boolean;
 
 class TablaHistorial extends Component
@@ -17,7 +18,9 @@ class TablaHistorial extends Component
     public $pages = 10;
 
     protected $listeners = [
-        'updateIndex' => 'render'
+        'updateIndex' => 'render',
+        'update-unread' => 'render',
+        'update-table-save-task' => 'render'
     ];
 
     public function render()
@@ -27,7 +30,7 @@ class TablaHistorial extends Component
             $vehiculo->where('placa', 'LIKE', '%' . $this->search . '%');
         })->orWhereHas('cliente', function ($cliente) {
             $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })->orWhereHas('user', function ($user) {
+        })->orWhereHas('tecnico', function ($user) {
             $user->where('name', 'LIKE', '%' . $this->search . '%');
         })->orWhereHas('tipo_tarea', function ($user) {
             $user->where('nombre', 'LIKE', '%' . $this->search . '%');
@@ -129,5 +132,16 @@ class TablaHistorial extends Component
     public function openModalInform(Tareas $tarea)
     {
         $this->dispatch('open-modal-inform', $tarea);
+    }
+
+    public function refreshComponent()
+    {
+        $this->render();
+    }
+
+    #[On(['render-cancel', 'update-unread', 'update-table-save-task'])]
+    public function updateTo()
+    {
+        $this->refreshComponent();
     }
 }

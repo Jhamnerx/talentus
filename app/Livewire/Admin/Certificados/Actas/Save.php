@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\ActasController;
 use App\Http\Requests\ActasRequest;
 use App\Models\Actas;
 use App\Models\Ciudades;
+use App\Models\Vehiculos;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Livewire\Attributes\On;
@@ -67,6 +68,8 @@ class Save extends Component
                 'fecha' => $fecha,
             ]);
 
+            $this->actualizarVehiculo(Vehiculos::find($values["vehiculos_id"]), $values["fecha_instalacion"]);
+
             $this->afterSave($acta->codigo);
         } catch (\Throwable $th) {
             $this->dispatch(
@@ -76,6 +79,17 @@ class Save extends Component
                 mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
             );
         }
+    }
+
+    public function actualizarVehiculo(Vehiculos $vehiculo, $fecha_instalacion)
+    {
+        $vehiculo->update(['fecha_instalacion' => $fecha_instalacion]);
+    }
+
+    public function updatedVehiculosId(Vehiculos $vehiculo)
+    {
+
+        $this->fecha_instalacion = $vehiculo->fecha_instalacion ?  Carbon::parse($vehiculo->fecha_instalacion)->format('Y-m-d') : Carbon::now()->format('Y-m-d');
     }
 
 

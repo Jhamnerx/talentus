@@ -12,6 +12,7 @@ class GuiaRemisionObserver
 
         if (!\App::runningInConsole()) {
             $guiaRemision->empresa_id = session('empresa');
+            $guiaRemision->user_id = auth()->user()->id;
         }
     }
     public function created(GuiaRemision $guiaRemision)

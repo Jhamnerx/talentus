@@ -105,7 +105,7 @@
                     <!-- Almacen -->
                     @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo', 'ver-guias'])
                         <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias']) ? 1 : 0 }} }">
+                            x-data="{ open: {{ in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos']) ? 1 : 0 }} }">
 
 
                             <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150"
@@ -215,7 +215,7 @@
                                     @endcan
                                     @can('ver-dispositivo')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.dispositivos.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.dispositivos.index', 'admin.almacen.modelos-dispositivos')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
                                                 href="{{ route('admin.almacen.dispositivos.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Dispositivos</span>
@@ -224,7 +224,7 @@
                                     @endcan
                                     @can('ver-guias')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.guias.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.almacen.guias.index', 'admin.almacen.guias.create', 'admin.almacen.guias.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
                                                 href="{{ route('admin.almacen.guias.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guias
@@ -281,7 +281,7 @@
                                 <ul class="pl-9 mt-1" :class="!open && 'hidden'" x-cloak>
                                     @can('ver-cliente')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.clientes.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.clientes.index', 'admin.clientes.create', 'admin.clientes.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
                                                 href="{{ route('admin.clientes.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Clientes
@@ -380,119 +380,136 @@
                     @endcanany
 
                     <!-- Comprobantes -->
-                    <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                        x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos']) ? 1 : 0 }} }">
+                    @canany(['ver-comprobantes', 'comprobantes-emitir-factura', 'comprobantes-emitir-boleta',
+                        'comprobantes-emitir-nota-venta', 'comprobantes-emitir-nota-debito',
+                        'comprobantes-emitir-nota-credito', 'ver-cotizaciones'])
 
-                        <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150 "
-                            href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
+                        <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos']) ? 1 : 0 }} }">
 
-                                    <svg class="shrink-0 h-6 w-6" fill="currentColor" width="800px" height="800px"
-                                        viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                        <path
-                                            d="M15,8a1,1,0,0,1-1,1H6A1,1,0,0,1,6,7h8A1,1,0,0,1,15,8Zm-1,3H6a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2Zm-4,4H6a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm13-3v8a3,3,0,0,1-3,3H4a3,3,0,0,1-3-3V4A3,3,0,0,1,4,1H16a3,3,0,0,1,3,3v7h3A1,1,0,0,1,23,12ZM17,4a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V20a1,1,0,0,0,1,1H17Zm4,9H19v8h1a1,1,0,0,0,1-1Z" />
-                                    </svg>
-                                    <span
-                                        class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                        Comprobantes
-                                    </span>
+                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150 "
+                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+
+                                        <svg class="shrink-0 h-6 w-6" fill="currentColor" width="800px" height="800px"
+                                            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M15,8a1,1,0,0,1-1,1H6A1,1,0,0,1,6,7h8A1,1,0,0,1,15,8Zm-1,3H6a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2Zm-4,4H6a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm13-3v8a3,3,0,0,1-3,3H4a3,3,0,0,1-3-3V4A3,3,0,0,1,4,1H16a3,3,0,0,1,3,3v7h3A1,1,0,0,1,23,12ZM17,4a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V20a1,1,0,0,0,1,1H17Zm4,9H19v8h1a1,1,0,0,0,1-1Z" />
+                                        </svg>
+                                        <span
+                                            class="text-sm font-medium ml-3 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                            Comprobantes
+                                        </span>
+                                    </div>
+                                    <!-- Icon -->
+                                    <div
+                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 @if (in_array(Request::segment(2), ['comprobantes'])) {{ 'rotate-180' }} @endif"
+                                            :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
+                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                        </svg>
+                                    </div>
                                 </div>
-                                <!-- Icon -->
-                                <div
-                                    class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 @if (in_array(Request::segment(2), ['comprobantes'])) {{ 'rotate-180' }} @endif"
-                                        :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
-                                        <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        </a>
+                            </a>
 
-                        <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul class="pl-9 mt-1 @if (!in_array(Request::segment(2), ['ventas'])) {{ 'hidden' }} @endif"
-                                :class="open ? '!block' : 'hidden'">
-                                @can('ver-cotizaciones')
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.ventas.presupuestos.index', 'admin.ventas.presupuestos.create', 'admin.ventas.presupuestos.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
-                                            href="{{ route('admin.ventas.presupuestos.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cotizaciones
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endcan
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-9 mt-1 @if (!in_array(Request::segment(2), ['ventas'])) {{ 'hidden' }} @endif"
+                                    :class="open ? '!block' : 'hidden'">
 
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}  transition duration-150 truncate @if (Route::is('admin.ventas.index')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.ventas.index') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Administrar Ventas
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.factura.create')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.factura.create') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Emitir Factura
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.boleta.create')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.boleta.create') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Emitir Boleta
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.venta.create')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.nota.venta.create') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Emitir Nota de venta
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.credito.create')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.nota.credito.create') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Emitir nota de credito
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="mb-1 last:mb-0">
-                                    <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.debito.create')) {{ '!text-blue-800' }} @endif"
-                                        href="{{ route('admin.nota.debito.create') }}">
-                                        <span
-                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                            Emitir nota de debito
-                                        </span>
-                                    </a>
-                                </li>
-                                @can('ver-recibos')
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block
+                                    @can('ver-cotizaciones')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} @if (Route::is('admin.ventas.presupuestos.index', 'admin.ventas.presupuestos.create', 'admin.ventas.presupuestos.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif transition duration-150 truncate"
+                                                href="{{ route('admin.ventas.presupuestos.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cotizaciones
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-comprobantes')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}  transition duration-150 truncate @if (Route::is('admin.ventas.index')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.ventas.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Administrar Ventas
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('comprobantes-emitir-factura')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.factura.create')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.factura.create') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Emitir Factura
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('comprobantes-emitir-boleta')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.boleta.create')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.boleta.create') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Emitir Boleta
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('comprobantes-emitir-nota-venta')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.venta.create')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.nota.venta.create') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Emitir Nota de venta
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('comprobantes-emitir-nota-credito')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.credito.create')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.nota.credito.create') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Emitir nota de credito
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('comprobantes-emitir-nota-debito')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.debito.create')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.nota.debito.create') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Emitir nota de debito
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-recibos')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
                                             @if (Route::is('admin.ventas.recibos.index', 'admin.ventas.recibos.create', 'admin.ventas.recibos.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
-                                            href="{{ route('admin.ventas.recibos.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Recibos</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </div>
-                    </li>
+                                                href="{{ route('admin.ventas.recibos.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Recibos</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                </ul>
+                            </div>
+                        </li>
+                    @endcanany
                     <!-- VENTAS -->
                     {{-- @canany(['ver-cotizaciones', 'ver-ventas-facturas', 'ver-recibos', 'ver-contrato'])
                     <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0" :class="{
@@ -602,7 +619,8 @@
                     @endcan
 
                     <!-- Vehiculos -->
-                    @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes'])
+                    @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes',
+                        'ver-mantenimientos-vehiculos'])
                         <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0 }} }">
 
@@ -664,27 +682,27 @@
                                             </a>
                                         </li>
                                     @endcan
-
-                                    <li class="mb-1 last:mb-0">
-                                        <a class="block
+                                    @can('ver-mantenimientos-vehiculos')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block
                                             {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
                                             @if (Route::is('admin.vehiculos.mantenimiento.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
-                                            href="{{ route('admin.vehiculos.mantenimiento.index') }}">
-                                            <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mantenimientos
-                                                Programados
-                                            </span>
-                                        </a>
-                                    </li>
-
+                                                href="{{ route('admin.vehiculos.mantenimiento.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mantenimientos
+                                                    Programados
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
                                     @can('ver-vehiculos-reportes')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.vehiculos.reportes.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.vehiculos.reportes.index', 'admin.vehiculos.reportes.show')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.vehiculos.reportes.index') }}">
                                                 <span
@@ -900,7 +918,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit', 'admin.cobros.show')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span
@@ -952,7 +970,8 @@
                                                         'admin.ajustes.roles.store',
                                                         'admin.ajustes.series',
                                                         'admin.ajustes.plantilla',
-                                                        'admin.ajustes.ciudades')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                        'admin.ajustes.ciudades',
+                                                        'admin.ajustes.sunat')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.ajustes.cuenta') }}">
                                                 <span
@@ -1020,12 +1039,23 @@
                                             {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
                                             @if (Route::is('admin.tecnico.tareas.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                             transition duration-150 truncate"
-                                            href="{{ route('admin.tecnico.tareas.index') }}"
-                                            :class="page === 'tecnico-tareas-index' &&
-                                                '!text-blue-800'">
+                                            href="{{ route('admin.tecnico.tareas.index') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
                                                 Modulo Tareas
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block
+                                            {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
+                                            {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
+                                            @if (Route::is('admin.tecnico.tecnico.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                            transition duration-150 truncate"
+                                            href="{{ route('admin.tecnico.tecnico.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                Administrar Tecnicos
                                             </span>
                                         </a>
                                     </li>

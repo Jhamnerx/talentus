@@ -17,6 +17,11 @@ class MotivoTraslado extends Model
      */
     protected $guarded = [];
     protected $table = 'motivo_traslado';
+    protected $primaryKey = 'codigo';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = false;
+
 
     public function guiaRemision(): HasOne
     {

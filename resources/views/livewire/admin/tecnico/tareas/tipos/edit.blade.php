@@ -46,8 +46,10 @@
                                 <div class="relative">
 
                                     <input wire:model.live="nombre" placeholder="Introduce el nombre" name="nombre"
-                                        id="nombre" class="form-input w-full pl-9 valid:border-emerald-300
-                            required:border-rose-300 invalid:border-rose-300 peer" type="text" required />
+                                        id="nombre"
+                                        class="form-input w-full pl-9 valid:border-emerald-300
+                            required:border-rose-300 invalid:border-rose-300 peer"
+                                        type="text" required />
 
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -64,11 +66,9 @@
                                     </div>
                                 </div>
                                 @error('nombre')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
                             </div>
                             <div class="col-span-12 sm:col-span-6">
@@ -77,10 +77,11 @@
                                         class="text-rose-500">*</span></label>
                                 <div class="relative">
 
-                                    <input wire:model.live="costo" placeholder="Introduce el costo" name="costo" id="costo"
+                                    <input wire:model.live="costo" placeholder="Introduce el costo" name="costo"
+                                        id="costo"
                                         class="form-input w-full pl-9 valid:border-emerald-300
-                                                    required:border-rose-300 invalid:border-rose-300 peer" type="text"
-                                        required />
+                                                    required:border-rose-300 invalid:border-rose-300 peer"
+                                        type="text" required />
 
 
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
@@ -95,12 +96,29 @@
                                     </div>
                                 </div>
                                 @error('costo')
-
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{$message}}
-                                </p>
-
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
                                 @enderror
+                            </div>
+                            <div class="col-span-12 sm:col-span-3">
+
+                                <label class="block text-sm font-medium mb-1" for="afecta_mantenimiento">Afecta
+                                    mantenimiento? </label>
+                                <x-form.toggle left-label="" lg wire:model.live="afecta_mantenimiento"
+                                    value="1" />
+                            </div>
+                            <div class="col-span-12">
+                                <x-form.badge flat positive label="%modelo_gps%" />
+                                <x-form.badge flat negative label="%placa%" />
+                                <x-form.badge flat warning label="%fecha%" />
+                                <x-form.badge flat info label="%hora%" />
+                                <x-form.badge flat dark label="%velo_modelo%" />
+                            </div>
+
+                            <div class="col-span-12">
+                                <x-form.textarea wire:model.live="descripcion" label="Descripcion"
+                                    placeholder="Instalación de GPS %modelo_gps% en vehículo: %placa%, Fecha instalación: %fecha% - Hora: %hora%" />
                             </div>
                         </div>
 

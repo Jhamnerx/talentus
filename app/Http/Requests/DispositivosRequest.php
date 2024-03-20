@@ -30,7 +30,7 @@ class DispositivosRequest extends FormRequest
             'items.*.imei.unique' => 'El imei ingresaso ya existe',
             'items.*.imei.distinct' => 'ya estas registrando este imei',
             'items.*.imei.numeric' => 'El campo no debe contener letras',
-            'items.*.modelo_id.required' => 'El operador es requerido',
+            'items.*.modelo_id.required' => 'El modelo es requerido',
 
         ];
 

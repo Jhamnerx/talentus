@@ -10,6 +10,10 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 class MantenimientoController extends Controller
 {
 
+    function __construct()
+    {
+        $this->middleware('permission:ver-mantenimientos-vehiculos', ['only' => ['index']]);
+    }
 
     public function index()
     {

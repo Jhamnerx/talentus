@@ -10,7 +10,9 @@ class Create extends Component
 
     public $modalSave = false;
 
-    public $nombre, $costo = 0;
+    public $nombre, $costo = 0, $descripcion = "Instalación de GPS %modelo_gps% en vehículo: %placa%, Fecha instalación: %fecha% - Hora: %hora%";
+
+    public $afecta_mantenimiento = false;
 
     protected $listeners = [
         'addTipoTask',
@@ -21,6 +23,8 @@ class Create extends Component
         return [
             'nombre' => 'required',
             'costo' => 'required',
+            'descripcion' => 'required',
+            'afecta_mantenimiento' => 'boolean',
         ];
     }
     protected function messages()
@@ -53,9 +57,20 @@ class Create extends Component
 
     public function save()
     {
+
         $data = $this->validate();
-        $tarea = tipoTareas::create($data);
-        $this->reset();
-        $this->dispatch('updateIndex');
+        try {
+
+            tipoTareas::create($data);
+            $this->reset();
+            $this->dispatch('updateIndex');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Mensaje: ' . $th->getMessage() . "."
+            );
+        }
     }
 }

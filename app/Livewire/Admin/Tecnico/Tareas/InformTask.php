@@ -35,15 +35,26 @@ class InformTask extends Component
 
     public function save()
     {
-
-        // dd($this->tarea);
         $informe = $this->tarea->informe()->updateOrCreate([
             'tarea_id' => $this->tarea->id
         ], [
             'message' => $this->message,
             'user_id' => Auth::user()->id,
         ]);
+
+        $this->afterSave($this->tarea->token);
+    }
+
+
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'INFORME TAREA REGISTRADA',
+            mensaje: 'Se registro el informe para la tarea #' . $numero,
+        );
+
         $this->closeModal();
-        $this->dispatch('save-inform', ['token' => $this->tarea->token]);
     }
 }

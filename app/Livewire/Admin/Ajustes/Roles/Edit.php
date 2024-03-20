@@ -66,7 +66,7 @@ class Edit extends Component
         return view('livewire.admin.ajustes.roles.edit');
     }
 
-    public function update()
+    public function save()
     {
 
         $rol = Role::find($this->rol->id);

@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Dispositivos extends Model
 {
@@ -68,14 +69,26 @@ class Dispositivos extends Model
     public static function asignarDispositivos(User $user, $items, GuiaRemision $guia)
     {
 
-        $user->dispositivos()->attach($items, ['guia_remision_id' => $guia->id]);
+        $user->dispositivos()->attach(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id
+            ]
+        );
     }
 
     public static function updateAsignarDispositivos(User $user, $items, GuiaRemision $guia)
     {
 
         //$user->dispositivos()->sync([1 => ['guia_remision_id' => $guia->id], 2, 3]);
-        $guia->dispositivos()->syncWithPivotValues($items, ['guia_remision_id' => $guia->id, 'user_id' => $user->id]);
+        $user->dispositivos()->syncWithPivotValues(
+            $items,
+            [
+                'guia_remision_id' => $guia->id,
+                'user_id' => auth()->user()->id,
+            ]
+        );
     }
 
 
@@ -96,10 +109,15 @@ class Dispositivos extends Model
     }
 
     //relacion many to many dipositivos
-    public function users()
+    // public function users()
+    // {
+    //     //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
+    //     return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    // }
+
+    public function users(): BelongsToMany
     {
-        //return $this->belongsToMany(User::class, 'dispositivos_users', 'user_id', 'user_id', null, 'id');
-        return $this->hasOne(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsToMany(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class)->using(DispositivosUsers::class);
     }
 
     public function user()

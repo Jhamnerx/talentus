@@ -156,9 +156,14 @@
                     </thead>
                     <tbody>
                         <tr>
+                            @php
+                                $total = $presupuesto->comision
+                                    ? floatval($presupuesto->total + $presupuesto->comision)
+                                    : floatval($presupuesto->total);
+                            @endphp
                             <td>
                                 Monto Total:<br>
-                                <strong>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $presupuesto->total }}</strong>
+                                <strong>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $total }}</strong>
                             </td>
                             <td>
                                 Fecha Emisión:<br>
@@ -233,6 +238,11 @@
                             <tbody>
                                 <tr>
                                     <td>
+                                        <p><strong>METODOS DE PAGO NACIONAL</strong></p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
                                         <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
                                     </td>
                                 </tr>
@@ -248,6 +258,18 @@
                                     <td>
                                         <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25
                                         </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <p><strong>METODOS DE PAGO INTERNACIONAL</strong></p>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>
+                                        <p><strong>CODIGO SWIF: BCONPEPL </strong>
+                                            CUENTA: 00110248 26 0200481886</p>
                                     </td>
                                 </tr>
                             </tbody>
@@ -277,6 +299,13 @@
                                             00224500266348716499</p>
                                     </td>
                                 </tr>
+                                <tr>
+
+                                    <td>
+                                        <p><strong>CODIGO SWIF: BCONPEPL </strong>
+                                            CUENTA: 00110248 26 0200481886</p>
+                                    </td>
+                                </tr>
                             </tbody>
                         @endif
 
@@ -291,7 +320,7 @@
                             </tr>
                             <tr>
                                 <td>IGV: 18%</td>
-                                <td>S/. {{ number_format($presupuesto->impuesto_soles, 2) }}</td>
+                                <td>S/. {{ number_format($presupuesto->igv_soles, 2) }}</td>
                             </tr>
 
                         </tbody>
@@ -316,12 +345,20 @@
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->igv, 2) }}
                                 </td>
                             </tr>
+                            @if ($presupuesto->comision)
+                                <tr>
+                                    <td>COMISION EXTRAJERO: </td>
+                                    <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->comision, 2) }}
+                                    </td>
+                                </tr>
+                            @endif
+
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total + $presupuesto->comision, 2) }}
                                 </td>
                             </tr>
                         </tfoot>
@@ -407,12 +444,20 @@
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->igv, 2) }}
                                 </td>
                             </tr>
+                            @if ($presupuesto->comision)
+                                <tr>
+                                    <td>COMISION EXTRAJERO: </td>
+                                    <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->comision, 2) }}
+                                    </td>
+                                </tr>
+                            @endif
+
 
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td>Monto Total:</td>
-                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total, 2) }}
+                                <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->total + $presupuesto->comision, 2) }}
                                 </td>
                             </tr>
                         </tfoot>

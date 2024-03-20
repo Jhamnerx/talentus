@@ -10,6 +10,7 @@ use Illuminate\Container\Container;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Client\Request;
 
 class UtilesController extends Controller
 {
@@ -342,5 +343,8 @@ class UtilesController extends Controller
         $fp = fopen($envFile, 'w');
         fwrite($fp, $str);
         fclose($fp);
+    }
+    public function uploadCdt(Request $request)
+    {
     }
 }

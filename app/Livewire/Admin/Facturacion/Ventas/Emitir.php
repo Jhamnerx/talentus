@@ -55,6 +55,9 @@ class Emitir extends Component
     //PROPIEDAD PARA ASIGNAR EL MINIMO DEL CORRELATIVO
     public $min_correlativo;
 
+    //DISMINUIR STOCK
+    public $decrease_stock = false;
+
 
 
     public function mount()
@@ -94,9 +97,7 @@ class Emitir extends Component
 
     public function render()
     {
-        $payments_methods = MetodoPago::pluck('descripcion', 'codigo');
-
-        return view('livewire.admin.facturacion.ventas.emitir', compact('payments_methods'));
+        return view('livewire.admin.facturacion.ventas.emitir');
     }
 
 
@@ -241,7 +242,6 @@ class Emitir extends Component
     #[On('add-producto-selected')]
     function addProducto($selected)
     {
-
         try {
 
             if ($this->items->contains('producto_id', $selected["producto_id"])) {
@@ -272,6 +272,7 @@ class Emitir extends Component
                     'total' => $selected["total"],
                     'codigo_afectacion' => $selected["codigo_afectacion"],
                     'afecto_icbper' => $selected["afecto_icbper"],
+                    'tipo' => $selected["tipo"],
                 ]);
 
                 //ENVIAR EVENTO PARA REINICIAR PRODUCTO SELECCIONADO EN MODAL
@@ -308,7 +309,7 @@ class Emitir extends Component
             }
 
             //CREAR ITEMS DE LA VENTA
-            $items = Ventas::createItems($venta, $datos["items"]);
+            $items = Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
 
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
@@ -572,5 +573,10 @@ class Emitir extends Component
     public function openModalAddProducto()
     {
         $this->dispatch('openModalAddProducto');
+    }
+
+    public function OpenModalCliente($busqueda)
+    {
+        $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
     }
 }

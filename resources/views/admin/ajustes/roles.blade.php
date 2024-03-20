@@ -25,8 +25,7 @@
                     <div class="p-6 space-y-6">
 
                         @livewire('admin.ajustes.roles.show')
-                        @livewire('admin.ajustes.roles.save')
-                        @livewire('admin.ajustes.roles.edit')
+
                     </div>
 
 
@@ -40,6 +39,10 @@
 
 
 @stop
+@push('modals')
+    @livewire('admin.ajustes.roles.save')
+    @livewire('admin.ajustes.roles.edit')
+@endpush
 
 @section('js')
     @if (session('store'))

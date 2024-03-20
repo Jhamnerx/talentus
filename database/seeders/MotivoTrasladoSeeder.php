@@ -26,14 +26,14 @@ class MotivoTrasladoSeeder extends Seeder
                 'codigo' => '04',
                 'descripcion' => 'TRASLADO ENTRE ESTABLECIMIENTOS DE LA MISMA EMPRESA'
             ],
-            [
-                'codigo' => '08',
-                'descripcion' => 'IMPORTACIÓN'
-            ],
-            [
-                'codigo' => '09',
-                'descripcion' => 'EXPORTACIÓN'
-            ],
+            // [
+            //     'codigo' => '08',
+            //     'descripcion' => 'IMPORTACIÓN'
+            // ],
+            // [
+            //     'codigo' => '09',
+            //     'descripcion' => 'EXPORTACIÓN'
+            // ],
             [
                 'codigo' => '13',
                 'descripcion' => 'OTROS'

@@ -125,88 +125,91 @@
                         <!-- Table body -->
                         <tbody class="text-sm divide-y divide-slate-200">
                             <!-- Row -->
-                            @if ($reviews->count())
-                                @foreach ($reviews as $review)
-                                    <tr wire:key='review-{{ $review->id }}'>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="flex items-center">
-                                                <label class="inline-flex">
-                                                    <span class="sr-only">Select</span>
-                                                    <input class="table-item form-checkbox" type="checkbox"
-                                                        @click="uncheckParent" />
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left uppercase">{{ $review->id }}</div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left uppercase">{{ $review->empresa }}</div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                            <div class="text-left uppercase">{{ $review->name }}</div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left uppercase">
-                                                {{ $review->cargo }}
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left uppercase">
-                                                {{ $review->telefono }}
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                            <div class="text-left uppercase">{{ $review->birthday }}</div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div class="text-left uppercase">
-                                                <p class="d font-semibold">1.- ¿Qué tan satisfecho se siente con la
-                                                    atención
-                                                    brindada a sus
-                                                    consultas y requerimientos?</p>
-                                                <p class="a pl-4">{{ $review->question['q1'] }}</p>
-                                            </div>
 
-                                            <div class="text-left uppercase">
-                                                <p class="d font-semibold">2.- ¿En qué aspecto cree Ud., que debería
-                                                    mejorar nuestro servicio?</p>
-                                                <p class="a pl-4"> {{ $review->question['q2'] }}</p>
-                                            </div>
-                                            <div class="text-left uppercase">
-                                                <p class="d font-semibold">3.- ¿Tiene algún inconveniente en el manejo
-                                                    de nuestras plataformas de monitoreo?</p>
-                                                <p class="a pl-4">{{ $review->question['q3'] }},
-                                                    {{ $review->question['q3_res'] }}</p>
+                            @foreach ($reviews as $review)
+                                <tr wire:key='review-{{ $review->id }}'>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                        <div class="flex items-center">
+                                            <label class="inline-flex">
+                                                <span class="sr-only">Select</span>
+                                                <input class="table-item form-checkbox" type="checkbox"
+                                                    @click="uncheckParent" />
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left uppercase">{{ $review->id }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left uppercase">{{ $review->empresa }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                        <div class="text-left uppercase">{{ $review->name }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left uppercase">
+                                            {{ $review->cargo }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left uppercase">
+                                            {{ $review->telefono }}
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                        <div class="text-left uppercase">{{ $review->birthday }}</div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <div class="text-left uppercase">
+                                            <p class="d font-semibold">1.- ¿Qué tan satisfecho se siente con la
+                                                atención
+                                                brindada a sus
+                                                consultas y requerimientos?</p>
+                                            <p class="a pl-4">{{ $review->question['q1'] }}</p>
+                                        </div>
 
-                                            </div>
-                                            <div class="text-left uppercase">
-                                                <p class="d font-semibold">4.- ¿Tiene alguna solicitud pendiente que no
-                                                    se haya atendido?</p>
-                                                <p class="a pl-4">{{ $review->question['q4'] }}.</p>
+                                        <div class="text-left uppercase">
+                                            <p class="d font-semibold">2.- ¿En qué aspecto cree Ud., que debería
+                                                mejorar nuestro servicio?</p>
+                                            <p class="a pl-4"> {{ $review->question['q2'] }}</p>
+                                        </div>
+                                        <div class="text-left uppercase">
+                                            <p class="d font-semibold">3.- ¿Tiene algún inconveniente en el manejo
+                                                de nuestras plataformas de monitoreo?</p>
+                                            <p class="a pl-4">{{ $review->question['q3'] }},
+                                                {{ $review->question['q3_res'] }}</p>
+
+                                        </div>
+                                        <div class="text-left uppercase">
+                                            <p class="d font-semibold">4.- ¿Tiene alguna solicitud pendiente que no
+                                                se haya atendido?</p>
+                                            <p class="a pl-4">{{ $review->question['q4'] }}.</p>
 
 
-                                            </div>
-                                            <div class="text-left uppercase">
-                                                <p class="d font-semibold">5.- ¿Recomendaría nuestro servicio a un
-                                                    familiar o amigo?</p>
-                                                <p class="a pl-4"> {{ $review->question['q5'] }}.
-                                                    {{ $review->question['q5_why'] }}.</p>
+                                        </div>
+                                        <div class="text-left uppercase">
+                                            <p class="d font-semibold">5.- ¿Recomendaría nuestro servicio a un
+                                                familiar o amigo?</p>
+                                            <p class="a pl-4"> {{ $review->question['q5'] }}.
+                                                {{ $review->question['q5_why'] }}.</p>
 
-                                            </div>
-                                        </td>
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                            <div class="text-left uppercase">
-                                                {{ $review->created_at->format('d-m-Y') }}</div>
-                                        </td>
+                                        </div>
+                                    </td>
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                        <div class="text-left uppercase">
+                                            {{ $review->created_at->format('d-m-Y') }}</div>
+                                    </td>
 
-                                    </tr>
-                                @endforeach
-                            @else
-                                <td colspan="11"
-                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
-                                </td>
+                                </tr>
+                            @endforeach
+
+                            @if ($reviews->count() < 1)
+                                <tr>
+                                    <td colspan="9"
+                                        class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                        <div class="text-center">No hay Registros</div>
+                                    </td>
+                                </tr>
                             @endif
 
 

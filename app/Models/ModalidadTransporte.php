@@ -17,6 +17,10 @@ class ModalidadTransporte extends Model
      */
     protected $guarded = [];
     protected $table = 'modalidad_transporte';
+    protected $primaryKey = 'codigo';
+    public $incrementing = false;
+    protected $keyType = 'string';
+    public $timestamps = false;
 
     public function guiaRemision(): HasOne
     {

@@ -2,13 +2,15 @@
 
 namespace App\Livewire\Admin\Tecnico\Tareas\Modales;
 
+use Carbon\Carbon;
 use App\Models\Tareas;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
-use Carbon\Carbon;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class Pending extends Component
@@ -55,15 +57,7 @@ class Pending extends Component
         $this->openModal = false;
     }
 
-    public function cancelTask(Tareas $task)
-    {
-        $task->estado = "CANCELED";
-        $task->fecha_termino = Carbon::now();
-        $task->save();
-        $this->dispatch('update-task', ['titulo' => 'TAREA CANCELADA', 'message' => 'Se cancelo la tarea',  'token' => $task->token, 'color' => '#f87171', 'progressBarColor' => 'rgb(255,255,255)']);
-        $this->render();
-        $this->dispatch('update-unread');
-    }
+
     public function markComplete(Tareas $task)
     {
         $task->estado = "COMPLETE";
@@ -87,21 +81,46 @@ class Pending extends Component
 
     public function saveImagen(Tareas $tarea, $image)
     {
-        $img = Image::make($image->getRealPath())->encode('jpg', 65)->fit(760, null, function ($c) {
-            $c->aspectRatio();
-            $c->upsize();
-        });
+        try {
+            $img = $this->resizeImagen($image);
+            Storage::disk('local')->put('public/tareas' . '/' . $tarea->token . '.png', $img, 'public');
 
-        Storage::disk('local')->put('public/tareas' . '/' . $tarea->token . '.png', $img, 'public');
+            $tarea->image()->create([
+                'url' => 'tareas/' . $tarea->token . '.png',
+            ]);
 
-        $tarea->image()->create([
-            'url' => 'tareas/' . $tarea->token . '.png',
-        ]);
-
-        $this->dispatch('save-imagen', ['tarea' => $tarea->token]);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'IMAGEN GUARDADA',
+                mensaje: 'Se guardo la imagen para la tarea: #' . $tarea->token,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL GUARDAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
     }
+    public static function resizeImagen($img)
+    {
+        // create new image manager with gd driver
+        $manager = ImageManager::gd();
 
+        $image = $manager->read($img->getRealPath());
 
+        $image->scale(height: 600);
+        // $image->resize(400, 400);
+
+        return $image->encode();
+    }
+    #[On('update-table-save-task')]
+    public function refreshComponent()
+    {
+        $this->render();
+    }
     public function sendWhatsApp(Tareas $task)
     {
         $util = new UtilesController();
@@ -112,5 +131,11 @@ class Pending extends Component
     public function openModalNotificationClient(Tareas $tarea)
     {
         $this->dispatch('send-notificacion-client', $tarea);
+    }
+
+    public function cancelTask(Tareas $task)
+    {
+
+        $this->dispatch('open-modal-cancel', tarea: $task);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ProductosRequest extends FormRequest
 {
@@ -32,7 +33,10 @@ class ProductosRequest extends FormRequest
             'valor_unitario' => 'numeric',
             'afecto_icbper' => 'boolean',
             'divisa' => 'required',
-            'tipo' => 'required'
+            'tipo' => 'required',
+            'modelo_id' => [
+                'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+            ]
         ];
 
         if ($producto) {
@@ -46,10 +50,23 @@ class ProductosRequest extends FormRequest
                 'valor_unitario' => 'numeric',
                 'afecto_icbper' => 'boolean',
                 'divisa' => 'required',
-                'tipo' => 'required'
+                'tipo' => 'required',
+                'modelo_id' => [
+                    'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                ]
             ];
         }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'categoria_id.required' => 'El campo categoría es obligatorio',
+            'tipo.required' => 'El campo tipo es obligatorio',
+            'modelo_id.required_if' => 'El campo modelo es obligatorio si la categoría es "Dispositivos"',
+            'modelo_id.unique' => 'Solo un producto debe ser vinculado a un modelo',
+        ];
     }
 }

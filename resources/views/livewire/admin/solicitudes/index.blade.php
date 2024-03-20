@@ -66,7 +66,7 @@
                 </h2>
 
             </header>
-            <div x-data="handleSelect">
+            <div>
                 <!-- Table -->
                 <div class="overflow-x-auto">
                     <table class="table-auto w-full">
@@ -177,8 +177,8 @@
                                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                             @can('admin.solicitudes.finalize')
                                                 @if (!$solicitud->estado)
-                                                    <div class="relative" x-data="{ open: false }"
-                                                        @mouseenter="open = true" @mouseleave="open = false">
+                                                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                                        @mouseleave="open = false">
                                                         <button type="button"
                                                             wire:click.prevent="markComplete({{ $solicitud->id }})"
                                                             aria-haspopup="true" :aria-expanded="open"

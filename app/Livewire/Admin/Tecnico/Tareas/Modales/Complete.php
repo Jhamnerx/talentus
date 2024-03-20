@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\WhatsAppApi;
 use App\Http\Controllers\Admin\UtilesController;
 use Intervention\Image\ImageManagerStatic as Image;
+use Intervention\Image\ImageManager;
 
 class Complete extends Component
 {
@@ -67,22 +68,52 @@ class Complete extends Component
 
     public function saveImagen(Tareas $tarea, $image)
     {
-        $img = Image::make($image->getRealPath())->encode('jpg', 65)->fit(760, null, function ($c) {
-            $c->aspectRatio();
-            $c->upsize();
-        });
+        try {
+            $img = $this->resizeImagen($image);
+            Storage::disk('local')->put('public/tareas' . '/' . $tarea->token . '.png', $img, 'public');
 
-        Storage::disk('local')->put('public/tareas' . '/' . $tarea->token . '.png', $img, 'public');
+            $tarea->image()->create([
+                'url' => 'tareas/' . $tarea->token . '.png',
+            ]);
 
-        $tarea->image()->create([
-            'url' => 'tareas/' . $tarea->token . '.png',
-        ]);
-
-        $this->dispatch('save-imagen', ['tarea' => $tarea->token]);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'IMAGEN GUARDADA',
+                mensaje: 'Se guardo la imagen para la tarea: #' . $tarea->token,
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL GUARDAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
     }
 
+    public static function resizeImagen($img)
+    {
+        // create new image manager with gd driver
+        $manager = ImageManager::gd();
+
+        $image = $manager->read($img->getRealPath());
+
+        $image->scale(height: 600);
+        // $image->resize(400, 400);
+
+        return $image->encode();
+    }
+    public function refreshComponent()
+    {
+        $this->render();
+    }
     public function openModalNotificationClient(Tareas $tarea)
     {
         $this->dispatch('send-notificacion-client', $tarea);
+    }
+    public function verModalImagen(Tareas $tarea)
+    {
+        $this->dispatch('open-modal-imagen', tarea: $tarea);
     }
 }

@@ -11,7 +11,7 @@ class Edit extends Component
     public $openModalEdit = false;
 
     public $nombre, $prefijo;
-    public $ciudad;
+    public Ciudades $ciudad;
 
     protected $listeners = [
         'openModalEdit' => 'openModal'
@@ -24,9 +24,6 @@ class Edit extends Component
         $this->ciudad = $ciudad;
         $this->nombre = $ciudad->nombre;
         $this->prefijo = $ciudad->prefijo;
-
-        //dd($ciudad);
-
     }
 
     public function closeModal()
@@ -48,15 +45,36 @@ class Edit extends Component
         $requestCiudades = new CiudadesRequest();
         $values = $this->validate($requestCiudades->rules($this->ciudad), $requestCiudades->messages());
 
-        $update = Ciudades::find($this->ciudad->id);
-        $update->nombre = $values["nombre"];
-        $update->prefijo = $values["prefijo"];
-        $update->save();
+        try {
 
-        $this->openModalEdit = false;
-        $this->dispatch('ciudad-edit', ['ciudad' => $this->ciudad->nombre]);
-        $this->dispatch('render');
-        $this->reset();
+            $this->updateCiudad($values);
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Ocurrio un error al actualizar la ciudad',
+            );
+        }
+
+        $this->afterSave($this->ciudad->nombre);
+    }
+
+    public function updateCiudad($values)
+    {
+        $this->ciudad->update($values);
+    }
+
+    public function afterSave($name)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'CIUDAD ACTUALIZADA',
+            mensaje: 'Se actualizo la ciudad: ' . $name,
+        );
+        $this->closeModal();
+        $this->dispatch('update-table');
     }
 
     public function updated($label)
@@ -65,6 +83,4 @@ class Edit extends Component
         $this->validateOnly($label, $requestCiudades->rules($this->ciudad), $requestCiudades->messages());
         //dd($label);
     }
-
-    
 }

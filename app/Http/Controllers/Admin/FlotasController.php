@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class FlotasController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-vehiculos-flotas', ['only' => ['index']]);
+    }
 
     public function index()
     {

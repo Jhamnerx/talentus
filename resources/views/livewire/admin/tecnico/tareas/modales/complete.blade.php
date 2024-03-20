@@ -60,14 +60,12 @@
 </div>
 
 @once
-@push('scripts')
-<script>
-    $(document).ready(function() {
+    @push('scripts')
+        <script>
+            $(document).ready(function() {
 
 
-    })
-
-
-</script>
-@endpush
+            })
+        </script>
+    @endpush
 @endonce

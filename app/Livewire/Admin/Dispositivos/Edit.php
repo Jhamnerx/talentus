@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Admin\Dispositivos;
 
-use App\Models\Dispositivos;
-use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\Attributes\On;
+use App\Models\Dispositivos;
+use App\Http\Requests\DispositivosRequest;
 
 class Edit extends Component
 {
@@ -15,6 +16,26 @@ class Edit extends Component
     public function render()
     {
         return view('livewire.admin.dispositivos.edit');
+    }
+
+    protected function rules()
+    {
+        return [
+            'imei' => 'required|unique:dispositivos,imei,' . $this->dispositivo->id,
+            'modelo_id' => 'required'
+        ];
+    }
+
+    protected function messages()
+    {
+        return [
+            'imei.required' => 'El imei es requerido',
+            'imei.unique' => 'El imei ingresaso ya existe',
+            'imei.distinct' => 'ya estas registrando este imei',
+            'imei.numeric' => 'El campo no debe contener letras',
+            'modelo_id.required' => 'El modelo es requerido',
+
+        ];
     }
 
     #[On('open-modal-edit')]
@@ -40,12 +61,21 @@ class Edit extends Component
 
     public function save()
     {
-        $this->dispositivo->update([
-            'imei' => $this->imei,
-            'modelo_id' => $this->modelo_id,
-            'of_client' => $this->of_client,
-        ]);
-        $this->afterSave();
+
+        $data = $this->validate();
+
+        try {
+            $this->dispositivo->update($data);
+            $this->afterSave();
+        } catch (\Throwable $th) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
     public function afterSave()

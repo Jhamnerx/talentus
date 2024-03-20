@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Admin\GuiasRemision;
 
-use App\Models\GuiaRemision;
 use App\Models\Guias;
 use Livewire\Component;
+use App\Models\GuiaRemision;
 use Livewire\WithPagination;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
 class Index extends Component
 {
@@ -20,14 +21,17 @@ class Index extends Component
 
     public function render()
     {
-        $guias = GuiaRemision::whereHas('motivo', function ($query) {
+        $guias = GuiaRemision::whereHas('motivoTraslado', function ($query) {
             $query->where('descripcion', 'like', '%' . $this->search . '%');
-        })->orWhere('serie_numero', 'like', '%' . $this->search . '%')
-            ->orWhere('razon_social', 'like', '%' . $this->search . '%')
+        })
+            ->orWhereHas('cliente', function ($cliente) {
+                $cliente->where('razon_social', 'like', '%' . $this->search . '%')
+                    ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
+            })
             ->orWhere('fecha_emision', 'like', '%' . $this->search . '%')
-            ->orWhere('numero_documento', 'like', '%' . $this->search . '%')
-            ->orWhere('code_puerto', 'like', '%' . $this->search . '%')
-            ->orWhere('numero_contenedor', 'like', '%' . $this->search . '%')
+            ->orWhere('serie_correlativo', 'like', '%' . $this->search . '%')
+            ->orWhere('serie', 'like', '%' . $this->search . '%')
+            ->orWhere('correlativo', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_partida', 'like', '%' . $this->search . '%')
             ->orWhere('ubigeo_llegada', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'DESC')
@@ -62,5 +66,39 @@ class Index extends Component
     {
         $this->dispatch('EliminarGuia', $guia);
         $this->openModalDelete = true;
+    }
+
+    public function getCdr(GuiaRemision $guia)
+    {
+        try {
+            $api = new ApiFacturacion();
+            $mensaje =  $api->sendInvoiceOnlyGuia($guia);
+            dd($mensaje);
+            if ($mensaje['fe_codigo_error']) {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR GUIA', 'error');
+            } else {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'GUIA ENVIADO A SUNAT', 'success');
+            }
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
+    public function afterGetCdr($mensaje, $titulo, $icono)
+    {
+        $this->dispatch(
+            'notify',
+            icon: $icono,
+            title: $titulo,
+            mensaje: $mensaje,
+        );
+        $this->render();
     }
 }

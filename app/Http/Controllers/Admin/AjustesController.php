@@ -37,4 +37,10 @@ class AjustesController extends Controller
 
         return view('admin.ajustes.plantilla', compact('plantilla'));
     }
+    public function sunat()
+    {
+        $plantilla = plantilla::first();
+
+        return view('admin.ajustes.sunat', compact('plantilla'));
+    }
 }

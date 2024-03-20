@@ -56,6 +56,14 @@ class plantilla extends Model
         );
     }
 
+    protected function terminos(): Attribute
+    {
+        return new Attribute(
+            get: fn ($terminos) => json_decode($terminos, true),
+            set: fn ($terminos) => json_encode($terminos),
+        );
+    }
+
     protected  function igvbase(): Attribute
     {
         return Attribute::make(

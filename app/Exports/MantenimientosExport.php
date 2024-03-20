@@ -29,7 +29,7 @@ extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, Wi
 
     protected $estado, $fecha_fin, $fecha_inicio;
 
-    function __construct($estado, $fecha_inicio, $fecha_fin)
+    function __construct($estado, $fecha_inicio, $fecha_fin, public $cliente_id)
     {
         $this->estado = $estado;
         $this->fecha_inicio = $fecha_inicio;
@@ -38,14 +38,23 @@ extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromView, Wi
 
     public function view(): View
     {
-        return view('exports.mantenimientos', [
-            'mantenimientos' => Mantenimiento::whereRaw(
-                "(fecha_hora_mantenimiento >= ? AND fecha_hora_mantenimiento <= ?)",
-                [
-                    $this->fecha_inicio . " 00:00:00",
-                    $this->fecha_fin . " 00:00:00"
-                ]
-            )->where('estado', $this->estado)->get()
-        ]);
+        $mantenimientos = Mantenimiento::wherehas('vehiculo', function ($vehiculo) {
+            $vehiculo->whereHas('cliente', function ($cliente) {
+                $cliente->where('id', $this->cliente_id);
+            });
+        });
+
+        if ($this->estado !== "TODAS") {
+            $mantenimientos->where('estado', $this->estado);
+        }
+
+        // ->where('estado', $this->estado)
+        $mantenimientos->orderBy('estado');
+
+
+        return view(
+            'exports.mantenimientos',
+            ['mantenimientos' => $mantenimientos->get()]
+        );
     }
 }

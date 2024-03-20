@@ -8,6 +8,7 @@ use App\Models\Tareas;
 use App\Models\tipoTareas;
 use App\Models\User;
 use App\Models\Vehiculos;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
@@ -23,11 +24,28 @@ class CreateTask extends Component
     public $titulo = '';
     public $ErrorMsgVehiculo;
 
-    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
+    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $dispositivo_id, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
 
+
+    public function resetProp()
+    {
+
+        $this->tipo_tarea_id = 0;
+        $this->vehiculos_id = null;
+        $this->cliente_id = null;
+        $this->dispositivo = null;
+        $this->dispositivo_id = null;
+        $this->numero = null;
+        $this->nuevo_numero = null;
+        $this->sim_card = null;
+        $this->nuevo_sim_card = null;
+        $this->fecha_hora = null;
+        $this->modelo_velocimetro = null;
+        $this->tecnico_id = null;
+    }
     protected function rules()
     {
-        return [
+        $rules =  [
             'tipo_tarea_id' => 'required|gt:0',
             'vehiculos_id' => 'required',
             'tecnico_id' => 'required',
@@ -40,6 +58,12 @@ class CreateTask extends Component
             'modelo_velocimetro' => 'required_if:tipo_tarea_id,4',
             'fecha_hora' => 'required',
         ];
+
+        if (auth()->user()->hasRole('tecnico')) {
+            $rules['tecnico_id'] = 'nullable';
+        }
+
+        return $rules;
     }
 
     protected function messages()
@@ -60,6 +84,12 @@ class CreateTask extends Component
         ];
     }
 
+    public function mount()
+    {
+
+        $this->fecha_hora = Carbon::now();
+    }
+
     public function render()
     {
         $tipo_tareas = tipoTareas::pluck('nombre', 'id');
@@ -73,6 +103,7 @@ class CreateTask extends Component
 
     public function addTask()
     {
+
         $this->modalSave = true;
     }
     public function closeModal()
@@ -81,8 +112,9 @@ class CreateTask extends Component
     }
     public function updatedTipoTareaId($id)
     {
-        $this->titulo = tipoTareas::find($id)->nombre;
-        $this->dispatch('change-tipo-tarea', ['value' => $id]);
+        if ($id) {
+            $this->titulo = tipoTareas::find($id)->nombre;
+        }
     }
     public function updatedVehiculosId($value)
     {
@@ -98,12 +130,24 @@ class CreateTask extends Component
         };
     }
 
-    // public function updatedNumero($value)
-    // {
-    //     $linea = Lineas::where('numero', $value)->first();
+    public function updatedNumero($numero)
+    {
 
-    //     dd($linea);
-    // }
+        if ($numero) {
+
+            $linea = Lineas::where('numero', $numero)->first();
+            $this->sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;
+        }
+    }
+    public function updatedNuevoNumero($numero)
+    {
+
+        if ($numero) {
+
+            $linea = Lineas::where('numero', $numero)->first();
+            $this->nuevo_sim_card = $linea->sim_card ? $linea->sim_card->sim_card : null;
+        }
+    }
 
     public function updated($name, $value)
     {
@@ -112,17 +156,44 @@ class CreateTask extends Component
 
     public function save()
     {
-        $data = $this->validate();
-        $tarea = Tareas::create($data);
-        if ($tarea) {
 
-            $tarea->informe()->create([
-                'message' => '',
-                'user_id' => Auth::user()->id,
-            ]);
+        $data = $this->validate();
+
+        if (auth()->user()->hasRole('tecnico')) {
+            $data['tecnico_id'] = auth()->user()->id;
         }
-        $this->dispatch('save-task', ['tarea' => $tarea]);
-        $this->reset();
-        $this->dispatch('updateIndex');
+
+        try {
+            $tarea = Tareas::create($data);
+
+            if ($tarea) {
+
+                $tarea->informe()->create([
+                    'message' => '',
+                    'user_id' => Auth::user()->id,
+                ]);
+            }
+            $this->afterSave($tarea->token);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL GUARDAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
+    }
+
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'TAREA REGISTRADA',
+            mensaje: 'Se registro correctamente la tarea #' . $numero,
+        );
+        $this->closeModal();
+        $this->resetProp();
+        $this->dispatch('update-table-save-task');
     }
 }

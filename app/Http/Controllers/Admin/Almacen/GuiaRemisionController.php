@@ -25,12 +25,7 @@ class GuiaRemisionController extends Controller
         return view('admin.almacen.guias.index');
     }
 
-    public function setNextSequenceNumber()
-    {
 
-        $id = IdGenerator::generate(['table' => 'guia_remision', 'field' => 'serie_numero', 'length' => 5, 'prefix' => 'T', 'where' => ['empresa_id' => session('empresa')], 'reset_on_prefix_change' => true]);
-        return trim($id);
-    }
     public function create()
     {
 
@@ -38,13 +33,13 @@ class GuiaRemisionController extends Controller
     }
 
 
-    public function show(GuiaRemision $guia)
-    {
-        return view('admin.almacen.guias.show', compact('guia'));
-    }
-
     public function edit(GuiaRemision $guia)
     {
-        return view('admin.almacen.guias.edit', compact('guia'));
+        if ($guia->fe_estado != '0') {
+
+            return redirect()->route('admin.almacen.guias.index')->with('info', 'No se puede editar una guia de remision que ya ha sido aceptada');
+        } else {
+            return view('admin.almacen.guias.edit', compact('guia'));
+        }
     }
 }

@@ -19,7 +19,7 @@ class EditTask extends Component
     public $titulo = '';
     public $ErrorMsgVehiculo;
 
-    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0;
+    public $tipo_tarea_id = 2, $placa, $vehiculos_id, $cliente_id, $dispositivo, $dispositivo_id, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0;
 
     public Tareas $task;
     protected function rules()
@@ -68,21 +68,25 @@ class EditTask extends Component
 
     public function openModal(Tareas $task)
     {
+        $this->modalEdit = true;
+
         $this->task = $task;
+
         $this->vehiculos_id = $task->vehiculos_id;
         $this->cliente_id = $task->cliente_id;
         $this->placa = $task->vehiculo->placa;
         $this->tipo_tarea_id = $task->tipo_tarea_id;
         $this->dispositivo = $task->dispositivo;
+        $this->dispositivo_id = $task->model_dispositivo ? $task->model_dispositivo->id : '';
         $this->modelo_velocimetro = $task->modelo_velocimetro;
         $this->numero = $task->numero;
         $this->sim_card = $task->sim_card;
         $this->nuevo_numero = $task->nuevo_numero;
         $this->nuevo_sim_card = $task->nuevo_sim_card;
         $this->fecha_hora = $task->fecha_hora->format('Y-m-d h:i');
-        $this->modalEdit = true;
+        $this->titulo = $task->tipo_tarea->nombre;
 
-        $this->dispatch('put-items', ['dispositivo' => $task->dispositivo]);
+        //$this->dispatch('put-items', ['dispositivo' => $task->dispositivo]);
     }
 
     public function closeModal()
@@ -99,9 +103,58 @@ class EditTask extends Component
     public function save()
     {
         $data = $this->validate();
-        $this->task->update($data);
-        $this->dispatch('edit-task', ['tarea' => $this->task]);
+
+        try {
+
+            $this->task->update($data);
+
+
+            $this->afterSave($this->task->token);
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL GUARDAR',
+                mensaje: 'Ocurrio el sgte error: ' . $th->getMessage(),
+            );
+        }
+    }
+    public function updatedTipoTareaId($id)
+    {
+        if ($id) {
+            $this->titulo = tipoTareas::find($id)->nombre;
+        }
+    }
+
+
+    public function resetProp()
+    {
+
+        $this->tipo_tarea_id = 0;
+        $this->vehiculos_id = null;
+        $this->cliente_id = null;
+        $this->dispositivo = null;
+        $this->dispositivo_id = null;
+        $this->numero = null;
+        $this->nuevo_numero = null;
+        $this->sim_card = null;
+        $this->nuevo_sim_card = null;
+        $this->fecha_hora = null;
+        $this->modelo_velocimetro = null;
+        //$this->tecnico_id = null;
+    }
+
+    public function afterSave($numero)
+    {
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'TAREA ACTUALIZADA',
+            mensaje: 'Se actualizo correctamente la tarea #' . $numero,
+        );
+
         $this->closeModal();
-        $this->dispatch('updateIndex');
+        $this->resetProp();
+        $this->dispatch('update-table-save-task');
     }
 }
