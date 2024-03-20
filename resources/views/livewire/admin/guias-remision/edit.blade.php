@@ -52,7 +52,7 @@
 
             <div class="col-span-12 sm:col-span-6 xl:col-span-4 mb-2">
 
-                <x-form.input wire:model.lazy='numero_documento' label="N° Documento:" placeholder="10203040">
+                <x-form.input wire:model.live='numero_documento' label="N° Documento:" placeholder="10203040">
 
                     <x-slot name="append">
                         <div class="absolute inset-y-0 right-0 flex items-center p-0.5">
@@ -92,6 +92,14 @@
                     option-label="descripcion" option-value="codigo" />
 
             </div>
+            @if ($motivo_traslado_id == '13')
+                <div class="col-span-12 sm:col-span-4 mb-2 gap-2">
+
+                    <x-form.input wire:model.live='descripcion_motivo_traslado' label="Descripción Motivo Traslado:"
+                        placeholder="Ingresa un motivo" />
+
+                </div>
+            @endif
 
             <div class="col-span-12 sm:col-span-4 mb-2">
 
@@ -131,10 +139,13 @@
 
             </div>
 
-            <div class="col-span-6 sm:col-span-3 mb-2">
+            <div class="col-span-6 sm:col-span-3 mb-2 ">
 
-                <x-form.input name="code_puerto" id="code_puerto" wire:model.live='code_puerto' label="Codigo Puerto:"
-                    placeholder="T01441" />
+                <x-form.select id="code_puerto" name="code_puerto" label="Codigo Puerto:" searchable="false"
+                    wire:model.live="code_puerto" placeholder="PUB" :async-data="[
+                        'api' => route('api.puertos.index'),
+                    ]" option-label="descripcion"
+                    option-value="descripcion" />
 
             </div>
 
@@ -162,6 +173,16 @@
                         option-label="option_description" option-value="ubigeo_inei" />
 
                 </div>
+                @if ($motivo_traslado_id == '04')
+                    <div class="grid grid-cols-12 gap-4 mb-3">
+
+                        <div class="col-span-12 sm:col-span-4 mb-2">
+                            <x-form.input wire:model.live='codigo_establecimiento_partida' label="Codigo Local:"
+                                placeholder="Codigo Local de partida" />
+                        </div>
+
+                    </div>
+                @endif
 
             </div>
 
@@ -188,6 +209,17 @@
                         option-label="option_description" option-value="ubigeo_inei" />
 
                 </div>
+
+                @if ($motivo_traslado_id == '04')
+                    <div class="grid grid-cols-12 gap-4 mb-3">
+
+                        <div class="col-span-12 sm:col-span-4 mb-2">
+                            <x-form.input wire:model.live='codigo_establecimiento_llegada' label="Codigo Local:"
+                                placeholder="Codigo Local de llegada" />
+                        </div>
+
+                    </div>
+                @endif
             </div>
 
 
@@ -201,15 +233,33 @@
 
         <div class="grid grid-cols-12 gap-4 mb-3">
 
-            <div class="col-span-12 sm:col-span-6 mb-2">
 
-                <x-form.select id="venta_id" name="venta_id" label="Serie Correlativo:" wire:model.live="venta_id"
-                    placeholder="Serie correlativo Comprobante" :async-data="[
+            <div
+                class="col-span-12 sm:col-span-3 mb-2 {{ $motivo_traslado_id == '08' || $motivo_traslado_id == '09' ? '' : 'hidden' }}">
+                <x-form.select id="docu_rel_tipo" name="docu_rel_tipo" label="Tipo Documento:"
+                    wire:model.live="docu_rel_tipo" placeholder="Serie correlativo Comprobante" :async-data="[
+                        'api' => route('api.prueba.index'),
+                    ]"
+                    option-label="label" option-value="id" />
+            </div>
+
+            <div
+                class="col-span-12 sm:col-span-3 mb-2 {{ $motivo_traslado_id == '08' || $motivo_traslado_id == '09' ? '' : 'hidden' }}">
+                <x-form.input wire:model.live='docu_rel_numero' label="Número Documento:"
+                    placeholder="Número documento" />
+            </div>
+
+
+            <div class="col-span-12 sm:col-span-6 mb-2 {{ $motivo_traslado_id == '01' ? '' : 'hidden' }}">
+
+                <x-form.select id="venta_id" name="venta_id" label="Serie y Correlativo:"
+                    wire:model.live="venta_id" placeholder="Serie correlativo Comprobante" :async-data="[
                         'api' => route('api.comprobantes.index'),
-                    ]" option-label="option_description"
-                    option-value="id" />
+                    ]"
+                    option-label="option_description" option-value="id" />
 
             </div>
+
 
             <div class="col-span-12  {{ $asignarTecnico ? 'sm:col-span-3' : 'sm:col-span-6' }} mb-2">
                 <label
@@ -218,7 +268,7 @@
                 </label>
                 <div class="relative">
 
-                    <div class="flex items-center" x-data="{ checked: {{ $asignarTecnico ? true : false }} }">
+                    <div class="flex items-center" x-data="{ checked: false }">
                         <div class="form-switch">
                             <input value="true" wire:model.live='asignarTecnico' role="switch" type="checkbox"
                                 id="switch-asign" class="sr-only" x-model="checked" />
@@ -267,6 +317,7 @@
 
                 </div>
             </div>
+
             {{-- tabla de items --}}
             <x-admin.guias-remision.tabla-detalle :items="$items"></x-admin.guias-remision.tabla-detalle>
             @error('items')
@@ -366,9 +417,8 @@
 
         <div class="px-4 py-3 text-right sm:px-6 col-span-12 mb-2 gap-2 ">
 
-            <button type="button" wire:click.prevent="save"
-                class="btn bg-emerald-500 hover:bg-emerald-600 text-white">GUARDAR</button>
-
+            <x-form.button wire:click.prevent="save" spinner="save" label="ACTUALIZAR GUIA" black lg
+                icon="document" />
         </div>
     </div>
 

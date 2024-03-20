@@ -38,7 +38,5 @@ class UpdateGuia
             'code_sunat' => $event->respuesta['code_sunat'],
             'clase' => $event->despacth,
         ]);
-
-        dd($event->guia);
     }
 }

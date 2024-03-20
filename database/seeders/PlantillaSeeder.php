@@ -77,7 +77,7 @@ class PlantillaSeeder extends Seeder
             ->update(
                 [
                     'razon_social' => 'KATARY SERVICIOS GENERALES S.A.C',
-                    'ruc' => '20605873783 ',
+                    'ruc' => '20605873783',
                     'img_documentos' => 'talentus/imagenes/img_documento.png',
                     'fondo_contrato' => 'talentus/imagenes/fondo_contrato.png',
                     'img_firma' => 'talentus/imagenes/img_firma.png',

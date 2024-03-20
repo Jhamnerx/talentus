@@ -8,6 +8,7 @@ use App\Models\Series;
 use App\Models\SimCard;
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
@@ -22,11 +23,12 @@ class Edit extends Component
     public Collection $items_sim_card;
 
     public $tipo_documento = '6';
-    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento, $razon_social, $codigo_traslado,
-        $motivo_traslado_id = '01',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
-        $code_puerto;
+    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento = '', $razon_social = '', $codigo_traslado,
+        $motivo_traslado_id = '01', $descripcion_motivo_traslado = '',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
+        $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
+    public $codigo_establecimiento_partida, $codigo_establecimiento_llegada;
     public $observacion = '';
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
@@ -34,15 +36,21 @@ class Edit extends Component
     public $transp_tipo_doc, $transp_numero_doc, $transp_razon_social, $transp_placa, $tipo_doc_chofer, $numero_doc_chofer;
     public $asignarTecnico = false;
 
+    public $docu_rel_tipo = '50', $docu_rel_numero =  '000-0000-10-000000';
+
     public $tecnico_id;
 
     public Collection $items;
     public Collection $selected;
     public $selected_id;
 
+    public plantilla $plantilla;
+
 
     public function mount()
     {
+        $this->plantilla = plantilla::first();
+
         $this->serie = $this->guia->serie;
         $this->correlativo = $this->guia->correlativo;
         $this->serie_correlativo = $this->guia->serie_correlativo;
@@ -53,30 +61,35 @@ class Edit extends Component
         $this->razon_social = $this->guia->cliente->razon_social;
         $this->codigo_traslado = $this->guia->codigo_traslado;
         $this->motivo_traslado_id = $this->guia->motivo_traslado_id;
+        $this->descripcion_motivo_traslado = $this->guia->descripcion_motivo_traslado;
         $this->modalidad_transporte_id = $this->guia->modalidad_transporte_id;
         $this->fecha_inicio_traslado = $this->guia->fecha_inicio_traslado;
         $this->peso = $this->guia->peso;
         $this->cantidad_items = $this->guia->cantidad_items;
         $this->numero_contenedor = $this->guia->numero_contenedor;
         $this->code_puerto = $this->guia->code_puerto;
+        $this->data_puerto = $this->guia->data_puerto;
+
         $this->direccion_partida = $this->guia->direccion_partida;
         $this->ubigeo_partida = $this->guia->ubigeo_partida;
         $this->direccion_llegada = $this->guia->direccion_llegada;
         $this->ubigeo_llegada = $this->guia->ubigeo_llegada;
+        $this->codigo_establecimiento_partida = $this->guia->codigo_establecimiento_partida;
+        $this->codigo_establecimiento_llegada = $this->guia->codigo_establecimiento_llegada;
         $this->observacion = $this->guia->observacion;
 
-
-
+        $this->docu_rel_tipo = $this->guia->docu_rel_tipo;
+        $this->docu_rel_numero = $this->guia->docu_rel_numero;
 
         if ($this->guia->tecnico_id) {
 
             $this->asignarTecnico = true;
             $this->tecnico_id = $this->guia->tecnico_id;
-            $this->items = collect($this->guia->detalle->toArray());
+
             $this->items_dispositivos = collect($this->guia->dispositivos->pluck('imei')->toArray());
             $this->items_sim_card = collect($this->guia->sim_cards->pluck('sim_card')->toArray());
         }
-
+        $this->items = collect($this->guia->detalle->toArray());
 
         $this->selected = collect([
             'producto_id' => "",

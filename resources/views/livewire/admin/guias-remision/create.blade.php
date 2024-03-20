@@ -417,9 +417,7 @@
 
         <div class="px-4 py-3 text-right sm:px-6 col-span-12 mb-2 gap-2 ">
 
-            <button type="button" wire:click.prevent="save"
-                class="btn bg-emerald-500 hover:bg-emerald-600 text-white">GUARDAR</button>
-
+            <x-form.button wire:click.prevent="save" spinner="save" label="EMITIR GUIA" black lg icon="document" />
         </div>
     </div>
 

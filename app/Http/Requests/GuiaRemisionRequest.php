@@ -12,13 +12,12 @@ class GuiaRemisionRequest extends FormRequest
         return true;
     }
 
-    public function rules($guia = null, $motivo_traslado_id = null, $docu_rel_tipo = null)
+    public function rules($guia = null, $motivo_traslado_id = null, $docu_rel_tipo = null, $numero_docu_empresa = null)
     {
 
         $rules = [
             'serie_correlativo' => [
-                'nullable'
-                // 'nullable', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'serie' => 'required',
             'correlativo' => 'nullable',
@@ -75,6 +74,14 @@ class GuiaRemisionRequest extends FormRequest
             }
         }
 
+        if ($motivo_traslado_id == '02') {
+
+            $rules['numero_documento'] = [
+                'required',
+                'in:' . $numero_docu_empresa
+            ];
+        }
+
 
 
         if ($guia) {
@@ -108,6 +115,7 @@ class GuiaRemisionRequest extends FormRequest
             'descripcion_motivo_traslado.required_if' => 'Ingresa una descripción del motivo de traslado',
             'docu_rel_numero.regex' => 'El número de documento debe tener el formato 000-0000-10-000000 o 000-0000-18-000000',
             'numero_contenedor.required' => 'El número de contenedor es requerido',
+            'numero_documento.in' => 'El número de documento debe ser el mismo que el de la empresa',
         ];
 
         return $messages;

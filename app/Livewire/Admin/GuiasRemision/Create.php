@@ -28,8 +28,10 @@ class Create extends Component
     public Collection $items_sim_card;
 
     public $tipo_documento = '6';
-    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id, $numero_documento = '', $razon_social = '', $codigo_traslado,
-        $motivo_traslado_id = '01', $descripcion_motivo_traslado = '',  $modalidad_transporte_id =  '02', $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
+    public $serie, $correlativo, $serie_correlativo, $fecha_emision, $venta_id, $cliente_id,
+        $numero_documento = null, $razon_social = '', $codigo_traslado,
+        $motivo_traslado_id = '01', $descripcion_motivo_traslado = '',  $modalidad_transporte_id =  '02',
+        $fecha_inicio_traslado, $peso = '1.00', $cantidad_items = 1, $numero_contenedor,
         $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
@@ -194,9 +196,8 @@ class Create extends Component
 
     public function save()
     {
-
         $request = new GuiaRemisionRequest();
-        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo), $request->messages());
+        $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc), $request->messages());
 
         try {
             $guia = GuiaRemision::create($data);
@@ -221,7 +222,7 @@ class Create extends Component
             $api = new ApiFacturacion();
 
             $mensaje = $api->emitirGuia($guia);
-            dd($mensaje);
+
 
             if ($mensaje['fe_codigo_error']) {
 
@@ -234,12 +235,12 @@ class Create extends Component
             }
         } catch (\Throwable $th) {
 
-            dd($th);
-            // $this->dispatch(
-            //     'error',
-            //     title: 'ERROR: ',
-            //     mensaje: $th->getMessage(),
-            // );
+
+            $this->dispatch(
+                'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
     }
     public function updatedMotivoTrasladoId($value)

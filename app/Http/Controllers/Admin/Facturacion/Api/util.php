@@ -14,6 +14,7 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
+use App\Models\GuiaRemision;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Response\CdrResponse;
@@ -88,7 +89,7 @@ class Util extends Controller
          * Usuario = MODDATOS
          * Clave   = moddatos
          */
-        $see->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+        $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
         $see->setCachePath(storage_path('framework/cache/facturacion/see'));
 
         return $see;
@@ -119,7 +120,7 @@ class Util extends Controller
                 'cache' => false,
             ])
                 ->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret'])
-                ->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat'])
+                ->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat'])
                 ->setCertificate($certificate);
 
             return $api;
@@ -144,7 +145,7 @@ class Util extends Controller
             ]);
 
             $see->setCertificate($certificate);
-            $see->setClaveSOL($this->plantilla->ruc, $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+            $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
             $see->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret']);
 
             return $see;
@@ -359,6 +360,37 @@ class Util extends Controller
     }
 
 
+    public function getPdfGuia(GuiaRemision $guia)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+
+        $report->setTemplate($resolver->getTemplate($guia->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo),
+                'hash' => $guia->hash,
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono
+
+            ]
+        ];
+
+
+        $html = $report->render($guia->clase, $params);
+
+        return $html;
+    }
+
+
     //OBTENER HASH DE XML INVOICE
     public function getHash(DocumentInterface $document): ?string
     {
@@ -374,12 +406,12 @@ class Util extends Controller
         return (new XmlUtils())->getHashSign($xml);
     }
 
-    public function downloadXml(Ventas $venta)
+    public function downloadXml($clase)
     {
-        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_xml . $venta->nombre_xml . '.xml';
+        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_xml . $clase->nombre_xml . '.xml';
 
 
-        return Storage::disk('facturacion')->download($ruta, $venta->nombre_xml . '.xml');
+        return Storage::disk('facturacion')->download($ruta, $clase->nombre_xml . '.xml');
     }
 
 

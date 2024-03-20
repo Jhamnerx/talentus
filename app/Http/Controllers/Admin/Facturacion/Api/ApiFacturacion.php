@@ -445,6 +445,48 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+
+    public function sendInvoiceOnlyGuia($clase)
+    {
+
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+        // Envio a SUNAT.
+        $api = $util->getSeeApi();
+
+        $res = $api->sendXml($clase->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $clase->nombre_xml . '.xml'));
+
+
+        if (!$res->isSuccess()) {
+
+            $msg = $util->getErrorResponse($res->getError());
+
+            //$this->updateComprobante($venta, $msg, 'BORRADOR', 'no_update', $invoice);
+            // dd($msg);
+            return $msg;
+        }
+
+        /**@var $res SummaryResult*/
+        $ticket = $res->getTicket();
+
+        $res = $api->getStatus($ticket);
+
+        $res = $api->getStatus($ticket);
+
+        if (!$res->isSuccess()) {
+            $msg = $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        $cdr = $res->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($clase->clase, $res->getCdrZip());
+
+        $respuesta = $util->showResponse($clase->clase, $cdr);
+
+        $this->updateGuiaRemision($clase, $respuesta, $clase->clase);
+        return $respuesta;
+    }
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
     public function createXmlInvoice(Ventas $venta)
     {
@@ -705,14 +747,13 @@ class ApiFacturacion extends Controller
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
 
 
-
         // Envio a SUNAT.
         $api = $util->getSeeApi();
         $res = $api->send($despatch);
 
         // Guardar XML firmado digitalmente.
         $util->writeXml($despatch, $api->getLastXml());
-        // dd($despatch);
+
         if (!$res->isSuccess()) {
             $msg = $util->getErrorResponse($res->getError());
             return $msg;
@@ -733,8 +774,6 @@ class ApiFacturacion extends Controller
         $util->writeCdr($despatch, $res->getCdrZip());
 
         $respuesta = $util->showResponse($despatch, $cdr);
-
-        dd($respuesta);
 
         $this->updateGuiaRemision($guia, $respuesta, $despatch);
 

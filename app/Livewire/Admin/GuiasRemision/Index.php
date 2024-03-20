@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Admin\GuiasRemision;
 
-use App\Models\GuiaRemision;
 use App\Models\Guias;
 use Livewire\Component;
+use App\Models\GuiaRemision;
 use Livewire\WithPagination;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
 class Index extends Component
 {
@@ -65,5 +66,39 @@ class Index extends Component
     {
         $this->dispatch('EliminarGuia', $guia);
         $this->openModalDelete = true;
+    }
+
+    public function getCdr(GuiaRemision $guia)
+    {
+        try {
+            $api = new ApiFacturacion();
+            $mensaje =  $api->sendInvoiceOnlyGuia($guia);
+            dd($mensaje);
+            if ($mensaje['fe_codigo_error']) {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR GUIA', 'error');
+            } else {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'GUIA ENVIADO A SUNAT', 'success');
+            }
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
+    public function afterGetCdr($mensaje, $titulo, $icono)
+    {
+        $this->dispatch(
+            'notify',
+            icon: $icono,
+            title: $titulo,
+            mensaje: $mensaje,
+        );
+        $this->render();
     }
 }

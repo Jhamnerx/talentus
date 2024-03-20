@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Scopes\EmpresaScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\ModalidadTraslado;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use App\Http\Controllers\Admin\Facturacion\Api\Util;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -33,8 +36,23 @@ class GuiaRemision extends Model
         'venta_id' => 'integer',
         'fecha_inicio_traslado' => 'date',
         'user_id' => 'integer',
-
+        'detalle_cuotas' => AsCollection::class,
+        'nota' => AsCollection::class,
     ];
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+    protected function nota(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => json_decode($nota, true),
+            set: fn ($nota) => json_encode($nota),
+        );
+    }
 
     protected function clase(): Attribute
     {
@@ -107,5 +125,25 @@ class GuiaRemision extends Model
     {
         return $this->belongsToMany(SimCard::class, 'sim_card_users', 'guia_remision_id', 'sim_card', 'id', 'sim_card')->using(SimCardUsers::class)
             ->withPivot('user_id', 'guia_remision_id ', 'created_at')->withTimestamps();
+    }
+
+    //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF
+    public function getPdf()
+    {
+
+        $util = Util::getInstance();
+
+        $html = $util->getPdfGuia($this);
+        //return $html;
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
+    }
+
+    public function downloadXml()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadXml($this);
     }
 }
