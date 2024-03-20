@@ -32,7 +32,8 @@ class ProductosRequest extends FormRequest
             'valor_unitario' => 'numeric',
             'afecto_icbper' => 'boolean',
             'divisa' => 'required',
-            'tipo' => 'required'
+            'tipo' => 'required',
+            'modelo_id' => 'required_if:categoria_id,1'
         ];
 
         if ($producto) {
@@ -46,10 +47,20 @@ class ProductosRequest extends FormRequest
                 'valor_unitario' => 'numeric',
                 'afecto_icbper' => 'boolean',
                 'divisa' => 'required',
-                'tipo' => 'required'
+                'tipo' => 'required',
+                'modelo_id' => 'required_if:categoria_id,1'
             ];
         }
 
         return $rules;
+    }
+
+    public function messages()
+    {
+        return [
+            'categoria_id.required' => 'El campo categoría es obligatorio',
+            'tipo.required' => 'El campo tipo es obligatorio',
+            'modelo_id.required_if' => 'El campo modelo es obligatorio si la categoría es "Dispositivos"',
+        ];
     }
 }

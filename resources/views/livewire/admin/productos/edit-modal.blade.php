@@ -1,4 +1,4 @@
-<x-form.modal.card title="Crear Producto" blur wire:model.live="modalEdit" align="center">
+<x-form.modal.card title="Editar Producto" blur wire:model.live="modalEdit" align="center">
 
     <div class="grid grid-cols-12 gap-6">
 

@@ -101,8 +101,6 @@ class Save extends Component
     {
 
         $countedItems = array_count_values(array_column($items, 'modelo_id'));
-        $modelos = ModelosDispositivo::whereIn('id', array_keys($countedItems))->pluck('id')->toArray();
-
 
         $modelosWithCount = [];
         foreach ($countedItems as $modeloId => $count) {

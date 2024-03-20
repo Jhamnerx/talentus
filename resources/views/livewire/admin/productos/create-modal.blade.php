@@ -4,7 +4,7 @@
 
         <div class="col-span-12">
             <div class="flex flex-wrap gap-4">
-                <x-form.radio md id="tipo_1" name="tipo" left-label="Producto" value="producto"
+                <x-form.radio md id="tipo_1" name="tipo" left-label="Producto" checked value="producto"
                     wire:model.live="tipo" />
                 <x-form.radio md id="tipo_2" name="tipo" label="Servicio" value="servicio"
                     wire:model.live="tipo" />
@@ -26,6 +26,14 @@
                     'api' => route('api.categorias.index'),
                 ]"
                 option-label="nombre" option-value="id" />
+        </div>{{ $modelo_id }}
+        <div class="col-span-12 md:col-span-4 {{ $categoria_id == '1' ? '' : 'hidden' }}">
+
+            <x-form.select label="Modelo Vinculado:" name="modelo_id" wire:model.live="modelo_id"
+                placeholder="Selecciona un modelo" :async-data="[
+                    'api' => route('api.dispositivos.modelos.index'),
+                ]" option-label="modelo" option-value="id"
+                option-description="marca" />
         </div>
 
 

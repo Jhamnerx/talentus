@@ -21,6 +21,8 @@ class CreateModal extends Component
     public $afecto_icbper = false;
     public $file;
 
+    public $modelo_id = null;
+
     public function render()
     {
         return view('livewire.admin.productos.create-modal');
@@ -38,6 +40,11 @@ class CreateModal extends Component
     public function updatedCategoriaId($value)
     {
         $this->generateCodeProduct($value);
+
+
+        if ($value != 1) {
+            $this->modelo_id = null;
+        }
     }
 
     // Generar el código del producto
@@ -55,7 +62,7 @@ class CreateModal extends Component
     {
         //GUARDAR PRODUCTO
         $request = new ProductosRequest();
-        $datos = $this->validate($request->rules());
+        $datos = $this->validate($request->rules(), $request->messages());
 
         try {
             $producto = Productos::create($datos);
@@ -104,8 +111,11 @@ class CreateModal extends Component
     {
 
         $request = new ProductosRequest();
-        $this->validateOnly($atributo, $request->rules());
+        $this->validateOnly($atributo, $request->rules(), $request->messages());
     }
+
+
+
 
     public function afterSave()
     {
