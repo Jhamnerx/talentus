@@ -130,7 +130,7 @@ class Edit extends Component
         }
 
         $this->terminos = collect(
-            $this->presupuesto->terminos
+            $this->presupuesto->terminos ? $this->presupuesto->terminos : $this->plantilla->terminos
         );
     }
 

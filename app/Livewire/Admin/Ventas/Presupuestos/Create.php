@@ -88,13 +88,7 @@ class Create extends Component
 
         $this->plantilla = plantilla::first();
 
-
-        $this->terminos = collect(
-            [
-                'Esta cotización es valida hasta su fecha de caducidad',
-                'El tiempo de entrega es inmediata previa solicitud con anticipación'
-            ]
-        );
+        $this->terminos = collect($this->plantilla->terminos);
     }
 
 
