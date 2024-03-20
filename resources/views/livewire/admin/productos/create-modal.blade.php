@@ -26,7 +26,8 @@
                     'api' => route('api.categorias.index'),
                 ]"
                 option-label="nombre" option-value="id" />
-        </div>{{ $modelo_id }}
+        </div>
+
         <div class="col-span-12 md:col-span-4 {{ $categoria_id == '1' ? '' : 'hidden' }}">
 
             <x-form.select label="Modelo Vinculado:" name="modelo_id" wire:model.live="modelo_id"

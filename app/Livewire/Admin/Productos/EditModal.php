@@ -23,6 +23,8 @@ class EditModal extends Component
     public $file;
     public $file_name;
 
+    public $modelo_id = null;
+
     public function render()
     {
         return view('livewire.admin.productos.edit-modal');
@@ -31,6 +33,10 @@ class EditModal extends Component
     public function updatedCategoriaId($value)
     {
         $this->generateCodeProduct($value);
+
+        if ($value != 1) {
+            $this->modelo_id = null;
+        }
     }
 
     // Generar el código del producto
@@ -39,9 +45,9 @@ class EditModal extends Component
         if ($categoria_id != $this->producto->categoria_id) {
             $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
             $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
-            $lastNumber = intval(substr($lastCode, -4));
+            $lastNumber = intval(substr($lastCode, strlen('PROD-')));
             $newNumber = $lastNumber + 1;
-            $newCode = 'PROD-' . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
+            $newCode = 'PROD-' . $categoria_id . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
             $this->codigo = $newCode;
         } else {
 
@@ -66,6 +72,7 @@ class EditModal extends Component
         $this->afecto_icbper = $producto->afecto_icbper;
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
+        $this->modelo_id = $producto->modelo_id;
 
         if ($producto->image) {
             $this->dispatch('set-imagen-file', imagen: Storage::url($producto->image->url));
@@ -78,7 +85,7 @@ class EditModal extends Component
         //GUARDAR PRODUCTO
         $request = new ProductosRequest();
 
-        $datos = $this->validate($request->rules($this->producto));
+        $datos = $this->validate($request->rules($this->producto), $request->messages());
 
 
         try {
@@ -147,7 +154,7 @@ class EditModal extends Component
     {
 
         $request = new ProductosRequest();
-        $this->validateOnly($atributo, $request->rules($this->producto));
+        $this->validateOnly($atributo, $request->rules($this->producto), $request->messages());
     }
     public function afterUpdate()
     {
