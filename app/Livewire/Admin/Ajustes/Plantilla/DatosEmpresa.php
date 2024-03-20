@@ -10,7 +10,7 @@ class DatosEmpresa extends Component
 {
     public plantilla $plantilla;
     public $direccion, $pais;
-    public $ruc, $razon_social, $nombre_comercial, $telefono, $igv, $icbper, $modo;
+    public $ruc, $razon_social, $nombre_comercial, $telefono, $igv, $icbper, $modo = false;
     public $sunat;
     public $mail_config;
     public $cdt;
@@ -24,7 +24,7 @@ class DatosEmpresa extends Component
         $this->direccion = $this->plantilla->direccion;
         $this->igv = $this->plantilla->igvbnormal;
         $this->icbper = $this->plantilla->icbper;
-        $this->modo = $this->plantilla->modo = "produccion" ? true : false;
+        $this->modo = $this->plantilla->modo == "local" ? false : true;
         $this->pais = $this->plantilla->pais;
         $this->sunat = $this->plantilla->sunat_datos;
         $this->mail_config = $this->plantilla->mail_config;

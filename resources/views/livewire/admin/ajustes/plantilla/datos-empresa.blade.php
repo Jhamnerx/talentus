@@ -49,10 +49,9 @@
                             Modo Sistema
                         </label>
                     </div>
-
                     <div class="relative rounded-md">
 
-                        <x-form.toggle md label="Produccion" wire:model.live="modo" value="1" />
+                        <x-form.toggle md label="Produccion" wire:model.live="modo" />
 
                     </div>
 

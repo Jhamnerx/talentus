@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('ruta_cert')->nullable();
             $table->string('igv')->nullable();
             $table->string('icbper')->nullable();
+            $table->string('terminos')->nullable();
             $table->dropColumn('impuesto');
             $table->dropColumn('series');
             $table->dropColumn('sunat');
