@@ -70,6 +70,60 @@
         </div>
     </div>
 
+    <div class="col-span-12 mx-3 rounded bg-white overflow-hidden shadow-2xl">
+        <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 px-3 mb-2">
+
+            <div class="max-w-3xl col-span-12">
+
+                <h3 class="text-base leading-snug text-slate-800 font-bold mb-6">TERMINOS</h3>
+
+            </div>
+            <div class="flex flex-auto gap-2 mx-4 py-2 col-span-12">
+                <div class=""></div>
+                <div class="w-full">
+                    <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
+                        class="float-right" />
+                </div>
+            </div>
+            @if ($terminos->isEmpty())
+                <div class="col-span-12">
+                    <span class="w-full text-red-500">Agregar Terminos</span>
+                </div>
+            @else
+                @foreach ($terminos as $clave => $termino)
+                    <div class="col-span-12 py-2">
+                        <div class="flex gap-2">
+
+                            <div class="col-span-12 sm:col-span-12 w-full">
+
+                                <x-form.textarea label="TERMINO {{ $clave + 1 }}:" placeholder="ESCRIBA AQUI"
+                                    wire:model.live='terminos.{{ $clave }}' />
+
+                            </div>
+
+                            <button type="button" wire:click.prevent="eliminar('{{ $clave }}')"
+                                class="text-rose-500 hover:text-rose-600 rounded-full">
+                                <span class="sr-only">Eliminar</span>
+                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                    <path
+                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            @endif
+
+            <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
+                @can('admin.settings.plantilla.informacion.edit')
+                    <x-form.button wire:click="saveTerminos" spinner="saveTerminos" loading-delay="short" positive
+                        label="GUARDAR" />
+                @endcan
+            </div>
+
+        </div>
+    </div>
 
     <div class="col-span-12 mx-3 rounded bg-white overflow-hidden shadow-2xl">
         <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 px-3 mb-2">
@@ -168,7 +222,8 @@
             </div>
 
             <div class="col-span-12 sm:col-span-3">
-                <x-form.input label="HOST:" placeholder="SERVIDOR DE CORREO" wire:model.live='mail_config.servidor' />
+                <x-form.input label="HOST:" placeholder="SERVIDOR DE CORREO"
+                    wire:model.live='mail_config.servidor' />
 
             </div>
 

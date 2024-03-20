@@ -67,6 +67,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '1',
+                    'terminos' => '{}',
                 ]
             );
 
@@ -120,6 +121,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '2',
+                    'terminos' => '{}',
                 ]
             );
     }

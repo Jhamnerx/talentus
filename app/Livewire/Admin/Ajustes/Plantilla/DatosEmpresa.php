@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Admin\Ajustes\Plantilla;
 
-use App\Http\Controllers\Admin\UtilesController;
 use Livewire\Component;
 use App\Models\plantilla;
+use Illuminate\Support\Collection;
+use App\Http\Controllers\Admin\UtilesController;
 
 class DatosEmpresa extends Component
 {
@@ -14,6 +15,8 @@ class DatosEmpresa extends Component
     public $sunat;
     public $mail_config;
     public $cdt;
+
+    public Collection $terminos;
 
     public function mount()
     {
@@ -28,6 +31,7 @@ class DatosEmpresa extends Component
         $this->pais = $this->plantilla->pais;
         $this->sunat = $this->plantilla->sunat_datos;
         $this->mail_config = $this->plantilla->mail_config;
+        $this->terminos = collect($this->plantilla->terminos);
     }
 
     public function render()
@@ -39,6 +43,47 @@ class DatosEmpresa extends Component
         dd($this->cdt);
     }
 
+    public function addItem()
+    {
+        $this->terminos->push(
+            "",
+        );
+    }
+    public function eliminar($key)
+    {
+        unset($this->terminos[$key]);
+    }
+
+    public function saveTerminos()
+    {
+        $this->validate([
+            'terminos.*' => 'required',
+        ], [
+            'terminos.*.required' => 'El campo no puede estar vacio',
+        ]);
+
+        try {
+
+
+            $this->plantilla->update([
+                'terminos' => $this->terminos,
+            ]);
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'TERMINOS ACTUALIZADOS',
+                mensaje: 'se actualizo la informacion'
+            );
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'OCURRIO UN ERROR',
+                mensaje: 'Error' . $th->getMessage() . "."
+            );
+        }
+    }
 
     public function saveInfo()
     {
