@@ -67,7 +67,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '1',
-                    'terminos' => '{}',
+                    'terminos' => '["Esta cotizaci\u00f3n es valida hasta su fecha de caducidad","El tiempo de entrega es inmediata previa solicitud con anticipaci\u00f3n"]',
                 ]
             );
 
@@ -121,7 +121,7 @@ class PlantillaSeeder extends Seeder
                     'ruta_cdr' => 'cdr/',
                     'ruta_cert' => 'certificado/cert',
                     'empresa_id' => '2',
-                    'terminos' => '{}',
+                    'terminos' => '["Esta cotizaci\u00f3n es valida hasta su fecha de caducidad","El tiempo de entrega es inmediata previa solicitud con anticipaci\u00f3n"]',
                 ]
             );
     }
