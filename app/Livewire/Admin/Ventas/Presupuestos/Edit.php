@@ -84,7 +84,7 @@ class Edit extends Component
 
         $this->metodo_pago_id = $this->presupuesto->metodo_pago_id;
         $this->comentario = $this->presupuesto->comentario;
-        $this->tipo_descuento = $this->presupuesto->tipo_descuento;
+        $this->tipo_descuento = $this->presupuesto->tipo_descuento ? $this->presupuesto->tipo_descuento : "cantidad";
         $this->descuento_factor = $this->presupuesto->descuento_factor;
 
 
