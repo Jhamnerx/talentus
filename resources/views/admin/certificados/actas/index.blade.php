@@ -12,6 +12,7 @@
     @livewire('admin.certificados.actas.edit')
     @livewire('admin.certificados.actas.send')
     @livewire('admin.certificados.actas.delete')
+    @livewire('admin.vehiculos.save-vehiculo')
 @endpush
 
 @section('js')

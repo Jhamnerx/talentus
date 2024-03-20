@@ -29,7 +29,7 @@ class Save extends Component
         'items.*.operador.alpha' => 'El campo no debe contener números',
     ];
 
-    #[On('open-modal-create')]
+    #[On(['open-modal-create', 'add-sim-card-modal'])]
     public function openModal()
     {
         $this->modalCreate = true;

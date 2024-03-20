@@ -276,4 +276,14 @@ class Create extends Component
             'ubigeo_puerto' => $ubigeo_puerto,
         ];
     }
+
+    public function addSimCard($sim_card)
+    {
+        $this->dispatch('add-sim-card-modal', sim_card: $sim_card);
+    }
+
+    public function addProductoModal($producto)
+    {
+        $this->dispatch('add-producto-modal', producto: $producto);
+    }
 }

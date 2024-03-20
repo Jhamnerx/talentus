@@ -140,18 +140,11 @@
                 placeholder="Selecciona una linea" option-description="option_description" :async-data="route('api.lineas.index')"
                 option-label="numero" option-value="numero">
 
-                <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
-                        <span x-html="`Registrar Linea <b>${search}</b>`"></span>
-                    </x-form.button>
-                </x-slot>
-
             </x-form.select>
         </div>
 
         {{-- nuevo sim card --}}
-        <div
-            class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 5 ? 'cambio' : 'hidden' }}">
+        <div class="col-span-12 sm:col-span-6 {{ $tipo_tarea_id == 2 && $tipo_tarea_id !== 5 ? 'cambio' : 'hidden' }}">
             <label class=" block text-sm font-medium mb-1" for="nuevo_sim_card">
                 Sim Card Nuevo:
             </label>

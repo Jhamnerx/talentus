@@ -234,4 +234,8 @@ class Create extends Component
         $this->items;
         $this->reCalTotal();
     }
+    public function addProductoModal($producto)
+    {
+        $this->dispatch('add-producto-modal', producto: $producto);
+    }
 }

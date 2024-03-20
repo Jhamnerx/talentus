@@ -11,6 +11,5 @@
 
 @push('modals')
     @livewire('admin.clientes.save')
-    @livewire('admin.productos.create-modal')
     @livewire('admin.productos.modal-add-producto')
 @endpush

@@ -28,10 +28,11 @@ class CreateModal extends Component
         return view('livewire.admin.productos.create-modal');
     }
 
-    #[On('open-modal-create')]
-    public function openModal()
+    #[On(['open-modal-create', 'add-producto-modal'])]
+    public function openModal($producto = null)
     {
         $this->modalCreate = true;
+        $this->descripcion = $producto;
     }
     public function closeModal()
     {
