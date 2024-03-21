@@ -39,3 +39,8 @@
     @livewire('admin.guias-remision.create')
 
 @stop
+
+@push('modals')
+    @livewire('admin.sim-card.save')
+    @livewire('admin.productos.create-modal')
+@endpush

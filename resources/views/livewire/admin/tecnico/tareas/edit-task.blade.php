@@ -87,12 +87,6 @@
                 placeholder="Selecciona una linea" option-description="option_description" :async-data="route('api.lineas.index')"
                 option-label="numero" option-value="numero">
 
-                <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
-                        <span x-html="`Registrar Linea <b>${search}</b>`"></span>
-                    </x-form.button>
-                </x-slot>
-
             </x-form.select>
         </div>
         {{-- sim card --}}

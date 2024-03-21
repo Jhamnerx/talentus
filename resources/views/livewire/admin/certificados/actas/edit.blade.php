@@ -11,7 +11,15 @@
 
             <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
                 placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
-                option-label="placa" option-value="id" />
+                option-label="placa" option-value="id">
+
+                <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                    <x-form.button wire:click.prevent='addVehiculo(`${search}`)' x-on:click="close" primary flat full>
+                        <span x-html="`Registrar Vehiculo <b>${search}</b>`"></span>
+                    </x-form.button>
+                </x-slot>
+
+            </x-form.select>
 
         </div>
         <div class="col-span-12 sm:col-span-4">

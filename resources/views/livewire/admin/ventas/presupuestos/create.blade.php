@@ -469,7 +469,7 @@
                 </div>
             </div>
         </div>
-        {{ json_encode($terminos) }}
+
     </div>
 </div>
 

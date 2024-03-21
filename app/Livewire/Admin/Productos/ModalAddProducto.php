@@ -239,4 +239,9 @@ class ModalAddProducto extends Component
             );
         }
     }
+
+    public function addProductoModal($producto)
+    {
+        $this->dispatch('add-producto-modal', producto: $producto);
+    }
 }

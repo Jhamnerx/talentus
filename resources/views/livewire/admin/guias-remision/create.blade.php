@@ -310,6 +310,12 @@
                             'config' => ['src' => 'imagen'],
                         ]" :always-fetch="true">
 
+                        <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                            <x-form.button wire:click.prevent='addProductoModal(`${search}`)' x-on:click="close"
+                                primary flat full>
+                                <span x-html="`Registrar Producto <b>${search}</b>`"></span>
+                            </x-form.button>
+                        </x-slot>
                     </x-form.select>
                 </div>
 
@@ -389,7 +395,14 @@
                                 'api' => route('api.sim.index'),
                                 'params' => ['of' => '01'],
                             ]" option-label="sim_card"
-                            option-value="sim_card" />
+                            option-value="sim_card">
+                            <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                                <x-form.button wire:click.prevent='addSimCard(`${search}`)' x-on:click="close" primary
+                                    flat full>
+                                    <span x-html="`Registrar Sim Card <b>${search}</b>`"></span>
+                                </x-form.button>
+                            </x-slot>
+                        </x-form.select>
                     </div>
 
                     <div class="col-span-2 sm:col-span-1">

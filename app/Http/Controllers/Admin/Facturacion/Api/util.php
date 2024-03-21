@@ -32,7 +32,6 @@ class Util extends Controller
      */
     private static $current;
 
-
     public plantilla $plantilla;
 
     //  PROPIEDAS PUBLICAS PARA ERRORES Y MENSAJES
@@ -345,7 +344,8 @@ class Util extends Controller
                     ['name' => 'VENDEDOR', 'value' => $venta->user->name],
                 ],
                 //'footer' => 'Resumen',
-                // 'footer' => view('templates.comprobantes.footer'),
+                'footer' => view('templates.comprobantes.footer'),
+
             ]
         ];
 

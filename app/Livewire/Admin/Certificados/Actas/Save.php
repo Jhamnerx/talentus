@@ -123,4 +123,9 @@ class Save extends Component
         $this->sello = 1;
         $this->plataforma = "basica";
     }
+
+    public function addVehiculo($placa)
+    {
+        $this->dispatch('open-modal-save', placa: $placa);
+    }
 }

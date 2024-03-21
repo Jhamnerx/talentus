@@ -29,10 +29,11 @@ class SaveVehiculo extends Component
 
 
     #[On('open-modal-save')]
-    public function openModalSave()
+    public function openModalSave($placa = null)
     {
 
         $this->modalCreate = true;
+        $this->placa = $placa;
     }
 
 

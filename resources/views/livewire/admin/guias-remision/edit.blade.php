@@ -309,7 +309,12 @@
                             'name' => 'user-option',
                             'config' => ['src' => 'imagen'],
                         ]" :always-fetch="true">
-
+                        <x-slot name="beforeOptions" class="p-2 flex justify-center">
+                            <x-form.button wire:click.prevent='addProductoModal(`${search}`)' x-on:click="close"
+                                primary flat full>
+                                <span x-html="`Registrar Producto <b>${search}</b>`"></span>
+                            </x-form.button>
+                        </x-slot>
                     </x-form.select>
                 </div>
 
