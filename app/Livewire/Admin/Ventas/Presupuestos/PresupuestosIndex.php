@@ -100,7 +100,18 @@ class PresupuestosIndex extends Component
     public function convertToInvoice(Presupuestos $presupuesto)
     {
 
-        $this->dispatch('convert-to-invoice', presupuesto: $presupuesto);
+        if (!$presupuesto->invoice) {
+
+
+            $this->dispatch('convert-to-invoice', presupuesto: $presupuesto);
+        } else {
+
+            $this->dispatch(
+                'error',
+                title: 'ERROR: ',
+                mensaje: 'El comprobante de este presupuesto ya fue creada',
+            );
+        }
     }
 
 

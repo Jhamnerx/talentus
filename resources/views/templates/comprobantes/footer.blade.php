@@ -1,5 +1,5 @@
 <h6>
-    <div>
+    {{-- <div>
         <p class="MsoNormal" style="line-height:normal"><span style="font-size: 10.6667px; font-weight: bold;">"FACTURA
                 SUJETA A DETRACCIÓN "</span></p>
         <p class="MsoNormal" style="line-height:normal"><b style="color: inherit;"><u><span lang="ES-PE"
@@ -49,6 +49,6 @@
                 00068125014
             </span>
         </p>
-    </div>
-    Consulte su documento electrónico en:
+    </div> --}}
+    Consulte su documento electrónico en: {{ env('APP_URL') }}/consulta/invoice
 </h6>
