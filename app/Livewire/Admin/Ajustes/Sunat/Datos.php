@@ -27,8 +27,9 @@ class Datos extends Component
             'sunat.usuario_sol_sunat' => 'required',
             'sunat.clave_sol_sunat' => 'required',
             'sunat.clave_certificado_cdt' => 'nullable',
+            'sunat.guia_cliente_id' => 'required',
+            'sunat.guia_secret' => 'required',
         ]);
-
 
         $this->plantilla->update([
             'sunat_datos' => [

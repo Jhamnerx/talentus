@@ -425,7 +425,6 @@ class Util extends Controller
             $certificate = new X509Certificate($pfx, $password);
             $pem = $certificate->export(X509ContentType::PEM);
             Storage::disk('facturacion')->put('talentus/certificado/certificado_talentus.pem', $pem);
-
             return "exito";
         } catch (\Throwable $th) {
 
