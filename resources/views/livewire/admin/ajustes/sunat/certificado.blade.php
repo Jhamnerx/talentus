@@ -62,8 +62,8 @@
         <div class="px-5 py-4 border-t border-slate-200">
             <div class="flex flex-wrap justify-end space-x-2">
 
-                <x-form.button disabled wire:click='uploadCertificado' spinner="uploadCertificado"
-                    label="Subir y Convertir" primary icon="upload" />
+                <x-form.button wire:click='uploadCertificado' spinner="uploadCertificado" label="Subir y Convertir"
+                    primary icon="upload" />
             </div>
         </div>
     </div>
