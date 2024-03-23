@@ -1,25 +1,32 @@
-const defaultTheme = require("tailwindcss/defaultTheme");
-const plugin = require("tailwindcss/plugin");
-const colors = require("tailwindcss/colors");
+import defaultTheme from "tailwindcss/defaultTheme";
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
+import colors from "tailwindcss/colors";
+import { defineConfig } from "vite";
+import forms from "@tailwindcss/forms";
+import typography from "@tailwindcss/typography";
+import aspectRatio from "@tailwindcss/aspect-ratio";
+import colors from "tailwindcss/colors";
+import wireuiConfig from "./vendor/wireui/wireui/tailwind.config.js";
+
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-    content: [
-        "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
-        "./vendor/laravel/jetstream/**/*.blade.php",
-        "./storage/framework/views/*.php",
-        "./resources/views/**/*.blade.php",
-        "./resources/views/**/**/*.blade.php",
-        "./resources/views/**/**/**/*.blade.php",
-        "./vendor/wireui/wireui/resources/**/*.blade.php",
-        "./vendor/wireui/wireui/ts/**/*.ts",
-        "./vendor/wireui/wireui/src/View/**/*.php",
-
-        "./resources/views/**/*.html.twig",
-        "./resources/views/**/**/*.html.twig",
-        "./resources/views/**/**/**/*.html.twig",
+export default defineConfig({
+    plugins: [
+        forms,
+        typography,
+        aspectRatio,
+        ({ addVariant, e }) => {
+            addVariant("sidebar-expanded", ({ modifySelectors, separator }) => {
+                modifySelectors(
+                    ({ className }) =>
+                        `.sidebar-expanded .${e(
+                            `sidebar-expanded${separator}${className}`
+                        )}`
+                );
+            });
+        },
     ],
-
-    presets: [require("./vendor/wireui/wireui/tailwind.config.js")],
     theme: {
         extend: {
             boxShadow: {
@@ -107,21 +114,12 @@ module.exports = {
             },
         },
     },
-
-    plugins: [
-        require("@tailwindcss/forms"),
-        require("@tailwindcss/typography"),
-        require("@tailwindcss/aspect-ratio"),
-        // add custom variant for expanding sidebar
-        plugin(({ addVariant, e }) => {
-            addVariant("sidebar-expanded", ({ modifySelectors, separator }) => {
-                modifySelectors(
-                    ({ className }) =>
-                        `.sidebar-expanded .${e(
-                            `sidebar-expanded${separator}${className}`
-                        )}`
-                );
-            });
-        }),
-    ],
-};
+    presets: [wireuiConfig],
+    build: {
+        rollupOptions: {
+            input: {
+                main: "./index.html",
+            },
+        },
+    },
+});
