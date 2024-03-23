@@ -16,7 +16,7 @@ class CertificadoPem extends Component
     {
         $this->plantilla = plantilla::first();
         $ruta = $this->plantilla->empresa->nombre . '/certificado';
-        $this->data = Storage::disk('facturacion')->get($ruta . '/certificado_talentus.pem');
+        $this->data = Storage::disk('facturacion')->get($ruta . '/' . $this->plantilla->empresa->nombre . '_certificado.pem');
     }
 
 
@@ -27,9 +27,15 @@ class CertificadoPem extends Component
 
     public function uploadCertificado()
     {
+
         try {
-            $ruta = $this->plantilla->empresa->nombre . '/certificado' . '/certificado_talentus.pem';
+            $ruta = $this->plantilla->empresa->nombre . '/certificado' .  '/' . $this->plantilla->empresa->nombre . '_certificado.pem';
+
+            //actualizar la ruta del certificado
+            $this->plantilla->update(['ruta_cert' => '/certificado' .  '/' . $this->plantilla->empresa->nombre . '_certificado']);
+
             Storage::disk('facturacion')->put($ruta, $this->data);
+
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',

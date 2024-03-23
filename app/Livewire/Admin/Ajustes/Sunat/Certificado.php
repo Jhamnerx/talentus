@@ -46,8 +46,17 @@ class Certificado extends Component
             $this->file->storeAs($ruta,  $this->file->getClientOriginalName(), 'facturacion');
 
             $util = new ApiFacturacion();
-            $util->convertCertificado($ruta . "/" .  $this->file->getClientOriginalName(), $this->plantilla->sunat_datos['clave_certificado_cdt']);
+            $mensaje = $util->convertCertificado($ruta . "/" .  $this->file->getClientOriginalName(), $this->plantilla->sunat_datos['clave_certificado_cdt']);
 
+            if ($mensaje != 'exito') {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR',
+                    mensaje: 'mensaje: ' . $mensaje,
+                );
+                return;
+            }
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
