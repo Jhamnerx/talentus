@@ -37,8 +37,6 @@ class Certificado extends Component
 
     public function uploadCertificado()
     {
-        \Cache::store('redis')->get('Laradock', 'Awesome', 10);
-
         $this->validate();
 
         try {
