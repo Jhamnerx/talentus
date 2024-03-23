@@ -10,8 +10,6 @@ class OnlyTareasScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        // $builder->where('empresa_id', 1);
-
         if (auth()->user()->hasRole('tecnico')) {
 
             $builder->where('tecnico_id', auth()->user()->id);
