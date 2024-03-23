@@ -131,7 +131,7 @@ class Presupuestos extends Model
         ]);
 
 
-
+        //   return view('pdf.presupuesto.pdf');
         //ANTIGUA VERSION CON NUMERO
         if ($this->numero) {
 
