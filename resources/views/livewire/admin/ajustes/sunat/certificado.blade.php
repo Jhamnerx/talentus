@@ -8,7 +8,7 @@
         </div>
         <!-- content -->
 
-        <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('logo').live, files: null }">
+        <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('file').live, files: null }">
 
             @if ($file)
                 <div class="px-5 py-2">
