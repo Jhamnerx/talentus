@@ -165,6 +165,8 @@
                             <tr>
                                 <td>
                                     @if ($detalle->descripcion)
+                                        <p class="producto-titulo"><b>{{ $detalle->producto }}</b>.
+                                        </p>
                                         <p class="descripcion">{{ $detalle->descripcion }}</p>
                                     @else
                                         <h6> {{ $detalle->producto }}

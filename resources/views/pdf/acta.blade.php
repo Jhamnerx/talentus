@@ -165,7 +165,7 @@
 
 @if ($acta->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
     @else
 
         <body>
@@ -228,7 +228,7 @@
                 <b>{{ $acta->vehiculo->cliente
                     ? strtoupper($acta->vehiculo->cliente->razon_social)
                     : 'no
-                                                                                                                                            existe' }}</b>
+                                                                                                                                                                            existe' }}</b>
                 con DNI/RUC:
                 {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}, ha
                 adquirido un equipo
@@ -325,8 +325,7 @@
     <div class="footer">
         <div class="sello">
             @if ($acta->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                    alt="">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
             @endif
 
         </div>
