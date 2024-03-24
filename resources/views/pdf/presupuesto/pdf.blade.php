@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/foundation.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/style.css'), '/') }}" /> --}}
 
-    <link rel="stylesheet" href="{{ asset('docs/normalize.css') }}">
-    <link rel="stylesheet" href="{{ asset('docs/foundation.css') }}">
-    <link rel="stylesheet" href="{{ asset('docs/presupuesto/style.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/normalize.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/foundation.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/presupuesto/style.css') }}">
 
     <style type="text/css">
         .page-break {

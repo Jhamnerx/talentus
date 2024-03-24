@@ -131,11 +131,11 @@ class Presupuestos extends Model
         ]);
 
 
-        //   return view('pdf.presupuesto.pdf');
+        //return view('pdf.presupuesto.pdf');
         //ANTIGUA VERSION CON NUMERO
         if ($this->numero) {
 
-            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal')->setOption(['isHtml5ParserEnabled' => false]);
             if ($action == 1) {
 
                 return $pdf->download('PRE-' . $this->numero . '.pdf');
@@ -148,6 +148,8 @@ class Presupuestos extends Model
 
 
             $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+
+
             if ($action == 1) {
 
                 return $pdf->download($this->serie_correlativo . '.pdf');
@@ -173,6 +175,7 @@ class Presupuestos extends Model
         if ($this->numero) {
             $pdf = PDF::loadHTML(view('pdf.presupuesto.pdf'))->setPaper('Legal');
         } else {
+
             $pdf = PDF::loadHTML(view('pdf.presupuesto.pdf-new'))->setPaper('Legal');
         }
 
