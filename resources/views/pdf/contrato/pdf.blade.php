@@ -8,10 +8,10 @@
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-    <link rel="stylesheet" href="{{ asset('docs/contrato/contrato.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/contrato/contrato.css') }}">
     {{ header('Content-type:application/pdf') }}
     @if ($contrato->fondo)
-        @php $fondo = base64_encode(file_get_contents(asset("storage/". $fondo))) @endphp
+        @php $fondo = base64_encode(Storage::get($fondo)) @endphp
         <style type="text/css">
             /* -- Base -- */
 
@@ -1667,8 +1667,7 @@
             <div class="columns medium-6" style="position:relative; left: 13.2rem; top: 2.2rem">
                 <div class="sello">
                     @if ($contrato->sello)
-                        <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                            alt="">
+                        <img src="data:image/jpeg;base64,{{ base64_encode(Storage::get($sello)) }}" alt="">
                     @endif
 
                 </div>
