@@ -421,10 +421,9 @@ class Util extends Controller
         try {
 
             $pfx = Storage::disk('facturacion')->get($ruta);
-
             $certificate = new X509Certificate($pfx, $password);
             $pem = $certificate->export(X509ContentType::PEM);
-            Storage::disk('facturacion')->put($this->plantilla->empresa->nombre . $this->plantilla->empresa->nombre . '_certificado' . '.pem', $pem);
+            Storage::disk('facturacion')->put($this->plantilla->empresa->nombre . '/' . $this->plantilla->empresa->nombre . '_certificado' . '.pem', $pem);
 
             $this->plantilla->update([
                 'ruta_cert' => 'certificado/' . $this->plantilla->empresa->nombre . '_certificado'
