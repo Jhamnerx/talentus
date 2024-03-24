@@ -171,9 +171,9 @@ class Presupuestos extends Model
         ]);
 
         if ($this->numero) {
-            $pdf = PDF::loadView('pdf.presupuesto.pdf')->setPaper('Legal');
+            $pdf = PDF::loadHTML(view('pdf.presupuesto.pdf'))->setPaper('Legal');
         } else {
-            $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
+            $pdf = PDF::loadHTML(view('pdf.presupuesto.pdf-new'))->setPaper('Legal');
         }
 
         $this->clientes->notify(new EnviarPresupuestoCliente($this, $pdf, $data));
