@@ -9,7 +9,7 @@
 
     </title>
 
-    <link rel="stylesheet" href="{{ asset('css/mantenimient.css') }}">
+    <link rel="stylesheet" href="{{ public_path('css/mantenimient.css') }}">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
@@ -28,7 +28,7 @@
 </head>
 
 <body
-    background="data:image/jpeg;base64,{{ base64_encode(file_get_contents(asset('storage/talentus/imagenes/fondo_documento_horizontal.png'))) }}">
+    background="data:image/jpeg;base64,{{ base64_encode(Storage::get('talentus/imagenes/fondo_documento_horizontal.png')) }}">
 
     <div class="w-full px-6 mx-2 row margin-pdf">
 
@@ -182,8 +182,7 @@
     <div class="footer row medium-12">
         <div class="sello">
 
-            <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                alt="">
+            <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
 
 
         </div>
