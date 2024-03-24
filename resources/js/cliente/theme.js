@@ -96,7 +96,7 @@
         );
         let mobileNavUL = mobileNavContainer.find(".main-nav__navigation-box");
 
-        console.log(mainNavUL);
+        // console.log(mainNavUL);
         dynamicCurrentMenuClass(mainNavUL);
         dynamicCurrentMenuClass(mobileNavUL);
     }

@@ -32,7 +32,7 @@
                     <!-- User button -->
                     <div class="relative inline-flex shadow-sm" x-data="{ open: false }">
                         <button class="inline-flex justify-center items-center group" aria-haspopup="true"
-                            @click.prevent="open = !open" :aria-expanded="open">
+                            @click.prevent="open = !open; console.log('hola')" :aria-expanded="open">
                             <img class="w-8 h-8 rounded-full" src="{{ auth()->user()->profile_photo_url }}" width="32"
                                 height="32" alt="User" />
                             <div class="flex items-center truncate">
