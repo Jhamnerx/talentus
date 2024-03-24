@@ -125,7 +125,7 @@
             width: 100%;
             overflow: hidden;
             color: rgb(238, 34, 34);
-            font-style:  !important;
+            font-style: !important;
             font-weight: bold;
             font-size: 26px;
             font-family: "DejaVu Sans";
@@ -178,7 +178,7 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
     @else
 
         <body>
@@ -207,7 +207,16 @@
                     ->style('square')
                     ->eye('circle')
                     ->encoding('UTF-8')
-                    ->generate(' VEHICULO: ' . $certificado->vehiculo->placa . '|' . " \nVALIDO HASTA: " . $certificado->fin_cobertura . '|' . "\nEXPEDIDO A: " . $certificado->vehiculo->cliente->razon_social),
+                    ->generate(
+                        ' VEHICULO: ' .
+                            $certificado->vehiculo->placa .
+                            '|' .
+                            " \nVALIDO HASTA: " .
+                            $certificado->fin_cobertura .
+                            '|' .
+                            "\nEXPEDIDO A: " .
+                            $certificado->vehiculo->cliente->razon_social,
+                    ),
             );
         @endphp
 
@@ -312,8 +321,7 @@
     <div class="footer">
         <div class="sello">
             @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                    alt="">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
             @endif
 
         </div>

@@ -237,7 +237,7 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $fondo))) }}">
+    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
     @else
 
         <body>
@@ -264,7 +264,7 @@
         $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
         $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
         $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
-        
+
     @endphp
     <div class="titulo">
         <div class="title">
@@ -395,8 +395,7 @@
 
         <div class="sello">
             @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $sello))) }}"
-                    alt="">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
             @endif
 
         </div>
