@@ -29,10 +29,6 @@
     <x-jet-banner />
 
 
-    {{-- @livewire('navigation') --}}
-
-
-
     <!-- Page Content -->
     <main class="min-h-full">
 
@@ -41,10 +37,6 @@
 
     </main>
 
-
-
-    {{--
-    <x-footer /> --}}
 
     @stack('modals')
 

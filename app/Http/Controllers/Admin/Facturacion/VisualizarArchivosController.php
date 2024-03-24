@@ -11,6 +11,7 @@ class VisualizarArchivosController extends Controller
 {
     public function pdf($serie_correlativo)
     {
+
         $venta = Ventas::where('serie_correlativo', $serie_correlativo)->firstOrFail();
 
         return $venta->getPdf();
