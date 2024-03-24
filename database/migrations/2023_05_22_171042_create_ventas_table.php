@@ -65,8 +65,10 @@ return new class extends Migration
             $table->text('hash_cdr')->nullable();
             $table->text('code_sunat')->nullable();
             $table->string('id_baja')->nullable();
-            $table->foreignId('nota_credito_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('nota_debito_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('nota_credito_id')->nullable()->unsigned();
+            $table->foreign('nota_credito_id')->references('id')->on('nota_credito')->onDelete('cascade');
+            $table->unsignedBigInteger('nota_debito_id')->nullable()->unsigned();
+            $table->foreign('nota_debito_id')->references('id')->on('nota_debito')->onDelete('cascade');
             $table->boolean('bienes_selva')->default(false);
             $table->boolean('servicios_selva')->default(false);
             $table->boolean('viewed')->default(false);

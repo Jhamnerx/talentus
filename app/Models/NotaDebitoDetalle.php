@@ -25,7 +25,7 @@ class NotaDebitoDetalle extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'nota_debido_id' => 'integer',
+        'nota_debito_id' => 'integer',
         'producto_id' => 'integer',
         'valor_unitario' => 'decimal:2',
         'precio_unitario' => 'decimal:2',
@@ -36,9 +36,9 @@ class NotaDebitoDetalle extends Model
         'importe_total' => 'decimal:2',
     ];
 
-    public function notaDebido(): BelongsTo
+    public function notaDebito(): BelongsTo
     {
-        return $this->belongsTo(NotaDebido::class);
+        return $this->belongsTo(NotaDebito::class);
     }
 
     public function producto(): BelongsTo

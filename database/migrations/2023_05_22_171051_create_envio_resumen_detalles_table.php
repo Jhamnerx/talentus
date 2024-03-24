@@ -15,7 +15,8 @@ return new class extends Migration
 
         Schema::create('envio_resumen_detalle', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('envio_resumen_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('envio_resumen_id')->nullable()->unsigned();
+            $table->foreign('envio_resumen_id')->references('id')->on('envio_resumen')->onDelete('cascade');
             $table->foreignId('venta_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('condicion')->nullable();
             $table->timestamps();

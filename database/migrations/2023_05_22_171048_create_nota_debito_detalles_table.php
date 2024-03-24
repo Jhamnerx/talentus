@@ -15,7 +15,8 @@ return new class extends Migration
 
         Schema::create('nota_debito_detalles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('nota_debido_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedBigInteger('nota_debito_id')->nullable()->unsigned();
+            $table->foreign('nota_debito_id')->references('id')->on('nota_debito')->onDelete('cascade');
             $table->foreignId('producto_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->string('cantidad');
             $table->decimal('valor_unitario', 11, 2)->nullable();

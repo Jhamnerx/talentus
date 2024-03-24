@@ -57,7 +57,7 @@ class Ventas extends Model
         'user_id' => 'integer',
         'fe_estado' => 'string',
         'nota_credito_id' => 'integer',
-        'nota_debido_id' => 'integer',
+        'nota_debito_id' => 'integer',
         'bienes_selva' => 'boolean',
         'servicios_selva' => 'boolean',
         'viewed' => 'boolean',
