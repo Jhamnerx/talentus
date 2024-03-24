@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="{{ ltrim(public_path('factura/foundation.css'), '/') }}" />
     <link rel="stylesheet" href="{{ ltrim(public_path('factura/style.css'), '/') }}" /> --}}
 
-    <link rel="stylesheet" href="{{ asset('docs/normalize.css') }}">
-    <link rel="stylesheet" href="{{ asset('docs/foundation.css') }}">
-    <link rel="stylesheet" href="{{ asset('docs/factura/style.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/normalize.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/foundation.css') }}">
+    <link rel="stylesheet" href="{{ public_path('docs/factura/style.css') }}">
 
     <style type="text/css">
         .header-bottom .invoice-header table tbody td {
@@ -51,8 +51,7 @@
 
             <div class="medium-6 columns">
 
-                <img
-                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents(asset('storage/' . $plantilla->logo))) }}">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($plantilla->logo)) }}">
             </div>
 
             <div class="medium-3 columns">
@@ -119,7 +118,7 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="circle"><img class="icon-calendar"
+                                <div class="circle"><img class="icon-barcode"
                                         src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/factura/images/barcode.png')) }}">
                                 </div>
                             </td>
