@@ -81,7 +81,8 @@
 
             <div class="medium-6 columns">
 
-                <img src="{{ Storage::get($plantilla->logo) }}">
+                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($plantilla->logo)) }}">
+
             </div>
 
             <div class="medium-3 columns">
