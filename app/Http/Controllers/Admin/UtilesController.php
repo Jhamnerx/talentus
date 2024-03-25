@@ -56,17 +56,17 @@ class UtilesController extends Controller
                     Cache::put(
                         'cambio',
                         $response["precioVenta"],
-                        now()->addHours(4)
+                        now()->addHours(6)
                     );
                     Cache::put(
                         'precioVenta',
                         $response["precioVenta"],
-                        now()->addHours(4)
+                        now()->addHours(6)
                     );
-                    Cache::put(
+                    Cache::store()->put(
                         'precioCompra',
                         $response["precioCompra"],
-                        now()->addHours(4)
+                        now()->addHours(6)
                     );
                     return $response["precioVenta"];
                 } else {
