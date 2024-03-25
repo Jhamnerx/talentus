@@ -5,6 +5,10 @@
 
 /vendor
 /storage/app/public/livewire-tmp/
+/storage/app/public/productos/
+/storage/app/public/payments/
+/storage/app/public/katary/
+/storage/app/public/talentus/
 .env
 .env.backup
 .phpunit.result.cache
@@ -19,3 +23,4 @@ yarn-error.log
 /storage\app\public\profile-photos/
 /storage/app/facturacion
 storage/app/facturacion/
+storage/app/talentus/
