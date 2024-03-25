@@ -273,12 +273,8 @@ Route::controller(SearchController::class)->prefix('search')->group(function () 
     // Route::get('users', 'users')->name('search.users');
 });
 
-
-Route::get('busqueda/clientes', [SearchController::class, 'busqueda'])->name('busqueda.clientes');
-
 //consulta sunat
 Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
-
 Route::get('consulta/placa', [SearchController::class, 'placa'])->name('consulta.placa');
 
 
