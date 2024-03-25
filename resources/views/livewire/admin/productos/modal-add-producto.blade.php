@@ -5,7 +5,7 @@
 
     <div class="col-span-12 md:col-span-7">
 
-        <x-form.select :clearable="false" wire:model.live="product_selected_id" id="product_selected_id"
+        <x-form.select autocomplete="off" :clearable="false" wire:model.live="product_selected_id" id="product_selected_id"
             name="product_selected_id" placeholder="Seleccionar producto o servicio" :async-data="[
                 'api' => route('api.productos.index'),
             ]"
