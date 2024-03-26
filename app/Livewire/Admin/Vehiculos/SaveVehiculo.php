@@ -138,9 +138,7 @@ class SaveVehiculo extends Component
 
     public function updatedDispositivoImei($imei)
     {
-
         if ($imei) {
-
             $dispositivo = Dispositivos::where('imei', $imei)->first();
             $this->dispositivos_id = $dispositivo->id;
             $this->modelo_gps = $dispositivo->modelo->modelo;
