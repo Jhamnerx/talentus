@@ -29,13 +29,14 @@ class ClientesRequest extends FormRequest
 
         $rules = [
             'razon_social' => 'required',
-            'numero_documento' => [
+            'numero_documento' =>
+            [
                 'required',
                 'digits_between:8,11',
                 'numeric',
                 Rule::unique('clientes', 'numero_documento')->where(fn ($query) =>
-                $query->where('empresa_id', session('empresa')
-                    ->whereNull('deleted_at'))),
+                $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at')),
             ],
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable'
