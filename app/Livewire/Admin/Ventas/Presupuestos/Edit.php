@@ -136,9 +136,7 @@ class Edit extends Component
 
     public function render()
     {
-        $payments_methods = MetodoPago::pluck('descripcion', 'codigo');
-
-        return view('livewire.admin.ventas.presupuestos.edit', compact('payments_methods'));
+        return view('livewire.admin.ventas.presupuestos.edit');
     }
 
     public function updatedSerie($value)
