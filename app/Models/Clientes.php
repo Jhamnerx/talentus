@@ -34,6 +34,11 @@ class Clientes extends Model
     // SCOPE DE EMPRESA
 
 
+    protected $casts = [
+        'id' => 'integer',
+        'deleted_at' => 'date',
+    ];
+
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {

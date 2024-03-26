@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
 
         $schedule->command('backup:clean')->daily()->at('01:00');
-        $schedule->command('backup:run')->daily()->at('01:30');
+        $schedule->command('backup:run')->daily()->at('22:00');
         // $schedule->command('backup:run')->everyMinute();
     }
 
