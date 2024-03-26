@@ -54,9 +54,10 @@ class CreateModal extends Component
         $lastProduct = Productos::where('categoria_id', $categoria_id)->latest('id')->withTrashed()->first();
         $lastCode = $lastProduct ? $lastProduct->codigo : 'PROD-' . $categoria_id . '000';
 
-        $lastNumber = intval(substr($lastCode, strlen('PROD-')));
+        $lastNumber = intval(substr($lastCode, strlen('PROD-' . $categoria_id)));
 
         $newNumber = $lastNumber + 1;
+
         $newCode = 'PROD-' . $categoria_id . str_pad($newNumber, 4, '0', STR_PAD_LEFT);
         $this->codigo = $newCode;
     }
