@@ -35,7 +35,12 @@ class ProductosRequest extends FormRequest
             'divisa' => 'required',
             'tipo' => 'required',
             'modelo_id' => [
-                'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->where(
+                    fn ($query) =>
+                    $query->where('empresa_id', session('empresa'))
+                        ->whereNotNull('modelo_id')
+                )
+
             ]
         ];
 
@@ -52,7 +57,8 @@ class ProductosRequest extends FormRequest
                 'divisa' => 'required',
                 'tipo' => 'required',
                 'modelo_id' => [
-                    'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                    'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                        ->whereNotNull('modelo_id'))
                 ]
             ];
         }
