@@ -135,7 +135,7 @@
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">
                         <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                            wire:click.prevent='cancel'>Cerrar</button>
+                            wire:click.prevent='closeModal'>Cerrar</button>
                         <button wire:click='importExcel'
                             class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
                     </div>
