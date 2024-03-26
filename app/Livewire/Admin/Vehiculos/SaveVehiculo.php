@@ -101,11 +101,11 @@ class SaveVehiculo extends Component
         }
     }
 
-    // public function updated($label)
-    // {
-    //     $requestVehiculo = new VehiculosRequest();
-    //     $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
-    // }
+    public function updated($label)
+    {
+        $requestVehiculo = new VehiculosRequest();
+        $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
+    }
 
 
     public function updatedClientesId($value)
@@ -136,8 +136,9 @@ class SaveVehiculo extends Component
         $this->placa = strtoupper($this->placa);
     }
 
-    public function updatedDispositivoImei($imei)
+    public function updatedDispositivoImei($imei = '')
     {
+
         if ($imei) {
             $dispositivo = Dispositivos::where('imei', $imei)->first();
             $this->dispositivos_id = $dispositivo->id;
