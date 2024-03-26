@@ -9,7 +9,7 @@
         </div>
         <div class="col-span-12 sm:col-span-5">
 
-            <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
+            <x-form.select autocomplete='off' label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
                 placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
                 option-label="placa" option-value="id">
 
@@ -24,7 +24,7 @@
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.select label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
+            <x-form.select autocomplete='off' label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
                 placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id" />
 
         </div>
