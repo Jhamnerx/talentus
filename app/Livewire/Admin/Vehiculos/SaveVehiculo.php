@@ -15,7 +15,7 @@ class SaveVehiculo extends Component
 {
     public $flotas;
 
-    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $dispositivo_imei, $modelo_gps,
+    public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $dispositivo_imei = '', $modelo_gps,
         $sim_card_id, $numero, $sim_card, $operador, $clientes_id, $dispositivos_id, $descripcion;
 
     public $modalCreate = false;
@@ -101,11 +101,11 @@ class SaveVehiculo extends Component
         }
     }
 
-    public function updated($label)
-    {
-        $requestVehiculo = new VehiculosRequest();
-        $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
-    }
+    // public function updated($label)
+    // {
+    //     $requestVehiculo = new VehiculosRequest();
+    //     $this->validateOnly($label, $requestVehiculo->rules($this->dispositivos_id, $this->numero), $requestVehiculo->messages());
+    // }
 
 
     public function updatedClientesId($value)
