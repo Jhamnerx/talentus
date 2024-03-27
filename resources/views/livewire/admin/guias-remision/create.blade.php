@@ -226,7 +226,7 @@
                 @endif
             </div>
 
-            {{ json_encode($errors->all()) }}
+
         </div>
 
         <div class="border-solid border-b-2 border-gray-200 mb-3">

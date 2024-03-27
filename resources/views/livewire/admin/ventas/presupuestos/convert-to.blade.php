@@ -217,7 +217,7 @@
 
         </div>
         {{-- {{ $serie_correlativo }}
-        {{ json_encode($errors->all()) }} --}}
+
     </div>
 
     <x-slot name="footer">

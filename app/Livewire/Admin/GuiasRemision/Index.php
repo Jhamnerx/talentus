@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\GuiasRemision;
 
 use App\Models\Guias;
 use Livewire\Component;
+use Livewire\Attributes\On;
 use App\Models\GuiaRemision;
 use Livewire\WithPagination;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
@@ -12,7 +13,7 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-    public $detallePanelOpen = false;
+
 
     protected $listeners = [
         'updateTable' => 'render',
@@ -43,23 +44,10 @@ class Index extends Component
 
     public function openDetallePanel(GuiaRemision $guia)
     {
-
-        $guia->sim_cards;
-        $this->dispatch('DetallePanel', $guia);
-
+        $this->dispatch('open-detalle-panel', $guia);
         $this->setDetalleOpen();
     }
 
-    public function setDetalleOpen()
-    {
-        $this->detallePanelOpen = true;
-    }
-
-    public function setDetalleClose()
-    {
-        $this->detallePanelOpen = false;
-        sleep(5);
-    }
 
     public function openModalDelete(GuiaRemision $guia)
     {

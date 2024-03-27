@@ -354,7 +354,7 @@
 
                 </div>
             </div>
-            {{ json_encode($errors->all()) }}
+
             <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200">
 
                 <div class="grid sm:grid-cols-2 gap-2 content-end">
