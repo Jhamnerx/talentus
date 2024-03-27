@@ -12,7 +12,6 @@ class Index extends Component
 {
     use WithPagination;
     public $search = '';
-    public $openModalDelete = false;
     public $detallePanelOpen = false;
 
     protected $listeners = [
@@ -65,7 +64,6 @@ class Index extends Component
     public function openModalDelete(GuiaRemision $guia)
     {
         $this->dispatch('EliminarGuia', $guia);
-        $this->openModalDelete = true;
     }
 
     public function getCdr(GuiaRemision $guia)

@@ -22,7 +22,11 @@
                     label="Correlativo:" />
 
             </div>
-
+            @error('serie_correlativo')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+            @enderror
             {{-- FECHA --}}
             <div class="col-span-12 sm:col-span-6 xl:col-span-4 mb-2">
 
@@ -222,7 +226,7 @@
                 @endif
             </div>
 
-
+            {{ json_encode($errors->all()) }}
         </div>
 
         <div class="border-solid border-b-2 border-gray-200 mb-3">

@@ -33,10 +33,9 @@ class VisualizarArchivosController extends Controller
     }
 
 
-    public function pdf_guia($serie_correlativo)
+    public function pdf_guia($id, $serie_correlativo)
     {
-        $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->firstOrFail();
-
+        $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
         return $guia->getPdf();
     }
 

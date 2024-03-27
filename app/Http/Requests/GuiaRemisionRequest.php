@@ -17,7 +17,8 @@ class GuiaRemisionRequest extends FormRequest
 
         $rules = [
             'serie_correlativo' => [
-                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at')),
             ],
             'serie' => 'required',
             'correlativo' => 'nullable',
@@ -88,7 +89,8 @@ class GuiaRemisionRequest extends FormRequest
 
             $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at'))
                     ->ignore($guia->id),
 
             ];

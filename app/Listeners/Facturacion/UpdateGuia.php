@@ -37,6 +37,7 @@ class UpdateGuia
             'hash_cdr' => $event->respuesta['hash_cdr'],
             'code_sunat' => $event->respuesta['code_sunat'],
             'clase' => $event->despacth,
+            'qr' => $event->respuesta['qr'],
         ]);
     }
 }

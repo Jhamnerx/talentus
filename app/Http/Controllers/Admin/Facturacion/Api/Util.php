@@ -48,6 +48,7 @@ class Util extends Controller
     public $hash_cdr;
     public $ticketS;
     public $code_sunat;
+    public $qr;
 
     private function __construct()
     {
@@ -202,6 +203,7 @@ class Util extends Controller
         }
 
         $this->mensaje = $cdr->getDescription();
+        $this->qr = $cdr->getReference();
         // $this->hash = $cdr->getHash();
         $this->hash = $this->getHash($document);
 
@@ -224,6 +226,7 @@ class Util extends Controller
                 'hash' => $this->hash,
                 'hash_cdr' => $this->hash_cdr,
                 'code_sunat' => $this->code_sunat,
+                'qr' => $this->qr,
 
             ];
         return $results;
@@ -383,7 +386,6 @@ class Util extends Controller
 
             ]
         ];
-
 
         $html = $report->render($guia->clase, $params);
 
