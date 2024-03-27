@@ -736,6 +736,7 @@ class ApiFacturacion extends Controller
                 $relDoc = (new AdditionalDoc())
                     ->setTipo($guia->venta->tipo_comprobante_id)
                     ->setTipoDesc('Factura')
+                    ->setEmisor($plantilla->ruc)
                     ->setNro($guia->venta->serie_correlativo);
 
                 $despatch->setAddDocs([$relDoc]);
