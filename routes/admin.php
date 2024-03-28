@@ -355,6 +355,7 @@ Route::controller(ComprobantesController::class)->group(function () {
     Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
     Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
     Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');
+    Route::get('notas', 'notas')->name('admin.nota.index');
 });
 
 
