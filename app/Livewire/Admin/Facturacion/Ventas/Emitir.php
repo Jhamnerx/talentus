@@ -56,7 +56,7 @@ class Emitir extends Component
     public $min_correlativo;
 
     //DISMINUIR STOCK
-    public $decrease_stock = false;
+    public $decrease_stock = true;
 
 
 
