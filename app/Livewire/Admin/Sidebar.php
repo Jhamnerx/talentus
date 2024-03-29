@@ -9,7 +9,7 @@ class Sidebar extends Component
 {
     public function render()
     {
-        $empresa = Empresa::where('id', session('empresa'))->first();
+        $empresa = Empresa::where('id', session('empresa', 1))->first();
 
         return view('livewire.admin.sidebar', compact('empresa'));
     }
