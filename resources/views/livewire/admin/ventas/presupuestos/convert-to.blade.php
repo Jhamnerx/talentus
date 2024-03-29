@@ -216,8 +216,6 @@
             @enderror
 
         </div>
-        {{-- {{ $serie_correlativo }}
-
     </div>
 
     <x-slot name="footer">
