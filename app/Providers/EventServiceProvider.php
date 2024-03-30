@@ -79,6 +79,8 @@ use App\Observers\CertificadosVelocimetrosObserver;
 use App\Listeners\nuevoCertificadoGpsAdminsListener;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use App\Models\CertificadosVelocimetros as ModelsCertificadosVelocimetros;
+use App\Models\Comprobantes;
+use App\Observers\ComprobanteObserver;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 
@@ -133,7 +135,6 @@ class EventServiceProvider extends ServiceProvider
         RecibosPagosVarios::observe(RecibosPagosObserver::class);
         Mantenimiento::observe(MantenimientoObserver::class);
         Ventas::observe(VentasObserver::class);
-        NotaCredito::observe(NotaCreditoObserver::class);
-        NotaDebito::observe(NotaDebitoObserver::class);
+        Comprobantes::observe(ComprobanteObserver::class);
     }
 }
