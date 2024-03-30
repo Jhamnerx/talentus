@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\VentasStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -41,7 +43,10 @@ class Comprobantes extends Model
         'serie_correlativo' => 'string',
         'user_id' => 'integer',
         'fe_estado' => 'string',
+        'estado' => VentasStatus::class,
         'invoice_id' => 'integer',
+        'detalle_cuotas' => AsCollection::class,
+        'nota' => AsCollection::class,
     ];
 
     public function getSerie(): BelongsTo

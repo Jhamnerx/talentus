@@ -23,6 +23,10 @@ class ComprobantesController extends Controller
     {
         return view('admin.comprobantes.index');
     }
+    public function notas()
+    {
+        return view('admin.comprobantes.notas-index');
+    }
 
     public function emitirFactura()
     {

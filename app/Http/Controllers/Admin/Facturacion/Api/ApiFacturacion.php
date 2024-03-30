@@ -34,6 +34,7 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
+use App\Models\Comprobantes;
 
 class ApiFacturacion extends Controller
 {
@@ -62,7 +63,7 @@ class ApiFacturacion extends Controller
         }
     }
     //EMITIR NOTA DE CREDITO
-    public function emitirNotaCredito(NotaCredito $nota, $tipo_comprobante)
+    public function emitirNotaCredito(Comprobantes $nota, $tipo_comprobante)
     {
 
         $util = Util::getInstance();
@@ -147,7 +148,7 @@ class ApiFacturacion extends Controller
     }
 
     //EMITIR NOTA DE DEBITO
-    public function emitirNotaDebito(NotaDebito $nota, $tipo_comprobante)
+    public function emitirNotaDebito(Comprobantes $nota, $tipo_comprobante)
     {
         $util = Util::getInstance();
         $formatter = new NumeroALetras();

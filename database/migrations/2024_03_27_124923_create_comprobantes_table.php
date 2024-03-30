@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('correlativo');
             $table->string('serie_correlativo');
             $table->date('fecha_emision');
+            $table->dateTime('fecha_hora_emision')->nullable();
             $table->string('divisa');
             $table->decimal('tipo_cambio', 11, 2)->nullable();
             $table->decimal('op_gravadas', 11, 2)->nullable();
