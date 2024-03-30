@@ -177,7 +177,6 @@ class Util extends Controller
         $this->nombre_xml = $document->getName();
         $this->code_sunat = (int)$cdr->getCode();
         $code = (int)$cdr->getCode();
-        return $code;
         if ($code === 0) {
             //SI EL CODIGO ES 0 EL ESTADO DE LA FACTURA ES
             $this->estado = 'ACEPTADA';
@@ -254,6 +253,10 @@ class Util extends Controller
             ];
 
         if ($error->getCode() == 'env:Client') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
+        }
+        if ($error->getCode() == 'env:Server') {
             $results['fe_estado'] = '0';
             $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
         }
