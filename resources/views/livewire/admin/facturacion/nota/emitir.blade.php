@@ -28,7 +28,6 @@
             <div class="grid grid-cols-12 gap-2">
 
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-0 md:pr-4 gap-2">
-
                     {{-- SERIE --}}
                     <div class="col-span-12 sm:col-span-6 lg:col-span-4">
                         <x-form.select always-fetch="true" id="serie" name="serie" label="Serie:"

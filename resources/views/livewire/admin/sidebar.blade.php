@@ -228,6 +228,7 @@
                                                 href="{{ route('admin.almacen.guias.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guias
+                                                    Remisión
                                                 </span>
                                             </a>
                                         </li>
@@ -493,6 +494,17 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @canany(['comprobantes-emitir-nota-debito', 'comprobantes-emitir-nota-credito'])
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.index')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.nota.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Ver notas de debito/credito
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcanany
                                     @can('ver-recibos')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
