@@ -55,6 +55,7 @@ return new class extends Migration
             $table->text('hash')->nullable();
             $table->text('hash_cdr')->nullable();
             $table->text('code_sunat')->nullable();
+            $table->longText('clase')->nullable();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->unsignedBigInteger('empresa_id')->nullable();
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');

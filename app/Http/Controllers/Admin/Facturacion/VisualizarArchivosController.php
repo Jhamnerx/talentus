@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Facturacion;
 
 use App\Http\Controllers\Controller;
+use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use App\Models\Ventas;
 use Illuminate\Http\Request;
@@ -44,5 +45,14 @@ class VisualizarArchivosController extends Controller
         $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->firstOrFail();
 
         return $guia->downloadXml();
+    }
+
+
+
+
+    public function pdf_nota($id, $serie_correlativo)
+    {
+        $comprobante = Comprobantes::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
+        return $comprobante->getPdf();
     }
 }

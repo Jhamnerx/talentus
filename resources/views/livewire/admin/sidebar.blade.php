@@ -386,7 +386,7 @@
                         'comprobantes-emitir-nota-credito', 'ver-cotizaciones'])
 
                         <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos']) ? 1 : 0 }} }">
+                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas']) ? 1 : 0 }} }">
 
                             <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150 "
                                 href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">

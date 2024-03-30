@@ -14,6 +14,7 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
+use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
@@ -358,6 +359,35 @@ class Util extends Controller
         }
 
         $html = $report->render($venta->clase, $params);
+
+        return $html;
+    }
+
+    //OBTENER Y VISUALIZAR PDF INVOICE
+    public function getPdfNota(Comprobantes $invoice)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+        $report->setTemplate($resolver->getTemplate($invoice->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
+                'hash' => $invoice->hash, // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
+                'footer' => ''
+            ]
+        ];
+
+        $html = $report->render($invoice->clase, $params);
 
         return $html;
     }

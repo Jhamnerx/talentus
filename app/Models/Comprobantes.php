@@ -6,9 +6,12 @@ use App\Enums\VentasStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Comprobantes extends Model
 {
@@ -49,6 +52,23 @@ class Comprobantes extends Model
         'nota' => AsCollection::class,
     ];
 
+    protected function nota(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => json_decode($nota, true),
+            set: fn ($nota) => json_encode($nota),
+        );
+    }
+
+    protected function clase(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => unserialize($nota),
+            set: fn ($nota) => serialize($nota),
+        );
+    }
+
+
     public function getSerie(): BelongsTo
     {
         return $this->belongsTo(Series::class, 'serie', 'serie');
@@ -82,5 +102,45 @@ class Comprobantes extends Model
     public function comprobante(): BelongsTo
     {
         return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+
+    //CREAR ITEM DETALLE VENTA
+    public static function createItems(Comprobantes $comprobante, $comprobanteItems, $decrease_stock = false)
+    {
+
+        foreach ($comprobanteItems as $comprobanteItem) {
+
+            $comprobanteItem['comprobante_id'] = $comprobante->id;
+
+            $item = $comprobante->ventaDetalles()->create($comprobanteItem);
+
+            if ($decrease_stock && $comprobanteItem['tipo'] == 'producto') {
+
+                $item->producto->decrement('stock', $comprobanteItem['cantidad']);
+            }
+        }
+
+        return $comprobante->ventaDetalles;
+    }
+
+
+
+    //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF
+    public function getPdf()
+    {
+
+        $util = Util::getInstance();
+
+        $html = $util->getPdfNota($this);
+        //return $html;
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
     }
 }

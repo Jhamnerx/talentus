@@ -124,7 +124,8 @@
                                         <div class="space-x-1">
 
                                             {{-- obtener pdf --}}
-                                            <a target="_blank" href="{{ route('facturacion.ver.pdf', $nota) }}">
+                                            <a target="_blank"
+                                                href="{{ route('facturacion.nota.ver.pdf', ['comprobantes' => $nota, 'id' => $nota->id]) }}">
                                                 <button type="button" class="bg-white ">
                                                     <svg class="w-8 h-8" viewBox="-4 0 40 40" fill="none"
                                                         xmlns="http://www.w3.org/2000/svg">
