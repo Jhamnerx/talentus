@@ -55,4 +55,11 @@ class VisualizarArchivosController extends Controller
         $comprobante = Comprobantes::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
         return $comprobante->getPdf();
     }
+
+    public function xml_nota($serie_correlativo)
+    {
+        $comprobante = Comprobantes::where('serie_correlativo', $serie_correlativo)->firstOrFail();
+
+        return $comprobante->downloadXml();
+    }
 }

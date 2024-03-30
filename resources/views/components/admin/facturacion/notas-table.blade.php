@@ -151,7 +151,7 @@
                                     @if ($nota->tipo_comprobante_id != '02')
                                         <div class="space-x-1">
                                             {{-- obtener xml --}}
-                                            <a href="{{ route('facturacion.ver.xml', $nota) }}">
+                                            <a href="{{ route('facturacion.nota.ver.xml', $nota) }}">
                                                 <button type="button" class="bg-white">
                                                     <svg aria-hidden="true" class="w-8 h-8" viewBox="0 0 56 56"
                                                         style="enable-background:new 0 0 56 56;" xml:space="preserve">

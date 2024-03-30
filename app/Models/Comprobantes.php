@@ -143,4 +143,12 @@ class Comprobantes extends Model
         $pdf = Pdf::loadHTML($html);
         return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
     }
+
+    public function downloadXml()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadXml($this);
+    }
 }
