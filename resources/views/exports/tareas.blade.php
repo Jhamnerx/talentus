@@ -85,46 +85,21 @@
 
                         <td>
 
-                            @switch($tarea->tipo_tarea_id)
-                                @case(1)
-                                    Instalación de GPS {{ $tarea->dispositivo }} en vehículo:
-                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                    instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                @break
+                            @php
+                                $datos = [
+                                    '%placa%' => '<b>' . $tarea->vehiculo->placa . '</b>',
+                                    '%velo_modelo%' => '<b>' . $tarea->modelo_velocimetro . '</b>',
+                                    '%fecha%' => '<b>' . $tarea->fecha_hora->format('d/m/Y') . '</b>',
+                                    '%modelo_gps%' => '<b>' . $tarea->dispositivo . '</b>',
+                                    '%hora%' => '<b>' . $tarea->fecha_hora->format('h:i A') . '</b>',
+                                ];
 
-                                @case(2)
-                                    Cambio de chip en el vehículo: <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                @break
-
-                                @case(3)
-                                    Desinstalación de GPS {{ $tarea->dispositivo }} en el vehículo:
-                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha Tarea:
-                                    <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                @break
-
-                                @case(4)
-                                    Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> en el vehículo:
-                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                @break
-
-                                @case(5)
-                                    Mantenimiento GPS {{ $tarea->dispositivo }} en el vehículo:
-                                    <b>{{ $tarea->vehiculo->placa }}</b>, Fecha
-                                    Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                    <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                @break
-                            @endswitch
-
+                                $info = strtr($tarea->tipo_tarea->descripcion, $datos);
+                            @endphp
+                            {!! $info !!}
 
                         </td>
                         <td>
-
 
                             {{ $tarea->vehiculo->cliente ? $tarea->vehiculo->cliente->razon_social : 'CLIENTE NO ENCONTRADO' }}
 
@@ -151,8 +126,6 @@
 
                             {{ $tarea->tipo_tarea->costo }}
 
-
-
                         </td>
 
                     </tr>
@@ -162,7 +135,6 @@
                     <div class="text-center">No hay Registros</div>
                 </td>
             @endif
-
 
         </tbody>
     </table>
