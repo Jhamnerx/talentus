@@ -70,7 +70,6 @@ class Index extends Component
         try {
             $api = new ApiFacturacion();
             $mensaje =  $api->sendInvoiceOnly($venta);
-            dd($mensaje);
             if ($mensaje['fe_codigo_error']) {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR COMPROBANTE', 'error');

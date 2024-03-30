@@ -442,7 +442,7 @@ class ApiFacturacion extends Controller
         $util->writeCdr($invoice, $result->getCdrZip());
 
         $respuesta = $util->showResponse($invoice, $cdr);
-        dd($respuesta);
+
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $invoice);
 
