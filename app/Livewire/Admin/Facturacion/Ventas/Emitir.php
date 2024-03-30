@@ -321,7 +321,6 @@ class Emitir extends Component
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
 
-
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');

@@ -224,7 +224,11 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
-
+    //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
+    public function updateNota($tipo_comprobante, $nota, $respuesta, $action, $note)
+    {
+        EmitirNota::dispatch($tipo_comprobante, $nota, $respuesta, $action, $note);
+    }
 
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
     public function emitirComprobante(Ventas $venta)
@@ -332,7 +336,6 @@ class ApiFacturacion extends Controller
         $util->writeCdr($invoice, $result->getCdrZip());
 
         $respuesta = $util->showResponse($invoice, $cdr);
-
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
 
@@ -591,13 +594,6 @@ class ApiFacturacion extends Controller
     {
         FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado, $action, $invoice);
     }
-
-    //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
-    public function updateNota($tipo_comprobante, $nota, $respuesta, $action, $note)
-    {
-        EmitirNota::dispatch($tipo_comprobante, $nota, $respuesta, $action, $note);
-    }
-
 
     //DEVOLVER OBJETO CLIENTE
     public function getCliente(Clientes $cliente)
