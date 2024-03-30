@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::table('guia_remision', function (Blueprint $table) {
             $table->text('qr')->nullable();
+            $table->text('ticket')->nullable();
         });
     }
 

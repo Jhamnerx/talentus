@@ -42,6 +42,7 @@ return new class extends Migration
             $table->string('serie_correlativo_ref')->nullable();
             $table->foreignId('sustento_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
             $table->text('sustento_texto')->nullable();
+            $table->text('ticket')->nullable();
             //SUNAT RESPUESTA
             $table->boolean('fe_estado')->default(false);
             $table->text('estado_texto')->nullable();
