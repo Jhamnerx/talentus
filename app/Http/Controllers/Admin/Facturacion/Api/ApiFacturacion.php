@@ -126,7 +126,7 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            $this->updateNota($nota, $msg, 'update', $note);
             return $msg;
         }
 
@@ -142,7 +142,7 @@ class ApiFacturacion extends Controller
 
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+        $this->updateNota($nota, $respuesta, 'update', $note);
 
         return $respuesta;
     }
@@ -205,7 +205,7 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            $this->updateNota($nota, $msg, 'update', $note);
             return $msg;
         }
 
@@ -219,15 +219,15 @@ class ApiFacturacion extends Controller
         $respuesta = $util->showResponse($note, $cdr);
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+        $this->updateNota($nota, $respuesta, 'update', $note);
 
         return $respuesta;
     }
 
     //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
-    public function updateNota($tipo_comprobante, $nota, $respuesta, $action, $note)
+    public function updateNota($nota, $respuesta, $action, $note)
     {
-        EmitirNota::dispatch($tipo_comprobante, $nota, $respuesta, $action, $note);
+        EmitirNota::dispatch($nota, $respuesta, $action, $note);
     }
 
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
@@ -449,10 +449,40 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+    public function sendInvoiceOnlyNota(Comprobantes $nota)
+    {
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+
+        $result = $see->sendXml(get_class($nota->clase), $nota->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $nota->nombre_xml . '.xml'));
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+
+            //$this->updateComprobante($nota, $msg, 'BORRADOR', 'no_update', $nota->clase);
+            // dd($msg);
+            return $msg;
+        }
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($nota->clase, $result->getCdrZip());
+
+        $respuesta = $util->showResponse($nota->clase, $cdr);
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateNota($nota, $respuesta, 'no_update', $nota->clase);
+        return $respuesta;
+    }
+
 
     public function sendInvoiceOnlyGuia($clase)
     {
-
         $util = Util::getInstance();
         $plantilla = plantilla::first();
         // Envio a SUNAT.
