@@ -970,6 +970,7 @@ class ApiFacturacion extends Controller
                     'nota' => $respuesta['nota'],
                     'fe_codigo_error' => $respuesta['fe_codigo_error'],
                     'nombre_xml' => $respuesta['nombre_xml'],
+                    'nombre_cdr' => $respuesta['nombre_cdr'],
                     'xml_base64' => $respuesta['xml_base64'],
                     'cdr_base64' => $respuesta['cdr_base64'],
                     'fe_estado' => $respuesta['fe_estado'],

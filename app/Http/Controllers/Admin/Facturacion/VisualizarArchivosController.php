@@ -76,4 +76,10 @@ class VisualizarArchivosController extends Controller
         $envio_resumen = EnvioResumen::where('nombre_xml', $nombre_xml)->where('id', $id)->firstOrFail();
         return $envio_resumen->downloadXml();
     }
+
+    public function cdr_anulacion($id, $nombre_cdr)
+    {
+        $envio_resumen = EnvioResumen::where('nombre_cdr', $nombre_cdr)->where('id', $id)->firstOrFail();
+        return $envio_resumen->downloadCdr();
+    }
 }

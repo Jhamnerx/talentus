@@ -67,4 +67,11 @@ class EnvioResumen extends Model
 
         return $util->downloadXml($this);
     }
+    public function downloadCdr()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadCdr($this);
+    }
 }

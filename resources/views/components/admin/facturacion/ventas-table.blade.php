@@ -816,7 +816,12 @@
                                                             'id' => $venta->envioResumen->id,
                                                             'envio_resumen' => $venta->envioResumen,
                                                         ]) }}" />
-                                                    <x-form.dropdown.item icon="document" label="Descargar CDR" />
+
+                                                    <x-form.dropdown.item icon="document" label="Descargar CDR"
+                                                        href="{{ route('facturacion.anulacion.ver.cdr', [
+                                                            'id' => $venta->envioResumen->id,
+                                                            'envio_resumen' => $venta->envioResumen,
+                                                        ]) }}" />
                                                 </x-form.dropdown.header>
                                             @endif
                                         @endif

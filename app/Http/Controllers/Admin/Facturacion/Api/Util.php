@@ -39,7 +39,7 @@ class Util extends Controller
     public $estado;
     public $mensaje_error;
     public $mensaje;
-    public $nota;
+    public $nota = null;
     public $fe_codigo_error;
     public $nombre_xml;
     public $nombre_cdr;
@@ -458,7 +458,13 @@ class Util extends Controller
 
         return Storage::disk('facturacion')->download($ruta, $clase->nombre_xml . '.xml');
     }
+    public function downloadCdr($clase)
+    {
+        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr . $clase->nombre_cdr . '.xml';
 
+
+        return Storage::disk('facturacion')->download($ruta, $clase->nombre_cdr . '.xml');
+    }
 
     public function convertToPem($ruta, $password)
     {
