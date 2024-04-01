@@ -18,7 +18,8 @@ class Index extends Component
     public $search;
 
     protected $listeners = [
-        'update' => 'render'
+        'update' => 'render',
+        'render-table' => 'render'
     ];
 
 

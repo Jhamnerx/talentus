@@ -126,6 +126,8 @@ class AnularComprobante extends Component
             mensaje: $mensaje,
         );
         $this->resetProps();
+
+        $this->dispatch('render-table');
     }
 
     //ACTUALIZAR LA VENTA Y CREAR EL DETALLE DE ENVIO DE RESUMEN
@@ -151,6 +153,7 @@ class AnularComprobante extends Component
         ]);
 
         $this->resetProps();
+        $this->dispatch('render-table');
     }
 
 
