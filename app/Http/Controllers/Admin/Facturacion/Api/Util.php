@@ -42,6 +42,7 @@ class Util extends Controller
     public $nota;
     public $fe_codigo_error;
     public $nombre_xml;
+    public $nombre_cdr;
     public $xml_base64;
     public $cdr_base64;
     public $fe_estado;
@@ -220,6 +221,7 @@ class Util extends Controller
                 'nota' => $this->nota,
                 'fe_codigo_error' => $this->fe_codigo_error,
                 'nombre_xml' => $this->nombre_xml,
+                'nombre_cdr' => $this->nombre_cdr,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
                 'fe_estado' => $this->fe_estado,
@@ -243,6 +245,7 @@ class Util extends Controller
                 'nota' => $this->nota,
                 'fe_codigo_error' => $error->getCode(),
                 'nombre_xml' => $this->nombre_xml,
+                'nombre_cdr' => $this->nombre_cdr,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
                 'fe_estado' => $error->getCode() == 'HTTP' ? '0' : '2',
@@ -286,6 +289,7 @@ class Util extends Controller
         $this->cdr_base64 = base64_encode($zip);
         $xml = $this->ExtractXmlCrdZip('R-' . $document->getName());
         $this->hash_cdr = $this->getHashFromFile($xml);
+        $this->nombre_cdr = 'R-' . $document->getName();
     }
     //FUNCION PARA GUARDAR ARCHIVOS EN STORAGE
     public function writeFile(?string $filename, ?string $content, $type): void
