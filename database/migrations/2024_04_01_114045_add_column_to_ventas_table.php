@@ -11,9 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('guia_remision', function (Blueprint $table) {
-            $table->text('qr')->nullable();
-            $table->text('ticket')->nullable();
+        Schema::table('ventas', function (Blueprint $table) {
             $table->text('nombre_cdr')->nullable()->after('nombre_xml');
         });
     }
@@ -23,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('guia_remision', function (Blueprint $table) {
-            $table->dropColumn('qr');
+        Schema::table('ventas', function (Blueprint $table) {
+            //
         });
     }
 };

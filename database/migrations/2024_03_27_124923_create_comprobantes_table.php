@@ -51,6 +51,7 @@ return new class extends Migration
             $table->text('fe_mensaje_sunat')->nullable();
             $table->text('nota')->nullable();
             $table->text('nombre_xml')->nullable();
+            $table->text('nombre_cdr')->nullable();
             $table->text('xml_base64')->nullable();
             $table->text('cdr_base64')->nullable();
             $table->text('hash')->nullable();

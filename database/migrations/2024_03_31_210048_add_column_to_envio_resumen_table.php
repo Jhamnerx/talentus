@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('fe_mensaje_error')->nullable()->after('nombre_xml');
             $table->text('nota')->nullable()->after('nombre_xml');
             $table->text('xml_base64')->nullable()->after('nombre_xml');
+            $table->text('nombre_cdr')->nullable()->after('nombre_xml');
             $table->text('cdr_base64')->nullable()->after('nombre_xml');
             $table->text('hash')->nullable()->after('nombre_xml');
             $table->text('hash_cdr')->nullable()->after('nombre_xml');
