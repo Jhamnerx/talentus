@@ -59,4 +59,12 @@ class EnvioResumen extends Model
         $pdf = Pdf::loadHTML($html);
         return $pdf->stream($this->nombre_xml . '.pdf');
     }
+
+    public function downloadXml()
+    {
+
+        $util = Util::getInstance();
+
+        return $util->downloadXml($this);
+    }
 }

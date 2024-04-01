@@ -811,7 +811,11 @@
 
                                                     </x-form.dropdown.item>
 
-                                                    <x-form.dropdown.item icon="document" label="Descargar XML" />
+                                                    <x-form.dropdown.item icon="document" label="Descargar XML"
+                                                        href="{{ route('facturacion.anulacion.ver.xml', [
+                                                            'id' => $venta->envioResumen->id,
+                                                            'envio_resumen' => $venta->envioResumen,
+                                                        ]) }}" />
                                                     <x-form.dropdown.item icon="document" label="Descargar CDR" />
                                                 </x-form.dropdown.header>
                                             @endif

@@ -36,4 +36,5 @@ Route::controller(VisualizarArchivosController::class)->group(function () {
 
 
     Route::get('anulaciones/pdf/{id}/{envio_resumen:nombre_xml}', 'pdf_anulacion')->name('facturacion.anulacion.ver.pdf');
+    Route::get('anulaciones/xml/{id}/{envio_resumen:nombre_xml}', 'xml_anulacion')->name('facturacion.anulacion.ver.xml');
 });
