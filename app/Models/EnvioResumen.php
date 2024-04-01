@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Casts\Attribute;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class EnvioResumen extends Model
 {
@@ -44,5 +46,16 @@ class EnvioResumen extends Model
     public function ventas(): HasOne
     {
         return $this->hasOne(Ventas::class, 'id_baja');
+    }
+
+    //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF
+    public function getPdf()
+    {
+
+        $util = Util::getInstance();
+
+        $html = $util->getPdfInvoice($this);
+        $pdf = Pdf::loadHTML($html);
+        return $pdf->stream($this->nombre_xml . '.pdf');
     }
 }

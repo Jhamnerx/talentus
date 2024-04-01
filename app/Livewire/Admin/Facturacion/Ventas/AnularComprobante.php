@@ -97,30 +97,11 @@ class AnularComprobante extends Component
             $mensaje =  $api->anularComprobante($datos, $resumen);
 
             if ($mensaje['fe_codigo_error']) {
-
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'error',
-                    title: 'ERROR: ',
-                    mensaje: $mensaje["fe_mensaje_error"] . ', Intenta enviar luego',
-                );
-
-                $this->resetProps();
+                //ENVIAR NOTIFICACION DE ERROR
+                $this->afterError($resumen, $mensaje["fe_mensaje_error"]);
             } else {
-
-                $this->invoice->update([
-                    'anulado' => 'si',
-                    'id_baja' => $resumen->id
-                ]);
-
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'success',
-                    title: 'RESUMEN DE ANULACION ENVIADO A SUNAT',
-                    mensaje: $mensaje['fe_mensaje_sunat'],
-                );
-
-                $this->resetProps();
+                //ENVIAR NOTIFICACION DE EXITO y actualizar la venta
+                $this->afterSuccess($resumen, $mensaje['fe_mensaje_sunat']);
             }
         } catch (\Throwable $th) {
             $this->dispatch(
@@ -129,11 +110,49 @@ class AnularComprobante extends Component
                 mensaje: $th->getMessage(),
             );
         }
-
-
-
-        $resumen->ventas;
     }
+    //ENVIAR NOTIFICACION DE ERROR
+    public function afterError($resumen, $mensaje)
+    {
+        $this->invoice->update([
+            'anulado' => 'si',
+            'id_baja' => $resumen->id
+        ]);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            title: 'ERROR AL ENVIAR RESUMEN DE ANULACION',
+            mensaje: $mensaje,
+        );
+        $this->resetProps();
+    }
+
+    //ACTUALIZAR LA VENTA Y CREAR EL DETALLE DE ENVIO DE RESUMEN
+    public function afterSuccess($resumen, $mensaje)
+    {
+
+        $this->invoice->update([
+            'anulado' => 'si',
+            'id_baja' => $resumen->id
+        ]);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'RESUMEN DE ANULACION ENVIADO A SUNAT',
+            mensaje: $mensaje,
+        );
+        //CREAR DETALLE DE ENVIO DE RESUMEN
+        $resumen->envioResumenDetalles()->create([
+            'venta_id' => $this->invoice->id,
+            'condicion' => 3,
+
+        ]);
+
+        $this->resetProps();
+    }
+
 
     public function closeModal()
     {

@@ -32,4 +32,8 @@ Route::controller(VisualizarArchivosController::class)->group(function () {
     Route::get('nota/pdf/{id}/{comprobantes:serie_correlativo}', 'pdf_nota')->name('facturacion.nota.ver.pdf');
     Route::get('nota/xml/{comprobantes:serie_correlativo}', 'xml_nota')->name('facturacion.nota.ver.xml');
     Route::get('nota/cdr/{comprobantes:serie_correlativo}', 'cdr_nota')->name('facturacion.nota.qver.cdr');
+
+
+
+    Route::get('anulaciones/pdf/{id}/{envio_resumen:nombre_xml}', 'pdf_anulacion')->name('facturacion.anulacion.ver.pdf');
 });

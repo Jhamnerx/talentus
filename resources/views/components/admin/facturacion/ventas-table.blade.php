@@ -713,9 +713,18 @@
                                                     icon="refresh" label="Volver a enviar" />
                                             @endif
 
-                                            @if ($venta->anulado == 'si')
+                                            @if ($venta->anulado == 'si' && $venta->envioResumen)
                                                 <x-form.dropdown.header label="Comunicación de baja">
-                                                    <x-form.dropdown.item icon="document" label="Descargar PDF" />
+
+                                                    <x-form.dropdown.item icon="document" target="_blank"
+                                                        href="{{ route('facturacion.anulacion.ver.pdf', [
+                                                            'id' => $venta->envioResumen->id,
+                                                            'envio_resumen' => $venta->envioResumen,
+                                                        ]) }}">
+                                                        Descargar PDF
+
+                                                    </x-form.dropdown.item>
+
                                                     <x-form.dropdown.item icon="document" label="Descargar XML" />
                                                     <x-form.dropdown.item icon="document" label="Descargar CDR" />
                                                 </x-form.dropdown.header>

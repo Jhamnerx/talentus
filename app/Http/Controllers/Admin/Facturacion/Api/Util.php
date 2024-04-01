@@ -476,4 +476,34 @@ class Util extends Controller
             return $th->getMessage();
         }
     }
+
+
+    //OBTENER Y VISUALIZAR PDF INVOICE
+    public function getPdfInvoice($invoice)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+        $report->setTemplate($resolver->getTemplate($invoice->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
+                'hash' => $invoice->hash, // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
+                'footer' => ''
+            ]
+        ];
+
+        $html = $report->render($invoice->clase, $params);
+
+        return $html;
+    }
 }
