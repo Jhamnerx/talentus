@@ -97,4 +97,10 @@ class Index extends Component
         );
         $this->render();
     }
+
+    public function anularComprobante(Ventas $venta)
+    {
+
+        $this->dispatch('open-modal-anular', invoice: $venta);
+    }
 }

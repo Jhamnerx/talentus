@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class EnvioResumen extends Model
 {
@@ -15,7 +17,7 @@ class EnvioResumen extends Model
      *
      * @var array
      */
-    protected $guarded = [];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'envio_resumen';
     /**
      * The attributes that should be cast to native types.
@@ -26,8 +28,21 @@ class EnvioResumen extends Model
         'id' => 'integer',
     ];
 
+    protected function clase(): Attribute
+    {
+        return new Attribute(
+            get: fn ($nota) => unserialize($nota),
+            set: fn ($nota) => serialize($nota),
+        );
+    }
+
     public function envioResumenDetalles(): HasMany
     {
         return $this->hasMany(EnvioResumenDetalle::class);
+    }
+
+    public function ventas(): HasOne
+    {
+        return $this->hasOne(Ventas::class, 'id_baja');
     }
 }

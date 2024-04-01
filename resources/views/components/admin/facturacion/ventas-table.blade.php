@@ -47,9 +47,9 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">SUNAT</div>
                         </th>
-                        {{-- <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ACCIONES</div>
-                        </th> --}}
+                        </th>
                     </tr>
                 </thead>
                 <!-- Table body -->
@@ -696,21 +696,36 @@
                                 @endif
                             </td>
 
-                            {{-- <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
 
                                 <div class=" text-center space-x-1">
                                     <x-form.dropdown>
-                                        <x-form.dropdown.header label="Settings">
-                                            <x-form.dropdown.item icon="cog" label="Preferences" />
-                                            <x-form.dropdown.item icon="user" label="My Profile" />
-                                        </x-form.dropdown.header>
+                                        <x-form.dropdown.item label="Volver a crear" />
+                                        @if ($venta->tipo_comprobante_id == '01')
+                                            @if ($venta->anulado == 'no')
+                                                <x-form.dropdown.item
+                                                    wire:click.prevent='anularComprobante({{ $venta->id }})'
+                                                    separator label="Anular comprobante" />
+                                            @endif
 
-                                        <x-form.dropdown.item separator label="Help Center" />
-                                        <x-form.dropdown.item label="Live Chat" />
-                                        <x-form.dropdown.item label="Logout" />
+                                            @if (!$venta->envioResumen && $venta->anulado == 'si')
+                                                <x-form.dropdown.item wire:click.prevent='getCdr({{ $venta->id }})'
+                                                    icon="refresh" label="Volver a enviar" />
+                                            @endif
+
+                                            @if ($venta->anulado == 'si')
+                                                <x-form.dropdown.header label="Comunicación de baja">
+                                                    <x-form.dropdown.item icon="document" label="Descargar PDF" />
+                                                    <x-form.dropdown.item icon="document" label="Descargar XML" />
+                                                    <x-form.dropdown.item icon="document" label="Descargar CDR" />
+                                                </x-form.dropdown.header>
+                                            @endif
+                                        @endif
+
+
                                     </x-form.dropdown>
                                 </div>
-                            </td> --}}
+                            </td>
 
                             {{-- Crear nota de crédito
                             Crear nota de débito
