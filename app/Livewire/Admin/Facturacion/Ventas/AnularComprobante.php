@@ -80,7 +80,6 @@ class AnularComprobante extends Component
 
     public function anularComprobante()
     {
-
         $datos = $this->validate();
 
         try {
@@ -92,6 +91,9 @@ class AnularComprobante extends Component
                 'fecha_generacion' => $datos['fecha_generacion'],
 
             ]);
+
+            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+            Series::where('tipo_comprobante_id', 'RA')->first()->increment('correlativo');
 
             $api = new ApiFacturacion();
             $mensaje =  $api->anularComprobante($datos, $resumen);
@@ -119,12 +121,20 @@ class AnularComprobante extends Component
             'id_baja' => $resumen->id
         ]);
 
+        //CREAR DETALLE DE ENVIO DE RESUMEN
+        $resumen->envioResumenDetalles()->create([
+            'venta_id' => $this->invoice->id,
+            'condicion' => 3,
+
+        ]);
+
         $this->dispatch(
             'notify-toast',
             icon: 'error',
             title: 'ERROR AL ENVIAR RESUMEN DE ANULACION',
             mensaje: $mensaje,
         );
+
         $this->resetProps();
 
         $this->dispatch('render-table');
@@ -139,18 +149,19 @@ class AnularComprobante extends Component
             'id_baja' => $resumen->id
         ]);
 
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'RESUMEN DE ANULACION ENVIADO A SUNAT',
-            mensaje: $mensaje,
-        );
         //CREAR DETALLE DE ENVIO DE RESUMEN
         $resumen->envioResumenDetalles()->create([
             'venta_id' => $this->invoice->id,
             'condicion' => 3,
 
         ]);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'RESUMEN DE ANULACION ENVIADO A SUNAT',
+            mensaje: $mensaje,
+        );
 
         $this->resetProps();
         $this->dispatch('render-table');

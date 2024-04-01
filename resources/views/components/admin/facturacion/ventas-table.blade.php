@@ -788,7 +788,7 @@
                                     <x-form.dropdown>
                                         <x-form.dropdown.item label="Volver a crear" />
                                         @if ($venta->tipo_comprobante_id == '01')
-                                            @if ($venta->anulado == 'no')
+                                            @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA')
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='anularComprobante({{ $venta->id }})'
                                                     separator label="Anular comprobante" />

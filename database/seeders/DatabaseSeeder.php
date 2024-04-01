@@ -70,18 +70,18 @@ class DatabaseSeeder extends Seeder
         // $this->call(UbigeosSeeder::class);
         // $this->call(TipoTareasSeeder::class);
 
-        $this->call(PlantillaSeeder::class);
-        $this->call(ProductoSeeder::class);
-        $this->call(MetodoPagoSeeder::class);
-        $this->call(ModalidadTransporteSeeder::class);
-        $this->call(MotivoTrasladoSeeder::class);
-        $this->call(SustentosSeeder::class);
-        $this->call(TipoAfectacionSeeder::class);
-        $this->call(tipoComprobanteSeeder::class);
-        $this->call(tipoDocumentosSeeder::class);
-        $this->call(UbigeosSeeder::class);
+        // $this->call(PlantillaSeeder::class);
+        // $this->call(ProductoSeeder::class);
+        // $this->call(MetodoPagoSeeder::class);
+        // $this->call(ModalidadTransporteSeeder::class);
+        // $this->call(MotivoTrasladoSeeder::class);
+        // $this->call(SustentosSeeder::class);
+        // $this->call(TipoAfectacionSeeder::class);
+        // $this->call(tipoComprobanteSeeder::class);
+        // $this->call(tipoDocumentosSeeder::class);
+        // $this->call(UbigeosSeeder::class);
         $this->call(SerieSeeder::class);
-        $this->call(ClientesSeeder::class);
-        $this->call(PermisosUpdateSeeder::class);
+        // $this->call(ClientesSeeder::class);
+        // $this->call(PermisosUpdateSeeder::class);
     }
 }
