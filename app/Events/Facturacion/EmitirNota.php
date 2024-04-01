@@ -17,7 +17,7 @@ class EmitirNota
     /**
      * Create a new event instance.
      */
-    public function __construct(public $tipo_comprobante, public $nota, public $respuesta, public $action, public $note)
+    public function __construct(public $nota, public $respuesta, public $action, public $note)
     {
         //
     }

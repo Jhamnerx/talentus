@@ -56,7 +56,7 @@ class Emitir extends Component
     public $min_correlativo;
 
     //DISMINUIR STOCK
-    public $decrease_stock = false;
+    public $decrease_stock = true;
 
 
 
@@ -320,7 +320,6 @@ class Emitir extends Component
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
-
 
                 if ($mensaje['fe_codigo_error']) {
 

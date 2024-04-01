@@ -17,7 +17,8 @@ class GuiaRemisionRequest extends FormRequest
 
         $rules = [
             'serie_correlativo' => [
-                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required', Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at')),
             ],
             'serie' => 'required',
             'correlativo' => 'nullable',
@@ -81,6 +82,13 @@ class GuiaRemisionRequest extends FormRequest
                 'in:' . $numero_docu_empresa
             ];
         }
+        if ($motivo_traslado_id == '14') {
+
+            $rules['numero_documento'] = [
+                'required',
+                'not_in:' . $numero_docu_empresa
+            ];
+        }
 
 
 
@@ -88,7 +96,8 @@ class GuiaRemisionRequest extends FormRequest
 
             $rules['serie_correlativo'] = [
                 'required',
-                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('guia_remision', 'serie_correlativo')->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    ->whereNull('deleted_at'))
                     ->ignore($guia->id),
 
             ];
@@ -116,6 +125,7 @@ class GuiaRemisionRequest extends FormRequest
             'docu_rel_numero.regex' => 'El número de documento debe tener el formato 000-0000-10-000000 o 000-0000-18-000000',
             'numero_contenedor.required' => 'El número de contenedor es requerido',
             'numero_documento.in' => 'El número de documento debe ser el mismo que el de la empresa',
+            'numero_documento.not_in' => 'Cual el motivo es por traslado de bienes vendidos, el número de documento no puede ser el mismo que el de la empresa',
         ];
 
         return $messages;

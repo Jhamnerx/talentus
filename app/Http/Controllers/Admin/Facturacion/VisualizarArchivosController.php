@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin\Facturacion;
 
-use App\Http\Controllers\Controller;
-use App\Models\GuiaRemision;
 use App\Models\Ventas;
+use App\Models\Comprobantes;
+use App\Models\EnvioResumen;
+use App\Models\GuiaRemision;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class VisualizarArchivosController extends Controller
 {
@@ -33,10 +35,9 @@ class VisualizarArchivosController extends Controller
     }
 
 
-    public function pdf_guia($serie_correlativo)
+    public function pdf_guia($id, $serie_correlativo)
     {
-        $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->firstOrFail();
-
+        $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
         return $guia->getPdf();
     }
 
@@ -45,5 +46,40 @@ class VisualizarArchivosController extends Controller
         $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->firstOrFail();
 
         return $guia->downloadXml();
+    }
+
+
+
+
+    public function pdf_nota($id, $serie_correlativo)
+    {
+        $comprobante = Comprobantes::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
+        return $comprobante->getPdf();
+    }
+
+    public function xml_nota($serie_correlativo)
+    {
+        $comprobante = Comprobantes::where('serie_correlativo', $serie_correlativo)->firstOrFail();
+
+        return $comprobante->downloadXml();
+    }
+
+
+    public function pdf_anulacion($id, $nombre_xml)
+    {
+        $envio_resumen = EnvioResumen::where('nombre_xml', $nombre_xml)->where('id', $id)->firstOrFail();
+        return $envio_resumen->getPdf();
+    }
+
+    public function xml_anulacion($id, $nombre_xml)
+    {
+        $envio_resumen = EnvioResumen::where('nombre_xml', $nombre_xml)->where('id', $id)->firstOrFail();
+        return $envio_resumen->downloadXml();
+    }
+
+    public function cdr_anulacion($id, $nombre_cdr)
+    {
+        $envio_resumen = EnvioResumen::where('nombre_cdr', $nombre_cdr)->where('id', $id)->firstOrFail();
+        return $envio_resumen->downloadCdr();
     }
 }

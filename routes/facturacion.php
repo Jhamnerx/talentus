@@ -23,7 +23,19 @@ Route::controller(VisualizarArchivosController::class)->group(function () {
     Route::get('cdr/{ventas:serie_correlativo}', 'cdr')->name('facturacion.ver.cdr');
 
     //GUIA DE REMISION - VISUALIZAR ARCHIVOS
-    Route::get('guia/pdf/{guia:serie_correlativo}', 'pdf_guia')->name('facturacion.guia.ver.pdf');
+    Route::get('guia/pdf/{id}/{guia:serie_correlativo}', 'pdf_guia')->name('facturacion.guia.ver.pdf');
     Route::get('guia/xml/{guia:serie_correlativo}', 'xml_guia')->name('facturacion.guia.ver.xml');
     Route::get('guia/cdr/{guia:serie_correlativo}', 'cdr_guia')->name('facturacion.guia.qver.cdr');
+
+
+    //GUIA DE REMISION - VISUALIZAR ARCHIVOS
+    Route::get('nota/pdf/{id}/{comprobantes:serie_correlativo}', 'pdf_nota')->name('facturacion.nota.ver.pdf');
+    Route::get('nota/xml/{comprobantes:serie_correlativo}', 'xml_nota')->name('facturacion.nota.ver.xml');
+    Route::get('nota/cdr/{comprobantes:serie_correlativo}', 'cdr_nota')->name('facturacion.nota.qver.cdr');
+
+
+
+    Route::get('anulaciones/pdf/{id}/{envio_resumen:nombre_xml}', 'pdf_anulacion')->name('facturacion.anulacion.ver.pdf');
+    Route::get('anulaciones/xml/{id}/{envio_resumen:nombre_xml}', 'xml_anulacion')->name('facturacion.anulacion.ver.xml');
+    Route::get('anulaciones/cdr/{id}/{envio_resumen:nombre_cdr}', 'cdr_anulacion')->name('facturacion.anulacion.ver.cdr');
 });

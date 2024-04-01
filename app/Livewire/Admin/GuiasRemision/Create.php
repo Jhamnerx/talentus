@@ -223,7 +223,6 @@ class Create extends Component
 
             $mensaje = $api->emitirGuia($guia);
 
-
             if ($mensaje['fe_codigo_error']) {
 
                 session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');

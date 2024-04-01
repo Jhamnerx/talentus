@@ -42,9 +42,9 @@
         </div>
         <div class="col-span-12 sm:col-span-12">
 
-            <x-form.select label="Selecciona un cliente:" id="clientes_id" wire:model.live="clientes_id"
-                placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                option-label="razon_social" option-value="id">
+            <x-form.select autocomplete='off' label="Selecciona un cliente:" id="clientes_id"
+                wire:model.live="clientes_id" placeholder="Selecciona un cliente" option-description="numero_documento"
+                :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
                     <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close" primary flat
@@ -80,9 +80,9 @@
         @endif
         <div class="col-span-12 sm:col-span-6">
 
-            <x-form.select label="Selecciona una linea:" id="numero" name="numero" wire:model.live="numero"
-                placeholder="Selecciona una linea" option-description="option_description" :async-data="route('api.lineas.index')"
-                option-label="numero" option-value="numero">
+            <x-form.select autocomplete='off' label="Selecciona una linea:" id="numero" name="numero"
+                wire:model.live="numero" placeholder="Selecciona una linea" option-description="option_description"
+                :async-data="route('api.lineas.index')" option-label="numero" option-value="numero">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
                     <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
@@ -110,12 +110,13 @@
 
         <div class="col-span-12 sm:col-span-6">
 
-            <x-form.select label="IMEI GPS:" id="dispositivo_imei" name="dispositivo_imei"
+            <x-form.select autocomplete='off' label="IMEI GPS:" id="dispositivo_imei" name="dispositivo_imei"
                 wire:model.live="dispositivo_imei" placeholder="357073292893290" option-description="option_description"
                 :async-data="route('api.dispositivos.index')" option-label="imei" option-value="imei">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat full>
+                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat
+                        full>
                         <span x-html="`Registrar Imei <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>

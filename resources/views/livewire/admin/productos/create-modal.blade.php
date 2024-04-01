@@ -79,7 +79,7 @@
 
         </div>
     </div>
-    {{ json_encode($errors->all()) }}
+
     <x-slot name="footer">
         <div class="flex justify-end gap-x-4">
 

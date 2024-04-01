@@ -14,6 +14,7 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
+use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
@@ -38,9 +39,10 @@ class Util extends Controller
     public $estado;
     public $mensaje_error;
     public $mensaje;
-    public $nota;
+    public $nota = null;
     public $fe_codigo_error;
     public $nombre_xml;
+    public $nombre_cdr;
     public $xml_base64;
     public $cdr_base64;
     public $fe_estado;
@@ -48,6 +50,7 @@ class Util extends Controller
     public $hash_cdr;
     public $ticketS;
     public $code_sunat;
+    public $qr;
 
     private function __construct()
     {
@@ -175,7 +178,6 @@ class Util extends Controller
         $this->nombre_xml = $document->getName();
         $this->code_sunat = (int)$cdr->getCode();
         $code = (int)$cdr->getCode();
-
         if ($code === 0) {
             //SI EL CODIGO ES 0 EL ESTADO DE LA FACTURA ES
             $this->estado = 'ACEPTADA';
@@ -202,6 +204,7 @@ class Util extends Controller
         }
 
         $this->mensaje = $cdr->getDescription();
+        $this->qr = $cdr->getReference();
         // $this->hash = $cdr->getHash();
         $this->hash = $this->getHash($document);
 
@@ -218,12 +221,14 @@ class Util extends Controller
                 'nota' => $this->nota,
                 'fe_codigo_error' => $this->fe_codigo_error,
                 'nombre_xml' => $this->nombre_xml,
+                'nombre_cdr' => $this->nombre_cdr,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
                 'fe_estado' => $this->fe_estado,
                 'hash' => $this->hash,
                 'hash_cdr' => $this->hash_cdr,
                 'code_sunat' => $this->code_sunat,
+                'qr' => $this->qr,
 
             ];
         return $results;
@@ -240,6 +245,7 @@ class Util extends Controller
                 'nota' => $this->nota,
                 'fe_codigo_error' => $error->getCode(),
                 'nombre_xml' => $this->nombre_xml,
+                'nombre_cdr' => $this->nombre_cdr,
                 'xml_base64' => $this->xml_base64,
                 'cdr_base64' => $this->cdr_base64,
                 'fe_estado' => $error->getCode() == 'HTTP' ? '0' : '2',
@@ -248,6 +254,16 @@ class Util extends Controller
                 'code_sunat' => $this->code_sunat,
 
             ];
+
+        if ($error->getCode() == 'env:Client') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
+        }
+        if ($error->getCode() == 'env:Server') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
+        }
+
         return $results;
     }
 
@@ -273,6 +289,7 @@ class Util extends Controller
         $this->cdr_base64 = base64_encode($zip);
         $xml = $this->ExtractXmlCrdZip('R-' . $document->getName());
         $this->hash_cdr = $this->getHashFromFile($xml);
+        $this->nombre_cdr = 'R-' . $document->getName();
     }
     //FUNCION PARA GUARDAR ARCHIVOS EN STORAGE
     public function writeFile(?string $filename, ?string $content, $type): void
@@ -359,6 +376,35 @@ class Util extends Controller
         return $html;
     }
 
+    //OBTENER Y VISUALIZAR PDF INVOICE
+    public function getPdfNota(Comprobantes $invoice)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+        $report->setTemplate($resolver->getTemplate($invoice->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
+                'hash' => $invoice->hash, // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
+                'footer' => ''
+            ]
+        ];
+
+        $html = $report->render($invoice->clase, $params);
+
+        return $html;
+    }
+
 
     public function getPdfGuia(GuiaRemision $guia)
     {
@@ -383,7 +429,6 @@ class Util extends Controller
 
             ]
         ];
-
 
         $html = $report->render($guia->clase, $params);
 
@@ -413,7 +458,13 @@ class Util extends Controller
 
         return Storage::disk('facturacion')->download($ruta, $clase->nombre_xml . '.xml');
     }
+    public function downloadCdr($clase)
+    {
+        $ruta = $this->plantilla->empresa->nombre . "/" . $this->plantilla->ruta_cdr . $clase->nombre_cdr . '.xml';
 
+
+        return Storage::disk('facturacion')->download($ruta, $clase->nombre_cdr . '.xml');
+    }
 
     public function convertToPem($ruta, $password)
     {
@@ -434,5 +485,35 @@ class Util extends Controller
 
             return $th->getMessage();
         }
+    }
+
+
+    //OBTENER Y VISUALIZAR PDF INVOICE
+    public function getPdfInvoice($invoice)
+    {
+
+        $twigOptions = [
+            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'strict_variables' => true,
+        ];
+
+        $report = new HtmlReport('', $twigOptions);
+        $resolver = new DefaultTemplateResolver();
+        $report->setTemplate($resolver->getTemplate($invoice->clase));
+
+        $params = [
+            'system' => [
+                'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
+                'hash' => $invoice->hash, // Valor Resumen
+            ],
+            'user' => [
+                'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
+                'footer' => ''
+            ]
+        ];
+
+        $html = $report->render($invoice->clase, $params);
+
+        return $html;
     }
 }

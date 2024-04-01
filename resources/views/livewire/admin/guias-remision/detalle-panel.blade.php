@@ -1,6 +1,7 @@
 <div class="absolute inset-0 sm:left-auto z-20 shadow-xl duration-200 ease-in-out"
     :class="detallePanelOpen ? 'translate-x-0' : 'translate-x-full'" @click.outside="detallePanelOpen = false"
-    @keydown.escape.window="detallePanelOpen = false" x-cloak>
+    @keydown.escape.window="detallePanelOpen = false" x-cloak x-data="{ detallePanelOpen: @entangle('detallePanelOpen').live }"
+    @set-detallePanelOpen="detallePanelOpen = $event.detail">
     <div
         class="sticky top-16 bg-slate-50 overflow-x-hidden overflow-y-auto no-scrollbar shrink-0 border-l border-slate-200 w-full sm:w-[430px] h-[calc(100vh-64px)]">
 
@@ -58,18 +59,17 @@
                                 <span class="font-medium text-slate-700 text-center">CANT</span>
                             </div>
 
-                            @if ($guia->detalles->count())
-                                @foreach ($guia->detalles as $detalle)
-                                    <div class="flex justify-between space-x-1">
-                                        <span
-                                            class="font-medium text-slate-700 text-right">{{ $detalle->codigo }}</span>
-                                        <span
-                                            class="font-medium text-slate-700 text-right">{{ $detalle->descripcion }}</span>
-                                        <span
-                                            class="font-medium text-slate-700 text-right">{{ $detalle->cantidad }}</span>
-                                    </div>
-                                @endforeach
-                            @else
+
+                            @foreach ($guia->detalle as $detalle)
+                                <div class="flex justify-between space-x-1">
+                                    <span class="font-medium text-slate-700 text-right">{{ $detalle->codigo }}</span>
+                                    <span
+                                        class="font-medium text-slate-700 text-right">{{ $detalle->descripcion }}</span>
+                                    <span class="font-medium text-slate-700 text-right">{{ $detalle->cantidad }}</span>
+                                </div>
+                            @endforeach
+
+                            @if ($guia->detalle->count() < 1)
                                 <div class="flex justify-between space-x-1">
                                     <span class="font-medium text-slate-700 text-center">
                                         No hay detalle de items
@@ -179,26 +179,15 @@
                                     </span>
                                 </div>
                             @endif
-
-
                         </div>
 
                     </div>
+
                     <!-- Download / Report -->
                     <div class="flex items-center space-x-3 mt-6">
-                        {{-- <div class="w-1/2">
-                            <button wire:click.prevent="save"
-                                class="btn w-full border-slate-200 hover:border-slate-300 text-slate-600">
-                                <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 rotate-180" viewBox="0 0 16 16"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M8 4c-.3 0-.5.1-.7.3L1.6 10 3 11.4l4-4V16h2V7.4l4 4 1.4-1.4-5.7-5.7C8.5 4.1 8.3 4 8 4ZM1 2h14V0H1v2Z" />
-                                </svg>
-                                <span class="ml-2">Guardar</span>
-                            </button>
-                        </div> --}}
                         <div class="w-1/2">
-                            <button class="btn w-full border-slate-200 hover:border-slate-300 text-rose-500">
+                            <button wire:click.prevent='closeDetallePanel'
+                                class="btn w-full border-slate-200 hover:border-slate-300 text-rose-500">
                                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
                                     <path
                                         d="M7.001 3h2v4h-2V3Zm1 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2ZM15 16a1 1 0 0 1-.6-.2L10.667 13H1a1 1 0 0 1-1-1V1a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1ZM2 11h9a1 1 0 0 1 .6.2L14 13V2H2v9Z" />
@@ -207,7 +196,6 @@
                             </button>
                         </div>
                     </div>
-
                 </div>
             </div>
         @endif

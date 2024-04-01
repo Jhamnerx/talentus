@@ -14,6 +14,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests\NotaDeCreditoRequest;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Models\Comprobantes;
 use App\Models\NotaDebito;
 
 class Emitir extends Component
@@ -89,6 +90,27 @@ class Emitir extends Component
         $this->correlativo = $serie->correlativo + 1;
         $this->min_correlativo = $serie->correlativo + 1;
         $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+    }
+
+    public function updatedSerie($value)
+    {
+        $this->changeSerieUpdate($value);
+    }
+
+    public function changeSerieUpdate($serie)
+    {
+
+        if ($serie) {
+
+            $serie = Series::where('serie', $serie)->first();
+            $this->serie = $serie->serie;
+            $this->correlativo = $serie->correlativo + 1;
+            $this->min_correlativo = $serie->correlativo + 1;
+            $this->serie_correlativo = $this->serie . "-" . $this->correlativo;
+        } else {
+
+            $this->reset('correlativo');
+        }
     }
 
     public function verIframe()
@@ -377,36 +399,12 @@ class Emitir extends Component
     public function save()
     {
 
-        if ($this->tipo_comprobante_id == '07') {
 
-            $request = new NotaDeCreditoRequest();
-            $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
+        $request = new NotaDeCreditoRequest();
+        $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
 
-            $nota = NotaCredito::create($datos);
-
-            //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
-            $nota->getSerie->increment('correlativo');
-
-            $api = new ApiFacturacion();
-            $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
-
-            if ($respuesta['fe_codigo_error']) {
-
-                session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                $this->redirectRoute('admin.nota.credito.index');
-            } else {
-
-                session()->flash('nota-registrada', $respuesta['fe_mensaje_sunat']);
-                $this->redirectRoute('admin.nota.credito.index');
-            }
-        }
-
-        if ($this->tipo_comprobante_id == '08') {
-
-            $request = new NotaDeCreditoRequest();
-            $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
-
-            $nota = NotaDebito::create($datos);
+        try {
+            $nota = Comprobantes::create($datos);
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $nota->getSerie->increment('correlativo');
@@ -417,12 +415,45 @@ class Emitir extends Component
             if ($respuesta['fe_codigo_error']) {
 
                 session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                $this->redirectRoute('admin.nota.debito.index');
+                $this->redirectRoute('admin.nota.index');
             } else {
 
                 session()->flash('nota-registrada', $respuesta['fe_mensaje_sunat']);
-                $this->redirectRoute('admin.nota.debito.index');
+                $this->redirectRoute('admin.nota.index');
             }
+        } catch (\Throwable $th) {
+
+            $this->dispatch(
+                'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
+
+
+
+        // if ($this->tipo_comprobante_id == '08') {
+
+        //     $request = new NotaDeCreditoRequest();
+        //     $datos = $this->validate($request->rules($this->tipo_comprobante_ref), $request->messages());
+
+        //     $nota = NotaDebito::create($datos);
+
+        //     //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
+        //     $nota->getSerie->increment('correlativo');
+
+        //     $api = new ApiFacturacion();
+        //     $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
+
+        //     if ($respuesta['fe_codigo_error']) {
+
+        //         session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
+        //         $this->redirectRoute('admin.nota.debito.index');
+        //     } else {
+
+        //         session()->flash('nota-registrada', $respuesta['fe_mensaje_sunat']);
+        //         $this->redirectRoute('admin.nota.debito.index');
+        //     }
+        // }
     }
 }

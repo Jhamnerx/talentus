@@ -39,7 +39,7 @@ class CreateTask extends Component
         $this->nuevo_numero = null;
         $this->sim_card = null;
         $this->nuevo_sim_card = null;
-        $this->fecha_hora = null;
+        $this->fecha_hora = Carbon::now();
         $this->modelo_velocimetro = null;
         $this->tecnico_id = null;
     }

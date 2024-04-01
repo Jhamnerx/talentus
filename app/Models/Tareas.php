@@ -112,7 +112,7 @@ class Tareas extends Model
         view()->share([
             'tarea' => $this,
             'fondo' => $fondo,
-            'plantilla' => $plantilla,
+            'sello' => $sello,
         ]);
 
         $pdf = PDF::loadView('pdf.reportes.tarea');

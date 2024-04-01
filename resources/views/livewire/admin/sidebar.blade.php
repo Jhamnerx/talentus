@@ -228,6 +228,7 @@
                                                 href="{{ route('admin.almacen.guias.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Guias
+                                                    Remisión
                                                 </span>
                                             </a>
                                         </li>
@@ -385,7 +386,7 @@
                         'comprobantes-emitir-nota-credito', 'ver-cotizaciones'])
 
                         <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos']) ? 1 : 0 }} }">
+                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas']) ? 1 : 0 }} }">
 
                             <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150 "
                                 href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
@@ -493,6 +494,17 @@
                                             </a>
                                         </li>
                                     @endcan
+                                    @canany(['comprobantes-emitir-nota-debito', 'comprobantes-emitir-nota-credito'])
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} transition duration-150 truncate @if (Route::is('admin.nota.index')) {{ '!text-blue-800' }} @endif"
+                                                href="{{ route('admin.nota.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                                    Ver notas de debito/credito
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcanany
                                     @can('ver-recibos')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block

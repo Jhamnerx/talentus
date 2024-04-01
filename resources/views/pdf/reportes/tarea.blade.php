@@ -3,7 +3,7 @@
 <head>
     <title> TAREA REPORTE #{{ $tarea->token }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    @php $fondo=base64_encode(file_get_contents(asset("storage/". $fondo))) @endphp
+    @php $fondo=base64_encode(Storage::get($fondo)) @endphp
     <style>
         .page-break {
             page-break-after: always;
@@ -257,14 +257,9 @@
             max-width: 200px;
         }
     </style>
-
-
-
-
 </head>
 
 <body>
-
 
     <header class="px-5 py-4 flex">
 
@@ -276,7 +271,6 @@
             </h2>
 
         </div>
-
 
         <div class="flex-auto">
 
@@ -290,7 +284,6 @@
                                     <div class="text-center">
                                         {{ $tarea->tecnico->name }}
                                     </div>
-
                                 </td>
                             </tr>
                             <tr>
@@ -307,16 +300,11 @@
                                 </td>
                             </tr>
                         </tbody>
-
-
-
                     </table>
                     <!-- End -->
                 </div>
             </div>
         </div>
-
-
     </header>
 
     <div class="flex-auto">
@@ -343,11 +331,8 @@
             </thead>
             <!-- Table body -->
             <tbody class="text-sm divide-y divide-slate-200">
-
                 <tr>
-
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap" style="max-width: 150px">
-
                         <div class="text-blue-700">
                             {{ $tarea->token }}
                         </div>
@@ -393,17 +378,13 @@
                                 @break
                             @endswitch
                         </div>
-
                     </td>
-
-
                 </tr>
 
             </tbody>
         </table>
 
     </div>
-
 
     <div class="cont-table">
         <table class="styled-table tabla2">
@@ -449,9 +430,9 @@
                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                         <div class="text-center">
                             @if ($tarea->respuesta)
-                                <img src="{{ asset('images/valid.png') }}" class="w-7" alt="">
+                                <img src="{{ public_path('images/valid.png') }}" class="w-7" alt="">
                             @else
-                                <img src="{{ asset('images/invalid.png') }}" class="w-7" alt="">
+                                <img src="{{ public_path('images/invalid.png') }}" class="w-7" alt="">
                             @endif
                         </div>
                     </td>
@@ -463,10 +444,11 @@
         </table>
     </div>
 
-    <div class="page-break"></div>
-    {!! $tarea->informe ? html_entity_decode($tarea->informe->message) : '' !!}
+    @if ($tarea->informe->message)
+        <div class="page-break"></div>
+        {!! $tarea->informe ? html_entity_decode($tarea->informe->message) : '' !!}
+    @endif
 
 </body>
-
 
 </html>

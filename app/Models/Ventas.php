@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Enums\VentasStatus;
-use App\Http\Controllers\Admin\Facturacion\Api\Util;
+use App\Models\EnvioResumen;
 use App\Models\GuiaRemision;
 use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -138,6 +139,12 @@ class Ventas extends Model
     {
         return $this->belongsTo(Series::class, 'serie', 'serie');
     }
+
+    public function envioResumen(): BelongsTo
+    {
+        return $this->belongsTo(EnvioResumen::class, 'id_baja');
+    }
+
     //CREAR ITEM DETALLE VENTA
 
     public static function createItems(Ventas $venta, $ventaItems, $decrease_stock = false)

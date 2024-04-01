@@ -308,39 +308,20 @@
 
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <div class="text-slate-800" style="max-width: 650px">
+                            <div class="text-slate-800" style="max-width: 560px">
+                                @php
+                                    $datos = [
+                                        '%placa%' => '<b>' . $tarea->vehiculo->placa . '</b>',
+                                        '%velo_modelo%' => '<b>' . $tarea->modelo_velocimetro . '</b>',
+                                        '%fecha%' => '<b>' . $tarea->fecha_hora->format('d/m/Y') . '</b>',
+                                        '%modelo_gps%' => '<b>' . $tarea->dispositivo . '</b>',
+                                        '%hora%' => '<b>' . $tarea->fecha_hora->format('h:i A') . '</b>',
+                                    ];
 
-                                @switch($tarea->tipo_tarea_id)
-                                    @case(1)
-                                        Instalación de GPS </b>, Fecha
-                                        instalación: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                    @break
+                                    $info = strtr($tarea->tipo_tarea->descripcion, $datos);
+                                @endphp
+                                {!! $info !!}
 
-                                    @case(2)
-                                        Cambio de chip, Fecha
-                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                    @break
-
-                                    @case(3)
-                                        Desinstalación de GPS {{ $tarea->dispositivo }}, Fecha Tarea:
-                                        <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                    @break
-
-                                    @case(4)
-                                        Instalación de Velocimetro <b>{{ $tarea->modelo_velocimetro }}</b> , Fecha
-                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                    @break
-
-                                    @case(5)
-                                        Mantenimiento GPS {{ $tarea->dispositivo }}</b>, Fecha
-                                        Tarea: <b> {{ $tarea->fecha_hora->format('d/m/Y') }}</b> - Hora:
-                                        <b>{{ $tarea->fecha_hora->format('h:i A') }}</b>
-                                    @break
-                                @endswitch
                             </div>
 
                         </td>
@@ -380,9 +361,9 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3">
                             <div class="text-center">
                                 @if ($tarea->respuesta)
-                                    <img src="{{ asset('images/valid.png') }}" class="w-7" alt="">
+                                    <img src="{{ public_path('images/valid.png') }}" class="w-7" alt="">
                                 @else
-                                    <img src="{{ asset('images/invalid.png') }}" class="w-7" alt="">
+                                    <img src="{{ public_path('images/invalid.png') }}" class="w-7" alt="">
                                 @endif
                             </div>
                         </td>

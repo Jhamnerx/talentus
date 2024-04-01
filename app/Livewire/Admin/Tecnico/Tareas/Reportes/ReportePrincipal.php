@@ -75,7 +75,16 @@ class ReportePrincipal extends Component
     {
 
         $this->validate();
-        return Excel::download(new TareasExport($this->tecnico_id, $this->fecha_inicial, $this->fecha_final, $this->estado), 'reporte_tareas.xlsx');
+        try {
+            return Excel::download(new TareasExport($this->tecnico_id, $this->fecha_inicial, $this->fecha_final, $this->estado), 'reporte_tareas.xlsx');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Msg: ' . $th->getMessage(),
+            );
+        }
     }
 
 
@@ -83,35 +92,43 @@ class ReportePrincipal extends Component
     {
         $this->validate();
 
-        $tareas = Tareas::join('tipo_tareas', function ($join) {
-            $join->on('tareas.tipo_tarea_id', '=', 'tipo_tareas.id');
-        })->whereRaw(
-            "(tareas.created_at >= ? AND tareas.created_at <= ?)",
-            [
-                $this->fecha_inicial . " 00:00:00",
-                $this->fecha_final . " 23:59:59"
-            ]
-        )->where('tareas.tecnico_id', $this->tecnico_id)
-            ->where('tareas.estado', $this->estado)
-            ->with('vehiculo', 'tipo_tarea', 'user', 'tecnico', 'image')
-            ->get();
+        try {
+            $tareas = Tareas::join('tipo_tareas', function ($join) {
+                $join->on('tareas.tipo_tarea_id', '=', 'tipo_tareas.id');
+            })->whereRaw(
+                "(tareas.created_at >= ? AND tareas.created_at <= ?)",
+                [
+                    $this->fecha_inicial . " 00:00:00",
+                    $this->fecha_final . " 23:59:59"
+                ]
+            )->where('tareas.tecnico_id', $this->tecnico_id)
+                ->where('tareas.estado', $this->estado)
+                ->with('vehiculo', 'tipo_tarea', 'user', 'tecnico', 'image')
+                ->get();
 
-        $totalCost = $this->SumTotalCostTask($tareas);
+            $totalCost = $this->SumTotalCostTask($tareas);
 
-        $tecnico = User::find($this->tecnico_id);
+            $tecnico = User::find($this->tecnico_id);
 
-        $pdfContent = PDF::loadView('pdf.reportes.tareas', ['tareas' => $tareas, 'tecnico' => $tecnico, 'total_costo' => $totalCost, 'fechas' => [
-            'fecha_inicial' => $this->fecha_inicial,
-            'fecha_final' => $this->fecha_final,
-        ]])
-            ->setPaper('Legal', 'landscape')->output();
+            $pdfContent = PDF::loadView('pdf.reportes.tareas', ['tareas' => $tareas, 'tecnico' => $tecnico, 'total_costo' => $totalCost, 'fechas' => [
+                'fecha_inicial' => $this->fecha_inicial,
+                'fecha_final' => $this->fecha_final,
+            ]])
+                ->setPaper('Legal', 'landscape')->output();
 
-        return response()->streamDownload(
-            fn () => print($pdfContent),
-            "reporte_tareas.pdf"
-        );
+            return response()->streamDownload(
+                fn () => print($pdfContent),
+                "reporte_tareas.pdf"
+            );
+        } catch (\Throwable $th) {
 
-        //return Excel::download(new TareasExport($this->tecnico_id, $this->fecha_inicial, $this->fecha_final), 'reporte_tareas.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Msg: ' . $th->getMessage(),
+            );
+        }
     }
     public function closeModal()
     {

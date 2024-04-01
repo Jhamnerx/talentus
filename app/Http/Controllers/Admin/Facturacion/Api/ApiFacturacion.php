@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Admin\Facturacion\Api;
 
 use DateTime;
+use Carbon\Carbon;
 use App\Models\Ventas;
 use App\Models\Clientes;
 use App\Models\plantilla;
 use App\Events\EmitirGuia;
 use App\Models\NotaDebito;
 use App\Models\NotaCredito;
+use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Cuota;
@@ -16,6 +18,7 @@ use Greenter\Model\Sale\Charge;
 use Greenter\Model\Sale\Legend;
 use Greenter\Model\Sale\Invoice;
 use Greenter\Model\Client\Client;
+use Greenter\Model\Voided\Voided;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Despatch\Puerto;
 use Greenter\Model\Sale\SaleDetail;
@@ -25,6 +28,7 @@ use Greenter\Model\Despatch\Despatch;
 use Greenter\Model\Despatch\Shipment;
 use App\Events\Facturacion\EmitirNota;
 use Greenter\Model\Despatch\Direction;
+use Greenter\Model\Voided\VoidedDetail;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Sale\DetailAttribute;
 use Luecano\NumeroALetras\NumeroALetras;
@@ -32,8 +36,8 @@ use Greenter\Model\Despatch\AdditionalDoc;
 use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
-use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
+use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 
 class ApiFacturacion extends Controller
 {
@@ -62,7 +66,7 @@ class ApiFacturacion extends Controller
         }
     }
     //EMITIR NOTA DE CREDITO
-    public function emitirNotaCredito(NotaCredito $nota, $tipo_comprobante)
+    public function emitirNotaCredito(Comprobantes $nota, $tipo_comprobante)
     {
 
         $util = Util::getInstance();
@@ -125,7 +129,7 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            $this->updateNota($nota, $msg, 'update', $note);
             return $msg;
         }
 
@@ -141,13 +145,13 @@ class ApiFacturacion extends Controller
 
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+        $this->updateNota($nota, $respuesta, 'update', $note);
 
         return $respuesta;
     }
 
     //EMITIR NOTA DE DEBITO
-    public function emitirNotaDebito(NotaDebito $nota, $tipo_comprobante)
+    public function emitirNotaDebito(Comprobantes $nota, $tipo_comprobante)
     {
         $util = Util::getInstance();
         $formatter = new NumeroALetras();
@@ -204,7 +208,7 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-            $this->updateNota($tipo_comprobante, $nota, $msg, 'update', $note);
+            $this->updateNota($nota, $msg, 'update', $note);
             return $msg;
         }
 
@@ -218,12 +222,16 @@ class ApiFacturacion extends Controller
         $respuesta = $util->showResponse($note, $cdr);
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateNota($tipo_comprobante, $nota, $respuesta, 'update', $note);
+        $this->updateNota($nota, $respuesta, 'update', $note);
 
         return $respuesta;
     }
 
-
+    //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
+    public function updateNota($nota, $respuesta, $action, $note)
+    {
+        EmitirNota::dispatch($nota, $respuesta, $action, $note);
+    }
 
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
     public function emitirComprobante(Ventas $venta)
@@ -331,7 +339,6 @@ class ApiFacturacion extends Controller
         $util->writeCdr($invoice, $result->getCdrZip());
 
         $respuesta = $util->showResponse($invoice, $cdr);
-
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
 
@@ -445,10 +452,40 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+    public function sendInvoiceOnlyNota(Comprobantes $nota)
+    {
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+
+        $result = $see->sendXml(get_class($nota->clase), $nota->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $nota->nombre_xml . '.xml'));
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+
+            //$this->updateComprobante($nota, $msg, 'BORRADOR', 'no_update', $nota->clase);
+            // dd($msg);
+            return $msg;
+        }
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($nota->clase, $result->getCdrZip());
+
+        $respuesta = $util->showResponse($nota->clase, $cdr);
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateNota($nota, $respuesta, 'no_update', $nota->clase);
+        return $respuesta;
+    }
+
 
     public function sendInvoiceOnlyGuia($clase)
     {
-
         $util = Util::getInstance();
         $plantilla = plantilla::first();
         // Envio a SUNAT.
@@ -591,13 +628,6 @@ class ApiFacturacion extends Controller
         FacturacionEmitirComprobante::dispatch($venta, $respuesta, $estado, $action, $invoice);
     }
 
-    //ACTUALIZAR NOTA CON LA RESPUESTA DE SUNAT
-    public function updateNota($tipo_comprobante, $nota, $respuesta, $action, $note)
-    {
-        EmitirNota::dispatch($tipo_comprobante, $nota, $respuesta, $action, $note);
-    }
-
-
     //DEVOLVER OBJETO CLIENTE
     public function getCliente(Clientes $cliente)
     {
@@ -736,6 +766,7 @@ class ApiFacturacion extends Controller
                 $relDoc = (new AdditionalDoc())
                     ->setTipo($guia->venta->tipo_comprobante_id)
                     ->setTipoDesc('Factura')
+                    ->setEmisor($plantilla->ruc)
                     ->setNro($guia->venta->serie_correlativo);
 
                 $despatch->setAddDocs([$relDoc]);
@@ -841,5 +872,115 @@ class ApiFacturacion extends Controller
         }
 
         return $direction;
+    }
+
+
+    public function anularComprobante($datos, $resumen)
+    {
+        $util = Util::getInstance();
+
+        $detail1 = new VoidedDetail();
+        $detail1->setTipoDoc($datos['tipo_comprobante'])
+            ->setSerie($datos['serie_ref'])
+            ->setCorrelativo($datos['correlativo_ref'])
+            ->setDesMotivoBaja($datos['motivo']);
+
+        $voided = new Voided();
+        $voided->setCorrelativo($datos['correlativo'])
+            // Fecha Generacion menor que Fecha comunicacion
+            ->setFecGeneracion(new DateTime($datos['fecha_generacion']))
+            ->setFecComunicacion(new DateTime())
+            ->setCompany($util->getCompany())
+            ->setDetails([$detail1]);
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+        $res = $see->send($voided);
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($voided, $see->getFactory()->getLastXml());
+
+        if (!$res->isSuccess()) {
+            $msg =  $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        /**@var SummaryResult $res */
+        $ticket = $res->getTicket();
+        $this->updateTicket($resumen, $ticket);
+        // echo 'Ticket :<strong>' . $ticket . '</strong>';
+
+        $res = $see->getStatus($ticket);
+
+        if (!$res->isSuccess()) {
+            $msg =  $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        $cdr = $res->getCdrResponse();
+
+        //Guardar CDR recibido
+        $util->writeCdr($voided, $res->getCdrZip());
+
+        $respuesta = $util->showResponse($voided, $cdr);
+
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->actualizarResumen($resumen, $respuesta, $voided, 'update');
+        return $respuesta;
+        // dd($respuesta);
+    }
+
+
+    public function updateTicket($invoice, $ticket)
+    {
+        $invoice->update([
+            'ticket' => $ticket
+        ]);
+    }
+
+    public function actualizarResumen($resumen, $respuesta, $voided, $action)
+    {
+        //actualizarResumen si action es no_update solo se actualiza el estado del resumen
+        if ($action == 'no_update') {
+            $resumen->update(
+                [
+                    'estado_texto' => $respuesta['estado_texto'],
+                    'fe_mensaje_sunat' => $respuesta['fe_mensaje_sunat'],
+                    'fe_mensaje_error' => $respuesta['fe_mensaje_error'],
+                    'nota' => $respuesta['nota'],
+                    'fe_codigo_error' => $respuesta['fe_codigo_error'],
+                    'nombre_xml' => $respuesta['nombre_xml'],
+                    'xml_base64' => $respuesta['xml_base64'],
+                    'cdr_base64' => $respuesta['cdr_base64'],
+                    'fe_estado' => $respuesta['fe_estado'],
+                    'hash' => $respuesta['hash'],
+                    'hash_cdr' => $respuesta['hash_cdr'],
+                    'code_sunat' => $respuesta['code_sunat'],
+                    'fecha_envio' => Carbon::now(),
+                ]
+            );
+        }
+
+        if ($action == 'update') {
+            $resumen->update(
+                [
+                    'estado_texto' => $respuesta['estado_texto'],
+                    'fe_mensaje_sunat' => $respuesta['fe_mensaje_sunat'],
+                    'fe_mensaje_error' => $respuesta['fe_mensaje_error'],
+                    'nota' => $respuesta['nota'],
+                    'fe_codigo_error' => $respuesta['fe_codigo_error'],
+                    'nombre_xml' => $respuesta['nombre_xml'],
+                    'nombre_cdr' => $respuesta['nombre_cdr'],
+                    'xml_base64' => $respuesta['xml_base64'],
+                    'cdr_base64' => $respuesta['cdr_base64'],
+                    'fe_estado' => $respuesta['fe_estado'],
+                    'hash' => $respuesta['hash'],
+                    'hash_cdr' => $respuesta['hash_cdr'],
+                    'code_sunat' => $respuesta['code_sunat'],
+                    'clase' => $voided,
+                    'fecha_envio' => Carbon::now(),
+                ]
+            );
+        }
     }
 }
