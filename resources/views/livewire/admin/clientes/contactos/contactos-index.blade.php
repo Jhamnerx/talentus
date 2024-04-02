@@ -170,7 +170,7 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $contacto->birthday }}</div>
+                                    <div class="text-left">{{ $contacto->birthday->format('d-m-Y') }}</div>
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
