@@ -73,7 +73,7 @@
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
         <x-form.inputs.currency id="valor_unitario" name="valor_unitario"
-            prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.valor_unitario" />
+            prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.valor_unitario" precision="4" />
 
     </div>
 

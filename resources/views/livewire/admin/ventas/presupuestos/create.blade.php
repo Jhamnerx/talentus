@@ -326,7 +326,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            S/ <span>{{ round($total_soles, 4) }}</span>
+                                            S/ <span>{{ round($total_soles, 2) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -441,7 +441,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            {{ $simbolo }}<span>{{ round($total, 4) }}</span>
+                                            {{ $simbolo }}<span>{{ round($total, 2) }}</span>
                                         </div>
                                     </div>
                                 </div>

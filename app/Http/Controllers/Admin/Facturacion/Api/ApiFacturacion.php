@@ -608,6 +608,7 @@ class ApiFacturacion extends Controller
                 'nota' => '',
                 'fe_codigo_error' => null,
                 'nombre_xml' => $invoice->getName(),
+                'nombre_cdr' => 'R-' . $invoice->getName(),
                 'xml_base64' => $xml_base64,
                 'cdr_base64' => null,
                 'fe_estado' => 0,

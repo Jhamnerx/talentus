@@ -227,7 +227,7 @@ class Create extends Component
         switch ($producto->tipoAfectacion->codigo_afectacion) {
             case "1000":
 
-                $igv = round(floatval($producto->valor_unitario), 4) *  $this->plantilla->igv;
+                $igv = round(floatval($producto->valor_unitario), 2) *  $this->plantilla->igv;
 
                 return floatval($igv);
             default:
