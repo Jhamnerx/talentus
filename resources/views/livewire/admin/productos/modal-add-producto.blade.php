@@ -134,7 +134,7 @@
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
-        <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00" disabled
+        <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00"
             prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.total" />
 
     </div>
