@@ -135,13 +135,37 @@ class ModalAddProducto extends Component
     //CALCULAR SUB TOTAL DEL ITEM SELECCIONADO
     public function updatedSelected($value, $name)
     {
+        if ($name != 'total') {
+            if ($name == "cantidad" && $value == "") {
+                $this->selected['cantidad'] = 0;
+            }
 
+            $this->calcularMontosProducto();
+        }
+    }
+
+    //CALCULAR SUB TOTAL DEL ITEM SELECCIONADO
+    public function updatedSelectedTotal($value, $name)
+    {
         if ($name == "cantidad" && $value == "") {
-
             $this->selected['cantidad'] = 0;
         }
+        $this->calcularValorUnitario();
+        $this->calcularIgv();
+    }
 
-        $this->calcularMontosProducto();
+    public function calcularValorUnitario()
+    {
+        $this->selected['valor_unitario'] = round(floatval($this->selected['total']) / (1 + $this->plantilla->igv), 4);
+    }
+
+    public function calcularIgv()
+    {
+        if ($this->tipo_afectacion == 10) {
+            $this->selected['igv'] = round(floatval($this->selected['total']) - floatval($this->selected['valor_unitario']), 4);
+        } else {
+            $this->selected['igv'] = 0.00;
+        }
     }
 
 
