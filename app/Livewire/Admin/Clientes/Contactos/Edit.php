@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Clientes\Contactos;
 use Livewire\Component;
 use App\Models\Contactos;
 use App\Http\Requests\ContactosRequest;
+use Carbon\Carbon;
 use Livewire\Attributes\On;
 
 class Edit extends Component
@@ -32,7 +33,7 @@ class Edit extends Component
         $this->cargo = $contacto->cargo;
         $this->telefono = $contacto->telefono;
         $this->email = $contacto->email;
-        $this->birthday = $contacto->birthday;
+        $this->birthday = Carbon::parse($contacto->birthday)->format('Y-m-d');
         $this->is_gerente = $contacto->is_gerente;
         $this->descripcion = $contacto->descripcion;
         $this->contacto = $contacto;

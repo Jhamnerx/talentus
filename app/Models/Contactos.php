@@ -43,6 +43,7 @@ class Contactos extends Model
 
     protected $casts = [
         'is_gerente' => 'boolean',
+        'birthday' => 'date',
 
     ];
 
