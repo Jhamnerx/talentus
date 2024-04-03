@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\MetodoPago;
 use App\Enums\VentasStatus;
 use App\Models\EnvioResumen;
 use App\Models\GuiaRemision;

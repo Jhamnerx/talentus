@@ -7,6 +7,8 @@ use Greenter\See;
 use App\Models\Ventas;
 use App\Models\Empresa;
 use App\Models\plantilla;
+use App\Models\Comprobantes;
+use App\Models\GuiaRemision;
 use Greenter\Report\XmlUtils;
 use Greenter\Report\PdfReport;
 use Greenter\Report\HtmlReport;
@@ -14,13 +16,13 @@ use Greenter\Model\Company\Address;
 use Greenter\Model\Sale\SaleDetail;
 use Psy\Readline\Hoa\FileDirectory;
 use App\Http\Controllers\Controller;
-use App\Models\Comprobantes;
-use App\Models\GuiaRemision;
+use Greenter\Ws\Services\SoapClient;
 use Greenter\Model\DocumentInterface;
 use Illuminate\Support\Facades\Storage;
 use Greenter\Model\Response\CdrResponse;
 use Greenter\Ws\Services\SunatEndpoints;
 use Greenter\XMLSecLibs\Sunat\SignedXml;
+use Greenter\Ws\Services\ConsultCdrService;
 use Greenter\Validator\XmlErrorCodeProvider;
 use Greenter\XMLSecLibs\Certificate\X509Certificate;
 use Greenter\XMLSecLibs\Certificate\X509ContentType;
@@ -152,6 +154,17 @@ class Util extends Controller
 
             return $see;
         }
+    }
+
+    public function getCdrStatusService(): ConsultCdrService
+    {
+        $ws = new SoapClient(SunatEndpoints::FE_CONSULTA_CDR . '?wsdl');
+        $ws->setCredentials(trim($this->plantilla->ruc) . $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
+
+        $service = new ConsultCdrService();
+        $service->setClient($ws);
+
+        return $service;
     }
 
     public function getCompany(): \Greenter\Model\Company\Company

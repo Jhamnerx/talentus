@@ -16,12 +16,12 @@
         </div>
 
         <div class="col-span-12 sm:col-span-3 md:col-span-6">
-            <x-form.input label="CLAVE SOL SUNAT:" wire:model.live='sunat.clave_sol_sunat' />
+            <x-form.inputs.password label="CLAVE SOL SUNAT:" wire:model.live='sunat.clave_sol_sunat' />
 
         </div>
 
         <div class="col-span-12 sm:col-span-3 md:col-span-6">
-            <x-form.input label="CLAVE CERTIFICADO CDT:" wire:model.live='sunat.clave_certificado_cdt' />
+            <x-form.inputs.password label="CLAVE CERTIFICADO CDT:" wire:model.live='sunat.clave_certificado_cdt' />
         </div>
 
         <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
@@ -49,7 +49,7 @@
         </div>
 
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input label="CLAVE:" placeholder='CLAVE' wire:model.live='sunat.guia_secret' />
+            <x-form.inputs.password label="CLAVE:" placeholder='CLAVE' wire:model.live='sunat.guia_secret' />
 
         </div>
 
