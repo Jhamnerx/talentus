@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\PaymentMethods;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Compras extends Model
 {
@@ -50,7 +51,7 @@ class Compras extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(MetodoPago::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo

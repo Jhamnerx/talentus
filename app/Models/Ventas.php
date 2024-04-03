@@ -8,6 +8,7 @@ use App\Models\EnvioResumen;
 use App\Models\GuiaRemision;
 use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
+use App\Models\PaymentMethods;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\EnvioResumenDetalle;
 use Illuminate\Database\Eloquent\Model;
@@ -118,7 +119,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(MetodoPago::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo

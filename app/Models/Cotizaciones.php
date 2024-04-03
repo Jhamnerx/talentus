@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\PaymentMethods;
 use App\Models\CotizacionesDetalle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -57,7 +58,7 @@ class Cotizaciones extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(MetodoPago::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo
