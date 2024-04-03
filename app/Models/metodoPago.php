@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Compras;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,12 +9,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class MetodoPago extends Model
 {
     use HasFactory;
-
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
     protected $guarded = [];
     protected $table = 'metodo_pago';
 

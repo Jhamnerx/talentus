@@ -11,7 +11,6 @@ use App\Models\VentasDetalle;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\EnvioResumenDetalle;
 use Illuminate\Database\Eloquent\Model;
-use Luecano\NumeroALetras\NumeroALetras;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Http\Controllers\Admin\Facturacion\Api\Util;
@@ -22,6 +21,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Ventas extends Model
 {
     use HasFactory;
+
 
     /**
      * The attributes that aren't mass assignable.
@@ -118,7 +118,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\MetodoPago::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(MetodoPago::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo
