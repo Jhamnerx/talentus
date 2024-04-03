@@ -3,8 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\MetodoPago;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\PaymentMethods;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class MetodoPagoSeeder extends Seeder
 {
@@ -107,7 +108,7 @@ class MetodoPagoSeeder extends Seeder
 
         foreach ($metodos as $metodo) {
 
-            MetodoPago::create($metodo);
+            PaymentMethods::create($metodo);
         }
     }
 }
