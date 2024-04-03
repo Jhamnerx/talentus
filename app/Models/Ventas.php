@@ -118,7 +118,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(MetodoPago::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(\App\Models\MetodoPago::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo
