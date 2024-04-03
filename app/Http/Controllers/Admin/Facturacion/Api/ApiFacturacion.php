@@ -34,13 +34,17 @@ use Greenter\Model\Sale\DetailAttribute;
 use Luecano\NumeroALetras\NumeroALetras;
 use Greenter\Model\Despatch\AdditionalDoc;
 use Greenter\Model\Despatch\DespatchDetail;
+use Greenter\Model\Response\StatusCdrResult;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 
+
 class ApiFacturacion extends Controller
 {
+    public $filename = null;
+
     public function emitirInvoice(Ventas $venta, $metodo_type)
     {
 
@@ -983,5 +987,32 @@ class ApiFacturacion extends Controller
                 ]
             );
         }
+    }
+
+
+    public function getStatusCdr(array $fields): ?StatusCdrResult
+    {
+        $util = Util::getInstance();
+
+        $service = $util->getCdrStatusService();
+
+        $arguments = [
+            $fields['ruc'],
+            $fields['tipo'],
+            $fields['serie'],
+            intval($fields['correlativo'])
+        ];
+
+        if (isset($fields['cdr'])) {
+            $result = $service->getStatusCdr(...$arguments);
+            if ($result->getCdrZip()) {
+                $this->filename = 'R-' . implode('-', $arguments) . '.zip';
+                //savedFile($filename, $result->getCdrZip());
+            }
+
+            return $result;
+        }
+
+        return $service->getStatus(...$arguments);
     }
 }
