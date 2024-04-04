@@ -70,7 +70,7 @@ class Emitir extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         //$this->fecha_hora_emision = Carbon::now();
         //$this->fecha_hora_emision = "2023-07-20 11:44:00";
-        $this->fecha_vencimiento = Carbon::now()->addDays(1)->format('Y-m-d');
+        $this->fecha_vencimiento = Carbon::now()->format('Y-m-d');
         // $this->fecha_vencimiento = "2023-07-20 11:44:00";
 
         $this->items = collect();
