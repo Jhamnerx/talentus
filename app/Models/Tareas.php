@@ -8,6 +8,7 @@ use App\Enums\TareasStatus;
 use App\Scopes\EmpresaScope;
 use App\Scopes\OnlyTareasScope;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Scopes\UserScope;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -60,7 +61,7 @@ class Tareas extends Model
 
     public function tipo_tarea()
     {
-        return $this->belongsTo(tipoTareas::class, 'tipo_tarea_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+        return $this->belongsTo(tipoTareas::class, 'tipo_tarea_id')->withTrashed()->withoutGlobalScopes([EmpresaScope::class, UserScope::class]);
     }
 
     public function vehiculo()
