@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\UserScope;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -21,6 +22,12 @@ class tipoTareas extends Model
             ->logUnguarded()
             ->logOnlyDirty();
         // Chain fluent methods for configuration options
+    }
+
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new UserScope);
     }
 
     protected $casts = [
