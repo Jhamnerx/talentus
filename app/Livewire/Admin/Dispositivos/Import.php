@@ -65,7 +65,7 @@ class Import extends Component
 
         try {
 
-            $excel = Excel::import(new DispositivosImport($this->modelo), $this->file);
+            $excel = Excel::import(new DispositivosImport(auth()->user(), $this->modelo), $this->file);
             $this->afterSave();
         } catch (ValidationException $e) {
 

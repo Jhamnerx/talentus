@@ -80,7 +80,7 @@ class Util extends Controller
         } else {
             $see->setService(SunatEndpoints::FE_PRODUCCION);
         }
-
+        dd($see);
         //        $see->setCodeProvider(new XmlErrorCodeProvider());
 
         if (!Storage::disk('facturacion')->exists($ruta_certificado)) {
