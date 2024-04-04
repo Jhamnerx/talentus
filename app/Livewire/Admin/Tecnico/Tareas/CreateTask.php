@@ -24,7 +24,9 @@ class CreateTask extends Component
     public $titulo = '';
     public $ErrorMsgVehiculo;
 
-    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo, $dispositivo_id, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
+    public $tipo_tarea_id = 0, $vehiculos_id, $cliente_id, $dispositivo,
+        $dispositivo_id, $numero, $nuevo_numero, $sim_card,
+        $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
 
 
     public function resetProp()

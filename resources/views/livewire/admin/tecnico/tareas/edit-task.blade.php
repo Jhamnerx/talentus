@@ -188,6 +188,30 @@
         </div>
 
 
+        @role('admin')
+            <div class="col-span-12">
+                <label class="block text-sm font-medium mb-1" for="plataforma">Selecciona El Tecnico:
+                    <span class="text-rose-500">*</span></label>
+                <div class="flex flex-wrap items-center">
+
+                    @foreach ($tecnicos as $tecnico)
+                        <div class="m-3">
+                            <label class="flex items-center">
+                                <input type="radio" name="radio-buttons" class="form-radio"
+                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
+                                <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                            </label>
+                        </div>
+                    @endforeach
+
+                </div>
+                @error('tecnico_id')
+                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+        @endrole
 
 
         @if ($tipo_tarea_id == '0')

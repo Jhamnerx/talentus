@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Tecnico\Tareas;
 
+use App\Models\User;
 use App\Models\Tareas;
 use Livewire\Component;
 use App\Models\Productos;
@@ -19,23 +20,33 @@ class EditTask extends Component
     public $titulo = '';
     public $ErrorMsgVehiculo;
 
-    public $tipo_tarea_id = 2, $placa, $vehiculos_id, $cliente_id, $dispositivo, $dispositivo_id, $numero, $nuevo_numero, $sim_card, $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0;
+    public $tipo_tarea_id = 2, $placa, $vehiculos_id, $cliente_id, $dispositivo,
+        $dispositivo_id, $numero, $nuevo_numero, $sim_card,
+        $nuevo_sim_card, $fecha_hora, $modelo_velocimetro = 0, $tecnico_id;
 
     public Tareas $task;
+
     protected function rules()
     {
-        return [
+        $rules =  [
             'tipo_tarea_id' => 'required|gt:0',
             'vehiculos_id' => 'required',
+            'tecnico_id' => 'required',
             'cliente_id' => 'required',
             'dispositivo' => 'exclude_if:tipo_tarea_id,2|exclude_if:tipo_tarea_id,4|required',
-            'numero' => 'exclude_if:tipo_tarea_id,4|required',
+            'numero' => 'exclude_if:tipo_tarea_id,4|exclude_if:tipo_tarea_id,5|required',
             'nuevo_numero' => 'required_if:tipo_tarea_id,2',
-            'sim_card' => 'exclude_if:tipo_tarea_id,4|required',
+            'sim_card' => 'exclude_if:tipo_tarea_id,4|exclude_if:tipo_tarea_id,5|required',
             'nuevo_sim_card' => 'required_if:tipo_tarea_id,2',
             'modelo_velocimetro' => 'required_if:tipo_tarea_id,4',
             'fecha_hora' => 'required',
         ];
+
+        if (auth()->user()->hasRole('tecnico')) {
+            $rules['tecnico_id'] = 'nullable';
+        }
+
+        return $rules;
     }
 
     protected function messages()
@@ -44,6 +55,7 @@ class EditTask extends Component
             'tipo_tarea_id.required' => 'Selecciona un tarea',
             'tipo_tarea_id.gt' => 'Selecciona una tarea valida',
             'vehiculos_id.required' => 'Selecciona un vehículo',
+            'tecnico_id.required' => 'Selecciona un tecnico',
             'cliente_id.required' => 'Selecciona un vehículo que tenga asignado a un cliente',
             'dispositivo.required' => 'Selecciona un dispositivo',
             'numero.required' => 'Ingresa un número de linea',
@@ -61,9 +73,10 @@ class EditTask extends Component
     public function render()
     {
         $tipo_tareas = tipoTareas::pluck('nombre', 'id');
-
         $velocimetros = Productos::velocimetro()->get();
-        return view('livewire.admin.tecnico.tareas.edit-task', compact('tipo_tareas', 'velocimetros'));
+        $tecnicos = User::role('tecnico')->get();
+
+        return view('livewire.admin.tecnico.tareas.edit-task', compact('tipo_tareas', 'velocimetros', 'tecnicos'));
     }
 
     public function openModal(Tareas $task)
@@ -85,6 +98,7 @@ class EditTask extends Component
         $this->nuevo_sim_card = $task->nuevo_sim_card;
         $this->fecha_hora = $task->fecha_hora->format('Y-m-d h:i');
         $this->titulo = $task->tipo_tarea->nombre;
+        $this->tecnico_id = $task->tecnico_id;
 
         //$this->dispatch('put-items', ['dispositivo' => $task->dispositivo]);
     }
