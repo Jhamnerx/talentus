@@ -16,6 +16,6 @@ class LoginResponse implements LoginResponseContract
 
         return $request->wantsJson()
             ? response()->json(['two_factor' => false])
-            : redirect()->route($role[0]->route_redirect);
+            : redirect()->route($role[0]->route_redirect ? $role[0]->route_redirect : 'admin.home');
     }
 }

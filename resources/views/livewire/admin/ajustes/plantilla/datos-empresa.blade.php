@@ -81,11 +81,14 @@
             <div class="flex flex-auto gap-2 mx-4 py-2 col-span-12">
                 <div class=""></div>
                 <div class="w-full">
-                    <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
-                        class="float-right" />
+                    @can('admin.settings.plantilla.informacion.edit')
+                        <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
+                            class="float-right" />
+                    @endcan
                 </div>
             </div>
             @if ($terminos->isEmpty())
+
                 <div class="col-span-12">
                     <span class="w-full text-red-500">Agregar Terminos</span>
                 </div>
@@ -100,16 +103,17 @@
                                     wire:model.live='terminos.{{ $clave }}' />
 
                             </div>
-
-                            <button type="button" wire:click.prevent="eliminar('{{ $clave }}')"
-                                class="text-rose-500 hover:text-rose-600 rounded-full">
-                                <span class="sr-only">Eliminar</span>
-                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                    <path
-                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                </svg>
-                            </button>
+                            @can('admin.settings.plantilla.informacion.edit')
+                                <button type="button" wire:click.prevent="eliminar('{{ $clave }}')"
+                                    class="text-rose-500 hover:text-rose-600 rounded-full">
+                                    <span class="sr-only">Eliminar</span>
+                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                        <path
+                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                    </svg>
+                                </button>
+                            @endcan
                         </div>
                     </div>
                 @endforeach

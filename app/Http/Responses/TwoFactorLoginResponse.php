@@ -22,6 +22,6 @@ class TwoFactorLoginResponse implements TwoFactorLoginResponseContract
 
         return $request->wantsJson()
             ? new JsonResponse('', 204)
-            : redirect()->route($role[0]->route_redirect);
+            : redirect()->route($role[0]->route_redirect ? $role[0]->route_redirect : 'admin.home');
     }
 }
