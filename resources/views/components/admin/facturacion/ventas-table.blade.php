@@ -31,6 +31,9 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ESTADO</div>
                         </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">ESTADO PAGO</div>
+                        </th>
                         @can('comprobantes-descargar-pdf')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">PDF</div>
@@ -192,6 +195,23 @@
                                     class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5 {{ $venta->estado->statusColor() }}">
                                     {{ $venta->estado->name }}
                                 </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @switch($venta->pago_estado)
+                                    @case('UNPAID')
+                                        <div
+                                            class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
+                                            Por Pagar</div>
+                                    @break
+
+                                    @case('PAID')
+                                        <div
+                                            class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                            Pagado</div>
+                                    @break
+                                @endswitch
+
+
                             </td>
                             @can('comprobantes-descargar-pdf')
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
