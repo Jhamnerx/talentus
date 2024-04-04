@@ -10,7 +10,7 @@ use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 class ConsultaCdr extends Component
 {
 
-    public $openModal = true;
+    public $openModal = false;
     public $plantilla;
     public $resultado;
     public $filename;
