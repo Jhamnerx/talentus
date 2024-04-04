@@ -74,14 +74,15 @@ class Util extends Controller
         $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
 
         $see = new See();
-        if ($this->plantilla->modo = 'local') {
+
+        if ($this->plantilla->modo == 'local') {
 
             $see->setService(SunatEndpoints::FE_BETA);
         } else {
             $see->setService(SunatEndpoints::FE_PRODUCCION);
         }
-        dd($see);
-        //        $see->setCodeProvider(new XmlErrorCodeProvider());
+
+        //$see->setCodeProvider(new XmlErrorCodeProvider());
 
         if (!Storage::disk('facturacion')->exists($ruta_certificado)) {
             throw new Exception('No se pudo cargar el certificado');
@@ -105,7 +106,7 @@ class Util extends Controller
         $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
 
 
-        if ($this->plantilla->modo = 'local') {
+        if ($this->plantilla->modo == 'local') {
 
             $api = new \Greenter\Api([
                 'auth' => 'https://gre-test.nubefact.com/v1',
