@@ -13,38 +13,45 @@ class PermisosUpdateSeeder extends Seeder
      */
     public function run(): void
     {
+        // $permisos = [
+        //     //VEHICULOS
+        //     'exportar.vehiculos-vehiculos',
+        //     'importar-vehiculos-vehiculos',
+
+        //     'show-vehiculos-vehiculos',
+        //     'ver-mantenimientos-vehiculos',
+        //     'crear-mantenimientos-vehiculos',
+        //     'editar-mantenimientos-vehiculos',
+        //     'eliminar-mantenimientos-vehiculos',
+        //     'task-mantenimientos-vehiculos',
+        //     'mark-mantenimientos-vehiculos',
+        //     'exportar-mantenimientos-vehiculos',
+
+
+        //     //COMPROBANTES
+        //     'ver-comprobantes',
+        //     'comprobantes-emitir-factura',
+        //     'comprobantes-emitir-boleta',
+        //     'comprobantes-emitir-nota-venta',
+        //     'comprobantes-emitir-nota-credito',
+        //     'comprobantes-emitir-nota-debito',
+        //     'comprobantes-descargar-pdf',
+        //     'comprobantes-descargar-xml',
+        //     'comprobantes-ver-nota-credito',
+        //     'comprobantes-ver-nota-debito',
+        //     'comprobantes-nota-credito-pdf',
+        //     'comprobantes-nota-credito-xml',
+        //     'comprobantes-nota-debito-pdf',
+        //     'comprobantes-nota-debito-xml',
+
+        //     'convertir-recibos',
+        // ];
+
         $permisos = [
-            //VEHICULOS
-            'exportar.vehiculos-vehiculos',
-            'importar-vehiculos-vehiculos',
-
-            'show-vehiculos-vehiculos',
-            'ver-mantenimientos-vehiculos',
-            'crear-mantenimientos-vehiculos',
-            'editar-mantenimientos-vehiculos',
-            'eliminar-mantenimientos-vehiculos',
-            'task-mantenimientos-vehiculos',
-            'mark-mantenimientos-vehiculos',
-            'exportar-mantenimientos-vehiculos',
-
-
-            //COMPROBANTES
-            'ver-comprobantes',
-            'comprobantes-emitir-factura',
-            'comprobantes-emitir-boleta',
-            'comprobantes-emitir-nota-venta',
-            'comprobantes-emitir-nota-credito',
-            'comprobantes-emitir-nota-debito',
-            'comprobantes-descargar-pdf',
-            'comprobantes-descargar-xml',
-            'comprobantes-ver-nota-credito',
-            'comprobantes-ver-nota-debito',
-            'comprobantes-nota-credito-pdf',
-            'comprobantes-nota-credito-xml',
-            'comprobantes-nota-debito-pdf',
-            'comprobantes-nota-debito-xml',
-
-            'convertir-recibos',
+            'comprobantes-volver-crear',
+            'comprobantes-anular',
+            'comprobantes-enviar-correo',
+            'comprobantes-cambiar-estado',
         ];
 
         foreach ($permisos as $permiso) {

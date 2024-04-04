@@ -804,13 +804,14 @@
                                 <div class=" text-center space-x-1">
                                     <x-form.dropdown class="w-60">
 
-                                        <x-form.dropdown.item label="Volver a crear" />
+                                        <x-form.dropdown.item icon='plus-sm' label="Volver a crear" />
+                                        <x-form.dropdown.item icon='mail' label="Enviar a cliente" />
 
                                         @if ($venta->tipo_comprobante_id == '01')
                                             @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA')
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='anularComprobante({{ $venta->id }})'
-                                                    separator label="Anular comprobante" />
+                                                    icon='minus-circle' separator label="Anular comprobante" />
                                             @endif
 
                                             @if (!$venta->envioResumen && $venta->anulado == 'si')
@@ -818,7 +819,7 @@
                                                     icon="refresh" label="Volver a enviar" />
                                             @endif
 
-                                            @if ($venta->anulado == 'si' && $venta->envioResumen)
+                                            @if ($venta->anulado == 'si' && $venta->envioResumen == true)
                                                 <x-form.dropdown.header label="Comunicación de baja">
 
                                                     <x-form.dropdown.item icon="document" target="_blank"

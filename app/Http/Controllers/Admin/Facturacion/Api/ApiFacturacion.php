@@ -118,7 +118,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($nota->total, 2, 'soles'))
+                    ->setValue($formatter->toInvoice($nota->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
 
@@ -198,7 +198,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($nota->total, 2, 'soles'))
+                    ->setValue($formatter->toInvoice($nota->total, 2, $nota->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
 
@@ -316,7 +316,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
         // Envio a SUNAT.
@@ -426,7 +426,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
         // Envio a SUNAT.
@@ -595,7 +595,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, 'soles'))
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
         //FIRMADO Y GUARDADO DEL XML
