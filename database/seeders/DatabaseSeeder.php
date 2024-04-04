@@ -80,8 +80,8 @@ class DatabaseSeeder extends Seeder
         // $this->call(tipoComprobanteSeeder::class);
         // $this->call(tipoDocumentosSeeder::class);
         // $this->call(UbigeosSeeder::class);
-        $this->call(SerieSeeder::class);
+        // $this->call(SerieSeeder::class);
         // $this->call(ClientesSeeder::class);
-        // $this->call(PermisosUpdateSeeder::class);
+        $this->call(PermisosUpdateSeeder::class);
     }
 }

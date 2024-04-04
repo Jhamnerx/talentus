@@ -31,6 +31,9 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ESTADO</div>
                         </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">ESTADO PAGO</div>
+                        </th>
                         @can('comprobantes-descargar-pdf')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">PDF</div>
@@ -192,6 +195,23 @@
                                     class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5 {{ $venta->estado->statusColor() }}">
                                     {{ $venta->estado->name }}
                                 </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                @switch($venta->pago_estado)
+                                    @case('UNPAID')
+                                        <div
+                                            class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
+                                            Por Pagar</div>
+                                    @break
+
+                                    @case('PAID')
+                                        <div
+                                            class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                            Pagado</div>
+                                    @break
+                                @endswitch
+
+
                             </td>
                             @can('comprobantes-descargar-pdf')
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
@@ -771,9 +791,6 @@
                                                 </div>
                                             </div>
                                         @endif
-
-
-
                                     </div>
                                 @else
                                     <div class="space-x-1">
@@ -785,13 +802,16 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
 
                                 <div class=" text-center space-x-1">
-                                    <x-form.dropdown>
-                                        <x-form.dropdown.item label="Volver a crear" />
+                                    <x-form.dropdown class="w-60">
+
+                                        <x-form.dropdown.item icon='plus-sm' label="Volver a crear" />
+                                        <x-form.dropdown.item icon='mail' label="Enviar a cliente" />
+
                                         @if ($venta->tipo_comprobante_id == '01')
                                             @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA')
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='anularComprobante({{ $venta->id }})'
-                                                    separator label="Anular comprobante" />
+                                                    icon='minus-circle' separator label="Anular comprobante" />
                                             @endif
 
                                             @if (!$venta->envioResumen && $venta->anulado == 'si')
@@ -799,7 +819,7 @@
                                                     icon="refresh" label="Volver a enviar" />
                                             @endif
 
-                                            @if ($venta->anulado == 'si' && $venta->envioResumen)
+                                            @if ($venta->anulado == 'si' && $venta->envioResumen == true)
                                                 <x-form.dropdown.header label="Comunicación de baja">
 
                                                     <x-form.dropdown.item icon="document" target="_blank"
@@ -822,10 +842,27 @@
                                                             'id' => $venta->envioResumen->id,
                                                             'envio_resumen' => $venta->envioResumen,
                                                         ]) }}" />
+
+
                                                 </x-form.dropdown.header>
                                             @endif
                                         @endif
 
+                                        @if ($venta->pago_estado == 'PAID')
+                                            <x-form.dropdown.item disabled="true"
+                                                wire:click.prevent='markPaid({{ $venta->id }})'
+                                                icon="check-circle" label="Marcar como Pagada" />
+
+                                            <x-form.dropdown.item wire:click.prevent='markUnPaid({{ $venta->id }})'
+                                                icon="x" label="Marcar como No Pagada" />
+                                        @else
+                                            <x-form.dropdown.item wire:click.prevent='markPaid({{ $venta->id }})'
+                                                icon="check-circle" label="Marcar como Pagada" />
+
+                                            <x-form.dropdown.item disabled="true"
+                                                wire:click.prevent='markUnPaid({{ $venta->id }})' icon="x"
+                                                label="Marcar como No Pagada" />
+                                        @endif
 
                                     </x-form.dropdown>
                                 </div>
