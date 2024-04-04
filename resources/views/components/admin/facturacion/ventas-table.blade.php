@@ -771,9 +771,6 @@
                                                 </div>
                                             </div>
                                         @endif
-
-
-
                                     </div>
                                 @else
                                     <div class="space-x-1">
@@ -785,8 +782,10 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
 
                                 <div class=" text-center space-x-1">
-                                    <x-form.dropdown>
+                                    <x-form.dropdown class="w-60">
+
                                         <x-form.dropdown.item label="Volver a crear" />
+
                                         @if ($venta->tipo_comprobante_id == '01')
                                             @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA')
                                                 <x-form.dropdown.item
@@ -822,10 +821,27 @@
                                                             'id' => $venta->envioResumen->id,
                                                             'envio_resumen' => $venta->envioResumen,
                                                         ]) }}" />
+
+
                                                 </x-form.dropdown.header>
                                             @endif
                                         @endif
 
+                                        @if ($venta->pago_estado == 'PAID')
+                                            <x-form.dropdown.item disabled="true"
+                                                wire:click.prevent='markPaid({{ $venta->id }})'
+                                                icon="check-circle" label="Marcar como Pagada" />
+
+                                            <x-form.dropdown.item wire:click.prevent='markUnPaid({{ $venta->id }})'
+                                                icon="x" label="Marcar como No Pagada" />
+                                        @else
+                                            <x-form.dropdown.item wire:click.prevent='markPaid({{ $venta->id }})'
+                                                icon="check-circle" label="Marcar como Pagada" />
+
+                                            <x-form.dropdown.item disabled="true"
+                                                wire:click.prevent='markUnPaid({{ $venta->id }})' icon="x"
+                                                label="Marcar como No Pagada" />
+                                        @endif
 
                                     </x-form.dropdown>
                                 </div>

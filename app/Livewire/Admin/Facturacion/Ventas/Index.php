@@ -104,4 +104,39 @@ class Index extends Component
 
         $this->dispatch('open-modal-anular', invoice: $venta);
     }
+
+
+    public function markPaid(Ventas $venta)
+    {
+
+        $venta->update([
+            'pago_estado' => 'PAID',
+        ]);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'MARCADO COMO PAGADO',
+            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como pagada',
+        );
+
+        $this->render();
+    }
+
+    public function markUnPaid(Ventas $venta)
+    {
+
+        $venta->update([
+            'pago_estado' => 'UNPAID',
+        ]);
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            title: 'MARCADO COMO NO PAGADO',
+            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como no pagada',
+        );
+
+        $this->render();
+    }
 }

@@ -96,6 +96,7 @@ class RecibosIndex extends Component
 
         $this->render();
     }
+
     public function markUnPaid(Recibos $recibo)
     {
 
