@@ -80,7 +80,7 @@
         </div>
 
         {{-- PROFILE BODY --}}
-        <div class="bg-white grow flex flex-col md:translate-x-0 transform transition-transform duration-300 ease-in-out"
+        {{-- <div class="bg-white grow flex flex-col md:translate-x-0 transform transition-transform duration-300 ease-in-out"
             :class="profileSidebarOpen ? 'translate-x-1/3' : 'translate-x-0'">
 
             <!-- Profile background -->
@@ -440,7 +440,7 @@
                         </div>
                         <div class="text-sm">
                             <h3 class="font-medium text-slate-800">Cumpleaños</h3>
-                            <div>{{ $user->birthday->format('d F, Y') }}</div>
+                            <div>{{ $user->birthday ? $user->birthday->format('d F, Y') : '' }}</div>
                         </div>
                         <div class="text-sm">
                             <h3 class="font-medium text-slate-800">Inicio Laboral</h3>
@@ -452,7 +452,7 @@
 
             </div>
 
-        </div>
+        </div> --}}
     </div>
 @stop
 
