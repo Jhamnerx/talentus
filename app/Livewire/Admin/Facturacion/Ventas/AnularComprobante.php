@@ -117,7 +117,7 @@ class AnularComprobante extends Component
     public function afterError($resumen, $mensaje)
     {
         $this->invoice->update([
-            'anulado' => 'si',
+            'anulado' => 'no',
             'id_baja' => $resumen->id
         ]);
 

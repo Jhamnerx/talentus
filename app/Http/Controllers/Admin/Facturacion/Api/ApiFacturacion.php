@@ -919,6 +919,7 @@ class ApiFacturacion extends Controller
 
         if (!$res->isSuccess()) {
             $msg =  $util->getErrorResponse($res->getError());
+            $this->actualizarResumen($resumen, $msg, $voided, 'update');
             return $msg;
         }
 
@@ -933,6 +934,31 @@ class ApiFacturacion extends Controller
         $this->actualizarResumen($resumen, $respuesta, $voided, 'update');
         return $respuesta;
         // dd($respuesta);
+    }
+
+    public function consultaTicketAnulacion($resumen)
+    {
+        $util = Util::getInstance();
+
+        $see = $util->getSee();
+
+        $res = $see->getStatus($resumen->ticket);
+
+        if (!$res->isSuccess()) {
+            $msg =  $util->getErrorResponse($res->getError());
+            return $msg;
+        }
+
+        $cdr = $res->getCdrResponse();
+
+        //Guardar CDR recibido
+        $util->writeCdr($resumen->clase, $res->getCdrZip());
+
+        $respuesta = $util->showResponse($resumen->clase, $cdr);
+        dd($respuesta);
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'update');
+        return $respuesta;
     }
 
 
