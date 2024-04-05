@@ -244,55 +244,51 @@ class Create extends Component
     #[On('add-producto-selected')]
     function addProducto($selected)
     {
-
         try {
+            // if ($this->items->contains('producto_id', $selected["producto_id"])) {
+            //     $this->dispatch(
+            //         'notify-toast',
+            //         icon: 'error',
+            //         title: 'YA ESTA AÑADIDO',
+            //         mensaje: 'El producto o servicio ya esta en el carrito'
+            //     );
+            // } else {
 
-            if ($this->items->contains('producto_id', $selected["producto_id"])) {
+            $this->items->push([
+                'producto_id' => $selected["producto_id"],
+                'codigo' => $selected["codigo"],
+                'cantidad' => $selected["cantidad"],
+                'unit' => $selected["unit"],
+                'unit_name' => $selected["unit_name"],
+                'producto' => $selected["producto"],
+                'descripcion' => $selected["descripcion"],
+                'valor_unitario' => $selected["valor_unitario"],
+                'precio_unitario' => $selected["precio_unitario"],
+                'igv' => $selected["igv"],
+                'porcentaje_igv' => $selected["porcentaje_igv"],
+                'icbper' => $selected["icbper"],
+                'total_icbper' => $selected["total_icbper"],
+                'sub_total' => $selected["valor_unitario"] * $selected["cantidad"],
+                'total' => $selected["total"],
+                'codigo_afectacion' => $selected["codigo_afectacion"],
+                'afecto_icbper' => $selected["afecto_icbper"],
+            ]);
 
+            //ENVIAR EVENTO PARA REINICIAR PRODUCTO SELECCIONADO EN MODAL
+            $this->dispatch('reset-selected');
 
-                $this->dispatch(
-                    'notify-toast',
-                    icon: 'error',
-                    title: 'YA ESTA AÑADIDO',
-                    mensaje: 'El producto o servicio ya esta en el carrito'
-                );
-            } else {
+            //  CALCULAR TOTALES AL AÑADIR PRODUCTO
+            $this->reCalTotal();
 
-                $this->items->push([
-                    'producto_id' => $selected["producto_id"],
-                    'codigo' => $selected["codigo"],
-                    'cantidad' => $selected["cantidad"],
-                    'unit' => $selected["unit"],
-                    'unit_name' => $selected["unit_name"],
-                    'producto' => $selected["producto"],
-                    'descripcion' => $selected["descripcion"],
-                    'valor_unitario' => $selected["valor_unitario"],
-                    'precio_unitario' => $selected["precio_unitario"],
-                    'igv' => $selected["igv"],
-                    'porcentaje_igv' => $selected["porcentaje_igv"],
-                    'icbper' => $selected["icbper"],
-                    'total_icbper' => $selected["total_icbper"],
-                    'sub_total' => $selected["valor_unitario"] * $selected["cantidad"],
-                    'total' => $selected["total"],
-                    'codigo_afectacion' => $selected["codigo_afectacion"],
-                    'afecto_icbper' => $selected["afecto_icbper"],
-                ]);
-
-                //ENVIAR EVENTO PARA REINICIAR PRODUCTO SELECCIONADO EN MODAL
-                $this->dispatch('reset-selected');
-
-                //  CALCULAR TOTALES AL AÑADIR PRODUCTO
-                $this->reCalTotal();
-
-                //$this->dispatchBrowserEvent('add-producto');
-                $this->calcularCuotas($this->numero_cuotas);
-            }
+            //$this->dispatchBrowserEvent('add-producto');
+            $this->calcularCuotas($this->numero_cuotas);
+            // }
         } catch (\Exception $e) {
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR AL AÑADIR',
-                mensaje: 'Error: ' . $e->getMessage(),
+                title: 'ERROR AL AÑADIR PRODUCTO',
+                mensaje: $e->getMessage()
             );
         }
     }
