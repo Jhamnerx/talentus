@@ -955,7 +955,6 @@ class ApiFacturacion extends Controller
         $util->writeCdr($resumen->clase, $res->getCdrZip());
 
         $respuesta = $util->showResponse($resumen->clase, $cdr);
-        dd($respuesta);
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'update');
         return $respuesta;
