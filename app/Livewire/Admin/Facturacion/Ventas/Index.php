@@ -142,7 +142,7 @@ class Index extends Component
             'notify-toast',
             icon: 'success',
             title: 'MARCADO COMO PAGADO',
-            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como pagada',
+            mensaje: 'La venta ' . $venta->serie_correlativo . ' ha sido marcada como pagada',
         );
 
         $this->render();
@@ -159,7 +159,7 @@ class Index extends Component
             'notify-toast',
             icon: 'error',
             title: 'MARCADO COMO NO PAGADO',
-            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como no pagada',
+            mensaje: 'La venta ' . $venta->serie_correlativo . ' ha sido marcada como no pagada',
         );
 
         $this->render();
