@@ -13,8 +13,7 @@
                 'name' => 'user-option',
                 'config' => ['src' => 'imagen'],
             ]"
-            :always-fetch="true" x-on:selected="$wire.prueba()">
-
+            :always-fetch="true">
         </x-form.select>
 
     </div>
@@ -34,7 +33,6 @@
         <label for="cantidad">Cantidad:</label>
 
     </div>
-
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
@@ -68,7 +66,6 @@
 
         <label for="valor_unitario">Valor Unitario:</label>
     </div>
-
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
@@ -138,7 +135,6 @@
             prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.total" />
 
     </div>
-
 
 </x-admin.facturacion.form-modal-w-buttons>
 

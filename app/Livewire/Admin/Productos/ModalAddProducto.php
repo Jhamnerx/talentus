@@ -70,10 +70,6 @@ class ModalAddProducto extends Component
     }
     //BUSCAR PRODUCTO SELECCIONADO Y AÑADIRLO
 
-    public function prueba()
-    {
-    }
-
     function updatedProductSelectedId($id)
     {
 
@@ -167,9 +163,6 @@ class ModalAddProducto extends Component
             $this->selected['igv'] = 0.00;
         }
     }
-
-
-
 
     public function calcularMontosProducto()
     {
