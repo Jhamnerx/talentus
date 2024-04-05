@@ -91,26 +91,25 @@ class Index extends Component
 
     public function getCdrAnulacion(EnvioResumen $resumen)
     {
-        // try {
-        $api = new ApiFacturacion();
-        $mensaje =  $api->consultaTicketAnulacion($resumen);
+        try {
+            $api = new ApiFacturacion();
+            $mensaje =  $api->consultaTicketAnulacion($resumen);
 
-        dd($mensaje);
-        if ($mensaje['fe_codigo_error']) {
+            if ($mensaje['fe_codigo_error']) {
 
-            $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
-        } else {
+                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
+            } else {
 
-            $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+            }
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
         }
-        // } catch (\Throwable $th) {
-        //     $this->dispatch(
-        //         'notify-toast',
-        //         icon: 'error',
-        //         title: 'ERROR: ',
-        //         mensaje: $th->getMessage(),
-        //     );
-        // }
     }
 
     public function afterGetCdr($mensaje, $titulo, $icono)
