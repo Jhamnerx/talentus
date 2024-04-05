@@ -45,7 +45,6 @@ class Index extends Component
     public function openDetallePanel(GuiaRemision $guia)
     {
         $this->dispatch('open-detalle-panel', $guia);
-        $this->setDetalleOpen();
     }
 
 
