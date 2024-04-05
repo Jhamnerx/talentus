@@ -514,14 +514,6 @@
                                 <div>
                                     <div class="text-sm">
                                         {{ $reporte->vehiculos->cliente ? $reporte->vehiculos->cliente->direccion : '' }}
-                                        @if ($reporte->vehiculos->cliente)
-                                            <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                                href="{{ route('admin.clientes.edit', $reporte->vehiculos->cliente) }}">#Editar</a>
-                                        @else
-                                            <a class="font-medium text-indigo-400 hover:text-indigo-600"
-                                                href="javascript: void(0)">#Editar</a>
-                                        @endif
-
                                     </div>
                                 </div>
                             @endcan

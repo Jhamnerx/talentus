@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Clientes;
 use App\Models\Clientes;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ClientesIndex extends Component
 {
     use WithPagination;
@@ -16,6 +17,7 @@ class ClientesIndex extends Component
     protected $listeners = [
         'render' => 'render',
         'updateTable' => 'render',
+        'update-table' => 'render',
         'echo:clientes,ClientesImportUpdated' => 'updateClientes'
     ];
 
@@ -65,8 +67,9 @@ class ClientesIndex extends Component
         return view('livewire.admin.clientes.clientes-index', compact('clientes'));
     }
 
-    public function updateClientes(){
-        
+    public function updateClientes()
+    {
+
         $this->render();
         $this->dispatch('clientes-import');
     }
@@ -97,9 +100,14 @@ class ClientesIndex extends Component
         }
     }
 
-    public function openModalImport(){
+    public function openModalImport()
+    {
 
         $this->dispatch('openModalImport');
+    }
 
+    public function openModalSave()
+    {
+        $this->dispatch('open-modal-save');
     }
 }

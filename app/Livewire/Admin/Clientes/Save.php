@@ -14,7 +14,7 @@ class Save extends Component
 
     public $modalSave = false;
 
-    public $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
+    public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
     public $errorConsulta;
 
@@ -33,14 +33,21 @@ class Save extends Component
     protected function rules()
     {
         return [
+            'tipo_documento_id' => 'required',
             'razon_social' => 'required',
+            'direccion' => 'nullable',
+            'web_site' => 'nullable',
             'telefono' => 'nullable|digits_between:6,9|numeric',
             'email' => 'email|nullable',
             'numero_documento' => [
                 'required',
-                'min:8',
+                'min:6',
                 'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('clientes', 'numero_documento')->where(
+                    fn ($query) =>
+                    $query->where('empresa_id', session('empresa'))
+                        ->where('is_active', 1)
+                )
             ],
         ];
     }
@@ -112,26 +119,42 @@ class Save extends Component
         }
     }
 
-
-    public function saveCliente()
+    public function save()
     {
+        $data = $this->validate();
 
-        $this->validate();
+        try {
+            $cliente = Clientes::create($data);
+            $this->afterSave($cliente);
+        } catch (\Throwable $th) {
 
-        Clientes::create([
-            'razon_social' => $this->razon_social,
-            'numero_documento' => $this->numero_documento,
-            'telefono' => $this->telefono,
-            'direccion' => $this->direccion,
-            'web_site' => $this->web_site,
-        ]);
-
-        $this->dispatch('save-cliente', ['razon_social' => $this->razon_social]);
-
-        $this->closeModal();
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
+    public function afterSave($cliente)
+    {
+        $this->closeModal();
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            title: 'CLIENTE GUARDADO',
+            mensaje: 'El cliente ' . $cliente->razon_social . ' fue registrado correctamente'
+        );
 
+        $this->dispatch('update-table');
+        $this->resetProp();
+    }
+
+    public function resetProp()
+    {
+        $this->reset('tipo_documento_id', 'numero_documento', 'razon_social', 'telefono', 'email', 'web_site', 'direccion');
+    }
 
     public function updated($value)
     {
@@ -144,8 +167,8 @@ class Save extends Component
         $this->reset('numero_documento', 'razon_social', 'telefono', 'direccion', 'web_site');
     }
 
-    #[On('open-modal-save-cliente')]
-    public function openModalSaveCliente($busqueda)
+    #[On(['open-modal-save-cliente', 'open-modal-save'])]
+    public function openModalSaveCliente($busqueda = null)
     {
         $this->razon_social = $busqueda;
         $this->modalSave = true;

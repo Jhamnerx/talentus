@@ -5,6 +5,7 @@
     <!-- Table -->
     @livewire('admin.clientes.clientes-index')
     @livewire('admin.clientes.import')
+    @livewire('admin.clientes.save')
 
 @stop
 
