@@ -22,7 +22,6 @@
                     <table class="v100 tabla_cuotas">
                         <tbody>
 
-
                             @if (count($venta['detalle_cuotas']) > 0 && count($venta['detalle_cuotas']) <= 3)
                                 <tr>
                                     @for ($i = 0; $i < count($venta['detalle_cuotas']); $i++)
@@ -36,9 +35,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -61,9 +60,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -83,9 +82,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -107,9 +106,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -129,9 +128,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -150,9 +149,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -176,9 +175,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -198,9 +197,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -219,9 +218,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -240,9 +239,9 @@
 
                                                     </tr>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>12/02/2032</td>
-                                                        <td>100</td>
+                                                        <td>{{ $i + 1 }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
+                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
