@@ -4,11 +4,15 @@
 
     <!-- Table -->
     @livewire('admin.clientes.clientes-index')
+
+@stop
+
+@push('modals')
     @livewire('admin.clientes.import')
     @livewire('admin.clientes.save')
     @livewire('admin.clientes.edit')
-
-@stop
+    @livewire('admin.clientes.delete')
+@endpush
 
 @section('js')
 

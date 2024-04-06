@@ -58,7 +58,7 @@
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
+                <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
@@ -295,17 +295,30 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                    <div class="text-left font-medium text-emerald-500">{{ $cliente->direccion }}
+                                    <div class="text-left font-medium text-emerald-500">
+                                        {{ $cliente->direccion }}
                                     </div>
                                 </td>
+
                                 @can('cambiar.estado-cliente')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
+                                        <div class="text-center">
+                                            <div class="m-3 w-48">
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $cliente->is_active ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Activo: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleStatus({{ $cliente->id }})"
+                                                            type="checkbox" id="switch-f{{ $cliente->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400" for="switch-f{{ $cliente->id }}">
+                                                            <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ACTIVO' : 'INACTIVO'"></div>
+                                                </div>
 
-
-                                                @livewire('admin.clientes.change-status', ['model' => $cliente, 'field' => 'is_active'], key('active' . $cliente->id))
-                                                <!-- End -->
                                             </div>
                                         </div>
                                     </td>
@@ -326,7 +339,7 @@
                                         @endcan
 
                                         @can('eliminar-cliente')
-                                            <button @click.prevent="modalOpen = true" aria-controls="danger-modal"
+                                            <button wire:click.prevent='openModalDelete({{ $cliente->id }})'
                                                 class="text-rose-500 hover:text-rose-600 rounded-full">
                                                 <span class="sr-only">Eliminar</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
@@ -336,11 +349,6 @@
                                                 </svg>
                                             </button>
                                         @endcan
-
-                                        {{-- @livewire('admin.clientes.delete', ['model' => $cliente], key('delete' . $cliente->id)) --}}
-
-
-
                                     </div>
                                 </td>
                             </tr>

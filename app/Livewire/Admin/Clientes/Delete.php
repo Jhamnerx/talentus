@@ -2,27 +2,57 @@
 
 namespace App\Livewire\Admin\Clientes;
 
-use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
+use App\Models\Clientes;
+use Livewire\Attributes\On;
+use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Component
 {
 
-    public Model $model;
-
-
-    public $field = "eliminado";
-
-    public $eliminado;
+    public Clientes $cliente;
+    public $modalDelete = false;
 
     public function delete()
     {
-        $this->model->delete();
-        return redirect()->route('admin.clientes.index')->with('delete', 'El cliente se elimino con exito');
-        $this->dispatch('clientes-delete', ['delete' => $this->model]);
-
-        $this->dispatch('updateTable');
+        try {
+            $this->cliente->delete();
+            $this->afterDelete();
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
+
+    #[On('open-modal-delete')]
+    public function openModal(Clientes $cliente)
+    {
+        $this->cliente = $cliente;
+        $this->modalDelete = true;
+    }
+
+    public function closeModal()
+    {
+
+        $this->modalDelete = false;
+    }
+
+    public function afterDelete()
+    {
+        $this->closeModal();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            title: 'CLIENTES ELIMINADO',
+            mensaje: 'se elimino correctamente el cliente'
+        );
+        $this->dispatch('update-table');
+    }
+
     public function render()
     {
         return view('livewire.admin.clientes.delete');

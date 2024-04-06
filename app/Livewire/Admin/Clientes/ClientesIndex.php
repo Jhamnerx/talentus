@@ -115,4 +115,15 @@ class ClientesIndex extends Component
     {
         $this->dispatch('open-modal-edit', cliente: $cliente);
     }
+
+    public function openModalDelete(Clientes $cliente)
+    {
+        $this->dispatch('open-modal-delete', cliente: $cliente);
+    }
+
+    public function toggleStatus(Clientes $cliente)
+    {
+        $cliente->is_active = !$cliente->is_active; // Cambia el estado del toggle
+        $cliente->save(); // Guarda el cambio en el modelo
+    }
 }
