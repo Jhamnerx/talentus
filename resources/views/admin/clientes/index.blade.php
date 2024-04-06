@@ -6,6 +6,7 @@
     @livewire('admin.clientes.clientes-index')
     @livewire('admin.clientes.import')
     @livewire('admin.clientes.save')
+    @livewire('admin.clientes.edit')
 
 @stop
 
