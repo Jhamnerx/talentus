@@ -175,7 +175,7 @@ class Ventas extends Model
 
         $html = $util->getPdf($this);
         //return $html;
-        $pdf = Pdf::loadHTML($html);
+        $pdf = Pdf::loadHTML($html)->setPaper('Legal');
         return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
     }
 
