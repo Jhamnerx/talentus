@@ -380,7 +380,7 @@ class Util extends Controller
             ]
         ];
 
-        if ($venta->forma_pago == 'Credito') {
+        if ($venta->forma_pago == 'CREDITO') {
 
             $params['user']['cuotas'] = view('templates.comprobantes.cuotas', ['venta' => $venta->toArray()]);
         }
