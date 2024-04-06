@@ -94,11 +94,11 @@ Route::controller(GuiaRemisionController::class)->group(function () {
 Route::controller(ClientesController::class)->group(function () {
 
     Route::get('clientes', 'index')->name('admin.clientes.index');
-    Route::post('clientes', 'store')->name('admin.clientes.store');
-    Route::get('clientes/crear', 'create')->name('admin.clientes.create');
-    Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
-    Route::put('clientes/{cliente}', 'update')->name('admin.clientes.updated');
-    Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
+    // Route::post('clientes', 'store')->name('admin.clientes.store');
+    //Route::get('clientes/crear', 'create')->name('admin.clientes.create');
+    //Route::get('clientes/{cliente}', 'show')->name('admin.clientes.show');
+    // Route::put('clientes/{cliente}', 'update')->name('admin.clientes.updated');
+    //Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
 });
 
 

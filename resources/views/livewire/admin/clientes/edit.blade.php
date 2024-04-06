@@ -1,4 +1,4 @@
-<x-form.modal.card title="REGISTRAR CLIENTE" max-width="2xl" wire:model.live="modalSave" align="center">
+<x-form.modal.card title="EDITAR CLIENTE" max-width="2xl" wire:model.live="modalEdit" align="center">
 
     <div class="grid grid-cols-12 gap-4">
 

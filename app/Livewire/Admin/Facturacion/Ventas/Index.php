@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Facturacion\Ventas;
 
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
+use App\Models\EnvioResumen;
 use App\Models\Ventas;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -88,6 +89,29 @@ class Index extends Component
         }
     }
 
+    public function getCdrAnulacion(EnvioResumen $resumen)
+    {
+        try {
+            $api = new ApiFacturacion();
+            $mensaje =  $api->consultaTicketAnulacion($resumen);
+
+            if ($mensaje['fe_codigo_error']) {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
+            } else {
+
+                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+            }
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
     public function afterGetCdr($mensaje, $titulo, $icono)
     {
         $this->dispatch(
@@ -117,7 +141,7 @@ class Index extends Component
             'notify-toast',
             icon: 'success',
             title: 'MARCADO COMO PAGADO',
-            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como pagada',
+            mensaje: 'La venta ' . $venta->serie_correlativo . ' ha sido marcada como pagada',
         );
 
         $this->render();
@@ -134,7 +158,7 @@ class Index extends Component
             'notify-toast',
             icon: 'error',
             title: 'MARCADO COMO NO PAGADO',
-            mensaje: 'La venta ' . $venta->serie_correlativo . 'ha sido marcada como no pagada',
+            mensaje: 'La venta ' . $venta->serie_correlativo . ' ha sido marcada como no pagada',
         );
 
         $this->render();

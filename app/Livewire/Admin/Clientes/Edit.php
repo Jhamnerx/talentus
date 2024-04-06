@@ -2,21 +2,19 @@
 
 namespace App\Livewire\Admin\Clientes;
 
-use App\Http\Controllers\Admin\UtilesController;
-use App\Http\Requests\ClientesRequest;
-use App\Models\Clientes;
 use Livewire\Component;
-use Illuminate\Validation\Rule;
+use App\Models\Clientes;
 use Livewire\Attributes\On;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Admin\UtilesController;
 
-class Save extends Component
+class Edit extends Component
 {
-
-    public $modalSave = false;
-
+    public $modalEdit = false;
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
     public $errorConsulta;
+    public Clientes $cliente;
 
     protected $messages =
     [
@@ -54,7 +52,21 @@ class Save extends Component
 
     public function render()
     {
-        return view('livewire.admin.clientes.save');
+        return view('livewire.admin.clientes.edit');
+    }
+
+    #[On('open-modal-edit')]
+    public function openModal(Clientes $cliente)
+    {
+        $this->modalEdit = true;
+        $this->cliente = $cliente;
+        $this->tipo_documento_id = $cliente->tipo_documento_id;
+        $this->numero_documento = $cliente->numero_documento;
+        $this->razon_social = $cliente->razon_social;
+        $this->telefono = $cliente->telefono;
+        $this->email = $cliente->email;
+        $this->web_site = $cliente->web_site;
+        $this->direccion = $cliente->direccion;
     }
 
     public function updatedNumeroDocumento($numero)
@@ -118,8 +130,8 @@ class Save extends Component
         $data = $this->validate();
 
         try {
-            $cliente = Clientes::create($data);
-            $this->afterSave($cliente);
+            $this->cliente->update($data);
+            $this->afterSave($this->cliente);
         } catch (\Throwable $th) {
 
             $this->dispatch(
@@ -137,8 +149,8 @@ class Save extends Component
         $this->dispatch(
             'notify',
             icon: 'success',
-            title: 'CLIENTE GUARDADO',
-            mensaje: 'El cliente ' . $cliente->razon_social . ' fue registrado correctamente'
+            title: 'CLIENTE EDITADO',
+            mensaje: 'El cliente ' . $cliente->razon_social . ' fue actulizado correctamente'
         );
 
         $this->dispatch('update-table');
@@ -158,13 +170,6 @@ class Save extends Component
 
     public function closeModal()
     {
-        $this->modalSave = false;
-    }
-
-    #[On(['open-modal-save-cliente', 'open-modal-save'])]
-    public function openModalSaveCliente($busqueda = null)
-    {
-        $this->razon_social = $busqueda;
-        $this->modalSave = true;
+        $this->modalEdit = false;
     }
 }

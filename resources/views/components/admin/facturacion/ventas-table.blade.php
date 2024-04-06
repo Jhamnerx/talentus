@@ -814,12 +814,15 @@
                                                     icon='minus-circle' separator label="Anular comprobante" />
                                             @endif
 
-                                            @if (!$venta->envioResumen && $venta->anulado == 'si')
-                                                <x-form.dropdown.item wire:click.prevent='getCdr({{ $venta->id }})'
-                                                    icon="refresh" label="Volver a enviar" />
+                                            @if ($venta->envioResumen && $venta->envioResumen->fe_estado != '1')
+                                                <x-form.dropdown.header label="Comunicación de baja">
+                                                    <x-form.dropdown.item
+                                                        wire:click.prevent='getCdrAnulacion({{ $venta->envioResumen->id }})'
+                                                        icon="refresh" label="Consultar Estado A." />
+                                                </x-form.dropdown.header>
                                             @endif
 
-                                            @if ($venta->anulado == 'si' && $venta->envioResumen == true)
+                                            @if ($venta->anulado == 'si' && $venta->envioResumen == true && $venta->envioResumen->fe_estado == '1')
                                                 <x-form.dropdown.header label="Comunicación de baja">
 
                                                     <x-form.dropdown.item icon="document" target="_blank"
@@ -848,22 +851,25 @@
                                             @endif
                                         @endif
 
-                                        @if ($venta->pago_estado == 'PAID')
-                                            <x-form.dropdown.item disabled="true"
-                                                wire:click.prevent='markPaid({{ $venta->id }})'
-                                                icon="check-circle" label="Marcar como Pagada" />
+                                        <x-form.dropdown.header label="Estado de pago">
+                                            @if ($venta->pago_estado == 'PAID')
+                                                <x-form.dropdown.item disabled="true"
+                                                    wire:click.prevent='markPaid({{ $venta->id }})'
+                                                    icon="check-circle" label="Marcar como Pagada" />
 
-                                            <x-form.dropdown.item wire:click.prevent='markUnPaid({{ $venta->id }})'
-                                                icon="x" label="Marcar como No Pagada" />
-                                        @else
-                                            <x-form.dropdown.item wire:click.prevent='markPaid({{ $venta->id }})'
-                                                icon="check-circle" label="Marcar como Pagada" />
+                                                <x-form.dropdown.item
+                                                    wire:click.prevent='markUnPaid({{ $venta->id }})'
+                                                    icon="x" label="Marcar como No Pagada" />
+                                            @else
+                                                <x-form.dropdown.item
+                                                    wire:click.prevent='markPaid({{ $venta->id }})'
+                                                    icon="check-circle" label="Marcar como Pagada" />
 
-                                            <x-form.dropdown.item disabled="true"
-                                                wire:click.prevent='markUnPaid({{ $venta->id }})' icon="x"
-                                                label="Marcar como No Pagada" />
-                                        @endif
-
+                                                <x-form.dropdown.item disabled="true"
+                                                    wire:click.prevent='markUnPaid({{ $venta->id }})'
+                                                    icon="x" label="Marcar como No Pagada" />
+                                            @endif
+                                        </x-form.dropdown.header>
                                     </x-form.dropdown>
                                 </div>
                             </td>
@@ -877,7 +883,7 @@
 
                     @if ($ventas->count() < 1)
                         <tr>
-                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <td colspan="12" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         </tr>

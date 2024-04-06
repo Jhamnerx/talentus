@@ -167,11 +167,7 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-sky-500">
                                         @if ($mantenimiento->vehiculo->cliente)
-                                            <a
-                                                href="{{ route('admin.clientes.edit', $mantenimiento->vehiculo->cliente) }}">
-                                                {{ $mantenimiento->vehiculo->cliente->razon_social }}
-
-                                            </a>
+                                            {{ $mantenimiento->vehiculo->cliente->razon_social }}
                                         @else
                                             Sin Cliente Registrado
                                         @endif

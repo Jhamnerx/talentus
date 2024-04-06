@@ -28,15 +28,13 @@
 
             <!-- Add customer button -->
             @can('crear-cliente')
-                <a href="{{ route('admin.clientes.create') }}">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Agregar Cliente</span>
-                    </button>
-                </a>
+                <button wire:click='openModalSave' class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Agregar Cliente</span>
+                </button>
             @endcan
 
         </div>
@@ -60,7 +58,7 @@
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
-                <button
+                <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
@@ -297,17 +295,30 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 ">
-                                    <div class="text-left font-medium text-emerald-500">{{ $cliente->direccion }}
+                                    <div class="text-left font-medium text-emerald-500">
+                                        {{ $cliente->direccion }}
                                     </div>
                                 </td>
+
                                 @can('cambiar.estado-cliente')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>
-                                            <div class="m-3 ">
+                                        <div class="text-center">
+                                            <div class="m-3 w-48">
+                                                <div class="flex items-center mt-2" x-data="{ checked: {{ $cliente->is_active ? 'true' : 'false' }} }">
+                                                    <span class="text-sm mr-3">Activo: </span>
+                                                    <div class="form-switch">
+                                                        <input wire:click="toggleStatus({{ $cliente->id }})"
+                                                            type="checkbox" id="switch-f{{ $cliente->id }}"
+                                                            class="sr-only" x-model="checked" />
+                                                        <label class="bg-slate-400" for="switch-f{{ $cliente->id }}">
+                                                            <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                            <span class="sr-only">Estado</span>
+                                                        </label>
+                                                    </div>
+                                                    <div class="text-sm text-slate-400 italic ml-2"
+                                                        x-text="checked ? 'ACTIVO' : 'INACTIVO'"></div>
+                                                </div>
 
-
-                                                @livewire('admin.clientes.change-status', ['model' => $cliente, 'field' => 'is_active'], key('active' . $cliente->id))
-                                                <!-- End -->
                                             </div>
                                         </div>
                                     </td>
@@ -316,12 +327,28 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="space-x-1">
 
+                                        @can('editar-cliente')
+                                            <button wire:click.prevent='openModalEdit({{ $cliente->id }})'
+                                                class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                <span class="sr-only">Editar</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <path
+                                                        d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                </svg>
+                                            </button>
+                                        @endcan
 
-
-                                        @livewire('admin.clientes.delete', ['model' => $cliente], key('delete' . $cliente->id))
-
-
-
+                                        @can('eliminar-cliente')
+                                            <button wire:click.prevent='openModalDelete({{ $cliente->id }})'
+                                                class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                <span class="sr-only">Eliminar</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                    <path
+                                                        d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                </svg>
+                                            </button>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>
