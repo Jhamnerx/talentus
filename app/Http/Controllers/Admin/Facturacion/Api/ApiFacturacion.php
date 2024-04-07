@@ -417,6 +417,14 @@ class ApiFacturacion extends Controller
 
         // Envio a SUNAT.
         $api = $util->getSeeApi();
+        try {
+            $res = $api->send($guia->clase);
+        } catch (InvalidServiceResponseException $e) {
+            return [
+                'success' => false,
+                'error_session' => $e->getMessage(),
+            ];
+        }
 
         $res = $api->sendXml($guia->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $guia->nombre_xml . '.xml'));
 
@@ -424,7 +432,6 @@ class ApiFacturacion extends Controller
 
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
-
             return $respuesta;
         }
 
@@ -436,7 +443,7 @@ class ApiFacturacion extends Controller
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
-            $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
+            $this->updateGuiaRemision($guia, $respuesta, $guia->clase);
             return $respuesta;
         }
 
@@ -748,9 +755,9 @@ class ApiFacturacion extends Controller
 
         /**@var $res SummaryResult*/
         $ticket = $res->getTicket();
-        $this->updateTicket($guia, $ticket);
 
         $res = $api->getStatus($ticket);
+        $this->updateTicket($guia, $ticket);
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
