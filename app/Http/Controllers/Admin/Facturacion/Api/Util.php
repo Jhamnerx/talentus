@@ -124,8 +124,8 @@ class Util extends Controller
                 'debug' => true,
                 'cache' => false,
             ])
-                ->setApiCredentials($this->plantilla->sunat_datos['guia_cliente_id'], $this->plantilla->sunat_datos['guia_secret'])
-                ->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat'])
+                ->setApiCredentials('test-85e5b0ae-255c-4891-a595-0b98c65c9854', 'test-Hty/M6QshYvPgItX2P0+Kw==')
+                ->setClaveSOL(trim($this->plantilla->ruc), 'MODDATOS', 'MODDATOS')
                 ->setCertificate($certificate);
 
             return $api;
@@ -229,6 +229,7 @@ class Util extends Controller
     {
         $results
             =  [
+                'success' => true,
                 'estado_texto' => $this->estado,
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $this->mensaje_error,
@@ -252,6 +253,7 @@ class Util extends Controller
     {
         $results
             =  [
+                'success' => false,
                 'estado_texto' => 'RECHAZADA',
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $error->getMessage(),
@@ -265,6 +267,7 @@ class Util extends Controller
                 'hash' => $this->hash,
                 'hash_cdr' => $this->hash_cdr,
                 'code_sunat' => $this->code_sunat,
+                'qr' => $this->qr,
 
             ];
 
