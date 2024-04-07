@@ -276,8 +276,9 @@
                                         @switch($guia->fe_estado)
                                             {{-- OBTENER CDR --}}
                                             @case('0')
-                                                <x-form.button.circle flat wire:click.prevent="getCdr({{ $guia->id }})"
-                                                    teal icon="refresh" spinner='getCdr({{ $guia->id }})' />
+                                                <x-form.button.circle flat
+                                                    wire:click.prevent="consultaTicket({{ $guia->id }})" teal
+                                                    icon="refresh" spinner='consultaTicket({{ $guia->id }})' />
                                             @break
 
                                             {{-- CDR OBTENIDO --}}
