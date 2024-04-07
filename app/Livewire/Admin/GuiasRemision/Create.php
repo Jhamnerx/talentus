@@ -223,14 +223,27 @@ class Create extends Component
 
             $mensaje = $api->emitirGuia($guia);
 
-            if ($mensaje['fe_codigo_error']) {
+            if (array_key_exists('success', $mensaje) && $mensaje['success'] == true) {
 
-                session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                $this->redirectRoute('admin.almacen.guias.index');
+                if ($mensaje['fe_codigo_error']) {
+
+                    session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    $this->redirectRoute('admin.almacen.guias.index');
+                } else {
+
+                    session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                    $this->redirectRoute('admin.almacen.guias.index');
+                }
             } else {
+                $guia->getSerie->decrement('correlativo');
+                $guia->forceDelete();
 
-                session()->flash('store', $mensaje['fe_mensaje_sunat']);
-                $this->redirectRoute('admin.almacen.guias.index');
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR AL ENVIAR A SUNAT, VUELVE A REGISTRAR',
+                    mensaje: $mensaje['error_session'],
+                );
             }
         } catch (\Throwable $th) {
 

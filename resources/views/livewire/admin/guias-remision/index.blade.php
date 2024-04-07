@@ -581,7 +581,7 @@
                                                 <ul>
 
                                                     @can('editar-guias')
-                                                        @if ($guia->fe_estado = '0')
+                                                        @if ($guia->fe_estado == '0')
                                                             <li>
 
                                                                 <a href="{{ route('admin.almacen.guias.edit', $guia) }}"

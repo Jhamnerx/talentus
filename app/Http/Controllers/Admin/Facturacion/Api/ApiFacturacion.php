@@ -7,9 +7,6 @@ use Carbon\Carbon;
 use App\Models\Ventas;
 use App\Models\Clientes;
 use App\Models\plantilla;
-use App\Events\EmitirGuia;
-use App\Models\NotaDebito;
-use App\Models\NotaCredito;
 use App\Models\Comprobantes;
 use App\Models\GuiaRemision;
 use Greenter\Model\Sale\Note;
@@ -37,6 +34,7 @@ use Greenter\Model\Despatch\DespatchDetail;
 use Greenter\Model\Response\StatusCdrResult;
 use Greenter\Model\Sale\FormaPagos\FormaPagoContado;
 use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
+use Greenter\Services\InvalidServiceResponseException;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
 
@@ -701,22 +699,26 @@ class ApiFacturacion extends Controller
             }
         }
 
-
-
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
 
-
         // Envio a SUNAT.
         $api = $util->getSeeApi();
-        $res = $api->send($despatch);
-
+        try {
+            $res = $api->send($despatch);
+        } catch (InvalidServiceResponseException $e) {
+            return [
+                'success' => false,
+                'error_session' => $e->getMessage(),
+            ];
+        }
         // Guardar XML firmado digitalmente.
         $util->writeXml($despatch, $api->getLastXml());
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $despatch);
+
             return $respuesta;
         }
 
