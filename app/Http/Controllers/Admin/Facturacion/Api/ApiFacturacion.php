@@ -449,6 +449,31 @@ class ApiFacturacion extends Controller
         $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
         return $respuesta;
     }
+
+    public function consultaTicket($guia)
+    {
+        $util = Util::getInstance();
+
+        // Envio a SUNAT.
+        $api = $util->getSeeApi();
+
+        $res = $api->getStatus($guia->ticket);
+
+        if (!$res->isSuccess()) {
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
+            return $respuesta;
+        }
+
+        $cdr = $res->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($guia->clase, $res->getCdrZip());
+
+        $respuesta = $util->showResponse($guia->clase, $cdr);
+
+        $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
+        return $respuesta;
+    }
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
     public function createXmlInvoice(Ventas $venta)
     {
