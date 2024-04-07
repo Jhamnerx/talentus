@@ -250,7 +250,6 @@ class Util extends Controller
 
     public function getErrorResponse(\Greenter\Model\Response\Error $error)
     {
-
         $results
             =  [
                 'estado_texto' => 'RECHAZADA',

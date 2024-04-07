@@ -357,101 +357,28 @@ class ApiFacturacion extends Controller
         $cliente = $this->getCliente($venta->cliente);
         $plantilla = plantilla::first();
 
-        // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
-        // $guiaRemision = (new Document())
-        // ->setTipoDoc('09') // Guia de Remision remitente: 09, catalogo 01
-        // ->setNroDoc('T001-2'); // Serie y correlativo de la guia de remision
-
-        $invoice = new Invoice();
-        $invoice
-            ->setUblVersion('2.1')
-            ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion('0101')
-            ->setObservacion($venta->comentario)
-            ->setTipoDoc($venta->tipo_comprobante_id)
-            ->setSerie($venta->serie)
-            ->setCorrelativo($venta->correlativo)
-            ->setFechaEmision(new DateTime($venta->fecha_hora_emision))
-            ->setTipoMoneda($venta->divisa)
-            ->setCompany($util->getCompany())
-            ->setClient($cliente)
-            ->setMtoOperGravadas($venta->op_gravadas)
-            ->setMtoOperExoneradas($venta->op_exoneradas)
-            ->setMtoOperInafectas($venta->op_inafectas)
-            ->setMtoIGV($venta->igv)
-            ->setIcbper($venta->icbper)
-            ->setTotalImpuestos($venta->igv + $venta->icbper)
-            ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-            ->setSubTotal($venta->total)
-            ->setMtoImpVenta($venta->total);
-
-
-        // $invoice->setGuias([
-        //     $guiaRemision // Incluir guia remision.
-        // ])
-
-        //EVALUAR SI LA VENTA ES A CREDITO
-        if ($venta->forma_pago == 'CREDITO') {
-
-            $invoice->setFormaPago(new FormaPagoCredito($venta->total, $venta->divisa));
-            $cuotas = $this->addCuotas($venta);
-            $invoice->setCuotas($cuotas);
-        } else {
-
-            $invoice->setFormaPago(new FormaPagoContado());
-        }
-
-
-        //AÑADIR DESCUENTO SI ES QUE HAY
-        if ($venta->descuento > 0) {
-
-            $invoice->setDescuentos([
-                (new Charge())
-                    ->setCodTipo('02') // Catalog. 53
-                    ->setMontoBase($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-                    ->setFactor($venta->descuento_factor)
-                    ->setMonto($venta->descuento)
-            ]);
-        }
-
-
-        //ESTBLECER EL VENDEDOR DEL COMPROBANTE
-        $invoice->setSeller((new Client())
-            ->setRznSocial(Auth::user()->name));
-
-        //ESTABLECER ITEMS DEL COMPROBANTE
-        $items = $this->getItemsInvoice($venta->ventaDetalles);
-
-        $invoice->setDetails($items)
-            ->setLegends([
-                (new Legend())
-                    ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
-            ]);
 
         // Envio a SUNAT.
         $see = $util->getSee();
 
-        $result = $see->sendXml(get_class($invoice), $invoice->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $venta->nombre_xml . '.xml'));
+        $result = $see->sendXml(get_class($venta->clase), $venta->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $venta->nombre_xml . '.xml'));
 
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-
-            //$this->updateComprobante($venta, $msg, 'BORRADOR', 'no_update', $invoice);
-            // dd($msg);
+            $this->updateComprobante($venta, $msg, 'BORRADOR', 'no_update', $venta->clase);
             return $msg;
         }
 
         /**@var $res BillResult*/
         $cdr = $result->getCdrResponse();
         //Guardar CDR recibido
-        $util->writeCdr($invoice, $result->getCdrZip());
+        $util->writeCdr($venta->clase, $result->getCdrZip());
 
-        $respuesta = $util->showResponse($invoice, $cdr);
+        $respuesta = $util->showResponse($venta->clase, $cdr);
 
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $invoice);
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $venta->clase);
 
         return $respuesta;
     }
@@ -469,9 +396,6 @@ class ApiFacturacion extends Controller
         if (!$result->isSuccess()) {
 
             $msg = $util->getErrorResponse($result->getError());
-
-            //$this->updateComprobante($nota, $msg, 'BORRADOR', 'no_update', $nota->clase);
-            // dd($msg);
             return $msg;
         }
 
@@ -488,44 +412,43 @@ class ApiFacturacion extends Controller
     }
 
 
-    public function sendInvoiceOnlyGuia($clase)
+    public function sendInvoiceOnlyGuia($guia)
     {
         $util = Util::getInstance();
         $plantilla = plantilla::first();
+
         // Envio a SUNAT.
         $api = $util->getSeeApi();
 
-        $res = $api->sendXml($clase->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $clase->nombre_xml . '.xml'));
-
+        $res = $api->sendXml($guia->clase->getName(), Storage::disk('facturacion')->get($plantilla->empresa->nombre . '/xml' . '/' . $guia->nombre_xml . '.xml'));
 
         if (!$res->isSuccess()) {
 
-            $msg = $util->getErrorResponse($res->getError());
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
 
-            //$this->updateComprobante($venta, $msg, 'BORRADOR', 'no_update', $invoice);
-            // dd($msg);
-            return $msg;
+            return $respuesta;
         }
 
         /**@var $res SummaryResult*/
         $ticket = $res->getTicket();
 
         $res = $api->getStatus($ticket);
-
-        $res = $api->getStatus($ticket);
+        $this->updateTicket($guia, $ticket);
 
         if (!$res->isSuccess()) {
-            $msg = $util->getErrorResponse($res->getError());
-            return $msg;
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
+            return $respuesta;
         }
 
         $cdr = $res->getCdrResponse();
         //Guardar CDR recibido
-        $util->writeCdr($clase->clase, $res->getCdrZip());
+        $util->writeCdr($guia->clase, $res->getCdrZip());
 
-        $respuesta = $util->showResponse($clase->clase, $cdr);
+        $respuesta = $util->showResponse($guia->clase, $cdr);
 
-        $this->updateGuiaRemision($clase, $respuesta, $clase->clase);
+        $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
         return $respuesta;
     }
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
@@ -792,18 +715,20 @@ class ApiFacturacion extends Controller
         $util->writeXml($despatch, $api->getLastXml());
 
         if (!$res->isSuccess()) {
-            $msg = $util->getErrorResponse($res->getError());
-            return $msg;
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $despatch);
+            return $respuesta;
         }
 
         /**@var $res SummaryResult*/
         $ticket = $res->getTicket();
+        $this->updateTicket($guia, $ticket);
 
         $res = $api->getStatus($ticket);
 
         if (!$res->isSuccess()) {
-            $msg = $util->getErrorResponse($res->getError());
-            return $msg;
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $despatch);
         }
 
         $cdr = $res->getCdrResponse();
@@ -817,10 +742,10 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
-    public function updateGuiaRemision($guia, $respuesta, $despatch)
+    public function updateGuiaRemision($guia, $respuesta, $despatch, $action = 'update')
     {
 
-        FacturacionEmitirGuia::dispatch($guia, $respuesta, $despatch);
+        FacturacionEmitirGuia::dispatch($guia, $respuesta, $despatch, $action);
     }
 
     //ESTABLECER ITEMS DE LA GUIA DE REMISION
@@ -907,6 +832,7 @@ class ApiFacturacion extends Controller
 
         if (!$res->isSuccess()) {
             $msg =  $util->getErrorResponse($res->getError());
+            $this->actualizarResumen($resumen, $msg, $voided, 'update');
             return $msg;
         }
 
