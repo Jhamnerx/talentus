@@ -477,8 +477,8 @@ class ApiFacturacion extends Controller
         $util->writeCdr($guia->clase, $res->getCdrZip());
 
         $respuesta = $util->showResponse($guia->clase, $cdr);
-
         $this->updateGuiaRemision($guia, $respuesta, $guia->clase, 'no_update');
+
         return $respuesta;
     }
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
