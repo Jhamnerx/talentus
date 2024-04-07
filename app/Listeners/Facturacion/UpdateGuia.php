@@ -29,6 +29,7 @@ class UpdateGuia
                     'fe_mensaje_error' => $event->respuesta['fe_mensaje_error'],
                     'nota' => $event->respuesta['nota'],
                     'fe_codigo_error' => $event->respuesta['fe_codigo_error'],
+                    'nombre_cdr' => $event->respuesta['nombre_cdr'],
                     'cdr_base64' => $event->respuesta['cdr_base64'],
                     'fe_estado' => $event->respuesta['fe_estado'],
                     'hash' => $event->respuesta['hash'],

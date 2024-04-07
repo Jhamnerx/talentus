@@ -743,7 +743,6 @@ class ApiFacturacion extends Controller
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $despatch);
-
             return $respuesta;
         }
 
@@ -755,7 +754,8 @@ class ApiFacturacion extends Controller
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
-            $this->updateGuiaRemision($guia, $respuesta, $despatch);
+            $this->updateGuiaRemision($guia, $respuesta, $despatch); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET
+            return $respuesta;
         }
 
         $cdr = $res->getCdrResponse();
@@ -812,7 +812,7 @@ class ApiFacturacion extends Controller
         if ($guia->motivo_traslado_id == '04') {
 
             $direction->setRuc($ruc)
-                ->setCodLocal('00001'); // Código de establecimiento anexo
+                ->setCodLocal($guia->codigo_establecimiento_llegada); // Código de establecimiento anexo
         }
 
         return $direction;
@@ -825,7 +825,7 @@ class ApiFacturacion extends Controller
         if ($guia->motivo_traslado_id == '04') {
 
             $direction->setRuc($ruc)
-                ->setCodLocal('00002'); // Código de establecimiento anexo
+                ->setCodLocal($guia->codigo_establecimiento_partida); // Código de establecimiento anexo
         }
 
         return $direction;

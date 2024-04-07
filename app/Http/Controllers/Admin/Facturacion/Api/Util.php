@@ -124,7 +124,7 @@ class Util extends Controller
                 'debug' => true,
                 'cache' => false,
             ])
-                ->setApiCredentials('test-85e5b0ae-255c-4891-a595-0b98c65c9854e', 'test-Hty/M6QshYvPgItX2P0+Kw==e')
+                ->setApiCredentials('test-85e5b0ae-255c-4891-a595-0b98c65c9854', 'test-Hty/M6QshYvPgItX2P0+Kw==')
                 ->setClaveSOL(trim($this->plantilla->ruc), 'MODDATOS', 'MODDATOS')
                 ->setCertificate($certificate);
 
@@ -270,6 +270,10 @@ class Util extends Controller
                 'qr' => $this->qr,
 
             ];
+        if ($error->getCode() == '98') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: EN PROCESO';
+        }
 
         if ($error->getCode() == 'env:Client') {
             $results['fe_estado'] = '0';
