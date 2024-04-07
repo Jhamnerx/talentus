@@ -18,7 +18,7 @@ class EmitirGuia
     /**
      * Create a new event instance.
      */
-    public function __construct(public GuiaRemision $guia, public $respuesta, public $despacth)
+    public function __construct(public GuiaRemision $guia, public $respuesta, public $despacth, public $action)
     {
     }
 
