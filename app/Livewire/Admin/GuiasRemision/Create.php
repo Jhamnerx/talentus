@@ -35,7 +35,7 @@ class Create extends Component
         $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
-    public $codigo_establecimiento_partida, $codigo_establecimiento_llegada;
+    public $codigo_establecimiento_partida = '00001', $codigo_establecimiento_llegada = '00002';
     public $observacion = '';
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
@@ -220,7 +220,6 @@ class Create extends Component
             }
 
             $api = new ApiFacturacion();
-
             $mensaje = $api->emitirGuia($guia);
 
             if (array_key_exists('success', $mensaje) && $mensaje['success'] == true) {
