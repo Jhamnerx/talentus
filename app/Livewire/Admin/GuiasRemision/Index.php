@@ -58,7 +58,7 @@ class Index extends Component
         try {
             $api = new ApiFacturacion();
             $mensaje =  $api->sendInvoiceOnlyGuia($guia);
-            dd($mensaje);
+
             if ($mensaje['fe_codigo_error']) {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR GUIA', 'error');
@@ -82,7 +82,6 @@ class Index extends Component
         try {
             $api = new ApiFacturacion();
             $mensaje =  $api->consultaTicket($guia);
-            dd($mensaje);
             if ($mensaje['fe_codigo_error']) {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR GUIA', 'error');

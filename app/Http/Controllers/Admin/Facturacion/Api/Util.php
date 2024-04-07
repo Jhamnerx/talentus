@@ -298,7 +298,6 @@ class Util extends Controller
     public function writeXmlOnly(DocumentInterface $document, ?string $xml)
     {
         $this->writeFile($document->getName() . '.xml', $xml, 'xml');
-        $this->nombre_xml = $document->getName();
         return base64_encode($xml);
     }
 

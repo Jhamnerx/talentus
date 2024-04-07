@@ -220,9 +220,8 @@ class Create extends Component
             }
 
             $api = new ApiFacturacion();
-
             $mensaje = $api->emitirGuia($guia);
-            dd($mensaje);
+
             if (array_key_exists('success', $mensaje) && $mensaje['success'] == true) {
 
                 if ($mensaje['fe_codigo_error']) {

@@ -15,6 +15,7 @@ use App\Models\GuiaRemision;
 use App\Models\MotivosTraslado;
 use Illuminate\Support\Collection;
 use App\Http\Requests\GuiaRemisionRequest;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
 class Edit extends Component
 {
@@ -274,7 +275,21 @@ class Edit extends Component
                 }
             }
 
-            return redirect()->route('admin.almacen.guias.index')->with('update', 'La guia se registro con exito');
+            $api = new ApiFacturacion();
+
+            $mensaje = $api->createXmlGuia($this->guia);
+
+            if ($mensaje['fe_codigo_error']) {
+
+                session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                $this->redirectRoute('admin.almacen.guias.index');
+            } else {
+
+                session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                $this->redirectRoute('admin.almacen.guias.index');
+            }
+
+            //return redirect()->route('admin.almacen.guias.index')->with('update', 'La guia se registro con exito');
         } catch (\Throwable $th) {
             $this->dispatch(
                 'error',

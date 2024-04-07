@@ -776,6 +776,141 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+
+    public function createXmlGuia(GuiaRemision $guia)
+    {
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+        $cliente = $this->getCliente($guia->cliente);
+
+        //ESTABLECER DATOS DE LA GUIA DE REMISION
+        $envio = new Shipment();
+        $envio
+            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
+            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
+            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
+            ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
+            ->setPesoTotal($guia->peso)
+            ->setUndPesoTotal('KGM')
+            ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
+
+            ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $envio->setContenedores([$guia->numero_contenedor]);
+
+            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
+                ->setNombre($guia->data_puerto['nombre_puerto']);
+
+            $envio->setPuerto($puerto);
+        }
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
+        if ($guia->motivo_traslado_id == '13') {
+
+            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
+        }
+        //ESTABLECER GUIA DE REMISION
+        $despatch = new Despatch();
+        $despatch->setVersion('2022')
+            ->setTipoDoc('09')
+            ->setSerie($guia->serie)
+            ->setCorrelativo($guia->correlativo)
+            ->setFechaEmision(new DateTime($guia->fecha_emision))
+            ->setCompany($util->getCompany())
+            ->setDestinatario($cliente) // misma empresa
+            ->setEnvio($envio);
+
+        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $relDoc = (new AdditionalDoc())
+                ->setTipo($guia->docu_rel_tipo)
+                ->setTipoDesc('Declaración Aduanera de Mercancías')
+                ->setNro($guia->docu_rel_numero);
+            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
+            $despatch->setAddDocs([$relDoc]);
+        } else {
+
+            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
+            if ($guia->venta) {
+
+                $relDoc = (new AdditionalDoc())
+                    ->setTipo($guia->venta->tipo_comprobante_id)
+                    ->setTipoDesc('Factura')
+                    ->setEmisor($plantilla->ruc)
+                    ->setNro($guia->venta->serie_correlativo);
+
+                $despatch->setAddDocs([$relDoc]);
+            }
+        }
+
+        //ESTABLECER ITEMS DE LA GUIA DE REMISION
+        $despatch->setDetails($this->getItemsGuia($guia->detalle));
+
+        // Envio a SUNAT.
+        $api = $util->getSeeApi();
+        try {
+            $res = $api->send($despatch);
+        } catch (InvalidServiceResponseException $e) {
+            return [
+                'success' => false,
+                'error_session' => $e->getMessage(),
+            ];
+        }
+
+        // Guardar XML firmado digitalmente.
+        $xml_base64 = $util->writeXmlOnly($despatch, $api->getLastXml());
+        $hash = $util->getHash($despatch);
+
+
+        if (!$res->isSuccess()) {
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $despatch);
+            return $respuesta;
+        }
+
+        /**@var $res SummaryResult*/
+        $ticket = $res->getTicket();
+
+        $res = $api->getStatus($ticket);
+        $this->updateTicket($guia, $ticket);
+
+        if (!$res->isSuccess()) {
+            $respuesta = $util->getErrorResponse($res->getError());
+            $this->updateGuiaRemision($guia, $respuesta, $despatch); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET
+
+            return $respuesta;
+        }
+
+
+        $respuesta
+            =  [
+                'estado_texto' => 'ESTADO: SOLO XML CREADO',
+                'fe_mensaje_sunat' => "El comprobante fue firmado, Pendiente de Envio",
+                'fe_mensaje_error' => null,
+                'nota' => '',
+                'fe_codigo_error' => null,
+                'nombre_xml' => $despatch->getName(),
+                'nombre_cdr' => 'R-' . $despatch->getName(),
+                'xml_base64' => $xml_base64,
+                'cdr_base64' => null,
+                'fe_estado' => 0,
+                'hash' => $hash,
+                'hash_cdr' => null,
+                'code_sunat' => null,
+                'qr' => null,
+
+            ];
+
+        $this->updateGuiaRemision($guia, $respuesta, $despatch);
+        return $respuesta;
+    }
+
     public function updateGuiaRemision($guia, $respuesta, $despatch, $action = 'update')
     {
 
