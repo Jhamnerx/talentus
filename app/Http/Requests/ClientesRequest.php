@@ -23,37 +23,50 @@ class ClientesRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules($cliente = null)
     {
-        $cliente = $this->route()->parameter('cliente');
-
-        $rules = [
-            'razon_social' => 'required',
-            'numero_documento' =>
+        $rules =
             [
-                'required',
-                'digits_between:8,11',
-                'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(fn ($query) =>
-                $query->where('empresa_id', session('empresa'))
-                    ->whereNull('deleted_at')),
-            ],
-            'telefono' => 'nullable|digits_between:6,9|numeric',
-            'email' => 'email|nullable'
-        ];
+                'tipo_documento_id' => 'required',
+                'razon_social' => 'required',
+                'direccion' => 'nullable',
+                'web_site' => 'nullable',
+                'telefono' => 'nullable|digits_between:6,9|numeric',
+                'email' => 'email|nullable',
+                'numero_documento' => [
+                    'required',
+                    'min:6',
+                    'numeric',
+                    Rule::unique('clientes', 'numero_documento')->where(
+                        fn ($query) =>
+                        $query->where('empresa_id', session('empresa'))
+                            ->where('is_active', 1)
+                    )
+                ],
+            ];
 
 
         if ($cliente) {
 
-            $rules['numero_documento'] = [
-                'required',
-                'digits_between:8,11',
-                'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(fn ($query) =>
-                $query->where('empresa_id', session('empresa'))
-                    ->whereNull('deleted_at'))
-                    ->ignore($cliente->id),
-            ];
+            $rules
+                = [
+                    'tipo_documento_id' => 'required',
+                    'razon_social' => 'required',
+                    'direccion' => 'nullable',
+                    'web_site' => 'nullable',
+                    'telefono' => 'nullable|digits_between:6,9|numeric',
+                    'email' => 'email|nullable',
+                    'numero_documento' => [
+                        'required',
+                        'min:6',
+                        'numeric',
+                        Rule::unique('clientes', 'numero_documento')->where(
+                            fn ($query) =>
+                            $query->where('empresa_id', session('empresa'))
+                                ->where('is_active', 1)
+                        )->ignore($cliente->id)
+                    ],
+                ];
         }
 
         return $rules;
