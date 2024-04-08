@@ -22,6 +22,7 @@ use App\Models\MotivosTraslado;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
 use App\Http\Controllers\Controller;
+use App\Models\CodigosDetracciones;
 use App\Models\ModalidadTransporte;
 use App\Models\Ubigeos;
 use App\Models\User;
@@ -563,6 +564,28 @@ class SelectsController extends Controller
                 $venta->option_description = '<b>' . $venta->serie_correlativo . '</b> - ' . $venta->cliente->razon_social . ' - ';
 
                 return $venta;
+            });
+    }
+    public function codigosDetracciones(Request $request): Collection
+    {
+
+        return CodigosDetracciones::query()
+            ->select('codigo', 'descripcion', 'porcentaje')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('codigo', 'like', "%{$request->search}%")
+                    ->Orwhere('descripcion', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', [])),
+            )
+            ->get()->map(function (CodigosDetracciones $detraccion) {
+
+                $detraccion->option_description = '<b>' . $detraccion->codigo . '</b> - ' . $detraccion->descripcion;
+
+                return $detraccion;
             });
     }
 
