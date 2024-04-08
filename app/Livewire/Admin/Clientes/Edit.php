@@ -45,7 +45,7 @@ class Edit extends Component
                     fn ($query) =>
                     $query->where('empresa_id', session('empresa'))
                         ->where('is_active', 1)
-                )
+                )->ignore($this->cliente->id)
             ],
         ];
     }
