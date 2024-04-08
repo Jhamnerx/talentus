@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ventas extends Model
 {
@@ -99,7 +100,7 @@ class Ventas extends Model
 
     public function guiaRemisions(): HasMany
     {
-        return $this->hasMany(GuiaRemision::class);
+        return $this->hasMany(GuiaRemision::class)->withTrashed()->withoutGlobalScope(EmpresaScope::class);;
     }
 
     public function envioResumenDetalles(): HasMany
@@ -114,7 +115,7 @@ class Ventas extends Model
 
     public function cliente(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Clientes::class);
+        return $this->belongsTo(\App\Models\Clientes::class)->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
 
     public function metodoPago(): BelongsTo
@@ -145,6 +146,11 @@ class Ventas extends Model
     public function envioResumen(): BelongsTo
     {
         return $this->belongsTo(EnvioResumen::class, 'id_baja');
+    }
+
+    public function detraccion(): HasOne
+    {
+        return $this->hasOne(Detracciones::class, 'venta_id', 'id');
     }
 
     //CREAR ITEM DETALLE VENTA
