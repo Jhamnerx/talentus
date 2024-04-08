@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('codigos_detracciones', function (Blueprint $table) {
             $table->string('codigo')->primary();
             $table->text('descripcion');
+            $table->string('porcentaje', 5)->nullable();
             $table->timestamps();
         });
     }
