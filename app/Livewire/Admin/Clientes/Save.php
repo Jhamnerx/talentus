@@ -18,39 +18,6 @@ class Save extends Component
 
     public $errorConsulta;
 
-    protected $messages =
-    [
-        'razon_social.required' => 'No dejes vacio este campo',
-        'numero_documento.required' => 'Ingresa un documento',
-        'numero_documento.digits_between' => 'Ingresa como minimo 8 caracteres',
-        'numero_documento.numeric' => 'El numero documento debe ser un numero',
-        'numero_documento.unique' => 'El cliente ya esta registrado',
-        'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
-        'telefono.numeric' => 'El numero de telefono debe ser un numero',
-        'email.email' => 'Debe tener formato de correo electronico',
-    ];
-
-    protected function rules()
-    {
-        return [
-            'tipo_documento_id' => 'required',
-            'razon_social' => 'required',
-            'direccion' => 'nullable',
-            'web_site' => 'nullable',
-            'telefono' => 'nullable|digits_between:6,9|numeric',
-            'email' => 'email|nullable',
-            'numero_documento' => [
-                'required',
-                'min:6',
-                'numeric',
-                Rule::unique('clientes', 'numero_documento')->where(
-                    fn ($query) =>
-                    $query->where('empresa_id', session('empresa'))
-                        ->where('is_active', 1)
-                )
-            ],
-        ];
-    }
 
     public function render()
     {
@@ -115,7 +82,8 @@ class Save extends Component
 
     public function save()
     {
-        $data = $this->validate();
+        $request = new ClientesRequest();
+        $data = $this->validate($request->rules(), $request->messages());
 
         try {
             $cliente = Clientes::create($data);
@@ -153,7 +121,8 @@ class Save extends Component
 
     public function updated($value)
     {
-        $this->validateOnly($value, $this->rules());
+        $request = new ClientesRequest();
+        $this->validateOnly($value, $request->rules(), $request->messages());
     }
 
     public function closeModal()
