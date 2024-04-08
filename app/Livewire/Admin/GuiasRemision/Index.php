@@ -82,6 +82,7 @@ class Index extends Component
         try {
             $api = new ApiFacturacion();
             $mensaje =  $api->consultaTicket($guia);
+
             if ($mensaje['fe_codigo_error']) {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR GUIA', 'error');
