@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Unit;
+use App\Models\User;
 use App\Models\Lineas;
 use App\Models\Series;
 use App\Models\Ventas;
 use App\Models\SimCard;
+use App\Models\Ubigeos;
 use App\Models\Ciudades;
 use App\Models\Clientes;
 use App\Models\Categoria;
@@ -17,15 +19,14 @@ use App\Models\Dispositivos;
 use Illuminate\Http\Request;
 use App\Models\TipoDocumento;
 use App\Models\MotivoTraslado;
+use App\Models\PaymentMethods;
 use App\Models\TipoAfectacion;
 use App\Models\MotivosTraslado;
 use App\Models\TipoComprobantes;
 use App\Models\ModelosDispositivo;
-use App\Http\Controllers\Controller;
 use App\Models\CodigosDetracciones;
 use App\Models\ModalidadTransporte;
-use App\Models\Ubigeos;
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -566,6 +567,7 @@ class SelectsController extends Controller
                 return $venta;
             });
     }
+
     public function codigosDetracciones(Request $request): Collection
     {
 
@@ -587,6 +589,23 @@ class SelectsController extends Controller
 
                 return $detraccion;
             });
+    }
+    public function metodosPago(Request $request): Collection
+    {
+
+        return PaymentMethods::query()
+            ->select('codigo', 'descripcion')
+            ->when(
+                $request->search,
+                fn (Builder $query) => $query
+                    ->where('codigo', 'like', "%{$request->search}%")
+                    ->Orwhere('descripcion', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn (Builder $query) => $query->whereIn('codigo', $request->input('selected', [])),
+            )
+            ->get();
     }
 
     public function user(Request $request): Collection

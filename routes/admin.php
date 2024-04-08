@@ -392,6 +392,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/puertos', 'puertosPeru')->name('api.puertos.index');
     Route::get('api/unidades', 'codesProductosGre')->name('api.unidades.index');
     Route::get('api/detracciones', 'codigosDetracciones')->name('api.detracciones.index');
+    Route::get('api/metodos-pago', 'metodosPago')->name('api.metodos.pago.index');
 });
 
 
