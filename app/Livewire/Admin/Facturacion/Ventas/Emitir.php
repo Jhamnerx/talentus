@@ -14,6 +14,7 @@ use App\Models\MetodoPago;
 use Livewire\Attributes\On;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Collection;
+use App\Models\CodigosDetracciones;
 use App\Http\Requests\VentasRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
@@ -59,6 +60,38 @@ class Emitir extends Component
     public $decrease_stock = true;
 
 
+    public $tipo_operacion = '0101';
+    public $detraccion = false;
+    public $openModalDt = false;
+    public Collection $datosDetraccion;
+
+    public function openModalDetraccion()
+    {
+        $this->openModalDt = true;
+    }
+
+    public function updatedDatosDetraccionCodigoDetraccion($value)
+    {
+        if ($value) {
+            $dt = CodigosDetracciones::where('codigo', $value)->first();
+            $this->datosDetraccion['porcentaje'] = $dt->porcentaje;
+            $this->calcularMontoDetraccion($this->total);
+        } else {
+            $this->datosDetraccion['porcentaje'] = 0.00;
+            $this->datosDetraccion['monto'] = 0.00;
+        }
+    }
+
+    public function calcularMontoDetraccion($total)
+    {
+        $monto = $total * ($this->datosDetraccion['porcentaje'] / 100);
+
+        if ($this->divisa == 'USD') {
+            $this->datosDetraccion['monto'] = round($monto * $this->tipo_cambio, 2);
+        } else {
+            $this->datosDetraccion['monto'] = round($monto, 2);
+        }
+    }
 
     public function mount()
     {
@@ -92,14 +125,22 @@ class Emitir extends Component
             $this->metodo_type = '03';
         }
         $this->plantilla = plantilla::first();
-    }
 
+
+        //DETRACCION INICIALIZAR DATOS
+        $this->datosDetraccion = collect([
+            'codigo_detraccion' => '',
+            'porcentaje' => 0.00,
+            'monto' => 0.00,
+            'metodo_pago_id' => '001',
+            'cuenta_bancaria' => '',
+        ]);
+    }
 
     public function render()
     {
         return view('livewire.admin.facturacion.ventas.emitir');
     }
-
 
     public function updatedClienteId($value)
     {
@@ -149,8 +190,9 @@ class Emitir extends Component
         } else {
             $this->simbolo = "S/. ";
         }
-    }
 
+        $this->calcularMontoDetraccion($this->total);
+    }
 
     public function updatedFormaPago()
     {
@@ -169,7 +211,6 @@ class Emitir extends Component
             $this->showCredit = false;
         }
     }
-
 
     public function resetCrediFields()
     {
@@ -276,7 +317,7 @@ class Emitir extends Component
 
             //$this->dispatchBrowserEvent('add-producto');
             $this->calcularCuotas($this->numero_cuotas);
-            //}
+            // }
         } catch (\Exception $e) {
             $this->dispatch(
                 'notify-toast',
@@ -289,9 +330,8 @@ class Emitir extends Component
 
     public function save()
     {
-
         $request = new VentasRequest();
-        $datos = $this->validate($request->rules(), $request->messages());
+        $datos = $this->validate($request->rules($this->detraccion), $request->messages());
 
         try {
 
@@ -301,23 +341,32 @@ class Emitir extends Component
             if (is_null($this->cliente->direccion)) {
 
                 $this->cliente->direccion = $datos["direccion"];
-
-
                 $this->cliente->save();
             }
 
             //CREAR ITEMS DE LA VENTA
             $items = Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
 
+            //SI DETRACCION ES TRUE CREAR DETRACCION
+
+            if ($this->detraccion) {
+                $venta->detraccion()->create([
+                    'codigo_detraccion' => $this->datosDetraccion['codigo_detraccion'],
+                    'porcentaje' => $this->datosDetraccion['porcentaje'],
+                    'monto' => $this->datosDetraccion['monto'],
+                    'metodo_pago_id' => $this->datosDetraccion['metodo_pago_id'],
+                    'cuenta_bancaria' => $this->datosDetraccion['cuenta_bancaria'],
+                    'tipo_cambio' => $this->tipo_cambio,
+                ]);
+            }
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
-
             $venta->getSerie->increment('correlativo');
 
             if ($this->metodo_type != '03') {
                 $api = new ApiFacturacion();
 
-                $mensaje = $api->emitirInvoice($venta, $this->metodo_type);
+                $mensaje = $api->emitirInvoice($venta, $this->metodo_type, $this->tipo_operacion);
 
                 if ($mensaje['fe_codigo_error']) {
 
@@ -342,8 +391,6 @@ class Emitir extends Component
             );
         }
     }
-
-
 
     public function afterSave($mensaje)
     {
@@ -372,7 +419,6 @@ class Emitir extends Component
         $this->reCalTotal();
     }
 
-
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()
     {
@@ -387,6 +433,7 @@ class Emitir extends Component
         $this->igv =  $this->calcularIgv();
         $this->total =  $this->calcularTotal();
         $this->calcularCuotas($this->numero_cuotas);
+        $this->calcularMontoDetraccion($this->total);
     }
 
     //CALCULAR EL SUB TOTAL DE LOS ITEMS
@@ -402,7 +449,6 @@ class Emitir extends Component
         return $sub_total->sum();
     }
 
-
     //CALCULAR IGV DESDE EL SUB TOTAL - FALTA POR TRAER EL PROCENTAJE DEL IUMPUESTO DE LA DB
     public function calcularIgv()
     {
@@ -413,11 +459,8 @@ class Emitir extends Component
     }
 
     //CALCULAR TOTALES DE LOS TIPOS DE AFECTACIONES
-
     public function calcularOperacionesGravadas($descuento)
     {
-
-
         $op_gravadas = $this->items->map(function ($item, $key) {
 
             if ($item['codigo_afectacion'] == '10') {
@@ -474,9 +517,9 @@ class Emitir extends Component
 
         return round($op_inafectas, 2);
     }
+
     public function calcularIcbper()
     {
-
         $icbper = $this->items->map(function ($item, $key) {
 
             if ($item['afecto_icbper']) {
@@ -492,8 +535,6 @@ class Emitir extends Component
     //CALCUJLAR TOTAL DE ACUERDO AL TIPO DE DESCUENTO Y SI HAY
     public function calcularTotal()
     {
-
-
         $total = ($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv;
 
         return round($total, 4);
@@ -501,7 +542,6 @@ class Emitir extends Component
 
     public function updatedDescuentoMonto()
     {
-
         $this->validate([
             'descuento_monto' => [
                 'lt:op_gravadas',
@@ -510,17 +550,15 @@ class Emitir extends Component
         ]);
         $this->reCalTotal();
     }
+
     public function updatedTipoDescuento()
     {
         $this->reCalTotal();
     }
 
-
-
     public function calcularDescuento()
     {
         // cantidad - porcentaje
-
         $descuento = 0.00;
         if ($this->tipo_descuento == "cantidad") {
 
@@ -553,7 +591,6 @@ class Emitir extends Component
         return round($descuento, 2);
     }
 
-
     public function eliminarProducto($key)
     {
         unset($this->items[$key]);
@@ -575,5 +612,15 @@ class Emitir extends Component
     public function OpenModalCliente($busqueda)
     {
         $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
+    }
+
+    public function updatedDetraccion()
+    {
+        if ($this->detraccion) {
+            $this->tipo_operacion = '1001';
+            $this->calcularMontoDetraccion($this->total);
+        } else {
+            $this->tipo_operacion = '0101';
+        }
     }
 }

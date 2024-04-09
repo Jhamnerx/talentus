@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('detracciones', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo_detraccion');
+            $table->string('codigo_detraccion')->nullable();
+            $table->foreign('codigo_detraccion')->references('codigo')->on('codigos_detracciones')->onDelete('set null')->onUpdate('cascade');
             $table->decimal('porcentaje', 12, 2);
             $table->decimal('monto', 12, 2);
+            $table->decimal('tipo_cambio', 12, 4);
             $table->string('metodo_pago_id')->nullable();
             $table->foreign('metodo_pago_id')->references('codigo')->on('metodo_pago')->onDelete('set null')->onUpdate('cascade');
             $table->foreignId('venta_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();

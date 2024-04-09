@@ -18,6 +18,7 @@ use Greenter\Model\Client\Client;
 use Greenter\Model\Voided\Voided;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Despatch\Puerto;
+use Greenter\Model\Sale\Detraction;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,22 +38,22 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use Greenter\Services\InvalidServiceResponseException;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-
+use App\Models\Detracciones;
 
 class ApiFacturacion extends Controller
 {
     public $filename = null;
 
-    public function emitirInvoice(Ventas $venta, $metodo_type)
+    public function emitirInvoice(Ventas $venta, $metodo_type, $tipo_operacion)
     {
 
         if ($metodo_type == "02") {
 
-            return $this->emitirComprobante($venta);
+            return $this->emitirComprobante($venta, $tipo_operacion);
         } else {
 
 
-            return  $this->createXmlInvoice($venta);
+            return  $this->createXmlInvoice($venta, $tipo_operacion);
         }
     }
     //DETERMINAR SI ES NOTA DE DEBITO O CREDITO
@@ -236,7 +237,7 @@ class ApiFacturacion extends Controller
     }
 
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
-    public function emitirComprobante(Ventas $venta)
+    public function emitirComprobante(Ventas $venta, $tipo_operacion)
     {
 
         $util = Util::getInstance();
@@ -255,7 +256,7 @@ class ApiFacturacion extends Controller
         $invoice
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion('0101')
+            ->setTipoOperacion($tipo_operacion)  // Catalogo 51
             ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
@@ -273,6 +274,11 @@ class ApiFacturacion extends Controller
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
+
+        if ($venta->detraccion) {
+
+            $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
+        }
 
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
@@ -310,12 +316,8 @@ class ApiFacturacion extends Controller
         //ESTABLECER ITEMS DEL COMPROBANTE
         $items = $this->getItemsInvoice($venta->ventaDetalles);
 
-        $invoice->setDetails($items)
-            ->setLegends([
-                (new Legend())
-                    ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
-            ]);
+        $invoice->setDetails($items) //CATALAGO 52 - LEYENDA
+            ->setLegends($this->getLegends($venta));
 
         // Envio a SUNAT.
         $see = $util->getSee();
@@ -347,6 +349,32 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+    public function getLegends($venta)
+    {
+        $formatter = new NumeroALetras();
+
+        if ($venta->detraccion) {
+
+            $legends = [
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES')),
+                (new Legend())
+                    ->setCode('2006')
+                    ->setValue('Operación sujeta a detracción')
+            ];
+
+            return $legends;
+        } else {
+            $legends = [
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
+            ];
+
+            return $legends;
+        }
+    }
 
     public function sendInvoiceOnly(Ventas $venta)
     {
@@ -379,6 +407,22 @@ class ApiFacturacion extends Controller
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $venta->clase);
 
         return $respuesta;
+    }
+
+    public function getDetraccion(Detracciones $detraccion)
+    {
+
+        // MONEDA SIEMPRE EN SOLES
+        $d = (new Detraction())
+            // Carnes y despojos comestibles
+            ->setCodBienDetraccion($detraccion->codigo_detraccion) // catalog. 54
+            // Deposito en cuenta
+            ->setCodMedioPago($detraccion->metodo_pago_id) // catalog. 59
+            ->setCtaBanco($detraccion->cuenta_bancaria)
+            ->setPercent($detraccion->porcentaje)
+            ->setMount($detraccion->monto);
+
+        return $d;
     }
 
     public function sendInvoiceOnlyNota(Comprobantes $nota)
@@ -482,7 +526,7 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
-    public function createXmlInvoice(Ventas $venta)
+    public function createXmlInvoice(Ventas $venta, $tipo_operacion)
     {
         $util = Util::getInstance();
         $formatter = new NumeroALetras();
@@ -493,7 +537,7 @@ class ApiFacturacion extends Controller
         $invoice
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion('0101')
+            ->setTipoOperacion($tipo_operacion)
             ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
@@ -545,11 +589,7 @@ class ApiFacturacion extends Controller
 
 
         $invoice->setDetails($items)
-            ->setLegends([
-                (new Legend())
-                    ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
-            ]);
+            ->setLegends($this->getLegends($venta));
 
         //FIRMADO Y GUARDADO DEL XML
         $see = $util->getSee();
