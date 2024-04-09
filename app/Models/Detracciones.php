@@ -33,4 +33,9 @@ class Detracciones extends Model
     {
         return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
     }
+
+    public function codigo(): BelongsTo
+    {
+        return $this->belongsTo(CodigosDetracciones::class, 'codigo_detraccion', 'codigo');
+    }
 }

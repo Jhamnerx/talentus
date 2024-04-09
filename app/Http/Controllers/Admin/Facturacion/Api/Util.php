@@ -301,7 +301,6 @@ class Util extends Controller
         return base64_encode($xml);
     }
 
-
     public function writeCdr(DocumentInterface $document, ?string $zip): void
     {
         $this->writeFile('R-' . $document->getName() . '.zip', $zip, 'cdr');
@@ -388,6 +387,11 @@ class Util extends Controller
         if ($venta->forma_pago == 'CREDITO') {
 
             $params['user']['cuotas'] = view('templates.comprobantes.cuotas', ['venta' => $venta->toArray()]);
+        }
+
+        if ($venta->detraccion) {
+
+            $params['user']['detraccion'] = view('templates.comprobantes.detraccion', compact('venta'));
         }
 
         $html = $report->render($venta->clase, $params);
