@@ -231,6 +231,9 @@
                                 <div class="font-semibold text-left">Razon Social</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">TIPO DOC.</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">RUC/DNI</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -247,7 +250,7 @@
                             </th>
                             @can('cambiar.estado-cliente')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Estado</div>
+                                    <div class="font-semibold text-center">Estado</div>
                                 </th>
                             @endcan
 
@@ -280,6 +283,10 @@
                                         <div class="font-medium text-slate-800">{{ $cliente->razon_social }}
                                         </div>
                                     </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="text-left">
+                                        {{ $cliente->tipoDocumento ? $cliente->tipoDocumento->descripcion : '' }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left">{{ $cliente->numero_documento }}</div>

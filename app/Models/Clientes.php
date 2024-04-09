@@ -12,6 +12,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Clientes extends Model
 {
@@ -128,5 +129,10 @@ class Clientes extends Model
     {
 
         return $this->hasMany(Tareas::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function tipoDocumento(): HasOne
+    {
+        return $this->hasOne(TipoDocumento::class, 'codigo', 'tipo_documento_id');
     }
 }
