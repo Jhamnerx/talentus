@@ -43,12 +43,13 @@
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.input placeholder="número de linea" wire:model="items.{{ $clave }}.numero" />
+                            <x-form.input placeholder="número de linea"
+                                wire:model.live="items.{{ $clave }}.numero" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.input placeholder="ingresa operador" wire:model="items.{{ $clave }}.operador"
-                                wire:input='convertirAMayusculas' />
+                            <x-form.input placeholder="ingresa operador"
+                                wire:model.change="items.{{ $clave }}.operador" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 

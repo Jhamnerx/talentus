@@ -76,6 +76,12 @@ class Edit extends Component
         }
     }
 
+    public function updatedOperador($value)
+    {
+
+        $this->operador = strtoupper($value);
+    }
+
     public function afterSave()
     {
         $this->dispatch(
