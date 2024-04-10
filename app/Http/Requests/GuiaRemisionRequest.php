@@ -22,7 +22,7 @@ class GuiaRemisionRequest extends FormRequest
             ],
             'serie' => 'required',
             'correlativo' => 'nullable',
-            'fecha_emision' => 'required|date',
+            'fecha_emision' => 'required|date|after_or_equal:yesterday',
             'cliente_id' => 'required',
             'tipo_documento' => 'required',
             'numero_documento' => 'required',
@@ -126,6 +126,8 @@ class GuiaRemisionRequest extends FormRequest
             'numero_contenedor.required' => 'El número de contenedor es requerido',
             'numero_documento.in' => 'El número de documento debe ser el mismo que el de la empresa',
             'numero_documento.not_in' => 'Cual el motivo es por traslado de bienes vendidos, el número de documento no puede ser el mismo que el de la empresa',
+
+            'fecha_emision.after_or_equal' => 'La fecha de emisión debe ser mayor a la fecha actual',
         ];
 
         return $messages;

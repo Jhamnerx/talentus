@@ -72,7 +72,6 @@ class Create extends Component
         ]);
     }
 
-
     public function render()
     {
 
@@ -226,11 +225,11 @@ class Create extends Component
 
                 if ($mensaje['fe_codigo_error']) {
 
-                    session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
                     $this->redirectRoute('admin.almacen.guias.index');
                 } else {
 
-                    session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                    session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
                     $this->redirectRoute('admin.almacen.guias.index');
                 }
             } else {

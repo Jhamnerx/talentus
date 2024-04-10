@@ -323,13 +323,13 @@
         });
     </script>
 @endif
-@if (session('store'))
+@if (session('guia-store'))
     <script>
         $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
-                title: 'Guardado',
-                text: '{{ session('store') }}',
+                title: 'GUIA REGISTRADA',
+                text: '{{ session('guia-store') }}',
                 showConfirmButton: true,
                 confirmButtonText: "Cerrar"
 
