@@ -449,13 +449,17 @@ class Util extends Controller
             ],
             'user' => [
                 'header'     => 'Telf: ' . $this->plantilla->telefono,
-                'qr' => view('templates.guia-remision.qr', ['qr' => $guia->qr]),
+
             ]
         ];
 
         if ($guia->dispositivos->count() > 0 || $guia->sim_cards->count() > 0) {
 
             $params['user']['dispositivos'] = view('templates.guia-remision.dispositivos', compact('guia'));
+        }
+
+        if ($guia->qr) {
+            $params['user']['qr'] = view('templates.guia-remision.qr', ['qr' => $guia->qr]);
         }
 
         $html = $report->render($guia->clase, $params);

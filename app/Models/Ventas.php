@@ -88,8 +88,8 @@ class Ventas extends Model
     protected function clase(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => unserialize($nota),
-            set: fn ($nota) => serialize($nota),
+            get: fn ($clase) => unserialize($clase),
+            set: fn ($clase) => serialize($clase),
         );
     }
 
