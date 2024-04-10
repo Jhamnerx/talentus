@@ -117,7 +117,7 @@ class ApiFacturacion extends Controller
             ->setLegends([
                 (new Legend())
                     ->setCode('1000')
-                    ->setValue($formatter->toInvoice($nota->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
+                    ->setValue($formatter->toInvoice($nota->total, 2, $nota->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
             ]);
 
 
