@@ -96,6 +96,11 @@ class GuiaRemision extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function tecnico(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'tecnico_id', 'id');
+    }
     public function getSerie(): BelongsTo
     {
         return $this->belongsTo(Series::class, 'serie', 'serie');

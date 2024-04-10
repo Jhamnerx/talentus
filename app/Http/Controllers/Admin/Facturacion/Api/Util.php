@@ -437,10 +437,10 @@ class Util extends Controller
             'strict_variables' => true,
         ];
 
-        $report = new HtmlReport('', $twigOptions);
-        $resolver = new DefaultTemplateResolver();
+        $path = base_path('resources/views/templates/guia-remision');
 
-        $report->setTemplate($resolver->getTemplate($guia->clase));
+        $report = new HtmlReport($path, $twigOptions);
+        $report->setTemplate('despatch.html.twig');
 
         $params = [
             'system' => [
@@ -448,10 +448,15 @@ class Util extends Controller
                 'hash' => $guia->hash,
             ],
             'user' => [
-                'header'     => 'Telf: ' . $this->plantilla->telefono
-
+                'header'     => 'Telf: ' . $this->plantilla->telefono,
+                'qr' => view('templates.guia-remision.qr', ['qr' => $guia->qr]),
             ]
         ];
+
+        if ($guia->dispositivos->count() > 0 || $guia->sim_cards->count() > 0) {
+
+            $params['user']['dispositivos'] = view('templates.guia-remision.dispositivos', compact('guia'));
+        }
 
         $html = $report->render($guia->clase, $params);
 

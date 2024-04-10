@@ -245,7 +245,7 @@ class Create extends Component
             }
         } catch (\Throwable $th) {
 
-
+            dd($th);
             $this->dispatch(
                 'error',
                 title: 'ERROR: ',
