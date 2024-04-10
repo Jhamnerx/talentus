@@ -138,7 +138,30 @@
                                     {{ $message }}
                                 </p>
                             @enderror
-                            {{ json_encode($datosDetraccion) }}
+                            <div class="col-span-6">
+                                <x-form.card title="Datos de detracción">
+                                    <ol>
+                                        <li>
+                                            <span class="font-semibold">Cuenta Bancaria:</span>
+                                            {{ $datosDetraccion['cuenta_bancaria'] }}
+                                        </li>
+                                        <li>
+                                            <span class="font-semibold">Codigo Detraccion:</span>
+                                            {{ $datosDetraccion['codigo_detraccion'] }}
+                                        </li>
+
+                                        <li>
+                                            <span class="font-semibold">Porcentaje:</span>
+                                            {{ $datosDetraccion['porcentaje'] }}
+                                        </li>
+                                        <li>
+                                            <span class="font-semibold">Monto:</span>
+                                            {{ $datosDetraccion['monto'] }}
+                                        </li>
+                                    </ol>
+                                </x-form.card>
+                            </div>
+
                             @if (
                                 $errors->has('datosDetraccion.cuenta_bancaria') ||
                                     $errors->has('datosDetraccion.codigo_detraccion') ||
