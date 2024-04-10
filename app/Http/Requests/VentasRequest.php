@@ -25,6 +25,7 @@ class VentasRequest extends FormRequest
             'tipo_comprobante_id' => 'required|exists:tipo_comprobantes,codigo',
             'serie' => 'required|exists:series,serie',
             'correlativo' => 'required',
+            'tipo_operacion' => 'required',
             'serie_correlativo' => 'required',
             'cliente_id' => 'required|exists:clientes,id',
             'direccion' => 'required',

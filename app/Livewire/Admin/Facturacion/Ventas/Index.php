@@ -91,10 +91,10 @@ class Index extends Component
 
     public function createXml(Ventas $venta)
     {
-        dd($venta);
         try {
             $api = new ApiFacturacion();
             $mensaje =  $api->createXmlInvoice($venta, $venta->tipo_operacion);
+
             if ($mensaje['fe_codigo_error']) {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR COMPROBANTE', 'error');
