@@ -35,7 +35,7 @@ class Create extends Component
         $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
-    public $codigo_establecimiento_partida = '00001', $codigo_establecimiento_llegada = '00002';
+    public $codigo_establecimiento_partida = '0000', $codigo_establecimiento_llegada = '0000';
     public $observacion = '';
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
