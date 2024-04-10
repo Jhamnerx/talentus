@@ -242,15 +242,11 @@ class ApiFacturacion extends Controller
 
         $util = Util::getInstance();
 
-        $formatter = new NumeroALetras();
         $cliente = $this->getCliente($venta->cliente);
-
         // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
         // $guiaRemision = (new Document())
         // ->setTipoDoc('09') // Guia de Remision remitente: 09, catalogo 01
         // ->setNroDoc('T001-2'); // Serie y correlativo de la guia de remision
-
-
 
         $invoice = new Invoice();
         $invoice
@@ -279,7 +275,6 @@ class ApiFacturacion extends Controller
 
             $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
         }
-
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
         // ])
@@ -295,7 +290,6 @@ class ApiFacturacion extends Controller
             $invoice->setFormaPago(new FormaPagoContado());
         }
 
-
         //AÑADIR DESCUENTO SI ES QUE HAY
         if ($venta->descuento > 0) {
 
@@ -307,7 +301,6 @@ class ApiFacturacion extends Controller
                     ->setMonto($venta->descuento)
             ]);
         }
-
 
         //ESTBLECER EL VENDEDOR DEL COMPROBANTE
         $invoice->setSeller((new Client())
@@ -321,9 +314,6 @@ class ApiFacturacion extends Controller
 
         // Envio a SUNAT.
         $see = $util->getSee();
-
-        /** Si solo desea enviar un XML ya generado utilice esta función**/
-        //$res = $see->sendXml(get_class($invoice), $invoice->getName(), file_get_contents($ruta_XML));
 
         $result = $see->send($invoice);
 
@@ -379,10 +369,7 @@ class ApiFacturacion extends Controller
     public function sendInvoiceOnly(Ventas $venta)
     {
         $util = Util::getInstance();
-        $formatter = new NumeroALetras();
-        $cliente = $this->getCliente($venta->cliente);
         $plantilla = plantilla::first();
-
 
         // Envio a SUNAT.
         $see = $util->getSee();
@@ -525,12 +512,11 @@ class ApiFacturacion extends Controller
 
         return $respuesta;
     }
+
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
     public function createXmlInvoice(Ventas $venta, $tipo_operacion)
     {
         $util = Util::getInstance();
-        $formatter = new NumeroALetras();
-        // Cliente
         $cliente = $this->getCliente($venta->cliente);
 
         $invoice = new Invoice();
@@ -588,10 +574,8 @@ class ApiFacturacion extends Controller
         $invoice->setSeller((new Client())
             ->setRznSocial(Auth::user()->name));
 
-
         //ESTABLECER ITEMS DEL COMPROBANTE
         $items = $this->getItemsInvoice($venta->ventaDetalles);
-
 
         $invoice->setDetails($items)
             ->setLegends($this->getLegends($venta));
@@ -619,7 +603,6 @@ class ApiFacturacion extends Controller
                 'code_sunat' => null,
 
             ];
-
 
         $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
 

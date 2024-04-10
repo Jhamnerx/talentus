@@ -805,6 +805,14 @@
                                     <x-form.dropdown class="w-60">
 
                                         <x-form.dropdown.item icon='plus-sm' label="Volver a crear" />
+
+                                        @role('admin')
+                                            @if (!$venta->detraccion && $venta->fe_estado == '0')
+                                                <x-form.dropdown.item wire:click.prevent='createXml({{ $venta->id }})'
+                                                    icon='refresh' label="Crear XML" />
+                                            @endif
+                                        @endrole
+
                                         <x-form.dropdown.item icon='mail' label="Enviar a cliente" />
 
                                         @if ($venta->tipo_comprobante_id == '01')
