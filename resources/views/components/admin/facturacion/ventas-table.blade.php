@@ -926,9 +926,8 @@
 
                                         <x-form.dropdown.header label="Estado de pago">
                                             @if ($venta->pago_estado == 'PAID')
-                                                <x-form.dropdown.item disabled="true"
-                                                    wire:click.prevent='markPaid({{ $venta->id }})'
-                                                    icon="check-circle" label="Marcar como Pagada" />
+                                                <x-form.dropdown.item disabled="true" icon="check-circle"
+                                                    label="Marcar como Pagada" />
 
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='markUnPaid({{ $venta->id }})'
@@ -938,9 +937,8 @@
                                                     wire:click.prevent='markPaid({{ $venta->id }})'
                                                     icon="check-circle" label="Marcar como Pagada" />
 
-                                                <x-form.dropdown.item disabled="true"
-                                                    wire:click.prevent='markUnPaid({{ $venta->id }})'
-                                                    icon="x" label="Marcar como No Pagada" />
+                                                <x-form.dropdown.item disabled icon="x"
+                                                    label="Marcar como No Pagada" />
                                             @endif
                                         </x-form.dropdown.header>
                                     </x-form.dropdown>
