@@ -761,7 +761,7 @@ class ApiFacturacion extends Controller
 
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
-
+        $despatch->setObservacion($guia->observacion);
         // Envio a SUNAT.
         $api = $util->getSeeApi();
         try {
@@ -880,6 +880,7 @@ class ApiFacturacion extends Controller
 
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
+        $despatch->setObservacion($guia->observacion);
 
         $guia->update([
             'clase' => $despatch,
@@ -970,6 +971,7 @@ class ApiFacturacion extends Controller
 
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
+        $despatch->setObservacion($guia->observacion);
 
         // Envio a SUNAT.
         $api = $util->getSeeApi();
