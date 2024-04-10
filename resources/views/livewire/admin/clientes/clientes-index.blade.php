@@ -325,7 +325,6 @@
                                                     <div class="text-sm text-slate-400 italic ml-2"
                                                         x-text="checked ? 'ACTIVO' : 'INACTIVO'"></div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </td>

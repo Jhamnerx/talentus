@@ -556,6 +556,11 @@ class ApiFacturacion extends Controller
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
 
+        if ($venta->detraccion) {
+
+            $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
+        }
+
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
 
