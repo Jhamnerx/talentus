@@ -4,8 +4,7 @@
 
         <div class="col-span-6 sm:col-span-6">
 
-            <x-form.input wire:model.live="placa" wire:input="convertirAMayusculas" label="Placa Unidad:"
-                placeholder="ABC-780" />
+            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">

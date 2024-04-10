@@ -111,7 +111,7 @@ class ClientesIndex extends Component
 
     public function openModalSave()
     {
-        $this->dispatch('open-modal-save');
+        $this->dispatch('open-modal-save-cliente');
     }
 
     public function openModalEdit(Clientes $cliente)

@@ -140,10 +140,11 @@ class EditVehiculo extends Component
     }
 
 
-    public function convertirAMayusculas()
+    public function updatedPlaca()
     {
         $this->placa = strtoupper($this->placa);
     }
+
     public function updatedClientesId($value)
     {
 
