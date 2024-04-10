@@ -18,6 +18,7 @@ use Greenter\Model\Client\Client;
 use Greenter\Model\Voided\Voided;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Despatch\Puerto;
+use Greenter\Model\Sale\Detraction;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -37,22 +38,22 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use Greenter\Services\InvalidServiceResponseException;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-
+use App\Models\Detracciones;
 
 class ApiFacturacion extends Controller
 {
     public $filename = null;
 
-    public function emitirInvoice(Ventas $venta, $metodo_type)
+    public function emitirInvoice(Ventas $venta, $metodo_type, $tipo_operacion)
     {
 
         if ($metodo_type == "02") {
 
-            return $this->emitirComprobante($venta);
+            return $this->emitirComprobante($venta, $tipo_operacion);
         } else {
 
 
-            return  $this->createXmlInvoice($venta);
+            return  $this->createXmlInvoice($venta, $tipo_operacion);
         }
     }
     //DETERMINAR SI ES NOTA DE DEBITO O CREDITO
@@ -236,31 +237,27 @@ class ApiFacturacion extends Controller
     }
 
     //CREAR XML - FIRMADO Y ENVIO A SUNAT
-    public function emitirComprobante(Ventas $venta)
+    public function emitirComprobante(Ventas $venta, $tipo_operacion)
     {
 
         $util = Util::getInstance();
 
-        $formatter = new NumeroALetras();
         $cliente = $this->getCliente($venta->cliente);
-
         // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
         // $guiaRemision = (new Document())
         // ->setTipoDoc('09') // Guia de Remision remitente: 09, catalogo 01
         // ->setNroDoc('T001-2'); // Serie y correlativo de la guia de remision
 
-
-
         $invoice = new Invoice();
         $invoice
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion('0101')
+            ->setTipoOperacion($tipo_operacion)  // Catalogo 51
             ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
             ->setCorrelativo($venta->correlativo)
-            ->setFechaEmision(new DateTime($venta->fecha_hora_emision))
+            ->setFechaEmision(new DateTime($venta->fecha_emision))
             ->setTipoMoneda($venta->divisa)
             ->setCompany($util->getCompany())
             ->setClient($cliente)
@@ -274,6 +271,10 @@ class ApiFacturacion extends Controller
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
 
+        if ($venta->detraccion) {
+
+            $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
+        }
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
         // ])
@@ -289,7 +290,6 @@ class ApiFacturacion extends Controller
             $invoice->setFormaPago(new FormaPagoContado());
         }
 
-
         //AÑADIR DESCUENTO SI ES QUE HAY
         if ($venta->descuento > 0) {
 
@@ -302,7 +302,6 @@ class ApiFacturacion extends Controller
             ]);
         }
 
-
         //ESTBLECER EL VENDEDOR DEL COMPROBANTE
         $invoice->setSeller((new Client())
             ->setRznSocial(Auth::user()->name));
@@ -310,18 +309,11 @@ class ApiFacturacion extends Controller
         //ESTABLECER ITEMS DEL COMPROBANTE
         $items = $this->getItemsInvoice($venta->ventaDetalles);
 
-        $invoice->setDetails($items)
-            ->setLegends([
-                (new Legend())
-                    ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
-            ]);
+        $invoice->setDetails($items) //CATALAGO 52 - LEYENDA
+            ->setLegends($this->getLegends($venta));
 
         // Envio a SUNAT.
         $see = $util->getSee();
-
-        /** Si solo desea enviar un XML ya generado utilice esta función**/
-        //$res = $see->sendXml(get_class($invoice), $invoice->getName(), file_get_contents($ruta_XML));
 
         $result = $see->send($invoice);
 
@@ -347,14 +339,37 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+    public function getLegends($venta)
+    {
+        $formatter = new NumeroALetras();
+
+        if ($venta->detraccion) {
+
+            $legends = [
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES')),
+                (new Legend())
+                    ->setCode('2006')
+                    ->setValue('Operación sujeta a detracción')
+            ];
+
+            return $legends;
+        } else {
+            $legends = [
+                (new Legend())
+                    ->setCode('1000')
+                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
+            ];
+
+            return $legends;
+        }
+    }
 
     public function sendInvoiceOnly(Ventas $venta)
     {
         $util = Util::getInstance();
-        $formatter = new NumeroALetras();
-        $cliente = $this->getCliente($venta->cliente);
         $plantilla = plantilla::first();
-
 
         // Envio a SUNAT.
         $see = $util->getSee();
@@ -379,6 +394,22 @@ class ApiFacturacion extends Controller
         $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'no_update', $venta->clase);
 
         return $respuesta;
+    }
+
+    public function getDetraccion(Detracciones $detraccion)
+    {
+
+        // MONEDA SIEMPRE EN SOLES
+        $d = (new Detraction())
+            // Carnes y despojos comestibles
+            ->setCodBienDetraccion($detraccion->codigo_detraccion) // catalog. 54
+            // Deposito en cuenta
+            ->setCodMedioPago($detraccion->metodo_pago_id) // catalog. 59
+            ->setCtaBanco($detraccion->cuenta_bancaria)
+            ->setPercent($detraccion->porcentaje)
+            ->setMount($detraccion->monto);
+
+        return $d;
     }
 
     public function sendInvoiceOnlyNota(Comprobantes $nota)
@@ -481,24 +512,23 @@ class ApiFacturacion extends Controller
 
         return $respuesta;
     }
+
     //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
-    public function createXmlInvoice(Ventas $venta)
+    public function createXmlInvoice(Ventas $venta, $tipo_operacion)
     {
         $util = Util::getInstance();
-        $formatter = new NumeroALetras();
-        // Cliente
         $cliente = $this->getCliente($venta->cliente);
 
         $invoice = new Invoice();
         $invoice
             ->setUblVersion('2.1')
             ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion('0101')
+            ->setTipoOperacion($tipo_operacion)
             ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
             ->setSerie($venta->serie)
             ->setCorrelativo($venta->correlativo)
-            ->setFechaEmision(new DateTime($venta->fecha_hora_emision))
+            ->setFechaEmision(new DateTime($venta->fecha_emision))
             ->setTipoMoneda($venta->divisa)
             ->setCompany($util->getCompany())
             ->setClient($cliente)
@@ -511,6 +541,11 @@ class ApiFacturacion extends Controller
             ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
             ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
+
+        if ($venta->detraccion) {
+
+            $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
+        }
 
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
@@ -539,17 +574,11 @@ class ApiFacturacion extends Controller
         $invoice->setSeller((new Client())
             ->setRznSocial(Auth::user()->name));
 
-
         //ESTABLECER ITEMS DEL COMPROBANTE
         $items = $this->getItemsInvoice($venta->ventaDetalles);
 
-
         $invoice->setDetails($items)
-            ->setLegends([
-                (new Legend())
-                    ->setCode('1000')
-                    ->setValue($formatter->toInvoice($venta->total, 2, $venta->divisa == 'PEN' ? 'SOLES' : 'DÓLARES'))
-            ]);
+            ->setLegends($this->getLegends($venta));
 
         //FIRMADO Y GUARDADO DEL XML
         $see = $util->getSee();
@@ -574,7 +603,6 @@ class ApiFacturacion extends Controller
                 'code_sunat' => null,
 
             ];
-
 
         $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
 
@@ -733,7 +761,7 @@ class ApiFacturacion extends Controller
 
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
-
+        $despatch->setObservacion($guia->observacion);
         // Envio a SUNAT.
         $api = $util->getSeeApi();
         try {
@@ -777,6 +805,98 @@ class ApiFacturacion extends Controller
     }
 
 
+    public function updateClaseGuia(GuiaRemision $guia)
+    {
+
+        $util = Util::getInstance();
+        $plantilla = plantilla::first();
+        $cliente = $this->getCliente($guia->cliente);
+
+        //ESTABLECER DATOS DE LA GUIA DE REMISION
+        $envio = new Shipment();
+        $envio
+            ->setCodTraslado($guia->motivo_traslado_id) // Cat.20 - Traslado entre establecimientos de la misma empresa
+            ->setModTraslado($guia->modalidad_transporte_id) // Cat.18 - Transp. Privado
+            ->setIndicadores(['SUNAT_Envio_IndicadorTrasladoVehiculoM1L']) // Transp M1 y L
+            ->setFecTraslado(new DateTime($guia->fecha_inicio_traslado))
+            ->setPesoTotal($guia->peso)
+            ->setUndPesoTotal('KGM')
+            ->setLlegada($this->getDirectionGuiaLLegada($guia, $plantilla->ruc))
+
+            ->setPartida($this->getDirectionGuiaPartida($guia, $plantilla->ruc));
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION y AGREGA EL PUERTO
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $envio->setContenedores([$guia->numero_contenedor]);
+
+            $puerto = (new Puerto())->setCodigo($guia->data_puerto['code_puerto'])
+                ->setNombre($guia->data_puerto['nombre_puerto']);
+
+            $envio->setPuerto($puerto);
+        }
+
+
+        //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
+        if ($guia->motivo_traslado_id == '13') {
+
+            $envio->setDesTraslado($guia->descripcion_motivo_traslado);
+        }
+        //ESTABLECER GUIA DE REMISION
+        $despatch = new Despatch();
+        $despatch->setVersion('2022')
+            ->setTipoDoc('09')
+            ->setSerie($guia->serie)
+            ->setCorrelativo($guia->correlativo)
+            ->setFechaEmision(new DateTime($guia->fecha_emision))
+            ->setCompany($util->getCompany())
+            ->setDestinatario($cliente) // misma empresa
+            ->setEnvio($envio);
+
+        //AGREGAR DOCUMENTO RELACIONADO SI EL MOTIVO DE TRASLADO ES IMPORTACION O EXPORTACION
+        if ($guia->motivo_traslado_id == '08' || $guia->motivo_traslado_id == '09') {
+
+            $relDoc = (new AdditionalDoc())
+                ->setTipo($guia->docu_rel_tipo)
+                ->setTipoDesc('Declaración Aduanera de Mercancías')
+                ->setNro($guia->docu_rel_numero);
+            // ->setNro('235-2024-10-000329');  //formato para el nro de documento relacionado tipo 50
+            $despatch->setAddDocs([$relDoc]);
+        } else {
+
+            //AGREGAR DOCUMENTO RELACIONADO SI ES QUE LA GUIA ESTA RELACIONADA A UNA VENTA
+            if ($guia->venta) {
+
+                $relDoc = (new AdditionalDoc())
+                    ->setTipo($guia->venta->tipo_comprobante_id)
+                    ->setTipoDesc('Factura')
+                    ->setEmisor($plantilla->ruc)
+                    ->setNro($guia->venta->serie_correlativo);
+
+                $despatch->setAddDocs([$relDoc]);
+            }
+        }
+
+        //ESTABLECER ITEMS DE LA GUIA DE REMISION
+        $despatch->setDetails($this->getItemsGuia($guia->detalle));
+        $despatch->setObservacion($guia->observacion);
+
+        $guia->update([
+            'clase' => $despatch,
+        ]);
+
+
+        $respuesta
+            =  [
+                'estado_texto' => 'ESTADO: SE CREÓ LA CLASE',
+                'fe_mensaje_sunat' => "El comprobante fue serializado correctamente",
+                'fe_mensaje_error' => null,
+                'nota' => '',
+                'fe_codigo_error' => null,
+            ];
+        return $respuesta;
+    }
     public function createXmlGuia(GuiaRemision $guia)
     {
         $util = Util::getInstance();
@@ -851,6 +971,7 @@ class ApiFacturacion extends Controller
 
         //ESTABLECER ITEMS DE LA GUIA DE REMISION
         $despatch->setDetails($this->getItemsGuia($guia->detalle));
+        $despatch->setObservacion($guia->observacion);
 
         // Envio a SUNAT.
         $api = $util->getSeeApi();

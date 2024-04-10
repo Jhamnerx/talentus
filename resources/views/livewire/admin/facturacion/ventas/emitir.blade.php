@@ -113,7 +113,7 @@
 
                     {{-- TIPO DE VENTA --}}
                     @if ($tipo_comprobante_id == '01')
-                        <div class="col-span-12 md:col-span-6 mb-3">
+                        <div class="col-span-12 md:col-span-4 mb-3">
 
                             <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[
                                 ['name' => 'CONTADO', 'id' => 'CONTADO'],
@@ -122,10 +122,129 @@
                                 option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
                         </div>
+
+                        <div class="col-span-6 sm:col-span-4">
+                            <x-form.checkbox left-label="Operación con Detraccion:" value="true" id="lg" lg
+                                wire:model.live="detraccion" />
+                        </div>
+
+                        @if ($detraccion)
+                            <div class="col-span-6 sm:col-span-4">
+                                <x-form.button xs wire:click="openModalDetraccion" spinner="openModalDetraccion" outline
+                                    primary label="Informacion de la detraccion" />
+                            </div>
+                            @error('datosDetraccion')
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
+                            @enderror
+                            <div class="col-span-6">
+                                <x-form.card title="Datos de detracción">
+                                    <ol>
+                                        <li>
+                                            <span class="font-semibold">Cuenta Bancaria:</span>
+                                            {{ $datosDetraccion['cuenta_bancaria'] }}
+                                        </li>
+                                        <li>
+                                            <span class="font-semibold">Codigo Detraccion:</span>
+                                            {{ $datosDetraccion['codigo_detraccion'] }}
+                                        </li>
+
+                                        <li>
+                                            <span class="font-semibold">Porcentaje:</span>
+                                            {{ $datosDetraccion['porcentaje'] }}
+                                        </li>
+                                        <li>
+                                            <span class="font-semibold">Monto:</span>
+                                            {{ $datosDetraccion['monto'] }}
+                                        </li>
+                                    </ol>
+                                </x-form.card>
+                            </div>
+
+                            @if (
+                                $errors->has('datosDetraccion.cuenta_bancaria') ||
+                                    $errors->has('datosDetraccion.codigo_detraccion') ||
+                                    $errors->has('datosDetraccion.metodo_pago_id') ||
+                                    $errors->has('datosDetraccion.porcentaje') ||
+                                    $errors->has('datosDetraccion.monto'))
+                                <div class="col-span-12">
+                                    <p class="mt-2  text-pink-600 text-sm">
+                                        {{ $errors->first('datosDetraccion.cuenta_bancaria') }}
+                                        <br>
+                                        {{ $errors->first('datosDetraccion.codigo_detraccion') }}
+                                        <br>
+                                        {{ $errors->first('datosDetraccion.metodo_pago_id') }}
+                                        <br>
+                                        {{ $errors->first('datosDetraccion.porcentaje') }}
+                                        <br>
+                                        {{ $errors->first('datosDetraccion.monto') }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            <x-form.modal.card title="Información de Detracción" max-width='lg'
+                                wire:model.live="openModalDt" align="center">
+
+                                <div
+                                    class="grid grid-cols-12 gap-6 text-sm col-span-12 rounded-lg shadow-lg bg-white text-center border border-gray-300 px-4 py-4">
+
+                                    <div class="col-span-12">
+
+                                        <span class="font-semibold">La información de detraccion siempre se registrará
+                                            en
+                                            moneda nacional "SOL"
+                                            independiente de la moneda
+                                            del comprobante.</span>
+                                    </div>
+
+                                    <div class="col-span-12">
+
+                                        <x-form.select autocomplete="off" id="codigo_detraccion"
+                                            name="codigo_detraccion"
+                                            label="código de bien/servicio sujeto a detracción*:"
+                                            wire:model.live="datosDetraccion.codigo_detraccion"
+                                            placeholder="Selecciona" :async-data="[
+                                                'api' => route('api.detracciones.index'),
+                                            ]" option-label="descripcion"
+                                            option-value="codigo" />
+
+                                    </div>
+                                    <div class="col-span-12 sm:col-span-6">
+
+                                        <x-form.input wire:model.live="datosDetraccion.cuenta_bancaria"
+                                            label="Nro. Cta. Banco de la Nación:" placeholder="" />
+
+                                    </div>
+                                    <div class="col-span-12 sm:col-span-6">
+
+                                        <x-form.select autocomplete="off" id="metodo_pago_id" name="metodo_pago_id"
+                                            label="Medio de pago:" wire:model.live="datosDetraccion.metodo_pago_id"
+                                            placeholder="Selecciona" :async-data="[
+                                                'api' => route('api.metodos.pago.index'),
+                                            ]" option-label="descripcion"
+                                            option-value="codigo" />
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-6">
+
+                                        <x-form.input wire:model.live="datosDetraccion.porcentaje"
+                                            label="Porcentaje de detracción:" placeholder="12" />
+
+                                    </div>
+
+                                    <div class="col-span-12 sm:col-span-6">
+
+                                        <x-form.input wire:model.live="datosDetraccion.monto"
+                                            label="Monto de detracción:" placeholder="0.00" />
+
+                                    </div>
+
+                                </div>
+                            </x-form.modal.card>
+                        @endif
+
                     @endif
-
-
-
                 </div>
 
                 {{-- componente venta al credito --}}
@@ -134,8 +253,6 @@
                     <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
                     </x-admin.facturacion.detalle-cuotas-table>
                 </div>
-
-
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 

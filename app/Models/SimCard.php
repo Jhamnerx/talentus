@@ -69,7 +69,7 @@ class SimCard extends Model
     public static function asignarSimCard(User $user, $items, GuiaRemision $guia)
     {
 
-        $user->sim_card()->attach(
+        $user->sim_cards()->attach(
             $items,
             [
                 'guia_remision_id' => $guia->id,

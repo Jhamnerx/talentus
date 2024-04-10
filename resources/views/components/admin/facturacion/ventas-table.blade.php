@@ -333,54 +333,119 @@
 
                                             {{-- RECHAZADO --}}
                                             @case('2')
-                                                <button type="button" class="bg-white cursor-default">
-                                                    <svg class="w-8 h-8" id="icons" enable-background="new 0 0 64 64"
-                                                        height="512" viewBox="0 0 64 64" width="512"
-                                                        xmlns="http://www.w3.org/2000/svg">
-                                                        <g>
-                                                            <g>
-                                                                <path
-                                                                    d="m41 52c.55 0 1 .45 1 1v6.152 1.005s-.433.128-.962.278c0 0-5.519 1.566-9.038 1.566-2.06 0-5.014-.487-5.014-.487-.542-.089-.986-.613-.986-1.162v-7.352c0-.55.45-1 1-1h.01 2 9.99z"
-                                                                    fill="#656d78" />
-                                                            </g>
-                                                            <g>
-                                                                <path
-                                                                    d="m43.95 20.05c-.22-1.16-1.23-2.03-2.45-2.03-1.38 0-2.5 1.12-2.5 2.5v-5.02c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v-3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v18.5l-3.89-3.41-.11-.09c-.42-.31-.94-.5-1.5-.5-1.38 0-2.5 1.12-2.5 2.5 0 .46.12.89.34 1.26l5.99 7.91 2.09 2.771c.96 1.42 2.17 2.659 3.59 3.569v3.99h11.99v-.17-3.83c2.39-1.4 4-4.01 4-7v-20.48c0-.16-.02-.32-.05-.47z"
-                                                                    fill="#eac6bb" />
-                                                            </g>
-                                                            <g>
-                                                                <path
-                                                                    d="m51.8 12.2c-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.479 6.391 13.8 7.55v-7.35h2.01v-3.99c-1.42-.91-2.63-2.149-3.59-3.569l-2.09-2.771-5.99-7.91c-.22-.37-.34-.8-.34-1.26 0-1.38 1.12-2.5 2.5-2.5.56 0 1.08.19 1.5.5l.11.09 3.89 3.41v-18.5c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v-3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v5.02c0-1.38 1.12-2.5 2.5-2.5 1.22 0 2.23.87 2.45 2.03.03.15.05.31.05.47v20.48c0 2.99-1.61 5.6-4 7v3.83.17h2v6.15c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8z"
-                                                                    fill="#f5f7fa" />
-                                                            </g>
-                                                            <g>
-                                                                <path
-                                                                    d="m28.998 15.259c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v18.51l-3.89-3.408-.11-.102c-.42-.309-.94-.5-1.5-.5-1.38 0-2.5 1.121-2.5 2.5 0 .441.11.861.32 1.221l8.1 10.73c.97 1.41 2.17 2.66 3.59 3.559v3.99h11.99v-3.99c2.39-1.398 4-4.01 4-7.01v-20.479c0-1.381-1.12-2.5-2.5-2.5s-2.5 1.119-2.5 2.5v-5.021c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v-3c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5z"
-                                                                    fill="#eac6bb" />
-                                                                <g fill="#d3b1a9">
-                                                                    <path
-                                                                        d="m28.981 14.272c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v13.5c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
-                                                                    <path
-                                                                        d="m38.981 20.278c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v7.494c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
-                                                                    <path
-                                                                        d="m33.998 29.769v-14.502c0-.814.396-1.531 1-1.988v15.49c0 .552-.447 1-1 1z" />
-                                                                </g>
-                                                            </g>
-                                                            <g>
-                                                                <g>
-                                                                    <path
-                                                                        d="m12.201 52.799c-.256 0-.512-.098-.707-.293-.391-.391-.391-1.023 0-1.414l39.598-39.598c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414l-39.598 39.598c-.195.195-.451.293-.707.293z"
-                                                                        fill="#da4453" />
-                                                                </g>
-                                                            </g>
-                                                            <g>
-                                                                <path
-                                                                    d="m1 32c0-17.12 13.88-31 31-31s31 13.88 31 31-13.88 31-31 31-31-13.88-31-31zm25 27.35c1.93.43 3.94.65 6 .65 3.52 0 6.89-.65 10-1.84v-.01c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.48 6.39 13.8 7.55z"
-                                                                    fill="#ed5565" />
-                                                            </g>
-                                                        </g>
-                                                    </svg>
-                                                </button>
+                                                <div x-data="{ open: false }" class="relative inline-block text-left">
+                                                    <div>
+                                                        <button
+                                                            class="inline-flex justify-center items-center grou text-sm font-medium"
+                                                            aria-haspopup="true" @click="open = !open" type="button"
+                                                            :aria-expanded="open">
+                                                            <div class="flex items-center truncate">
+                                                                <svg class="w-8 h-8" id="icons"
+                                                                    enable-background="new 0 0 64 64" height="512"
+                                                                    viewBox="0 0 64 64" width="512"
+                                                                    xmlns="http://www.w3.org/2000/svg">
+                                                                    <g>
+                                                                        <g>
+                                                                            <path
+                                                                                d="m41 52c.55 0 1 .45 1 1v6.152 1.005s-.433.128-.962.278c0 0-5.519 1.566-9.038 1.566-2.06 0-5.014-.487-5.014-.487-.542-.089-.986-.613-.986-1.162v-7.352c0-.55.45-1 1-1h.01 2 9.99z"
+                                                                                fill="#656d78" />
+                                                                        </g>
+                                                                        <g>
+                                                                            <path
+                                                                                d="m43.95 20.05c-.22-1.16-1.23-2.03-2.45-2.03-1.38 0-2.5 1.12-2.5 2.5v-5.02c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v-3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v3c0-1.39-1.12-2.5-2.5-2.5s-2.5 1.11-2.5 2.5v18.5l-3.89-3.41-.11-.09c-.42-.31-.94-.5-1.5-.5-1.38 0-2.5 1.12-2.5 2.5 0 .46.12.89.34 1.26l5.99 7.91 2.09 2.771c.96 1.42 2.17 2.659 3.59 3.569v3.99h11.99v-.17-3.83c2.39-1.4 4-4.01 4-7v-20.48c0-.16-.02-.32-.05-.47z"
+                                                                                fill="#eac6bb" />
+                                                                        </g>
+                                                                        <g>
+                                                                            <path
+                                                                                d="m51.8 12.2c-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.479 6.391 13.8 7.55v-7.35h2.01v-3.99c-1.42-.91-2.63-2.149-3.59-3.569l-2.09-2.771-5.99-7.91c-.22-.37-.34-.8-.34-1.26 0-1.38 1.12-2.5 2.5-2.5.56 0 1.08.19 1.5.5l.11.09 3.89 3.41v-18.5c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v-3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v3c0-1.39 1.12-2.5 2.5-2.5s2.5 1.11 2.5 2.5v5.02c0-1.38 1.12-2.5 2.5-2.5 1.22 0 2.23.87 2.45 2.03.03.15.05.31.05.47v20.48c0 2.99-1.61 5.6-4 7v3.83.17h2v6.15c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8z"
+                                                                                fill="#f5f7fa" />
+                                                                        </g>
+                                                                        <g>
+                                                                            <path
+                                                                                d="m28.998 15.259c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v18.51l-3.89-3.408-.11-.102c-.42-.309-.94-.5-1.5-.5-1.38 0-2.5 1.121-2.5 2.5 0 .441.11.861.32 1.221l8.1 10.73c.97 1.41 2.17 2.66 3.59 3.559v3.99h11.99v-3.99c2.39-1.398 4-4.01 4-7.01v-20.479c0-1.381-1.12-2.5-2.5-2.5s-2.5 1.119-2.5 2.5v-5.021c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5v-3c0-1.379-1.12-2.5-2.5-2.5s-2.5 1.121-2.5 2.5z"
+                                                                                fill="#eac6bb" />
+                                                                            <g fill="#d3b1a9">
+                                                                                <path
+                                                                                    d="m28.981 14.272c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v13.5c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
+                                                                                <path
+                                                                                    d="m38.981 20.278c.006 0 .011-.004.017-.004.553 0 1 .447 1 1v7.494c0 .553-.447 1-1 1-.006 0-.011-.004-.017-.004z" />
+                                                                                <path
+                                                                                    d="m33.998 29.769v-14.502c0-.814.396-1.531 1-1.988v15.49c0 .552-.447 1-1 1z" />
+                                                                            </g>
+                                                                        </g>
+                                                                        <g>
+                                                                            <g>
+                                                                                <path
+                                                                                    d="m12.201 52.799c-.256 0-.512-.098-.707-.293-.391-.391-.391-1.023 0-1.414l39.598-39.598c.391-.391 1.023-.391 1.414 0s.391 1.023 0 1.414l-39.598 39.598c-.195.195-.451.293-.707.293z"
+                                                                                    fill="#da4453" />
+                                                                            </g>
+                                                                        </g>
+                                                                        <g>
+                                                                            <path
+                                                                                d="m1 32c0-17.12 13.88-31 31-31s31 13.88 31 31-13.88 31-31 31-31-13.88-31-31zm25 27.35c1.93.43 3.94.65 6 .65 3.52 0 6.89-.65 10-1.84v-.01c10.52-4.02 18-14.21 18-26.15 0-7.73-3.14-14.73-8.2-19.8-5.07-5.06-12.07-8.2-19.8-8.2-15.46 0-28 12.54-28 28 0 7.73 3.14 14.73 8.2 19.8 3.72 3.71 8.48 6.39 13.8 7.55z"
+                                                                                fill="#ed5565" />
+                                                                        </g>
+                                                                    </g>
+                                                                </svg>
+
+                                                                <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                                                    viewBox="0 0 12 12">
+                                                                    <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                                                </svg>
+                                                            </div>
+                                                        </button>
+                                                    </div>
+
+                                                    <div x-show="open" @click.away="open = false"
+                                                        class="origin-top-right z-10 absolute top-full overflow-x-auto right-0 mt-2 min-w-44 max-w-md rounded-md bg-white border border-slate-300 shadow-2xl ring-1 ring-black ring-opacity-5 overflow-hidden">
+                                                        <div class="py-1 min-w-80" role="menu" aria-orientation="vertical"
+                                                            aria-labelledby="options-menu">
+
+                                                            <div
+                                                                class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
+                                                                <div class="w-full">
+                                                                    <span>COMPROBANTE: </span>
+                                                                </div>
+                                                                <div class="w-full">
+                                                                    <x-form.badge indigo md
+                                                                        label="{{ $venta->serie_correlativo }}" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div
+                                                                class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
+                                                                <div class="w-full">
+                                                                    <span>Estado:</span>
+                                                                </div>
+                                                                <div class="w-full">
+                                                                    <x-form.badge indigo md
+                                                                        label="{{ $venta->estado_texto }}" />
+                                                                </div>
+                                                            </div>
+
+                                                            <div
+                                                                class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
+                                                                <div class="w-full">
+                                                                    <span>Código:</span>
+                                                                </div>
+                                                                <div class="w-full">
+                                                                    <x-form.badge indigo md
+                                                                        label="{{ $venta->fe_codigo_error }}" />
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900 whitespace-normal">
+                                                                <div class="w-full">
+                                                                    <span>Descripción: </span>
+                                                                </div>
+                                                                <div class="w-full">
+                                                                    {{ $venta->fe_mensaje_error }}
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @break
 
                                             {{-- ACEPTADO PERO CON OBSERVACIONES --}}
@@ -805,6 +870,14 @@
                                     <x-form.dropdown class="w-60">
 
                                         <x-form.dropdown.item icon='plus-sm' label="Volver a crear" />
+
+                                        @role('admin')
+                                            @if (!$venta->clase && $venta->fe_estado == '0')
+                                                <x-form.dropdown.item wire:click.prevent='createXml({{ $venta->id }})'
+                                                    icon='refresh' label="Crear XML" />
+                                            @endif
+                                        @endrole
+
                                         <x-form.dropdown.item icon='mail' label="Enviar a cliente" />
 
                                         @if ($venta->tipo_comprobante_id == '01')
@@ -853,9 +926,8 @@
 
                                         <x-form.dropdown.header label="Estado de pago">
                                             @if ($venta->pago_estado == 'PAID')
-                                                <x-form.dropdown.item disabled="true"
-                                                    wire:click.prevent='markPaid({{ $venta->id }})'
-                                                    icon="check-circle" label="Marcar como Pagada" />
+                                                <x-form.dropdown.item disabled="true" icon="check-circle"
+                                                    label="Marcar como Pagada" />
 
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='markUnPaid({{ $venta->id }})'
@@ -865,9 +937,8 @@
                                                     wire:click.prevent='markPaid({{ $venta->id }})'
                                                     icon="check-circle" label="Marcar como Pagada" />
 
-                                                <x-form.dropdown.item disabled="true"
-                                                    wire:click.prevent='markUnPaid({{ $venta->id }})'
-                                                    icon="x" label="Marcar como No Pagada" />
+                                                <x-form.dropdown.item disabled icon="x"
+                                                    label="Marcar como No Pagada" />
                                             @endif
                                         </x-form.dropdown.header>
                                     </x-form.dropdown>

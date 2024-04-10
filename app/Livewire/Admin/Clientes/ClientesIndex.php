@@ -36,7 +36,10 @@ class ClientesIndex extends Component
                         ->orwhere('direccion', 'like', '%' . $this->search . '%')
                         ->orwhere('telefono', 'like', '%' . $this->search . '%');
                 }
-            )->orderBy('id', 'desc')
+            )->orwhereHas('tipoDocumento', function ($query) {
+                $query->where('descripcion', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy('id', 'desc')
             ->paginate(10);
 
         if (!empty($desde)) {

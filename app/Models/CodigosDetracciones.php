@@ -13,11 +13,10 @@ class CodigosDetracciones extends Model
     protected $table = 'codigos_detracciones';
 
     protected $primaryKey = "codigo";
-    protected $incrementing = false;
 
     protected $casts = [
         'codigo' => 'string',
-        'porcentaje' => 'decimal:4',
+        'porcentaje' => 'decimal:2',
         'descripcion' => 'string',
     ];
 }

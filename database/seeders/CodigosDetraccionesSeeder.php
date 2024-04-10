@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CodigosDetracciones;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -193,5 +194,10 @@ class CodigosDetraccionesSeeder extends Seeder
                 'descripcion' => "Ley 30737"
             ]
         ];
+
+        foreach ($codigos as $codigo) {
+
+            CodigosDetracciones::create($codigo);
+        }
     }
 }

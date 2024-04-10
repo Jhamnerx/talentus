@@ -35,7 +35,7 @@ class Create extends Component
         $code_puerto, $data_puerto = [];
 
     public $direccion_partida, $ubigeo_partida, $direccion_llegada, $ubigeo_llegada;
-    public $codigo_establecimiento_partida = '00001', $codigo_establecimiento_llegada = '00002';
+    public $codigo_establecimiento_partida = '0000', $codigo_establecimiento_llegada = '0000';
     public $observacion = '';
 
     public $terceros_tipo_documento, $terceros_num_doc, $terceros_razon_social;
@@ -71,7 +71,6 @@ class Create extends Component
             'descripcion' => "",
         ]);
     }
-
 
     public function render()
     {
@@ -226,11 +225,11 @@ class Create extends Component
 
                 if ($mensaje['fe_codigo_error']) {
 
-                    session()->flash('store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
                     $this->redirectRoute('admin.almacen.guias.index');
                 } else {
 
-                    session()->flash('store', $mensaje['fe_mensaje_sunat']);
+                    session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
                     $this->redirectRoute('admin.almacen.guias.index');
                 }
             } else {
@@ -246,7 +245,7 @@ class Create extends Component
             }
         } catch (\Throwable $th) {
 
-
+            dd($th);
             $this->dispatch(
                 'error',
                 title: 'ERROR: ',

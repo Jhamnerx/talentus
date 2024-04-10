@@ -19,12 +19,13 @@ class VentasRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
+    public function rules($detraccion = false): array
     {
         $rules = [
             'tipo_comprobante_id' => 'required|exists:tipo_comprobantes,codigo',
             'serie' => 'required|exists:series,serie',
             'correlativo' => 'required',
+            'tipo_operacion' => 'required',
             'serie_correlativo' => 'required',
             'cliente_id' => 'required|exists:clientes,id',
             'direccion' => 'required',
@@ -76,6 +77,15 @@ class VentasRequest extends FormRequest
             //'detalle_cuotas.*.importe' => 'required',
         ];
 
+        if ($detraccion) {
+            $rules['datosDetraccion.codigo_detraccion'] = 'required';
+            $rules['datosDetraccion.porcentaje'] = 'required|min:1';
+            $rules['datosDetraccion.monto'] = 'required|min:1';
+            $rules['datosDetraccion.metodo_pago_id'] = 'required';
+            $rules['datosDetraccion.cuenta_bancaria'] = 'required|alpha_num';
+            // $rules['total'] = 'required|same:detraccion.total_venta';
+        }
+
 
         return $rules;
     }
@@ -87,6 +97,8 @@ class VentasRequest extends FormRequest
             'total_cuotas.same' => 'la suma de las cuotas debe ser igual al Monto neto',
             'cliente_id.required' => 'Debes Seleccionar un cliente',
             'items.between' => 'Debes Añadir al menos 1 producto o servicio',
+            'datosDetraccion.cuenta_bancaria.required' => 'La cuenta bancaria es obligatoria si hay detracción',
+            'datosDetraccion.codigo_detraccion.required' => 'El código detracción es obligatorio',
         ];
         return $messages;
     }

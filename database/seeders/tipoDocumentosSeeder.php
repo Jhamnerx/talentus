@@ -16,7 +16,7 @@ class tipoDocumentosSeeder extends Seeder
         $tipos = [
             [
                 'codigo' => '0',
-                'descripcion' => 'SIN DOCUMENTO',
+                'descripcion' => 'DOC.TRIB.NO.DOM.SIN.RUC',
             ],
             [
                 'codigo' => '1',
