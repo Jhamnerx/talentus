@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class detalleGuiaRemision extends Model
 {
@@ -16,7 +17,13 @@ class detalleGuiaRemision extends Model
         'cantidad' => 'float',
     ];
     //Relacion uno a muchos inversa
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     public function guias()
     {
         return $this->belongsTo(GuiaRemision::class, 'guia_remision_id');

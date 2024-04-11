@@ -5,14 +5,15 @@ namespace App\Models;
 use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\ModalidadTraslado;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GuiaRemision extends Model
 {
@@ -30,6 +31,14 @@ class GuiaRemision extends Model
      *
      * @var array
      */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
+
     protected $casts = [
         'id' => 'integer',
         'cliente_id' => 'integer',

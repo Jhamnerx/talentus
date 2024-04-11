@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class SimCard extends Model
 {
@@ -47,10 +48,9 @@ class SimCard extends Model
     }
 
     //relacion uno a muchos
-
-    public function cambios()
+    public function cambios(): HasMany
     {
-        return $this->hasMany(CambiosLineas::class, 'sim_card');
+        return $this->hasMany(CambiosLineas::class, 'sim_card_id', 'sim_card');
     }
 
     //relacion many to many

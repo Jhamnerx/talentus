@@ -221,7 +221,7 @@ class Create extends Component
             $api = new ApiFacturacion();
             $mensaje = $api->emitirGuia($guia);
 
-            if (array_key_exists('success', $mensaje) && $mensaje['success'] == true) {
+            if (array_key_exists('success', $mensaje) && $mensaje['success'] == true && array_key_exists('error_session', $mensaje) == false) {
 
                 if ($mensaje['fe_codigo_error']) {
 
@@ -245,7 +245,7 @@ class Create extends Component
             }
         } catch (\Throwable $th) {
 
-            dd($th);
+
             $this->dispatch(
                 'error',
                 title: 'ERROR: ',

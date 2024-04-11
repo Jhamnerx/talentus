@@ -10,15 +10,16 @@ use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
 use App\Models\PaymentMethods;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Spatie\Activitylog\LogOptions;
 use App\Models\EnvioResumenDetalle;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Ventas extends Model
 {
@@ -70,7 +71,13 @@ class Ventas extends Model
         'detalle_cuotas' => AsCollection::class,
         'nota' => AsCollection::class,
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
