@@ -1,22 +1,5 @@
 <div>
-
-    <!-- Basic Modal -->
-
-    <!-- Start -->
-    <div x-data="{ modalOpen: false }">
-
-        <button @click="modalOpen = true" aria-controls="basic-modal"
-            class="btn border-slate-200 hover:border-slate-300 rounded-full">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye-check w-6 h-6 shrink-0"
-                viewBox="0 0 32 32" stroke-width="1.5" stroke="#9e9e9e" fill="none" stroke-linecap="round"
-                stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                <circle cx="12" cy="12" r="2" />
-                <path
-                    d="M12 19c-4 0 -7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7c-.42 .736 -.858 1.414 -1.311 2.033" />
-                <path d="M15 19l2 2l4 -4" />
-            </svg>
-        </button>
+    <div x-data="{ modalOpen: @entangle('modalOpen').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalOpen"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -49,53 +32,54 @@
                 </div>
                 <!-- Modal content -->
                 <div class="relative mx-auto px-4 sm:px-6 lg:px-8 my-4">
+                    @if ($sim_card)
 
-                    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
-                        <header class="px-5 py-4">
-                            <h2 class="font-semibold text-slate-800">{{ $sim_card->sim_card }} <span
-                                    class="text-slate-400 font-medium"></span></h2>
-                        </header>
-                        <div>
 
-                            <!-- Table -->
-                            <div class="overflow-x-auto">
-                                <table class="table-auto w-full">
-                                    <!-- Table header -->
-                                    <thead
-                                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
-                                        <tr>
+                        <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+                            <header class="px-5 py-4">
+                                <h2 class="font-semibold text-slate-800">{{ $sim_card->sim_card }} <span
+                                        class="text-slate-400 font-medium"></span></h2>
+                            </header>
+                            <div>
+                                <!-- Table -->
+                                <div class="overflow-x-auto">
+                                    <table class="table-auto w-full">
+                                        <!-- Table header -->
+                                        <thead
+                                            class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                                            <tr>
 
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">#</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">Tipo de cambios</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">Sim card</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">Numero anterior</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold">Numero Nuevo</div>
-                                            </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">#</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">Tipo de cambios</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">Sim card</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">Numero anterior</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold">Numero Nuevo</div>
+                                                </th>
 
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">Fecha</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold text-left">Fecha Activacion</div>
-                                            </th>
-                                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                <div class="font-semibold">Usuario</div>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <!-- Table body -->
-                                    <tbody class="text-sm divide-y divide-slate-200">
-                                        <!-- Row -->
-                                        @if ($cambios->count())
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">Fecha</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold text-left">Fecha Activacion</div>
+                                                </th>
+                                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                                    <div class="font-semibold">Usuario</div>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <!-- Table body -->
+                                        <tbody class="text-sm divide-y divide-slate-200">
+                                            <!-- Row -->
+
                                             @foreach ($cambios as $key => $cambio)
                                                 <tr>
                                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -107,7 +91,8 @@
                                                     </td>
 
                                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                                        <div class="text-left">{{ $cambio->sim_card->sim_card }}</div>
+                                                        <div class="text-left">{{ $cambio->sim_card->sim_card }}
+                                                        </div>
                                                     </td>
 
 
@@ -116,7 +101,8 @@
                                                             <div class="text-left font-medium text-rose-500">+51
                                                                 {{ $cambio->linea_old->numero }}</div>
                                                         @else
-                                                            <div class="text-left font-medium text-rose-500">Asignado
+                                                            <div class="text-left font-medium text-rose-500">
+                                                                Asignado
                                                                 por 1° vez
                                                             </div>
                                                         @endif
@@ -146,26 +132,22 @@
 
                                                 </tr>
                                             @endforeach
-                                        @else
-                                            <td colspan="8"
-                                                class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                                <div class="text-center">No hay Cambios en este Sim Card</div>
-                                            </td>
-                                        @endif
-                                        <!-- Row -->
+                                            @if ($cambios->count() < 1)
+                                                <td colspan="8"
+                                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                                    <div class="text-center">No hay Cambios en este Sim Card</div>
+                                                </td>
+                                            @endif
+                                            <!-- Row -->
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-
-
-
+                    @endif
                 </div>
-
                 <!-- Modal footer -->
                 <div class="px-5 py-4 border-t border-slate-200">
                     <div class="flex flex-wrap justify-end space-x-2">

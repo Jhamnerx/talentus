@@ -786,7 +786,7 @@ class ApiFacturacion extends Controller
 
         $res = $api->getStatus($ticket);
         $this->updateTicket($guia, $ticket);
-
+        //CREAR TABLA TICKETS PARA NO PERDERLOS
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $despatch); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET

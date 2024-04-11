@@ -126,4 +126,10 @@ class Index extends Component
     {
         $this->dispatch('open-modal-asign');
     }
+
+    public function openModalCambios(SimCard $sim_card)
+    {
+
+        $this->dispatch('open-modal-cambios', sim_card: $sim_card);
+    }
 }

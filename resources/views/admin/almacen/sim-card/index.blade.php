@@ -12,6 +12,7 @@
     @livewire('admin.sim-card.un-asign')
     @livewire('admin.sim-card.save')
     @livewire('admin.sim-card.asign-linea')
+    @livewire('admin.sim-card.ver-cambios')
 @endpush
 
 

@@ -50,7 +50,7 @@ class SimCard extends Model
     //relacion uno a muchos
     public function cambios(): HasMany
     {
-        return $this->hasMany(CambiosLineas::class, 'sim_card_id', 'sim_card');
+        return $this->hasMany(CambiosLineas::class, 'sim_card_id');
     }
 
     //relacion many to many

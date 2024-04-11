@@ -331,7 +331,7 @@
                                                             <div
                                                                 class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
                                                                 <div class="w-full">
-                                                                    <span>FACTURA:</span>
+                                                                    <span>GUIA:</span>
                                                                 </div>
                                                                 <div class="w-full">
                                                                     <x-form.badge indigo md

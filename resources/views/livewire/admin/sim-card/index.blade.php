@@ -362,9 +362,6 @@
                                                     <!-- End -->
 
                                                 </div>
-
-
-                                                {{-- @livewire('admin.sim-card.un-asign', ['sim_card' => $sim_card], key('unasign' . $sim_card->id)) --}}
                                             @else
                                                 <div class="text-left">-</div>
                                             @endif
@@ -373,16 +370,79 @@
                                     </td>
                                 @endcan
 
-                                @can('ver.cambios-sim_card')
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                        <div class="space-x-1">
-                                            @livewire('admin.sim-card.ver-cambios', ['sim_card' => $sim_card], key('change' . $sim_card->id))
-                                        </div>
-                                    </td>
-                                @endcan
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <div class="relative inline-flex" x-data="{ open: false }">
+                                        <div class="relative inline-block h-full text-left">
+                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
+                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
+                                                @click.prevent="open = !open" :aria-expanded="open">
+                                                <span class="sr-only">Menu</span>
+                                                <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                    <circle cx="16" cy="16" r="2" />
+                                                    <circle cx="10" cy="16" r="2" />
+                                                    <circle cx="22" cy="16" r="2" />
+                                                </svg>
+                                            </button>
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                @click.outside="open = false" @keydown.escape.window="open = false"
+                                                x-show="open"
+                                                x-transition:enter="transition ease-out duration-200 transform"
+                                                x-transition:enter-start="opacity-0 -translate-y-2"
+                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                x-transition:leave="transition ease-out duration-200"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" x-cloak>
 
+                                                <ul>
+                                                    <li>
+                                                        <a href="javascript: void(0)"
+                                                            wire:click.prevent="openModalEdit({{ $sim_card->id }})"
+                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            disabled="false" id="headlessui-menu-item-27"
+                                                            role="menuitem" tabindex="-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
+                                                                </path>
+                                                            </svg> Editar
+
+                                                        </a>
+                                                    </li>
+                                                    @can('ver.cambios-sim_card')
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalCambios({{ $sim_card->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-27"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="icon icon-tabler icon-tabler-eye-check w-6 h-6 shrink-0"
+                                                                    viewBox="0 0 32 32" stroke-width="1.5"
+                                                                    stroke="#9e9e9e" fill="none"
+                                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                        fill="none" />
+                                                                    <circle cx="12" cy="12" r="2" />
+                                                                    <path
+                                                                        d="M12 19c-4 0 -7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7c-.42 .736 -.858 1.414 -1.311 2.033" />
+                                                                    <path d="M15 19l2 2l4 -4" />
+                                                                </svg> Ver Cambios
+
+                                                            </a>
+                                                        </li>
+                                                    @endcan
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
+
                         @if ($sim_cards->count() < 1)
                             <tr>
                                 <td colspan="6"
