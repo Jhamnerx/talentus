@@ -130,7 +130,7 @@ class Save extends Component
         $this->modalSave = false;
     }
 
-    #[On(['open-modal-save-cliente', 'open-modal-save'])]
+    #[On(['open-modal-save-cliente'])]
     public function openModalSaveCliente($busqueda = null)
     {
         $this->razon_social = $busqueda;

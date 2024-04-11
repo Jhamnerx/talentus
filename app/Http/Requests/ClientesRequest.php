@@ -36,7 +36,7 @@ class ClientesRequest extends FormRequest
                 'numero_documento' => [
                     'required',
                     'min:6',
-                    'numeric',
+
                     Rule::unique('clientes', 'numero_documento')->where(
                         fn ($query) =>
                         $query->where('empresa_id', session('empresa'))
@@ -59,7 +59,7 @@ class ClientesRequest extends FormRequest
                     'numero_documento' => [
                         'required',
                         'min:6',
-                        'numeric',
+
                         Rule::unique('clientes', 'numero_documento')->where(
                             fn ($query) =>
                             $query->where('empresa_id', session('empresa'))

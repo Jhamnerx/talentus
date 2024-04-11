@@ -65,11 +65,10 @@ class SaveQuick extends Component
         $this->validateOnly($attr);
     }
 
-    public function convertirAMayusculas()
+    public function updatedPlaca()
     {
         $this->placa = strtoupper($this->placa);
     }
-
     public function save()
     {
         $this->validate();

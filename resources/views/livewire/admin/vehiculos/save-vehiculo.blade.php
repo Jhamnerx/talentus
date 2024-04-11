@@ -1,11 +1,10 @@
-<x-form.modal.card title="REGISTRAR VEHICULO" blur wire:model.live="modalCreate" align="center">
+<x-form.modal.card title="REGISTRAR VEHICULO" blur wire:model.live="modalSaveV" align="center">
 
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-6 sm:col-span-6">
 
-            <x-form.input wire:model.live="placa" wire:input="convertirAMayusculas" label="Placa Unidad:"
-                placeholder="ABC-780" />
+            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
         </div>
 
         <div class="col-span-6 sm:col-span-6">
@@ -115,8 +114,7 @@
                 :async-data="route('api.dispositivos.index')" option-label="imei" option-value="imei">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat
-                        full>
+                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat full>
                         <span x-html="`Registrar Imei <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>

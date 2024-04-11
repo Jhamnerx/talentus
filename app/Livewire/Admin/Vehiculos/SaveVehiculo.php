@@ -18,7 +18,7 @@ class SaveVehiculo extends Component
     public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $dispositivo_imei = '', $modelo_gps,
         $sim_card_id, $numero, $sim_card, $operador, $clientes_id, $dispositivos_id, $descripcion;
 
-    public $modalCreate = false;
+    public $modalSaveV = false;
 
     public $flotas_selected = [];
 
@@ -32,14 +32,14 @@ class SaveVehiculo extends Component
     public function openModalSave($placa = null)
     {
 
-        $this->modalCreate = true;
+        $this->modalSaveV = true;
         $this->placa = $placa;
     }
 
 
     public function closeModal()
     {
-        $this->modalCreate = false;
+        $this->modalSaveV = false;
         $this->resetErrorBag();
         $this->resetValidation();
     }
@@ -131,7 +131,7 @@ class SaveVehiculo extends Component
         }
     }
 
-    public function convertirAMayusculas()
+    public function updatedPlaca()
     {
         $this->placa = strtoupper($this->placa);
     }
@@ -164,6 +164,7 @@ class SaveVehiculo extends Component
 
     public function OpenModalCliente($busqueda)
     {
+
         $this->dispatch('open-modal-save-cliente', busqueda: $busqueda);
     }
 }

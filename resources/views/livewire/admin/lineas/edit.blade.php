@@ -34,8 +34,7 @@
                     </td>
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <x-form.input placeholder="ingresa operador" wire:model.live="operador"
-                            wire:input.lazy='convertirAMayusculas' />
+                        <x-form.input placeholder="ingresa operador" wire:model.change="operador" />
                     </td>
 
                 </tr>

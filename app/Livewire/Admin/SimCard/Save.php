@@ -99,15 +99,13 @@ class Save extends Component
         }
     }
 
-    public function convertirAMayusculas()
+    public function updatedItems($value)
     {
         $this->items = $this->items->map(function ($item) {
             $item['operador'] = strtoupper($item['operador']);
             return $item;
         });
     }
-
-
 
     public function render()
     {
