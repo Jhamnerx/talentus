@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class VentasDetalle extends Model
 {
@@ -36,7 +37,13 @@ class VentasDetalle extends Model
         'sub_total' => 'decimal:2',
         'total' => 'decimal:2',
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logUnguarded()
+            ->logOnlyDirty();
+        // Chain fluent methods for configuration options
+    }
     public function venta(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Ventas::class);
