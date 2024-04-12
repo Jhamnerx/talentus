@@ -1175,7 +1175,7 @@ class ApiFacturacion extends Controller
 
         $respuesta = $util->showResponse($resumen->clase, $cdr);
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'update');
+        $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'no_update');
         return $respuesta;
     }
 
@@ -1198,8 +1198,6 @@ class ApiFacturacion extends Controller
                     'fe_mensaje_error' => $respuesta['fe_mensaje_error'],
                     'nota' => $respuesta['nota'],
                     'fe_codigo_error' => $respuesta['fe_codigo_error'],
-                    'nombre_xml' => $respuesta['nombre_xml'],
-                    'xml_base64' => $respuesta['xml_base64'],
                     'cdr_base64' => $respuesta['cdr_base64'],
                     'fe_estado' => $respuesta['fe_estado'],
                     'hash' => $respuesta['hash'],
