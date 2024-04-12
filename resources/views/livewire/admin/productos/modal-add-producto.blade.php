@@ -135,10 +135,10 @@
             prefix="{{ $divisa = 'PEN' ? 'S/ ' : 'US$ ' }}" wire:model.live="selected.total" />
 
     </div>
-    <div class="col-span-12 md:col-start-5 md:col-span-4">
+    {{-- <div class="col-span-12 md:col-start-5 md:col-span-4">
         {{ json_encode($selected) }}
 
-    </div>
+    </div> --}}
 
 </x-admin.facturacion.form-modal-w-buttons>
 
