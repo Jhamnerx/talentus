@@ -781,6 +781,7 @@ class ApiFacturacion extends Controller
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $despatch);
+
             return $respuesta;
         }
 
@@ -793,6 +794,7 @@ class ApiFacturacion extends Controller
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
             $this->updateGuiaRemision($guia, $respuesta, $despatch); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET
+
             return $respuesta;
         }
 
@@ -801,9 +803,7 @@ class ApiFacturacion extends Controller
         $util->writeCdr($despatch, $res->getCdrZip());
 
         $respuesta = $util->showResponse($despatch, $cdr);
-
         $this->updateGuiaRemision($guia, $respuesta, $despatch);
-
         return $respuesta;
     }
 
@@ -900,6 +900,8 @@ class ApiFacturacion extends Controller
             ];
         return $respuesta;
     }
+
+    //FUNCION QUE SE EJECUTA CUANDO SE ACTUALIZA UNA GUIA DE REMISION
     public function createXmlGuia(GuiaRemision $guia)
     {
         $util = Util::getInstance();
@@ -988,9 +990,7 @@ class ApiFacturacion extends Controller
         }
 
         // Guardar XML firmado digitalmente.
-        $xml_base64 = $util->writeXmlOnly($despatch, $api->getLastXml());
-        $hash = $util->getHash($despatch);
-
+        $util->writeXml($despatch, $api->getLastXml());
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
@@ -1006,32 +1006,18 @@ class ApiFacturacion extends Controller
 
         if (!$res->isSuccess()) {
             $respuesta = $util->getErrorResponse($res->getError());
-            $this->updateGuiaRemision($guia, $respuesta, $despatch); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET
+            $this->updateGuiaRemision($guia, $respuesta, $despatch, 'no_update'); //ACTUALIZAR GUIA CUANDO SOLO OBTENEMOS EL TICKET
 
             return $respuesta;
         }
 
+        $cdr = $res->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($despatch, $res->getCdrZip());
 
-        $respuesta
-            =  [
-                'estado_texto' => 'ESTADO: SOLO XML CREADO',
-                'fe_mensaje_sunat' => "El comprobante fue firmado, Pendiente de Envio",
-                'fe_mensaje_error' => null,
-                'nota' => '',
-                'fe_codigo_error' => null,
-                'nombre_xml' => $despatch->getName(),
-                'nombre_cdr' => 'R-' . $despatch->getName(),
-                'xml_base64' => $xml_base64,
-                'cdr_base64' => null,
-                'fe_estado' => 0,
-                'hash' => $hash,
-                'hash_cdr' => null,
-                'code_sunat' => null,
-                'qr' => null,
-
-            ];
-
+        $respuesta = $util->showResponse($despatch, $cdr);
         $this->updateGuiaRemision($guia, $respuesta, $despatch);
+
         return $respuesta;
     }
 
@@ -1152,7 +1138,6 @@ class ApiFacturacion extends Controller
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
         $this->actualizarResumen($resumen, $respuesta, $voided, 'update');
         return $respuesta;
-        // dd($respuesta);
     }
 
     public function consultaTicketAnulacion($resumen)

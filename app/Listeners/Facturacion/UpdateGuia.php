@@ -35,6 +35,7 @@ class UpdateGuia
                     'hash' => $event->respuesta['hash'],
                     'hash_cdr' => $event->respuesta['hash_cdr'],
                     'code_sunat' => $event->respuesta['code_sunat'],
+                    'qr' => $event->respuesta['qr'] ? $event->respuesta['qr'] : null,
                 ]
             );
         }
