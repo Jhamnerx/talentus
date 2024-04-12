@@ -221,18 +221,7 @@ class Create extends Component
             $api = new ApiFacturacion();
             $mensaje = $api->emitirGuia($guia);
 
-            if (array_key_exists('success', $mensaje) && $mensaje['success'] == true && array_key_exists('error_session', $mensaje) == false) {
-
-                if ($mensaje['fe_codigo_error']) {
-
-                    session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                    $this->redirectRoute('admin.almacen.guias.index');
-                } else {
-
-                    session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
-                    $this->redirectRoute('admin.almacen.guias.index');
-                }
-            } else {
+            if (array_key_exists('error_session', $mensaje)) {
                 $guia->getSerie->decrement('correlativo');
                 $guia->forceDelete();
 
@@ -242,9 +231,18 @@ class Create extends Component
                     title: 'ERROR AL ENVIAR A SUNAT, VUELVE A REGISTRAR',
                     mensaje: $mensaje['error_session'],
                 );
+            } else {
+                if ($mensaje['fe_codigo_error']) {
+
+                    session()->flash('guia-store', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    $this->redirectRoute('admin.almacen.guias.index');
+                } else {
+
+                    session()->flash('guia-store', $mensaje['fe_mensaje_sunat']);
+                    $this->redirectRoute('admin.almacen.guias.index');
+                }
             }
         } catch (\Throwable $th) {
-
 
             $this->dispatch(
                 'error',

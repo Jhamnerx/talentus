@@ -114,8 +114,6 @@ class SelectsController extends Controller
 
     public function clientes(Request $request): Collection
     {
-
-
         return Clientes::query()
             ->select('id', 'razon_social', 'numero_documento', 'tipo_documento_id')
             ->orderBy('id')
@@ -132,13 +130,13 @@ class SelectsController extends Controller
             )->when(
                 $request->tipo_comprobante == "03" ? true : false,
                 fn (Builder $query) => $query
-                    ->tipoDoc(1)
+
 
             )
             ->when(
                 $request->exists('selected'),
                 fn (Builder $query) => $query->whereIn('id', $request->input('selected', [])),
-                fn (Builder $query) => $query->limit(50)
+
             )
             ->active(1)
             ->get();
