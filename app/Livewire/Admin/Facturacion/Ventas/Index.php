@@ -124,6 +124,9 @@ class Index extends Component
             } else {
 
                 $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+                $resumen->ventas->update([
+                    'anulado' => 'si',
+                ]);
             }
         } catch (\Throwable $th) {
             $this->dispatch(
