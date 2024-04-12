@@ -98,7 +98,11 @@ class ModalAddProducto extends Component
 
     public function calcularPrecioUnitario($valor_unitario)
     {
-        return ($valor_unitario * $this->plantilla->igv) + $valor_unitario;
+        if ($this->tipo_afectacion == "10") {
+            return ($valor_unitario * $this->plantilla->igv) + $valor_unitario;
+        } else {
+            return $valor_unitario;
+        }
     }
 
     public function calcularIgvProducto($valor_unitario)
