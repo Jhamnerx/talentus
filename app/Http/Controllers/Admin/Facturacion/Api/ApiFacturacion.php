@@ -46,7 +46,6 @@ class ApiFacturacion extends Controller
 
     public function emitirInvoice(Ventas $venta, $metodo_type, $tipo_operacion)
     {
-
         if ($metodo_type == "02") {
 
             return $this->emitirComprobante($venta, $tipo_operacion);
@@ -662,8 +661,13 @@ class ApiFacturacion extends Controller
                 ->setPorcentajeIgv($item->porcentaje_igv)
                 ->setIgv($item->igv)
                 ->setTipAfeIgv($item->codigo_afectacion) // Catalog: 07
-                ->setTotalImpuestos($item->igv + $item->total_icbper)
-                ->setMtoPrecioUnitario($item->precio_unitario);
+                ->setTotalImpuestos($item->igv + $item->total_icbper);
+
+            if ($item->codigo_afectacion == '10') {
+                $i->setMtoPrecioUnitario($item->precio_unitario);
+            } else {
+                $i->setMtoPrecioUnitario($item->valor_unitario);
+            }
 
             if ($item->afecto_icbper) {
                 $i->setIcbper($item->cantidad * $item->icbper) // (cantidad)*(factor ICBPER)
@@ -672,7 +676,6 @@ class ApiFacturacion extends Controller
 
             $detalle[] = $i;
         }
-
         return $detalle;
     }
 
