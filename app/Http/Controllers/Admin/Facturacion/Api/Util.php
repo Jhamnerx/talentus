@@ -254,7 +254,7 @@ class Util extends Controller
         $results
             =  [
                 'success' => false,
-                'estado_texto' => 'RECHAZADA',
+                'estado_texto' => 'RECHAZADA.',
                 'fe_mensaje_sunat' => $this->mensaje,
                 'fe_mensaje_error' => $error->getMessage(),
                 'nota' => $this->nota,
@@ -273,6 +273,10 @@ class Util extends Controller
         if ($error->getCode() == '98') {
             $results['fe_estado'] = '0';
             $results['estado_texto'] = 'ESTADO: EN PROCESO';
+        }
+        if ($error->getCode() == '0109') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: EN PROCESO. ENVIE NUEVAMENTE';
         }
 
         if ($error->getCode() == 'env:Client') {
