@@ -287,6 +287,10 @@ class Util extends Controller
             $results['fe_estado'] = '0';
             $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
         }
+        if ($error->getCode() == '0111') {
+            $results['fe_estado'] = '0';
+            $results['estado_texto'] = 'ESTADO: SOLO XML CREADO';
+        }
 
         return $results;
     }
