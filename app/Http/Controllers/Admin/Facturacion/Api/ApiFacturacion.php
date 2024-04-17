@@ -1086,6 +1086,7 @@ class ApiFacturacion extends Controller
 
     public function anularComprobante($datos, $resumen)
     {
+
         $util = Util::getInstance();
 
         $detail1 = new VoidedDetail();
@@ -1097,7 +1098,7 @@ class ApiFacturacion extends Controller
         $voided = new Voided();
         $voided->setCorrelativo($datos['correlativo'])
             // Fecha Generacion menor que Fecha comunicacion
-            ->setFecGeneracion(new DateTime($datos['fecha_generacion']))
+            ->setFecGeneracion(new DateTime($datos['fecha_emision_invoice'])) //FECHA DE LA EMISION DE LOS COMPROBANTES
             ->setFecComunicacion(new DateTime($datos['fecha_generacion']))
             ->setCompany($util->getCompany())
             ->setDetails([$detail1]);
