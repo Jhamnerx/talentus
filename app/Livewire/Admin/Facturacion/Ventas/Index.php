@@ -120,7 +120,7 @@ class Index extends Component
             if ($resumen->ticket) {
 
                 $mensaje =  $api->consultaTicketAnulacion($resumen);
-                dd($mensaje);
+
                 if ($mensaje['fe_codigo_error']) {
 
                     $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
@@ -136,7 +136,7 @@ class Index extends Component
                 $api->getTicketAnulacion($resumen);
 
                 $mensaje =  $api->consultaTicketAnulacion($resumen);
-                dd($mensaje);
+
                 if ($mensaje['fe_codigo_error']) {
 
                     $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
