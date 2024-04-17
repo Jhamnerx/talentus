@@ -18,7 +18,11 @@ class RecibosRequest extends FormRequest
         $rules = [
             'clientes_id' => 'required',
             'serie_numero' => [
-                'required', Rule::unique('recibos', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                'required',
+                Rule::unique('recibos', 'serie_numero')->where(function ($query) {
+                    $query->where('empresa_id', session('empresa'))
+                        ->whereNull('deleted_at');
+                }),
             ],
             'serie' => 'required',
             'numero' => 'required',
