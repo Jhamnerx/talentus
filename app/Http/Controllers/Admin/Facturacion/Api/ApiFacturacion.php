@@ -1160,8 +1160,32 @@ class ApiFacturacion extends Controller
 
         $respuesta = $util->showResponse($resumen->clase, $cdr);
         //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'no_update');
+        $this->actualizarResumen($resumen, $respuesta, $resumen->clase, 'update');
+
         return $respuesta;
+    }
+
+    public function getTicketAnulacion($resumen)
+    {
+        $util = Util::getInstance();
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+        $res = $see->send($resumen->clase);
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($resumen->clase, $see->getFactory()->getLastXml());
+
+        if (!$res->isSuccess()) {
+            $msg =  $util->getErrorResponse($res->getError());
+            $this->actualizarResumen($resumen, $msg, $resumen->clase, 'update');
+            return $msg;
+        }
+
+        /**@var SummaryResult $res */
+        $ticket = $res->getTicket();
+        $this->updateTicket($resumen, $ticket);
+        return true;
     }
 
 

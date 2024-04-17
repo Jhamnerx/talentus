@@ -116,17 +116,37 @@ class Index extends Component
     {
         try {
             $api = new ApiFacturacion();
-            $mensaje =  $api->consultaTicketAnulacion($resumen);
 
-            if ($mensaje['fe_codigo_error']) {
+            if ($resumen->ticket) {
 
-                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
+                $mensaje =  $api->consultaTicketAnulacion($resumen);
+                dd($mensaje);
+                if ($mensaje['fe_codigo_error']) {
+
+                    $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
+                } else {
+
+                    $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+                    $resumen->ventas->update([
+                        'anulado' => 'si',
+                    ]);
+                }
             } else {
 
-                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
-                $resumen->ventas->update([
-                    'anulado' => 'si',
-                ]);
+                $api->getTicketAnulacion($resumen);
+
+                $mensaje =  $api->consultaTicketAnulacion($resumen);
+                dd($mensaje);
+                if ($mensaje['fe_codigo_error']) {
+
+                    $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL ENVIAR RESUMEN', 'error');
+                } else {
+
+                    $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'RESUMEN ENVIADO A SUNAT', 'success');
+                    $resumen->ventas->update([
+                        'anulado' => 'si',
+                    ]);
+                }
             }
         } catch (\Throwable $th) {
             $this->dispatch(
