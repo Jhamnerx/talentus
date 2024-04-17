@@ -24,6 +24,7 @@ class AnularComprobante extends Component
     public $tipo_comprobante_id = null;
 
     public $fecha_generacion = null;
+    public $fecha_emision_invoice = null;
     protected function rules()
     {
         return [
@@ -33,6 +34,7 @@ class AnularComprobante extends Component
             'tipo_comprobante' => 'required',
             'motivo' => 'required|min:3',
             'fecha_generacion' => 'date',
+            'fecha_emision_invoice' => 'date',
 
             'serie' => 'required',
             'correlativo' => 'required',
@@ -74,6 +76,7 @@ class AnularComprobante extends Component
         $this->invoice = $invoice;
         $this->openModal = true;
         $this->serie_ref = $invoice->serie;
+        $this->fecha_emision_invoice = $invoice->fecha_emision;
         $this->correlativo_ref = $invoice->correlativo;
         $this->tipo_comprobante = $invoice->tipo_comprobante_id;
     }
