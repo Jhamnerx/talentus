@@ -1225,7 +1225,6 @@ class ApiFacturacion extends Controller
                     'fe_mensaje_error' => $respuesta['fe_mensaje_error'],
                     'nota' => $respuesta['nota'],
                     'fe_codigo_error' => $respuesta['fe_codigo_error'],
-                    'nombre_xml' => $respuesta['nombre_xml'],
                     'nombre_cdr' => $respuesta['nombre_cdr'],
                     'xml_base64' => $respuesta['xml_base64'],
                     'cdr_base64' => $respuesta['cdr_base64'],
@@ -1236,7 +1235,17 @@ class ApiFacturacion extends Controller
                     'clase' => $voided,
                     'fecha_envio' => Carbon::now(),
                 ]
+
             );
+
+            if ($respuesta['nombre_xml']) {
+                $resumen->update(
+                    [
+                        'nombre_xml' => $respuesta['nombre_xml'],
+
+                    ]
+                );
+            }
         }
     }
 
