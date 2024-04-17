@@ -1098,7 +1098,7 @@ class ApiFacturacion extends Controller
         $voided->setCorrelativo($datos['correlativo'])
             // Fecha Generacion menor que Fecha comunicacion
             ->setFecGeneracion(new DateTime($datos['fecha_generacion']))
-            ->setFecComunicacion(new DateTime())
+            ->setFecComunicacion(new DateTime($datos['fecha_generacion']))
             ->setCompany($util->getCompany())
             ->setDetails([$detail1]);
 
