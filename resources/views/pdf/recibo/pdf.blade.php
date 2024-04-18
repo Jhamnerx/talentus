@@ -233,19 +233,10 @@
                                 </td>
                             </tr>
                             <tr>
-
                                 <td>
                                     <p><strong>SCOTIABANK: </strong>722-8079419</p>
                                 </td>
                             </tr>
-                            <tr>
-
-                                <td>
-                                    <p><strong>BCP: </strong>245-92705922-0-70</p>
-                                </td>
-
-                            </tr>
-
 
                         </tbody>
                     @endif
