@@ -300,7 +300,7 @@
                         </span>
                     </td>
                 </tr>
-                <tr style="border: 1px solid">
+                {{-- <tr style="border: 1px solid">
                     <td style="border: 1px solid">
                         <span style="padding-left: 2px; padding-right: 4px">
                             Fecha de Vencimiento
@@ -312,7 +312,7 @@
                         </span>
 
                     </td>
-                </tr>
+                </tr> --}}
             </table>
         </div>
 
