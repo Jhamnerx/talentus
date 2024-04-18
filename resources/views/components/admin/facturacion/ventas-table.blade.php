@@ -66,7 +66,7 @@
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-sky-500">
+                                <div class="font-medium {{ $venta->envioResumen ? 'text-red-500' : 'text-sky-500' }}">
                                     @switch($venta->tipo_comprobante_id)
                                         @case('01')
                                             FACTURA-{{ $venta->serie_correlativo }}
@@ -690,7 +690,7 @@
                                                                 <div
                                                                     class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
                                                                     <div class="w-full">
-                                                                        <span>FACTURA:</span>
+                                                                        <span>COMPROBANTE:</span>
                                                                     </div>
                                                                     <div class="w-full">
                                                                         <x-form.badge indigo md
