@@ -274,8 +274,9 @@
                 <li style="color: red">Añadir Dispositivo</li>
             @endif
 
-
-            <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
+            @if (!$certificado->accesorios->isEmpty())
+                <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
+            @endif
 
             <li style="padding-top: 10px;  font-size: 16px">
                 <b>Placa de la unidad: {{ $certificado->vehiculo->placa }}</b>
