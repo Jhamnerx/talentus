@@ -877,7 +877,7 @@
                                         <x-form.dropdown.item icon='mail' label="Enviar a cliente" />
 
                                         @if ($venta->tipo_comprobante_id == '01')
-                                            @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA')
+                                            @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA' && $venta->envioResumen == false)
                                                 <x-form.dropdown.item
                                                     wire:click.prevent='anularComprobante({{ $venta->id }})'
                                                     icon='minus-circle' separator label="Anular comprobante" />
