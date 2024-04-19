@@ -151,7 +151,7 @@ class GuiaRemision extends Model
         $html = $util->getPdfGuia($this);
         //return $html;
         $pdf = Pdf::loadHTML($html);
-        return $pdf->stream('venta-' . $this->serie_correlativo . '.pdf');
+        return $pdf->stream('GUIA_REMISION-' . $this->serie_correlativo . '.pdf');
     }
 
     public function downloadXml()
