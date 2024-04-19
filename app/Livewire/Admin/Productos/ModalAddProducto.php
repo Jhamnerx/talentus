@@ -152,6 +152,7 @@ class ModalAddProducto extends Component
         }
         $this->calcularValorUnitario();
         $this->calcularIgv();
+        $this->calcularMontosProducto();
     }
 
     public function calcularValorUnitario()
