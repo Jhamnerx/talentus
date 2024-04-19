@@ -36,7 +36,7 @@ class Productos extends Model
         'id' => 'integer',
         'categoria_id' => 'integer',
         'stock' => 'integer',
-        'valor_unitario' => 'decimal:2',
+        'valor_unitario' => 'decimal:4',
         'user_id' => 'integer',
         'ventas' => 'integer',
         'afecto_icbper' => 'boolean',
