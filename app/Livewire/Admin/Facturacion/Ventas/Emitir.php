@@ -87,9 +87,9 @@ class Emitir extends Component
         $monto = $total * ($this->datosDetraccion['porcentaje'] / 100);
 
         if ($this->divisa == 'USD') {
-            $this->datosDetraccion['monto'] = round($monto * $this->tipo_cambio, 2);
+            $this->datosDetraccion['monto'] = round($monto * $this->tipo_cambio, 4);
         } else {
-            $this->datosDetraccion['monto'] = round($monto, 2);
+            $this->datosDetraccion['monto'] = round($monto, 4);
         }
     }
 
@@ -242,7 +242,7 @@ class Emitir extends Component
                 'dias' => $this->vence_cuotas,
                 'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => ucfirst($fecha->dayName),
-                'importe' => $this->total > 0 ? round(floatval(($this->total) / $nCuotas), 2)  : 0.00,
+                'importe' => $this->total > 0 ? round(floatval(($this->total) / $nCuotas), 4)  : 0.00,
             ]);
         }
         $this->total_cuotas = $this->detalle_cuotas->sum('importe');
@@ -465,7 +465,7 @@ class Emitir extends Component
             if ($item['codigo_afectacion'] == '10') {
                 $op_gravadas = 0.00;
                 $op_gravadas = $op_gravadas + $item['sub_total'];
-                return round($op_gravadas, 2);
+                return round($op_gravadas, 4);
             }
         })->sum();
 
@@ -495,11 +495,11 @@ class Emitir extends Component
             if ($item['codigo_afectacion'] == '20') {
                 $op_exoneradas = 0.00;
                 $op_exoneradas = $op_exoneradas + $item['sub_total'];
-                return round($op_exoneradas, 2);
+                return round($op_exoneradas, 4);
             }
         })->sum();
 
-        return round($op_exoneradas, 2);
+        return round($op_exoneradas, 4);
     }
 
     public function calcularOperacionesInafectas()
@@ -510,11 +510,11 @@ class Emitir extends Component
             if ($item['codigo_afectacion'] == '30') {
                 $op_inafectas = 0.00;
                 $op_inafectas = $op_inafectas + $item['sub_total'];
-                return round($op_inafectas, 2);
+                return round($op_inafectas, 4);
             }
         })->sum();
 
-        return round($op_inafectas, 2);
+        return round($op_inafectas, 4);
     }
 
     public function calcularIcbper()
@@ -528,7 +528,7 @@ class Emitir extends Component
             }
         })->sum();
 
-        return round($icbper, 2);
+        return round($icbper, 4);
     }
 
     //CALCUJLAR TOTAL DE ACUERDO AL TIPO DE DESCUENTO Y SI HAY
@@ -587,7 +587,7 @@ class Emitir extends Component
             $descuento = ($this->op_gravadas * $this->descuento_monto) / 100;
         }
 
-        return round($descuento, 2);
+        return round($descuento, 4);
     }
 
     public function eliminarProducto($key)
