@@ -66,7 +66,7 @@
         <div class="col-span-12 md:col-span-4">
 
             <x-form.inputs.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
-                icon="currency-dollar" precision="2" wire:model.blur="valor_unitario" />
+                icon="currency-dollar" precision="4" wire:model.blur="valor_unitario" />
         </div>
         <div class="col-span-12">
             <x-form.checkbox id="afecto_icbper" name="afecto_icbper" md left-label="Afecto icbper?"
