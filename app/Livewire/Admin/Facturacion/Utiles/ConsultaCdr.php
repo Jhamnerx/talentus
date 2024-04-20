@@ -6,6 +6,7 @@ use Livewire\Component;
 use App\Models\plantilla;
 use Greenter\Model\Response\StatusCdrResult;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use Livewire\Attributes\On;
 
 class ConsultaCdr extends Component
 {
@@ -48,7 +49,7 @@ class ConsultaCdr extends Component
         $api = new ApiFacturacion();
         // Assign the result to a variable
         $res = $api->getStatusCdr($datos);
-
+        dd($res->getCdrZip());
         $this->resultado = [
             'is_success' => $res->isSuccess(),
             'codigo' => $res->getCode(),
@@ -66,6 +67,11 @@ class ConsultaCdr extends Component
     public function closeModal()
     {
         $this->openModal = false;
+    }
+    #[On('open-modal-consulta-cdr')]
+    public function openModal()
+    {
+        $this->openModal = true;
     }
 
     public function updated($propertyName)

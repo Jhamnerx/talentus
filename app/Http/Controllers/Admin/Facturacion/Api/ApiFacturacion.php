@@ -1250,7 +1250,10 @@ class ApiFacturacion extends Controller
         }
     }
 
-
+    /**
+     * @param array<string, string> $fields
+     * @return StatusCdrResult|null
+     */
     public function getStatusCdr(array $fields): ?StatusCdrResult
     {
         $util = Util::getInstance();

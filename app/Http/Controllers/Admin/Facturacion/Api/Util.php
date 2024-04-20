@@ -157,6 +157,9 @@ class Util extends Controller
         }
     }
 
+    /**
+     * @return ConsultCdrService
+     */
     public function getCdrStatusService(): ConsultCdrService
     {
         $ws = new SoapClient(SunatEndpoints::FE_CONSULTA_CDR . '?wsdl');
