@@ -37,7 +37,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -62,7 +62,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -84,7 +84,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -108,7 +109,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -130,7 +132,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -151,7 +154,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -177,7 +181,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -199,7 +204,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -220,7 +226,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -241,7 +248,8 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ $venta['detalle_cuotas'][$i]['importe'] }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
