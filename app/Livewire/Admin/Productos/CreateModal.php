@@ -8,6 +8,7 @@ use Livewire\Attributes\On;
 use Intervention\Image\ImageManager;
 use App\Http\Requests\ProductosRequest;
 use App\Models\Categoria;
+use App\Models\plantilla;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
@@ -18,10 +19,18 @@ class CreateModal extends Component
     public $descripcion, $categoria_id, $codigo, $unit_code = "NIU",
         $stock = 1,  $valor_unitario = 0.00, $ventas = 0, $divisa = 'PEN',
         $tipo = '';
+
+    public $precio_unitario = 0.00;
     public $afecto_icbper = false;
     public $file;
 
     public $modelo_id = null;
+    public plantilla $plantilla;
+
+    public function mount()
+    {
+        $this->plantilla = plantilla::first();
+    }
 
     public function render()
     {
@@ -138,5 +147,14 @@ class CreateModal extends Component
     public function resetProps()
     {
         $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper');
+    }
+    public function updatedPrecioUnitario($value)
+    {
+        $this->calcularValorUnitario();
+    }
+
+    public function calcularValorUnitario()
+    {
+        $this->valor_unitario = round($this->precio_unitario / $this->plantilla->igvbase, 4);
     }
 }

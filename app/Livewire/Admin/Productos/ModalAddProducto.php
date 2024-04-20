@@ -95,7 +95,6 @@ class ModalAddProducto extends Component
         $this->calcularMontosProducto();
     }
 
-
     public function calcularPrecioUnitario($valor_unitario)
     {
         if ($this->tipo_afectacion == "10") {
@@ -107,7 +106,6 @@ class ModalAddProducto extends Component
 
     public function calcularIgvProducto($valor_unitario)
     {
-
         $igv = 0.00;
         if ($this->tipo_afectacion == 10) {
 
@@ -119,11 +117,8 @@ class ModalAddProducto extends Component
             $igv = 0.00;
         }
 
-
         return $igv;
     }
-
-
 
     public function updatedTipoAfectacion($value)
     {

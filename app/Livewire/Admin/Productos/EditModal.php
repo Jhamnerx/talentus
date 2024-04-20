@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Productos;
 
 use Livewire\Component;
+use App\Models\plantilla;
 use App\Models\Productos;
 use Livewire\Attributes\On;
 use Intervention\Image\ImageManager;
@@ -19,11 +20,20 @@ class EditModal extends Component
     public $descripcion, $categoria_id, $codigo, $unit_code = "NIU",
         $stock = 1,  $valor_unitario = 0.00, $divisa = 'PEN',
         $tipo = 'producto';
+
+    public $precio_unitario = 0.00;
     public $afecto_icbper = false;
     public $file;
+
     public $file_name;
 
     public $modelo_id = null;
+    public plantilla $plantilla;
+
+    public function mount()
+    {
+        $this->plantilla = plantilla::first();
+    }
 
     public function render()
     {
@@ -73,6 +83,7 @@ class EditModal extends Component
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
         $this->modelo_id = $producto->modelo_id;
+        $this->precio_unitario = $this->valor_unitario * $this->plantilla->igvbase;
 
         if ($producto->image) {
             $this->dispatch('set-imagen-file', imagen: Storage::url($producto->image->url));
@@ -176,5 +187,14 @@ class EditModal extends Component
     public function resetProps()
     {
         $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
+    }
+    public function updatedPrecioUnitario($value)
+    {
+        $this->calcularValorUnitario();
+    }
+
+    public function calcularValorUnitario()
+    {
+        $this->valor_unitario = round($this->precio_unitario / $this->plantilla->igvbase, 4);
     }
 }
