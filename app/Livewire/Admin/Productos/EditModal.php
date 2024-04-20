@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Productos;
 
 use Livewire\Component;
+use App\Models\plantilla;
 use App\Models\Productos;
 use Livewire\Attributes\On;
 use Intervention\Image\ImageManager;
@@ -27,6 +28,12 @@ class EditModal extends Component
     public $file_name;
 
     public $modelo_id = null;
+    public plantilla $plantilla;
+
+    public function mount()
+    {
+        $this->plantilla = plantilla::first();
+    }
 
     public function render()
     {
@@ -76,6 +83,7 @@ class EditModal extends Component
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
         $this->modelo_id = $producto->modelo_id;
+        $this->precio_unitario = $this->valor_unitario * $this->plantilla->igvbase;
 
         if ($producto->image) {
             $this->dispatch('set-imagen-file', imagen: Storage::url($producto->image->url));

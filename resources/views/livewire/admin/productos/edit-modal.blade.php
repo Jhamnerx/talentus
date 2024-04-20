@@ -56,7 +56,7 @@
 
         </div>
 
-        <div class="col-span-12 md:col-span-4">
+        <div class="col-span-12 md:col-span-3">
             <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
                 wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
         </div>
