@@ -19,8 +19,11 @@ class EditModal extends Component
     public $descripcion, $categoria_id, $codigo, $unit_code = "NIU",
         $stock = 1,  $valor_unitario = 0.00, $divisa = 'PEN',
         $tipo = 'producto';
+
+    public $precio_unitario = 0.00;
     public $afecto_icbper = false;
     public $file;
+
     public $file_name;
 
     public $modelo_id = null;
@@ -176,5 +179,14 @@ class EditModal extends Component
     public function resetProps()
     {
         $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
+    }
+    public function updatedPrecioUnitario($value)
+    {
+        $this->calcularValorUnitario();
+    }
+
+    public function calcularValorUnitario()
+    {
+        $this->valor_unitario = round($this->precio_unitario / $this->plantilla->igvbase, 4);
     }
 }

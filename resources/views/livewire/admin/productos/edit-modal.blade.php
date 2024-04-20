@@ -61,10 +61,16 @@
                 wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
         </div>
 
-        <div class="col-span-12 md:col-span-4">
+        <div class="col-span-12 md:col-span-3">
 
-            <x-form.inputs.currency name="valor_unitario" label="Valor unitario:" placeholder="9.99"
+            <x-form.inputs.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
                 icon="currency-dollar" precision="4" wire:model.blur="valor_unitario" />
+        </div>
+
+        <div class="col-span-12 md:col-span-3">
+
+            <x-form.inputs.currency id="precio_unitario" name="precio_unitario" label="Precio unitario:"
+                placeholder="9.99" icon="currency-dollar" precision="4" wire:model.blur="precio_unitario" />
         </div>
         <div class="col-span-12">
             <x-form.checkbox id="afecto_icbper" md left-label="Afecto icbper?" wire:model="afecto_icbper" />
