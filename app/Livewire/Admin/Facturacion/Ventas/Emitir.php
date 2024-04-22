@@ -65,6 +65,11 @@ class Emitir extends Component
     public $openModalDt = false;
     public Collection $datosDetraccion;
 
+    public function render()
+    {
+        return view('livewire.admin.facturacion.ventas.emitir');
+    }
+
     public function openModalDetraccion()
     {
         $this->openModalDt = true;
@@ -76,6 +81,7 @@ class Emitir extends Component
             $dt = CodigosDetracciones::where('codigo', $value)->first();
             $this->datosDetraccion['porcentaje'] = $dt->porcentaje;
             $this->calcularMontoDetraccion($this->total);
+            $this->calcularCuotas($this->numero_cuotas);
         } else {
             $this->datosDetraccion['porcentaje'] = 0.00;
             $this->datosDetraccion['monto'] = 0.00;
@@ -135,11 +141,6 @@ class Emitir extends Component
             'metodo_pago_id' => '001',
             'cuenta_bancaria' => '',
         ]);
-    }
-
-    public function render()
-    {
-        return view('livewire.admin.facturacion.ventas.emitir');
     }
 
     public function updatedClienteId($value)
@@ -242,16 +243,16 @@ class Emitir extends Component
                 'dias' => $this->vence_cuotas,
                 'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => ucfirst($fecha->dayName),
-                'importe' => $this->total > 0 ? round(floatval(($this->total) / $nCuotas), 4)  : 0.00,
+                'importe' => $this->total > 0 ? round(floatval(($this->detraccion ? ($this->total - $this->datosDetraccion['monto']) : $this->total) / $nCuotas), 4)  : 0.00,
             ]);
         }
-        $this->total_cuotas = $this->detalle_cuotas->sum('importe');
+        $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
     }
 
     public function updatedDetalleCuotas($attr, $valor)
     {
 
-        $this->total_cuotas = $this->detalle_cuotas->sum('importe');
+        $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
     }
 
     public function openModalCreateProduct()
@@ -618,6 +619,7 @@ class Emitir extends Component
         if ($this->detraccion) {
             $this->tipo_operacion = '1001';
             $this->calcularMontoDetraccion($this->total);
+            $this->calcularCuotas($this->numero_cuotas);
         } else {
             $this->tipo_operacion = '0101';
         }

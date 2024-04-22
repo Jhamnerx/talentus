@@ -44,7 +44,7 @@ class ApiFacturacion extends Controller
 {
     public $filename = null;
 
-    public function emitirInvoice(Ventas $venta, $metodo_type, $tipo_operacion)
+    public function emitirInvoice(Ventas $venta, $metodo_type, $tipo_operacion = '0101')
     {
         if ($metodo_type == "02") {
 
@@ -280,8 +280,7 @@ class ApiFacturacion extends Controller
 
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
-
-            $invoice->setFormaPago(new FormaPagoCredito($venta->total, $venta->divisa));
+            $invoice->setFormaPago(new FormaPagoCredito($venta->detalle_cuotas->sum('importe'), $venta->divisa));
             $cuotas = $this->addCuotas($venta);
             $invoice->setCuotas($cuotas);
         } else {
@@ -549,7 +548,7 @@ class ApiFacturacion extends Controller
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
 
-            $invoice->setFormaPago(new FormaPagoCredito($venta->total, $venta->divisa));
+            $invoice->setFormaPago(new FormaPagoCredito($venta->detalle_cuotas->sum('importe'), $venta->divisa));
             $cuotas = $this->addCuotas($venta);
             $invoice->setCuotas($cuotas);
         } else {

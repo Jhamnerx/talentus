@@ -92,7 +92,8 @@
                                         </td>
                                         <td class="py-4 px-6 min-w-36">
                                             <x-form.inputs.currency
-                                                wire:model.blur="detalle_cuotas.{{ $clave }}.importe" />
+                                                wire:model.blur="detalle_cuotas.{{ $clave }}.importe"
+                                                precision="4" />
 
                                         </td>
 

@@ -6,25 +6,20 @@
             </tr>
             <tr class="border_top">
                 <td align="left">Monto neto pendiente de pago:</td>
-                <td align="left" colspan="2">{{ round($venta['total'], 4) }}</td>
+                <td align="left" colspan="2">{{ round($venta->detalle_cuotas->sum('importe'), 4) }}</td>
             </tr>
             <tr class="border_top border_bottom">
                 <td align="left">Total de Cuotas: </td>
-                <td align="left" colspan="2">{{ $venta['numero_cuotas'] }}</td>
+                <td align="left" colspan="2">{{ $venta->numero_cuotas }}</td>
             </tr>
-            {{ count($venta['detalle_cuotas']) }}
-
-            @if ($venta['detalle_cuotas'] > 3)
-                si
-            @endif
             <tr class="">
                 <td colspan="3" align="left" class="v100">
                     <table class="v100 tabla_cuotas">
                         <tbody>
 
-                            @if (count($venta['detalle_cuotas']) > 0 && count($venta['detalle_cuotas']) <= 3)
+                            @if ($venta['detalle_cuotas']->count() > 0 && $venta['detalle_cuotas']->count() <= 3)
                                 <tr>
-                                    @for ($i = 0; $i < count($venta['detalle_cuotas']); $i++)
+                                    @for ($i = 0; $i < $venta['detalle_cuotas']->count(); $i++)
                                         <td align="left">
                                             <table class="tabla-credito">
                                                 <tbody>
@@ -37,7 +32,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -47,7 +42,7 @@
                             @endif
 
 
-                            @if (count($venta['detalle_cuotas']) > 3 && count($venta['detalle_cuotas']) <= 6)
+                            @if ($venta['detalle_cuotas']->count() > 3 && $venta['detalle_cuotas']->count() <= 6)
                                 <tr>
                                     @for ($i = 0; $i < 3; $i++)
                                         <td align="left">
@@ -62,7 +57,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}</td>
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -71,7 +66,7 @@
                                 </tr>
 
                                 <tr>
-                                    @for ($i = 3; $i < count($venta['detalle_cuotas']); $i++)
+                                    @for ($i = 3; $i < $venta['detalle_cuotas']->count(); $i++)
                                         <td align="left">
                                             <table class="tabla-credito">
                                                 <tbody>
@@ -84,7 +79,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -94,7 +89,7 @@
                                 </tr>
                             @endif
                             //3 LINEAS
-                            @if (count($venta['detalle_cuotas']) > 6 && count($venta['detalle_cuotas']) <= 9)
+                            @if ($venta['detalle_cuotas']->count() > 6 && $venta['detalle_cuotas']->count() <= 9)
                                 <tr>
                                     @for ($i = 0; $i < 3; $i++)
                                         <td align="left">
@@ -109,7 +104,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -132,7 +127,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -141,7 +136,7 @@
                                     @endfor
                                 </tr>
                                 <tr>
-                                    @for ($i = 6; $i < count($venta['detalle_cuotas']); $i++)
+                                    @for ($i = 6; $i < $venta['detalle_cuotas']->count(); $i++)
                                         <td align="left">
                                             <table class="tabla-credito">
                                                 <tbody>
@@ -154,7 +149,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -166,7 +161,7 @@
                             //4 LINEAS
 
                             //3 LINEAS
-                            @if (count($venta['detalle_cuotas']) > 9 && count($venta['detalle_cuotas']) <= 12)
+                            @if ($venta['detalle_cuotas']->count() > 9 && $venta['detalle_cuotas']->count() <= 12)
                                 <tr>
                                     @for ($i = 0; $i < 3; $i++)
                                         <td align="left">
@@ -181,7 +176,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -204,7 +199,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -226,7 +221,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -235,7 +230,7 @@
                                     @endfor
                                 </tr>
                                 <tr>
-                                    @for ($i = 9; $i < count($venta['detalle_cuotas']); $i++)
+                                    @for ($i = 9; $i < $venta['detalle_cuotas']->count(); $i++)
                                         <td align="left">
                                             <table class="tabla-credito">
                                                 <tbody>
@@ -248,7 +243,7 @@
                                                     <tr>
                                                         <td>{{ $i + 1 }}</td>
                                                         <td>{{ $venta['detalle_cuotas'][$i]['fecha'] }}</td>
-                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 2) }}
+                                                        <td>{{ round($venta['detalle_cuotas'][$i]['importe'], 4) }}
                                                         </td>
                                                     </tr>
                                                 </tbody>
