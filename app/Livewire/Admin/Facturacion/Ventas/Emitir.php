@@ -619,9 +619,9 @@ class Emitir extends Component
         if ($this->detraccion) {
             $this->tipo_operacion = '1001';
             $this->calcularMontoDetraccion($this->total);
-            $this->calcularCuotas($this->numero_cuotas);
         } else {
             $this->tipo_operacion = '0101';
         }
+        $this->calcularCuotas($this->numero_cuotas);
     }
 }
