@@ -93,9 +93,9 @@ class Emitir extends Component
         $monto = $total * ($this->datosDetraccion['porcentaje'] / 100);
 
         if ($this->divisa == 'USD') {
-            $this->datosDetraccion['monto'] = round($monto * $this->tipo_cambio, 4);
+            $this->datosDetraccion['monto'] = round($monto * $this->tipo_cambio);
         } else {
-            $this->datosDetraccion['monto'] = round($monto, 4);
+            $this->datosDetraccion['monto'] = round($monto);
         }
     }
 
@@ -243,7 +243,7 @@ class Emitir extends Component
                 'dias' => $this->vence_cuotas,
                 'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => ucfirst($fecha->dayName),
-                'importe' => $this->total > 0 ? round(floatval(($this->detraccion ? ($this->total - $this->datosDetraccion['monto']) : $this->total) / $nCuotas), 4)  : 0.00,
+                'importe' => $this->total > 0 ? round(floatval(($this->detraccion ? ($this->total - $this->datosDetraccion['monto']) : $this->total) / $nCuotas), 2)  : 0.00,
             ]);
         }
         $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
