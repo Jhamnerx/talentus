@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class VentasRequest extends FormRequest
 {
@@ -26,7 +27,13 @@ class VentasRequest extends FormRequest
             'serie' => 'required|exists:series,serie',
             'correlativo' => 'required',
             'tipo_operacion' => 'required',
-            'serie_correlativo' => 'required',
+            'serie_correlativo' => [
+                'required',
+                // Rule::unique('ventas', 'serie_correlativo')->where(
+                //     fn ($query) =>
+                //     $query->where('empresa_id', session('empresa'))
+                // )
+            ],
             'cliente_id' => 'required|exists:clientes,id',
             'direccion' => 'required',
             'fecha_emision' => 'required|date',
@@ -55,7 +62,7 @@ class VentasRequest extends FormRequest
             'forma_pago' => 'required',
 
             'items' => 'array|between:1,1000',
-            'items.*.producto_id' => 'required',
+            // 'items.*.producto_id' => 'required',
             'items.*.codigo' => 'required',
             'items.*.cantidad' => 'required|gte:1',
             'items.*.unit' => 'required',

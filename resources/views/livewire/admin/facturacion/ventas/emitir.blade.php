@@ -122,11 +122,12 @@
                                 option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
                         </div>
-
-                        <div class="col-span-6 sm:col-span-4">
-                            <x-form.checkbox left-label="Operación con Detraccion:" value="true" id="lg" lg
-                                wire:model.live="detraccion" />
-                        </div>
+                        @if (!$deduce_anticipos)
+                            <div class="col-span-6 sm:col-span-4">
+                                <x-form.checkbox left-label="Operación con Detraccion:" value="true" id="detraccion"
+                                    name="detraccion" lg wire:model.live="detraccion" />
+                            </div>
+                        @endif
 
                         @if ($detraccion)
                             <div class="col-span-6 sm:col-span-4">
@@ -256,9 +257,9 @@
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
-                    <div class="grid grid-cols-2 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+                    <div class="grid grid-cols-5 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
 
-                        <div class="col-span-2 sm:col-span-1">
+                        <div class="col-span-2 sm:col-span-2">
 
                             <x-form.button wire:click="openModalAddProducto" spinner="openModalAddProducto"
                                 label="AÑADIR" primary md icon="plus" />
@@ -266,13 +267,27 @@
                         </div>
 
                         <div class="col-span-2 sm:col-span-1">
-                            <x-form.checkbox left-label="Disminuir Stock:" value="true" id="lg" lg
+                            <x-form.checkbox left-label="Disminuir Stock:" value="true" lg id="decrease_stock"
                                 wire:model.live="decrease_stock" />
                         </div>
-
+                        @if (!$deduce_anticipos)
+                            <div class="col-span-2 sm:col-span-1">
+                                <x-form.checkbox
+                                    left-label="Indique si la {{ $comprobante_slug }} se emite por un Pago Anticipado"
+                                    value="true" lg id="pago_anticipado" wire:model.live="pago_anticipado" />
+                            </div>
+                        @endif
+                        @if (!$pago_anticipado && !$detraccion)
+                            <div class="col-span-2 sm:col-span-1">
+                                <x-form.checkbox
+                                    left-label="Indique si la {{ $comprobante_slug }} tiene Descuentos o Deduce Anticipos"
+                                    value="true" lg wire:model.live="deduce_anticipos" id="deduce_anticipos" />
+                            </div>
+                        @endif
                     </div>
 
                     {{-- LISTA DE PRODUCTOS --}}
+
                     <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
@@ -445,7 +460,7 @@
                             </div>
 
                             @if ($showCredit)
-                                <div class="py-2 border-b ">
+                                {{-- <div class="py-2 border-b ">
                                     <div class="flex justify-between">
                                         <div class="text-gray-900 text-right flex-1 font-medium text-sm">
                                             Adelanto
@@ -457,7 +472,7 @@
                                                 precision="4" />
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             @endif
 
                         </div>
@@ -465,7 +480,7 @@
 
                 </div>
             </div>
-
+            {{ json_encode($errors->all()) }}
             <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
 
                 <div class="grid {{ $tipo_comprobante_id == '02' ? '' : 'sm:grid-cols-2' }}  gap-2 content-end">
@@ -527,7 +542,12 @@
         </div>
 
     </div>
+    <livewire:admin.productos.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
+        key="producto-add-">
 
 </div>
 @section('js')
 @endsection
+
+@push('modals')
+@endpush

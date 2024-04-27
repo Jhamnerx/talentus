@@ -10,7 +10,7 @@
 
 @push('modals')
     @livewire('admin.productos.create-modal')
-    @livewire('admin.productos.modal-add-producto')
+
     @livewire('admin.clientes.save')
     @livewire('admin.facturacion.ventas.modal-detraccion')
 @endpush

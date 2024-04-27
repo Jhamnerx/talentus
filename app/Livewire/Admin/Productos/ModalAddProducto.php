@@ -2,26 +2,45 @@
 
 namespace App\Livewire\Admin\Productos;
 
+use Exception;
+use Carbon\Carbon;
+use App\Models\Ventas;
 use App\Models\Empresa;
-use App\Models\plantilla;
 use Livewire\Component;
+use App\Models\plantilla;
 use App\Models\Productos;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Reactive;
+use Illuminate\Support\Collection;
 
 class ModalAddProducto extends Component
 {
     public plantilla $plantilla;
     public $showModal = false;
 
-    public $divisa = "PEN";
+    #[Reactive]
+    public $divisa;
 
     public $product_selected_id;
     public Collection $selected;
     public $tipo_afectacion = "10";
 
-    public function mount(Productos $productos)
+    //ANTICIPOS
+    #[Reactive]
+    public $deduce_anticipos;
+    public $anticipo = false;
+    public $comprobante_slug = '';
+
+    public $serie_ref = 'F001', $correlativo_ref;
+    public $fecha_emision_ref;
+    public $total_invoice_ref = 0.00;
+    public $valor_venta_ref = 0.00;
+
+
+    public function mount()
     {
+
         $this->plantilla = plantilla::first();
 
         $this->selected = collect([
@@ -43,6 +62,8 @@ class ModalAddProducto extends Component
             'afecto_icbper' => false,
             'tipo' => 'producto',
         ]);
+
+        $this->fecha_emision_ref = Carbon::now()->format('Y-m-d');
     }
 
     #[On('openModalAddProducto')]
@@ -72,7 +93,6 @@ class ModalAddProducto extends Component
 
     function updatedProductSelectedId($id)
     {
-
         $producto = Productos::find($id);
 
         $igv = $this->calcularIgvProducto($producto->valor_unitario);
@@ -166,7 +186,6 @@ class ModalAddProducto extends Component
 
     public function calcularMontosProducto()
     {
-
         $igv = 0.00;
         $sub_total = 0.00;
         $total_icbper = 0.00;
@@ -213,18 +232,25 @@ class ModalAddProducto extends Component
             'codigo_afectacion' => $this->tipo_afectacion,
             'afecto_icbper' => false
         ]);
-        $this->reset('product_selected_id', 'divisa');
+
+        $this->reset('product_selected_id', 'anticipo', 'serie_ref', 'correlativo_ref', 'total_invoice_ref', 'fecha_emision_ref', 'valor_venta_ref');
     }
 
     public function addProducto()
     {
+        if ($this->anticipo) {
+            $this->selected['igv'] = $this->negative($this->selected['igv']);
+            $this->selected['valor_unitario'] = $this->negative($this->selected['valor_unitario']);
+            $this->selected['total'] = $this->negative($this->selected['total']);
+            $this->selected['precio_unitario'] = $this->negative($this->selected['precio_unitario']);
+        }
         try {
             $this->validate([
-                'selected.producto_id' => 'required',
+                //'selected.producto_id' => 'required',
                 'selected.codigo' => 'required',
                 'selected.cantidad' => 'required|integer|min:1',
                 'selected.unit' => 'required|exists:units,codigo',
-                'selected.producto' => 'required',
+                //'selected.producto' => 'required',
                 'selected.descripcion' => 'required',
                 'selected.valor_unitario' => 'required|',
                 'selected.igv' => 'required',
@@ -245,6 +271,7 @@ class ModalAddProducto extends Component
                 'selected.total.required' => 'Sub Total requerido',
 
             ]);
+
             $this->dispatch('add-producto-selected', selected: $this->selected);
             $this->closeModal();
         } catch (\Throwable $th) {
@@ -260,5 +287,88 @@ class ModalAddProducto extends Component
     public function addProductoModal($producto)
     {
         $this->dispatch('add-producto-modal', producto: $producto);
+    }
+
+    //BUSCAR FACTURA DE REFERENCIA
+    public function updatedCorrelativoRef($value)
+    {
+        $this->searchInvoice();
+    }
+    public function updatedSerieRef($value)
+    {
+        $this->searchInvoice();
+    }
+
+    public function updatedAnticipo($value)
+    {
+        $this->resetAnticipo();
+    }
+
+    public function resetAnticipo()
+    {
+        $this->reset('serie_ref', 'correlativo_ref', 'total_invoice_ref');
+        $this->fecha_emision_ref = Carbon::now()->format('Y-m-d');
+    }
+
+    public function searchInvoice()
+    {
+
+        $this->validate(
+            [
+                'serie_ref' => 'required|min:4|max:4|exists:series,serie',
+                'correlativo_ref' => 'required',
+            ],
+            [
+                'serie_ref.required' => 'Serie requerida',
+                'serie_ref.min' => 'La Serie debe tener 4 caracteres',
+                'serie_ref.max' => 'Serie debe tener 4 caracteres',
+                'serie_ref.exists' => 'La Serie no existe',
+                'correlativo_ref.required' => 'Correlativo requerido',
+
+            ]
+        );
+
+        try {
+
+            $venta = Ventas::where('serie', $this->serie_ref)->where('correlativo', $this->correlativo_ref)->first();
+
+            if ($venta) {
+
+                if ($venta->divisa != $this->divisa) {
+                    throw new Exception('La factura de referencia no es de la misma divisa');
+                } else {
+                    $this->fecha_emision_ref = $venta->fecha_emision;
+                    $this->valor_venta_ref = $venta->sub_total;
+                    $this->total_invoice_ref = $venta->total;
+                    $this->selected['descripcion'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
+                    $this->selected['producto'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
+                    $this->selected['igv'] = $venta->igv;
+                    $this->selected['total'] = $venta->total;
+
+                    $this->selected['codigo'] = 'ANTICIPO';
+                    $this->selected['cantidad'] = 1;
+                    $this->selected['valor_unitario'] = $venta->sub_total;
+                    $this->selected['precio_unitario'] = $venta->total;
+                    $this->selected['tipo'] = 'servicio';
+                }
+            } else {
+
+                throw new Exception('No se encontro la factura de referencia');
+            }
+        } catch (\Exception $e) {
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Error: ' . $e->getMessage(),
+                timer: 6000
+            );
+        }
+    }
+
+    public function negative($num)
+    {
+        return -$num;
     }
 }

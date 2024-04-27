@@ -143,6 +143,7 @@
                 html: `<div  style="font-size: 14px; color: #056b85;"> ` +
                     event.mensaje + `</div`,
                 showCloseButton: true,
+                timer: event.timer ? event.timer : 3000,
             });
 
         });

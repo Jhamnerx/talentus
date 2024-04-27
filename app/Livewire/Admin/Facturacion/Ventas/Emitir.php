@@ -13,6 +13,7 @@ use App\Models\Productos;
 use App\Models\MetodoPago;
 use Livewire\Attributes\On;
 use App\Models\TipoComprobantes;
+use Livewire\Attributes\Reactive;
 use Illuminate\Support\Collection;
 use App\Models\CodigosDetracciones;
 use App\Http\Requests\VentasRequest;
@@ -64,6 +65,11 @@ class Emitir extends Component
     public $detraccion = false;
     public $openModalDt = false;
     public Collection $datosDetraccion;
+
+
+    //pago anticipado
+    public $pago_anticipado = false;
+    public $deduce_anticipos = false;
 
     public function render()
     {
@@ -316,8 +322,8 @@ class Emitir extends Component
             //  CALCULAR TOTALES AL AÑADIR PRODUCTO
             $this->reCalTotal();
 
-            //$this->dispatchBrowserEvent('add-producto');
-            $this->calcularCuotas($this->numero_cuotas);
+
+            // $this->calcularCuotas($this->numero_cuotas);
             // }
         } catch (\Exception $e) {
             $this->dispatch(
@@ -363,7 +369,7 @@ class Emitir extends Component
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
-
+            dd($venta);
             if ($this->metodo_type != '03') {
                 $api = new ApiFacturacion();
 
@@ -425,7 +431,7 @@ class Emitir extends Component
         $this->descuento =  $this->calcularDescuento();
         $this->sub_total =   $this->calcularSubTotal();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
-        // $this->op_gratuitas = $this->calcularOperacionesGratuitas();
+
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
         $this->op_inafectas = $this->calcularOperacionesInafectas();
         $this->icbper = $this->calcularIcbper();
@@ -433,7 +439,13 @@ class Emitir extends Component
         $this->igv =  $this->calcularIgv();
         $this->total =  $this->calcularTotal();
         $this->calcularCuotas($this->numero_cuotas);
-        $this->calcularMontoDetraccion($this->total);
+
+        //CALCULAR DETRACCION SI ES TRUE
+        if ($this->detraccion) {
+            $this->calcularMontoDetraccion($this->total);
+        }
+
+        //$this->op_gratuitas = $this->calcularOperacionesGratuitas();
     }
 
     //CALCULAR EL SUB TOTAL DE LOS ITEMS
