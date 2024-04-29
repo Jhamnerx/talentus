@@ -1,7 +1,7 @@
 <x-admin.facturacion.form-modal-w-buttons titulo="NUEVO ITEM" wire:model.live="showModal" maxWidth="2xl">
     {{-- <div class="col-span-12 md:col-start-2">
         <span class="font-semibold text-sm">{{ $divisa }}</span>
-        <span class="font-semibold text-sm">{{ $deduce_anticipos }}</span>
+        <span class="font-semibold text-sm">{{ $tipo_comprobante_id }}</span>
     </div> --}}
     @if ($deduce_anticipos)
         <div class="col-span-12 md:col-start-2 mt-2">
@@ -16,7 +16,6 @@
         </div>
 
         {{-- DATOS DE DE COMPROBANTE --}}
-
         <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
             <label for="product_selected_id">{{ Str::ucfirst($comprobante_slug) }} de Venta:</label> <br>
             <label for="sr">Serie - Nro.</label>
@@ -25,30 +24,29 @@
         <div class="col-span-4 md:col-span-2">
 
             <x-form.input id="serie_ref" errorless='false' placeholder="F001" name="serie_ref"
-                wire:model.live="serie_ref" maxlength="4" />
+                wire:model.live="prepayments.serie_ref" maxlength="4" />
         </div>
 
         <div class="col-span-4 md:col-span-3">
 
             <x-form.input id="correlativo_ref" errorless='false' placeholder="1" name="correlativo_ref"
-                wire:model.change="correlativo_ref" />
+                wire:model.change="prepayments.correlativo_ref" />
         </div>
 
         <div class="col-span-12 md:col-start-2 md:col-end-7 text-sm">
-            <x-form.errors only="serie_ref|correlativo_ref" />
+            <x-form.errors only="prepayments.serie_ref|prepayments.correlativo_ref" />
         </div>
-        {{-- FECHA DE COMPROBANTE --}}
 
+        {{-- FECHA DE COMPROBANTE --}}
         <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
             <label for="fecha_emision_ref">Fecha de Emisión:</label>
         </div>
 
         <div class="col-span-12 md:col-start-5 md:col-span-4">
-            <x-form.datetime-picker id="fecha_emision_ref" name="fecha_emision_ref" wire:model.live="fecha_emision_ref"
-                :min="now()->subDays(1)" :max="now()" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
-                :clearable="false" />
+            <x-form.datetime-picker id="fecha_emision_ref" name="fecha_emision_ref"
+                wire:model.live="prepayments.fecha_emision_ref" :min="now()->subDays(1)" :max="now()" without-time
+                parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
-
 
         {{-- VALOR UNITARIO --}}
         <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
@@ -59,8 +57,7 @@
         <div class="col-span-12 md:col-start-5 md:col-span-4">
 
             <x-form.inputs.currency prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" id="total_invoice_ref"
-                name="total_invoice_ref" wire:model.live="total_invoice_ref" precision="2" disabled />
-
+                name="total_invoice_ref" wire:model.live="prepayments.total_invoice_ref" precision="2" disabled />
         </div>
     @else
         <div class="col-span-12 md:col-start-2 md:col-end-5 mt-2 text-sm">
@@ -115,18 +112,21 @@
         </div>
     @endif
 
-    <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
 
-        <label for="descripcion">Descripción:</label>
-
-    </div>
-
-    <div class="col-span-12 md:col-start-5 md:col-end-11">
-
-        <x-form.textarea name="descripcion" id="descripcion" wire:model.live="selected.descripcion" />
-
-    </div>
     @if ($anticipo)
+        <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
+
+            <label for="prepayments_descripcion">Descripción:</label>
+
+        </div>
+
+        <div class="col-span-12 md:col-start-5 md:col-end-11">
+
+            <x-form.textarea name="prepayments_descripcion" id="prepayments_descripcion"
+                wire:model.live="prepayments.descripcion" />
+
+        </div>
+
         <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
 
             <label for="valor_venta_ref">Anticipo a Valor de Venta:</label>
@@ -135,10 +135,23 @@
         <div class="col-span-12 md:col-start-5 md:col-span-4">
 
             <x-form.inputs.currency id="valor_venta_ref" name="valor_venta_ref"
-                prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="valor_venta_ref" precision="4" />
+                prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="prepayments.valor_venta_ref"
+                precision="4" />
 
         </div>
     @else
+        <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
+
+            <label for="descripcion">Descripción:</label>
+
+        </div>
+
+        <div class="col-span-12 md:col-start-5 md:col-end-11">
+
+            <x-form.textarea name="descripcion" id="descripcion" wire:model.live="selected.descripcion" />
+
+        </div>
+
         <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
 
             <label for="valor_unitario">Valor Unitario:</label>

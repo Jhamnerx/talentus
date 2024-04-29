@@ -62,7 +62,7 @@ class VentasRequest extends FormRequest
             'forma_pago' => 'required',
 
             'items' => 'array|between:1,1000',
-            // 'items.*.producto_id' => 'required',
+            'items.*.producto_id' => 'nullable',
             'items.*.codigo' => 'required',
             'items.*.cantidad' => 'required|gte:1',
             'items.*.unit' => 'required',
@@ -80,6 +80,8 @@ class VentasRequest extends FormRequest
             'items.*.afecto_icbper' => 'required',
             'items.*.tipo' => 'required',
 
+            //pago anticipado
+            'pago_anticipado' => 'boolean',
             //  'total_cuotas' => 'exclude_if:forma_pago,CONTADO|required|same:total',
             //'detalle_cuotas.*.importe' => 'required',
         ];

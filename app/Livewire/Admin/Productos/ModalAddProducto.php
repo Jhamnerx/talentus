@@ -24,6 +24,7 @@ class ModalAddProducto extends Component
 
     public $product_selected_id;
     public Collection $selected;
+
     public $tipo_afectacion = "10";
 
     //ANTICIPOS
@@ -31,11 +32,9 @@ class ModalAddProducto extends Component
     public $deduce_anticipos;
     public $anticipo = false;
     public $comprobante_slug = '';
-
-    public $serie_ref = 'F001', $correlativo_ref;
-    public $fecha_emision_ref;
-    public $total_invoice_ref = 0.00;
-    public $valor_venta_ref = 0.00;
+    #[Reactive]
+    public $tipo_comprobante_id;
+    public Collection $prepayments;
 
 
     public function mount()
@@ -63,7 +62,20 @@ class ModalAddProducto extends Component
             'tipo' => 'producto',
         ]);
 
-        $this->fecha_emision_ref = Carbon::now()->format('Y-m-d');
+        $this->prepayments = collect([
+            'serie_ref' => "F001",
+            'correlativo_ref' => "",
+            'serie_correlativo_ref' => "",
+            'tipo_comprobante_ref' => $this->tipo_comprobante_id == '01' ? '02' : '03',
+            'descripcion' => "",
+            'producto' => "",
+            'codigo_anticipo' => "",
+            'valor_venta_ref' => 0.00,
+            'igv' => 0.00,
+            'total_invoice_ref' => 0.00,
+            'factor_anticipo' => 0.00,
+            'fecha_emision_ref' => Carbon::now()->format('Y-m-d'),
+        ]);
     }
 
     #[On('openModalAddProducto')]
@@ -233,54 +245,52 @@ class ModalAddProducto extends Component
             'afecto_icbper' => false
         ]);
 
-        $this->reset('product_selected_id', 'anticipo', 'serie_ref', 'correlativo_ref', 'total_invoice_ref', 'fecha_emision_ref', 'valor_venta_ref');
+        $this->reset('product_selected_id', 'anticipo');
     }
 
     public function addProducto()
     {
         if ($this->anticipo) {
-            $this->selected['igv'] = $this->negative($this->selected['igv']);
-            $this->selected['valor_unitario'] = $this->negative($this->selected['valor_unitario']);
-            $this->selected['total'] = $this->negative($this->selected['total']);
-            $this->selected['precio_unitario'] = $this->negative($this->selected['precio_unitario']);
-        }
-        try {
-            $this->validate([
-                //'selected.producto_id' => 'required',
-                'selected.codigo' => 'required',
-                'selected.cantidad' => 'required|integer|min:1',
-                'selected.unit' => 'required|exists:units,codigo',
-                //'selected.producto' => 'required',
-                'selected.descripcion' => 'required',
-                'selected.valor_unitario' => 'required|',
-                'selected.igv' => 'required',
-                'selected.icbper' => 'required',
-                'selected.total' => 'required',
 
-            ], [
-                'selected.producto_id.required' => 'Seleccion una producto',
-                'selected.codigo.required' => 'Seleccion una producto',
-                'selected.cantidad.required' => 'Por favor ingresa una cantidad',
-                'selected.cantidad.integer' => 'Debe ser un numero entero',
-                'selected.cantidad.min' => 'La cantidad debe ser mayor a 1',
-                'selected.unit.required' => 'Seleccion una producto',
-                'selected.unit.exists' => 'Error no existe la unidad',
-                'selected.descripcion.required' => 'Seleccion una producto',
-                'selected.valor_unitario.required' => 'Valor unitario requerido',
-
-                'selected.total.required' => 'Sub Total requerido',
-
-            ]);
-
-            $this->dispatch('add-producto-selected', selected: $this->selected);
+            $this->dispatch('add-prepayment', prepayments: $this->prepayments);
             $this->closeModal();
-        } catch (\Throwable $th) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: 'Error: ' . $th->getMessage(),
-            );
+        } else {
+            try {
+                $this->validate([
+                    //'selected.producto_id' => 'required',
+                    'selected.codigo' => 'required',
+                    'selected.cantidad' => 'required|integer|min:1',
+                    'selected.unit' => 'required|exists:units,codigo',
+                    //'selected.producto' => 'required',
+                    'selected.descripcion' => 'required',
+                    'selected.valor_unitario' => 'required|',
+                    'selected.igv' => 'required',
+                    'selected.icbper' => 'required',
+                    'selected.total' => 'required',
+
+                ], [
+                    'selected.producto_id.required' => 'Seleccion una producto',
+                    'selected.codigo.required' => 'Seleccion una producto',
+                    'selected.cantidad.required' => 'Por favor ingresa una cantidad',
+                    'selected.cantidad.integer' => 'Debe ser un numero entero',
+                    'selected.cantidad.min' => 'La cantidad debe ser mayor a 1',
+                    'selected.unit.required' => 'Seleccion una producto',
+                    'selected.unit.exists' => 'Error no existe la unidad',
+                    'selected.descripcion.required' => 'Seleccion una producto',
+                    'selected.valor_unitario.required' => 'Valor unitario requerido',
+                    'selected.total.required' => 'Sub Total requerido',
+                ]);
+
+                $this->dispatch('add-producto-selected', selected: $this->selected);
+                $this->closeModal();
+            } catch (\Throwable $th) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR',
+                    mensaje: 'Error: ' . $th->getMessage(),
+                );
+            }
         }
     }
 
@@ -290,7 +300,7 @@ class ModalAddProducto extends Component
     }
 
     //BUSCAR FACTURA DE REFERENCIA
-    public function updatedCorrelativoRef($value)
+    public function updatedPrePaymentsCorrelativoRef($value)
     {
         $this->searchInvoice();
     }
@@ -301,47 +311,62 @@ class ModalAddProducto extends Component
 
     public function updatedAnticipo($value)
     {
-        $this->resetAnticipo();
+        //$this->resetAnticipo();
     }
 
+    #[On('reset-prepayments')]
     public function resetAnticipo()
     {
-        $this->reset('serie_ref', 'correlativo_ref', 'total_invoice_ref');
-        $this->fecha_emision_ref = Carbon::now()->format('Y-m-d');
+        $this->prepayments = collect([
+            'serie_ref' => "F001",
+            'correlativo_ref' => "",
+            'serie_correlativo_ref' => "",
+            'tipo_comprobante_ref' => $this->tipo_comprobante_id == '01' ? '02' : '03',
+            'descripcion' => "",
+            'producto' => "",
+            'codigo_anticipo' => "",
+            'valor_venta_ref' => 0.00,
+            'igv' => 0.00,
+            'total_invoice_ref' => 0.00,
+            'factor_anticipo' => 0.00,
+            'fecha_emision_ref' => Carbon::now()->format('Y-m-d'),
+        ]);
+        $this->resetSelected();
     }
 
     public function searchInvoice()
     {
 
-        $this->validate(
-            [
-                'serie_ref' => 'required|min:4|max:4|exists:series,serie',
-                'correlativo_ref' => 'required',
-            ],
-            [
-                'serie_ref.required' => 'Serie requerida',
-                'serie_ref.min' => 'La Serie debe tener 4 caracteres',
-                'serie_ref.max' => 'Serie debe tener 4 caracteres',
-                'serie_ref.exists' => 'La Serie no existe',
-                'correlativo_ref.required' => 'Correlativo requerido',
-
-            ]
-        );
+        // $this->validate(
+        //     [
+        //         'serie_ref' => 'required|min:4|max:4|exists:series,serie',
+        //         'correlativo_ref' => 'required',
+        //     ],
+        //     [
+        //         'serie_ref.required' => 'Serie requerida',
+        //         'serie_ref.min' => 'La Serie debe tener 4 caracteres',
+        //         'serie_ref.max' => 'Serie debe tener 4 caracteres',
+        //         'serie_ref.exists' => 'La Serie no existe',
+        //         'correlativo_ref.required' => 'Correlativo requerido',
+        //     ]
+        // );
 
         try {
 
-            $venta = Ventas::where('serie', $this->serie_ref)->where('correlativo', $this->correlativo_ref)->first();
+            $venta = Ventas::where('serie', $this->prepayments['serie_ref'])->where('correlativo', $this->prepayments['correlativo_ref'])->first();
 
             if ($venta) {
 
                 if ($venta->divisa != $this->divisa) {
                     throw new Exception('La factura de referencia no es de la misma divisa');
                 } else {
-                    $this->fecha_emision_ref = $venta->fecha_emision;
-                    $this->valor_venta_ref = $venta->sub_total;
-                    $this->total_invoice_ref = $venta->total;
-                    $this->selected['descripcion'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
-                    $this->selected['producto'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
+                    $this->prepayments['fecha_emision_ref'] = $venta->fecha_emision;
+                    $this->prepayments['valor_venta_ref'] = $venta->sub_total;
+                    $this->prepayments['igv'] = $venta->igv;
+                    $this->prepayments['total_invoice_ref'] = $venta->total;
+                    $this->prepayments['serie_correlativo_ref'] = $venta->serie_correlativo;
+                    $this->prepayments['descripcion'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
+                    $this->prepayments['producto'] = 'ANTICIPO: ' . Str::upper($this->comprobante_slug) . ' DE VENTA NRO° ' . $venta->serie_correlativo;
                     $this->selected['igv'] = $venta->igv;
                     $this->selected['total'] = $venta->total;
 

@@ -109,8 +109,6 @@
                             :clearable="false" />
                     </div>
 
-
-
                     {{-- TIPO DE VENTA --}}
                     @if ($tipo_comprobante_id == '01')
                         <div class="col-span-12 md:col-span-4 mb-3">
@@ -288,7 +286,7 @@
 
                     {{-- LISTA DE PRODUCTOS --}}
 
-                    <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
 
@@ -358,6 +356,16 @@
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">
                                         {{ $simbolo }} <span>{{ round($sub_total, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="flex justify-between ">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">ANTICIPOS
+                                </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($total_anticipos, 4) }}</span>
                                     </div>
 
                                 </div>
@@ -543,7 +551,7 @@
 
     </div>
     <livewire:admin.productos.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
-        key="producto-add-">
+        :tipo_comprobante_id="$tipo_comprobante_id" key="producto-add-">
 
 </div>
 @section('js')

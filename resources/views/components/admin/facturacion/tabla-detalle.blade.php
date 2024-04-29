@@ -42,6 +42,63 @@
         <!-- Table body -->
         <tbody class="text-sm divide-y divide-slate-200 listaItems">
 
+            @foreach ($prepayments->all() as $clave => $prepayment)
+                <br>
+                <tr class="main bg-slate-100" wire:key="item-prepay-{{ $clave }}">
+
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                        <div class="font-normal text-center">
+                            {{ $prepayment['serie_correlativo_ref'] }}
+                        </div>
+
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                        <div class="font-normal text-center">
+
+                        </div>
+                    </td>
+
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap min-w-36 md:min-w-0">
+                        <div class="font-normal text-center">
+                            1
+                        </div>
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+
+                        <x-form.textarea required wire:model.live="prepayments.{{ $clave }}.descripcion" />
+
+                    </td>
+
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-normal text-center">
+                            -{{ $prepayment['valor_venta_ref'] }}
+                        </div>
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-normal text-center">
+                            -{{ $prepayment['igv'] }}
+                        </div>
+
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="font-normal text-center">
+                            -{{ $prepayment['total_invoice_ref'] }}
+                        </div>
+                    </td>
+                    @if ($tipo != '07' && $tipo != '08')
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                            <div class="space-x-1">
+
+                                <x-form.button label="Eliminar"
+                                    wire:click.prevent="eliminarPrepayment('{{ $clave }}')" outline red sm
+                                    icon="trash" />
+                            </div>
+                        </td>
+                    @endif
+                </tr>
+            @endforeach
             {{-- fila para añadir --}}
             @foreach ($items->all() as $clave => $item)
                 <tr class="main bg-slate-100" wire:key="item-{{ $clave }}">
