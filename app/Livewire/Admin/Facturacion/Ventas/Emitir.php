@@ -385,7 +385,7 @@ class Emitir extends Component
 
                 Ventas::createPrepayments($venta, $this->prepayments);
             }
-            dd($venta);
+
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
 
@@ -393,6 +393,7 @@ class Emitir extends Component
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type, $this->tipo_operacion);
+                dd($mensaje);
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
@@ -495,7 +496,7 @@ class Emitir extends Component
     {
         if ($this->igv_anticipos > 0) {
 
-            $igv = (floatval($this->op_gravadas) *  $this->plantilla->igv) - $this->igv_anticipos;
+            $igv = (floatval($this->op_gravadas) *  $this->plantilla->igv);
             return round($igv, 4);
         } else {
 
@@ -517,8 +518,13 @@ class Emitir extends Component
             }
         })->sum();
 
+        if ($descuento > 0) {
 
-        return $descuento > 0 ? $op_gravadas - $descuento : $op_gravadas;
+            return $op_gravadas - $descuento;
+        } else {
+
+            return round($op_gravadas - $this->total_anticipos, 4);
+        }
     }
 
     // public function calcularOperacionesGratuitas()
@@ -584,7 +590,7 @@ class Emitir extends Component
     {
         if ($this->igv_anticipos > 0) {
 
-            $total = (($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv) - $this->total_anticipos;
+            $total = (($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv);
 
             return round($total, 4);
         } else {
@@ -680,7 +686,7 @@ class Emitir extends Component
     {
         unset($this->prepayments[$key]);
         $this->prepayments;
-        $this->reCalTotal();
+        $this->calcularAnticipos();
     }
 
     public function updated($propertyName)

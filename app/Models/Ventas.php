@@ -47,7 +47,7 @@ class Ventas extends Model
         'fecha_vencimiento' => 'date',
         'tipo_cambio' => 'decimal:2',
         'metodo_pago_id' => 'string',
-        'op_gravadas' => 'decimal:2',
+        'op_gravadas' => 'double',
         'op_exoneradas' => 'decimal:2',
         'op_inafectas' => 'decimal:2',
         'op_gratuitas' => 'decimal:2',

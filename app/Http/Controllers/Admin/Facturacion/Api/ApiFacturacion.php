@@ -8,6 +8,7 @@ use App\Models\Ventas;
 use App\Models\Clientes;
 use App\Models\plantilla;
 use App\Models\Comprobantes;
+use App\Models\Detracciones;
 use App\Models\GuiaRemision;
 use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Cuota;
@@ -19,6 +20,7 @@ use Greenter\Model\Voided\Voided;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Despatch\Puerto;
 use Greenter\Model\Sale\Detraction;
+use Greenter\Model\Sale\Prepayment;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +40,6 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use Greenter\Services\InvalidServiceResponseException;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-use App\Models\Detracciones;
 
 class ApiFacturacion extends Controller
 {
@@ -266,14 +267,43 @@ class ApiFacturacion extends Controller
             ->setMtoIGV($venta->igv)
             ->setIcbper($venta->icbper)
             ->setTotalImpuestos($venta->igv + $venta->icbper)
-            ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-            ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
 
         if ($venta->detraccion) {
 
             $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
         }
+
+        if ($venta->anticipos) {
+            //ESTABLECER VALORES
+            $invoice->setValorVenta($venta->ventaDetalles->sum('sub_total'))
+                ->setSubTotal($venta->ventaDetalles->sum('total'));
+
+            //ESTABLECER ANTICIPOS
+            foreach ($venta->anticipos as $anticipo) {
+                $invoice->setAnticipos([
+                    (new Prepayment())
+                        ->setTipoDocRel($anticipo->tipo_comprobante_ref) // catalog. 12
+                        ->setNroDocRel($anticipo->serie_correlativo_ref)
+                        ->setTotal($anticipo->total_invoice_ref)
+                ]);
+
+                $invoice->setDescuentos([
+                    (
+                        new Charge())
+                        ->setCodTipo('04')
+                        ->setMonto($anticipo->valor_venta_ref) // anticipo
+                        ->setMontoBase(2124)
+                ]);
+            }
+
+            $invoice->setTotalAnticipos($venta->anticipos->sum('total_invoice_ref'));
+        } else {
+            //ESTABLECER VALORES
+            $invoice->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+                ->setSubTotal($venta->total);
+        }
+
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
         // ])

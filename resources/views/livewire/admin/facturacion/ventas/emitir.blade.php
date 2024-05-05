@@ -252,7 +252,6 @@
                     <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
                     </x-admin.facturacion.detalle-cuotas-table>
                 </div>
-
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
                     <div class="grid grid-cols-5 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
