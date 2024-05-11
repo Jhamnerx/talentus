@@ -35,14 +35,25 @@ class UtilesController extends Controller
                     'connect_timeout' => 5,
                     'headers' => [
                         'Authorization' => 'Bearer ' . $token,
-                        'Referer' => 'https://apis.net.pe/api-sunat-tipo-de-cambio',
+                        'Referer' => 'https://api.apis.net.pe/v2/sunat/tipo-cambio',
                         'User-Agent' => 'laravel/guzzle',
                         'Accept' => 'application/json',
                     ],
                 ];
 
                 $res = $client->request('GET', '/v2/sunat/tipo-cambio', $parameters);
+
                 $response = json_decode($res->getBody()->getContents(), true);
+
+                if (array_key_exists('message', $response)) {
+
+                    if ($response['message'] == 'Not found') {
+                        sleep(5);
+                        $res = $client->request('GET', '/v2/sunat/tipo-cambio?date=' . Carbon::now()->yesterday()->format('Y-m-d'), $parameters);
+
+                        $response = json_decode($res->getBody()->getContents(), true);
+                    }
+                }
 
                 if (array_key_exists('precioVenta', $response)) {
 
@@ -63,6 +74,7 @@ class UtilesController extends Controller
                     );
                     return $response["precioVenta"];
                 } else {
+
                     return $response['message'];
                 }
             } catch (\Exception $e) {
