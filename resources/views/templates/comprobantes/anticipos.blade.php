@@ -12,12 +12,12 @@
         </td>
         <td align="center">
             {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }}
-            -{{ $anticipo->valor_venta_ref }}
+            -{{ round($anticipo->valor_venta_ref, 2) }}
 
         </td>
         <td align="center">
             {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }}
-            -{{ $anticipo->valor_venta_ref }}
+            -{{ round($anticipo->valor_venta_ref, 2) }}
         </td>
     </tr>
 @endforeach

@@ -402,8 +402,3 @@ Route::controller(UtilesController::class)->group(function () {
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
     Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
 });
-
-Route::get('test', function () {
-
-    return response()->view('greeting', ['name' => 'James'])->header('Content-Type', 'text/plain');
-});

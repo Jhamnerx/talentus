@@ -63,7 +63,7 @@ class ModalAddProducto extends Component
         ]);
 
         $this->prepayments = collect([
-            'serie_ref' => "F001",
+            'serie_ref' =>  $this->tipo_comprobante_id == '01' ? 'F001' : 'B001',
             'correlativo_ref' => "",
             'serie_correlativo_ref' => "",
             'tipo_comprobante_ref' => $this->tipo_comprobante_id == '01' ? '02' : '03',
@@ -318,7 +318,7 @@ class ModalAddProducto extends Component
     public function resetAnticipo()
     {
         $this->prepayments = collect([
-            'serie_ref' => "F001",
+            'serie_ref' => $this->tipo_comprobante_id == '01' ? 'F001' : 'B001',
             'correlativo_ref' => "",
             'serie_correlativo_ref' => "",
             'tipo_comprobante_ref' => $this->tipo_comprobante_id == '01' ? '02' : '03',
@@ -357,6 +357,11 @@ class ModalAddProducto extends Component
 
             if ($venta) {
 
+                if ($venta->tipo_comprobante_id != $this->tipo_comprobante_id) {
+                    throw new Exception('La factura de referencia no es del mismo tipo de comprobante');
+                    $this->resetAnticipo();
+                }
+
                 if ($venta->divisa != $this->divisa) {
                     throw new Exception('La factura de referencia no es de la misma divisa');
                 } else {
@@ -379,6 +384,7 @@ class ModalAddProducto extends Component
             } else {
 
                 throw new Exception('No se encontro la factura de referencia');
+                $this->resetAnticipo();
             }
         } catch (\Exception $e) {
 

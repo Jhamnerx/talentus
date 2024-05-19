@@ -181,13 +181,15 @@
                                     wire:model.live="deduce_anticipos" id="deduce_anticipos" value="true" />
                             </div>
                         @endif
-
-                        @if (!$deduce_anticipos)
-                            <div class="col-span-12 text-center">
-                                <x-form.toggle left-label="Operación con Detraccion" md wire:model.live="detraccion"
-                                    id="detraccion" value="true" />
-                            </div>
+                        @if ($tipo_comprobante_id == '01')
+                            @if (!$deduce_anticipos)
+                                <div class="col-span-12 text-center">
+                                    <x-form.toggle left-label="Operación con Detraccion" md
+                                        wire:model.live="detraccion" id="detraccion" value="true" />
+                                </div>
+                            @endif
                         @endif
+
 
                         @if ($detraccion)
                             <div class="col-span-12 text-left">
