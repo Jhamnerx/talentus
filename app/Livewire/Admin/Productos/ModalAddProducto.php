@@ -337,19 +337,19 @@ class ModalAddProducto extends Component
     public function searchInvoice()
     {
 
-        // $this->validate(
-        //     [
-        //         'serie_ref' => 'required|min:4|max:4|exists:series,serie',
-        //         'correlativo_ref' => 'required',
-        //     ],
-        //     [
-        //         'serie_ref.required' => 'Serie requerida',
-        //         'serie_ref.min' => 'La Serie debe tener 4 caracteres',
-        //         'serie_ref.max' => 'Serie debe tener 4 caracteres',
-        //         'serie_ref.exists' => 'La Serie no existe',
-        //         'correlativo_ref.required' => 'Correlativo requerido',
-        //     ]
-        // );
+        $this->validate(
+            [
+                'prepayments.serie_ref' => 'required|min:4|max:4|exists:series,serie',
+                'prepayments.correlativo_ref' => 'required',
+            ],
+            [
+                'prepayments.serie_ref.required' => 'Serie requerida',
+                'prepayments.serie_ref.min' => 'La Serie debe tener 4 caracteres',
+                'prepayments.serie_ref.max' => 'Serie debe tener 4 caracteres',
+                'prepayments.serie_ref.exists' => 'La Serie no existe',
+                'prepayments.correlativo_ref.required' => 'Correlativo requerido',
+            ]
+        );
 
         try {
 

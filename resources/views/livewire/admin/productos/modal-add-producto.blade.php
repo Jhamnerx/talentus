@@ -33,7 +33,7 @@
                 wire:model.change="prepayments.correlativo_ref" />
         </div>
 
-        <div class="col-span-12 md:col-start-2 md:col-end-7 text-sm">
+        <div class="col-span-12 md:col-span-9 md:col-start-2">
             <x-form.errors only="prepayments.serie_ref|prepayments.correlativo_ref" />
         </div>
 
