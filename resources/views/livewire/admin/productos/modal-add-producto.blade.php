@@ -229,10 +229,13 @@
             prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total" disabled />
 
     </div>
-    {{-- <div class="col-span-12 md:col-start-5 md:col-span-4">
-        {{ json_encode($selected) }}
 
-    </div> --}}
+    @if (app()->environment('local'))
+        <div class="col-span-12 md:col-start-5 md:col-span-4">
+            {{ json_encode($selected) }}
+
+        </div>
+    @endif
 
 </x-admin.facturacion.form-modal-w-buttons>
 

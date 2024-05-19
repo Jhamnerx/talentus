@@ -43,7 +43,7 @@ class ModalDetraccion extends Component
             ]
         );
 
-        $this->dispatch('set-datos-detraccion', datos: $datos);
+        $this->dispatch('set-datos-detraccion', ['datos' => $datos]);
         $this->closeModal();
     }
 

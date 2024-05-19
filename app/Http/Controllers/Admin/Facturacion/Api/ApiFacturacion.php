@@ -274,7 +274,7 @@ class ApiFacturacion extends Controller
             $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
         }
 
-        if ($venta->anticipos) {
+        if ($venta->anticipos->count() > 0) {
             //ESTABLECER VALORES
             $invoice->setValorVenta($venta->ventaDetalles->sum('sub_total'))
                 ->setSubTotal($venta->ventaDetalles->sum('total'));
@@ -318,13 +318,14 @@ class ApiFacturacion extends Controller
             $invoice->setFormaPago(new FormaPagoContado());
         }
 
+
         //AÑADIR DESCUENTO SI ES QUE HAY
         if ($venta->descuento > 0) {
 
             $invoice->setDescuentos([
                 (new Charge())
                     ->setCodTipo('02') // Catalog. 53
-                    ->setMontoBase($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+                    ->setMontoBase($venta->sub_total)
                     ->setFactor($venta->descuento_factor)
                     ->setMonto($venta->descuento)
             ]);
@@ -342,7 +343,6 @@ class ApiFacturacion extends Controller
 
         // Envio a SUNAT.
         $see = $util->getSee();
-
         $result = $see->send($invoice);
 
         // Guardar XML firmado digitalmente.

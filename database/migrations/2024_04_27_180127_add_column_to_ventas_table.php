@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ventas', function (Blueprint $table) {
-            $table->boolean('anticipo')->default(false)->after('total');
+            $table->boolean('pago_anticipado')->default(false)->after('total');
         });
     }
 

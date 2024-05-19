@@ -3,6 +3,7 @@
 use Maatwebsite\Excel\Row;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\GpsController;
@@ -400,4 +401,9 @@ Route::controller(UtilesController::class)->group(function () {
 
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
     Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
+});
+
+Route::get('test', function () {
+
+    return response()->view('greeting', ['name' => 'James'])->header('Content-Type', 'text/plain');
 });

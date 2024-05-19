@@ -22,165 +22,179 @@
         </div>
     </div>
     <!-- Code block ends -->
-    <div class="p-6 shadow overflow-hidden sm:rounded-md">
-        <div class="px-4 py-2 bg-gray-50 dark:bg-gray-700 sm:p-6">
-            @error('tipo_cambio')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
-            @enderror
+    <div class="p-2 shadow overflow-hidden sm:rounded-md">
+        <div class="px-4 py-2 bg-slate-100 dark:bg-gray-700 sm:p-2">
             <div class="grid grid-cols-12 gap-2">
+                {{-- COLUMNA IZQUIERDA --}}
+                <div class="col-span-12 md:col-span-9">
+                    {{-- PRIMERA FILA --}}
+                    <div class="grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
 
-                <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-0 md:pr-4 gap-2">
+                        {{-- LOGO --}}
+                        <div class="col-span-12 lg:col-span-2">
+                            <div>
+                                <img src="{{ Storage::url($plantilla->logo) }}">
 
-                    {{-- CLIENTE --}}
+                            </div>
+                        </div>
 
-                    <div class="col-span-12 mb-2">
+                        {{-- DATOS DE LA EMPRESA --}}
+                        <div
+                            class="col-span-12 lg:col-span-4 xl:col-span-6 pl-6 self-center overflow-hidden text-ellipsis">
+                            <div class="mb-0" style="line-height: initial;">
+                                <span class="font-bold">
+                                    {{ $plantilla->razon_social }}
+                                </span>
+                                <br>
 
-                        <x-form.select autocomplete="off" id="cliente_id" name="cliente_id"
-                            label="Selecciona un cliente:" wire:model.live="cliente_id"
-                            placeholder="Selecciona un cliente" :async-data="[
-                                'api' => route('api.clientes.index'),
-                                'params' => ['tipo_comprobante' => $tipo_comprobante_id],
-                            ]" option-label="razon_social"
-                            option-value="id" option-description="numero_documento" x-on:clear="$wire.direccion = ''">
+                                <span>{{ $plantilla->correo }}</span>
+                            </div>
+                        </div>
 
-                            <x-slot name="afterOptions" class="p-2 flex justify-center"
-                                x-show="displayOptions.length === 0">
-                                <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
-                                    primary flat full>
-                                    <span x-html="`Crear cliente <b>${search}</b>`"></span>
-                                </x-form.button>
-                            </x-slot>
+                        {{-- FECHAS --}}
+                        <div class="col-span-12 lg:col-span-6 xl:col-span-4 self-end">
 
-                        </x-form.select>
-                    </div>
+                            <div class="grid grid-cols-12 gap-2">
+                                <div class="col-span-6">
+                                    <x-form.datetime-picker label="Fec. Emision:" id="fecha_emision"
+                                        name="fecha_emision" wire:model.live="fecha_emision" :min="now()->subDays(1)"
+                                        :max="now()" without-time parse-format="YYYY-MM-DD"
+                                        display-format="DD-MM-YYYY" :clearable="false" />
+                                </div>
 
-                    <div class="col-span-12 mb-2">
-                        <x-form.input autocomplete="off" id="direccion" name="direccion" label="Direccion:"
-                            wire:model.live="direccion" placeholder="Ingresa direccion" />
-                    </div>
+                                <div class="col-span-6">
+                                    <x-form.datetime-picker label="Fec. Vencimiento:" id="fecha_vencimiento"
+                                        name="fecha_vencimiento" wire:model.live="fecha_vencimiento" :min="now()->subDays(1)"
+                                        :max="now()->addDays(7)" without-time parse-format="YYYY-MM-DD"
+                                        display-format="DD-MM-YYYY" :clearable="false" />
+                                </div>
+                            </div>
 
-                    {{-- MONEDA --}}
-                    <div class="col-span-12 md:col-span-4">
-                        <x-form.select label="Divisa:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
-                            option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
-                            icon='currency-dollar' />
-                    </div>
-
-                    {{-- SERIE --}}
-                    <div class="col-span-12 xs:col-span-4">
-
-                        <x-form.select id="serie" name="serie" label="Serie:" wire:model.live="serie"
-                            placeholder="Selecciona una serie" :async-data="[
-                                'api' => route('api.series.index'),
-                                'params' => ['tipo_comprobante' => $tipo_comprobante_id],
-                            ]" option-label="serie"
-                            option-value="serie" />
-                    </div>
-
-                    {{-- CORRELATIVO --}}
-                    <div class="col-span-12 xs:col-span-4">
-
-                        <x-form.inputs.number readonly id="correlativo" name="correlativo" wire:model.live="correlativo"
-                            label="Correlativo:" />
+                        </div>
 
                     </div>
 
-                </div>
+                    {{-- SEGUNDA FILA --}}
+                    <div
+                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
 
-                <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-red-600 lg:pl-6 mb-2 gap-2">
-                    {{-- FECHA EMISION --}}
-                    <div class="col-span-12 xs:col-span-6 gap-2">
+
+                        <div class="col-span-12 xs:col-span-4">
+
+                            <x-form.input label="Tipo comprobante:"
+                                value="{{ strtoupper($comprobante_slug) }} ELECTRONICA" readonly />
+                        </div>
+
+                        {{-- SERIE --}}
+                        <div class="col-span-12 xs:col-span-4 xl:col-span-2">
+
+                            <x-form.select id="serie" name="serie" label="Serie:" wire:model.live="serie"
+                                placeholder="Selecciona una serie" :async-data="[
+                                    'api' => route('api.series.index'),
+                                    'params' => ['tipo_comprobante' => $tipo_comprobante_id],
+                                ]" option-label="serie"
+                                option-value="serie" />
+                        </div>
+
+                        {{-- CORRELATIVO --}}
+                        <div class="col-span-12 xs:col-span-4 xl:col-span-2">
+
+                            <x-form.inputs.number readonly id="correlativo" name="correlativo"
+                                wire:model.live="correlativo" label="Correlativo:" />
+
+                        </div>
+
+                        {{-- MONEDA --}}
+                        <div class="col-span-12 xs:col-span-6 xl:col-span-2">
+                            <x-form.select label="Divisa:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                                option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                                icon='currency-dollar' />
+                        </div>
+
+                        @if ($tipo_comprobante_id == '01')
+                            <div class="col-span-12 xs:col-span-6 xl:col-span-2">
+
+                                <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[
+                                    ['name' => 'CONTADO', 'id' => 'CONTADO'],
+                                    ['name' => 'CREDITO', 'id' => 'CREDITO'],
+                                ]"
+                                    option-label="name" option-value="id" wire:model.live="forma_pago"
+                                    :clearable="false" />
+
+                            </div>
+                        @endif
+                    </div>
+
+                    <div
+                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+
                         <div class="col-span-12 md:col-span-6">
 
-                            <x-form.datetime-picker label="Fecha de Emision:" id="fecha_emision" name="fecha_emision"
-                                wire:model.live="fecha_emision" :min="now()->subDays(1)" :max="now()" without-time
-                                parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                            <x-form.select autocomplete="off" id="cliente_id" name="cliente_id"
+                                label="Selecciona un cliente:" wire:model.live="cliente_id"
+                                placeholder="Escriba el nombre o número de documento del cliente" :async-data="[
+                                    'api' => route('api.clientes.index'),
+                                    'params' => ['tipo_comprobante' => $tipo_comprobante_id],
+                                ]"
+                                option-label="razon_social" option-value="id" option-description="numero_documento"
+                                x-on:clear="$wire.direccion = ''">
 
+                                <x-slot name="afterOptions" class="p-2 flex justify-center"
+                                    x-show="displayOptions.length === 0">
+                                    <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
+                                        primary flat full>
+                                        <span x-html="`Crear cliente <b>${search}</b>`"></span>
+                                    </x-form.button>
+                                </x-slot>
+
+                            </x-form.select>
+                        </div>
+
+                        <div class="col-span-12 md:col-span-6">
+                            <x-form.input autocomplete="off" id="direccion" name="direccion" label="Direccion:"
+                                wire:model.live="direccion" placeholder="Ingresa direccion" />
                         </div>
                     </div>
+                </div>
 
-                    {{-- FECHA CADUCIDAD --}}
-                    <div class="col-span-12 xs:col-span-6 gap-2">
-                        <x-form.datetime-picker label="Fecha Vencimiento:" id="fecha_vencimiento"
-                            name="fecha_vencimiento" wire:model.live="fecha_vencimiento" :min="now()->subDays(1)"
-                            :max="now()->addDays(7)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
-                            :clearable="false" />
-                    </div>
+                {{-- COLUMNA DERECHA --}}
+                <div class="col-span-12 md:col-span-3">
 
-                    {{-- TIPO DE VENTA --}}
-                    @if ($tipo_comprobante_id == '01')
-                        <div class="col-span-12 md:col-span-4 mb-3">
+                    <div
+                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-4 bg-white items-start border rounded-md m-3 p-4">
 
-                            <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[
-                                ['name' => 'CONTADO', 'id' => 'CONTADO'],
-                                ['name' => 'CREDITO', 'id' => 'CREDITO'],
-                            ]"
-                                option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
-
+                        <div class="col-span-12">
+                            <x-form.checkbox left-label="Disminuir Stock:" value="true" lg id="decrease_stock"
+                                wire:model.live="decrease_stock" />
                         </div>
+
                         @if (!$deduce_anticipos)
-                            <div class="col-span-6 sm:col-span-4">
-                                <x-form.checkbox left-label="Operación con Detraccion:" value="true" id="detraccion"
-                                    name="detraccion" lg wire:model.live="detraccion" />
+                            <div class="col-span-12 text-center">
+                                <x-form.toggle left-label="¿Es un pago anticipado?" md id="pago_anticipado"
+                                    wire:model.live="pago_anticipado" value="true" />
+                            </div>
+                        @endif
+
+                        @if (!$pago_anticipado && !$detraccion)
+                            <div class="col-span-12 text-center">
+                                <x-form.toggle left-label="Deducción de los pagos anticipados" md
+                                    wire:model.live="deduce_anticipos" id="deduce_anticipos" value="true" />
+                            </div>
+                        @endif
+
+                        @if (!$deduce_anticipos)
+                            <div class="col-span-12 text-center">
+                                <x-form.toggle left-label="Operación con Detraccion" md wire:model.live="detraccion"
+                                    id="detraccion" value="true" />
                             </div>
                         @endif
 
                         @if ($detraccion)
-                            <div class="col-span-6 sm:col-span-4">
-                                <x-form.button xs wire:click="openModalDetraccion" spinner="openModalDetraccion" outline
-                                    primary label="Informacion de la detraccion" />
-                            </div>
-                            @error('datosDetraccion')
-                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                    {{ $message }}
-                                </p>
-                            @enderror
-                            <div class="col-span-6">
-                                <x-form.card title="Datos de detracción">
-                                    <ol>
-                                        <li>
-                                            <span class="font-semibold">Cuenta Bancaria:</span>
-                                            {{ $datosDetraccion['cuenta_bancaria'] }}
-                                        </li>
-                                        <li>
-                                            <span class="font-semibold">Codigo Detraccion:</span>
-                                            {{ $datosDetraccion['codigo_detraccion'] }}
-                                        </li>
-
-                                        <li>
-                                            <span class="font-semibold">Porcentaje:</span>
-                                            {{ $datosDetraccion['porcentaje'] }}
-                                        </li>
-                                        <li>
-                                            <span class="font-semibold">Monto:</span>
-                                            {{ $datosDetraccion['monto'] }}
-                                        </li>
-                                    </ol>
-                                </x-form.card>
+                            <div class="col-span-12 text-left">
+                                <x-form.button xs wire:click="openModalDetraccion" spinner="openModalDetraccion"
+                                    outline primary label="Informacion de la detraccion" />
                             </div>
 
-                            @if (
-                                $errors->has('datosDetraccion.cuenta_bancaria') ||
-                                    $errors->has('datosDetraccion.codigo_detraccion') ||
-                                    $errors->has('datosDetraccion.metodo_pago_id') ||
-                                    $errors->has('datosDetraccion.porcentaje') ||
-                                    $errors->has('datosDetraccion.monto'))
-                                <div class="col-span-12">
-                                    <p class="mt-2  text-pink-600 text-sm">
-                                        {{ $errors->first('datosDetraccion.cuenta_bancaria') }}
-                                        <br>
-                                        {{ $errors->first('datosDetraccion.codigo_detraccion') }}
-                                        <br>
-                                        {{ $errors->first('datosDetraccion.metodo_pago_id') }}
-                                        <br>
-                                        {{ $errors->first('datosDetraccion.porcentaje') }}
-                                        <br>
-                                        {{ $errors->first('datosDetraccion.monto') }}
-                                    </p>
-                                </div>
-                            @endif
 
                             <x-form.modal.card title="Información de Detracción" max-width='lg'
                                 wire:model.live="openModalDt" align="center">
@@ -242,45 +256,137 @@
                                 </div>
                             </x-form.modal.card>
                         @endif
+                    </div>
 
+                    {{-- DIV PARA MOSTRAR INFO DE LA DETRACCION --}}
+                    @if ($detraccion)
+                        <div
+                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+                            <div class="col-span-12">
+                                @error('datosDetraccion')
+                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                        {{ $message }}
+                                    </p>
+                                @enderror
+                                <div class="col-span-6">
+                                    <x-form.card title="Datos de detracción">
+                                        <ol>
+                                            <li>
+                                                <span class="font-semibold">Cuenta Bancaria:</span>
+                                                {{ $datosDetraccion['cuenta_bancaria'] }}
+                                            </li>
+                                            <li>
+                                                <span class="font-semibold">Codigo Detraccion:</span>
+                                                {{ $datosDetraccion['codigo_detraccion'] }}
+                                            </li>
+
+                                            <li>
+                                                <span class="font-semibold">Porcentaje:</span>
+                                                {{ $datosDetraccion['porcentaje'] }}
+                                            </li>
+                                            <li>
+                                                <span class="font-semibold">Monto:</span>
+                                                {{ $datosDetraccion['monto'] }}
+                                            </li>
+                                        </ol>
+                                    </x-form.card>
+                                </div>
+
+                                @if (
+                                    $errors->has('datosDetraccion.cuenta_bancaria') ||
+                                        $errors->has('datosDetraccion.codigo_detraccion') ||
+                                        $errors->has('datosDetraccion.metodo_pago_id') ||
+                                        $errors->has('datosDetraccion.porcentaje') ||
+                                        $errors->has('datosDetraccion.monto'))
+                                    <div class="col-span-12">
+                                        <p class="mt-2  text-pink-600 text-sm">
+                                            {{ $errors->first('datosDetraccion.cuenta_bancaria') }}
+                                            <br>
+                                            {{ $errors->first('datosDetraccion.codigo_detraccion') }}
+                                            <br>
+                                            {{ $errors->first('datosDetraccion.metodo_pago_id') }}
+                                            <br>
+                                            {{ $errors->first('datosDetraccion.porcentaje') }}
+                                            <br>
+                                            {{ $errors->first('datosDetraccion.monto') }}
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     @endif
+
+                    {{-- componente venta al credito --}}
+                    @if ($showCredit)
+                        <div
+                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
+
+                            <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                            </x-admin.facturacion.detalle-cuotas-table>
+
+                        </div>
+                    @endif
+
+                    {{-- DIV PARA MOSTRAR OTRA INFORMACION --}}
+                    {{-- <div
+                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+
+                        <div class="col-span-12 text-center" x-data="{ reportsOpen: false }">
+                            <div @click="reportsOpen = !reportsOpen"
+                                class='flex items-center text-gray-600 w-full border-b overflow-hidden mt-1 md:mt-0 mb-5 mx-auto'>
+                                <div class='w-10 border-r px-2 transform transition duration-300 ease-in-out'
+                                    :class="{ 'rotate-90': reportsOpen, ' -translate-y-0.0': !reportsOpen }">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </div>
+                                <div class='flex items-center px-2 py-3'>
+                                    <div class='mx-3'>
+                                        <button class="hover:underline">This is where you click to open</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex p-5 md:p-0 w-full transform transition duration-300 ease-in-out border-b pb-10"
+                                x-cloak x-show="reportsOpen" x-collapse x-collapse.duration.500ms>
+                                This is a very simple dropdown/accordion/collapse (whatever you call it) using Tailwind,
+                                Alpine.js, and the Alpine.js plugin "Collapse" to enable smoother open/collapse
+                                transitions
+                                than what comes out of the box with Alpine.js
+                            </div>
+                        </div>
+
+
+                    </div> --}}
+
                 </div>
+            </div>
+        </div>
 
-                {{-- componente venta al credito --}}
-                <div class="grid grid-cols-12 col-span-12">
 
-                    <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
-                    </x-admin.facturacion.detalle-cuotas-table>
-                </div>
-                <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
-                    <div class="grid grid-cols-5 gap-2 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+        <div class="px-4 py-2 bg-gray-50 dark:bg-gray-700 sm:p-1">
+            @error('tipo_cambio')
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
+            @enderror
 
-                        <div class="col-span-2 sm:col-span-2">
+            <div class="grid grid-cols-12 gap-2">
+
+                <div class="col-span-12 mt-2 pt-2 bg-white shadow-lg rounded-lg px-3">
+
+                    <div class="grid grid-cols-5 gap-2 mt-2 pt-2 pb-2 bg-white px-3 mb-2">
+
+                        <div class="col-span-6 sm:col-span-2">
 
                             <x-form.button wire:click="openModalAddProducto" spinner="openModalAddProducto"
-                                label="AÑADIR" primary md icon="plus" />
+                                label="AÑADIR PRODUCTO" primary md icon="plus" />
 
                         </div>
 
-                        <div class="col-span-2 sm:col-span-1">
-                            <x-form.checkbox left-label="Disminuir Stock:" value="true" lg id="decrease_stock"
-                                wire:model.live="decrease_stock" />
-                        </div>
-                        @if (!$deduce_anticipos)
-                            <div class="col-span-2 sm:col-span-1">
-                                <x-form.checkbox
-                                    left-label="Indique si la {{ $comprobante_slug }} se emite por un Pago Anticipado"
-                                    value="true" lg id="pago_anticipado" wire:model.live="pago_anticipado" />
-                            </div>
-                        @endif
-                        @if (!$pago_anticipado && !$detraccion)
-                            <div class="col-span-2 sm:col-span-1">
-                                <x-form.checkbox
-                                    left-label="Indique si la {{ $comprobante_slug }} tiene Descuentos o Deduce Anticipos"
-                                    value="true" lg wire:model.live="deduce_anticipos" id="deduce_anticipos" />
-                            </div>
-                        @endif
                     </div>
 
                     {{-- LISTA DE PRODUCTOS --}}
@@ -288,7 +394,6 @@
                     <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
-
 
                     <div class="block md:flex gap-2">
                         {{-- LADO IZQUIERDO --}}
@@ -315,7 +420,7 @@
                                         wire:model.live.lazy="descuento_monto" thousands="." decimal="."
                                         precision="2" />
                                 </div>
-
+                                {{ $descuento_factor }}
                             </div>
 
                             {{-- FORMA DE PAGO --}}
@@ -359,17 +464,18 @@
 
                                 </div>
                             </div>
-                            <div class="flex justify-between ">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">ANTICIPOS
-                                </div>
-                                <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">
-                                        {{ $simbolo }} <span>{{ round($total_anticipos, 4) }}</span>
+                            @if ($deduce_anticipos)
+                                <div class="flex justify-between ">
+                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">ANTICIPOS
                                     </div>
+                                    <div class="text-right w-40">
+                                        <div class="text-gray-800 text-sm">
+                                            {{ $simbolo }} <span>{{ round($total_anticipos, 4) }}</span>
+                                        </div>
 
+                                    </div>
                                 </div>
-                            </div>
-
+                            @endif
                             <div class="flex justify-between mt-2">
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP. GRAVADAS
                                 </div>
@@ -487,7 +593,9 @@
 
                 </div>
             </div>
-            {{ json_encode($errors->all()) }}
+            @if (app()->environment('local'))
+                {{ json_encode($errors->all()) }}
+            @endif
             <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
 
                 <div class="grid {{ $tipo_comprobante_id == '02' ? '' : 'sm:grid-cols-2' }}  gap-2 content-end">

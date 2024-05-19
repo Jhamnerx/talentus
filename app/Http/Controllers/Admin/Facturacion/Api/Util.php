@@ -411,6 +411,13 @@ class Util extends Controller
             $params['user']['detraccion'] = view('templates.comprobantes.detraccion', compact('venta'));
         }
 
+        if ($venta->descuento) {
+            $params['user']['descuento'] = view('templates.comprobantes.descuentos', compact('venta'));
+        }
+        if ($venta->anticipos()->count() > 0) {
+            $params['user']['anticipos'] = view('templates.comprobantes.anticipos', compact('venta'));
+        }
+
         $html = $report->render($venta->clase, $params);
 
         return $html;

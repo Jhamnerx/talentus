@@ -5,7 +5,6 @@
         <thead
             class="text-xs font-semibold uppercase text-white  bg-gradient-to-r from-slate-800  to-indigo-500 border-t border-b rounded-lg border-slate-200">
             <tr>
-
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-left">CODIGO</div>
                 </th>
@@ -23,7 +22,6 @@
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-center">VALOR UNITARIO</div>
                 </th>
-
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-center">IGV</div>
                 </th>
@@ -40,10 +38,9 @@
             </tr>
         </thead>
         <!-- Table body -->
-        <tbody class="text-sm divide-y divide-slate-200 listaItems">
+        <tbody class="text-xs divide-y divide-slate-200 listaItems">
 
             @foreach ($prepayments->all() as $clave => $prepayment)
-                <br>
                 <tr class="main bg-slate-100" wire:key="item-prepay-{{ $clave }}">
 
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -65,7 +62,7 @@
                             1
                         </div>
                     </td>
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap min-w-72 md:min-w-0">
 
                         <x-form.textarea required wire:model.live="prepayments.{{ $clave }}.descripcion" />
 
@@ -151,6 +148,7 @@
                             </p>
                         @endif
                     </td>
+
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         <div class="font-normal text-center">
                             {{ $items[$clave]['igv'] }}
@@ -189,7 +187,7 @@
             @endforeach
             @if ($items->count() < 1)
                 <tr>
-                    <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                         <div class="font-normal text-center">
                             AÑADIR PRODUCTOS

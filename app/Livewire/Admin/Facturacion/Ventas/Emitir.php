@@ -335,7 +335,7 @@ class Emitir extends Component
                 'notify-toast',
                 icon: 'error',
                 title: 'ERROR AL AÑADIR PRODUCTO',
-                mensaje: $e->getMessage()
+                mensaje: $e->getMessage(),
             );
         }
     }
@@ -655,9 +655,9 @@ class Emitir extends Component
             }
 
             $descuento = $this->descuento_monto;
-            if ($this->sub_total) {
+            if ($this->sub_total && $this->descuento_monto > 0) {
 
-                $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 4);
+                $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 5);
             }
         } else {
             if ($this->total) {
@@ -714,5 +714,21 @@ class Emitir extends Component
             $this->tipo_operacion = '0101';
         }
         $this->calcularCuotas($this->numero_cuotas);
+    }
+
+    public function updatedPagoAnticipado($value)
+    {
+
+        if ($value) {
+            $this->items = $this->items->map(function ($item) {
+                $item['descripcion'] .= '***Pago Anticipado***';
+                return $item;
+            });
+        } else {
+            $this->items = $this->items->map(function ($item) {
+                $item['descripcion'] = str_replace('***Pago Anticipado***', '', $item['descripcion']);
+                return $item;
+            });
+        }
     }
 }
