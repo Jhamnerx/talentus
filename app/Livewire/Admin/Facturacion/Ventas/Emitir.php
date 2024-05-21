@@ -74,6 +74,10 @@ class Emitir extends Component
     public $total_anticipos = 0.00;
     public $igv_anticipos = 0.00;
 
+
+    //PROPIEDAD PARA VERIFICAR EMPRESA
+    public $empresa_id;
+
     public function render()
     {
         return view('livewire.admin.facturacion.ventas.emitir');
@@ -152,6 +156,8 @@ class Emitir extends Component
         ]);
 
         $this->prepayments = collect();
+
+        $this->empresa_id = Empresa::first()->id;
     }
 
     public function updatedClienteId($value)
@@ -351,6 +357,17 @@ class Emitir extends Component
 
     public function save()
     {
+
+        if ($this->empresa_id != session('empresa')) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: 'No puedes registrar una venta de otra empresa',
+            );
+            return;
+        }
+
         $request = new VentasRequest();
         $datos = $this->validate($request->rules($this->detraccion), $request->messages());
 

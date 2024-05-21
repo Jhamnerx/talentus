@@ -597,7 +597,7 @@ class ApiFacturacion extends Controller
         // Cliente
         $cliente = (new Client())
             ->setTipoDoc($cliente->tipo_documento_id)
-            ->setNumDoc($cliente->numero_documento)
+            ->setNumDoc(trim($cliente->numero_documento))
             ->setRznSocial($cliente->razon_social)
             ->setAddress((new Address())
                 ->setDireccion($cliente->direccion))
