@@ -1,0 +1,249 @@
+{
+  "_iziToast-CjU_gcaL.js": {
+    "file": "assets/iziToast-CjU_gcaL.js",
+    "name": "iziToast"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Cw2eWeSe.css",
+    "src": "resources/css/app.css",
+    "isEntry": true
+  },
+  "resources/css/cliente.css": {
+    "file": "assets/cliente-NLkqXoAn.css",
+    "src": "resources/css/cliente.css",
+    "isEntry": true
+  },
+  "resources/css/style.scss": {
+    "file": "assets/style-E_EHNihg.css",
+    "src": "resources/css/style.scss",
+    "isEntry": true
+  },
+  "resources/fonts/fa-brands-400.eot": {
+    "file": "assets/fa-brands-400-BniAJAuf.eot",
+    "src": "resources/fonts/fa-brands-400.eot"
+  },
+  "resources/fonts/fa-brands-400.svg": {
+    "file": "assets/fa-brands-400-D0SGUlJe.svg",
+    "src": "resources/fonts/fa-brands-400.svg"
+  },
+  "resources/fonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400-D2k7E3SQ.ttf",
+    "src": "resources/fonts/fa-brands-400.ttf"
+  },
+  "resources/fonts/fa-brands-400.woff": {
+    "file": "assets/fa-brands-400-Byanlnsj.woff",
+    "src": "resources/fonts/fa-brands-400.woff"
+  },
+  "resources/fonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400-CQYQ2tpV.woff2",
+    "src": "resources/fonts/fa-brands-400.woff2"
+  },
+  "resources/fonts/fa-light-300.eot": {
+    "file": "assets/fa-light-300-Ddzzy1ai.eot",
+    "src": "resources/fonts/fa-light-300.eot"
+  },
+  "resources/fonts/fa-light-300.svg": {
+    "file": "assets/fa-light-300-B75IKSrQ.svg",
+    "src": "resources/fonts/fa-light-300.svg"
+  },
+  "resources/fonts/fa-light-300.ttf": {
+    "file": "assets/fa-light-300-Bs7JY2J-.ttf",
+    "src": "resources/fonts/fa-light-300.ttf"
+  },
+  "resources/fonts/fa-light-300.woff": {
+    "file": "assets/fa-light-300-CyDSRxiQ.woff",
+    "src": "resources/fonts/fa-light-300.woff"
+  },
+  "resources/fonts/fa-light-300.woff2": {
+    "file": "assets/fa-light-300-DRq1WQm1.woff2",
+    "src": "resources/fonts/fa-light-300.woff2"
+  },
+  "resources/fonts/fa-regular-400.eot": {
+    "file": "assets/fa-regular-400-C2GxrME4.eot",
+    "src": "resources/fonts/fa-regular-400.eot"
+  },
+  "resources/fonts/fa-regular-400.svg": {
+    "file": "assets/fa-regular-400-C3TMpuhn.svg",
+    "src": "resources/fonts/fa-regular-400.svg"
+  },
+  "resources/fonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400-DK4k0xq3.ttf",
+    "src": "resources/fonts/fa-regular-400.ttf"
+  },
+  "resources/fonts/fa-regular-400.woff": {
+    "file": "assets/fa-regular-400-CMVxDNep.woff",
+    "src": "resources/fonts/fa-regular-400.woff"
+  },
+  "resources/fonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400-BzHW4h0S.woff2",
+    "src": "resources/fonts/fa-regular-400.woff2"
+  },
+  "resources/fonts/fa-solid-900.eot": {
+    "file": "assets/fa-solid-900-Bh5Cv63f.eot",
+    "src": "resources/fonts/fa-solid-900.eot"
+  },
+  "resources/fonts/fa-solid-900.svg": {
+    "file": "assets/fa-solid-900-CT2YlFmG.svg",
+    "src": "resources/fonts/fa-solid-900.svg"
+  },
+  "resources/fonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900-DXcCQJMR.ttf",
+    "src": "resources/fonts/fa-solid-900.ttf"
+  },
+  "resources/fonts/fa-solid-900.woff": {
+    "file": "assets/fa-solid-900-BGbgH7lG.woff",
+    "src": "resources/fonts/fa-solid-900.woff"
+  },
+  "resources/fonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900-CiOq61Qs.woff2",
+    "src": "resources/fonts/fa-solid-900.woff2"
+  },
+  "resources/fonts/seolight-icon.eot": {
+    "file": "assets/seolight-icon-Bhz5uU7u.eot",
+    "src": "resources/fonts/seolight-icon.eot"
+  },
+  "resources/fonts/seolight-icon.svg": {
+    "file": "assets/seolight-icon-DvFsnd5t.svg",
+    "src": "resources/fonts/seolight-icon.svg"
+  },
+  "resources/fonts/seolight-icon.ttf": {
+    "file": "assets/seolight-icon-B844Yoxl.ttf",
+    "src": "resources/fonts/seolight-icon.ttf"
+  },
+  "resources/fonts/seolight-icon.woff": {
+    "file": "assets/seolight-icon-CBMhmC9k.woff",
+    "src": "resources/fonts/seolight-icon.woff"
+  },
+  "resources/images/cliente/resources/faq-1-moc-1.png": {
+    "file": "assets/faq-1-moc-1-DOB_hXQA.png",
+    "src": "resources/images/cliente/resources/faq-1-moc-1.png"
+  },
+  "resources/images/cliente/resources/home-one/banner-bg-1-1.png": {
+    "file": "assets/banner-bg-1-1-B2E-bk6V.png",
+    "src": "resources/images/cliente/resources/home-one/banner-bg-1-1.png"
+  },
+  "resources/images/cliente/resources/inner-banner-bg-1-1.jpg": {
+    "file": "assets/inner-banner-bg-1-1-CaICC3Sm.jpg",
+    "src": "resources/images/cliente/resources/inner-banner-bg-1-1.jpg"
+  },
+  "resources/images/cliente/shapes/banner-2-bg-1.png": {
+    "file": "assets/banner-2-bg-1-CzlhOZWB.png",
+    "src": "resources/images/cliente/shapes/banner-2-bg-1.png"
+  },
+  "resources/images/cliente/shapes/banner-3-bg-1-1.jpg": {
+    "file": "assets/banner-3-bg-1-1-_7LEPCo-.jpg",
+    "src": "resources/images/cliente/shapes/banner-3-bg-1-1.jpg"
+  },
+  "resources/images/cliente/shapes/banner-3-shape-1-1.png": {
+    "file": "assets/banner-3-shape-1-1-DEC1KWE4.png",
+    "src": "resources/images/cliente/shapes/banner-3-shape-1-1.png"
+  },
+  "resources/images/cliente/shapes/contact-shape-1.png": {
+    "file": "assets/contact-shape-1-CQ2Idrm8.png",
+    "src": "resources/images/cliente/shapes/contact-shape-1.png"
+  },
+  "resources/images/cliente/shapes/faq-close-1-1.png": {
+    "file": "assets/faq-close-1-1-y-rEVX8f.png",
+    "src": "resources/images/cliente/shapes/faq-close-1-1.png"
+  },
+  "resources/images/cliente/shapes/sec-stripe-1-1.png": {
+    "file": "assets/sec-stripe-1-1-ezczVw_B.png",
+    "src": "resources/images/cliente/shapes/sec-stripe-1-1.png"
+  },
+  "resources/images/cliente/shapes/sec-stripe-2-1.png": {
+    "file": "assets/sec-stripe-2-1-CJL8eLk6.png",
+    "src": "resources/images/cliente/shapes/sec-stripe-2-1.png"
+  },
+  "resources/images/cliente/shapes/sec-stripe-3-1.png": {
+    "file": "assets/sec-stripe-3-1-PS4Exjph.png",
+    "src": "resources/images/cliente/shapes/sec-stripe-3-1.png"
+  },
+  "resources/images/cliente/shapes/service-5-shape-1.png": {
+    "file": "assets/service-5-shape-1-B9k_v8Wm.png",
+    "src": "resources/images/cliente/shapes/service-5-shape-1.png"
+  },
+  "resources/images/cliente/shapes/service-6-bg-1-1.jpg": {
+    "file": "assets/service-6-bg-1-1-0FQBL_jQ.jpg",
+    "src": "resources/images/cliente/shapes/service-6-bg-1-1.jpg"
+  },
+  "resources/images/cliente/shapes/service-shape-1-1.png": {
+    "file": "assets/service-shape-1-1-BxJ37zic.png",
+    "src": "resources/images/cliente/shapes/service-shape-1-1.png"
+  },
+  "resources/images/cliente/shapes/service-shape-1-2.png": {
+    "file": "assets/service-shape-1-2-CepcZh2L.png",
+    "src": "resources/images/cliente/shapes/service-shape-1-2.png"
+  },
+  "resources/images/cliente/shapes/service-shape-2-1.png": {
+    "file": "assets/service-shape-2-1-DPMBOMU-.png",
+    "src": "resources/images/cliente/shapes/service-shape-2-1.png"
+  },
+  "resources/images/cliente/shapes/service-shape-2-2.png": {
+    "file": "assets/service-shape-2-2-BJFuNVGY.png",
+    "src": "resources/images/cliente/shapes/service-shape-2-2.png"
+  },
+  "resources/images/cliente/shapes/testi-map-1-1.png": {
+    "file": "assets/testi-map-1-1-BNZu6A3n.png",
+    "src": "resources/images/cliente/shapes/testi-map-1-1.png"
+  },
+  "resources/images/cliente/shapes/testi-map-2-1.png": {
+    "file": "assets/testi-map-2-1-8ZIE1E5U.png",
+    "src": "resources/images/cliente/shapes/testi-map-2-1.png"
+  },
+  "resources/images/cliente/shapes/testi-qoute-1-1.png": {
+    "file": "assets/testi-qoute-1-1-BzMvbgwH.png",
+    "src": "resources/images/cliente/shapes/testi-qoute-1-1.png"
+  },
+  "resources/images/cliente/shapes/testi-qoute-1-2.png": {
+    "file": "assets/testi-qoute-1-2-C2Rwi9Ra.png",
+    "src": "resources/images/cliente/shapes/testi-qoute-1-2.png"
+  },
+  "resources/images/cliente/shapes/testi-qoute-2.png": {
+    "file": "assets/testi-qoute-2-lROv4r0e.png",
+    "src": "resources/images/cliente/shapes/testi-qoute-2.png"
+  },
+  "resources/images/facturacion/error.svg": {
+    "file": "assets/error-DDXTNTOP.svg",
+    "src": "resources/images/facturacion/error.svg"
+  },
+  "resources/images/facturacion/get_cdr.svg": {
+    "file": "assets/get_cdr-DcCUadkP.svg",
+    "src": "resources/images/facturacion/get_cdr.svg"
+  },
+  "resources/images/facturacion/rechazo.svg": {
+    "file": "assets/rechazo-CoPishfr.svg",
+    "src": "resources/images/facturacion/rechazo.svg"
+  },
+  "resources/images/facturacion/success.svg": {
+    "file": "assets/success-BPFBIw_X.svg",
+    "src": "resources/images/facturacion/success.svg"
+  },
+  "resources/images/facturacion/sunat_logo.png": {
+    "file": "assets/sunat_logo-DOs_S6UN.png",
+    "src": "resources/images/facturacion/sunat_logo.png"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-DLD0IO5o.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_iziToast-CjU_gcaL.js"
+    ]
+  },
+  "resources/js/cliente.js": {
+    "file": "assets/cliente-fJc-MlXb.js",
+    "name": "cliente",
+    "src": "resources/js/cliente.js",
+    "isEntry": true,
+    "imports": [
+      "_iziToast-CjU_gcaL.js"
+    ]
+  },
+  "resources/js/cliente/theme.js": {
+    "file": "assets/theme-DDwwgxTB.js",
+    "name": "theme",
+    "src": "resources/js/cliente/theme.js",
+    "isEntry": true
+  }
+}
