@@ -41,6 +41,7 @@ class ClientesRequest extends FormRequest
                         fn ($query) =>
                         $query->where('empresa_id', session('empresa'))
                             ->where('is_active', 1)
+                            ->whereNull('deleted_at')
                     )
                 ],
             ];
@@ -64,6 +65,7 @@ class ClientesRequest extends FormRequest
                             fn ($query) =>
                             $query->where('empresa_id', session('empresa'))
                                 ->where('is_active', 1)
+                                ->whereNull('deleted_at')
                         )->ignore($cliente->id)
                     ],
                 ];
