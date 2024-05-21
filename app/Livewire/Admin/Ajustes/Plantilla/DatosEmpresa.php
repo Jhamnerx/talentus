@@ -16,6 +16,8 @@ class DatosEmpresa extends Component
     public $mail_config;
     public $cdt;
 
+    public $cuenta_detraccion = "";
+
     public Collection $terminos;
 
     public function mount()
@@ -32,6 +34,7 @@ class DatosEmpresa extends Component
         $this->sunat = $this->plantilla->sunat_datos;
         $this->mail_config = $this->plantilla->mail_config;
         $this->terminos = collect($this->plantilla->terminos);
+        $this->cuenta_detraccion = $this->plantilla->cuenta_detraccion;
     }
 
     public function render()
@@ -95,6 +98,7 @@ class DatosEmpresa extends Component
             'telefono' => 'required',
             'igv' => 'required',
             'icbper' => 'required',
+            'cuenta_detraccion' => 'required',
             'modo' => 'required',
         ]);
 
@@ -106,6 +110,7 @@ class DatosEmpresa extends Component
             'telefono' => $data["telefono"],
             'igv' => $data["igv"],
             'icbper' => $data["icbper"],
+            'cuenta_detraccion' => $data["cuenta_detraccion"],
             'modo' => $data["modo"] ? 'produccion' : 'local',
         ]);
 

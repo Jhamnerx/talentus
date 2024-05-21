@@ -148,7 +148,7 @@ class Emitir extends Component
             'porcentaje' => 0.00,
             'monto' => 0.00,
             'metodo_pago_id' => '001',
-            'cuenta_bancaria' => '',
+            'cuenta_bancaria' => $this->plantilla->cuenta_detraccion,
         ]);
 
         $this->prepayments = collect();
