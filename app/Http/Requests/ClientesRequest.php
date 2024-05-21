@@ -36,6 +36,7 @@ class ClientesRequest extends FormRequest
                 'numero_documento' => [
                     'required',
                     'min:6',
+                    'alpha_num',
 
                     Rule::unique('clientes', 'numero_documento')->where(
                         fn ($query) =>
@@ -85,6 +86,7 @@ class ClientesRequest extends FormRequest
             'telefono.digits_between' => 'Ingresa como maximo 9 caracteres numericos',
             'telefono.numeric' => 'El numero de telefono debe ser un numero',
             'email.email' => 'Debe tener formato de correo electronico',
+            'numero_documento.alpha_num' => 'Solo se permiten caracteres alfanumericos',
         ];
     }
 }
