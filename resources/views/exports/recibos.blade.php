@@ -41,15 +41,15 @@
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                         @if ($recibo->estado == 'BORRADOR')
                             <div class="font-medium text-red-500">
-                                <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                    #{{ $recibo->serie_numero }}
-                                </a>
+
+                                #{{ $recibo->serie_numero }}
+
                             </div>
                         @else
                             <div class="font-medium text-sky-600">
-                                <a href="{{ route('admin.ventas.recibos.show', $recibo) }}">
-                                    #{{ $recibo->serie_numero }}
-                                </a>
+
+                                #{{ $recibo->serie_numero }}
+
                             </div>
                         @endif
 
