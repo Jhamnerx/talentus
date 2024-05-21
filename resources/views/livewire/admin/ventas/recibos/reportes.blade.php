@@ -44,7 +44,7 @@
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-6 gap-2">
                                 <x-form.datetime-picker label="Fecha Inicio:" id="fecha_inicio" name="fecha_inicio"
-                                    wire:model.live="fecha_inicio" :min="now()->subDays(90)" :max="now()->addDays(30)" without-time
+                                    wire:model.live="fecha_inicio" :min="now()->subDays(365)" :max="now()->addDays(30)" without-time
                                     parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
 
                             </div>

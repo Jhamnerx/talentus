@@ -8,6 +8,7 @@ use App\Models\Ventas;
 use App\Models\Clientes;
 use App\Models\plantilla;
 use App\Models\Comprobantes;
+use App\Models\Detracciones;
 use App\Models\GuiaRemision;
 use Greenter\Model\Sale\Note;
 use Greenter\Model\Sale\Cuota;
@@ -19,6 +20,7 @@ use Greenter\Model\Voided\Voided;
 use Greenter\Model\Company\Address;
 use Greenter\Model\Despatch\Puerto;
 use Greenter\Model\Sale\Detraction;
+use Greenter\Model\Sale\Prepayment;
 use Greenter\Model\Sale\SaleDetail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +40,6 @@ use Greenter\Model\Sale\FormaPagos\FormaPagoCredito;
 use Greenter\Services\InvalidServiceResponseException;
 use App\Events\Facturacion\EmitirGuia as FacturacionEmitirGuia;
 use App\Events\Facturacion\EmitirComprobante as FacturacionEmitirComprobante;
-use App\Models\Detracciones;
 
 class ApiFacturacion extends Controller
 {
@@ -240,6 +241,73 @@ class ApiFacturacion extends Controller
     {
 
         $util = Util::getInstance();
+        $invoice = $this->createObjetInvoice($venta, $tipo_operacion);
+
+        // Envio a SUNAT.
+        $see = $util->getSee();
+        $result = $see->send($invoice);
+
+        // Guardar XML firmado digitalmente.
+        $util->writeXml($invoice, $see->getFactory()->getLastXml());
+
+        if (!$result->isSuccess()) {
+
+            $msg = $util->getErrorResponse($result->getError());
+            $this->updateComprobante($venta, $msg, 'BORRADOR', 'update', $invoice);
+            return $msg;
+        }
+
+        /**@var $res BillResult*/
+        $cdr = $result->getCdrResponse();
+        //Guardar CDR recibido
+        $util->writeCdr($invoice, $result->getCdrZip());
+
+        $respuesta = $util->showResponse($invoice, $cdr);
+        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
+        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
+
+        return $respuesta;
+    }
+    //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
+    public function createXmlInvoice(Ventas $venta, $tipo_operacion)
+    {
+
+        $util = Util::getInstance();
+        $invoice = $this->createObjetInvoice($venta, $tipo_operacion);
+
+        //FIRMADO Y GUARDADO DEL XML
+        $see = $util->getSee();
+        $xml = $see->getXmlSigned($invoice);
+        $xml_base64 = $util->writeXmlOnly($invoice, $xml);
+        $hash = $util->getHash($invoice);
+
+        $respuesta
+            =  [
+                'estado_texto' => 'ESTADO: SOLO XML CREADO',
+                'fe_mensaje_sunat' => "El comprobante fue firmado, Pendiente de Envio",
+                'fe_mensaje_error' => null,
+                'nota' => '',
+                'fe_codigo_error' => null,
+                'nombre_xml' => $invoice->getName(),
+                'nombre_cdr' => 'R-' . $invoice->getName(),
+                'xml_base64' => $xml_base64,
+                'cdr_base64' => null,
+                'fe_estado' => 0,
+                'hash' => $hash,
+                'hash_cdr' => null,
+                'code_sunat' => null,
+
+            ];
+
+        $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
+
+        return $respuesta;
+    }
+
+    public function createObjetInvoice(Ventas $venta, $tipo_operacion)
+    {
+
+        $util = Util::getInstance();
 
         $cliente = $this->getCliente($venta->cliente);
         // RELACIONAR FACTURA CON GUIA DE REMISION EMITIDA
@@ -266,14 +334,43 @@ class ApiFacturacion extends Controller
             ->setMtoIGV($venta->igv)
             ->setIcbper($venta->icbper)
             ->setTotalImpuestos($venta->igv + $venta->icbper)
-            ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-            ->setSubTotal($venta->total)
             ->setMtoImpVenta($venta->total);
 
         if ($venta->detraccion) {
 
             $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
         }
+
+        if ($venta->anticipos->count() > 0) {
+            //ESTABLECER VALORES
+            $invoice->setValorVenta($venta->ventaDetalles->sum('sub_total'))
+                ->setSubTotal($venta->ventaDetalles->sum('total'));
+
+            //ESTABLECER ANTICIPOS
+            foreach ($venta->anticipos as $anticipo) {
+                $invoice->setAnticipos([
+                    (new Prepayment())
+                        ->setTipoDocRel($anticipo->tipo_comprobante_ref) // catalog. 12
+                        ->setNroDocRel($anticipo->serie_correlativo_ref)
+                        ->setTotal($anticipo->total_invoice_ref)
+                ]);
+
+                $invoice->setDescuentos([
+                    (
+                        new Charge())
+                        ->setCodTipo('04')
+                        ->setMonto($anticipo->valor_venta_ref) // anticipo
+                        ->setMontoBase(2124)
+                ]);
+            }
+
+            $invoice->setTotalAnticipos($venta->anticipos->sum('total_invoice_ref'));
+        } else {
+            //ESTABLECER VALORES
+            $invoice->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+                ->setSubTotal($venta->total);
+        }
+
         // $invoice->setGuias([
         //     $guiaRemision // Incluir guia remision.
         // ])
@@ -288,13 +385,14 @@ class ApiFacturacion extends Controller
             $invoice->setFormaPago(new FormaPagoContado());
         }
 
+
         //AÑADIR DESCUENTO SI ES QUE HAY
         if ($venta->descuento > 0) {
 
             $invoice->setDescuentos([
                 (new Charge())
                     ->setCodTipo('02') // Catalog. 53
-                    ->setMontoBase($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
+                    ->setMontoBase($venta->sub_total)
                     ->setFactor($venta->descuento_factor)
                     ->setMonto($venta->descuento)
             ]);
@@ -310,31 +408,7 @@ class ApiFacturacion extends Controller
         $invoice->setDetails($items) //CATALAGO 52 - LEYENDA
             ->setLegends($this->getLegends($venta));
 
-        // Envio a SUNAT.
-        $see = $util->getSee();
-
-        $result = $see->send($invoice);
-
-        // Guardar XML firmado digitalmente.
-        $util->writeXml($invoice, $see->getFactory()->getLastXml());
-
-        if (!$result->isSuccess()) {
-
-            $msg = $util->getErrorResponse($result->getError());
-            $this->updateComprobante($venta, $msg, 'BORRADOR', 'update', $invoice);
-            return $msg;
-        }
-
-        /**@var $res BillResult*/
-        $cdr = $result->getCdrResponse();
-        //Guardar CDR recibido
-        $util->writeCdr($invoice, $result->getCdrZip());
-
-        $respuesta = $util->showResponse($invoice, $cdr);
-        //ACTUALIZAR COMPROBANTE CON LOS DATOS DEVUELTOS POR EL API
-        $this->updateComprobante($venta, $respuesta, 'COMPLETADO', 'update', $invoice);
-
-        return $respuesta;
+        return $invoice;
     }
 
     public function getLegends($venta)
@@ -511,101 +585,6 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
-    //CREAR XML Y FIRMADO - PENDIENTE DE ENVIO
-    public function createXmlInvoice(Ventas $venta, $tipo_operacion)
-    {
-        $util = Util::getInstance();
-        $cliente = $this->getCliente($venta->cliente);
-
-        $invoice = new Invoice();
-        $invoice
-            ->setUblVersion('2.1')
-            ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
-            ->setTipoOperacion($tipo_operacion)
-            ->setObservacion($venta->comentario)
-            ->setTipoDoc($venta->tipo_comprobante_id)
-            ->setSerie($venta->serie)
-            ->setCorrelativo($venta->correlativo)
-            ->setFechaEmision(new DateTime($venta->fecha_emision))
-            ->setTipoMoneda($venta->divisa)
-            ->setCompany($util->getCompany())
-            ->setClient($cliente)
-            ->setMtoOperGravadas($venta->op_gravadas)
-            ->setMtoOperExoneradas($venta->op_exoneradas)
-            ->setMtoOperInafectas($venta->op_inafectas)
-            ->setMtoIGV($venta->igv)
-            ->setIcbper($venta->icbper)
-            ->setTotalImpuestos($venta->igv + $venta->icbper)
-            ->setValorVenta($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-            ->setSubTotal($venta->total)
-            ->setMtoImpVenta($venta->total);
-
-        if ($venta->detraccion) {
-
-            $invoice->setDetraccion($this->getDetraccion($venta->detraccion));
-        }
-
-        //EVALUAR SI LA VENTA ES A CREDITO
-        if ($venta->forma_pago == 'CREDITO') {
-
-            $invoice->setFormaPago(new FormaPagoCredito($venta->detalle_cuotas->sum('importe'), $venta->divisa));
-            $cuotas = $this->addCuotas($venta);
-            $invoice->setCuotas($cuotas);
-        } else {
-
-            $invoice->setFormaPago(new FormaPagoContado());
-        }
-
-        //AÑADIR DESCUENTO SI ES QUE HAY
-        if ($venta->descuento > 0) {
-
-            $invoice->setDescuentos([
-                (new Charge())
-                    ->setCodTipo('02') // Catalog. 53
-                    ->setMontoBase($venta->op_gravadas + $venta->op_exoneradas + $venta->op_inafectas)
-                    ->setFactor($venta->descuento_factor)
-                    ->setMonto($venta->descuento)
-            ]);
-        }
-
-        //ESTBLECER EL VENDEDOR DEL COMPROBANTE
-        $invoice->setSeller((new Client())
-            ->setRznSocial(Auth::user()->name));
-
-        //ESTABLECER ITEMS DEL COMPROBANTE
-        $items = $this->getItemsInvoice($venta->ventaDetalles);
-
-        $invoice->setDetails($items)
-            ->setLegends($this->getLegends($venta));
-
-        //FIRMADO Y GUARDADO DEL XML
-        $see = $util->getSee();
-        $xml = $see->getXmlSigned($invoice);
-        $xml_base64 = $util->writeXmlOnly($invoice, $xml);
-        $hash = $util->getHash($invoice);
-
-        $respuesta
-            =  [
-                'estado_texto' => 'ESTADO: SOLO XML CREADO',
-                'fe_mensaje_sunat' => "El comprobante fue firmado, Pendiente de Envio",
-                'fe_mensaje_error' => null,
-                'nota' => '',
-                'fe_codigo_error' => null,
-                'nombre_xml' => $invoice->getName(),
-                'nombre_cdr' => 'R-' . $invoice->getName(),
-                'xml_base64' => $xml_base64,
-                'cdr_base64' => null,
-                'fe_estado' => 0,
-                'hash' => $hash,
-                'hash_cdr' => null,
-                'code_sunat' => null,
-
-            ];
-
-        $this->updateComprobante($venta, $respuesta, 'BORRADOR', 'update', $invoice);
-
-        return $respuesta;
-    }
 
     public function updateComprobante(Ventas $venta, $respuesta, $estado, $action, $invoice)
     {
@@ -618,7 +597,7 @@ class ApiFacturacion extends Controller
         // Cliente
         $cliente = (new Client())
             ->setTipoDoc($cliente->tipo_documento_id)
-            ->setNumDoc($cliente->numero_documento)
+            ->setNumDoc(trim($cliente->numero_documento))
             ->setRznSocial($cliente->razon_social)
             ->setAddress((new Address())
                 ->setDireccion($cliente->direccion))

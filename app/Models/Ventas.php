@@ -47,7 +47,7 @@ class Ventas extends Model
         'fecha_vencimiento' => 'date',
         'tipo_cambio' => 'decimal:2',
         'metodo_pago_id' => 'string',
-        'op_gravadas' => 'decimal:2',
+        'op_gravadas' => 'double',
         'op_exoneradas' => 'decimal:2',
         'op_inafectas' => 'decimal:2',
         'op_gratuitas' => 'decimal:2',
@@ -160,6 +160,10 @@ class Ventas extends Model
         return $this->hasOne(Detracciones::class, 'venta_id', 'id');
     }
 
+    public function anticipos(): HasMany
+    {
+        return $this->hasMany(Anticipos::class, 'venta_id', 'id');
+    }
     //CREAR ITEM DETALLE VENTA
 
     public static function createItems(Ventas $venta, $ventaItems, $decrease_stock = false)
@@ -178,6 +182,29 @@ class Ventas extends Model
         }
 
         return $venta->ventaDetalles;
+    }
+
+    public static function createPrepayments(Ventas $venta, $prepayments)
+    {
+
+
+        foreach ($prepayments as $prepayment) {
+
+            $prepayment['venta_id'] = $venta->id;
+            $venta->anticipos()->create(
+                [
+                    'descripcion' => $prepayment['descripcion'],
+                    'serie_correlativo_ref' => $prepayment['serie_correlativo_ref'],
+                    'tipo_comprobante_ref' => $prepayment['tipo_comprobante_ref'],
+                    'igv' => $prepayment['igv'],
+                    'total_invoice_ref' => $prepayment['total_invoice_ref'],
+                    'valor_venta_ref' => $prepayment['valor_venta_ref'],
+                    'fecha_emision_ref' => $venta->fecha_emision,
+                ]
+            );
+        }
+
+        return $venta->anticipos;
     }
 
     //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF

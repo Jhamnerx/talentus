@@ -9,7 +9,7 @@
         </div>
 
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input label="Número Documento:" placeholder="10203040" wire:model.live='numero_documento' />
+            <x-form.input label="Número Documento:" placeholder="10203040" wire:model.change='numero_documento' />
         </div>
 
         <div class="col-span-12">

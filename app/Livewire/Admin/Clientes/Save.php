@@ -26,6 +26,11 @@ class Save extends Component
 
     public function updatedNumeroDocumento($numero)
     {
+        if (strlen($numero) == 11) {
+            $this->tipo_documento_id = 6;
+        } else {
+            $this->tipo_documento_id = 1;
+        }
 
         $this->consultarCliente($numero);
     }

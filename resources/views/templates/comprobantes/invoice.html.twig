@@ -536,6 +536,16 @@
                         <td align="center" class="bold">VALOR UNITARIO</td>
                         <td align="center" class="bold">VALOR TOTAL</td>
                     </tr>
+
+                    {# MOSTRAR ANTICIPOS #}
+                    {% if params.user.anticipos is defined %}
+
+                        {{ params.user.anticipos|raw }}
+
+                    {% endif %}
+
+                 
+
                     {% for det in doc.details %}
                     <tr class="border_top">
                         <td align="center">
@@ -694,11 +704,15 @@
                                 <td align="right"><strong>I.G.V.{% if params.user.numIGV is defined %} {{ params.user.numIGV }}%{% endif %}:</strong></td>
                                 <td width="120" align="right"><span>{{ moneda }}  {{ doc.mtoIGV|n_format }}</span></td>
                             </tr>
+                            {% if doc.descuentos %}
+                             {{ params.user.descuento|raw }}
+                            {% endif %}
                             {% if doc.mtoISC %}
                             <tr>
                                 <td align="right"><strong>I.S.C.:</strong></td>
                                 <td width="120" align="right"><span>{{ moneda }}  {{ doc.mtoISC|n_format }}</span></td>
                             </tr>
+
                             {% endif %}
                             {% if  doc.sumOtrosCargos %}
                                 <tr>

@@ -13,6 +13,7 @@ use App\Models\Productos;
 use App\Models\MetodoPago;
 use Livewire\Attributes\On;
 use App\Models\TipoComprobantes;
+use Livewire\Attributes\Reactive;
 use Illuminate\Support\Collection;
 use App\Models\CodigosDetracciones;
 use App\Http\Requests\VentasRequest;
@@ -64,6 +65,18 @@ class Emitir extends Component
     public $detraccion = false;
     public $openModalDt = false;
     public Collection $datosDetraccion;
+
+
+    //pago anticipado
+    public $pago_anticipado = false;
+    public $deduce_anticipos = false;
+    public Collection $prepayments;
+    public $total_anticipos = 0.00;
+    public $igv_anticipos = 0.00;
+
+
+    //PROPIEDAD PARA VERIFICAR EMPRESA
+    public $empresa_id;
 
     public function render()
     {
@@ -139,8 +152,12 @@ class Emitir extends Component
             'porcentaje' => 0.00,
             'monto' => 0.00,
             'metodo_pago_id' => '001',
-            'cuenta_bancaria' => '',
+            'cuenta_bancaria' => $this->plantilla->cuenta_detraccion,
         ]);
+
+        $this->prepayments = collect();
+
+        $this->empresa_id = Empresa::first()->id;
     }
 
     public function updatedClienteId($value)
@@ -296,7 +313,7 @@ class Emitir extends Component
                 'cantidad' => $selected["cantidad"],
                 'unit' => $selected["unit"],
                 'unit_name' => $selected["unit_name"],
-                'descripcion' => $selected["descripcion"],
+                'descripcion' => $this->pago_anticipado ? $selected["descripcion"] . "***Pago Anticipado***" : $selected["descripcion"],
                 'valor_unitario' => $selected["valor_unitario"],
                 'precio_unitario' => $selected["precio_unitario"],
                 'igv' => $selected["igv"],
@@ -316,21 +333,41 @@ class Emitir extends Component
             //  CALCULAR TOTALES AL AÑADIR PRODUCTO
             $this->reCalTotal();
 
-            //$this->dispatchBrowserEvent('add-producto');
-            $this->calcularCuotas($this->numero_cuotas);
+
+            // $this->calcularCuotas($this->numero_cuotas);
             // }
         } catch (\Exception $e) {
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
                 title: 'ERROR AL AÑADIR PRODUCTO',
-                mensaje: $e->getMessage()
+                mensaje: $e->getMessage(),
             );
         }
     }
 
+    #[On('add-prepayment')]
+    public function addPrepayment($prepayments)
+    {
+
+        $this->prepayments->push($prepayments);
+        $this->dispatch('reset-prepayments');
+        $this->calcularAnticipos();
+    }
+
     public function save()
     {
+
+        if ($this->empresa_id != session('empresa')) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: 'No puedes registrar una venta de otra empresa',
+            );
+            return;
+        }
+
         $request = new VentasRequest();
         $datos = $this->validate($request->rules($this->detraccion), $request->messages());
 
@@ -346,10 +383,9 @@ class Emitir extends Component
             }
 
             //CREAR ITEMS DE LA VENTA
-            $items = Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
+            Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
 
             //SI DETRACCION ES TRUE CREAR DETRACCION
-
             if ($this->detraccion) {
                 $venta->detraccion()->create([
                     'codigo_detraccion' => $this->datosDetraccion['codigo_detraccion'],
@@ -361,6 +397,12 @@ class Emitir extends Component
                 ]);
             }
 
+            //SI ES ANTICIPO REGISTRAR ANTICIPO
+            if ($this->deduce_anticipos) {
+
+                Ventas::createPrepayments($venta, $this->prepayments);
+            }
+
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
 
@@ -368,6 +410,7 @@ class Emitir extends Component
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type, $this->tipo_operacion);
+
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
@@ -422,18 +465,34 @@ class Emitir extends Component
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()
     {
-        $this->descuento =  $this->calcularDescuento();
+
         $this->sub_total =   $this->calcularSubTotal();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
-        // $this->op_gratuitas = $this->calcularOperacionesGratuitas();
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
         $this->op_inafectas = $this->calcularOperacionesInafectas();
+
         $this->icbper = $this->calcularIcbper();
 
         $this->igv =  $this->calcularIgv();
         $this->total =  $this->calcularTotal();
         $this->calcularCuotas($this->numero_cuotas);
-        $this->calcularMontoDetraccion($this->total);
+
+        //CALCULAR DETRACCION SI ES TRUE
+        if ($this->detraccion) {
+            $this->calcularMontoDetraccion($this->total);
+        }
+
+        $this->descuento =  $this->calcularDescuento();
+        //$this->op_gratuitas = $this->calcularOperacionesGratuitas();
+    }
+
+    public function calcularAnticipos()
+    {
+        //CALCULAR ANTICIPOS
+        $this->total_anticipos = $this->calcularTotalAnticipos();
+        $this->igv_anticipos = $this->calcularIvgAnticipos();
+
+        $this->reCalTotal();
     }
 
     //CALCULAR EL SUB TOTAL DE LOS ITEMS
@@ -446,16 +505,22 @@ class Emitir extends Component
             return round($sub_total, 4);
         });
 
-        return $sub_total->sum();
+        return $this->total_anticipos > 0 ? $sub_total->sum() - $this->total_anticipos : $sub_total->sum();
     }
 
     //CALCULAR IGV DESDE EL SUB TOTAL - FALTA POR TRAER EL PROCENTAJE DEL IUMPUESTO DE LA DB
     public function calcularIgv()
     {
+        if ($this->igv_anticipos > 0) {
 
-        $igv = floatval($this->op_gravadas) *  $this->plantilla->igv;
+            $igv = (floatval($this->op_gravadas) *  $this->plantilla->igv);
+            return round($igv, 4);
+        } else {
 
-        return round($igv, 4);
+            $igv = floatval($this->op_gravadas) *  $this->plantilla->igv;
+
+            return round($igv, 4);
+        }
     }
 
     //CALCULAR TOTALES DE LOS TIPOS DE AFECTACIONES
@@ -470,8 +535,13 @@ class Emitir extends Component
             }
         })->sum();
 
+        if ($descuento > 0) {
 
-        return $descuento > 0 ? $op_gravadas - $descuento : $op_gravadas;
+            return $op_gravadas - $descuento;
+        } else {
+
+            return round($op_gravadas - $this->total_anticipos, 4);
+        }
     }
 
     // public function calcularOperacionesGratuitas()
@@ -535,9 +605,40 @@ class Emitir extends Component
     //CALCUJLAR TOTAL DE ACUERDO AL TIPO DE DESCUENTO Y SI HAY
     public function calcularTotal()
     {
-        $total = ($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv;
+        if ($this->igv_anticipos > 0) {
 
-        return round($total, 4);
+            $total = (($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv);
+
+            return round($total, 4);
+        } else {
+            $total = ($this->op_gravadas + $this->op_exoneradas + $this->op_inafectas + $this->icbper) + $this->igv;
+
+            return round($total, 4);
+        }
+    }
+
+    public function calcularTotalAnticipos()
+    {
+        $total_anticipos = $this->prepayments->map(function ($item, $key) {
+
+            $total_anticipos = 0.00;
+            $total_anticipos = $total_anticipos + $item['valor_venta_ref'];
+            return round($total_anticipos, 4);
+        });
+
+        return $total_anticipos->sum();
+    }
+
+    public function calcularIvgAnticipos()
+    {
+        $igv_anticipos = $this->prepayments->map(function ($item, $key) {
+
+            $igv_anticipos = 0.00;
+            $igv_anticipos = $igv_anticipos + $item['igv'];
+            return round($igv_anticipos, 4);
+        });
+
+        return $igv_anticipos->sum();
     }
 
     public function updatedDescuentoMonto()
@@ -560,6 +661,7 @@ class Emitir extends Component
     {
         // cantidad - porcentaje
         $descuento = 0.00;
+
         if ($this->tipo_descuento == "cantidad") {
 
             if ($this->total) {
@@ -570,23 +672,23 @@ class Emitir extends Component
                 ]);
             }
 
-            $descuento = $this->descuento_monto;
-            if ($this->sub_total) {
+            if ($this->sub_total && $this->descuento_monto > 0) {
 
-                $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 4);
+                $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 5);
             }
-        } else {
-            if ($this->total) {
-                $rules = $this->validate([
-                    'descuento_monto' => [
-                        'min:0',
-
-                    ],
-                ]);
-            }
-            //calculcart el porncetaje del descuento del subtotal
-            $descuento = ($this->op_gravadas * $this->descuento_monto) / 100;
         }
+        // else {
+        //     if ($this->total) {
+        //         $rules = $this->validate([
+        //             'descuento_monto' => [
+        //                 'min:0',
+
+        //             ],
+        //         ]);
+        //     }
+        //     //calculcart el porncetaje del descuento del subtotal
+        //     $descuento = ($this->op_gravadas * $this->descuento_monto) / 100;
+        // }
 
         return round($descuento, 4);
     }
@@ -596,6 +698,13 @@ class Emitir extends Component
         unset($this->items[$key]);
         $this->items;
         $this->reCalTotal();
+    }
+
+    public function eliminarPrepayment($key)
+    {
+        unset($this->prepayments[$key]);
+        $this->prepayments;
+        $this->calcularAnticipos();
     }
 
     public function updated($propertyName)
@@ -623,5 +732,21 @@ class Emitir extends Component
             $this->tipo_operacion = '0101';
         }
         $this->calcularCuotas($this->numero_cuotas);
+    }
+
+    public function updatedPagoAnticipado($value)
+    {
+
+        if ($value) {
+            $this->items = $this->items->map(function ($item) {
+                $item['descripcion'] .= '***Pago Anticipado***';
+                return $item;
+            });
+        } else {
+            $this->items = $this->items->map(function ($item) {
+                $item['descripcion'] = str_replace('***Pago Anticipado***', '', $item['descripcion']);
+                return $item;
+            });
+        }
     }
 }

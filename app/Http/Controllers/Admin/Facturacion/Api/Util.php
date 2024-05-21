@@ -75,12 +75,19 @@ class Util extends Controller
 
         $see = new See();
 
-        if ($this->plantilla->modo == 'local') {
+        $see->setBuilderOptions([
+            'strict_variables' => false,
+            'optimizations' => 0,
+            'debug' => true,
+            'cache' => storage_path('framework/cache/data/facturacion/see'),
+        ]);
 
+        if ($this->plantilla->modo == 'local' || env('APP_ENV') == 'local') {
             $see->setService(SunatEndpoints::FE_BETA);
         } else {
             $see->setService(SunatEndpoints::FE_PRODUCCION);
         }
+
 
         //$see->setCodeProvider(new XmlErrorCodeProvider());
 
@@ -95,7 +102,7 @@ class Util extends Controller
          * Clave   = moddatos
          */
         $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
-        $see->setCachePath(storage_path('framework/cache/facturacion/see'));
+        $see->setCachePath(storage_path('framework/cache/data/facturacion/see'));
 
         return $see;
     }
@@ -105,8 +112,7 @@ class Util extends Controller
 
         $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
 
-
-        if ($this->plantilla->modo == 'local') {
+        if ($this->plantilla->modo == 'local' || env('APP_ENV') == 'local') {
 
             $api = new \Greenter\Api([
                 'auth' => 'https://gre-test.nubefact.com/v1',
@@ -366,7 +372,7 @@ class Util extends Controller
 
         // dd($venta->clase->getFormaPago()->getTipo());
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -405,6 +411,13 @@ class Util extends Controller
             $params['user']['detraccion'] = view('templates.comprobantes.detraccion', compact('venta'));
         }
 
+        if ($venta->descuento) {
+            $params['user']['descuento'] = view('templates.comprobantes.descuentos', compact('venta'));
+        }
+        if ($venta->anticipos()->count() > 0) {
+            $params['user']['anticipos'] = view('templates.comprobantes.anticipos', compact('venta'));
+        }
+
         $html = $report->render($venta->clase, $params);
 
         return $html;
@@ -415,7 +428,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -444,7 +457,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -536,7 +549,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 

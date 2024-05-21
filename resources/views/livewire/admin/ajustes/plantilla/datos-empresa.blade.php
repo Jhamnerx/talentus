@@ -41,6 +41,12 @@
                 <x-form.inputs.currency label="ICBPER" placeholder="0.50" wire:model.live="icbper" />
 
             </div>
+
+            <div class="col-span-12 sm:col-span-4">
+                <x-form.input label="N° Cuenta de detracción" placeholder="N° Cuenta de detracción"
+                    wire:model.live='cuenta_detraccion' />
+
+            </div>
             <div class="col-span-12 sm:col-span-3">
 
                 <div class="w-full ">
