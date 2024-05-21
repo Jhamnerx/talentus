@@ -393,7 +393,7 @@ class Emitir extends Component
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type, $this->tipo_operacion);
-                dd($mensaje);
+
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
@@ -448,7 +448,7 @@ class Emitir extends Component
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()
     {
-        $this->descuento =  $this->calcularDescuento();
+
         $this->sub_total =   $this->calcularSubTotal();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
@@ -465,7 +465,7 @@ class Emitir extends Component
             $this->calcularMontoDetraccion($this->total);
         }
 
-
+        $this->descuento =  $this->calcularDescuento();
         //$this->op_gratuitas = $this->calcularOperacionesGratuitas();
     }
 
@@ -644,6 +644,7 @@ class Emitir extends Component
     {
         // cantidad - porcentaje
         $descuento = 0.00;
+
         if ($this->tipo_descuento == "cantidad") {
 
             if ($this->total) {
@@ -654,23 +655,23 @@ class Emitir extends Component
                 ]);
             }
 
-            $descuento = $this->descuento_monto;
             if ($this->sub_total && $this->descuento_monto > 0) {
 
                 $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 5);
             }
-        } else {
-            if ($this->total) {
-                $rules = $this->validate([
-                    'descuento_monto' => [
-                        'min:0',
-
-                    ],
-                ]);
-            }
-            //calculcart el porncetaje del descuento del subtotal
-            $descuento = ($this->op_gravadas * $this->descuento_monto) / 100;
         }
+        // else {
+        //     if ($this->total) {
+        //         $rules = $this->validate([
+        //             'descuento_monto' => [
+        //                 'min:0',
+
+        //             ],
+        //         ]);
+        //     }
+        //     //calculcart el porncetaje del descuento del subtotal
+        //     $descuento = ($this->op_gravadas * $this->descuento_monto) / 100;
+        // }
 
         return round($descuento, 4);
     }
