@@ -79,7 +79,7 @@ class Util extends Controller
             'strict_variables' => false,
             'optimizations' => 0,
             'debug' => true,
-            'cache' => false,
+            'cache' => storage_path('framework/cache/data/facturacion/see'),
         ]);
 
         if ($this->plantilla->modo == 'local' || env('APP_ENV') == 'local') {
@@ -102,7 +102,7 @@ class Util extends Controller
          * Clave   = moddatos
          */
         $see->setClaveSOL(trim($this->plantilla->ruc), $this->plantilla->sunat_datos['usuario_sol_sunat'], $this->plantilla->sunat_datos['clave_sol_sunat']);
-        // $see->setCachePath(storage_path('framework/cache/facturacion/see'));
+        $see->setCachePath(storage_path('framework/cache/data/facturacion/see'));
 
         return $see;
     }
@@ -372,7 +372,7 @@ class Util extends Controller
 
         // dd($venta->clase->getFormaPago()->getTipo());
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -428,7 +428,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -457,7 +457,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
@@ -549,7 +549,7 @@ class Util extends Controller
     {
 
         $twigOptions = [
-            //'cache' => storage_path('framework/cache/facturacion/pdf'),
+            'cache' => storage_path('framework/cache/data/facturacion/pdf'),
             'strict_variables' => true,
         ];
 
