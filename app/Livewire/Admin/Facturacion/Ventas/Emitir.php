@@ -157,7 +157,7 @@ class Emitir extends Component
 
         $this->prepayments = collect();
 
-        $this->empresa_id = Empresa::first()->id;
+        $this->empresa_id = $plantilla = plantilla::first()->empresa->id;
     }
 
     public function updatedClienteId($value)
@@ -357,6 +357,7 @@ class Emitir extends Component
 
     public function save()
     {
+        dd($this->empresa_id, session('empresa'));
 
         if ($this->empresa_id != session('empresa')) {
             $this->dispatch(
