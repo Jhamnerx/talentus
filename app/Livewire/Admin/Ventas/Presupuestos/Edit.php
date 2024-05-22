@@ -62,9 +62,13 @@ class Edit extends Component
     public $min_correlativo;
 
     public Collection $terminos;
+    public Collection $prepayments;
 
     public function mount()
     {
+
+        $this->prepayments = collect();
+
         $this->serie = $this->presupuesto->serie;
         $this->correlativo = $this->presupuesto->correlativo;
         $this->serie_correlativo = $this->presupuesto->serie_correlativo;
