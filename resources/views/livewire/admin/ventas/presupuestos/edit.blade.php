@@ -123,11 +123,15 @@
                 </div>
 
                 {{-- componente venta al credito --}}
-                <div class="grid grid-cols-12 col-span-12">
+                @if ($showCredit)
+                    <div
+                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
 
-                    <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
-                    </x-admin.facturacion.detalle-cuotas-table>
-                </div>
+                        <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                        </x-admin.facturacion.detalle-cuotas-table>
+
+                    </div>
+                @endif
 
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
@@ -169,10 +173,9 @@
 
                     {{-- LISTA DE PRODUCTOS --}}
 
-                    <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
-
                     <div class="block md:flex gap-2">
                         {{-- LADO IZQUIERDO --}}
                         <div class="grid grid-cols-12 gap-4 w-full px-4 mx-4 py-2 ml-auto mt-5">
