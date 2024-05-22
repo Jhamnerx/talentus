@@ -357,7 +357,7 @@ class Emitir extends Component
 
     public function save()
     {
-        dd($this->empresa_id, session('empresa'));
+
 
         if ($this->empresa_id != session('empresa')) {
             $this->dispatch(
