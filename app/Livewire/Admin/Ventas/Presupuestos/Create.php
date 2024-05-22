@@ -71,6 +71,9 @@ class Create extends Component
 
     public Collection $terminos;
 
+
+    public Collection $prepayments;
+
     public function mount()
     {
         $this->setSerieMount();
@@ -89,6 +92,9 @@ class Create extends Component
         $this->plantilla = plantilla::first();
 
         $this->terminos = collect($this->plantilla->terminos);
+
+
+        $this->prepayments = collect();
     }
 
 

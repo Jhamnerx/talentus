@@ -384,7 +384,7 @@
                                                         </li>
                                                     @endcan
 
-
+                                                    {{-- 
                                                     @can('convertir-cotizaciones')
                                                         @if (!$presupuesto->invoice)
                                                             <li @click="open = false">
@@ -420,8 +420,8 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                    @endcan
-
+                                                    @endcan --}}
+                                                    {{-- 
                                                     @can('convertir-cotizaciones')
                                                         @if (!$presupuesto->recibo)
                                                             <li @click="open = false">
@@ -456,7 +456,7 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                    @endcan
+                                                    @endcan --}}
 
                                                     @can('enviar-cotizaciones')
                                                         <li>
