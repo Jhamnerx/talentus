@@ -51,7 +51,7 @@
                             <div class="col-span-6 gap-2">
 
                                 <x-form.datetime-picker label="Fecha de Fin:" id="fecha_fin" name="fecha_fin"
-                                    wire:model.live="fecha_fin" :min="now()->subDays(90)" :max="now()->addDays(30)" without-time
+                                    wire:model.live="fecha_fin" :min="now()->subYear(3)" :max="now()->addDays(30)" without-time
                                     parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                             </div>
 
