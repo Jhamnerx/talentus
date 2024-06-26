@@ -97,7 +97,7 @@
                 </tr>
             @endforeach
             {{-- fila para añadir --}}
-            {{ json_encode($items) }}
+
             @foreach ($items->all() as $clave => $item)
                 <tr class="main bg-slate-100" wire:key="item-{{ $clave }}">
                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
