@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Livewire\Admin\Ajustes\Cuenta;
+
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Contracts\UpdatesUserPasswords;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class UpdatePassword extends Component
         'password' => '',
         'password_confirmation' => '',
     ];
+
     public function render()
     {
         return view('livewire.admin.ajustes.cuenta.update-password');
@@ -46,7 +48,7 @@ class UpdatePassword extends Component
 
         if (request()->hasSession()) {
             request()->session()->put([
-                'password_hash_'.Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
+                'password_hash_' . Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
             ]);
         }
 
@@ -65,5 +67,4 @@ class UpdatePassword extends Component
     {
         return Auth::user();
     }
-
 }

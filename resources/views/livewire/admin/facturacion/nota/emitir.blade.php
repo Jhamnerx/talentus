@@ -179,7 +179,7 @@
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
                     {{-- LISTA DE PRODUCTOS --}}
-                    <x-admin.facturacion.tabla-detalle :items="$items" :tipo="$tipo_comprobante_id">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
 
