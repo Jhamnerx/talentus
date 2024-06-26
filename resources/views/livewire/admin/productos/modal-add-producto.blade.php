@@ -219,15 +219,16 @@
     <div class="col-span-12 md:col-start-2 md:col-end-5 text-sm">
 
         <label for="total">
-            Importe Total del Item:
+            Importe Total del Item: {{ $tipo_comprobante_id }}
         </label>
     </div>
 
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
+
         <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00"
-            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total"
-            {{ $tipo_comprobante_id != '00' ? 'disabled' : '' }} />
+            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total" />
+
 
     </div>
 

@@ -425,7 +425,7 @@ class Create extends Component
             if ($item['codigo_afectacion'] == '10') {
                 $op_gravadas = 0.00;
                 $op_gravadas = $op_gravadas + $item['sub_total'];
-                return round($op_gravadas, 2);
+                return round($op_gravadas, 4);
             }
         })->sum();
 
