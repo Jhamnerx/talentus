@@ -227,7 +227,7 @@
 
 
         <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00"
-            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total" />
+            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.blur="selected.total" />
 
 
     </div>
