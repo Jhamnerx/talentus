@@ -205,13 +205,13 @@ class ModalAddProducto extends Component
 
         if ($this->tipo_afectacion == 10) {
 
-            $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
+            $sub_total = round($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]), 4);
             $igv = round($sub_total * $this->plantilla->igv, 4);
             $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * floatval($this->plantilla->icbper)) : 0.00;
             $total = $sub_total + $igv;
         } else {
 
-            $sub_total = ($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]));
+            $sub_total = round($this->selected["valor_unitario"] * floatval($this->selected["cantidad"]), 4);
             $igv = 0.00;
             $total_icbper = ($this->selected['afecto_icbper']) ? floatval($this->selected["cantidad"] * floatval($this->plantilla->icbper)) : 0.00;
             $total = $sub_total + $igv;

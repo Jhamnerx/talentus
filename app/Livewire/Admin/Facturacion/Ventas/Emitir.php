@@ -320,7 +320,7 @@ class Emitir extends Component
                 'porcentaje_igv' => $selected["porcentaje_igv"],
                 'icbper' => $selected["icbper"],
                 'total_icbper' => $selected["total_icbper"],
-                'sub_total' => $selected["valor_unitario"] * $selected["cantidad"],
+                'sub_total' => round($selected["valor_unitario"] * $selected["cantidad"], 4),
                 'total' => $selected["total"],
                 'codigo_afectacion' => $selected["codigo_afectacion"],
                 'afecto_icbper' => $selected["afecto_icbper"],
