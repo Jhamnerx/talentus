@@ -96,6 +96,11 @@
                     @endif
                 </tr>
             @endforeach
+            @if (app()->environment('local'))
+                <div class="col-span-12 md:col-start-5 md:col-span-4">
+                    {{ json_encode($items) }}
+                </div>
+            @endif
             {{-- fila para añadir --}}
             @foreach ($items->all() as $clave => $item)
                 <tr class="main bg-slate-100" wire:key="item-{{ $clave }}">
