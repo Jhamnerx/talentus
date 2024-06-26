@@ -102,7 +102,7 @@
     <script>
         // Get a file input reference
         const input = document.querySelector(".imagen-upload");
-        const img = document.querySelector(".img");
+        // const img = document.querySelector(".img");
 
         // Create a FilePond instance
         $(document).ready(function() {
@@ -133,7 +133,7 @@
                     //console.log(base64String);
                     @this.set('file', base64String);
 
-                    img.SRC = base64String;
+                    //img.SRC = base64String;
                     // Logs wL2dvYWwgbW9yZ...
                 };
                 reader.readAsDataURL(file.file);

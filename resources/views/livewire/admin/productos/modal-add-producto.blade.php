@@ -226,7 +226,8 @@
     <div class="col-span-12 md:col-start-5 md:col-span-4">
 
         <x-form.inputs.currency id="total" name="total" precision="4" placeholer="0.00"
-            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total" disabled />
+            prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live="selected.total"
+            {{ $tipo_comprobante_id != '00' ? 'disabled' : '' }} />
 
     </div>
 

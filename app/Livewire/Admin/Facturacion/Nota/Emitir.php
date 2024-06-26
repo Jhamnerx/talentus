@@ -56,6 +56,12 @@ class Emitir extends Component
 
     public Collection $items;
 
+    //pago anticipado
+    public $pago_anticipado = false;
+    public $deduce_anticipos = false;
+    public Collection $prepayments;
+    public $total_anticipos = 0.00;
+    public $igv_anticipos = 0.00;
 
     public function mount()
     {
@@ -74,7 +80,7 @@ class Emitir extends Component
         // $this->tipo_cambio = $util->tipoCambio();
         $this->plantilla = plantilla::first();
 
-
+        $this->prepayments = collect();
         //
     }
     public function render()
