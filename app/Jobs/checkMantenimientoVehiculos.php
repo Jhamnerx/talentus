@@ -36,7 +36,7 @@ class checkMantenimientoVehiculos implements ShouldQueue
                     'asunto' => 'MANTENIMIENTO APROXIMANDOSE',
                     'estado' => 'PROXIMO',
                     'accion' => 'maintenance_coming_soon',
-                    'url' => "admin.vehiculos.mantenimiento.show",
+                    'url' => "admin.vehiculos.mantenimiento.index",
                     'id_mantenimiento' => $mantenimiento->id,
                 );
             }
@@ -47,7 +47,7 @@ class checkMantenimientoVehiculos implements ShouldQueue
                     'asunto' => 'MANTENIMIENTO PROGRAMADO PARA HOY',
                     'estado' => 'TODAY',
                     'accion' => 'maintenance_today',
-                    'url' => "admin.vehiculos.mantenimiento.show",
+                    'url' => "admin.vehiculos.mantenimiento.index",
                     'id_mantenimiento' => $mantenimiento->id,
                 );
             }
