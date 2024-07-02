@@ -273,11 +273,10 @@
                                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                                             </td>
                                             <td class="tabla-vehiculos" style="font-size: 12px">
-                                                {{ $contrato->detalle[$i]->vehiculos->numero }}
-                                            </td>
-
-                                            <td class="tabla-vehiculos" style="font-size: 12px">
                                                 {{ $contrato->detalle[$i]->plan }}
+                                            </td>
+                                            <td class="tabla-vehiculos" style="font-size: 12px">
+                                                {{ $contrato->detalle[$i]->vehiculos->numero }}
                                             </td>
 
                                         </tr>
