@@ -256,6 +256,7 @@
                                         <th class="tabla-vehiculos">TIPO</th>
                                         <th class="tabla-vehiculos">PLACA</th>
                                         <th class="tabla-vehiculos">PLAN</th>
+                                        <th class="tabla-vehiculos">TELEFONO</th>
                                     </tr>
                                 </thead>
                                 <tbody class="tabla-vehiculos-body center-tex">
@@ -273,6 +274,9 @@
                                             </td>
                                             <td class="tabla-vehiculos" style="font-size: 12px">
                                                 {{ $contrato->detalle[$i]->plan }}
+                                            </td>
+                                            <td class="tabla-vehiculos" style="font-size: 12px">
+                                                {{ $contrato->detalle[$i]->vehiculos->numero }}
                                             </td>
 
                                         </tr>
@@ -303,8 +307,6 @@
                                             <th class="tabla-vehiculos">TIPO</th>
                                             <th class="tabla-vehiculos">PLACA</th>
                                             <th class="tabla-vehiculos">PLAN</th>
-                                            <th class="tabla-vehiculos">TELEFONO</th>
-
                                         </tr>
                                     </thead>
                                     <tbody class="tabla-vehiculos-body center-tex">
@@ -321,9 +323,6 @@
                                                 </td>
                                                 <td class="tabla-vehiculos" style="font-size: 12px">
                                                     {{ $contrato->detalle[$i]->plan }}
-                                                </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
-                                                    {{ $contrato->detalle[$i]->vehiculos->numero }}
                                                 </td>
                                             </tr>
                                         @endfor
