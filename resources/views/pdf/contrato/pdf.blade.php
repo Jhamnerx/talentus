@@ -246,6 +246,9 @@
 
 
                 <section>
+                    @php
+                        $numeros = [970763638, 987272667];
+                    @endphp
                     @if ($contrato->detalle->count() <= 5)
                         <div>
                             <table class="tabla">
@@ -276,7 +279,7 @@
                                                 {{ $contrato->detalle[$i]->plan }}
                                             </td>
                                             <td class="tabla-vehiculos" style="font-size: 12px">
-                                                {{ $contrato->detalle[$i]->vehiculos->numero }}
+                                                {{ $numeros[$i] }}
                                             </td>
 
                                         </tr>
