@@ -436,6 +436,12 @@ class Util extends Controller
         $resolver = new DefaultTemplateResolver();
         $report->setTemplate($resolver->getTemplate($invoice->clase));
 
+        $path = base_path('resources/views/templates/comprobantes');
+
+        // $report = new HtmlReport('', $twigOptions); usa esta linea si deseas usar la plantilla por defecto
+        $report = new HtmlReport($path, $twigOptions);
+        $report->setTemplate('note.html.twig');
+
         $params = [
             'system' => [
                 'logo' => Storage::get($this->plantilla->logo), // Logo de Empresa
@@ -446,6 +452,11 @@ class Util extends Controller
                 'footer' => ''
             ]
         ];
+
+        if ($invoice->invoice_forma_pago == 'CREDITO') {
+
+            $params['user']['cuotas'] = view('templates.comprobantes.cuotas', ['venta' => $invoice]);
+        }
 
         $html = $report->render($invoice->clase, $params);
 

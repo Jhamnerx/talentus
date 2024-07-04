@@ -536,14 +536,6 @@
                         <td align="center" class="bold">VALOR UNITARIO</td>
                         <td align="center" class="bold">VALOR TOTAL</td>
                     </tr>
-
-                    {# MOSTRAR ANTICIPOS #}
-                    {% if params.user.anticipos is defined %}
-
-                        {{ params.user.anticipos|raw }}
-
-                    {% endif %}
-
                  
 
                     {% for det in doc.details %}
@@ -705,9 +697,6 @@
                                 <td width="120" align="right"><span>{{ moneda }}  {{ doc.mtoIGV|n_format }}</span></td>
                             </tr>
                             
-                            {% if doc.descuentos %}
-                             {{ params.user.descuento|raw }}
-                            {% endif %}
 
                             {% if doc.mtoISC %}
                             <tr>
@@ -757,13 +746,7 @@
             </tbody>
         </table>
         <br>
-          {# DETRACCION DETALLES #}
-        {% if params.user.detraccion is defined %}
 
-
-         {{ params.user.detraccion|raw }}
-
-        {% endif %}
 
          {# CUOTAS #}
         {% if params.user.cuotas is defined %}

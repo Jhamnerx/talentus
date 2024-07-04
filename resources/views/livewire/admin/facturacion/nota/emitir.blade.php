@@ -65,7 +65,7 @@
                                 'api' => route('api.sustentos.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]"
-                            option-label="descripcion" option-value="codigo" />
+                            option-label="descripcion" option-value="id" />
                     </div>
                     {{-- sustento escrito --}}
 
@@ -158,12 +158,12 @@
                             wire:model.live="invoice_fecha_vencimiento" :min="now()->subDays(1)" :max="now()->addDays(7)"
                             without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
-
+                    {{ $invoice_forma_pago }}
                     {{-- TIPO DE VENTA --}}
                     @if ($tipo_comprobante_ref == '01')
                         <div class="col-span-12 md:col-span-6 mb-3">
 
-                            <x-form.select readonly label="Forma Pago:" :options="[
+                            <x-form.select label="Forma Pago:" :options="[
                                 ['name' => 'CONTADO', 'id' => 'CONTADO'],
                                 ['name' => 'CREDITO', 'id' => 'CREDITO'],
                             ]" option-label="name"
@@ -174,7 +174,20 @@
 
 
 
+
+
+
                 </div>
+                {{-- componente venta al credito --}}
+                @if ($showCredit)
+                    <div
+                        class="col-span-12 md:col-span-4 mb-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
+
+                        <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                        </x-admin.facturacion.detalle-cuotas-table>
+
+                    </div>
+                @endif
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
@@ -320,7 +333,7 @@
                                 <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
                                 <div class="text-right w-40">
                                     <div class="text-gray-800 text-sm">{{ $simbolo }}
-                                        <span>{{ round($invoice_igv, 4) }}</span>
+                                        <span>{{ round($invoice_igv, 2) }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -341,7 +354,7 @@
                                     </div>
                                     <div class="text-right w-40">
                                         <div class="text-xl text-gray-800 font-bold">
-                                            {{ $simbolo }}<span>{{ round($invoice_total, 4) }}</span>
+                                            {{ $simbolo }}<span>{{ round($invoice_total, 2) }}</span>
                                         </div>
                                     </div>
                                 </div>
