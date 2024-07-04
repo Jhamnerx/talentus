@@ -379,7 +379,7 @@ class ApiFacturacion extends Controller
         $invoice = new Invoice();
         $invoice
             ->setUblVersion('2.1')
-            ->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
+            //->setFecVencimiento(new DateTime($venta->fecha_vencimiento))
             ->setTipoOperacion($tipo_operacion)  // Catalogo 51
             ->setObservacion($venta->comentario)
             ->setTipoDoc($venta->tipo_comprobante_id)
