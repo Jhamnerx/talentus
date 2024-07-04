@@ -26,6 +26,7 @@ class NotaDeCreditoRequest extends FormRequest
         $rules = [
             //DATOS NOTA
             'tipo_comprobante_id' => 'required|exists:tipo_comprobantes,codigo',
+            'tipo_operacion' => 'required',
             'serie' => 'required|exists:series,serie',
             'correlativo' => 'required',
             'serie_correlativo' => 'required',
@@ -46,6 +47,11 @@ class NotaDeCreditoRequest extends FormRequest
             'igv' => 'required',
             'sub_total' => 'required',
             'total' => 'required',
+            'numero_cuotas' => 'exclude_unless:invoice_forma_pago,CREDITO|integer|required_if:invoice_forma_pago,CREDITO|min:1',
+            'vence_cuotas' => 'exclude_unless:invoice_forma_pago,CREDITO|integer|required_if:invoice_forma_pago,CREDITO|min:1',
+            'detalle_cuotas.*' => 'array|between:1,100|required_if:invoice_forma_pago,CREDITO',
+            'invoice_forma_pago' => 'required',
+
 
             'invoice_id' => 'required|exists:ventas,id',
             'serie_ref' => 'required',

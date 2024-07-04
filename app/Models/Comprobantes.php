@@ -135,12 +135,10 @@ class Comprobantes extends Model
     //FUNCION QUE LLAMA A LA CLASE UTIL PARA RENDERIZAR EL PDF
     public function getPdf()
     {
-
         $util = Util::getInstance();
-
         $html = $util->getPdfNota($this);
         //return $html;
-        $pdf = Pdf::loadHTML($html);
+        $pdf = Pdf::loadHTML($html)->setPaper('Legal');
         return $pdf->stream('Nota-' . $this->serie_correlativo . '.pdf');
     }
 

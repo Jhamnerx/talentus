@@ -63,6 +63,19 @@ class Emitir extends Component
     public $total_anticipos = 0.00;
     public $igv_anticipos = 0.00;
 
+    public $tipo_operacion = '0101';
+    public $detraccion = false;
+    public $openModalDt = false;
+    public Collection $datosDetraccion;
+
+
+    //cuotas
+    public $showCredit = false;
+    public $numero_cuotas = 0;
+    public Collection $detalle_cuotas;
+    public $total_cuotas = 0.00;
+    public $vence_cuotas = 30;
+
     public function mount()
     {
         $this->tipo_comprobante_id = TipoComprobantes::where('slug', $this->comprobante_slug)->first()->codigo;
@@ -82,6 +95,9 @@ class Emitir extends Component
 
         $this->prepayments = collect();
         //
+
+        //CUOTAS
+        $this->detalle_cuotas = collect();
     }
     public function render()
     {
@@ -170,7 +186,23 @@ class Emitir extends Component
 
     public function selectInvoice()
     {
-        $this->invoice = Ventas::find($this->invoice_id);
+
+        $venta = Ventas::find($this->invoice_id);
+
+        if ($this->sustento_id == '13' && $venta->forma_pago !== 'CREDITO') {
+
+            $this->reset('invoice_id');
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: 'Solo se puede emitir una nota de crédito a una factura de crédito',
+            );
+
+            return;
+        }
+
+        $this->invoice = $venta;
         $this->serie_correlativo_ref = $this->invoice->serie_correlativo;
         $this->serie_ref = $this->invoice->serie;
         $this->correlativo_ref = $this->invoice->correlativo;
@@ -189,6 +221,13 @@ class Emitir extends Component
         $this->total = $this->invoice->total;
 
         $this->cliente_id = $this->invoice->cliente_id;
+        $this->tipo_operacion = $this->invoice->tipo_operacion;
+
+        if ($this->invoice->forma_pago == 'CREDITO') {
+            $this->setCuotas();
+            $this->numero_cuotas = $this->invoice->numero_cuotas;
+            $this->vence_cuotas = $this->invoice->vence_cuotas;
+        }
 
         $this->setDataInvoice();
         $this->setDataItemsInvoice();
@@ -196,6 +235,7 @@ class Emitir extends Component
         //  CALCULAR TOTALES AL AÑADIR ITEMS
         $this->reCalTotal();
     }
+
     public function selectTypeInvoice()
     {
         $this->resetItems();
@@ -417,7 +457,6 @@ class Emitir extends Component
 
             $api = new ApiFacturacion();
             $respuesta = $api->emitirNota($nota, $this->tipo_comprobante_id);
-
             if ($respuesta['fe_codigo_error']) {
 
                 session()->flash('nota-registrada', $respuesta["fe_mensaje_error"] . ': Intenta enviar en un rato');
@@ -435,6 +474,7 @@ class Emitir extends Component
                 mensaje: $th->getMessage(),
             );
         }
+
 
 
 
@@ -461,5 +501,51 @@ class Emitir extends Component
         //         $this->redirectRoute('admin.nota.debito.index');
         //     }
         // }
+    }
+    public function resetCrediFields()
+    {
+        $this->numero_cuotas = 0;
+        $this->detalle_cuotas = collect();
+    }
+
+    public function updatedNumeroCuotas($value)
+    {
+
+        $this->calcularCuotas($value);
+    }
+
+    public function updatedVenceCuotas($value)
+    {
+        $this->calcularCuotas($this->numero_cuotas);
+    }
+
+    public function calcularCuotas($nCuotas)
+    {
+        $this->detalle_cuotas = collect();
+        $fecha = Carbon::now();
+        //$this->total_cuotas = 0.00;
+        for ($i = 0; $i < (int)$nCuotas; $i++) {
+
+            $this->detalle_cuotas->push([
+                'n_cuota' => $i + 1,
+                'dias' => $this->vence_cuotas,
+                'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
+                'dia_semana' => ucfirst($fecha->dayName),
+                'importe' => $this->total > 0 ? round(floatval(($this->detraccion ? ($this->total - $this->datosDetraccion['monto']) : $this->total) / $nCuotas), 2)  : 0.00,
+            ]);
+        }
+        $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
+    }
+
+    public function updatedDetalleCuotas($attr, $valor)
+    {
+
+        $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
+    }
+
+    public function setCuotas()
+    {
+        $this->showCredit = true;
+        $this->detalle_cuotas = collect($this->invoice->detalle_cuotas);
     }
 }

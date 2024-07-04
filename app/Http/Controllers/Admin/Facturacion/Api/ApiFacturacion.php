@@ -85,33 +85,46 @@ class ApiFacturacion extends Controller
             ->setFechaEmision($nota->fecha_emision)
             ->setTipDocAfectado($nota->tipo_comprobante_ref) // Tipo Doc: Factura
             ->setNumDocfectado($nota->serie_correlativo_ref) // Factura: Serie-Correlativo
-            ->setCodMotivo($nota->sustento_id) // Catalogo. 09
+            ->setCodMotivo($nota->sustento->codigo) // Catalogo. 09
             ->setDesMotivo($nota->sustento->descripcion)
             ->setTipoMoneda($nota->divisa)
-            // ->setGuias([/* Guias (Opcional) */
-            //     (new Document())
-            //         ->setTipoDoc('09')
-            //         ->setNroDoc('0001-213')
-            // ])
             ->setCompany($util->getCompany())
-            ->setClient($cliente)
-            ->setMtoOperGravadas($nota->op_gravadas)
-            ->setMtoOperExoneradas($nota->op_exoneradas)
-            ->setMtoOperInafectas($nota->op_inafectas)
-            ->setMtoIGV($nota->igv)
-            ->setIcbper($nota->icbper)
-            ->setTotalImpuestos($nota->igv + $nota->icbper)
-            ->setMtoImpVenta($nota->total);
+            ->setClient($cliente);
+        // ->setGuias([/* Guias (Opcional) */
+        //     (new Document())
+        //         ->setTipoDoc('09')
+        //         ->setNroDoc('0001-213')
+        // ])
+        if ($nota->sustento->codigo !== '13') {
+            $note
+                ->setMtoOperGravadas($nota->op_gravadas)
+                ->setMtoOperExoneradas($nota->op_exoneradas)
+                ->setMtoOperInafectas($nota->op_inafectas)
+                ->setMtoIGV($nota->igv)
+                ->setIcbper($nota->icbper)
+                ->setTotalImpuestos($nota->igv + $nota->icbper)
+                ->setMtoImpVenta($nota->total);
+        } else {
+            $note
+                ->setMtoOperGravadas(0.00)
+                ->setMtoOperExoneradas(0.00)
+                ->setMtoOperInafectas(0.00)
+                ->setMtoIGV(0.00)
+                ->setIcbper(0.00)
+                ->setTotalImpuestos(0.00)
+                ->setMtoImpVenta(0.00);
+        }
+
 
         //EVALUAR SI LA NOTA ES A CREDITO
-        if ($nota->venta->forma_pago == 'CREDITO') {
+        if ($nota->invoice_forma_pago == 'CREDITO') {
 
             $note->setFormaPago(new FormaPagoCredito($nota->total, $nota->divisa));
-            $cuotas = $this->addCuotas($nota->venta);
+            $cuotas = $this->addCuotas($nota->detalle_cuotas);
             $note->setCuotas($cuotas);
         }
         //ESTABLECER ITEMS DEL COMPROBANTE
-        $items = $this->getItemsInvoice($nota->venta->ventaDetalles);
+        $items = $this->getItemsNota($nota->venta->ventaDetalles, $nota->sustento->codigo);
 
         $note->setDetails($items)
             ->setLegends([
@@ -153,6 +166,54 @@ class ApiFacturacion extends Controller
         return $respuesta;
     }
 
+    public function getItemsNota($items, $sustento_id)
+    {
+
+        $detalle = [];
+
+        foreach ($items as $item) {
+
+            // Detalle gravado
+            $i = (new SaleDetail())
+                ->setCodProducto($item->codigo)
+                ->setUnidad($item->unit)
+                ->setDescripcion($item->descripcion)
+                ->setCantidad($item->cantidad);
+
+
+            if ($sustento_id == '13') {
+                $i->setMtoValorUnitario(0.00)
+                    ->setMtoValorVenta(0.00)
+                    ->setMtoBaseIgv(0.00)
+                    ->setPorcentajeIgv($item->porcentaje_igv)
+                    ->setIgv(0.00)
+                    ->setTipAfeIgv(0.00) // Catalog: 07
+                    ->setTotalImpuestos(0.00);
+            } else {
+                $i->setMtoValorUnitario($item->valor_unitario)
+                    ->setMtoValorVenta($item->sub_total)
+                    ->setMtoBaseIgv($item->sub_total)
+                    ->setPorcentajeIgv($item->porcentaje_igv)
+                    ->setIgv($item->igv)
+                    ->setTipAfeIgv($item->codigo_afectacion) // Catalog: 07
+                    ->setTotalImpuestos($item->igv + $item->total_icbper);
+            }
+            if ($item->codigo_afectacion == '10') {
+                $i->setMtoPrecioUnitario($item->precio_unitario);
+            } else {
+                $i->setMtoPrecioUnitario($item->valor_unitario);
+            }
+
+            if ($item->afecto_icbper) {
+                $i->setIcbper($item->cantidad * $item->icbper) // (cantidad)*(factor ICBPER)
+                    ->setFactorIcbper($item->icbper);
+            }
+
+            $detalle[] = $i;
+        }
+        return $detalle;
+    }
+
     //EMITIR NOTA DE DEBITO
     public function emitirNotaDebito(Comprobantes $nota, $tipo_comprobante)
     {
@@ -165,7 +226,7 @@ class ApiFacturacion extends Controller
             ->setUblVersion('2.1')
             ->setTipDocAfectado($nota->tipo_comprobante_ref)
             ->setNumDocfectado($nota->serie_correlativo_ref)
-            ->setCodMotivo($nota->sustento_id)
+            ->setCodMotivo($nota->sustento->codigo)
             ->setDesMotivo($nota->sustento->descripcion)
             ->setTipoDoc('08')
             ->setSerie($nota->serie)
@@ -186,7 +247,7 @@ class ApiFacturacion extends Controller
         if ($nota->venta->forma_pago == 'CREDITO') {
 
             $note->setFormaPago(new FormaPagoCredito($nota->total, $nota->divisa));
-            $cuotas = $this->addCuotas($nota->venta);
+            $cuotas = $this->addCuotas($nota->detalle_cuotas);
             $note->setCuotas($cuotas);
         }
 
@@ -378,7 +439,7 @@ class ApiFacturacion extends Controller
         //EVALUAR SI LA VENTA ES A CREDITO
         if ($venta->forma_pago == 'CREDITO') {
             $invoice->setFormaPago(new FormaPagoCredito($venta->detalle_cuotas->sum('importe'), $venta->divisa));
-            $cuotas = $this->addCuotas($venta);
+            $cuotas = $this->addCuotas($venta->detalle_cuotas);
             $invoice->setCuotas($cuotas);
         } else {
 
@@ -607,11 +668,11 @@ class ApiFacturacion extends Controller
         return $cliente;
     }
     //CREAR OBJETO DE CUOTAS
-    public function addCuotas(Ventas $venta)
+    public function addCuotas($cuotas)
     {
         $cuota = [];
 
-        foreach ($venta->detalle_cuotas as $detalle_cuota) {
+        foreach ($cuotas as $detalle_cuota) {
 
             $cuota[] = (new Cuota())
                 ->setMonto($detalle_cuota['importe'])

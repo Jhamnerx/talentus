@@ -83,6 +83,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(SerieSeeder::class);
         // $this->call(ClientesSeeder::class);
         //$this->call(PermisosUpdateSeeder::class);
-        $this->call(CodigosDetraccionesSeeder::class);
+        $this->call(SustentosSeeder::class);
     }
 }

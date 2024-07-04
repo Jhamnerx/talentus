@@ -1,4 +1,4 @@
-<div class="m-1 credito w-full col-span-12">
+<div class="credito w-full col-span-12">
     <div class="overflow-x-auto">
         <div class="rounded-lg shadow-lg bg-white text-center grid grid-cols-12 gap-2">
             {{-- HEADER --}}
