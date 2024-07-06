@@ -466,7 +466,7 @@ class Emitir extends Component
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()
     {
-
+        $this->descuento =  $this->calcularDescuento();
         $this->sub_total =   $this->calcularSubTotal();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
@@ -483,7 +483,7 @@ class Emitir extends Component
             $this->calcularMontoDetraccion($this->total);
         }
 
-        $this->descuento =  $this->calcularDescuento();
+
         //$this->op_gratuitas = $this->calcularOperacionesGratuitas();
     }
 
@@ -674,7 +674,7 @@ class Emitir extends Component
             }
 
             if ($this->sub_total && $this->descuento_monto > 0) {
-
+                $descuento = $this->descuento_monto;
                 $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 5);
             }
         }
