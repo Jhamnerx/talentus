@@ -119,7 +119,7 @@
                             {!! Form::text('fecha_emision', null, [
                                 'placeholder' => 'Selecciona la fecha',
                                 'class' => 'form-input fechaEmision pl-9 py-2 outline-none block sm:text-sm border-gray-200 rounded-md
-                                                                                text-black input w-full',
+                                                                                                            text-black input w-full',
                             ]) !!}
                         </div>
                         @error('fecha_emision')
@@ -374,11 +374,12 @@
 
                 </div>
             </div>
+
             <div class="px-4 py-3 text-right sm:px-6">
                 {!! Form::submit('GUARDAR', [
                     'class' => 'btn hover:cursor-pointer bg-emerald-500 hover:bg-emerald-600 focus:outline-none
-                                            focus:ring-2 focus:ring-offset-2
-                                            focus:ring-emerald-600 text-white',
+                                                            focus:ring-2 focus:ring-offset-2
+                                                            focus:ring-emerald-600 text-white',
                 ]) !!}
 
             </div>

@@ -468,6 +468,7 @@ class Emitir extends Component
     {
 
         $this->sub_total =   $this->calcularSubTotal();
+        $this->descuento =  $this->calcularDescuento();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
         $this->op_inafectas = $this->calcularOperacionesInafectas();
@@ -483,7 +484,7 @@ class Emitir extends Component
             $this->calcularMontoDetraccion($this->total);
         }
 
-        $this->descuento =  $this->calcularDescuento();
+
         //$this->op_gratuitas = $this->calcularOperacionesGratuitas();
     }
 
@@ -674,7 +675,7 @@ class Emitir extends Component
             }
 
             if ($this->sub_total && $this->descuento_monto > 0) {
-
+                $descuento = $this->descuento_monto;
                 $this->descuento_factor = round($this->descuento_monto / $this->sub_total, 5);
             }
         }
@@ -697,7 +698,10 @@ class Emitir extends Component
     public function eliminarProducto($key)
     {
         unset($this->items[$key]);
-        $this->items;
+        if ($this->items->count() == 0) {
+            $this->descuento_monto = 0.00;
+            $this->descuento = 0.00;
+        }
         $this->reCalTotal();
     }
 
