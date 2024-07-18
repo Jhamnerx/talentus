@@ -26,4 +26,8 @@ class WebController extends Controller
     public function submitContacto(Request $request)
     {
     }
+    public function manualesPlataforma()
+    {
+        return view('cliente.manuales.plataforma');
+    }
 }

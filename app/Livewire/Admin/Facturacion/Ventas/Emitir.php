@@ -466,8 +466,9 @@ class Emitir extends Component
     //METODO GLOBAL PARA HACER CALCULOS
     public function reCalTotal()
     {
-        $this->descuento =  $this->calcularDescuento();
+
         $this->sub_total =   $this->calcularSubTotal();
+        $this->descuento =  $this->calcularDescuento();
         $this->op_gravadas = $this->calcularOperacionesGravadas($this->descuento);
         $this->op_exoneradas = $this->calcularOperacionesExoneradas();
         $this->op_inafectas = $this->calcularOperacionesInafectas();
@@ -697,7 +698,10 @@ class Emitir extends Component
     public function eliminarProducto($key)
     {
         unset($this->items[$key]);
-        $this->items;
+        if ($this->items->count() == 0) {
+            $this->descuento_monto = 0.00;
+            $this->descuento = 0.00;
+        }
         $this->reCalTotal();
     }
 

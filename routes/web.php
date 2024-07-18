@@ -25,7 +25,7 @@ Route::get('consulta/velocimetro/{certificado_velocimetros:codigo?}', [Consultas
 
 // Route::get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');
 
-
+Route::get('manuales/plataforma', [WebController::class, 'manualesPlataforma'])->name('manuales.plataforma');
 
 
 

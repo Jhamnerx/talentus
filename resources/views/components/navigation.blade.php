@@ -57,7 +57,9 @@
                                 {{-- <li><a href="{{ route('web.faq') }}">Preguntas Frecuentes</a></li> --}}
                             </ul>
                         </li>
-
+                        <li>
+                            <a href="{{ route('manuales.plataforma') }}">Manual Plataforma</a>
+                        </li>
                         <li>
                             <a href="{{ route('web.contacto') }}">Contactar</a>
                         </li>

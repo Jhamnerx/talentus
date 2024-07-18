@@ -68,7 +68,9 @@
                                 </ul>
                             </li>
 
-
+                            <li>
+                                <a href="{{ route('manuales.plataforma') }}">Manual Plataforma</a>
+                            </li>
                             <li>
                                 <a href="{{ route('web.contacto') }}">Contactar</a>
                             </li>
@@ -150,15 +152,17 @@
                         <div class="col-lg-8">
                             <div class="banner-two__content">
                                 <h3>
-                                    BIENVENIDO A TALENTUS APP
+                                    BIENVENIDO A TALENTUS
                                 </h3>
                                 <p>Podras encontrar diversar soluciones, desde consulta de duración y validez de actas, tus
                                     vehiculos
                                     y actualizar tus datos.</p>
                                 <div class="banner-two__btn-block">
-                                    <a href="" class="thm-btn banner-two__btn-1">Plataforma Premium</a>
+                                    <a href="https://plataforma.talentustechnology.com/" target="_blank"
+                                        class="thm-btn banner-two__btn-1">Plataforma Talentus Track</a>
                                     <!-- /.thm-btn banner-two__btn-1 -->
-                                    <a href="" class="thm-btn banner-two__btn-2">Plataforma Basica</a>
+                                    <a href="https://play.google.com/store/apps/details?id=com.talentus.usuariosandroid"
+                                        target="_blank" class="thm-btn banner-two__btn-2">App Plataforma</a>
                                     <!-- /.thm-btn banner-two__btn-2 -->
                                 </div><!-- /.banner-two__btn-block -->
                             </div><!-- /.banner-two__content -->

@@ -422,7 +422,7 @@
                                         wire:model.live.lazy="descuento_monto" thousands="." decimal="."
                                         precision="2" />
                                 </div>
-
+                                {{ $descuento_monto }}-{{ $descuento }} -{{ $descuento_factor }}
                             </div>
 
                             {{-- FORMA DE PAGO --}}
