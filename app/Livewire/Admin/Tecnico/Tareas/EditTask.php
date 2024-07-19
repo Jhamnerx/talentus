@@ -56,7 +56,7 @@ class EditTask extends Component
             'tipo_tarea_id.gt' => 'Selecciona una tarea valida',
             'vehiculos_id.required' => 'Selecciona un vehículo',
             'tecnico_id.required' => 'Selecciona un tecnico',
-            'cliente_id.required' => 'Selecciona un vehículo que tenga asignado a un cliente',
+            'cliente_id.required' => 'Selecciona un vehículo que tenga asignado a un cliente (Pedir a administración)',
             'dispositivo.required' => 'Selecciona un dispositivo',
             'numero.required' => 'Ingresa un número de linea',
             'sim_card.required' => 'Ingresa un sim card',
