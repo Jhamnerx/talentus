@@ -223,6 +223,19 @@
             </div>
         @endif
 
+        @if (app()->environment('local'))
+            <div class="col-span-12">
+
+                <div class="text-center font-medium text-rose-600">
+                    {{ json_encode($errors->all()) }}
+                </div>
+            </div>
+        @endif
+        <div class="col-span-12">
+
+            <x-form.errors />
+        </div>
+
     </div>
 
     <x-slot name="footer">
