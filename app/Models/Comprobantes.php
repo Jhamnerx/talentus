@@ -108,12 +108,12 @@ class Comprobantes extends Model
 
     public function comprobante(): BelongsTo
     {
-        return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo')->withTrashed();
+        return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo');
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class)->withTrashed();
+        return $this->belongsTo(User::class);
     }
 
 
