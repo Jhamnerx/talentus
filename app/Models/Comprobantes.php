@@ -3,15 +3,16 @@
 namespace App\Models;
 
 use App\Enums\VentasStatus;
+use App\Scopes\EmpresaScope;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Comprobantes extends Model
 {
@@ -51,6 +52,12 @@ class Comprobantes extends Model
         'detalle_cuotas' => AsCollection::class,
         'nota' => AsCollection::class,
     ];
+    //GLOBAL SCOPE EMPRESA
+    protected static function booted()
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
 
     protected function nota(): Attribute
     {
