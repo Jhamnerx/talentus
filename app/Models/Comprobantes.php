@@ -91,7 +91,7 @@ class Comprobantes extends Model
 
     public function cliente(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Clientes::class);
+        return $this->belongsTo(\App\Models\Clientes::class)->withTrashed();
     }
 
     public function sustento(): BelongsTo
@@ -101,12 +101,12 @@ class Comprobantes extends Model
 
     public function comprobante(): BelongsTo
     {
-        return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo');
+        return $this->belongsTo(Ventas::class, 'serie_correlativo_ref', 'serie_correlativo')->withTrashed();
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->withTrashed();
     }
 
 
