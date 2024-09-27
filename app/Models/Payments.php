@@ -60,7 +60,7 @@ class Payments extends Model
     protected function empresaId(): Attribute
     {
         return new Attribute(
-            set: fn ($empresa_id) => session('empresa'),
+            set: fn($empresa_id) => session('empresa'),
         );
     }
 
@@ -73,7 +73,7 @@ class Payments extends Model
     protected function userId(): Attribute
     {
         return new Attribute(
-            set: fn ($user_id) => Auth::user()->id,
+            set: fn($user_id) => Auth::user()->id,
         );
     }
 

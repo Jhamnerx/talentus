@@ -241,27 +241,28 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    @if (count($reporte->vehiculos->cliente->contactos) > 0)
-                                        <div wire:click="openModalContactos({{ $reporte->vehiculos->cliente->id }})"
-                                            class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
-                                            {{ $reporte->vehiculos->cliente->razon_social }}
-                                        </div>
+                                    @if ($reporte->vehiculos->cliente)
+                                        @if (count($reporte->vehiculos->cliente->contactos) > 0)
+                                            <div wire:click="openModalContactos({{ $reporte->vehiculos->cliente->id }})"
+                                                class="font-medium text-slate-800 cursor-pointer hover:shadow-inner hover:text-blue-600 hover:font-semibold">
+                                                {{ $reporte->vehiculos->cliente->razon_social }}
+                                            </div>
 
-                                        {{-- <div class="font-sm text-slate-900">
+                                            {{-- <div class="font-sm text-slate-900">
                                     <p class="text-xs">
                                         {{ $reporte->vehiculos->cliente->razon_social }}
                                     </p>
 
                                 </div> --}}
-                                    @else
-                                        <div class="font-sm text-slate-900">
-                                            <p class="text-xs">
-                                                {{ $reporte->vehiculos->cliente->razon_social }}
-                                            </p>
+                                        @else
+                                            <div class="font-sm text-slate-900">
+                                                <p class="text-xs">
+                                                    {{ $reporte->vehiculos->cliente->razon_social }}
+                                                </p>
 
-                                        </div>
+                                            </div>
+                                        @endif
                                     @endif
-
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
