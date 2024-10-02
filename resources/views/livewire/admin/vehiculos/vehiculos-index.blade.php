@@ -165,6 +165,11 @@
                     <x-form.button wire:click="openModalImport()" label="Importar" info md icon="upload" />
                 </div>
             @endcan
+
+            <div class="relative inline-flex">
+
+                <x-form.button wire:click="getDevicesWox()" label="Vehiculos plataforma" info md icon="briefcase" />
+            </div>
         </div>
         <!-- Left side -->
         <div class="mb-4 sm:mb-0">
@@ -211,8 +216,12 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Datos</div>
                             </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Cliente</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="font-semibold text-left">Ver info Plataforma</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">SIM#</div>

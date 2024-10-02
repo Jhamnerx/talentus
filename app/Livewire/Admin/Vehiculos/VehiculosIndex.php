@@ -180,4 +180,9 @@ class VehiculosIndex extends Component
             );
         }
     }
+
+    public function getDevicesWox()
+    {
+        $this->dispatch('get-devices-wox');
+    }
 }
