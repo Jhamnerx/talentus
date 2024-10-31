@@ -89,18 +89,14 @@ class ModalAddProducto extends Component
     {
         $this->showModal = false;
     }
-    public function updatedProductos()
-    {
-    }
+    public function updatedProductos() {}
 
     public function render()
     {
         return view('livewire.admin.productos.modal-add-producto');
     }
 
-    public function updated($name, $value)
-    {
-    }
+    public function updated($name, $value) {}
     //BUSCAR PRODUCTO SELECCIONADO Y AÑADIRLO
 
     function updatedProductSelectedId($id)
@@ -259,7 +255,7 @@ class ModalAddProducto extends Component
                 $this->validate([
                     //'selected.producto_id' => 'required',
                     'selected.codigo' => 'required',
-                    'selected.cantidad' => 'required|integer|min:1',
+                    'selected.cantidad' => 'required|min:1',
                     'selected.unit' => 'required|exists:units,codigo',
                     //'selected.producto' => 'required',
                     'selected.descripcion' => 'required',
