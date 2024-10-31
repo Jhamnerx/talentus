@@ -256,6 +256,7 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-slate-800">{{ $vehiculo->marca }}</div>
                                 </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                         @mouseleave="open = false">
@@ -397,6 +398,10 @@
                                         </div>
                                     @endif
 
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                    <x-form.button label="Info" emerald icon="information-circle"
+                                        wire:click.prevent="openModalInfoWox({{ $vehiculo->id }})" />
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 

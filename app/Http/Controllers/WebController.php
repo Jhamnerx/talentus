@@ -23,9 +23,7 @@ class WebController extends Controller
         return view('cliente.review');
     }
 
-    public function submitContacto(Request $request)
-    {
-    }
+    public function submitContacto(Request $request) {}
     public function manualesPlataforma()
     {
         return view('cliente.manuales.plataforma');

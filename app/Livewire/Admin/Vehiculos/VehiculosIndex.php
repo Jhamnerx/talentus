@@ -185,4 +185,9 @@ class VehiculosIndex extends Component
     {
         $this->dispatch('get-devices-wox');
     }
+
+    public function openModalInfoWox(Vehiculos $vehiculo)
+    {
+        $this->dispatch('open-modal-info-wox', vehiculo: $vehiculo);
+    }
 }
