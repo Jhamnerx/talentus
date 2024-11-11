@@ -268,9 +268,22 @@ class Emitir extends Component
         $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
     }
 
+
+
     public function updatedDetalleCuotas($attr, $valor)
     {
 
+        $this->detalle_cuotas = $this->detalle_cuotas->map(function ($item, $key) use ($attr, $valor) {
+
+            $item[$attr] = $valor;
+            $item['dia_semana'] = ucfirst(Carbon::parse($item['fecha'])->dayName);
+            $item['dias'] = Carbon::parse($item['fecha'])->diffInDays(Carbon::now());
+            return $item;
+        });
+
+        $this->validate(['detalle_cuotas.*.fecha' => 'required|date|after_or_equal:fecha_emision'], [
+            'detalle_cuotas.*.fecha.after_or_equal' => 'La fecha de vencimiento de la cuota debe ser mayor o igual a la fecha de emisión',
+        ]);
         $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
     }
 

@@ -1,5 +1,5 @@
 <div class="credito w-full col-span-12">
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto overflow-y-auto">
         <div class="rounded-lg shadow-lg bg-white text-center grid grid-cols-12 gap-2">
             {{-- HEADER --}}
             <div class="grid grid-cols-12 gap-2 col-span-12 rounded-sm">
@@ -28,6 +28,12 @@
             <div class="col-span-12 border rounded-sm">
                 <x-form.errors only="numero_cuotas|vence_cuotas" />
 
+                @if (app()->environment('local'))
+                    <div class="col-span-12 md:col-start-5 md:col-span-4">
+                        {{ json_encode($cuotas) }}
+
+                    </div>
+                @endif
             </div>
 
             <div class="col-span-12 overflow-x-auto relative shadow-md rounded-lg m-2 ">
@@ -52,7 +58,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-xs">
+                    <tbody class="text-xs z-40">
 
                         @if (!$cuotas->isEmpty())
                             @foreach ($cuotas->all() as $clave => $cuota)
@@ -65,8 +71,12 @@
                                         {{ $cuota['dias'] }}
                                     </td>
                                     <td class="py-2 px-2 min-w-36 text-center">
-                                        {{ $cuota['fecha'] }}
+
+                                        <input type="date" class="form-input"
+                                            wire:model.live="detalle_cuotas.{{ $clave }}.fecha"
+                                            :min="now() - > subDays(1)">
                                     </td>
+
                                     <td class="py-2 px-4">
                                         {{ $cuota['dia_semana'] }}
                                     </td>

@@ -87,16 +87,16 @@ class Ventas extends Model
     protected function nota(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => json_decode($nota, true),
-            set: fn ($nota) => json_encode($nota),
+            get: fn($nota) => json_decode($nota, true),
+            set: fn($nota) => json_encode($nota),
         );
     }
 
     protected function clase(): Attribute
     {
         return new Attribute(
-            get: fn ($clase) => unserialize($clase),
-            set: fn ($clase) => serialize($clase),
+            get: fn($clase) => unserialize($clase),
+            set: fn($clase) => serialize($clase),
         );
     }
 

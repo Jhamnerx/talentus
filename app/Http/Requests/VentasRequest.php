@@ -59,6 +59,11 @@ class VentasRequest extends FormRequest
             'vence_cuotas' => 'exclude_unless:forma_pago,CREDITO|integer|required_if:forma_pago,CREDITO|min:1',
             'adelanto' => 'exclude_unless:forma_pago,CREDITO|required_if:forma_pago,CREDITO',
             'detalle_cuotas.*' => 'array|between:1,100|required_if:forma_pago,CREDITO',
+            'detalle_cuotas.*.n_cuota' => 'required',
+            'detalle_cuotas.*.dias' => 'required',
+            'detalle_cuotas.*.fecha' => 'required|date|after_or_equal:fecha_emision',
+            'detalle_cuotas.*.dia_semana' => 'required',
+            'detalle_cuotas.*.importe' => 'required',
             'forma_pago' => 'required',
 
             'items' => 'array|between:1,1000',
