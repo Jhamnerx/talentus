@@ -275,7 +275,7 @@ class Emitir extends Component
 
         $this->detalle_cuotas = $this->detalle_cuotas->map(function ($item, $key) use ($attr, $valor) {
 
-            $item[$attr] = $valor;
+            // $item['fecha'] = $valor['fecha'];
             $item['dia_semana'] = ucfirst(Carbon::parse($item['fecha'])->dayName);
             $item['dias'] = Carbon::parse($item['fecha'])->diffInDays(Carbon::now());
             return $item;
