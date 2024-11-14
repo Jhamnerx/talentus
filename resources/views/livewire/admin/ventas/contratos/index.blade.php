@@ -52,8 +52,6 @@
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-
-
         </div>
 
     </div>
@@ -281,7 +279,9 @@
                                         </td>
                                     @endcan
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div>{{ $contrato->created_at->format('d-m-Y') }}</div>
+                                        <div>
+                                            {{ $contrato->fecha_emision ? $contrato->fecha_emision->format('d-m-Y') : '' }}
+                                        </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $contrato->user->name }}</div>

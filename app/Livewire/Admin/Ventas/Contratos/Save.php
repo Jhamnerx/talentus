@@ -13,8 +13,8 @@ use Livewire\Component;
 
 class Save extends Component
 {
-    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false, $fecha;
-
+    public $clientes_id, $ciudades_id = '01', $fondo = true, $sello = true, $fecha;
+    public $fecha_emision;
     public $panelVehiculosOpen = false;
 
     public Collection $items;
@@ -22,6 +22,7 @@ class Save extends Component
     public function mount()
     {
         $this->fecha = Carbon::now()->addDays(30)->format('Y-m-d');
+        $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->items = collect();
     }
 
@@ -55,7 +56,6 @@ class Save extends Component
             );
         } else {
 
-
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
@@ -86,6 +86,7 @@ class Save extends Component
         $contrato = Contratos::create([
             'clientes_id' => $validate["clientes_id"],
             'fecha' => $validate["fecha"],
+            'fecha_emision' => $validate["fecha_emision"],
             'sello' => $validate["sello"],
             'fondo' => $validate["fondo"],
             'ciudades_id' => $validate["ciudades_id"],
@@ -93,7 +94,7 @@ class Save extends Component
 
         Contratos::createItems($contrato, $validate["items"]);
 
-        session()->flash('store', 'El contrato de guardo con exito');
+        session()->flash('store', 'El contrato fue guardado con exito');
         $this->redirectRoute('admin.ventas.contratos.index');
     }
 
