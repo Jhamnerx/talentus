@@ -28,6 +28,7 @@ class ContratosRequest extends FormRequest
         $rules = [
             'clientes_id' => 'required',
             'fecha' => 'required',
+            'fecha_emision' => 'required',
             'ciudades_id' => 'required',
             'items' => 'array|between:1,100',
             'items.*.plan' => 'required|integer',
@@ -44,11 +45,10 @@ class ContratosRequest extends FormRequest
 
     public function messages()
     {
-
         $messages = [
-
             'clientes_id.required' => 'Debes Seleccionar un Cliente',
             'fecha.required' => 'Selecciona una fecha',
+            'fecha_emision.required' => 'Selecciona una fecha de emision',
             'ciudades_id.required' => 'Debe seleccionar una ciudad',
             'items.*.plan.required' => 'Ingresa un plan valido',
             'items.*.plan.integer' => 'No puedes ingresar letras aqui',

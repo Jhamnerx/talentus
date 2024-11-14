@@ -386,7 +386,6 @@ class Emitir extends Component
 
         $request = new VentasRequest();
         $datos = $this->validate($request->rules($this->detraccion), $request->messages());
-
         try {
 
             $venta = Ventas::create($datos);
