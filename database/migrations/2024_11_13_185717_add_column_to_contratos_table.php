@@ -14,8 +14,9 @@ return new class extends Migration
     {
         Schema::table('contratos', function (Blueprint $table) {
             $table->dateTime('fecha_emision')->nullable()->after('fecha');
-            DB::table('contratos')->update(['fecha_emision' => DB::raw('created_at')]);
         });
+
+        DB::table('contratos')->update(['fecha_emision' => DB::raw('created_at')]);
     }
 
     /**
