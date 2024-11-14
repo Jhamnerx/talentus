@@ -35,6 +35,7 @@ class Contratos extends Model
         'fondo' => 'boolean',
         'estado' => 'boolean',
         'fecha' => 'date:Y/m/d',
+        'fecha_emision' => 'date:Y/m/d',
         'eliminado' => 'boolean',
     ];
 
@@ -95,7 +96,7 @@ class Contratos extends Model
 
     public function periodo()
     {
-        return $this->created_at->subDay(2)->diffInMonths($this->fecha);
+        return $this->fecha_emision->subDay(2)->diffInMonths($this->fecha);
     }
 
     public function getPDFData()

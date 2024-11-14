@@ -1110,9 +1110,10 @@
                     de
                     duración
                     de {{ $contrato->periodo() }} Meses, que se contabilizarán desde el
-                    <b>{{ $contrato->created_at->format('d') }} de {{ ucfirst($contrato->created_at->monthName) }}
+                    <b>{{ $contrato->fecha_emision->format('d') }} de
+                        {{ ucfirst($contrato->fecha_emision->monthName) }}
                         del
-                        {{ $contrato->created_at->format('Y') }} al {{ $contrato->fecha->format('d') }} de
+                        {{ $contrato->fecha_emision->format('Y') }} al {{ $contrato->fecha->format('d') }} de
                         {{ ucfirst($contrato->fecha->monthName) }}
                         del
                         {{ $contrato->fecha->format('Y') }}</b>; así mismo cualquiera de las partes se reservan
@@ -1665,8 +1666,8 @@
 
             <div class="columns medium-6">
                 <p>
-                    {{ $contrato->ciudades->nombre }}, {{ $contrato->created_at->format('d') }} de
-                    {{ $contrato->created_at->monthName }} del {{ $contrato->created_at->format('Y') }}
+                    {{ $contrato->ciudades->nombre }}, {{ $contrato->fecha_emision->format('d') }} de
+                    {{ $contrato->fecha_emision->monthName }} del {{ $contrato->fecha_emision->format('Y') }}
                 </p>
             </div>
             <div class="columns medium-6" style="position:relative; left: 13.2rem; top: 2.2rem">
