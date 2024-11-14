@@ -14,7 +14,7 @@ class Edit extends Component
 {
     public Contratos $contrato;
 
-    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false, $fecha;
+    public $clientes_id, $ciudades_id = '01', $fondo = false, $sello = false, $fecha, $fecha_emision;
 
     public $panelVehiculosOpen = false;
 
@@ -30,6 +30,7 @@ class Edit extends Component
         $this->fondo = $contrato->fondo;
         $this->sello = $contrato->sello;
         $this->fecha = $contrato->fecha;
+        $this->fecha_emision = $contrato->fecha_emision;
 
         foreach ($this->contrato->detalle as $detalle) {
             $this->items[$detalle->vehiculos->placa] = [

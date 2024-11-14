@@ -17,7 +17,11 @@
                 </x-form.select>
 
             </div>
-
+            <div class="col-span-12 sm:col-span-4">
+                <x-form.datetime-picker label="Fecha Emision:" id="fecha_emision" name="fecha_emision"
+                    wire:model.live="fecha_emision" :min="now()->subDays(600)" without-time parse-format="YYYY-MM-DD"
+                    display-format="DD-MM-YYYY" :clearable="false" />
+            </div>
             <div class="col-span-12 sm:col-span-4">
 
                 <x-form.datetime-picker label="Fecha Fin Contrato:" id="fecha" name="fecha"
