@@ -42,8 +42,8 @@
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2 selectCliente">
                         <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                            placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                            option-label="razon_social" option-value="id">
+                            placeholder="Selecciona un cliente" option-description="numero_documento"
+                            :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                             <x-slot name="afterOptions" class="p-2 flex justify-center"
                                 x-show="displayOptions.length === 0">
@@ -56,27 +56,26 @@
                     </div>
 
                     @if ($cliente)
-                        <x-admin.ventas.cliente-selected :cliente="$cliente">
-                        </x-admin.ventas.cliente-selected>
+                    <x-admin.ventas.cliente-selected :cliente="$cliente">
+                    </x-admin.ventas.cliente-selected>
                     @endif
 
                     {{-- NUMERO --}}
                     <div class="col-span-12 xs:col-span-6 mb-2">
-                        <x-form.select readonly disabled id="serie" name="serie" label="Serie:"
-                            wire:model.live="serie" placeholder="Selecciona una serie" :async-data="[
+                        <x-form.select readonly disabled id="serie" name="serie" label="Serie:" wire:model.live="serie"
+                            placeholder="Selecciona una serie" :async-data="[
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => '10'],
-                            ]"
-                            option-label="serie" option-value="serie" />
+                            ]" option-label="serie" option-value="serie" />
                     </div>
 
                     <div class="col-span-12 xs:col-span-6 mb-2">
-                        <x-form.inputs.number id="correlativo" readonly name="numero" wire:model.live="numero"
+                        <x-form.number id="correlativo" readonly name="numero" wire:model.live="numero"
                             label="Número Recibo:" />
                     </div>
                     {{-- FECHA --}}
                     <div class="col-span-12 xs:col-span-6 gap-2">
-                        <x-form.datetime-picker label="Fecha de Emision:" id="fecha_emision" name="fecha_emision"
+                        <x-form.datetime.picker label="Fecha de Emision:" id="fecha_emision" name="fecha_emision"
                             wire:model.live="fecha_emision" :min="now()->subDays(10)" :max="now()" without-time
                             parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
@@ -84,9 +83,9 @@
                     {{-- FECHA CADUCIDAD --}}
                     <div class="col-span-12 xs:col-span-6 gap-2">
 
-                        <x-form.datetime-picker label="Fecha de Pago:" id="fecha_pago" name="fecha_pago"
-                            wire:model.live="fecha_pago" :min="now()->subDays(15)" :max="now()->addDays(30)" without-time
-                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                        <x-form.datetime.picker label="Fecha de Pago:" id="fecha_pago" name="fecha_pago"
+                            wire:model.live="fecha_pago" :min="now()->subDays(15)" :max="now()->addDays(30)"
+                            without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
 
                 </div>
@@ -95,7 +94,8 @@
                     {{-- moneda --}}
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <x-form.select label="Moneda:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                        <x-form.select label="Moneda:" id="divisa" name="divisa"
+                            :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
                             option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
                             icon='currency-dollar' />
 
@@ -103,7 +103,8 @@
 
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <x-form.select id="tipo_venta" name="tipo_venta" label="Forma Pago:" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                        <x-form.select id="tipo_venta" name="tipo_venta" label="Forma Pago:"
+                            :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
                             option-label="name" option-value="id" wire:model.live="tipo_venta" :clearable="false" />
 
                     </div>
@@ -118,8 +119,7 @@
                             ['name' => 'Tarjeta de crédito', 'id' => '006'],
                             ['name' => 'Transferencia bancaria', 'id' => '003'],
                             ['name' => 'Giro', 'id' => '002'],
-                        ]"
-                            option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
+                        ]" option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
                     </div>
 
@@ -140,8 +140,7 @@
                                     id="product_selected_id" name="product_selected_id"
                                     placeholder="Seleccionar producto o servicio" :async-data="[
                                         'api' => route('api.productos.index'),
-                                    ]"
-                                    option-label="descripcion" option-value="id"
+                                    ]" option-label="descripcion" option-value="id"
                                     option-description="option_description" :template="[
                                         'name' => 'user-option',
                                         'config' => ['src' => 'imagen'],
@@ -205,5 +204,5 @@
 
 </div>
 @section('js')
-    <script></script>
+<script></script>
 @endsection

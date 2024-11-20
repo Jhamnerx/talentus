@@ -21,12 +21,4 @@ class SolicitudesController extends Controller
     {
         return view('admin.reviews.index');
     }
-
-    public static function setNextSequenceNumber()
-    {
-
-
-        $id = IdGenerator::generate(['table' => 'solicitudes', 'field' => 'numero', 'length' => 7, 'prefix' => 'ST-', 'reset_on_prefix_change' => true, 'show_prefix' => true]);
-        return $id;
-    }
 }

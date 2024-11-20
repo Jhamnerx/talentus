@@ -3,8 +3,7 @@
     <div class="flex flex-auto gap-2 mx-4 py-2">
         <div class=""></div>
         <div class="w-full">
-            <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
-                class="float-right" />
+            <x-form.mini.button wire:click.prevent="addItem" spinner="addItem" primary label="+" class="float-right" />
         </div>
     </div>
     <div class=" relative">
@@ -33,36 +32,34 @@
 
             <tbody class="text-sm divide-y divide-slate-200">
                 @foreach ($items->all() as $clave => $item)
-                    <tr wire:key="{{ $clave }}">
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="col-span-1 sm:col-span-1 flex items-center justify-center">
-                                <span>{{ $clave + 1 }}</span>
-                            </div>
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <x-form.input placeholder="IMEI DISPOSITIVO"
-                                wire:model.live="items.{{ $clave }}.imei" />
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap  text-left">
-                            <x-form.select autocomplete='off' name="modelo_id"
-                                wire:model.live="items.{{ $clave }}.modelo_id" placeholder="Selecciona un modelo"
-                                :async-data="[
+                <tr wire:key="{{ $clave }}">
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <div class="col-span-1 sm:col-span-1 flex items-center justify-center">
+                            <span>{{ $clave + 1 }}</span>
+                        </div>
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                        <x-form.input placeholder="IMEI DISPOSITIVO" wire:model.live="items.{{ $clave }}.imei" />
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap  text-left">
+                        <x-form.select autocomplete='off' name="modelo_id"
+                            wire:model.live="items.{{ $clave }}.modelo_id" placeholder="Selecciona un modelo"
+                            :async-data="[
                                     'api' => route('api.dispositivos.modelos.index'),
                                 ]" option-label="modelo" option-value="id" option-description="marca" />
 
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.toggle wire:model.live="items.{{ $clave }}.of_client" value="true" />
+                        <x-form.toggle wire:model.live="items.{{ $clave }}.of_client" value="true" />
 
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    </td>
+                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.button.circle negative icon="x"
-                                wire:click.prevent="eliminarItem('{{ $clave }}')" />
-                        </td>
+                        <x-form.mini.button negative icon="x" wire:click.prevent="eliminarItem('{{ $clave }}')" />
+                    </td>
 
-                    </tr>
+                </tr>
                 @endforeach
 
             </tbody>

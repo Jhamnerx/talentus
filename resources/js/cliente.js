@@ -1,4 +1,6 @@
 import "./bootstrap";
+import "./cliente/slider.js";
+import "./cliente/theme.js";
 
 import Swal from "sweetalert2";
 

@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import path from "path";
 import laravel from "laravel-vite-plugin";
 
 export default defineConfig({
@@ -6,13 +7,21 @@ export default defineConfig({
         laravel({
             input: [
                 "resources/css/app.css",
-                "resources/css/cliente.css",
-                "resources/css/style.scss",
                 "resources/js/app.js",
+
+                "resources/css/cliente.css",
                 "resources/js/cliente.js",
-                "resources/js/cliente/theme.js",
+                "resources/css/fontawesome-all.min.css",
             ],
             refresh: true,
         }),
     ],
+    resolve: {
+        alias: {
+            "@tailwindConfig": path.resolve(__dirname, "tailwind.config.js"),
+        },
+    },
+    optimizeDeps: {
+        include: ["@tailwindConfig"],
+    },
 });

@@ -41,14 +41,13 @@
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <x-form.inputs.number required wire:model.live="selected.cantidad" min="1" step="1"
-                        placeholder="45" />
+                    <x-form.number required wire:model.live="selected.cantidad" min="1" step="1" placeholder="45" />
 
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                    <x-form.inputs.currency placeholder="100.00" wire:model.live="selected.precio" />
+                    <x-form.currency placeholder="100.00" wire:model.live="selected.precio" />
                 </td>
 
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -78,61 +77,60 @@
             </tr>
             {{-- fila para añadir --}}
             @if ($items->count() > 0)
-                @foreach ($items->all() as $clave => $item)
-                    <tr wire:key="item-{{ $clave }}">
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+            @foreach ($items->all() as $clave => $item)
+            <tr wire:key="item-{{ $clave }}">
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.textarea required wire:model.live="items.{{ $clave }}.producto" />
+                    <x-form.textarea required wire:model.live="items.{{ $clave }}.producto" />
 
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                            <x-form.textarea required wire:model.live="items.{{ $clave }}.descripcion" />
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <x-form.inputs.number wire:model.live="items.{{ $clave }}.cantidad" min="1"
-                                step="1" placeholder="Cantidad" />
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-normal text-center">
-                                {{ $items[$clave]['precio'] }}
-                            </div>
+                    <x-form.textarea required wire:model.live="items.{{ $clave }}.descripcion" />
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <x-form.number wire:model.live="items.{{ $clave }}.cantidad" min="1" step="1"
+                        placeholder="Cantidad" />
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <div class="font-normal text-center">
+                        {{ $items[$clave]['precio'] }}
+                    </div>
 
-                            @if ($errors->has('items.' . $clave . '.precio'))
-                                <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.precio') }}
-                                </p>
-                            @endif
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-normal text-center">
-                                {{ $items[$clave]['total'] }}
-                            </div>
+                    @if ($errors->has('items.' . $clave . '.precio'))
+                    <p class="mt-2  text-pink-600 text-sm">
+                        {{ $errors->first('items.' . $clave . '.precio') }}
+                    </p>
+                    @endif
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <div class="font-normal text-center">
+                        {{ $items[$clave]['total'] }}
+                    </div>
 
-                            @if ($errors->has('items.' . $clave . '.total'))
-                                <p class="mt-2  text-pink-600 text-sm">
-                                    {{ $errors->first('items.' . $clave . '.total') }}
-                                </p>
-                            @endif
-                        </td>
-                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                            <div class="space-x-1">
+                    @if ($errors->has('items.' . $clave . '.total'))
+                    <p class="mt-2  text-pink-600 text-sm">
+                        {{ $errors->first('items.' . $clave . '.total') }}
+                    </p>
+                    @endif
+                </td>
+                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                    <div class="space-x-1">
 
-                                <x-form.button label="Eliminar"
-                                    wire:click.prevent="eliminarProducto('{{ $clave }}')" outline red sm
-                                    icon="trash" />
+                        <x-form.button label="Eliminar" wire:click.prevent="eliminarProducto('{{ $clave }}')" outline
+                            red sm icon="trash" />
 
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
+                    </div>
+                </td>
+            </tr>
+            @endforeach
             @endif
         </tbody>
         <tfoot>
             @error('items')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
         </tfoot>
     </table>

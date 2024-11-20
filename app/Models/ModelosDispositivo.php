@@ -6,10 +6,13 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Observers\ModelosDispositivosObserver;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ModelosDispositivosObserver::class)]
 class ModelosDispositivo extends Model
 {
     use HasFactory;
@@ -49,7 +52,7 @@ class ModelosDispositivo extends Model
 
 
         return new Attribute(
-            get: fn () => $porcentaje,
+            get: fn() => $porcentaje,
         );
     }
 

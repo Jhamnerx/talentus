@@ -4,23 +4,23 @@
         <div class="col-span-12 mx-auto">
             <ul class="list-disc">
                 @if ($items)
-                    @foreach ($items as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
+                @foreach ($items as $item)
+                <li>{{ $item }}</li>
+                @endforeach
                 @endif
 
             </ul>
         </div>
         <div class="col-span-12 md:col-span-6 gap-2">
             {{ $fecha_suspencion }}
-            <x-form.datetime-picker without-time display-format="DD-MM-YYYY" :min="now()->subDays(7)"
+            <x-form.datetime.picker without-time display-format="DD-MM-YYYY" :min="now()->subDays(7)"
                 label="Fecha de Suspención:" placeholder="Selecciona la fecha" parse-format="YYYY-MM-DD"
                 wire:model.defer="fecha_suspencion" />
 
         </div>
         <div class="col-span-12 md:col-span-6 gap-2">
             {{ $date_to_suspend }}
-            <x-form.datetime-picker without-time display-format="DD-MM-YYYY" :min="now()->subDays(7)"
+            <x-form.datetime.picker without-time display-format="DD-MM-YYYY" :min="now()->subDays(7)"
                 label="Fecha de Reactivación:" placeholder="Selecciona la fecha" parse-format="YYYY-MM-DD"
                 wire:model.defer="date_to_suspend" />
 
@@ -55,5 +55,5 @@
 </x-form.modal.card>
 
 @push('scripts')
-    <script></script>
+<script></script>
 @endpush

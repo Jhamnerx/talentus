@@ -3,19 +3,22 @@
 namespace App\Models;
 
 use App\Scopes\EmpresaScope;
+use App\Observers\UserObserver;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Jetstream\HasProfilePhoto;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 //Spatie Permisos
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Livewire\Admin\Vehiculos\Reportes\Recordatorio;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable
 {
     use HasApiTokens;

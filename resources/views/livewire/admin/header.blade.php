@@ -30,15 +30,16 @@
                     <!-- Start -->
 
                     @if (!Cache::has('precioVenta'))
-                        Obtener TC <x-form.button.circle wire:click.prevent="getTipoCambio()" spinner="getTipoCambio"
-                            positive icon="refresh" xs />
+                    Obtener TC
+                    <x-form.mini.button wire:click.prevent="getTipoCambio()" spinner="getTipoCambio" positive
+                        icon="arrow-path" xs />
                     @else
-                        <div
-                            class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
-                            TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
+                    <div
+                        class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
+                        TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
 
 
-                        </div>
+                    </div>
                     @endif
 
 
@@ -79,22 +80,21 @@
 
 
                             @foreach ($empresas as $empresa)
-                                <li>
+                            <li>
 
-                                    <a wire:click.prevent="changeBussines({{ $empresa->id }})"
-                                        class="hover:bg-violet-400 focus:outline-none focus:ring font-medium text-sm hover:text-white flex items-center py-1 px-3"
-                                        :class="selected === {{ $empresa->id }} &&
-                                            'border-transparent shadow-sm bg-violet-700 text-white'"
-                                        href="#0" @click="open = false; selected = {{ $empresa->id }}"
-                                        @focus="open = true" @focusout="open = false">
-                                        <svg class="w-3 h-3 fill-current text-indigo-300 shrink-0 mr-2"
-                                            viewBox="0 0 12 12">
-                                            <rect y="3" width="12" height="9" rx="1" />
-                                            <path d="M2 0h8v2H2z" />
-                                        </svg>
-                                        <span class="truncate">{{ $empresa->plantilla->razon_social }}</span>
-                                    </a>
-                                </li>
+                                <a wire:click.prevent="changeBussines({{ $empresa->id }})"
+                                    class="hover:bg-violet-400 focus:outline-none focus:ring font-medium text-sm hover:text-white flex items-center py-1 px-3"
+                                    :class="selected === {{ $empresa->id }} &&
+                                            'border-transparent shadow-sm bg-violet-700 text-white'" href="#0"
+                                    @click="open = false; selected = {{ $empresa->id }}" @focus="open = true"
+                                    @focusout="open = false">
+                                    <svg class="w-3 h-3 fill-current text-indigo-300 shrink-0 mr-2" viewBox="0 0 12 12">
+                                        <rect y="3" width="12" height="9" rx="1" />
+                                        <path d="M2 0h8v2H2z" />
+                                    </svg>
+                                    <span class="truncate">{{ $empresa->plantilla->razon_social }}</span>
+                                </a>
+                            </li>
                             @endforeach
 
                         </ul>

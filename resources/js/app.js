@@ -1,7 +1,5 @@
 import "./bootstrap";
 import "./main";
-import "./utils";
-import "./slider";
 
 import VenoBox from "venobox";
 
@@ -25,6 +23,8 @@ import Swal from "sweetalert2";
 window.Swal = Swal;
 import iziToast from "izitoast";
 window.iziToast = iziToast;
+
+import.meta.glob(["../images/**"]);
 
 //FILE POND IMAGE DROP AND DRAG
 import * as FilePond from "filepond";

@@ -9,10 +9,13 @@ use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Observers\CertificadosVelocimetrosObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Database\Factories\CertificadosVelocimetrosFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Notifications\Certificados\EnviarCertificadoVelocimetroCliente;
 
+#[ObservedBy(CertificadosVelocimetrosObserver::class)]
 class CertificadosVelocimetros extends Model
 {
     //Definir Factory

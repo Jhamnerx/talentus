@@ -4,13 +4,16 @@ namespace App\Models;
 
 use App\Scopes\EmpresaScope;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\PaymentsObserver;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(PaymentsObserver::class)]
 class Payments extends Model
 {
     use HasFactory;

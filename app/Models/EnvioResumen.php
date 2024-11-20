@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Observers\EnvioResumenObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -10,7 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(EnvioResumenObserver::class)]
 class EnvioResumen extends Model
 {
     use HasFactory;
@@ -34,8 +37,8 @@ class EnvioResumen extends Model
     protected function clase(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => unserialize($nota),
-            set: fn ($nota) => serialize($nota),
+            get: fn($nota) => unserialize($nota),
+            set: fn($nota) => serialize($nota),
         );
     }
 

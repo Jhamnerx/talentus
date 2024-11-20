@@ -8,6 +8,7 @@ use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use App\Notifications\EnviarMensaje;
+use App\Observers\ContactosObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -16,7 +17,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Database\Factories\ContactosFlotasFactory;
 use App\Notifications\Birthday\NotifyContactBirthday;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ContactosObserver::class)]
 class Contactos extends Model
 {
 

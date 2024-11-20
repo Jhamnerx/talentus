@@ -5,8 +5,8 @@
             <div class="col-span-12 sm:col-span-4">
 
                 <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                    placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                    option-label="razon_social" option-value="id">
+                    placeholder="Selecciona un cliente" option-description="numero_documento"
+                    :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                     <x-slot name="afterOptions" class="p-2 flex justify-center" x-show="displayOptions.length === 0">
                         <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close" primary
@@ -18,15 +18,15 @@
 
             </div>
             <div class="col-span-12 sm:col-span-4">
-                <x-form.datetime-picker label="Fecha Emision:" id="fecha_emision" name="fecha_emision"
+                <x-form.datetime.picker label="Fecha Emision:" id="fecha_emision" name="fecha_emision"
                     wire:model.live="fecha_emision" :min="now()->subDays(600)" without-time parse-format="YYYY-MM-DD"
                     display-format="DD-MM-YYYY" :clearable="false" />
             </div>
             <div class="col-span-12 sm:col-span-4">
 
-                <x-form.datetime-picker label="Fecha Fin Contrato:" id="fecha" name="fecha"
-                    wire:model.live="fecha" :min="now()->subDays(90)" without-time parse-format="YYYY-MM-DD"
-                    display-format="DD-MM-YYYY" :clearable="false" />
+                <x-form.datetime.picker label="Fecha Fin Contrato:" id="fecha" name="fecha" wire:model.live="fecha"
+                    :min="now()->subDays(90)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                    :clearable="false" />
             </div>
 
             <div class="col-span-12 sm:col-span-4">
@@ -112,53 +112,52 @@
                 <div class="detallesvehiculos">
 
                     @if ($items->count() > 0)
-                        @foreach ($items->all() as $placa => $vehiculo)
-                            <div class="flex -mx-1 px-2 py-4 border-b box-border">
+                    @foreach ($items->all() as $placa => $vehiculo)
+                    <div class="flex -mx-1 px-2 py-4 border-b box-border">
 
-                                <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+                        <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
-                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
-
-                                </div>
-
-                                <div class="flex-auto xl:w-28 text-center">
-
-                                    <input wire:model.live="items.{{ $placa }}.plan"
-                                        class="form-input w-16 md:w-28 lg:w-28" type="text">
-
-                                    @if ($errors->has('items.' . $placa . '.plan'))
-                                        <p class="mt-2  text-pink-600 text-sm">
-                                            {{ $errors->first('items.' . $placa . '.plan') }}
-                                        </p>
-                                    @endif
-
-
-                                </div>
-
-                                <div class="flex-auto xl:w-20 text-center">
-                                    <x-form.button label="Eliminar"
-                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')" outline red sm
-                                        icon="trash" />
-                                </div>
-
-
-
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
-                            <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
-
-                                <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
-                                @if ($errors->has('items'))
-                                    <p class="mt-2  text-pink-600 text-sm">
-                                        {{ $errors->first('items') }}
-                                    </p>
-                                @endif
-
-                            </div>
+                            <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
 
                         </div>
+
+                        <div class="flex-auto xl:w-28 text-center">
+
+                            <input wire:model.live="items.{{ $placa }}.plan" class="form-input w-16 md:w-28 lg:w-28"
+                                type="text">
+
+                            @if ($errors->has('items.' . $placa . '.plan'))
+                            <p class="mt-2  text-pink-600 text-sm">
+                                {{ $errors->first('items.' . $placa . '.plan') }}
+                            </p>
+                            @endif
+
+
+                        </div>
+
+                        <div class="flex-auto xl:w-20 text-center">
+                            <x-form.button label="Eliminar" wire:click.prevent="eliminarVehiculo('{{ $placa }}')"
+                                outline red sm icon="trash" />
+                        </div>
+
+
+
+                    </div>
+                    @endforeach
+                    @else
+                    <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
+                        <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+
+                            <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
+                            @if ($errors->has('items'))
+                            <p class="mt-2  text-pink-600 text-sm">
+                                {{ $errors->first('items') }}
+                            </p>
+                            @endif
+
+                        </div>
+
+                    </div>
 
                     @endif
 
@@ -186,9 +185,10 @@
 
         </div>
     </div>
-    @livewire('admin.ventas.contratos.items-vehiculo', ['vehiculos' => $contrato->cliente->vehiculos, 'cliente' => $contrato->cliente])
+    @livewire('admin.ventas.contratos.items-vehiculo', ['vehiculos' => $contrato->cliente->vehiculos, 'cliente' =>
+    $contrato->cliente])
 </div>
 
 @push('modals')
-    @livewire('admin.clientes.save')
+@livewire('admin.clientes.save')
 @endpush

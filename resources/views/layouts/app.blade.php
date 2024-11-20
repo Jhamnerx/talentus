@@ -12,13 +12,9 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
     <!-- Styles -->
-
     @vite('resources/css/cliente.css')
-    @vite('resources/css/app.css')
-    @vite('resources/css/style.scss')
 
-
-    <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
+    @vite('resources/css/fontawesome-all.min.css')
 
 
     @livewireStyles
@@ -26,7 +22,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    <x-jet-banner />
+    <x-banner />
 
 
     <!-- Page Content -->
@@ -47,6 +43,7 @@
 
 
     @vite('resources/js/cliente.js')
+
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('plugins/bootstrap-datepicker.min.js') }}"></script>
@@ -61,7 +58,6 @@
     <script src="{{ asset('plugins/input-case-enforcer/input-case-enforcer.min.js') }}"></script>
     <script src="{{ asset('plugins/wow.js') }}"></script>
 
-    @vite('resources/js/cliente/theme.js')
 
     @stack('scripts')
 

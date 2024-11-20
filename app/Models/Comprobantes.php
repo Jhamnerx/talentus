@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\VentasStatus;
 use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Observers\ComprobanteObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -13,7 +14,9 @@ use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ComprobanteObserver::class)]
 class Comprobantes extends Model
 {
     use HasFactory;
@@ -62,16 +65,16 @@ class Comprobantes extends Model
     protected function nota(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => json_decode($nota, true),
-            set: fn ($nota) => json_encode($nota),
+            get: fn($nota) => json_decode($nota, true),
+            set: fn($nota) => json_encode($nota),
         );
     }
 
     protected function clase(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => unserialize($nota),
-            set: fn ($nota) => serialize($nota),
+            get: fn($nota) => unserialize($nota),
+            set: fn($nota) => serialize($nota),
         );
     }
 

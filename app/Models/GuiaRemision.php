@@ -6,6 +6,7 @@ use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\ModalidadTraslado;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\GuiaRemisionObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,8 +14,10 @@ use App\Http\Controllers\Admin\Facturacion\Api\Util;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
+#[ObservedBy(GuiaRemisionObserver::class)]
 class GuiaRemision extends Model
 {
     use HasFactory;
@@ -59,24 +62,24 @@ class GuiaRemision extends Model
     protected function nota(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => json_decode($nota, true),
-            set: fn ($nota) => json_encode($nota),
+            get: fn($nota) => json_decode($nota, true),
+            set: fn($nota) => json_encode($nota),
         );
     }
 
     protected function clase(): Attribute
     {
         return new Attribute(
-            get: fn ($nota) => unserialize($nota),
-            set: fn ($nota) => serialize($nota),
+            get: fn($nota) => unserialize($nota),
+            set: fn($nota) => serialize($nota),
         );
     }
 
     protected function dataPuerto(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => json_decode($value, true),
-            set: fn ($value) => json_encode($value),
+            get: fn($value) => json_decode($value, true),
+            set: fn($value) => json_encode($value),
         );
     }
 

@@ -52,11 +52,16 @@ class CreateForm extends Component
 
     public function mount($tipo_solicitud)
     {
-        $ctr = new SolicitudesController();
-        $this->numero = $ctr->setNextSequenceNumber();
+        $this->numero = $this->getNextSequenceNumber();
         $this->tipo_solicitud = $tipo_solicitud;
         $this->fecha_inicial = Carbon::now()->subDays(10)->format('Y-m-d');
         $this->fecha_final = Carbon::now()->format('Y-m-d');
+    }
+
+    public function getNextSequenceNumber()
+    {
+        $maxNumero = Solicitudes::max('numero');
+        return $maxNumero ? $maxNumero + 1 : 1;
     }
 
     public function render()

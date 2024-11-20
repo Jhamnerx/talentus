@@ -28,7 +28,7 @@ class Save extends Component
             [
                 'required',
                 Rule::unique('mantenimientos', 'numero')
-                    ->where(fn ($query) => $query->where('empresa_id', session('empresa'))),
+                    ->where(fn($query) => $query->where('empresa_id', session('empresa'))),
             ],
             'detalle_trabajo' => 'nullable',
             'fecha_hora_mantenimiento' => 'date|required',
@@ -60,14 +60,20 @@ class Save extends Component
     public function openModalSaveMantenimiento($from, Vehiculos $vehiculo = null)
     {
 
-        $ctr = new MantenimientoController();
-        $this->numero =  $ctr->setNextSequenceNumber();
+        $this->numero =  $this->getNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
 
         if ($vehiculo) {
             $this->vehiculo_id = $vehiculo->id;
         }
         $this->openModal();;
+    }
+
+
+    public function getNextSequenceNumber()
+    {
+        $maxNumero = Mantenimiento::max('numero');
+        return $maxNumero ? $maxNumero + 1 : 1;
     }
 
 
@@ -119,8 +125,7 @@ class Save extends Component
     #[On(['open-modal-mantenimiento'])]
     public function listenUpdatedNumero($placa)
     {
-        $ctr = new MantenimientoController();
-        $this->numero =  $ctr->setNextSequenceNumber();
+        $this->numero =  $this->getNextSequenceNumber();
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
         $this->vehiculo_id = Vehiculos::where('placa', $placa)->first()->id;
         $this->openModal();

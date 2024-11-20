@@ -12,11 +12,8 @@
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    @vite('resources/css/style.scss')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
-
 
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -28,7 +25,8 @@
 </head>
 
 <body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }"
+    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
     <script>
@@ -51,15 +49,15 @@
             <!-- Site header -->
             @livewire('admin.header', ['page' => request()->fullUrl()])
 
-            <x-jet-banner />
+            <x-banner />
 
             <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
                 <div class="px-4 sm:px-6 lg:px-8">
                     <div class="flex items-center h-16 -mb-px">
 
                         <div class="hover text-left mx-2">
-                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
-                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
+                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b class="hover:text-talentus-200">{{
+                                    \App\Models\plantilla::first()->razon_social }}</b>
                             </p>
                         </div>
 
@@ -197,8 +195,8 @@
 @stack('scripts')
 
 @if (session('venta-registrada'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'VENTA REGISTRADA',
@@ -208,11 +206,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('nota-registrada'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'NOTA REGISTRADA',
@@ -222,11 +220,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('cobro-registrado'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'REGISTRO DE COBRO REGISTRADO',
@@ -236,11 +234,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('cotizacion-registrada'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'COTIZACION REGISTRADA',
@@ -250,12 +248,12 @@
 
             })
         });
-    </script>
+</script>
 @endif
 
 @if (session('cotizacion-actualizada'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'COTIZACION ACTUALIZADA',
@@ -265,12 +263,12 @@
 
             })
         });
-    </script>
+</script>
 @endif
 
 @if (session('recibo-registrado'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUARDADO',
@@ -280,11 +278,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('recibog-store'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUARDADO',
@@ -294,11 +292,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('recibo-actualizo'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'ACTUALIZADO',
@@ -308,11 +306,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('recibog-actualizo'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'ACTUALIZADO',
@@ -322,11 +320,11 @@
 
             })
         });
-    </script>
+</script>
 @endif
 @if (session('guia-store'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUIA REGISTRADA',
@@ -336,12 +334,12 @@
 
             })
         });
-    </script>
+</script>
 @endif
 
 @if (session('update'))
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Actualizado',
@@ -351,7 +349,7 @@
 
             })
         });
-    </script>
+</script>
 @endif
 
 </html>

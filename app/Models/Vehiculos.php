@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Scopes\EmpresaScope;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\VehiculosObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(VehiculosObserver::class)]
 class Vehiculos extends Model
 {
     use HasFactory;
@@ -36,8 +39,8 @@ class Vehiculos extends Model
     protected function placa(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => strtoupper($value),
-            set: fn ($value) => strtoupper($value),
+            get: fn($value) => strtoupper($value),
+            set: fn($value) => strtoupper($value),
         );
     }
     // Scope local de activo

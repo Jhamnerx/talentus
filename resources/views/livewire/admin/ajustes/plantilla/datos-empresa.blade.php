@@ -27,18 +27,17 @@
 
             </div>
             <div class="col-span-12 sm:col-span-3">
-                <x-form.inputs.phone label="TELEFONO:" wire:model.live='telefono' placeholder="987654321" maxlength="9"
+                <x-form.phone label="TELEFONO:" wire:model.live='telefono' placeholder="987654321" maxlength="9"
                     mask="#########" />
 
             </div>
             <div class="col-span-6 sm:col-span-2">
-                <x-form.input class="!pl-[6.5rem]" label="I.G.V:" placeholder="18" prefix="%"
-                    wire:model.live='igv' />
+                <x-form.input class="!pl-[6.5rem]" label="I.G.V:" placeholder="18" prefix="%" wire:model.live='igv' />
 
             </div>
             <div class="col-span-6 sm:col-span-2">
 
-                <x-form.inputs.currency label="ICBPER" placeholder="0.50" wire:model.live="icbper" />
+                <x-form.currency label="ICBPER" placeholder="0.50" wire:model.live="icbper" />
 
             </div>
 
@@ -69,8 +68,8 @@
 
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.informacion.edit')
-                    <x-form.button wire:click="saveInfo" spinner="saveInfo" loading-delay="short" positive
-                        label="GUARDAR" />
+                <x-form.button wire:click="saveInfo" spinner="saveInfo" loading-delay="short" positive
+                    label="GUARDAR" />
                 @endcan
             </div>
         </div>
@@ -88,47 +87,47 @@
                 <div class=""></div>
                 <div class="w-full">
                     @can('admin.settings.plantilla.informacion.edit')
-                        <x-form.button.circle wire:click.prevent="addItem" spinner="addItem" primary label="+"
-                            class="float-right" />
+                    <x-form.mini.button wire:click.prevent="addItem" spinner="addItem" primary label="+"
+                        class="float-right" />
                     @endcan
                 </div>
             </div>
             @if ($terminos->isEmpty())
 
-                <div class="col-span-12">
-                    <span class="w-full text-red-500">Agregar Terminos</span>
-                </div>
+            <div class="col-span-12">
+                <span class="w-full text-red-500">Agregar Terminos</span>
+            </div>
             @else
-                @foreach ($terminos as $clave => $termino)
-                    <div class="col-span-12 py-2">
-                        <div class="flex gap-2">
+            @foreach ($terminos as $clave => $termino)
+            <div class="col-span-12 py-2">
+                <div class="flex gap-2">
 
-                            <div class="col-span-12 sm:col-span-12 w-full">
+                    <div class="col-span-12 sm:col-span-12 w-full">
 
-                                <x-form.textarea label="TERMINO {{ $clave + 1 }}:" placeholder="ESCRIBA AQUI"
-                                    wire:model.live='terminos.{{ $clave }}' />
+                        <x-form.textarea label="TERMINO {{ $clave + 1 }}:" placeholder="ESCRIBA AQUI"
+                            wire:model.live='terminos.{{ $clave }}' />
 
-                            </div>
-                            @can('admin.settings.plantilla.informacion.edit')
-                                <button type="button" wire:click.prevent="eliminar('{{ $clave }}')"
-                                    class="text-rose-500 hover:text-rose-600 rounded-full">
-                                    <span class="sr-only">Eliminar</span>
-                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                        <path
-                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                    </svg>
-                                </button>
-                            @endcan
-                        </div>
                     </div>
-                @endforeach
+                    @can('admin.settings.plantilla.informacion.edit')
+                    <button type="button" wire:click.prevent="eliminar('{{ $clave }}')"
+                        class="text-rose-500 hover:text-rose-600 rounded-full">
+                        <span class="sr-only">Eliminar</span>
+                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                            <path
+                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                        </svg>
+                    </button>
+                    @endcan
+                </div>
+            </div>
+            @endforeach
             @endif
 
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.informacion.edit')
-                    <x-form.button wire:click="saveTerminos" spinner="saveTerminos" loading-delay="short" positive
-                        label="GUARDAR" />
+                <x-form.button wire:click="saveTerminos" spinner="saveTerminos" loading-delay="short" positive
+                    label="GUARDAR" />
                 @endcan
             </div>
 
@@ -169,8 +168,8 @@
             </div>
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.informacion.edit')
-                    <x-form.button wire:click="saveDireccion" spinner="saveInfo" loading-delay="short" positive
-                        label="GUARDAR" />
+                <x-form.button wire:click="saveDireccion" spinner="saveInfo" loading-delay="short" positive
+                    label="GUARDAR" />
                 @endcan
             </div>
         </div>
@@ -200,14 +199,13 @@
 
             <div class="col-span-12 sm:col-span-3">
                 <x-form.input label="CLAVE CERTIFICADO
-                    CDT:"
-                    wire:model.live='sunat.clave_certificado_cdt' />
+                    CDT:" wire:model.live='sunat.clave_certificado_cdt' />
             </div>
 
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.sunat.edit')
-                    <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive
-                        label="GUARDAR" />
+                <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive
+                    label="GUARDAR" />
                 @endcan
 
             </div>
@@ -232,8 +230,7 @@
             </div>
 
             <div class="col-span-12 sm:col-span-3">
-                <x-form.input label="HOST:" placeholder="SERVIDOR DE CORREO"
-                    wire:model.live='mail_config.servidor' />
+                <x-form.input label="HOST:" placeholder="SERVIDOR DE CORREO" wire:model.live='mail_config.servidor' />
 
             </div>
 
@@ -252,8 +249,8 @@
 
             <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
                 @can('admin.settings.plantilla.correo-config.edit')
-                    <x-form.button wire:click="saveMail" spinner="saveSunat" loading-delay="short" positive
-                        label="GUARDAR" />
+                <x-form.button wire:click="saveMail" spinner="saveSunat" loading-delay="short" positive
+                    label="GUARDAR" />
                 @endcan
 
             </div>
@@ -262,11 +259,11 @@
     </div>
 </div>
 @push('scripts')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
+<script>
+    document.addEventListener('livewire:initialized', () => {
 
 
 
         });
-    </script>
+</script>
 @endpush

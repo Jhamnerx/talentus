@@ -16,17 +16,17 @@
         </div>
 
         <div class="col-span-12 sm:col-span-3 md:col-span-6">
-            <x-form.inputs.password label="CLAVE SOL SUNAT:" wire:model.live='sunat.clave_sol_sunat' />
+            <x-form.password label="CLAVE SOL SUNAT:" wire:model.live='sunat.clave_sol_sunat' />
 
         </div>
 
         <div class="col-span-12 sm:col-span-3 md:col-span-6">
-            <x-form.inputs.password label="CLAVE CERTIFICADO CDT:" wire:model.live='sunat.clave_certificado_cdt' />
+            <x-form.password label="CLAVE CERTIFICADO CDT:" wire:model.live='sunat.clave_certificado_cdt' />
         </div>
 
         <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
             @can('admin.settings.plantilla.sunat.edit')
-                <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive label="GUARDAR" />
+            <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive label="GUARDAR" />
             @endcan
 
         </div>
@@ -49,15 +49,15 @@
         </div>
 
         <div class="col-span-12 sm:col-span-6">
-            <x-form.inputs.password label="CLAVE:" placeholder='CLAVE' wire:model.live='sunat.guia_secret' />
+            <x-form.password label="CLAVE:" placeholder='CLAVE' wire:model.live='sunat.guia_secret' />
 
         </div>
 
 
         <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
             @can('admin.settings.plantilla.sunat.edit')
-                <x-form.button wire:click="saveApiSunat" spinner="saveApiSunat" loading-delay="short" positive
-                    label="GUARDAR" />
+            <x-form.button wire:click="saveApiSunat" spinner="saveApiSunat" loading-delay="short" positive
+                label="GUARDAR" />
             @endcan
 
         </div>

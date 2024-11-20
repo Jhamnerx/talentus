@@ -9,12 +9,15 @@ use App\Scopes\EmpresaScope;
 use App\Scopes\OnlyTareasScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Scopes\UserScope;
+use App\Observers\TareasObserver;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(TareasObserver::class)]
 class Tareas extends Model
 {
     use HasFactory;

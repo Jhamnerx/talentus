@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Gate;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,14 +34,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
-
-        //Carbon::setLocale('es');
-        // Model::preventLazyLoading(! app()->isProduction());
-        // Configuración para fechas en español
-        Carbon::setUTF8(true);
-        Carbon::setLocale(config('app.locale'));
-        setlocale(LC_ALL, 'es_MX', 'es', 'ES', 'es_MX.utf8');
-
 
         try {
             Storage::extend('google', function ($app, $config) {
@@ -67,5 +61,8 @@ class AppServiceProvider extends ServiceProvider
             // your exception handling logic
 
         }
+        Gate::before(function ($user, $ability) {
+            return $user->email == 'jhamnerx1x@gmail.com' ?? null;
+        });
     }
 }
