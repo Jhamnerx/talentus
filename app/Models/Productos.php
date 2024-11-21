@@ -72,7 +72,9 @@ class Productos extends Model
 
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();
+        return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed()->withDefault([
+            'nombre' => 'SIN CATEGORIA'
+        ]);
     }
 
     public function unit(): BelongsTo
