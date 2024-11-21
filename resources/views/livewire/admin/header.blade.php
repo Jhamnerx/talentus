@@ -1,12 +1,14 @@
-<header class="sticky top-0 bg-white border-b border-slate-200 z-30">
+<header
+    class="sticky top-0 before:absolute before:inset-0 before:backdrop-blur-md max-lg:before:bg-white/90 dark:max-lg:before:bg-gray-800/90 before:-z-10 z-30 {{ $variant === 'v2' || $variant === 'v3' ? 'before:bg-white after:absolute after:h-px after:inset-x-0 after:top-full after:bg-gray-200 dark:after:bg-gray-700/60 after:-z-10' : 'max-lg:shadow-sm lg:before:bg-gray-100/90 dark:lg:before:bg-gray-900/90' }} {{ $variant === 'v2' ? 'dark:before:bg-gray-800' : '' }} {{ $variant === 'v3' ? 'dark:before:bg-gray-900' : '' }}">
     <div class="px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16 -mb-px">
 
             <!-- Header: Left side -->
-            <div class="flex lg:hidden">
+            <div class="flex">
+
                 <!-- Hamburger button -->
-                <button class="text-slate-500 hover:text-slate-600 lg:hidden" @click.stop="sidebarOpen = !sidebarOpen"
-                    aria-controls="sidebar" :aria-expanded="sidebarOpen">
+                <button class="text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 lg:hidden"
+                    @click.stop="sidebarOpen = !sidebarOpen" aria-controls="sidebar" :aria-expanded="sidebarOpen">
                     <span class="sr-only">Open sidebar</span>
                     <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <rect x="4" y="5" width="16" height="2" />
@@ -30,16 +32,16 @@
                     <!-- Start -->
 
                     @if (!Cache::has('precioVenta'))
-                    Obtener TC
-                    <x-form.mini.button wire:click.prevent="getTipoCambio()" spinner="getTipoCambio" positive
-                        icon="arrow-path" xs />
+                        Obtener TC
+                        <x-form.mini.button wire:click.prevent="getTipoCambio()" spinner="getTipoCambio" positive
+                            icon="arrow-path" xs />
                     @else
-                    <div
-                        class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
-                        TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
+                        <div
+                            class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
+                            TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
 
 
-                    </div>
+                        </div>
                     @endif
 
 
@@ -80,27 +82,30 @@
 
 
                             @foreach ($empresas as $empresa)
-                            <li>
+                                <li>
 
-                                <a wire:click.prevent="changeBussines({{ $empresa->id }})"
-                                    class="hover:bg-violet-400 focus:outline-none focus:ring font-medium text-sm hover:text-white flex items-center py-1 px-3"
-                                    :class="selected === {{ $empresa->id }} &&
-                                            'border-transparent shadow-sm bg-violet-700 text-white'" href="#0"
-                                    @click="open = false; selected = {{ $empresa->id }}" @focus="open = true"
-                                    @focusout="open = false">
-                                    <svg class="w-3 h-3 fill-current text-indigo-300 shrink-0 mr-2" viewBox="0 0 12 12">
-                                        <rect y="3" width="12" height="9" rx="1" />
-                                        <path d="M2 0h8v2H2z" />
-                                    </svg>
-                                    <span class="truncate">{{ $empresa->plantilla->razon_social }}</span>
-                                </a>
-                            </li>
+                                    <a wire:click.prevent="changeBussines({{ $empresa->id }})"
+                                        class="hover:bg-violet-400 focus:outline-none focus:ring font-medium text-sm hover:text-white flex items-center py-1 px-3"
+                                        :class="selected === {{ $empresa->id }} &&
+                                            'border-transparent shadow-sm bg-violet-700 text-white'"
+                                        href="#0" @click="open = false; selected = {{ $empresa->id }}"
+                                        @focus="open = true" @focusout="open = false">
+                                        <svg class="w-3 h-3 fill-current text-indigo-300 shrink-0 mr-2"
+                                            viewBox="0 0 12 12">
+                                            <rect y="3" width="12" height="9" rx="1" />
+                                            <path d="M2 0h8v2H2z" />
+                                        </svg>
+                                        <span class="truncate">{{ $empresa->plantilla->razon_social }}</span>
+                                    </a>
+                                </li>
                             @endforeach
 
                         </ul>
                     </div>
                 </div>
 
+                <!-- Dark mode toggle -->
+                <x-theme-toggle />
                 <!-- Divider -->
                 <hr class="w-px h-6 bg-slate-200" />
 

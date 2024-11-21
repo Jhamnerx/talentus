@@ -4,7 +4,7 @@
             <x-jet-authentication-card-logo />
         </x-slot>
 
-        <x-jet-validation-errors class="mb-4" />
+        <x-validation-errors class="mb-4" />
 
         {{-- <form method="POST" action="{{ route('register') }}"> --}}
         <form method="POST" action="">
@@ -38,7 +38,7 @@
                 <div class="mt-4">
                     <x-jet-label for="terms">
                         <div class="flex items-center">
-                            <x-jet-checkbox name="terms" id="terms" />
+                            <x-checkbox name="terms" id="terms" />
 
                             <div class="ml-2">
                                 {!! __('I agree to the :terms_of_service and :privacy_policy', [
@@ -66,9 +66,9 @@
                     {{ __('Already registered?') }}
                 </a>
 
-                <x-jet-button class="ml-4">
+                <x-button class="ml-4">
                     {{ __('Register') }}
-                </x-jet-button>
+                </x-button>
             </div>
         </form>
     </x-jet-authentication-card>

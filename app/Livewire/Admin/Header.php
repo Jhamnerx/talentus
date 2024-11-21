@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UtilesController;
 class Header extends Component
 {
     public $page;
+    public $variant;
 
     public function render()
     {

@@ -28,7 +28,7 @@
 
                         <h1 class="text-3xl text-slate-800 font-bold mb-6">BIENVENIDO A TALENTUS APP! ✨</h1>
                         <!-- Form -->
-                        <x-jet-validation-errors class="mb-4" />
+                        <x-validation-errors class="mb-4" />
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
                             <p tabindex="0"
@@ -83,7 +83,7 @@
                             </div>
                             <div class="block mt-4">
                                 <label for="remember_me" class="flex items-center">
-                                    <x-jet-checkbox id="remember_me" name="remember" />
+                                    <x-checkbox id="remember_me" name="remember" />
                                     <span class="ml-2 text-sm text-gray-600">Recuerdame</span>
                                 </label>
                             </div>
@@ -96,9 +96,9 @@
                                     @endif
                                 </div>
 
-                                <x-jet-button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">
+                                <x-button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">
                                     INGRESAR
-                                </x-jet-button>
+                                </x-button>
                             </div>
 
                         </form>

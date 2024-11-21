@@ -24,9 +24,9 @@
     <wireui:scripts />
 </head>
 
-<body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }"
-    x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+
+<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
+    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
     <script>
@@ -34,6 +34,16 @@
             document.querySelector('body').classList.add('sidebar-expanded');
         } else {
             document.querySelector('body').classList.remove('sidebar-expanded');
+        }
+    </script>
+
+    <script>
+        if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
+            document.querySelector('html').classList.remove('dark');
+            document.querySelector('html').style.colorScheme = 'light';
+        } else {
+            document.querySelector('html').classList.add('dark');
+            document.querySelector('html').style.colorScheme = 'dark';
         }
     </script>
 
@@ -47,7 +57,7 @@
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
 
             <!-- Site header -->
-            @livewire('admin.header', ['page' => request()->fullUrl()])
+            @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
 
             <x-banner />
 
@@ -56,8 +66,8 @@
                     <div class="flex items-center h-16 -mb-px">
 
                         <div class="hover text-left mx-2">
-                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b class="hover:text-talentus-200">{{
-                                    \App\Models\plantilla::first()->razon_social }}</b>
+                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
+                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
                             </p>
                         </div>
 
@@ -195,8 +205,8 @@
 @stack('scripts')
 
 @if (session('venta-registrada'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'VENTA REGISTRADA',
@@ -206,11 +216,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('nota-registrada'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'NOTA REGISTRADA',
@@ -220,11 +230,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('cobro-registrado'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'REGISTRO DE COBRO REGISTRADO',
@@ -234,11 +244,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('cotizacion-registrada'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'COTIZACION REGISTRADA',
@@ -248,12 +258,12 @@
 
             })
         });
-</script>
+    </script>
 @endif
 
 @if (session('cotizacion-actualizada'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'COTIZACION ACTUALIZADA',
@@ -263,12 +273,12 @@
 
             })
         });
-</script>
+    </script>
 @endif
 
 @if (session('recibo-registrado'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUARDADO',
@@ -278,11 +288,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('recibog-store'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUARDADO',
@@ -292,11 +302,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('recibo-actualizo'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'ACTUALIZADO',
@@ -306,11 +316,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('recibog-actualizo'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'ACTUALIZADO',
@@ -320,11 +330,11 @@
 
             })
         });
-</script>
+    </script>
 @endif
 @if (session('guia-store'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'GUIA REGISTRADA',
@@ -334,12 +344,12 @@
 
             })
         });
-</script>
+    </script>
 @endif
 
 @if (session('update'))
-<script>
-    $(document).ready(function() {
+    <script>
+        $(document).ready(function() {
             Swal.fire({
                 icon: 'success',
                 title: 'Actualizado',
@@ -349,7 +359,7 @@
 
             })
         });
-</script>
+    </script>
 @endif
 
 </html>

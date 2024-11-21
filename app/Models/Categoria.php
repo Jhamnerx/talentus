@@ -43,7 +43,7 @@ class Categoria extends Model
     // Scope local de activo
     public function scopeActive($query, $status)
     {
-        return $query->where('is_active', $status);
+        return $query->where('estado', $status);
     }
 
     //relacion uno a muchos

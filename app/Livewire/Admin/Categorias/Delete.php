@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Categorias;
 
+use Exception;
 use Livewire\Component;
 use App\Models\Categoria;
 use Livewire\Attributes\On;
@@ -15,8 +16,22 @@ class Delete extends Component
 
     public function delete()
     {
-        $this->categoria->delete();
-        $this->afterDelete();
+        try {
+
+            if ($this->categoria->productos->count() > 0) {
+                return throw new Exception("La categoria contiene productos", 1);
+            }
+
+            $this->categoria->delete();
+            $this->afterDelete();
+        } catch (Exception $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR:',
+                mensaje: $th->getMessage(),
+            );
+        }
     }
 
     #[On('open-modal-delete')]
@@ -41,7 +56,7 @@ class Delete extends Component
             title: 'CATEGORIA ELIMINADA',
             mensaje: 'se elimino correctamente la categoria'
         );
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaCategorias');
     }
 
 

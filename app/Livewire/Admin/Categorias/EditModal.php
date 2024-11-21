@@ -41,6 +41,7 @@ class EditModal extends Component
         $datos = $this->validate($request->rules($this->categoria), $request->messages());
 
         try {
+
             $this->categoria->update($datos);
             $this->afterSave($this->categoria);
         } catch (\Throwable $th) {
@@ -63,7 +64,7 @@ class EditModal extends Component
             title: 'CATEGORIA ACTUALIZADA',
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'
         );
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaCategorias');
         $this->resetProp();
     }
     public function resetProp()
