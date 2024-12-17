@@ -209,4 +209,8 @@ class Index extends Component
 
         $this->render();
     }
+    public function openModalReporteVentas()
+    {
+        $this->dispatch('open-modal-reporte-ventas');
+    }
 }
