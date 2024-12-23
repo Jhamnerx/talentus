@@ -7,27 +7,19 @@ use Illuminate\Validation\Rule;
 
 class ProductosRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules($producto = null): array
     {
         $rules = [
             'descripcion' => 'required',
             'categoria_id' => 'required|exists:categorias,id',
-            'codigo' => 'required|unique:productos,codigo',
+
+            'codigo' => [
+                'required',
+                Rule::unique('productos', 'codigo')->where(
+                    fn($query) =>
+                    $query->where('empresa_id', session('empresa'))
+                )
+            ],
             'unit_code' => 'required|exists:units,codigo',
             'stock' => 'numeric',
             'valor_unitario' => 'numeric',
@@ -35,8 +27,9 @@ class ProductosRequest extends FormRequest
             'divisa' => 'required',
             'tipo' => 'required',
             'modelo_id' => [
-                'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->where(
-                    fn ($query) =>
+                'required_if:categoria_id,1',
+                Rule::unique('productos', 'modelo_id')->where(
+                    fn($query) =>
                     $query->where('empresa_id', session('empresa'))
                         ->whereNotNull('modelo_id')
                 )
@@ -48,8 +41,10 @@ class ProductosRequest extends FormRequest
             $rules = [
                 'descripcion' => 'required',
                 'categoria_id' => 'required|exists:categorias,id',
-                'codigo' => 'required|unique:productos,codigo,' . $producto->id,
-                // 'tipo_afectacion_id' => 'required|exists:tipo_afectacion,codigo',
+                'codigo' => [
+                    'required',
+                    Rule::unique('productos', 'codigo')->ignore($producto->id)->where(fn($query) => $query->where('empresa_id', session('empresa')))
+                ],
                 'unit_code' => 'required|exists:units,codigo',
                 'stock' => 'numeric',
                 'valor_unitario' => 'numeric',
@@ -57,7 +52,8 @@ class ProductosRequest extends FormRequest
                 'divisa' => 'required',
                 'tipo' => 'required',
                 'modelo_id' => [
-                    'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    'required_if:categoria_id,1',
+                    Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn($query) => $query->where('empresa_id', session('empresa'))
                         ->whereNotNull('modelo_id'))
                 ]
             ];

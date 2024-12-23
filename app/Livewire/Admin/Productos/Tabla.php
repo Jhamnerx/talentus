@@ -39,7 +39,7 @@ final class Tabla extends PowerGridComponent
 
     public function datasource(): Builder
     {
-        return Productos::query()->with('categoria', 'unit', 'image');
+        return Productos::query()->orderBy('id', 'desc')->with('categoria', 'unit', 'image');
     }
 
     public function relationSearch(): array

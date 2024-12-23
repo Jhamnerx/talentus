@@ -38,8 +38,27 @@ class Delete extends Component
 
     public function delete()
     {
-        $this->producto->delete();
-        $this->afterDelete();
+        try {
+            if ($this->producto->detalle_facturas()->exists()) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'warning',
+                    title: 'NO SE PUEDE ELIMINAR',
+                    mensaje: 'El producto tiene relaciones con ventas u otros modelos'
+                );
+                return;
+            }
+
+            $this->producto->delete();
+            $this->afterDelete();
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Ocurrió un error al intentar eliminar el producto'
+            );
+        }
     }
 
     public function afterDelete()
@@ -52,6 +71,6 @@ class Delete extends Component
         );
 
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaProductos');
     }
 }

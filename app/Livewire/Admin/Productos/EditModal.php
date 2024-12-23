@@ -83,7 +83,7 @@ class EditModal extends Component
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
         $this->modelo_id = $producto->modelo_id;
-        $this->precio_unitario = $this->valor_unitario * $this->plantilla->igvbase;
+        $this->precio_unitario = round($this->valor_unitario * $this->plantilla->igvbase, 2);
 
         if ($producto->image) {
             $this->dispatch('set-imagen-file', imagen: Storage::url($producto->image->url));
@@ -91,6 +91,7 @@ class EditModal extends Component
             //$this->dispatchBrowserEvent('set-imagen-file', ['imagen' => Storage::url('public/productos/default.jpg')]);
         }
     }
+
     public function save()
     {
         //GUARDAR PRODUCTO
@@ -178,7 +179,7 @@ class EditModal extends Component
         $this->closeModal();
         $this->resetProps();
         $this->reset('file');
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaProductos');
     }
     public function closeModal()
     {
@@ -188,6 +189,7 @@ class EditModal extends Component
     {
         $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
     }
+
     public function updatedPrecioUnitario($value)
     {
         $this->calcularValorUnitario();

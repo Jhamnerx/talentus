@@ -43,6 +43,7 @@ class CreateModal extends Component
         $this->modalCreate = true;
         $this->descripcion = $producto;
     }
+
     public function closeModal()
     {
         $this->modalCreate = false;
@@ -127,9 +128,6 @@ class CreateModal extends Component
         $this->validateOnly($atributo, $request->rules(), $request->messages());
     }
 
-
-
-
     public function afterSave()
     {
         $this->dispatch(
@@ -141,7 +139,7 @@ class CreateModal extends Component
         $this->closeModal();
         $this->resetProps();
         $this->reset('file');
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaProductos');
     }
 
     public function resetProps()
