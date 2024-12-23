@@ -45,13 +45,13 @@ class AsignLinea extends Component
     public function updatedSimCardId($value)
     {
 
-        $value ? $this->sim_card  = SimCard::findOr($value, fn () => null) : null;
+        $value ? $this->sim_card  = SimCard::findOr($value, fn() => null) : null;
     }
 
     public function updatedLineasId($value)
     {
 
-        $value ? $this->linea  = Lineas::findOr($value, fn () => null) : null;
+        $value ? $this->linea  = Lineas::findOr($value, fn() => null) : null;
     }
     public function save()
     {
@@ -138,6 +138,6 @@ class AsignLinea extends Component
         );
         $this->reset('sim_card', 'linea', 'sim_card_id', 'lineas_id');
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaSimCard');
     }
 }

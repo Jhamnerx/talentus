@@ -87,7 +87,7 @@ class Edit extends Component
             mensaje: 'se actualizo correctamente la sim card'
         );
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaSimCard');
     }
 
     public function closeModal()

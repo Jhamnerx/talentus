@@ -126,6 +126,6 @@ class Save extends Component
             mensaje: 'se guardo correctamente los sim cards'
         );
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaSimCard');
     }
 }

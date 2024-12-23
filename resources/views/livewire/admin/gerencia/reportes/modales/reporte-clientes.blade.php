@@ -64,7 +64,7 @@
 
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
                                         <x-form.button label="EXCEL" wire:click.prevent="exportToExcel"
-                                            spinner="exportToExcel" emerald icon="document-download" />
+                                            spinner="exportToExcel" emerald icon="arrow-down-tray" />
                                     </div>
                                 </div>
 

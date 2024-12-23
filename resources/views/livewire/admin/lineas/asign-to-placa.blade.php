@@ -51,7 +51,7 @@
                                     <x-form.button wire:click.prevent="confirmation()" icon="exclamation" warning
                                         label="Confirmar" />
                                 @else
-                                    <x-form.button wire:click.prevent="removeLinea()" icon="x" negative
+                                    <x-form.button wire:click.prevent="removeLinea()" icon="x-mark" negative
                                         label="Remover Linea" />
                                 @endif
 

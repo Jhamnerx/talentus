@@ -43,11 +43,19 @@ class UnAsign extends Component
                 'user_id' => auth()->user()->id,
             ]);
 
-            $linea = Lineas::findOrFail($this->sim_card->lineas_id);
-
-            if ($linea) {
+            try {
+                $linea = Lineas::findOrFail($this->sim_card->lineas_id);
                 $linea->old_sim_card = $this->sim_card->sim_card;
                 $linea->save();
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR',
+                    mensaje: 'No se encontro la linea'
+                );
+
+                return;
             }
 
 
@@ -69,6 +77,6 @@ class UnAsign extends Component
         );
 
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaSimCard');
     }
 }
