@@ -28,7 +28,7 @@ final class Tabla extends PowerGridComponent
                 ->showSearchInput(),
 
             PowerGrid::footer()
-                ->showPerPage(10)
+                ->showPerPage(20)
                 ->showRecordCount()
                 ->pagination('components.custom-pagination'),
 
