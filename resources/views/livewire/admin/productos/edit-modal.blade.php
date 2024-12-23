@@ -23,8 +23,7 @@
             <x-form.select id="categoria_id" name="categoria_id" label="Selecciona una categoria"
                 wire:model.live="categoria_id" placeholder="Selecciona una categoria" :async-data="[
                     'api' => route('api.categorias.index'),
-                ]"
-                option-label="nombre" option-value="id" />
+                ]" option-label="nombre" option-value="id" />
         </div>
 
 
@@ -33,8 +32,7 @@
             <x-form.select label="Modelo Vinculado:" name="modelo_id" wire:model.live="modelo_id"
                 placeholder="Selecciona un modelo" :async-data="[
                     'api' => route('api.dispositivos.modelos.index'),
-                ]" option-label="modelo" option-value="id"
-                option-description="marca" />
+                ]" option-label="modelo" option-value="id" option-description="marca" />
         </div>
 
         <div class="col-span-12 md:col-span-3">
@@ -46,31 +44,34 @@
         <div class="col-span-12 md:col-span-4">
 
             <x-form.select name="unit_code" label="Unidad:" wire:model.live="unit_code"
-                placeholder="Selecciona una opcion" :async-data="route('api.unit.index')" option-label="name" option-value="codigo" />
+                placeholder="Selecciona una opcion" :async-data="route('api.unit.index')" option-label="name"
+                option-value="codigo" />
         </div>
 
 
         <div class="col-span-12 md:col-span-3">
 
-            <x-form.inputs.number name="stock" wire:model="stock" label="Stock:" />
+            <x-form.number name="stock" wire:model="stock" label="Stock:" />
 
         </div>
 
         <div class="col-span-12 md:col-span-3">
-            <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
-                wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
+            <x-form.select label="Divisa:"
+                :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                icon='currency-dollar' />
         </div>
 
         <div class="col-span-12 md:col-span-3">
 
-            <x-form.inputs.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
+            <x-form.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
                 icon="currency-dollar" precision="4" wire:model.blur="valor_unitario" />
         </div>
 
         <div class="col-span-12 md:col-span-3">
 
-            <x-form.inputs.currency id="precio_unitario" name="precio_unitario" label="Precio unitario:"
-                placeholder="9.99" icon="currency-dollar" precision="4" wire:model.blur="precio_unitario" />
+            <x-form.currency id="precio_unitario" name="precio_unitario" label="Precio unitario:" placeholder="9.99"
+                icon="currency-dollar" precision="4" wire:model.blur="precio_unitario" />
         </div>
         <div class="col-span-12">
             <x-form.checkbox id="afecto_icbper" md left-label="Afecto icbper?" wire:model="afecto_icbper" />
@@ -95,8 +96,8 @@
 </x-form.modal.card>
 
 @push('scripts')
-    <script>
-        // Get a file input reference
+<script>
+    // Get a file input reference
         const inputEdit = document.querySelector(".imagen-upload-edit");
         //const img = document.querySelector(".img");
 
@@ -149,5 +150,5 @@
             });
 
         });
-    </script>
+</script>
 @endpush

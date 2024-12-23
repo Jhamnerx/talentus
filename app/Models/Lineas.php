@@ -6,12 +6,15 @@ use Carbon\Carbon;
 use App\Enums\LineasStatus;
 use App\Scopes\EmpresaScope;
 use App\Models\OldSimCardLinea;
+use App\Observers\LineasObserver;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(LineasObserver::class)]
 class Lineas extends Model
 {
     use HasFactory;

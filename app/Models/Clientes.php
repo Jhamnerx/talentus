@@ -6,14 +6,17 @@ use App\Scopes\ActiveScope;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\ClientesObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ClientesObserver::class)]
 class Clientes extends Model
 {
     use HasFactory;

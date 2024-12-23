@@ -40,10 +40,6 @@ class CheckRecordatorios extends Command
         return 0;
     }
 
-    
-    public function __invoke()
-    {
-        
-    }
 
+    public function __invoke() {}
 }

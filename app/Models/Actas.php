@@ -5,6 +5,7 @@ namespace App\Models;
 use App;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
+use App\Observers\ActasObserver;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\Certificados\EnviarActaCliente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ActasObserver::class)]
 class Actas extends Model
 {
 

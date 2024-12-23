@@ -10,26 +10,27 @@
         <div class="col-span-12 sm:col-span-6">
 
             <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
-                option-label="placa" option-value="id" />
+                placeholder="Selecciona una placa" option-description="option_description"
+                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.datetime-picker label="Fecha Instalación:" id="fecha_instalacion" name="fecha_instalacion"
+            <x-form.datetime.picker label="Fecha Instalación:" id="fecha_instalacion" name="fecha_instalacion"
                 wire:model.live="fecha_instalacion" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.datetime-picker label="Fin de Cobertura:" id="fin_cobertura" name="fin_cobertura"
+            <x-form.datetime.picker label="Fin de Cobertura:" id="fin_cobertura" name="fin_cobertura"
                 wire:model.live="fin_cobertura" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-4">
 
             <x-form.select label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
-                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id" />
+                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre"
+                option-value="id" />
 
         </div>
 
@@ -124,9 +125,9 @@
 
 
             @error('accesorios')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
 
         </div>

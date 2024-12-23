@@ -10,8 +10,8 @@
         <div class="col-span-12 sm:col-span-5">
 
             <x-form.select autocomplete='off' label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
-                option-label="placa" option-value="id">
+                placeholder="Selecciona una placa" option-description="option_description"
+                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
                     <x-form.button wire:click.prevent='addVehiculo(`${search}`)' x-on:click="close" primary flat full>
@@ -24,24 +24,25 @@
         <div class="col-span-12 sm:col-span-4">
 
             <x-form.select autocomplete='off' label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
-                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id" />
+                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre"
+                option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.datetime-picker label="Fecha Instalación:" id="fecha_instalacion" name="fecha_instalacion"
+            <x-form.datetime.picker label="Fecha Instalación:" id="fecha_instalacion" name="fecha_instalacion"
                 wire:model.live="fecha_instalacion" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.datetime-picker label="Inicio de Cobertura:" id="inicio_cobertura" name="inicio_cobertura"
+            <x-form.datetime.picker label="Inicio de Cobertura:" id="inicio_cobertura" name="inicio_cobertura"
                 wire:model.live="inicio_cobertura" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-4">
 
-            <x-form.datetime-picker label="Fin de Cobertura:" id="fin_cobertura" name="fin_cobertura"
+            <x-form.datetime.picker label="Fin de Cobertura:" id="fin_cobertura" name="fin_cobertura"
                 wire:model.live="fin_cobertura" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
@@ -69,9 +70,9 @@
 
             </div>
             @error('plataforma')
-                <p class="mt-2 text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
         </div>
         <div class="col-span-12 sm:col-span-12 mt-4">

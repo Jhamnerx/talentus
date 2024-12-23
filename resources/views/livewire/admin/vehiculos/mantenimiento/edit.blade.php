@@ -53,7 +53,7 @@
 
                             <div class="col-span-12 sm:col-span-4">
 
-                                <x-form.datetime-picker label="Fecha Programada:" id="fecha_hora_mantenimiento"
+                                <x-form.datetime.picker label="Fecha Programada:" id="fecha_hora_mantenimiento"
                                     name="fecha_hora_mantenimiento" wire:model.live="fecha_hora_mantenimiento"
                                     without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                                     :clearable="false" />
@@ -64,8 +64,9 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">DETALLE:</label>
                                 <div class="relative">
-                                    <textarea wire:model.live="detalle_trabajo" class="form-input w-full pl-9" name="descripcion" id="descripcion"
-                                        rows="2" placeholder="Ingresar Breve detalle"></textarea>
+                                    <textarea wire:model.live="detalle_trabajo" class="form-input w-full pl-9"
+                                        name="descripcion" id="descripcion" rows="2"
+                                        placeholder="Ingresar Breve detalle"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -97,8 +98,8 @@
 
                                 <label class="block text-sm font-medium mb-1" for="descripcion">NOTA:</label>
                                 <div class="relative">
-                                    <textarea wire:model.live="nota" class="form-input w-full pl-9" name="descripcion" id="descripcion" rows="2"
-                                        placeholder="Ingresar Breve nota"></textarea>
+                                    <textarea wire:model.live="nota" class="form-input w-full pl-9" name="descripcion"
+                                        id="descripcion" rows="2" placeholder="Ingresar Breve nota"></textarea>
                                     <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
 
                                         <svg class="w-4 h-4 fill-current text-slate-400 shrink-0 ml-3 mr-2"
@@ -134,16 +135,16 @@
 
                                     <div class="m-3">
                                         <label class="flex items-center">
-                                            <input type="radio" name="notify_client" value="1"
-                                                class="form-radio" wire:model.live="notify_client" />
+                                            <input type="radio" name="notify_client" value="1" class="form-radio"
+                                                wire:model.live="notify_client" />
                                             <span class="text-sm ml-2">Si</span>
                                         </label>
                                     </div>
 
                                     <div class="m-3">
                                         <label class="flex items-center">
-                                            <input type="radio" name="notify_client" value="0"
-                                                class="form-radio" wire:model.live="notify_client" />
+                                            <input type="radio" name="notify_client" value="0" class="form-radio"
+                                                wire:model.live="notify_client" />
                                             <span class="text-sm ml-2">No</span>
                                         </label>
                                     </div>

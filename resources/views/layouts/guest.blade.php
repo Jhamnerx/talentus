@@ -13,7 +13,6 @@
 
     <!-- Styles -->
     @vite('resources/css/app.css')
-    @vite('resources/css/style.scss')
 
     <!-- Scripts -->
     @vite('resources/js/app.js')

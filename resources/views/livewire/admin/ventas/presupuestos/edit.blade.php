@@ -34,9 +34,9 @@
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 sm:p-6">
             @error('tipo_cambio')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
 
             <div class="grid grid-cols-12 gap-2">
@@ -47,8 +47,8 @@
                     <div class="col-span-12 mb-2">
 
                         <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                            placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                            option-label="razon_social" option-value="id">
+                            placeholder="Selecciona un cliente" option-description="numero_documento"
+                            :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                             <x-slot name="afterOptions" class="p-2 flex justify-center"
                                 x-show="displayOptions.length === 0">
@@ -69,14 +69,13 @@
                             placeholder="Selecciona una serie" :async-data="[
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => '00'],
-                            ]" option-label="serie"
-                            option-value="serie" />
+                            ]" option-label="serie" option-value="serie" />
                     </div>
 
                     {{-- CORRELATIVO --}}
                     <div class="col-span-12 md:col-span-6 xl:col-span-4">
 
-                        <x-form.inputs.number readonly id="correlativo" name="correlativo" wire:model.live="correlativo"
+                        <x-form.number readonly id="correlativo" name="correlativo" wire:model.live="correlativo"
                             label="Correlativo:" />
 
                     </div>
@@ -85,7 +84,7 @@
 
                     <div class="col-span-6 gap-2">
 
-                        <x-form.datetime-picker label="Fecha de Emision:" id="fecha" name="fecha"
+                        <x-form.datetime.picker label="Fecha de Emision:" id="fecha" name="fecha"
                             wire:model.live="fecha" :min="now()->subDays(1)" :max="now()" without-time
                             parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
 
@@ -93,9 +92,10 @@
 
                     {{-- FECHA CADUCIDAD --}}
                     <div class="col-span-6 gap-2">
-                        <x-form.datetime-picker label="Fecha de Vencimiento:" id="fecha_caducidad"
-                            name="fecha_caducidad" wire:model.live="fecha_caducidad" :min="now()->subDays(1)" :max="now()->addDays(15)"
-                            without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                        <x-form.datetime.picker label="Fecha de Vencimiento:" id="fecha_caducidad"
+                            name="fecha_caducidad" wire:model.live="fecha_caducidad" :min="now()->subDays(1)"
+                            :max="now()->addDays(15)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                            :clearable="false" />
 
                     </div>
                 </div>
@@ -104,7 +104,8 @@
                     {{-- moneda --}}
                     <div class="col-span-12 md:col-span-6 mb-2">
 
-                        <x-form.select label="Moneda:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                        <x-form.select label="Moneda:" id="divisa" name="divisa"
+                            :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
                             option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
                             icon='currency-dollar' />
 
@@ -112,7 +113,8 @@
 
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                        <x-form.select id="forma_pago" name="forma_pago" label="Forma Pago:"
+                            :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
                             option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
 
                     </div>
@@ -124,13 +126,13 @@
 
                 {{-- componente venta al credito --}}
                 @if ($showCredit)
-                    <div
-                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
+                <div
+                    class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
 
-                        <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
-                        </x-admin.facturacion.detalle-cuotas-table>
+                    <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                    </x-admin.facturacion.detalle-cuotas-table>
 
-                    </div>
+                </div>
                 @endif
 
 
@@ -173,7 +175,8 @@
 
                     {{-- LISTA DE PRODUCTOS --}}
 
-                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments"
+                        :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
                     <div class="block md:flex gap-2">
@@ -191,15 +194,15 @@
                                     <div class="mt-2 flex gap-5">
                                         <x-form.radio value="cantidad" id="left-label" md left-label="S/"
                                             wire:model.live="tipo_descuento" />
-                                        {{-- <x-radio value="porcentaje" id="right-label" md label="%"
+                                        {{--
+                                        <x-radio value="porcentaje" id="right-label" md label="%"
                                             wire:model.live="tipo_descuento" /> --}}
                                     </div>
 
 
-                                    <x-form.inputs.currency id="descuento_monto" name="descuento_monto"
-                                        icon="currency-dollar" placeholder="Monto descuento"
-                                        wire:model.live.lazy="descuento_monto" thousands="." decimal="."
-                                        precision="2" />
+                                    <x-form.currency id="descuento_monto" name="descuento_monto" icon="currency-dollar"
+                                        placeholder="Monto descuento" wire:model.live.lazy="descuento_monto"
+                                        thousands="." decimal="." precision="2" />
                                 </div>
 
                             </div>
@@ -215,8 +218,8 @@
                                         ['name' => 'Tarjeta de crédito', 'id' => '006'],
                                         ['name' => 'Transferencia bancaria', 'id' => '003'],
                                         ['name' => 'Giro', 'id' => '002'],
-                                    ]" option-label="name" option-value="id"
-                                    wire:model.live="metodo_pago_id" :clearable="false" />
+                                    ]" option-label="name" option-value="id" wire:model.live="metodo_pago_id"
+                                    :clearable="false" />
 
                             </div>
 
@@ -252,44 +255,44 @@
                             </div>
 
                             @if ($op_exoneradas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        EXONERADAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            S/ <span>{{ round($op_exoneradas_soles, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    EXONERADAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($op_exoneradas_soles, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             @if ($op_inafectas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        INAFECTAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            S/ <span>{{ round($op_inafectas_soles, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    INAFECTAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($op_inafectas_soles, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
                             @if ($op_gratuitas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        GRATUITAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            S/ <span>{{ round($op_gratuitas_soles, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    GRATUITAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        S/ <span>{{ round($op_gratuitas_soles, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             <div class="flex justify-between mt-2">
@@ -367,44 +370,44 @@
                             </div>
 
                             @if ($op_exoneradas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        EXONERADAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($op_exoneradas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    EXONERADAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($op_exoneradas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             @if ($op_inafectas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        INAFECTAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($op_inafectas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    INAFECTAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($op_inafectas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
                             @if ($op_gratuitas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        GRATUITAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($op_gratuitas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    GRATUITAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($op_gratuitas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             <div class="flex justify-between mt-2">
@@ -477,8 +480,8 @@
 </div>
 
 @push('modals')
-    @livewire('admin.clientes.save')
-    @livewire('admin.ventas.presupuestos.modal-terminos', ['terminos' => $terminos])
+@livewire('admin.clientes.save')
+@livewire('admin.ventas.presupuestos.modal-terminos', ['terminos' => $terminos])
 @endpush
 
 @section('js')

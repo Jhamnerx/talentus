@@ -3,7 +3,7 @@
     <div class="grid grid-cols-12 gap-6">
 
         <div class="col-span-12">
-            <x-form.datetime-picker label="Fecha Recordatorio:" id="fecha_recordatorio" name="fecha_recordatorio"
+            <x-form.datetime.picker label="Fecha Recordatorio:" id="fecha_recordatorio" name="fecha_recordatorio"
                 wire:model.live="fecha_recordatorio" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
@@ -30,9 +30,9 @@
                 </div>
             </div>
             @error('nota')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
         </div>
 

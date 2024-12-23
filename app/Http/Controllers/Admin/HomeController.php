@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Recibos;
+use App\Models\Ventas;
 use Illuminate\Support\Arr;
 
 class HomeController extends Controller
@@ -74,7 +75,7 @@ class HomeController extends Controller
 
         for ($i = 0; $i < $nMeses; $i++) {
 
-            $total  = Facturas::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->Where('divisa', $divisa)->sum('total');
+            $total  = Ventas::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->Where('divisa', $divisa)->sum('total');
 
             array_push(
                 $totales,
@@ -109,7 +110,7 @@ class HomeController extends Controller
     public function getDataFeed()
     {
 
-        Facturas::whereMonth('created_at', '08')->get();
+        Ventas::whereMonth('created_at', '08')->get();
 
 
 

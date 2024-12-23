@@ -71,9 +71,9 @@
                                     </div>
                                 </div>
                                 @error('tipo_tarea_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
 
@@ -133,9 +133,9 @@
                                     </div>
                                 </div>
                                 @error('vehiculo_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
 
@@ -143,7 +143,7 @@
                             <div class="col-span-12 sm:col-span-6">
 
 
-                                <x-form.datetime-picker label=" Fecha y Hora de la Tarea:" id="fecha_hora"
+                                <x-form.datetime.picker label=" Fecha y Hora de la Tarea:" id="fecha_hora"
                                     name="fecha_hora" wire:model.live="fecha_hora" parse-format="YYYY-MM-DD"
                                     display-format="DD-MM-YYYY" :clearable="false" />
                             </div>
@@ -182,9 +182,9 @@
                                     </div>
                                 </div>
                                 @error('dispositivo')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
                             <div class="col-span-12">
@@ -193,31 +193,31 @@
                                 <div class="flex flex-wrap items-center">
 
                                     @foreach ($tecnicos as $tecnico)
-                                        <div class="m-3">
-                                            <label class="flex items-center">
-                                                <input type="radio" name="radio-buttons" class="form-radio"
-                                                    wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
-                                                <span class="text-sm ml-2">{{ $tecnico->name }}</span>
-                                            </label>
-                                        </div>
+                                    <div class="m-3">
+                                        <label class="flex items-center">
+                                            <input type="radio" name="radio-buttons" class="form-radio"
+                                                wire:model.live="tecnico_id" value="{{ $tecnico->id }}" />
+                                            <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                                        </label>
+                                    </div>
                                     @endforeach
 
                                 </div>
                                 @error('tecnico_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
+                                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                                    {{ $message }}
+                                </p>
                                 @enderror
                             </div>
 
 
                             @if ($tipo_tarea_id == '0')
-                                <div class="col-span-12">
+                            <div class="col-span-12">
 
-                                    <div class="text-center font-medium text-rose-600">
-                                        SELECCIONA EL TIPO DE TAREA.
-                                    </div>
+                                <div class="text-center font-medium text-rose-600">
+                                    SELECCIONA EL TIPO DE TAREA.
                                 </div>
+                            </div>
                             @endif
 
                         </div>

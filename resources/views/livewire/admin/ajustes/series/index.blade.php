@@ -7,7 +7,8 @@
             documento, no podrás emitir todos los comprobantes de pago disponibles.
         </div>
         <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-red-800 dark:text-red-400" role="alert">
-            <span class="font-medium">¡Alerta de series!</span> Si la serie empieza en 1 Debes registrarla con 0: Ejemplo
+            <span class="font-medium">¡Alerta de series!</span> Si la serie empieza en 1 Debes registrarla con 0:
+            Ejemplo
             si debe continuar la 10, registra 9.
         </div>
         <div class="flex items-center mb-8">
@@ -41,8 +42,8 @@
 
                             <div class="relative rounded-md  shadow-sm ">
 
-                                <x-form.inputs.maskable maxlength="4" autocomplete="off" mask="XXXX"
-                                    placeholder="F001" wire:model='serie' />
+                                <x-form.maskable maxlength="4" autocomplete="off" mask="XXXX" placeholder="F001"
+                                    wire:model='serie' />
 
                             </div>
 
@@ -59,7 +60,7 @@
                         <div class="relative rounded-md  shadow-sm ">
 
 
-                            <x-form.inputs.number autocomplete="off" wire:model.live='correlativo' name="correlativo"
+                            <x-form.number autocomplete="off" wire:model.live='correlativo' name="correlativo"
                                 min="0" />
                         </div>
 
@@ -79,28 +80,27 @@
 
         <div>
             @foreach ($series as $serie)
-                <div class="grid grid-cols-4 gap-6 items-center py-3 border-t" wire:key="serie-{{ $serie->id }}">
+            <div class="grid grid-cols-4 gap-6 items-center py-3 border-t" wire:key="serie-{{ $serie->id }}">
 
-                    <div class="col-span-4 lg:col-span-1">
-                        {{ $serie->tipoComprobante->descripcion }}
-                    </div>
+                <div class="col-span-4 lg:col-span-1">
+                    {{ $serie->tipoComprobante->descripcion }}
+                </div>
 
-                    <div class="flex lg:justify-center col-span-2 lg:col-span-1">
-                        Serie: {{ $serie->serie }}
-                    </div>
+                <div class="flex lg:justify-center col-span-2 lg:col-span-1">
+                    Serie: {{ $serie->serie }}
+                </div>
 
-                    <div class="flex justify-end lg:justify-center col-span-2 lg:col-span-1">
-                        Correlativo: {{ $serie->correlativo }}
-                    </div>
+                <div class="flex justify-end lg:justify-center col-span-2 lg:col-span-1">
+                    Correlativo: {{ $serie->correlativo }}
+                </div>
 
-                    <div class="col-span-4 lg:col-span-1">
+                <div class="col-span-4 lg:col-span-1">
 
-                        <x-form.button outline rose label="Eliminar"
-                            wire:click.prevent="deleteSerie({{ $serie->id }})" />
-
-                    </div>
+                    <x-form.button outline rose label="Eliminar" wire:click.prevent="deleteSerie({{ $serie->id }})" />
 
                 </div>
+
+            </div>
             @endforeach
 
             {{ $series->links() }}

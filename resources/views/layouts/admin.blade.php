@@ -12,11 +12,8 @@
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    @vite('resources/css/style.scss')
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
     @yield('css')
-
 
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -27,8 +24,9 @@
     <wireui:scripts />
 </head>
 
-<body class="font-inter antialiased bg-slate-200 text-slate-600" :class="{ 'sidebar-expanded': sidebarExpanded }"
-    x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true', profileSidebarOpen: false }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+
+<body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
+    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
     <script>
@@ -36,6 +34,16 @@
             document.querySelector('body').classList.add('sidebar-expanded');
         } else {
             document.querySelector('body').classList.remove('sidebar-expanded');
+        }
+    </script>
+
+    <script>
+        if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
+            document.querySelector('html').classList.remove('dark');
+            document.querySelector('html').style.colorScheme = 'light';
+        } else {
+            document.querySelector('html').classList.add('dark');
+            document.querySelector('html').style.colorScheme = 'dark';
         }
     </script>
 
@@ -49,9 +57,9 @@
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
 
             <!-- Site header -->
-            @livewire('admin.header', ['page' => request()->fullUrl()])
+            @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
 
-            <x-jet-banner />
+            <x-banner />
 
             <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
                 <div class="px-4 sm:px-6 lg:px-8">

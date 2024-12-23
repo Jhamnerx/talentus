@@ -6,11 +6,14 @@ use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Spatie\Activitylog\LogOptions;
 use App\Models\Admin\Recordatorios;
+use App\Observers\ReportesObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(ReportesObserver::class)]
 class Reportes extends Model
 {
     use HasFactory;

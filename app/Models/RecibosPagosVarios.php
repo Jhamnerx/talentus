@@ -6,12 +6,15 @@ use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use App\Models\DetalleRecibosPagos;
+use App\Observers\RecibosPagosObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(RecibosPagosObserver::class)]
 class RecibosPagosVarios extends Model
 {
     use HasFactory;

@@ -43,16 +43,18 @@
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-6 gap-2">
-                                <x-form.datetime-picker label="Fecha Inicio:" id="fecha_inicio" name="fecha_inicio"
-                                    wire:model.live="fecha_inicio" :min="now()->subYear(3)" :max="now()->addDays(30)" without-time
-                                    parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                                <x-form.datetime.picker label="Fecha Inicio:" id="fecha_inicio" name="fecha_inicio"
+                                    wire:model.live="fecha_inicio" :min="now()->subYear(3)" :max="now()->addDays(30)"
+                                    without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                                    :clearable="false" />
 
                             </div>
                             <div class="col-span-6 gap-2">
 
-                                <x-form.datetime-picker label="Fecha de Fin:" id="fecha_fin" name="fecha_fin"
-                                    wire:model.live="fecha_fin" :min="now()->subYear(3)" :max="now()->addDays(30)" without-time
-                                    parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                                <x-form.datetime.picker label="Fecha de Fin:" id="fecha_fin" name="fecha_fin"
+                                    wire:model.live="fecha_fin" :min="now()->subYear(3)" :max="now()->addDays(30)"
+                                    without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                                    :clearable="false" />
                             </div>
 
                             <div class="col-span-12 mt-2">
@@ -66,14 +68,14 @@
                                 <div class="flex flex-wrap items-center -m-3">
 
                                     <div class="m-3">
-                                        <x-form.radio id="lg" lg wire:model.live="estado" value="PAID"
-                                            name="estado" label="PAGADO" />
+                                        <x-form.radio id="lg" lg wire:model.live="estado" value="PAID" name="estado"
+                                            label="PAGADO" />
 
                                     </div>
                                     <div class="m-3">
 
-                                        <x-form.radio id="lg" lg wire:model.live="estado" value="UNPAID"
-                                            name="estado" label="POR PAGAR" />
+                                        <x-form.radio id="lg" lg wire:model.live="estado" value="UNPAID" name="estado"
+                                            label="POR PAGAR" />
                                         <!-- End -->
                                     </div>
 

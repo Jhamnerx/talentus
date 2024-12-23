@@ -14,8 +14,6 @@ class Imagen extends Model
 
     //Relacion polimorfica
 
-
-
     public function imageable()
     {
 

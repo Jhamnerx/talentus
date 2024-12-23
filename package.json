@@ -45,7 +45,7 @@
         "stylelint": "^13.13.1",
         "stylelint-config-recommended": "^3.0.0",
         "stylelint-scss": "^3.21.0",
-        "tailwindcss": "^3.4.0",
+        "tailwindcss": "^3.4.14",
         "vite": "^5.0"
     },
     "dependencies": {
@@ -55,15 +55,17 @@
         "chart.js": "^3.9.1",
         "chartjs-adapter-moment": "^1.0.0",
         "datatables.net-dt": "^1.12.1",
-        "filepond": "^4.30.4",
-        "filepond-plugin-image-preview": "^4.6.11",
+        "filepond": "^4.31.1",
+        "filepond-plugin-image-preview": "^4.6.12",
+        "flatpickr": "^4.6.13",
         "focus-visible": "^5.2.0",
         "izitoast": "^1.4.0",
         "moment": "^2.29.1",
         "owl.carousel": "^2.3.4",
         "sortablejs": "^1.15.0",
-        "sweetalert2": "^11.10.1",
+        "sweetalert2": "^11.14.4",
         "swiper": "^8.0.6",
+        "tom-select": "^2.4.1",
         "tw-elements": "^1.0.0-alpha12",
         "venobox": "^2.0.4"
     }

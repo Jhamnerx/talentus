@@ -8,10 +8,13 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\mantenimientoStatus;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
+use App\Observers\MantenimientoObserver;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(MantenimientoObserver::class)]
 class Mantenimiento extends Model
 {
     use HasFactory;

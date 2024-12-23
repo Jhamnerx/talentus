@@ -11,20 +11,20 @@
                 <div class="col-span-12 mb-2">
 
                     <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                        placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                        option-label="razon_social" option-value="id" />
+                        placeholder="Selecciona un cliente" option-description="numero_documento"
+                        :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id" />
 
                 </div>
 
                 {{-- FECHA INICIO --}}
                 <div class="col-span-6 gap-2">
-                    <x-form.datetime-picker label="Fecha de Inicio: " id="fecha_inicio" name="fecha_inicio"
+                    <x-form.datetime.picker label="Fecha de Inicio: " id="fecha_inicio" name="fecha_inicio"
                         wire:model.live="fecha_inicio" without-time parse-format="YYYY-MM-DD"
                         display-format="DD-MM-YYYY" :clearable="false" />
                 </div>
                 {{-- FECHA CADUCIDAD --}}
                 <div class="col-span-6 gap-2">
-                    <x-form.datetime-picker label="Fecha de vencimiento: " id="fecha_vencimiento"
+                    <x-form.datetime.picker label="Fecha de vencimiento: " id="fecha_vencimiento"
                         name="fecha_vencimiento" wire:model.live="fecha_vencimiento" without-time
                         parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                 </div>
@@ -47,13 +47,17 @@
 
                 <div class="col-span-12 sm:col-span-6 mb-2">
                     <x-form.select label="Tipo Pago: " wire:model.live='tipo_pago' name="tipo_pago" id="tipo_pago"
-                        placeholder="selecciona" :options="[['name' => 'RECIBO', 'id' => 'RECIBO'], ['name' => 'FACTURA', 'id' => 'FACTURA']]" option-label="name" option-value="id" />
+                        placeholder="selecciona"
+                        :options="[['name' => 'RECIBO', 'id' => 'RECIBO'], ['name' => 'FACTURA', 'id' => 'FACTURA']]"
+                        option-label="name" option-value="id" />
 
                 </div>
 
                 <div class="col-span-12 sm:col-span-4 mb-2">
-                    <x-form.select label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
-                        wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
+                    <x-form.select label="Divisa:"
+                        :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                        option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
+                        icon='currency-dollar' />
 
                 </div>
 
@@ -152,57 +156,56 @@
                 <div class="detallesvehiculos">
 
                     @if ($items->count() > 0)
-                        @foreach ($items->all() as $placa => $vehiculo)
-                            <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
+                    @foreach ($items->all() as $placa => $vehiculo)
+                    <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
 
-                                <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+                        <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
-                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
-
-                                </div>
-
-                                <div class="flex-auto xl:w-28 text-center">
-
-                                    <input wire:model.live="items.{{ $placa }}.plan"
-                                        class="form-input w-16 md:w-28 lg:w-28" type="text">
-
-                                    @if ($errors->has('items.' . $placa . '.plan'))
-                                        <p class="mt-2  text-pink-600 text-sm">
-                                            {{ $errors->first('items.' . $placa . '.plan') }}
-                                        </p>
-                                    @endif
-
-                                </div>
-                                <div class="flex-auto xl:w-28 text-center">
-
-                                    <x-form.datetime-picker id="fecha_vencimiento_i" name="fecha_vencimiento_i"
-                                        wire:model.live="items.{{ $placa }}.fecha" without-time
-                                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
-                                </div>
-
-                                <div class="flex-auto xl:w-20 text-center">
-
-                                    <x-form.button label="Eliminar"
-                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')" outline red sm
-                                        icon="trash" />
-                                </div>
-
-                            </div>
-                        @endforeach
-                    @else
-                        <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
-                            <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
-
-                                <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
-                                @if ($errors->has('items'))
-                                    <p class="mt-2  text-pink-600 text-sm">
-                                        {{ $errors->first('items') }}
-                                    </p>
-                                @endif
-
-                            </div>
+                            <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
 
                         </div>
+
+                        <div class="flex-auto xl:w-28 text-center">
+
+                            <input wire:model.live="items.{{ $placa }}.plan" class="form-input w-16 md:w-28 lg:w-28"
+                                type="text">
+
+                            @if ($errors->has('items.' . $placa . '.plan'))
+                            <p class="mt-2  text-pink-600 text-sm">
+                                {{ $errors->first('items.' . $placa . '.plan') }}
+                            </p>
+                            @endif
+
+                        </div>
+                        <div class="flex-auto xl:w-28 text-center">
+
+                            <x-form.datetime.picker id="fecha_vencimiento_i" name="fecha_vencimiento_i"
+                                wire:model.live="items.{{ $placa }}.fecha" without-time parse-format="YYYY-MM-DD"
+                                display-format="DD-MM-YYYY" :clearable="false" />
+                        </div>
+
+                        <div class="flex-auto xl:w-20 text-center">
+
+                            <x-form.button label="Eliminar" wire:click.prevent="eliminarVehiculo('{{ $placa }}')"
+                                outline red sm icon="trash" />
+                        </div>
+
+                    </div>
+                    @endforeach
+                    @else
+                    <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
+                        <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+
+                            <p class="text-gray-800 xs:text-base">Agregar un vehiculo</p>
+                            @if ($errors->has('items'))
+                            <p class="mt-2  text-pink-600 text-sm">
+                                {{ $errors->first('items') }}
+                            </p>
+                            @endif
+
+                        </div>
+
+                    </div>
 
                     @endif
 
@@ -212,8 +215,8 @@
 
                 <div class="py-3 text-left">
                     @if ($clientes_id)
-                        <x-form.button spinner="openPanelVehiculos" rounded positive label="Añadir Vehiculo"
-                            wire:click.prevent="openPanelVehiculos" />
+                    <x-form.button spinner="openPanelVehiculos" rounded positive label="Añadir Vehiculo"
+                        wire:click.prevent="openPanelVehiculos" />
                     @endif
 
                 </div>

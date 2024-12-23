@@ -15,7 +15,8 @@
         </a>
         <div class="mt-2 md:mt-0">
             <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">EMITIR
-                {{ strtoupper($comprobante_slug == 'nota-venta' ? 'NOTA DE VENTA' : str_replace('-', ' ', $comprobante_slug)) }}
+                {{ strtoupper($comprobante_slug == 'nota-venta' ? 'NOTA DE VENTA' : str_replace('-', ' ',
+                $comprobante_slug)) }}
             </h4>
             <ul aria-label="current Status"
                 class="flex flex-col md:flex-row items-start md:items-center text-gray-600 dark:text-gray-400 text-sm mt-3">
@@ -34,15 +35,13 @@
                             wire:model.live="serie" placeholder="Selecciona una serie" :async-data="[
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
-                            ]"
-                            option-label="serie" option-value="serie" />
+                            ]" option-label="serie" option-value="serie" />
                     </div>
 
                     {{-- CORRELATIVO --}}
                     <div class="col-span-12 sm:col-span-6 lg:col-span-3">
 
-                        <x-form.inputs.number readonly name="correlativo" wire:model.live="correlativo"
-                            label="Correlativo:" />
+                        <x-form.number readonly name="correlativo" wire:model.live="correlativo" label="Correlativo:" />
 
                     </div>
 
@@ -50,7 +49,7 @@
                     <div class="col-span-12 sm:col-span-6 lg:col-span-5 gap-2">
                         <div class="col-span-12 md:col-span-6">
 
-                            <x-form.datetime-picker label="Fecha de Emision:" wire:model.live="fecha_emision"
+                            <x-form.datetime.picker label="Fecha de Emision:" wire:model.live="fecha_emision"
                                 :min="now()->subDays(1)" :max="now()" without-time parse-format="YYYY-MM-DD"
                                 display-format="DD-MM-YYYY" :clearable="false" />
 
@@ -64,41 +63,38 @@
                             wire:model.live="sustento_id" placeholder="Selecciona el tipo" :async-data="[
                                 'api' => route('api.sustentos.index'),
                                 'params' => ['tipo_comprobante' => $tipo_comprobante_id],
-                            ]"
-                            option-label="descripcion" option-value="id" />
+                            ]" option-label="descripcion" option-value="id" />
                     </div>
                     {{-- sustento escrito --}}
 
                     @if ($sustento_id == '02' && $tipo_comprobante_id == '07')
-                        {{-- INVOICE NEW --}}
-                        <div
-                            class="col-span-12 md:col-span-6  {{ $invoice_id_new ? 'lg:col-span-4' : 'lg:col-span-6' }}  mb-3">
-                            <x-form.select autocomplete="off" id="invoice_id_new" name="invoice_id_new"
-                                label="Nueva {{ $titulo_select_new }} Electrónica" wire:model.live="invoice_id_new"
-                                placeholder="Ingrese serie y número" :async-data="[
+                    {{-- INVOICE NEW --}}
+                    <div
+                        class="col-span-12 md:col-span-6  {{ $invoice_id_new ? 'lg:col-span-4' : 'lg:col-span-6' }}  mb-3">
+                        <x-form.select autocomplete="off" id="invoice_id_new" name="invoice_id_new"
+                            label="Nueva {{ $titulo_select_new }} Electrónica" wire:model.live="invoice_id_new"
+                            placeholder="Ingrese serie y número" :async-data="[
                                     'api' => route('api.invoices.index'),
                                     'params' => ['tipo_comprobante_ref' => $tipo_comprobante_ref, 'code_sunat' => '0'],
-                                ]" option-label="serie_correlativo"
-                                :template="[
+                                ]" option-label="serie_correlativo" :template="[
                                     'name' => 'user-option',
                                     'config' => ['src' => 'imagen'],
-                                ]" :always-fetch="true" option-value="id"
-                                option-description="option_description" />
-                        </div>
+                                ]" :always-fetch="true" option-value="id" option-description="option_description" />
+                    </div>
 
-                        @if ($invoice_id_new)
-                            <div class="col-span-12 md:col-span-6 lg:col-span-2 mt-0 md:mt-7">
-                                <x-form.button wire:click.prevent="verIframe()" label="Ver" outline emerald xs
-                                    icon="document-search" />
-                            </div>
-                        @endif
+                    @if ($invoice_id_new)
+                    <div class="col-span-12 md:col-span-6 lg:col-span-2 mt-0 md:mt-7">
+                        <x-form.button wire:click.prevent="verIframe()" label="Ver" outline emerald xs
+                            icon="document-search" />
+                    </div>
+                    @endif
                     @else
-                        <div class="col-span-12 ">
+                    <div class="col-span-12 ">
 
-                            <x-form.textarea rows="1" wire:model.live='sustento_texto'
-                                label="Motivo o sustento por el cual se emitirá la {{ ucwords(str_replace('-', ' de ', $comprobante_slug)) }}" />
+                        <x-form.textarea rows="1" wire:model.live='sustento_texto'
+                            label="Motivo o sustento por el cual se emitirá la {{ ucwords(str_replace('-', ' de ', $comprobante_slug)) }}" />
 
-                        </div>
+                    </div>
                     @endif
 
                 </div>
@@ -108,9 +104,10 @@
                     {{-- TIPO --}}
                     <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-3">
 
-                        <x-form.select label="Documento a modificar:" :options="[['name' => 'FACTURA', 'id' => '01'], ['name' => 'BOLETA', 'id' => '03']]" option-label="name"
-                            option-value="id" wire:model.live="tipo_comprobante_ref" :clearable="false"
-                            x-on:selected="$wire.selectTypeInvoice()" />
+                        <x-form.select label="Documento a modificar:"
+                            :options="[['name' => 'FACTURA', 'id' => '01'], ['name' => 'BOLETA', 'id' => '03']]"
+                            option-label="name" option-value="id" wire:model.live="tipo_comprobante_ref"
+                            :clearable="false" x-on:selected="$wire.selectTypeInvoice()" />
                     </div>
 
                     {{-- INVOICE --}}
@@ -122,54 +119,56 @@
                             placeholder="Ingrese serie y número" :async-data="[
                                 'api' => route('api.invoices.index'),
                                 'params' => ['tipo_comprobante_ref' => $tipo_comprobante_ref],
-                            ]" option-label="serie_correlativo"
-                            :template="[
+                            ]" option-label="serie_correlativo" :template="[
                                 'name' => 'user-option',
                                 'config' => ['src' => 'imagen'],
-                            ]" :always-fetch="true" option-value="id"
-                            option-description="option_description" empty-message="No se encuentran comprobantes"
-                            x-on:clear="$wire.direccion = ''" x-on:selected="$wire.selectInvoice()" />
+                            ]" :always-fetch="true" option-value="id" option-description="option_description"
+                            empty-message="No se encuentran comprobantes" x-on:clear="$wire.direccion = ''"
+                            x-on:selected="$wire.selectInvoice()" />
                     </div>
 
                     @if ($invoice_id)
-                        <div class="col-span-12 md:col-span-6 lg:col-span-2 mt-0 md:mt-7">
-                            <x-form.button wire:click.prevent="verIframe()" label="Ver" outline emerald xs
-                                icon="document-search" />
-                        </div>
+                    <div class="col-span-12 md:col-span-6 lg:col-span-2 mt-0 md:mt-7">
+                        <x-form.button wire:click.prevent="verIframe()" label="Ver" outline emerald xs
+                            icon="document-search" />
+                    </div>
                     @endif
 
                     {{-- MONEDA --}}
                     <div class="col-span-12 md:col-span-6">
-                        <x-form.select readonly label="Divisa:" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]" option-label="name" option-value="id"
-                            wire:model.live="invoice_divisa" :clearable="false" icon='currency-dollar' />
+                        <x-form.select readonly label="Divisa:"
+                            :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                            option-label="name" option-value="id" wire:model.live="invoice_divisa" :clearable="false"
+                            icon='currency-dollar' />
                     </div>
 
                     {{-- FECHA EMISION --}}
                     <div class="col-span-12 md:col-span-6 gap-2">
 
-                        <x-form.datetime-picker readonly label="Fecha de Emision:"
+                        <x-form.datetime.picker readonly label="Fecha de Emision:"
                             wire:model.live="invoice_fecha_emision" :min="now()->subDays(1)" :max="now()" without-time
                             parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
 
                     {{-- FECHA --}}
                     <div class="col-span-12 md:col-span-6 gap-2">
-                        <x-form.datetime-picker readonly label="Fecha Vencimiento:"
-                            wire:model.live="invoice_fecha_vencimiento" :min="now()->subDays(1)" :max="now()->addDays(7)"
-                            without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                        <x-form.datetime.picker readonly label="Fecha Vencimiento:"
+                            wire:model.live="invoice_fecha_vencimiento" :min="now()->subDays(1)"
+                            :max="now()->addDays(7)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                            :clearable="false" />
                     </div>
                     {{ $invoice_forma_pago }}
                     {{-- TIPO DE VENTA --}}
                     @if ($tipo_comprobante_ref == '01')
-                        <div class="col-span-12 md:col-span-6 mb-3">
+                    <div class="col-span-12 md:col-span-6 mb-3">
 
-                            <x-form.select label="Forma Pago:" :options="[
+                        <x-form.select label="Forma Pago:" :options="[
                                 ['name' => 'CONTADO', 'id' => 'CONTADO'],
                                 ['name' => 'CREDITO', 'id' => 'CREDITO'],
-                            ]" option-label="name"
-                                option-value="id" wire:model.live="invoice_forma_pago" :clearable="false" />
+                            ]" option-label="name" option-value="id" wire:model.live="invoice_forma_pago"
+                            :clearable="false" />
 
-                        </div>
+                    </div>
                     @endif
 
 
@@ -180,19 +179,20 @@
                 </div>
                 {{-- componente venta al credito --}}
                 @if ($showCredit)
-                    <div
-                        class="col-span-12 md:col-span-4 mb-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
+                <div
+                    class="col-span-12 md:col-span-4 mb-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
 
-                        <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
-                        </x-admin.facturacion.detalle-cuotas-table>
+                    <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
+                    </x-admin.facturacion.detalle-cuotas-table>
 
-                    </div>
+                </div>
                 @endif
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
 
                     {{-- LISTA DE PRODUCTOS --}}
-                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments" :tipo="$tipo_comprobante_id">
+                    <x-admin.facturacion.tabla-detalle :items="$items" :prepayments="$prepayments"
+                        :tipo="$tipo_comprobante_id">
 
                     </x-admin.facturacion.tabla-detalle>
 
@@ -215,9 +215,9 @@
                                     </div>
 
 
-                                    <x-form.inputs.currency readonly icon="currency-dollar"
-                                        placeholder="Monto descuento" wire:model.live.lazy="invoice_descuento_monto"
-                                        thousands="." decimal="." precision="2" />
+                                    <x-form.currency readonly icon="currency-dollar" placeholder="Monto descuento"
+                                        wire:model.live.lazy="invoice_descuento_monto" thousands="." decimal="."
+                                        precision="2" />
 
 
                                 </div>
@@ -234,8 +234,8 @@
                                     ['name' => 'Tarjeta de crédito', 'id' => '006'],
                                     ['name' => 'Transferencia bancaria', 'id' => '003'],
                                     ['name' => 'Giro', 'id' => '002'],
-                                ]" option-label="name"
-                                    option-value="id" wire:model.live="invoice_metodo_pago_id" :clearable="false" />
+                                ]" option-label="name" option-value="id" wire:model.live="invoice_metodo_pago_id"
+                                    :clearable="false" />
 
                             </div>
 
@@ -276,44 +276,44 @@
                             </div>
 
                             @if ($invoice_op_exoneradas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        EXONERADAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($invoice_op_exoneradas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    EXONERADAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($invoice_op_exoneradas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             @if ($invoice_op_inafectas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        INAFECTAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($invoice_op_inafectas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    INAFECTAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($invoice_op_inafectas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
                             @if ($invoice_op_gratuitas > 0)
-                                <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
-                                        GRATUITAS
-                                    </div>
-                                    <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
-                                            {{ $simbolo }} <span>{{ round($invoice_op_gratuitas, 4) }}</span>
-                                        </div>
-
-                                    </div>
+                            <div class="flex justify-between mt-2">
+                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    GRATUITAS
                                 </div>
+                                <div class="text-right w-40">
+                                    <div class="text-gray-800 text-sm">
+                                        {{ $simbolo }} <span>{{ round($invoice_op_gratuitas, 4) }}</span>
+                                    </div>
+
+                                </div>
+                            </div>
                             @endif
 
                             <div class="flex justify-between mt-2">

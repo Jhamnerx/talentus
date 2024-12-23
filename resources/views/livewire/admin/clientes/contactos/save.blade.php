@@ -11,8 +11,8 @@
         <div class="col-span-12 sm:col-span-6">
 
             <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
-                option-label="razon_social" option-value="id">
+                placeholder="Selecciona un cliente" option-description="numero_documento"
+                :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                 <x-slot name="afterOptions" class="p-2 flex justify-center" x-show="displayOptions.length === 0">
                     <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close" primary flat
@@ -45,7 +45,7 @@
         </div>
         <div class="col-span-12 sm:col-span-6">
 
-            <x-form.datetime-picker label="Fecha. Nacimiento:" id="birthday" name="birthday" wire:model.live="birthday"
+            <x-form.datetime.picker label="Fecha. Nacimiento:" id="birthday" name="birthday" wire:model.live="birthday"
                 without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
 

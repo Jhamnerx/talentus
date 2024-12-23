@@ -57,7 +57,7 @@ class CreateModal extends Component
             title: 'CATEGORIA REGISTRADA',
             mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
         );
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaCategorias');
         $this->resetProp();
     }
 

@@ -6,11 +6,14 @@ namespace App\Models;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\CategoriasObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(CategoriasObserver::class)]
 class Categoria extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -40,7 +43,7 @@ class Categoria extends Model
     // Scope local de activo
     public function scopeActive($query, $status)
     {
-        return $query->where('is_active', $status);
+        return $query->where('estado', $status);
     }
 
     //relacion uno a muchos

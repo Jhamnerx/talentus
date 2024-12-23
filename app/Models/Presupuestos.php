@@ -8,6 +8,7 @@ use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Enums\PresupuestosStatus;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\PresupuestosObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -15,7 +16,9 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use App\Notifications\Ventas\EnviarPresupuestoCliente;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(PresupuestosObserver::class)]
 class Presupuestos extends Model
 {
     use HasFactory;

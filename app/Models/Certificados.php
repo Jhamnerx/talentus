@@ -6,14 +6,17 @@ use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\CertificadosObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use App\Notifications\Certificados\EnviarCertificadoCliente;
 
+#[ObservedBy(CertificadosObserver::class)]
 class Certificados extends Model
 {
     use HasFactory;

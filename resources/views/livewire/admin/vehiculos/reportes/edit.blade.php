@@ -4,13 +4,13 @@
         <div class="col-span-12 sm:col-span-6">
 
             <x-form.select disabled label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
-                option-label="placa" option-value="id" />
+                placeholder="Selecciona una placa" option-description="option_description"
+                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-6">
 
-            <x-form.datetime-picker label="Fecha Transmisión:" id="fecha_t" name="fecha_t" wire:model.live="fecha_t"
+            <x-form.datetime.picker label="Fecha Transmisión:" id="fecha_t" name="fecha_t" wire:model.live="fecha_t"
                 without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-6">

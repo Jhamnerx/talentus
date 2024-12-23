@@ -2,7 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-/* @import "contact.css"; */
+@import "cliente/contact.css";
 
 @import "cliente/bootstrap.min.css";
 @import "cliente/animate.min.css";
@@ -16,6 +16,7 @@
 
 @import "cliente/style.css";
 @import "cliente/responsive.css";
+
 .search {
     margin-bottom: auto;
     margin-top: auto;

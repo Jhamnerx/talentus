@@ -4,12 +4,15 @@ namespace App\Models;
 
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
+use App\Observers\FlotasObserver;
 use Spatie\Activitylog\LogOptions;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(FlotasObserver::class)]
 class Flotas extends Model
 {
     use HasFactory;

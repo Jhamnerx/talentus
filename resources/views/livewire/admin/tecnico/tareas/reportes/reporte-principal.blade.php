@@ -2,13 +2,13 @@
 
     <div class="grid grid-cols-12 gap-6">
         <div class="col-span-12 md:col-span-6 gap-2">
-            <x-form.datetime-picker label="Fecha Inicial:" id="fecha_inicial" name="fecha_inicial"
+            <x-form.datetime.picker label="Fecha Inicial:" id="fecha_inicial" name="fecha_inicial"
                 wire:model.live="fecha_inicial" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
 
         <div class="col-span-12 md:col-span-6 gap-2">
-            <x-form.datetime-picker label="Fecha Final:" id="fecha_final" name="fecha_final"
+            <x-form.datetime.picker label="Fecha Final:" id="fecha_final" name="fecha_final"
                 wire:model.live="fecha_final" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>
@@ -41,20 +41,20 @@
             <div class="flex flex-wrap items-center">
 
                 @foreach ($tecnicos as $tecnico)
-                    <div class="m-3">
-                        <label class="flex items-center">
-                            <input type="radio" name="radio-buttons" class="form-radio" wire:model.live="tecnico_id"
-                                value="{{ $tecnico->id }}" />
-                            <span class="text-sm ml-2">{{ $tecnico->name }}</span>
-                        </label>
-                    </div>
+                <div class="m-3">
+                    <label class="flex items-center">
+                        <input type="radio" name="radio-buttons" class="form-radio" wire:model.live="tecnico_id"
+                            value="{{ $tecnico->id }}" />
+                        <span class="text-sm ml-2">{{ $tecnico->name }}</span>
+                    </label>
+                </div>
                 @endforeach
 
             </div>
             @error('tecnico_id')
-                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                    {{ $message }}
-                </p>
+            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                {{ $message }}
+            </p>
             @enderror
         </div>
 

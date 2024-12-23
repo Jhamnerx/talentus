@@ -5,15 +5,17 @@ namespace App\Models;
 use App\Models\Categoria;
 use App\Scopes\EmpresaScope;
 use App\Scopes\EliminadoScope;
-use App\View\Components\Admin\Ventas\TablaDetalleVenta;
 use Spatie\Activitylog\LogOptions;
+use App\Observers\ProductoObserver;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\View\Components\Admin\Ventas\TablaDetalleVenta;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
-
+#[ObservedBy(ProductoObserver::class)]
 class Productos extends Model
 {
     use HasFactory;
@@ -70,7 +72,9 @@ class Productos extends Model
 
     public function categoria()
     {
-        return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed();
+        return $this->belongsTo(Categoria::class, 'categoria_id')->withTrashed()->withDefault([
+            'nombre' => 'SIN CATEGORIA'
+        ]);
     }
 
     public function unit(): BelongsTo
