@@ -91,6 +91,7 @@ class SuspendLinea extends Component
         $this->dispatch('suspend-save', lista: $lista);
 
         $this->closeModal();
+        $this->dispatch('pg:eventRefresh-TablaLineas');
     }
     public function updated($attr)
     {

@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ReporteLineas extends Component
 {
-    public $modalReporte = false;
+    public $showModal = false;
     public $operador = "todos";
     public $suspencion = false;
 
@@ -34,13 +34,13 @@ class ReporteLineas extends Component
     public function openModal()
     {
 
-        $this->modalReporte = true;
+        $this->showModal = true;
     }
 
     public function closeModal()
     {
 
-        $this->modalReporte = false;
+        $this->showModal = false;
     }
 
     public function exportToPdf()
@@ -78,7 +78,7 @@ class ReporteLineas extends Component
                 ->setPaper('Legal', 'landscape')->output();
 
             return response()->streamDownload(
-                fn () => print($pdfContent),
+                fn() => print($pdfContent),
                 "reporte_lineas.pdf"
             );
         } catch (\Throwable $e) {

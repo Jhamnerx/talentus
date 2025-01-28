@@ -49,7 +49,7 @@ class AsignToPlaca extends Component
 
         if ($vehiculo->save()) {
             $this->asignado = false;
-            $this->dispatch('index-update');
+            $this->dispatch('pg:eventRefresh-TablaLineas');
         }
         $this->reset('confirm');
     }
@@ -84,6 +84,6 @@ class AsignToPlaca extends Component
             mensaje: 'se asigno la linea: ' . $this->linea->numero . ' a la placa: ' . $vehiculo->placa
         );
         $this->closeModal();
-        $this->dispatch('update-table');
+        $this->dispatch('pg:eventRefresh-TablaLineas');
     }
 }

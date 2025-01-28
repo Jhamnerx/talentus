@@ -1,4 +1,4 @@
-<x-form.modal.card title="ASIGNAR LINEA A PLACA" wire:model.live="openModal" align="center">
+<x-form.modal.card title="ASIGNAR LINEA A PLACA" wire:model.live="openModal" align="center" persistent>
     <div class="text-sm">
 
         <div class="mb-4">
@@ -14,7 +14,7 @@
     @if ($asignado)
         <div class="overflow-x-auto mb-2">
             <table class="table-auto w-full">
-                <!-- Table header -->
+
                 <thead
                     class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                     <tr>
@@ -48,10 +48,10 @@
                             <div class="space-x-1">
 
                                 @if ($confirm)
-                                    <x-form.button wire:click.prevent="confirmation()" icon="exclamation" warning
-                                        label="Confirmar" />
+                                    <x-form.button xs wire:click.prevent="confirmation()" icon="exclamation-circle"
+                                        warning label="Confirmar" />
                                 @else
-                                    <x-form.button wire:click.prevent="removeLinea()" icon="x-mark" negative
+                                    <x-form.button xs wire:click.prevent="removeLinea()" icon="x-mark" negative
                                         label="Remover Linea" />
                                 @endif
 
