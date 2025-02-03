@@ -611,10 +611,10 @@
 
                             <div class=" text-center space-x-1">
                                 <x-form.dropdown>
-                                    <x-form.dropdown.header label="Settings">
+                                    <x-dropdown.header label="Settings">
                                         <x-dropdown.item icon="cog" label="Preferences" />
                                         <x-dropdown.item icon="user" label="My Profile" />
-                                    </x-form.dropdown.header>
+                                    </x-dropdown.header>
 
                                     <x-dropdown.item separator label="Help Center" />
                                     <x-dropdown.item label="Live Chat" />

@@ -837,35 +837,38 @@
                             <div class=" text-center space-x-1">
                                 <x-form.dropdown class="w-60">
 
-                                    <x-dropdown.item icon='plus-sm' label="Volver a crear" />
+                                    <x-dropdown.item icon='plus' label="Volver a crear" />
 
                                     @role('admin')
                                     @if (!$venta->clase && $venta->fe_estado == '0')
                                     <x-dropdown.item wire:click.prevent='createXml({{ $venta->id }})'
-                                        icon='refresh' label="Crear XML" />
+                                        icon='arrow-path' label="Crear XML" />
                                     @endif
                                     @endrole
 
-                                    <x-dropdown.item icon='mail' label="Enviar a cliente" />
+                                    <x-dropdown.item icon='envelope' label="Enviar a cliente" />
 
                                     @if ($venta->tipo_comprobante_id == '01')
+
                                     @if ($venta->anulado == 'no' && $venta->estado_texto == 'ACEPTADA' &&
                                     $venta->envioResumen == false)
+
                                     <x-dropdown.item wire:click.prevent='anularComprobante({{ $venta->id }})'
                                         icon='minus-circle' separator label="Anular comprobante" />
+
                                     @endif
 
                                     @if ($venta->envioResumen && $venta->envioResumen->fe_estado != '1')
-                                    <x-form.dropdown.header label="Comunicación de baja">
+                                    <x-dropdown.header label="Comunicación de baja">
                                         <x-dropdown.item
                                             wire:click.prevent='getCdrAnulacion({{ $venta->envioResumen->id }})'
                                             icon="arrow-path" label="Consultar Estado A." />
-                                    </x-form.dropdown.header>
+                                    </x-dropdown.header>
                                     @endif
 
                                     @if ($venta->anulado == 'si' && $venta->envioResumen == true &&
                                     $venta->envioResumen->fe_estado == '1')
-                                    <x-form.dropdown.header label="Comunicación de baja">
+                                    <x-dropdown.header label="Comunicación de baja">
 
                                         <x-dropdown.item icon="document" target="_blank" href="{{ route('facturacion.anulacion.ver.pdf', [
                                                             'id' => $venta->envioResumen->id,
@@ -886,11 +889,11 @@
                                                         ]) }}" />
 
 
-                                    </x-form.dropdown.header>
+                                    </x-dropdown.header>
                                     @endif
                                     @endif
 
-                                    <x-form.dropdown.header label="Estado de pago">
+                                    <x-dropdown.header label="Estado de pago">
                                         @if ($venta->pago_estado == 'PAID')
                                         <x-dropdown.item disabled="true" icon="check-circle"
                                             label="Marcar como Pagada" />
@@ -903,7 +906,7 @@
 
                                         <x-dropdown.item disabled icon="x-mark" label="Marcar como No Pagada" />
                                         @endif
-                                    </x-form.dropdown.header>
+                                    </x-dropdown.header>
                                 </x-form.dropdown>
                             </div>
                         </td>
@@ -920,7 +923,7 @@
                             <div class="text-center">No hay Registros</div>
                         </td>
                         </tr>
-                        @endif
+                    @endif
                 </tbody>
             </table>
 

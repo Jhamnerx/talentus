@@ -260,9 +260,9 @@ class Emitir extends Component
             $this->detalle_cuotas->push([
                 'n_cuota' => $i + 1,
                 'dias' => $this->vence_cuotas,
-                'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
+                'fecha' => $fecha->addDays((int)$this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => ucfirst($fecha->dayName),
-                'importe' => $this->total > 0 ? round(floatval(($this->detraccion ? ($this->total - ($this->datosDetraccion['monto'] / $this->tipo_cambio)) : $this->total) / $nCuotas), 2)  : 0.00,
+                'importe' => $this->total > 0 && $nCuotas > 0 && floatval($this->tipo_cambio) != 0 ? round(floatval(($this->detraccion ? ($this->total - ($this->divisa == 'USD' ? $this->datosDetraccion['monto'] / floatval($this->tipo_cambio) : $this->datosDetraccion['monto'])) : $this->total) / $nCuotas), 2) : 0.00,
             ]);
         }
         $this->total_cuotas = round($this->detalle_cuotas->sum('importe'), 4);
