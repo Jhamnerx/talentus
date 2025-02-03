@@ -1,15 +1,15 @@
 {
-  "_iziToast-C-Mg3M2-.js": {
-    "file": "assets/iziToast-C-Mg3M2-.js",
+  "_iziToast-BMxtxNnE.js": {
+    "file": "assets/iziToast-BMxtxNnE.js",
     "name": "iziToast"
   },
   "resources/css/app.css": {
-    "file": "assets/app-BkC_497P.css",
+    "file": "assets/app-Dorl77mL.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/cliente.css": {
-    "file": "assets/cliente-DH5FIsnI.css",
+    "file": "assets/cliente-BSsx0YqZ.css",
     "src": "resources/css/cliente.css",
     "isEntry": true
   },
@@ -1147,24 +1147,24 @@
     "src": "resources/images/user-avatar-80.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CeQwsRLO.js",
+    "file": "assets/app-TUxmkysN.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_iziToast-C-Mg3M2-.js"
+      "_iziToast-BMxtxNnE.js"
     ],
     "css": [
       "assets/app-BI2sCKC-.css"
     ]
   },
   "resources/js/cliente.js": {
-    "file": "assets/cliente-kLAvWk5Q.js",
+    "file": "assets/cliente-4Wx52Y1M.js",
     "name": "cliente",
     "src": "resources/js/cliente.js",
     "isEntry": true,
     "imports": [
-      "_iziToast-C-Mg3M2-.js"
+      "_iziToast-BMxtxNnE.js"
     ]
   }
 }
