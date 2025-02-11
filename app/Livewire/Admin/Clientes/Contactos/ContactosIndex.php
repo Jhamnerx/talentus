@@ -27,7 +27,6 @@ class ContactosIndex extends Component
             ->orWhere('email', 'like', '%' . $this->search . '%')->with('clientes')
             ->orderBy('id', 'desc')
             ->paginate(10);
-        // ->get();
         return view('livewire.admin.clientes.contactos.contactos-index', compact('contactos'));
     }
 

@@ -5,8 +5,6 @@
     <!-- Table -->
     @livewire('admin.clientes.contactos.contactos-index')
 
-
-
 @stop
 
 @push('modals')
