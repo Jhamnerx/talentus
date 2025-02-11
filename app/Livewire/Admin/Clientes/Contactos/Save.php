@@ -15,12 +15,6 @@ class Save extends Component
     public $nombre, $clientes_id, $numero_documento, $cargo, $telefono, $email, $birthday, $is_gerente = false, $descripcion;
 
 
-    public function mount()
-    {
-
-        $this->birthday = Carbon::now();
-    }
-
     public function render()
     {
         return view('livewire.admin.clientes.contactos.save');
@@ -29,8 +23,12 @@ class Save extends Component
     #[On('open-modal-save')]
     public function openModal()
     {
+
+        // $this->birthday = Carbon::now();
+        $this->birthday = Carbon::now()->format('Y-m-d');
         $this->modalSave = true;
     }
+
     public function closeModal()
     {
         $this->modalSave = false;

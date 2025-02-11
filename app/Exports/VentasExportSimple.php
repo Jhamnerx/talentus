@@ -16,18 +16,16 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
 {
     use Exportable;
 
-    public function __construct(public $fecha_inicio, public  $fecha_fin, public $estado, public  $tipo_comprobante_id, public  $cliente_id, public  $vendedor_id)
-    {
-    }
+    public function __construct(public $fecha_inicio, public  $fecha_fin, public $estado, public  $tipo_comprobante_id, public  $cliente_id, public  $vendedor_id) {}
 
 
     public function query()
     {
         return Ventas::query()->where('fecha_emision', '>=', $this->fecha_inicio)
             ->where('fecha_emision', '<=', $this->fecha_fin)
-            // ->when($this->estado != 'Todos', function ($query) {
-            //     return $query->where('estado', $this->estado);
-            // })
+            ->when($this->estado != 'Todos', function ($query) {
+                return $query->where('pago_estado', $this->estado);
+            })
             ->when($this->tipo_comprobante_id, function ($query) {
                 return $query->where('tipo_comprobante_id', $this->tipo_comprobante_id);
             })

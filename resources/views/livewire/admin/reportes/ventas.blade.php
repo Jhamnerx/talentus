@@ -32,6 +32,32 @@
                 :clearable="false" />
         </div>
 
+        <div class="col-span-12 mt-2">
+            <label
+                class="flex text-sm not-italic items-center font-medium text-gray-800 whitespace-nowrap justify-between">
+                <div>
+                    Tipo de Pago:
+                </div>
+
+            </label>
+            <div class="flex flex-wrap items-center -m-3">
+
+                <div class="m-3">
+                    <x-form.radio id="lg" lg wire:model.live="estado" value="PAID" name="estado"
+                        label="PAGADO" />
+
+                </div>
+                <div class="m-3">
+
+                    <x-form.radio id="lg" lg wire:model.live="estado" value="UNPAID" name="estado"
+                        label="POR PAGAR" />
+                    <!-- End -->
+                </div>
+
+            </div>
+
+        </div>
+
         <div
             class="flex items-center justify-center col-span-12 bg-gray-100 shadow-md cursor-pointer  dark:bg-secondary-700 rounded-lg gap-4 py-4">
 
@@ -39,6 +65,8 @@
             <x-form.button icon="clipboard" secondary label="EXCEl" wire:click.prevent="exportar" spinner="exportar" />
             {{-- <x-form.button icon="clipboard" secondary label="PDF" /> --}}
         </div>
+
+
 
     </div>
 
