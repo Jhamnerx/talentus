@@ -109,8 +109,9 @@ Route::controller(ContactosController::class)->group(function () {
 });
 
 
-//Route::get('/proveedores/{proveedor}', [ProveedoresController::class, 'show']);
-Route::resource('proveedor', ProveedoresController::class)->names('admin.proveedores');
+Route::controller(ProveedoresController::class)->group(function () {
+    Route::get('proveedor', 'index')->name('admin.proveedores.index');
+});
 
 // COMPRAS
 Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([

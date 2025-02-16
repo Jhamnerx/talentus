@@ -25,29 +25,6 @@ class ProveedoresController extends Controller
         return view('admin.proveedores.index');
     }
 
-
-    public function create()
-    {
-        return view('admin.proveedores.create');
-    }
-
-    public function store(ProveedoresRequest $request)
-    {
-        Proveedores::create($request->all());
-        return redirect()->route('admin.proveedores.index')->with('store', 'El Proveedor se guardo con exito');
-    }
-
-    public function edit(Proveedores $proveedor)
-    {
-        return view('admin.proveedores.edit', compact('proveedor'));
-    }
-    public function update(ProveedoresRequest $request, Proveedores $proveedor)
-    {
-
-        $proveedor->update($request->all());
-        return redirect()->route('admin.proveedores.index')->with('update', 'El Proveedor se actualizo con exito');
-    }
-
     public function exportExcel()
     {
         return Excel::download(new ProveedoresExport, 'proveedores.xls');

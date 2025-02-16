@@ -1,12 +1,19 @@
 @extends('layouts.admin')
 @section('ruta', 'proveedores')
+
 @section('contenido')
 
-    <!-- Table -->
     @livewire('admin.proveedores.proveedores-index')
-    @livewire('admin.proveedores.import')
-
 @stop
+
+
+@push('modals')
+    @livewire('admin.proveedores.import')
+    @livewire('admin.proveedores.create')
+    @livewire('admin.proveedores.edit')
+    @livewire('admin.proveedores.delete')
+@endpush
+
 
 @section('js')
     @if (session('store'))

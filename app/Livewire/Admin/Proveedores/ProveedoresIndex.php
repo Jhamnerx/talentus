@@ -5,23 +5,25 @@ namespace App\Livewire\Admin\Proveedores;
 use App\Models\Proveedores;
 use Livewire\Component;
 use Livewire\WithPagination;
+
 class ProveedoresIndex extends Component
 {
     use WithPagination;
-    
+
     public $search;
     public $from = '';
     public $to = '';
 
     protected $listeners = [
         'render' => 'render',
-        'updateTable' => 'render',
+        'update-table' => 'render',
         'echo:proveedores,ProveedoresImportUpdated' => 'updateProveedores'
     ];
 
-    public function updateProveedores(){
+    public function updateProveedores()
+    {
         $this->render();
-       
+
         $this->dispatch('proveedores-import');
     }
 
@@ -97,9 +99,24 @@ class ProveedoresIndex extends Component
         }
     }
 
-    public function openModalImport(){
+    public function openModalImport()
+    {
 
         $this->dispatch('openModalImport');
+    }
 
+    public function openModalCreate()
+    {
+        $this->dispatch('open-modal-create');
+    }
+
+    public function openModalEdit(Proveedores $proveedor)
+    {
+        $this->dispatch('open-modal-edit', proveedor: $proveedor);
+    }
+
+    public function openModalDelete(Proveedores $proveedor)
+    {
+        $this->dispatch('open-modal-delete', proveedor: $proveedor);
     }
 }

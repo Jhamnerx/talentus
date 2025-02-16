@@ -39,7 +39,7 @@ class RecibosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder imp
     {
         return view('exports.recibos', [
             'recibos' => Recibos::whereRaw(
-                "(created_at >= ? AND created_at <= ?)",
+                "(fecha_emision >= ? AND fecha_emision <= ?)",
                 [
                     $this->fecha_inicio . " 00:00:00",
                     $this->fecha_fin . " 23:59:59"

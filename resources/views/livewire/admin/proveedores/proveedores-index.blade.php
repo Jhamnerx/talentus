@@ -28,20 +28,18 @@
 
             <!-- Add customer button -->
             @can('crear-proveedor')
-                <a href="{{ route('admin.proveedores.create') }}">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Agregar Proveedor</span>
-                    </button>
-                </a>
+                <button wire:click.prevent="openModalCreate" class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Agregar Proveedor</span>
+                </button>
             @endcan
 
         </div>
-
     </div>
+
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
@@ -145,7 +143,6 @@
                 </div>
             </div>
 
-
             <!-- Export button -->
             @can('exportar-proveedor')
                 <div class="relative inline-flex">
@@ -161,7 +158,6 @@
                     </a>
                 </div>
             @endcan
-
 
             <!-- Import button -->
             @can('importar-proveedor')
@@ -227,18 +223,19 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="font-semibold text-left">Direccion</div>
                             </th>
+
                             @can('cambiar.estado-proveedor')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Estado</div>
                                 </th>
                             @endcan
 
-
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Accioness</div>
                             </th>
                         </tr>
                     </thead>
+
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200">
                         <!-- Row -->
@@ -256,10 +253,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="flex items-center">
-                                            <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                                <img class="rounded-full" src="../images/user-40-01.jpg"
-                                                    width="40" height="40" alt="User 01" />
-                                            </div>
+
                                             <div class="font-medium text-slate-800">{{ $proveedor->razon_social }}
                                             </div>
                                         </div>
@@ -296,8 +290,29 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="space-x-1">
 
-                                            @livewire('admin.proveedores.delete', ['model' => $proveedor], key('delete' . $proveedor->id))
+                                            @can('editar-proveedor')
+                                                <button wire:click.prevent="openModalEdit({{ $proveedor->id }})"
+                                                    class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    <span class="sr-only">Editar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path
+                                                            d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
 
+                                            @can('eliminar-proveedor')
+                                                <button wire:click.prevent="openModalDelete({{ $proveedor->id }})"
+                                                    aria-controls="danger-modal"
+                                                    class="text-rose-500 hover:text-rose-600 rounded-full">
+                                                    <span class="sr-only">Eliminar</span>
+                                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                                        <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
+                                                        <path
+                                                            d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
+                                                    </svg>
+                                                </button>
+                                            @endcan
                                         </div>
                                     </td>
                                 </tr>
@@ -307,124 +322,7 @@
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         @endif
-                        {{-- <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center relative">
-                                    <button>
-                                        <svg class="w-4 h-4 shrink-0 fill-current text-yellow-500" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                        <img class="rounded-full" src="../images/user-40-01.jpg" width="40" height="40"
-                                            alt="User 01" />
-                                    </div>
-                                    <div class="font-medium text-slate-800">Patricia Semklo</div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">patricia.semklo@app.com</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">🇬🇧 London, UK</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">24</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-sky-500">#123567</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-emerald-500">$2,890.66</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">-</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                    <span class="sr-only">Menu</span>
-                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                        <circle cx="16" cy="16" r="2" />
-                                        <circle cx="10" cy="16" r="2" />
-                                        <circle cx="22" cy="16" r="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr> --}}
-                        <!-- Row -->
-                        {{-- <tr>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Select</span>
-                                        <input class="table-item form-checkbox" type="checkbox"
-                                            @click="uncheckParent" />
-                                    </label>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center relative">
-                                    <button>
-                                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-300" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 0L6 5.934H0l4.89 3.954L2.968 16 8 12.223 13.032 16 11.11 9.888 16 5.934h-6L8 0z" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 shrink-0 mr-2 sm:mr-3">
-                                        <img class="rounded-full" src="../images/user-40-02.jpg" width="40" height="40"
-                                            alt="User 02" />
-                                    </div>
-                                    <div class="font-medium text-slate-800">Dominik Lamakani</div>
-                                </div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">dominik.lamakani@gmail.com</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left">🇩🇪 Dortmund, DE</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">77</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-sky-500">#779912</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-left font-medium text-emerald-500">$14,767.04</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-center">4</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <button class="text-slate-400 hover:text-slate-500 rounded-full">
-                                    <span class="sr-only">Menu</span>
-                                    <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                        <circle cx="16" cy="16" r="2" />
-                                        <circle cx="10" cy="16" r="2" />
-                                        <circle cx="22" cy="16" r="2" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </tr> --}}
-                        <!-- Row -->
+
 
                     </tbody>
                 </table>
@@ -435,7 +333,6 @@
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $proveedores->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
 
     </div>
 </div>

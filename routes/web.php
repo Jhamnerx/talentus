@@ -7,7 +7,7 @@ use App\Http\Controllers\ConsultasController;
 use App\Http\Controllers\PlatBasicaController;
 use App\Http\Controllers\PlatPremiumController;
 use App\Http\Controllers\SolicitudesController;
-
+use App\Http\Controllers\Testcontroller;
 
 Route::get('/', [WebController::class, 'index'])->name('web.home');
 Route::get('plataforma-basica', [PlatBasicaController::class, 'index'])->name('plataforma.basica');
@@ -49,3 +49,6 @@ Route::get('review', [WebController::class, 'review'])->name('web.review');
 Route::post('send-form', [WebController::class, 'submitContacto'])->name('contact.form');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('consulta/vehiculos', [ConsultasController::class, 'consultaVehiculos'])->name('consulta.vehiculos');
+
+
+Route::get('consulta/cpe', [Testcontroller::class, 'cpe'])->name('consulta.cpe');
