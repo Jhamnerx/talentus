@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Proveedores;
 
 use App\Models\Proveedores;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -16,7 +17,6 @@ class ProveedoresIndex extends Component
 
     protected $listeners = [
         'render' => 'render',
-        'update-table' => 'render',
         'echo:proveedores,ProveedoresImportUpdated' => 'updateProveedores'
     ];
 
@@ -27,6 +27,11 @@ class ProveedoresIndex extends Component
         $this->dispatch('proveedores-import');
     }
 
+    #[On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
 
     public function render()
     {

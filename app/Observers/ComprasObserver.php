@@ -15,6 +15,7 @@ class ComprasObserver
         if (!App::runningInConsole()) {
 
             $compra->empresa_id =  session('empresa');
+            $compra->serie_correlativo = $compra->serie . '-' . $compra->correlativo;
             $compra->user_id = auth()->user()->id;
         }
     }
@@ -23,6 +24,7 @@ class ComprasObserver
     public function created(Compras $compra) {}
 
 
+    public function updating(Compras $compra) {}
     public function updated(Compras $compra)
     {
         //

@@ -10,21 +10,13 @@ class ComprasDetalle extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array
-     */
-    protected $guarded = [];
-    protected $table = 'compras_detalle';
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $table = 'detalle_compras';
+
     protected $casts = [
         'id' => 'integer',
         'compra_id' => 'integer',
+        'producto_id' => 'integer',
         'cantidad' => 'decimal:2',
         'valor_unitario' => 'decimal:2',
         'precio_unitario' => 'decimal:2',
@@ -39,5 +31,10 @@ class ComprasDetalle extends Model
     public function compra(): BelongsTo
     {
         return $this->belongsTo(\App\Models\Compras::class);
+    }
+
+    public function producto(): BelongsTo
+    {
+        return $this->belongsTo(\App\Models\Productos::class, 'producto_id', 'id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Categoria;
 use App\Scopes\EmpresaScope;
+use App\Models\ComprasDetalle;
 use App\Scopes\EliminadoScope;
 use Spatie\Activitylog\LogOptions;
 use App\Observers\ProductoObserver;
@@ -107,5 +108,11 @@ class Productos extends Model
     {
 
         return  $this->hasMany(DetalleRecibos::class, 'producto_id');
+    }
+
+    public function detalle_compras()
+    {
+
+        return  $this->hasMany(ComprasDetalle::class, 'producto_id');
     }
 }

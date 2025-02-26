@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\ComprasDetalle;
 use App\Models\PaymentMethods;
 use App\Observers\ComprasObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,14 +16,14 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 class Compras extends Model
 {
     use HasFactory;
-
+    use SoftDeletes;
     /**
      * The attributes that aren't mass assignable.
      *
      * @var array
      */
-    protected $guarded = [];
-    protected $table = 'clientes';
+    protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $table = 'compras';
     /**
      * The attributes that should be cast to native types.
      *
@@ -29,20 +31,14 @@ class Compras extends Model
      */
     protected $casts = [
         'id' => 'integer',
-        'metodo_pago_id' => 'integer',
-        'op_gravadas' => 'decimal:2',
-        'op_exoneradas' => 'decimal:2',
-        'op_inafectas' => 'decimal:2',
-        'op_gratuitas' => 'decimal:2',
-        'descuento' => 'decimal:2',
-        'icbper' => 'decimal:2',
+        'fecha_emision' => 'date:Y-m-d',
         'sub_total' => 'decimal:2',
         'igv' => 'decimal:2',
         'total' => 'decimal:2',
         'user_id' => 'integer',
     ];
 
-    public function comprasDetalles(): HasMany
+    public function detalle(): HasMany
     {
         return $this->hasMany(ComprasDetalle::class);
     }
@@ -60,5 +56,27 @@ class Compras extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+
+    public function proveedor(): BelongsTo
+    {
+        return $this->belongsTo(Proveedores::class, 'proveedor_id', 'id')->withTrashed();
+    }
+
+    //CREAR ITEM DETALLE VENTA
+    public static function createItems($items, Compras $compra)
+    {
+        foreach ($items as $item) {
+            $item['compras_id'] = $compra->id;
+
+            // Crear o actualizar el detalle de la compra
+            $detalleItem = $compra->detalle()->create($item);
+
+            // Incrementar el stock del producto
+            $detalleItem->producto->increment('stock', $item['cantidad']);
+        }
+
+        return $compra->detalle;
     }
 }

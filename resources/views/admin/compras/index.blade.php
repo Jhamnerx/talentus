@@ -2,12 +2,15 @@
 @section('ruta', 'compras-facturas')
 @section('contenido')
 
-
-    <!-- Table -->
-    @livewire('admin.compras.facturas.index')
-    @livewire('admin.compras.facturas.delete')
+    @livewire('admin.compras.index')
 
 @stop
+
+@push('modals')
+    @livewire('admin.compras.delete')
+@endpush
+
+
 
 @section('js')
     @if (session('store'))

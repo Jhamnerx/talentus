@@ -42,7 +42,7 @@ use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PDF\FacturaPdfController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 use App\Http\Controllers\Admin\CertificadosGpsController;
-use App\Http\Controllers\Admin\ComprasFacturasController;
+use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
@@ -114,11 +114,13 @@ Route::controller(ProveedoresController::class)->group(function () {
 });
 
 // COMPRAS
-Route::resource('compras-factura', ComprasFacturasController::class)->names('admin.compras.facturas')->parameters([
-    'compras-factura' => 'factura'
-]);
 
+Route::controller(ComprasController::class)->middleware(['auth'])->group(function () {
 
+    Route::get('compras', 'index')->name('admin.compras.index');
+    Route::get('compras/registrar', 'create')->name('admin.compras.create');
+    Route::get('compras/editar/{compra}', 'editar')->name('admin.compras.edit');
+});
 
 
 // VENTAS PRESUPUESTOS
@@ -373,6 +375,7 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/tipo-afectacion', 'tipoAfectacion')->name('api.tipo-afectacion.index');
     Route::get('api/unit', 'unit')->name('api.unit.index');
     Route::get('api/clientes', 'clientes')->name('api.clientes.index');
+    Route::get('api/proveedores', 'proveedores')->name('api.proveedores.index');
     Route::get('api/series', 'series')->name('api.series.index');
     Route::get('api/invoices', 'invoices')->name('api.invoices.index');
     Route::get('api/productos', 'productos')->name('api.productos.index');

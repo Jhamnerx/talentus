@@ -28,7 +28,7 @@
             </form>
 
             <!-- Create invoice button -->
-            <a href="{{ route('admin.compras.facturas.create') }}">
+            <a href="{{ route('admin.compras.create') }}">
                 <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
@@ -249,7 +249,7 @@
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-slate-800">
-                                            {{ $factura->proveedores->razon_social }}</div>
+                                            {{ $factura->proveedor->razon_social }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div>{{ $factura->fecha }}</div>

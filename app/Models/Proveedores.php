@@ -34,7 +34,6 @@ class Proveedores extends Model
         static::addGlobalScope(new EmpresaScope);
     }
 
-
     // Scope local de activo
     public function scopeActive($query, $status)
     {
@@ -44,6 +43,6 @@ class Proveedores extends Model
 
     public function compras_factura()
     {
-        return $this->hasMany(ComprasFacturas::class, 'proveedores_id');
+        return $this->hasMany(Compras::class, 'proveedores_id');
     }
 }
