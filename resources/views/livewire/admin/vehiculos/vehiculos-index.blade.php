@@ -155,7 +155,7 @@
 
 
                     <x-form.button wire:click.prevent='exportVehiculos()' spinner="exportVehiculos" label="Exportar"
-                        positive md icon="download" />
+                        positive md icon="arrow-down-tray" />
                 </div>
             @endcan
             <!-- Import button -->

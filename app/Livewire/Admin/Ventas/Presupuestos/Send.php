@@ -41,7 +41,7 @@ class Send extends Component
         $this->modalOpenSend = true;
         $this->presupuesto = $presupuesto;
         $this->to = $presupuesto->clientes->email . " | " . $presupuesto->clientes->razon_social;
-        $this->asunto = "TALENTUS - COTIZACIÓN #" . $presupuesto->numero;
+        $this->asunto = "TALENTUS - COTIZACIÓN #" . $presupuesto->serie_correlativo;
         $this->correo =  $presupuesto->clientes->email;
 
         if (empty($presupuesto->clientes->email)) {

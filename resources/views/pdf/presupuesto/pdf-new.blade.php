@@ -5,12 +5,6 @@
     <meta charset="UTF-8">
     <title>COTIZACION #{{ $presupuesto->serie_correlativo }}</title>
 
-
-    {{--
-    <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/normalize.css'), '/') }}" />
-    <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/foundation.css'), '/') }}" />
-    <link rel="stylesheet" href="{{ ltrim(public_path('presupuesto/style.css'), '/') }}" /> --}}
-
     <link rel="stylesheet" href="{{ public_path('docs/normalize.css') }}">
     <link rel="stylesheet" href="{{ public_path('docs/foundation.css') }}">
     <link rel="stylesheet" href="{{ public_path('docs/presupuesto/style.css') }}">
@@ -26,8 +20,10 @@
 
         .header-bottom .invoice-header table tbody td {
             padding: 20px;
-            background: url("data:image/jpeg;base64, {{ base64_encode(file_get_contents('docs/presupuesto/images/arrow.png')) }}") no-repeat 20px top #ed832f;
-
+            background-color: #ed832f;
+            background-image: url("data:image/jpeg;base64, {{ base64_encode(file_get_contents(public_path('docs/presupuesto/images/arrow.png'))) }}");
+            background-repeat: no-repeat;
+            background-position: 20px top;
             font-size: 16px;
             color: #fff;
         }

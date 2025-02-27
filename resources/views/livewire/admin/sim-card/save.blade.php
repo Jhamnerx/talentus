@@ -3,7 +3,8 @@
     <div class="flex flex-auto gap-2 mx-4 py-2">
         <div class=""></div>
         <div class="w-full">
-            <x-form.mini.button wire:click.prevent="addItem" spinner="addItem" primary label="+" class="float-right" />
+            <x-form.mini.button wire:click.prevent="addItem" spinner="addItem" primary label="+"
+                class="float-right" />
         </div>
     </div>
     <div class=" relative">
@@ -29,25 +30,28 @@
 
             <tbody class="text-sm divide-y divide-slate-200">
                 @foreach ($items->all() as $clave => $item)
-                <tr wire:key="{{ $clave }}">
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <div class="col-span-1 sm:col-span-1 flex items-center justify-center">
-                            <span>{{ $clave + 1 }}</span>
-                        </div>
-                    </td>
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                        <x-form.input placeholder="imei sim card" wire:model.live="items.{{ $clave }}.sim_card" />
-                    </td>
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                    <tr wire:key="{{ $clave }}">
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="col-span-1 sm:col-span-1 flex items-center justify-center">
+                                <span>{{ $clave + 1 }}</span>
+                            </div>
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <x-form.input placeholder="imei sim card"
+                                wire:model.live="items.{{ $clave }}.sim_card" />
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <x-form.input placeholder="ingresa operador" wire:model.change="items.{{ $clave }}.operador" />
-                    </td>
-                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <x-form.input placeholder="ingresa operador"
+                                wire:model.change="items.{{ $clave }}.operador" />
+                        </td>
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                        <x-form.mini.button negative icon="x" wire:click.prevent="eliminarItem('{{ $clave }}')" />
-                    </td>
+                            <x-form.mini.button negative icon="x-mark"
+                                wire:click.prevent="eliminarItem('{{ $clave }}')" />
+                        </td>
 
-                </tr>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

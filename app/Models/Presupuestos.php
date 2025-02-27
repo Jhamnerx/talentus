@@ -126,15 +126,14 @@ class Presupuestos extends Model
     {
 
         $plantilla = plantilla::first();
-        $fondo = $plantilla->img_documentos;
-        $sello = $plantilla->img_firma;
+
         view()->share([
             'presupuesto' => $this,
             'plantilla' => $plantilla,
         ]);
 
 
-        //return view('pdf.presupuesto.pdf');
+        //return view('pdf.presupuesto.pdf-new');
         //ANTIGUA VERSION CON NUMERO
         if ($this->numero) {
 
@@ -149,9 +148,7 @@ class Presupuestos extends Model
         //NUEVA VERSION CON DATOS ADICIONALES
         else {
 
-
             $pdf = PDF::loadView('pdf.presupuesto.pdf-new')->setPaper('Legal');
-
 
             if ($action == 1) {
 

@@ -22,12 +22,12 @@
         </div>
 
         <div class="col-span-6">
-            <x-form.datetime-picker label="Fec. Emision:" id="fecha_inicio" name="fecha_inicio"
+            <x-form.datetime.picker label="Fec. Emision:" id="fecha_inicio" name="fecha_inicio"
                 wire:model.live="fecha_inicio" :min="now()->subYears(5)" :max="now()" without-time
                 parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
         <div class="col-span-6">
-            <x-form.datetime-picker label="Fec. Emision:" id="fecha_fin" name="fecha_fin" wire:model.live="fecha_fin"
+            <x-form.datetime.picker label="Fec. Emision:" id="fecha_fin" name="fecha_fin" wire:model.live="fecha_fin"
                 :min="$fecha_inicio" :max="now()" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
                 :clearable="false" />
         </div>

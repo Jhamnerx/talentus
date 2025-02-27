@@ -16,7 +16,8 @@ class Index extends Component
     public function render()
     {
         $compras = Compras::whereHas('proveedor', function ($query) {
-            $query->where('razon_social', 'like', '%' . $this->search . '%');
+            $query->where('razon_social', 'like', '%' . $this->search . '%')
+                ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
         })->orWhereHas('tipoComprobante', function ($query) {
             $query->where('descripcion', 'like', '%' . $this->search . '%');
         })
