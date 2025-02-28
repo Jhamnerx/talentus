@@ -70,7 +70,9 @@
                                 <div class="flex flex-wrap items-center -m-1.5">
                                     <div class="flex flex-wrap pt-2 -space-x-px gap-3">
                                         <x-form.button wire:click.prevent='exportToPdf' spinner="exportToPdf"
-                                            label="PDF" red icon="document-download" />
+                                            label="PDF" red icon="arrow-down-tray
+
+" />
                                     </div>
                                 </div>
 

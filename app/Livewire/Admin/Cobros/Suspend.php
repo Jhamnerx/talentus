@@ -3,19 +3,19 @@
 namespace App\Livewire\Admin\Cobros;
 
 use App\Models\Cobros;
+use App\Models\DetalleCobros;
 use Livewire\Component;
 
 class Suspend extends Component
 {
     public $observacion;
-    public $cobro;
-    public $openModalSuspend = false;
-    public $openModalActivar = false;
+    public $detalle;
 
-    public function mount(Cobros $cobro)
+
+    public function mount(DetalleCobros $detalle)
     {
-        $this->observacion = $cobro->observacion;
-        $this->cobro = $cobro;
+        $this->observacion = $detalle->observacion;
+        $this->detalle = $detalle;
     }
 
 
@@ -24,18 +24,26 @@ class Suspend extends Component
         return view('livewire.admin.cobros.suspend');
     }
 
-    public function openModalSuspend()
+    public function openModalSuspend(DetalleCobros $detalle)
     {
-
-        $this->dispatch('suspendCobro', $this->cobro, $this->observacion);
-        $this->openModalSuspend = true;
-        //dd($this->cobro);
+        $this->dispatch('suspend-vehiculo-cobro', detalle: $this->detalle);
     }
 
     public function openModalActivar()
     {
 
-        $this->dispatch('activarCobro', $this->cobro);
-        $this->openModalActivar = true;
+        $this->dispatch('activar-vehiculo-cobro', detalle: $this->detalle);
+    }
+
+    public function guardarObservacion()
+    {
+        $this->detalle->observacion = $this->observacion;
+        $this->detalle->save();
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'OBSERVACION GUARDADA',
+            mensaje: 'Se guardo la observacion correctamente'
+        );
     }
 }

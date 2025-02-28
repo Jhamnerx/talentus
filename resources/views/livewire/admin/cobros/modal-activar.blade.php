@@ -2,7 +2,7 @@
 
 
 
-    <div x-data="{ modalActivar: @entangle('openModalActivar').live }">
+    <div x-data="{ modalActivar: @entangle('openModal').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalActivar"

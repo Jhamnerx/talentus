@@ -37,14 +37,21 @@ class RecibosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder imp
 
     public function view(): View
     {
+        $recibos = Recibos::whereRaw(
+            "(fecha_emision >= ? AND fecha_emision <= ?)",
+            [
+                $this->fecha_inicio . " 00:00:00",
+                $this->fecha_fin . " 23:59:59"
+            ]
+        )->where('pago_estado', $this->estado)->orderBy('fecha_emision')->get();
+
+        $total_soles = $recibos->where('divisa', 'PEN')->sum('total');
+        $total_dolares = $recibos->where('divisa', 'USD')->sum('total');
+
         return view('exports.recibos', [
-            'recibos' => Recibos::whereRaw(
-                "(fecha_emision >= ? AND fecha_emision <= ?)",
-                [
-                    $this->fecha_inicio . " 00:00:00",
-                    $this->fecha_fin . " 23:59:59"
-                ]
-            )->where('pago_estado', $this->estado)->get()
+            'recibos' => $recibos,
+            'total_soles' => $total_soles,
+            'total_dolares' => $total_dolares,
         ]);
     }
 }

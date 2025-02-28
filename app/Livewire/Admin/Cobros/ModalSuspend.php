@@ -3,44 +3,43 @@
 namespace App\Livewire\Admin\Cobros;
 
 use App\Models\Cobros;
+use App\Models\DetalleCobros;
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalSuspend extends Component
 {
-    public $openModalSuspend = false;
-    public $cobro, $observacion;
-    protected $listeners = [
+    public $openModal = false;
+    public $detalle;
 
-        'suspendCobro' => 'openModalSuspend',
-    ];
 
     public function render()
     {
         return view('livewire.admin.cobros.modal-suspend');
     }
 
-    public function openModalSuspend(Cobros $cobro, $observacion)
+    #[On('suspend-vehiculo-cobro')]
+    public function openModalSuspend(DetalleCobros $detalle)
     {
-        $this->openModalSuspend = true;
-        $this->cobro = $cobro;
-        $this->observacion = $observacion;
+        $this->openModal = true;
+        $this->detalle = $detalle;
     }
 
     public function SuspendCobro()
     {
-        $this->cobro->observacion = $this->observacion;
-        $this->cobro->suspendido = 1;
-        $this->cobro->save();
+        $this->detalle->estado = 0;
+        $this->detalle->save();
 
-        $vehiculo = Vehiculos::find($this->cobro->vehiculo->id);
+        $vehiculo = Vehiculos::find($this->detalle->vehiculo_id);
         $vehiculo->is_active = 0;
         $vehiculo->save();
 
-        //return redirect()->route('admin.cobros.show', $this->cobro)->with('suspend', 'Se suspendio el servicio');
-        session()->flash('flash.banner', 'Se suspendio el servicio');
-        session()->flash('flash.bannerStyle', 'danger');
-
-        return redirect()->route('admin.cobros.show', $this->cobro);
+        $this->dispatch(
+            'notify-toast',
+            icon: 'error',
+            title: 'VEHICULO SUSPENDIDO',
+            mensaje: 'Se suspendio el vehiculo correctamente'
+        );
     }
 }

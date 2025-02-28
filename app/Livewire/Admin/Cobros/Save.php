@@ -17,11 +17,11 @@ class Save extends Component
 
     public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
     public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
-    public $dataVehiculos = [];
+
     public $nota;
 
+    public $vehiculo_selected;
 
-    public $panelVehiculosOpen = false;
 
     public Collection $items;
 
@@ -35,29 +35,6 @@ class Save extends Component
     public function render()
     {
         return view('livewire.admin.cobros.save');
-    }
-
-
-    public function updatedCliente($id)
-    {
-
-        $cliente = Clientes::where('id', $id)->first();
-
-
-        $data = [];
-
-        foreach ($cliente->vehiculos as $vehiculo) {
-
-            if ($vehiculo->is_active) {
-                $data[] = [
-                    'id' => $vehiculo->id,
-                    'text' => $vehiculo->placa,
-                ];
-            }
-        }
-
-        $this->dispatch('dataVehiculos', ['data' => $data]);
-        $this->dataVehiculos = $data;
     }
 
     public function updatedPeriodo($periodo)
@@ -110,7 +87,7 @@ class Save extends Component
                 'observacion' => $datos["observacion"],
             ]);
 
-            Cobros::createItems($cobro, $datos["items"]);
+            Cobros::createItems($cobro, $datos["items"], 'create');
 
             // $this->dispatch(
             //     'notify-toast',
@@ -123,26 +100,31 @@ class Save extends Component
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',
-                icon: 'success',
-                title: 'VENTA REGISTRADA',
+                icon: 'error',
+                title: 'ERROR AL ACTUALIZAR',
                 mensaje: $th->getMessage(),
             );
         }
     }
 
-    public function updatedClientesId($cliente)
+    public function agregarVehiculo()
     {
-        $this->panelVehiculosOpen = true;
-        $this->dispatch('open-panel-vehiculos', $cliente);
+        if (empty($this->vehiculo_selected)) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: 'Debes seleccionar un vehiculo',
+            );
+            return;
+        }
+
+        $vehiculo = Vehiculos::find($this->vehiculo_selected);
+
+        $this->addVehiculo($vehiculo);
+        $this->vehiculo_selected = '';
     }
 
-    public function openPanelVehiculos()
-    {
-        $this->panelVehiculosOpen = true;
-        $this->dispatch('open-panel-vehiculos', $this->clientes_id);
-    }
-
-    #[On('add-vehiculo')]
     public function addVehiculo(Vehiculos $vehiculo)
     {
         if (array_key_exists($vehiculo->placa, $this->items->all())) {
@@ -167,6 +149,7 @@ class Save extends Component
                 'placa' => $vehiculo->placa,
                 'plan' => 30,
                 'fecha' => $this->fecha_vencimiento,
+                'estado' => 1,
             ];
         }
     }

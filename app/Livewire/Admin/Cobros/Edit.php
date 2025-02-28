@@ -16,16 +16,15 @@ class Edit extends Component
 {
     public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
     public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
-    public $dataVehiculos = [];
     public $nota;
 
-
-    public $panelVehiculosOpen = false;
+    public $vehiculo_selected;
 
     public Collection $items;
 
     public Cobros $cobro;
-    public function mount()
+
+    public function mount(Cobros $cobro)
     {
         $this->fecha_vencimiento = $this->cobro->fecha_vencimiento->format('Y-m-d');
         $this->fecha_inicio = $this->cobro->fecha_inicio ? $this->cobro->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d');
@@ -37,8 +36,19 @@ class Edit extends Component
         $this->clientes_id = $this->cobro->clientes_id;
         $this->observacion = $this->cobro->observacion;
         $this->comentario = $this->cobro->comentario;
-        $this->items = collect();
-        $this->LoadDataVehiculos($this->cobro->detalle);
+        $this->cobro = $cobro;
+
+        $this->items = collect($this->cobro->detalle->mapWithKeys(function ($detalle) {
+            return [
+                $detalle->vehiculo->placa => [
+                    'vehiculo_id' => $detalle->vehiculo_id,
+                    'placa' => $detalle->vehiculo->placa,
+                    'plan' => $detalle->plan,
+                    'fecha' => $detalle->fecha->format('Y-m-d'),
+                    'estado' => $detalle->estado,
+                ],
+            ];
+        }));
     }
 
     public function render()
@@ -46,12 +56,10 @@ class Edit extends Component
         return view('livewire.admin.cobros.edit');
     }
 
-
     public function updatedCliente($id)
     {
 
         $cliente = Clientes::where('id', $id)->first();
-
 
         $data = [];
 
@@ -64,24 +72,26 @@ class Edit extends Component
                 ];
             }
         }
-
-        $this->dispatch('dataVehiculos', ['data' => $data]);
-        $this->dataVehiculos = $data;
     }
 
-    public function updatedClientesId($cliente)
+    public function agregarVehiculo()
     {
-        $this->panelVehiculosOpen = true;
-        $this->dispatch('open-panel-vehiculos', $cliente);
+        if (empty($this->vehiculo_selected)) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR EL AÑADIR',
+                mensaje: 'Debes seleccionar un vehiculo',
+            );
+            return;
+        }
+
+        $vehiculo = Vehiculos::find($this->vehiculo_selected);
+
+        $this->addVehiculo($vehiculo);
+        $this->vehiculo_selected = '';
     }
 
-    public function openPanelVehiculos()
-    {
-        $this->panelVehiculosOpen = true;
-        $this->dispatch('open-panel-vehiculos', $this->clientes_id);
-    }
-
-    #[On('add-vehiculo')]
     public function addVehiculo(Vehiculos $vehiculo)
     {
         if (array_key_exists($vehiculo->placa, $this->items->all())) {
@@ -106,6 +116,7 @@ class Edit extends Component
                 'placa' => $vehiculo->placa,
                 'plan' => 30,
                 'fecha' => $this->fecha_vencimiento,
+                'estado' => 1,
             ];
         }
     }
@@ -114,19 +125,6 @@ class Edit extends Component
     {
         unset($this->items[$key]);
         $this->items;
-    }
-
-    public function LoadDataVehiculos($items)
-    {
-        foreach ($items as $item) {
-
-            $this->items[$item->vehiculo->placa] = [
-                'vehiculo_id' => $item->vehiculo_id,
-                'placa' => $item->vehiculo->placa,
-                'plan' => $item->plan,
-                'fecha' => $item->fecha,
-            ];
-        }
     }
 
     public function updatedPeriodo($periodo)
@@ -158,11 +156,9 @@ class Edit extends Component
 
     public function updateCobro()
     {
-
         $requestCobros = new CobrosRequest();
 
-        $values = $this->validate($requestCobros->rules(), $requestCobros->messages());
-
+        $this->validate($requestCobros->rules(), $requestCobros->messages());
 
         $this->cobro->update([
             'periodo' => $this->periodo,
@@ -180,7 +176,6 @@ class Edit extends Component
     public function save()
     {
         $requestCobros = new CobrosRequest();
-
         $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
 
         $this->cantidad_unidades = $this->items->count();
@@ -202,15 +197,15 @@ class Edit extends Component
 
             $this->cobro->detalle()->delete();
 
-            Cobros::createItems($this->cobro, $datos["items"]);
+            Cobros::createItems($this->cobro, $datos["items"], 'update');
 
             session()->flash('cobro-actualizado', 'Se Actualizo con exito el cobro');
             $this->redirectRoute('admin.cobros.index');
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',
-                icon: 'success',
-                title: 'VENTA REGISTRADA',
+                icon: 'error',
+                title: 'ERROR AL ACTUALIZAR',
                 mensaje: $th->getMessage(),
             );
         }

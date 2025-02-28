@@ -111,9 +111,21 @@
                 <div class="text-center">No hay Registros</div>
             </td>
         @endif
-
-
     </tbody>
+
+    <!-- Table footer -->
+    <tfoot>
+        <tr>
+            <td colspan="2" style="text-align: right; font-weight: bold;">Total en USD:</td>
+            <td>{{ number_format($total_dolares, 2) }}</td>
+            <td colspan="5"></td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: right; font-weight: bold;">Total en Soles:</td>
+            <td>{{ number_format($total_soles, 2) }}</td>
+            <td colspan="5"></td>
+        </tr>
+    </tfoot>
 </table>
 
 </html>

@@ -4,12 +4,9 @@
 
 @section('contenido')
 
-
-    <!-- Code block starts -->
-
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
-        <!-- Add customer button -->
+
         <a href="{{ route('admin.cobros.index') }}">
             <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
@@ -44,11 +41,7 @@
 
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
 
-
-
-
         @livewire('admin.cobros.save')
-
 
     </div>
 

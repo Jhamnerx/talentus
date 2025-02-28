@@ -10,29 +10,27 @@
 
     <link rel="stylesheet" href="{{ public_path('docs/contrato/contrato.css') }}">
     {{ header('Content-type:application/pdf') }}
-    @if ($contrato->fondo)
-        @php $fondo = base64_encode(Storage::get($fondo)) @endphp
-        <style type="text/css">
-            /* -- Base -- */
+    @if ($fondo)
 
-            body:before {
-                display: block;
-                position: fixed;
-                top: -65px;
-                right: -28px;
-                bottom: -84px;
-                left: -82px;
-
-                background-image:
-
-                    url(data:image/jpeg;base64,{{ $fondo }});
-                background-size: 100%;
-                background-repeat: no-repeat;
-                /* opacity: .2; */
-                content: "";
-                z-index: -1000;
-            }
-        </style>
+        @if ($fondo)
+            <style type="text/css">
+                /* -- Base -- */
+                body:before {
+                    display: block;
+                    position: fixed;
+                    top: -65px;
+                    right: -28px;
+                    bottom: -84px;
+                    left: -82px;
+                    background-image: url("data:image/jpeg;base64,{{ $fondo }}");
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    /* opacity: .2; */
+                    content: "";
+                    z-index: -1000;
+                }
+            </style>
+        @endif
     @else
         <style type="text/css">
             /* -- Base -- */

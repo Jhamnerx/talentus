@@ -44,6 +44,7 @@ class CobrosRequest extends FormRequest
             'items.*.placa' => 'required',
             'items.*.fecha' => 'required|date',
             'items.*.vehiculo_id' => 'required',
+            'items.*.estado' => 'boolean',
         ];
 
         return $rules;

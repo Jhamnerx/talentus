@@ -3,43 +3,43 @@
 namespace App\Livewire\Admin\Cobros;
 
 use App\Models\Cobros;
+use App\Models\DetalleCobros;
 use App\Models\Vehiculos;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalActivar extends Component
 {
-    public $openModalActivar = false;
-    public $cobro;
-
-    protected $listeners = [
-
-        'activarCobro' => 'openModalActivar',
-    ];
+    public $openModal = false;
+    public $detalle;
 
     public function render()
     {
         return view('livewire.admin.cobros.modal-activar');
     }
 
-    public function openModalActivar(Cobros $cobro)
+    #[On('activar-vehiculo-cobro')]
+    public function openModal(DetalleCobros $detalle)
     {
 
-        $this->openModalActivar = true;
-        $this->cobro = $cobro;
+        $this->openModal = true;
+        $this->detalle = $detalle;
     }
+
     public function ActivarCobro()
     {
-        $this->cobro->suspendido = 0;
-        $this->cobro->save();
+        $this->detalle->estado = 1;
+        $this->detalle->save();
 
-        $vehiculo = Vehiculos::find($this->cobro->vehiculo->id);
+        $vehiculo = Vehiculos::find($this->detalle->vehiculo->id);
         $vehiculo->is_active = 1;
         $vehiculo->save();
 
-
-        session()->flash('flash.banner', 'Se activo el servicio');
-        session()->flash('flash.bannerStyle', 'green');
-
-        return redirect()->route('admin.cobros.show', $this->cobro);
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'VEHICULO ACTIVADO',
+            mensaje: 'Se activo el vehiculo correctamente'
+        );
     }
 }

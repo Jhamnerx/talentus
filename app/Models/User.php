@@ -77,6 +77,10 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function scopeExcludeEmail($query, $email)
+    {
+        return $query->where('email', '!=', $email);
+    }
 
     public function cambios()
     {

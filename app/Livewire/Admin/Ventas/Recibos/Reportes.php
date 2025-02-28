@@ -6,6 +6,7 @@ use App\Exports\RecibosExport;
 use Carbon\Carbon;
 use Livewire\Component;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Recibos;
 
 class Reportes extends Component
 {
@@ -16,6 +17,8 @@ class Reportes extends Component
     public $estado;
 
 
+    public $total_soles = 0;
+    public $total_dolares = 0;
 
     protected $listeners = [
         'openModalReporte' => 'openModal'
@@ -72,5 +75,15 @@ class Reportes extends Component
     public function updated($label)
     {
         $this->validateOnly($label);
+        $this->calcularTotales();
+    }
+
+    public function calcularTotales()
+    {
+        $recibos = Recibos::where('pago_estado', $this->estado)
+            ->whereBetween('fecha_emision', [$this->fecha_inicio, $this->fecha_fin])
+            ->get();
+        $this->total_soles = $recibos->where('divisa', 'PEN')->sum('total');
+        $this->total_dolares = $recibos->where('divisa', 'USD')->sum('total');
     }
 }

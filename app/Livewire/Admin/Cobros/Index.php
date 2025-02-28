@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Cobros;
 
 use Livewire\Component;
 use App\Models\Cobros;
+use App\Models\DetalleCobros;
 use Livewire\WithPagination;
 use Carbon\Carbon;
 
@@ -18,7 +19,8 @@ class Index extends Component
     ];
     protected $queryString = [
         'search' => ['except' => ''],
-        'estado' => ['except' => '']
+        'estado' => ['except' => ''],
+        'status' => ['except' => '']
 
     ];
 
@@ -32,13 +34,16 @@ class Index extends Component
             $query->orWhereHas('contactos', function ($contacto) {
                 $contacto->Where('nombre', 'like', '%' . $this->search . '%');
             });
-        })->orwhereHas('vehiculo', function ($query) {
-            $query->where('placa', 'like', '%' . $this->search . '%');
+        })->orwhereHas('detalle', function ($query) {
+            $query->whereHas('vehiculo', function ($vehiculo) {
+                $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+            });
         })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
             ->orWhere('periodo', 'like', '%' . $this->search . '%')
             ->orWhere('monto_unidad', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(10);
+
 
         if ($status === 1) {
 
@@ -90,5 +95,11 @@ class Index extends Component
     public function openModalDelete(Cobros $cobro)
     {
         $this->dispatch('openModalDelete', $cobro);
+    }
+
+    public function cambiarEstado(DetalleCobros $detalleCobros)
+    {
+        $detalleCobros->estado = !$detalleCobros->estado;
+        $detalleCobros->save();
     }
 }

@@ -157,13 +157,8 @@
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
-                                    </label>
-                                </div>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">ver</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Empresa</div>
@@ -174,10 +169,6 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">VEHICULOS</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Estado</div>
-                            </th>
-
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Comentario</div>
                             </th>
@@ -190,9 +181,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Tipo Comprobante</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Monto</div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Observacion</div>
                             </th>
@@ -208,13 +197,21 @@
                         @foreach ($cobros as $cobro)
                             <tr wire:key='cobro-{{ $cobro->id }}'>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center">
-                                        <label class="inline-flex">
-                                            <span class="sr-only">Select</span>
-                                            <input class="table-item form-checkbox" type="checkbox"
-                                                @click="uncheckParent" />
-                                        </label>
-                                    </div>
+                                    <a href="{{ route('admin.cobros.show', $cobro) }}"
+                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                        disabled="false" id="headlessui-menu-item-29" role="menuitem"
+                                        tabindex="-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-violet-500">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                                            </path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                            </path>
+                                        </svg>
+                                    </a>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -241,8 +238,6 @@
                                     </div>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <!-- Start -->
                                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                         @mouseleave="open = false">
                                         <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
@@ -287,6 +282,12 @@
                                                                     <th scope="col" class="px-6 py-3">
                                                                         Plan
                                                                     </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        Fecha Vencimiento
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        Estado
+                                                                    </th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody class="a overflow-y-auto">
@@ -301,22 +302,66 @@
                                                                     </tr>
                                                                 @else
                                                                     @foreach ($cobro->detalle as $detalle)
+                                                                        @php
+                                                                            $diasRestantes = \Carbon\Carbon::now()->diffInDays(
+                                                                                $detalle->fecha,
+                                                                                false,
+                                                                            );
+                                                                            $colorClase = '';
+                                                                            if ($diasRestantes > 30) {
+                                                                                $colorClase = 'text-green-500';
+                                                                            } elseif (
+                                                                                $diasRestantes <= 30 &&
+                                                                                $diasRestantes > 15
+                                                                            ) {
+                                                                                $colorClase = 'text-orange-500';
+                                                                            } elseif ($diasRestantes <= 15) {
+                                                                                $colorClase = 'text-red-500';
+                                                                            }
+                                                                        @endphp
                                                                         <tr
-                                                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                            class=" border-b {{ $detalle->estado == 0 ? 'bg-red-200' : 'bg-white' }}">
                                                                             <th scope="row"
-                                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-
+                                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap {{ $colorClase }}">
                                                                                 @if ($detalle->vehiculo)
                                                                                     {{ $detalle->vehiculo->placa }}
                                                                                 @else
                                                                                     -
                                                                                 @endif
-
                                                                             </th>
                                                                             <td class="px-6 py-4">
                                                                                 S/. {{ $detalle->plan }}
                                                                             </td>
+                                                                            <td class="px-6 py-4">
 
+                                                                                <span class="{{ $colorClase }}">
+                                                                                    {{ $detalle->fecha->format('d-m-Y') }}
+                                                                                </span>
+                                                                            </td>
+
+                                                                            <td class="px-6 py-4">
+                                                                                <div class="m-3">
+                                                                                    <div class="flex items-center mt-2"
+                                                                                        x-data="{ checked: {{ $detalle->estado ? 'true' : 'false' }} }">
+                                                                                        <div class="form-switch">
+                                                                                            <input
+                                                                                                wire:click="cambiarEstado({{ $detalle->id }})"
+                                                                                                type="checkbox"
+                                                                                                id="switch{{ $detalle->id }}"
+                                                                                                class="sr-only"
+                                                                                                x-model="checked" />
+                                                                                            <label class="bg-slate-400"
+                                                                                                for="switch{{ $detalle->id }}">
+                                                                                                <span
+                                                                                                    class="bg-white shadow-sm"
+                                                                                                    aria-hidden="true"></span>
+                                                                                                <span
+                                                                                                    class="sr-only">Estado</span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 @endif
@@ -327,42 +372,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                </td>
-
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-
-                                    @if ($cobro->suspendido)
-                                        <div
-                                            class="text-xs inline-flex font-medium bg-rose-100 text-rose-600 rounded-full text-center px-2.5 py-1">
-                                            Suspendido</div>
-                                    @else
-                                        @switch($cobro->estado)
-                                            @case(0)
-                                                <div class="font-medium text-emerald-500">
-                                                    ACTIVO
-
-                                                </div>
-                                            @break
-
-                                            @case(1)
-                                                <div class="font-medium text-orange-400">
-                                                    POR VENCER
-
-                                                </div>
-                                            @break
-
-                                            @case(2)
-                                                <div class="font-medium text-rose-500">
-                                                    VENCIDO
-
-                                                </div>
-                                            @break
-
-                                            @default
-                                        @endswitch
-                                    @endif
 
                                 </td>
 
@@ -387,19 +396,6 @@
 
                                     <div class="font-medium text-slate-800">
                                         {{ $cobro->tipo_pago }}
-                                    </div>
-
-                                </td>
-
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="font-medium text-slate-800">
-                                        @if ($cobro->divisa == 'PEN')
-                                            S/. {{ $cobro->monto_unidad }}
-                                        @else
-                                            ${{ $cobro->monto_unidad }}
-                                        @endif
-
                                     </div>
 
                                 </td>
@@ -433,7 +429,6 @@
                                                 x-transition:leave="transition ease-out duration-200"
                                                 x-transition:leave-start="opacity-100"
                                                 x-transition:leave-end="opacity-0" x-cloak>
-
                                                 <ul>
                                                     @can('admin.cobros.edit')
                                                         <li>
@@ -472,7 +467,6 @@
                                                             </a>
                                                         </li>
                                                     @endcan
-
                                                     <li>
                                                         <a href="{{ route('admin.cobros.show', $cobro) }}"
                                                             class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
@@ -492,15 +486,10 @@
                                                             </svg> Ver
                                                         </a>
                                                     </li>
-
                                                 </ul>
-
-
                                             </div>
                                         </div>
-
                                     </div>
-
                                 </td>
                             </tr>
                         @endforeach
@@ -509,8 +498,6 @@
                                 <div class="text-center">No hay Registros</div>
                             </td>
                         @endif
-
-
                     </tbody>
                 </table>
 
@@ -521,7 +508,6 @@
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $cobros->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
 
     </div>
 

@@ -57,7 +57,7 @@
                                     <p class="text-sm  leading-none text-talentus">
                                         <span class="font-semibold text-gray-800">
                                             Placa: </span>
-                                        T5B-540
+                                        {{ $mantenimiento->vehiculo->placa }}
                                     </p>
 
                                     <p class="text-sm leading-none text-talentus"><span

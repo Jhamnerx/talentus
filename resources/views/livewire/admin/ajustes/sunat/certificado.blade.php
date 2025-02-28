@@ -63,7 +63,7 @@
             <div class="flex flex-wrap justify-end space-x-2">
 
                 <x-form.button wire:click='uploadCertificado' spinner="uploadCertificado" label="Subir y Convertir"
-                    primary icon="upload" />
+                    primary icon="arrow-up-tray" />
             </div>
         </div>
     </div>

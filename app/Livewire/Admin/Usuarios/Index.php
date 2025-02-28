@@ -10,15 +10,17 @@ class Index extends Component
 {
     use WithPagination;
     public $search;
-    public $from = '';
-    public $to = '';
-    protected $listeners = [
-        'render' => 'render',
-    ];
+
+    #[\Livewire\Attributes\On('update-table')]
+    public function updateTable()
+    {
+        $this->render();
+    }
+
     public function render()
     {
         $usuarios = User::Where('name', 'like', '%' . $this->search . '%')
-            ->where('email', '<>', 'jhamnerx1x@gmail.com')
+            ->excludeEmail('jhamnerx1x@gmail.com')
             ->orderBy('id', 'desc')
             ->paginate(10);
 
@@ -30,5 +32,16 @@ class Index extends Component
     {
         $user->is_active = !$user->is_active; // Cambia el estado del toggle
         $user->save(); // Guarda el cambio en el modelo
+    }
+
+    public function openModalCreate()
+    {
+        $this->dispatch('open-modal-create');
+    }
+
+    public function openModalEdit(User $usuario)
+    {
+
+        $this->dispatch('open-modal-edit', usuario: $usuario);
     }
 }

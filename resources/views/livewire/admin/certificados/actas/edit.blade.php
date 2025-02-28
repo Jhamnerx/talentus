@@ -1,4 +1,4 @@
-<x-form.modal.card title="EDITAR ACTA" wire:model.live="openModalEdit" align="center">
+<x-form.modal.card title="EDITAR ACTA" wire:model.live="openModalEdit" align="center" width="4xl">
 
     <div class="grid grid-cols-12 gap-6">
 
@@ -10,8 +10,8 @@
         <div class="col-span-12 sm:col-span-5">
 
             <x-form.select autocomplete='off' label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description"
-                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id">
+                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
+                option-label="placa" option-value="id">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
                     <x-form.button wire:click.prevent='addVehiculo(`${search}`)' x-on:click="close" primary flat full>
@@ -20,13 +20,11 @@
                 </x-slot>
 
             </x-form.select>
-
         </div>
         <div class="col-span-12 sm:col-span-4">
 
             <x-form.select autocomplete='off' label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
-                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre"
-                option-value="id" />
+                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-4">
@@ -71,9 +69,9 @@
 
             </div>
             @error('plataforma')
-            <p class="mt-2 text-pink-600 text-sm">
-                {{ $message }}
-            </p>
+                <p class="mt-2 text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
             @enderror
         </div>
         <div class="col-span-12 sm:col-span-12 mt-4">

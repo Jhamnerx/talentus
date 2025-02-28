@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Requests\PaymentsRequest;
 use App\Models\Clientes;
 use App\Models\Cobros;
+use App\Models\DetalleCobros;
 use App\Models\Facturas;
 use App\Models\PaymentMethods;
 use App\Models\Payments;
@@ -25,7 +26,7 @@ class Payment extends Component
 
     public $paymentsMethods = [];
 
-    public $cobro;
+    public $detalle;
 
     public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
 
@@ -33,12 +34,12 @@ class Payment extends Component
         'openModalPayment' => 'openModal',
     ];
 
-    public function mount(Cobros $cobro)
+    public function mount(DetalleCobros $detalle)
     {
-        $this->cobro = $cobro;
-        $this->divisa = $cobro->divisa;
-        $this->tipo_pago = $cobro->tipo_pago;
-        $this->cobro->reset;
+
+        $this->detalle = $detalle;
+        $this->divisa = $detalle->cobro->divisa;
+        $this->tipo_pago = $detalle->cobro->tipo_pago;
         $this->paymentsMethods = PaymentMethods::all();
         $paymentController = new PaymentsController();
         $this->numero = $paymentController->setNextSequenceNumber();

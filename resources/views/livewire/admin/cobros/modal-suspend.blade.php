@@ -2,7 +2,7 @@
 
 
 
-    <div x-data="{ modalSuspend: @entangle('openModalSuspend').live }">
+    <div x-data="{ modalSuspend: @entangle('openModal').live }">
 
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSuspend"
@@ -31,7 +31,8 @@
                     <div>
                         <!-- Modal header -->
                         <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800">Suspender Servicio</div>
+                            <div class="text-lg font-semibold text-slate-800">Suspender Servicio
+                                {{ $detalle ? $detalle->vehiculo->placa : '' }}</div>
 
                         </div>
                         <!-- Modal content -->

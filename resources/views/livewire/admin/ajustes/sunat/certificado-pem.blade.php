@@ -15,7 +15,7 @@
             <div class="flex flex-wrap justify-end space-x-2">
 
                 <x-form.button @click="files = null" wire:click='uploadCertificado' spinner="uploadCertificado"
-                    label="Crear Archivo PEM" primary icon="upload" />
+                    label="Crear Archivo PEM" primary icon="arrow-up-tray" />
             </div>
         </div>
     </div>

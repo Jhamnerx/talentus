@@ -7,6 +7,13 @@
 
 @stop
 
+
+@push('modals')
+    @livewire('admin.usuarios.create')
+    @livewire('admin.usuarios.edit')
+@endpush
+
+
 @section('js')
 
     @if (session('delete'))

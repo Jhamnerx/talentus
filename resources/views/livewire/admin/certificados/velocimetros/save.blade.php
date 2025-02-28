@@ -25,8 +25,7 @@
                                     Velocimetro:"
                 placeholder="Selecciona un modelo" wire:model.live="velocimetro_modelo">
                 @foreach ($velocimetros as $velocimetro)
-                    <x-form.select.option label="{{ $velocimetro->descripcion }}"
-                        value="{{ $velocimetro->descripcion }}" />
+                    <x-select.option label="{{ $velocimetro->descripcion }}" value="{{ $velocimetro->descripcion }}" />
                 @endforeach
             </x-form.select>
 

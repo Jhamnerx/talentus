@@ -4,12 +4,12 @@
     "name": "iziToast"
   },
   "resources/css/app.css": {
-    "file": "assets/app-2DWy8uu4.css",
+    "file": "assets/app-xRrCO0Xw.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/css/cliente.css": {
-    "file": "assets/cliente-Df5DLuxP.css",
+    "file": "assets/cliente-CEWLqz2D.css",
     "src": "resources/css/cliente.css",
     "isEntry": true
   },
@@ -912,15 +912,15 @@
   },
   "resources/images/slider-bg-1.png": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider/slider-bg.jpg"
   },
   "resources/images/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider/slider-bg.jpg"
   },
   "resources/images/slider/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider/slider-bg.jpg"
   },
   "resources/images/task-image-01.jpg": {
     "file": "assets/task-image-01-yEnpb4kW.jpg",

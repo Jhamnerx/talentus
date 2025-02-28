@@ -4,8 +4,8 @@
         <div class="col-span-12 sm:col-span-6">
 
             <x-form.select disabled label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description"
-                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" />
+                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
+                option-label="placa" option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-6">
@@ -14,7 +14,7 @@
                 without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.time-picker label="Hora Transmision:" placeholder="22:30" format="24" wire:model.live="hora_t" />
+            <x-form.time.picker label="Hora Transmision:" placeholder="22:30" format="24" wire:model.live="hora_t" />
         </div>
         <div class="col-span-12 sm:col-span-12 mt-4">
             <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">

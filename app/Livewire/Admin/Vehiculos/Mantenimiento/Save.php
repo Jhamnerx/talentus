@@ -61,6 +61,7 @@ class Save extends Component
     {
 
         $this->numero =  $this->getNextSequenceNumber();
+
         $this->fecha_hora_mantenimiento = Carbon::now()->addYear()->format('Y-m-d');
 
         if ($vehiculo) {
@@ -73,7 +74,15 @@ class Save extends Component
     public function getNextSequenceNumber()
     {
         $maxNumero = Mantenimiento::max('numero');
-        return $maxNumero ? $maxNumero + 1 : 1;
+
+        if ($maxNumero) {
+            preg_match('/(\d+)$/', $maxNumero, $matches);
+            $numericPart = $matches ? intval($matches[0]) : 0;
+            $nextNumero = $numericPart + 1;
+            return str_replace($numericPart, $nextNumero, $maxNumero);
+        } else {
+            return 1;
+        }
     }
 
 
@@ -107,7 +116,7 @@ class Save extends Component
             'notify-toast',
             icon: 'success',
             title: 'MANTENIMIENTO REGISTRADO',
-            mensaje: 'Se registro correctamente el mantenimiento para' . $placa,
+            mensaje: 'Se registro correctamente el mantenimiento para ' . $placa,
         );
         $this->closeModal();
         $this->dispatch('update-table');

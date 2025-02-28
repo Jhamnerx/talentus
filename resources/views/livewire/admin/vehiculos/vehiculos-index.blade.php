@@ -162,7 +162,7 @@
             @can('importar-vehiculos-vehiculos')
                 <div class="relative inline-flex">
 
-                    <x-form.button wire:click="openModalImport()" label="Importar" info md icon="upload" />
+                    <x-form.button wire:click="openModalImport()" label="Importar" info md icon="arrow-up-tray" />
                 </div>
             @endcan
 

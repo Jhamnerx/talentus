@@ -100,12 +100,18 @@ class Cobros extends Model
     }
 
 
-    public static function createItems(Cobros $cobro, $cobroItems)
+    public static function createItems(Cobros $cobro, $cobroItems, $type = 'create')
     {
 
         foreach ($cobroItems as $cobroItem) {
 
             $cobroItem['cobros_id'] = $cobro->id;
+            // if ($type == 'create') {
+            //     $cobroItem['estado'] = 1;
+            // } else {
+            //     $cobroItem['estado'] = 0;
+            // }
+
             $cobro->detalle()->create($cobroItem);
         }
 

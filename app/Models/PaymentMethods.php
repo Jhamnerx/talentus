@@ -31,7 +31,6 @@ class PaymentMethods extends Model
     public function payments()
     {
 
-
         return $this->hasOne(Payments::class, 'payment_method_id');
     }
 }

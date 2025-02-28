@@ -8,6 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Spatie\Activitylog\LogOptions;
 use App\Observers\ContratosObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\Ventas\EnviarContratoCliente;
@@ -106,7 +107,10 @@ class Contratos extends Model
     {
 
         $plantilla = plantilla::first();
-        $fondo = $plantilla->fondo_contrato;
+
+        $fondoContent = Storage::get($plantilla->fondo_contrato);
+        $fondo = $fondoContent ? base64_encode($fondoContent) : null;
+
         $sello = $plantilla->img_firma;
         view()->share([
             'contrato' => $this,
@@ -120,7 +124,7 @@ class Contratos extends Model
 
         return $pdf->stream('CONTRATO-' . $this->cliente->razon_social . '.pdf');
 
-        // return view('pdf.contrato.pdf');
+        return view('pdf.contrato.pdf');
     }
 
     public function getPDFDataToMail($data)
