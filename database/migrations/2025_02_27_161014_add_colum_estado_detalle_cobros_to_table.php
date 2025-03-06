@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::table('detalles_cobros', function (Blueprint $table) {
             $table->boolean('estado')->default(0)->after('fecha');
             $table->text('observacion')->nullable()->after('estado');
+            $table->unsignedBigInteger('producto_id')->nullable()->after('cobro_id');
+            $table->foreign('producto_id')->references('id')->on('productos');
         });
     }
 

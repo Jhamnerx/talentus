@@ -29,6 +29,9 @@ class Index extends Component
         $ventas = Ventas::whereHas('cliente', function ($cliente) {
             $cliente->where('razon_social', 'LIKE', '%' . $this->search . '%')
                 ->orWhere('numero_documento', 'LIKE', '%' . $this->search . '%');
+        })->orWhereHas('ventaDetalles', function ($detalle) {
+            $detalle->where('codigo', 'LIKE', '%' . $this->search . '%')
+                ->orWhere('descripcion', 'LIKE', '%' . $this->search . '%');
         })
             ->orWhere('serie', 'LIKE', '%' . $this->search . '%')
             ->orWhere('correlativo', 'LIKE', '%' . $this->search . '%')

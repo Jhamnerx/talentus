@@ -4,7 +4,10 @@
 
 @section('contenido')
 
-    @livewire('admin.ventas.recibos.create')
+    @livewire('admin.ventas.recibos.create', [
+        'detalle_ids' => $detalle_ids,
+        'cobro_id' => $cobro_id,
+    ])
 
 
 @stop

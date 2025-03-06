@@ -41,5 +41,7 @@ class ModalSuspend extends Component
             title: 'VEHICULO SUSPENDIDO',
             mensaje: 'Se suspendio el vehiculo correctamente'
         );
+
+        $this->dispatch('update-cobros');
     }
 }

@@ -1,10 +1,4 @@
 <div>
-    <div class="mb-4">
-        <button class="btn w-full bg-indigo-500 hover:bg-indigo-600 text-white" wire:click.prevent="openModal">
-            Pagar - ${{ $cobro->monto_unidad }}
-        </button>
-    </div>
-    <!-- Start -->
     <div x-data="{ modalPayment: @entangle('modalPayment').live }">
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalPayment"
@@ -12,7 +6,7 @@
             x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
             x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak>
         </div>
-        <!-- Modal dialog -->
+
         <div id="basic-modal"
             class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
             role="dialog" aria-modal="true" x-show="modalPayment"
@@ -101,71 +95,32 @@
                             {{-- DOCUMENTO --}}
 
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="documento">{{ $titulo_documento }}:
-                                    <span class="text-rose-500">*</span></label>
 
-                                <div class="relative" lang="es" wire:ignore>
+                                <x-form.select wire:model.live="paymentable_id" label="{{ $titulo_documento }}"
+                                    placeholder="Selecciona">
 
+                                    @foreach ($documentos as $documento)
+                                        <x-select.option label="{{ $documento['text'] }}"
+                                            value="{{ $documento['id'] }}" />
+                                    @endforeach
 
-                                    <select id="documentos" name="documentos" class="documentos w-full form-input pl-9 "
-                                        required>
-                                        <option selected disabled value="">Selecciona <-- </option>
-                                    </select>
-
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-
-                                        <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                                            <g class="nc-icon-wrapper">
-                                                <path d="M1,13V40a4,4,0,0,0,4,4H43a4,4,0,0,0,4-4V13Z" fill="#6cc4f5">
-                                                </path>
-                                                <path d="M47,14H1V6A2,2,0,0,1,3,4H13l4,4H43a4,4,0,0,1,4,4Z"
-                                                    fill="#2594d0"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @error('paymentable_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                                </x-form.select>
                             </div>
 
                             {{-- metodo de pago --}}
-
                             <div class="col-span-12 sm:col-span-6">
-                                <label class="block text-sm font-medium mb-1" for="tipo_pago">Metodo de pago: <span
-                                        class="text-rose-500">*</span></label>
-                                <div class="relative">
 
-                                    <select id="payment_method" name="payment_method"
-                                        wire:model.live="payment_method_id"
-                                        class="payment_method w-full form-input pl-9">
+                                <x-form.select wire:model.live="payment_method_id" label="Metodo de pago"
+                                    placeholder="Selecciona">
 
-                                        @foreach ($paymentsMethods as $methods)
-                                            <option value="{{ $methods->id }}">{{ $methods->name }}</option>
-                                        @endforeach
+                                    @foreach ($paymentsMethods as $metodo)
+                                        <x-select.option label="{{ $metodo['descripcion'] }}"
+                                            value="{{ $metodo['codigo'] }}" />
+                                    @endforeach
 
-                                    </select>
-
-                                    <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                        <svg class="w-4 h-4 fill-current text-slate-600 shrink-0 ml-3 mr-2"
-                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                            <g fill="none" class="nc-icon-wrapper">
-                                                <path
-                                                    d="M19 14V6c0-1.1-.9-2-2-2H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zm-9-1c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm13-6v11c0 1.1-.9 2-2 2H4v-2h17V7h2z"
-                                                    fill="currentColor"></path>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                </div>
-                                @error('payment_method_id')
-                                    <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                                        {{ $message }}
-                                    </p>
-                                @enderror
+                                </x-form.select>
                             </div>
+
                             <div class="col-span-12 sm:col-span-12">
                                 <label class="block text-sm font-medium mb-1" for="plataforma">
                                     Marcar como pagado:

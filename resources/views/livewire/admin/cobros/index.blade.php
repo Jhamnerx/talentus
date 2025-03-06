@@ -141,7 +141,7 @@
         </div>
 
     </div>
-    <!-- Table -->
+
     <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
         <header class="px-5 py-4">
             <h2 class="font-semibold text-slate-800">Registros de cobros
@@ -150,10 +150,9 @@
         </header>
         <div>
 
-            <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
-                    <!-- Table header -->
+
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
@@ -181,7 +180,9 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Tipo Comprobante</div>
                             </th>
-
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Crear Invoice</div>
+                            </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Observacion</div>
                             </th>
@@ -190,9 +191,8 @@
                             </th>
                         </tr>
                     </thead>
-                    <!-- Table body -->
+
                     <tbody class="text-sm divide-y divide-slate-200">
-                        <!-- Row -->
 
                         @foreach ($cobros as $cobro)
                             <tr wire:key='cobro-{{ $cobro->id }}'>
@@ -392,12 +392,18 @@
                                     </div>
 
                                 </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                     <div class="font-medium text-slate-800">
                                         {{ $cobro->tipo_pago }}
                                     </div>
 
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                    <x-form.mini.button wire:click="createInvoice({{ $cobro->id }})" rounded
+                                        icon="bookmark" flat info hover:outline.negative focus:solid.positive />
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -407,6 +413,7 @@
                                     </div>
 
                                 </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
@@ -493,6 +500,7 @@
                                 </td>
                             </tr>
                         @endforeach
+
                         @if ($cobros->count() < 1)
                             <td colspan="12" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
                                 <div class="text-center">No hay Registros</div>

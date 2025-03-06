@@ -37,6 +37,14 @@ class Ventas extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'ventas';
 
+
+    public const PAID = 'PAID';
+    public const UNPAID = 'UNPAID';
+
+
+    public const PEN = 'PEN';
+    public const USD = 'USD';
+
     /**
      * The attributes that should be cast to native types.
      *
@@ -85,6 +93,16 @@ class Ventas extends Model
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
+    }
+
+    public function scopePaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::PAID);
+    }
+
+    public function scopeUnPaid($query)
+    {
+        return $query->where('pago_estado', '=', $this::UNPAID);
     }
 
     protected function nota(): Attribute

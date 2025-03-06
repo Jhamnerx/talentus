@@ -3,16 +3,18 @@
 namespace App\Livewire\Admin\Cobros;
 
 use App\Models\Cobros;
-use App\Models\DetalleCobros;
 use Livewire\Component;
+use App\Models\DetalleCobros;
+use Livewire\Attributes\On;
+use Livewire\Attributes\Reactive;
 
 class Suspend extends Component
 {
     public $observacion;
+
     public $detalle;
 
-
-    public function mount(DetalleCobros $detalle)
+    public function mount($detalle)
     {
         $this->observacion = $detalle->observacion;
         $this->detalle = $detalle;
@@ -45,5 +47,11 @@ class Suspend extends Component
             title: 'OBSERVACION GUARDADA',
             mensaje: 'Se guardo la observacion correctamente'
         );
+    }
+
+    #[On('update-cobros')]
+    public function updateSuspend()
+    {
+        $this->render();
     }
 }

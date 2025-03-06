@@ -99,6 +99,10 @@ class Cobros extends Model
         return $this->hasMany(DetalleCobros::class, 'cobros_id');
     }
 
+    public function producto()
+    {
+        return $this->belongsTo(Productos::class, 'producto_id');
+    }
 
     public static function createItems(Cobros $cobro, $cobroItems, $type = 'create')
     {

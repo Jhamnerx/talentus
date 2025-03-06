@@ -143,7 +143,7 @@ Route::controller(VentasFacturasController::class)->group(function () {
 
 Route::controller(RecibosController::class)->group(function () {
     Route::get('recibos', 'index')->name('admin.ventas.recibos.index');
-    Route::get('recibos/crear', 'create')->name('admin.ventas.recibos.create');
+    Route::get('recibos/crear/{detalle_ids?}/{cobro_id?}', 'create')->name('admin.ventas.recibos.create');
     Route::get('recibos/{recibo}/editar', 'edit')->name('admin.ventas.recibos.edit');
 });
 
@@ -354,8 +354,8 @@ Route::get('/test/sunat', [UtilesController::class, 'sunatConsulta'])->name('sun
 Route::controller(ComprobantesController::class)->group(function () {
 
     Route::get('ventas', 'index')->name('admin.ventas.index');
-    Route::get('emitir/factura', 'emitirFactura')->name('admin.factura.create');
-    Route::get('emitir/boleta', 'emitirBoleta')->name('admin.boleta.create');
+    Route::get('emitir/factura/{detalle_ids?}/{cobro_id?}', 'emitirFactura')->name('admin.factura.create');
+    Route::get('emitir/boleta/{detalle_ids?}/{cobro_id?}', 'emitirBoleta')->name('admin.boleta.create');
     Route::get('emitir/nota-venta', 'emitirNotaVenta')->name('admin.nota.venta.create');
     Route::get('emitir/nota-credito', 'emitirNotaCredito')->name('admin.nota.credito.create');
     Route::get('emitir/nota-debito', 'emitirNotaDebito')->name('admin.nota.debito.create');

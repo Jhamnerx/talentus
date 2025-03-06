@@ -102,4 +102,9 @@ class Index extends Component
         $detalleCobros->estado = !$detalleCobros->estado;
         $detalleCobros->save();
     }
+
+    public function createInvoice(Cobros $cobro)
+    {
+        $this->dispatch('open-modal-create-invoice', cobro: $cobro);
+    }
 }

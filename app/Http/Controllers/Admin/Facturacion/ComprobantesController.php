@@ -28,14 +28,16 @@ class ComprobantesController extends Controller
         return view('admin.comprobantes.notas-index');
     }
 
-    public function emitirFactura()
+    public function emitirFactura($detalle_ids = null, $cobro_id = null)
     {
-        return view('admin.comprobantes.factura.create');
+        $detalle_ids = $detalle_ids ? json_decode($detalle_ids, true) : [];
+        return view('admin.comprobantes.factura.create', compact('detalle_ids', 'cobro_id'));
     }
 
-    public function emitirBoleta()
+    public function emitirBoleta($detalle_ids = null, $cobro_id = null)
     {
-        return view('admin.comprobantes.boleta.create');
+        $detalle_ids = $detalle_ids ? json_decode($detalle_ids, true) : [];
+        return view('admin.comprobantes.boleta.create', compact('detalle_ids', 'cobro_id'));
     }
 
     public function emitirNotaVenta()

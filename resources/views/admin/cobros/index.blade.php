@@ -10,6 +10,10 @@
 
 @stop
 
+@push('modals')
+    @livewire('admin.cobros.create-invoice')
+@endpush
+
 @section('js')
     @if (session('store'))
         <script>

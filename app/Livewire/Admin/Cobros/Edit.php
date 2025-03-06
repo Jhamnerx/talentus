@@ -23,6 +23,7 @@ class Edit extends Component
     public Collection $items;
 
     public Cobros $cobro;
+    public $producto_id;
 
     public function mount(Cobros $cobro)
     {
@@ -37,6 +38,7 @@ class Edit extends Component
         $this->observacion = $this->cobro->observacion;
         $this->comentario = $this->cobro->comentario;
         $this->cobro = $cobro;
+        $this->producto_id = $cobro->producto_id;
 
         $this->items = collect($this->cobro->detalle->mapWithKeys(function ($detalle) {
             return [
@@ -154,25 +156,6 @@ class Edit extends Component
         $this->validateOnly($label, $requestCobros->rules(), $requestCobros->messages());
     }
 
-    public function updateCobro()
-    {
-        $requestCobros = new CobrosRequest();
-
-        $this->validate($requestCobros->rules(), $requestCobros->messages());
-
-        $this->cobro->update([
-            'periodo' => $this->periodo,
-            'fecha_vencimiento' => $this->fecha_vencimiento,
-            'nota' => $this->nota,
-            'tipo_pago' => $this->tipo_pago,
-            'divisa' => $this->divisa,
-            'monto_unidad' => $this->monto_unidad,
-
-        ]);
-
-        return redirect()->route('admin.cobros.index')->with('update', 'Se actualizo con exito');
-    }
-
     public function save()
     {
         $requestCobros = new CobrosRequest();
@@ -193,6 +176,7 @@ class Edit extends Component
                 'fecha_inicio' => $datos["fecha_inicio"],
                 'nota' => $datos["nota"],
                 'observacion' => $datos["observacion"],
+                'producto_id' => $datos["producto_id"],
             ]);
 
             $this->cobro->detalle()->delete();
@@ -200,7 +184,7 @@ class Edit extends Component
             Cobros::createItems($this->cobro, $datos["items"], 'update');
 
             session()->flash('cobro-actualizado', 'Se Actualizo con exito el cobro');
-            $this->redirectRoute('admin.cobros.index');
+            return redirect()->route('admin.cobros.index')->with('update', 'Se actualizo con exito');
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',

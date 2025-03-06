@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Facturacion\Ventas;
 
 use Carbon\Carbon;
+use App\Models\Cobros;
 use App\Models\Series;
 use App\Models\Ventas;
 use App\Models\Empresa;
@@ -12,6 +13,7 @@ use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\MetodoPago;
 use Livewire\Attributes\On;
+use App\Models\DetalleCobros;
 use App\Models\TipoComprobantes;
 use Livewire\Attributes\Reactive;
 use Illuminate\Support\Collection;
@@ -20,7 +22,6 @@ use App\Http\Requests\VentasRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
-
 
 class Emitir extends Component
 {
@@ -78,6 +79,10 @@ class Emitir extends Component
     //PROPIEDAD PARA VERIFICAR EMPRESA
     public $empresa_id;
 
+    //DETALLE DESDE COBRO
+    public $detalle_ids;
+    public $cobro_id;
+
     public function render()
     {
         return view('livewire.admin.facturacion.ventas.emitir');
@@ -114,7 +119,7 @@ class Emitir extends Component
         }
     }
 
-    public function mount()
+    public function mount($detalle_ids = null, $cobro_id = null)
     {
         //DEFINIR EL TIPO DE COMPROBANTE
         $this->tipo_comprobante_id = TipoComprobantes::where('slug', $this->comprobante_slug)->first()->codigo;
@@ -159,7 +164,93 @@ class Emitir extends Component
 
         $this->prepayments = collect();
 
-        $this->empresa_id = $plantilla = plantilla::first()->empresa->id;
+        $this->empresa_id = plantilla::first()->empresa->id;
+
+        // Asignar cliente_id
+        $cobro = Cobros::find($cobro_id);
+
+        if ($cobro) {
+            $this->cliente = Clientes::find($cobro->clientes_id);
+            $this->direccion = $this->cliente->direccion;
+            $this->cliente_id = $cobro->clientes_id;
+        }
+
+        // Procesar items si no son nulos
+        if ($detalle_ids) {
+            $this->procesarItems($detalle_ids);
+        }
+    }
+
+    public function procesarItems($items)
+    {
+        $detalles = DetalleCobros::whereIn('id', $items)->get();
+        foreach ($detalles as $detalle) {
+            $cantidad = $this->calcularCantidad($detalle->cobro->periodo);
+            $igv = $this->calcularIgvProducto($detalle->cobro->producto->valor_unitario, $cantidad, 10);
+            $this->addProducto([
+                'producto_id' => $detalle->cobro->producto_id,
+                'codigo' => $detalle->cobro->producto->codigo,
+                'cantidad' => $cantidad,
+                'unit' => $detalle->cobro->producto->unit_code,
+                'unit_name' => $detalle->cobro->producto->unit->descripcion,
+                'descripcion' => $detalle->cobro->producto->descripcion . " DE LA PLACA: " . $detalle->vehiculo->placa . ' HASTA LA FECHA ' . $detalle->fecha->format('d-m-Y'),
+                'valor_unitario' => round(floatval($detalle->cobro->producto->valor_unitario)),
+                'precio_unitario' => round(floatval($this->calcularPrecioUnitario($detalle->cobro->producto->valor_unitario, 10)), 4),
+                'igv' => $igv,
+                'porcentaje_igv' => 18,
+                'icbper' => 0.00,
+                'total_icbper' => 0.00,
+                'sub_total' => round(floatval($detalle->cobro->producto->valor_unitario)) * $cantidad,
+                'total' => round(floatval($detalle->cobro->producto->valor_unitario) * $cantidad + $igv, 4),
+                'codigo_afectacion' => 10,
+                'afecto_icbper' => false,
+                'tipo' => $detalle->cobro->producto->tipo,
+            ]);
+        }
+    }
+
+
+    public function calcularCantidad($periodo)
+    {
+        switch ($periodo) {
+            case 'MENSUAL':
+                return 1;
+            case 'BIMENSUAL':
+                return 2;
+            case 'TRIMESTRAL':
+                return 3;
+            case 'SEMESTRAL':
+                return 6;
+            case 'ANUAL':
+                return 12;
+            default:
+                return 1;
+        }
+    }
+
+    public function calcularPrecioUnitario($valor_unitario, $tipo_afectacion)
+    {
+        if ($tipo_afectacion == "10") {
+            return ($valor_unitario * $this->plantilla->igv) + $valor_unitario;
+        } else {
+            return $valor_unitario;
+        }
+    }
+
+    public function calcularIgvProducto($valor_unitario, $cantidad, $tipo_afectacion)
+    {
+        $igv = 0.00;
+        if ($tipo_afectacion == 10) {
+
+            $sub_total = ($valor_unitario * floatval($cantidad));
+            $igv = round($sub_total * $this->plantilla->igv, 4);
+        } else {
+
+            $sub_total = ($valor_unitario * floatval($cantidad));
+            $igv = 0.00;
+        }
+
+        return $igv;
     }
 
     public function updatedClienteId($value)
@@ -185,7 +276,6 @@ class Emitir extends Component
     {
         $this->changeSerieUpdate($value);
     }
-
 
     public function changeSerieUpdate($serie)
     {
@@ -290,21 +380,6 @@ class Emitir extends Component
     public function openModalCreateProduct()
     {
         $this->dispatch('openModalCreate');
-    }
-
-    public function calcularIgvProducto(Productos $producto): float
-    {
-        switch ($producto->tipoAfectacion->codigo_afectacion) {
-            case "1000":
-
-                $igv = round(floatval($producto->valor_unitario), 4) *  $this->plantilla->igv;
-
-                return floatval($igv);
-            default:
-                $igv = 0;
-
-                return floatval($igv);
-        }
     }
 
     //AÑADIR ITEM SELECCIONADO A LA LISTA DE ITEMS

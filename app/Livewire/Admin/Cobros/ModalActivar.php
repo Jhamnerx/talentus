@@ -41,5 +41,6 @@ class ModalActivar extends Component
             title: 'VEHICULO ACTIVADO',
             mensaje: 'Se activo el vehiculo correctamente'
         );
+        $this->dispatch('update-cobros');
     }
 }

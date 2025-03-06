@@ -1,9 +1,6 @@
 <div class="m-1.5 flex">
 
-
-
     <div x-data="{ modalSuspend: @entangle('openModal').live }">
-
         <!-- Modal backdrop -->
         <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalSuspend"
             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
@@ -27,13 +24,11 @@
                                 d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
                         </svg>
                     </div>
-                    <!-- Content -->
                     <div>
-                        <!-- Modal header -->
                         <div class="mb-2">
                             <div class="text-lg font-semibold text-slate-800">Suspender Servicio
-                                {{ $detalle ? $detalle->vehiculo->placa : '' }}</div>
-
+                                {{ $detalle ? $detalle->vehiculo->placa : '' }}
+                            </div>
                         </div>
                         <!-- Modal content -->
                         <div class="text-sm mb-10">
@@ -47,7 +42,8 @@
                                 @click="modalSuspend = false">Cancelar</button>
                             <button wire:click="SuspendCobro" class="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
                                 @click="modalSuspend = false">
-                                Si, Suspender</button>
+                                Si, Suspender
+                            </button>
                         </div>
                     </div>
                 </div>

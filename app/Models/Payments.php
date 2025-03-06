@@ -33,6 +33,7 @@ class Payments extends Model
 
     protected $casts = [
         'fecha' => 'date:Y/m/d',
+
     ];
 
 
@@ -101,8 +102,7 @@ class Payments extends Model
 
     public function paymentMethod()
     {
-
-        return $this->belongsTo(PaymentMethods::class, 'payment_method_id');
+        return $this->belongsTo(PaymentMethods::class, 'payment_method_id', 'codigo');
     }
 
 

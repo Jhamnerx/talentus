@@ -13,6 +13,14 @@ class PaymentMethods extends Model
     protected $guarded = [];
     protected $table = 'metodo_pago';
 
+    protected $primaryKey = 'codigo';
+    protected $keyType = 'string';
+
+    protected $casts = [
+        'codigo' => 'string',
+        'descripcion' => 'string',
+    ];
+
     public function compras(): HasMany
     {
         return $this->hasMany(Compras::class);

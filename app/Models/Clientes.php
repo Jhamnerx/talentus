@@ -69,9 +69,9 @@ class Clientes extends Model
     }
 
     //relacion uno a muchos
-    public function facturas()
+    public function ventas()
     {
-        return $this->hasMany(Facturas::class, 'clientes_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
+        return $this->hasMany(Ventas::class, 'cliente_id')->withoutGlobalScope(EmpresaScope::class);
     }
 
     //relacion uno a muchos

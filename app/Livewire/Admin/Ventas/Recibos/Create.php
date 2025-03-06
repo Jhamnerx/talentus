@@ -3,16 +3,16 @@
 namespace App\Livewire\Admin\Ventas\Recibos;
 
 use Carbon\Carbon;
+use App\Models\Cobros;
 use App\Models\Series;
 use App\Models\Recibos;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\plantilla;
 use App\Models\Productos;
-use App\Models\PaymentMethods;
+use App\Models\DetalleCobros;
 use Illuminate\Support\Collection;
 use App\Http\Requests\RecibosRequest;
-use App\Http\Controllers\Admin\RecibosController;
 
 class Create extends Component
 {
@@ -34,7 +34,12 @@ class Create extends Component
     public Collection $detalle_cuotas;
 
 
-    public function mount()
+    //DETALLE DESDE COBRO
+    public $detalle_ids;
+    public $cobro_id;
+    public $empresa_id;
+
+    public function mount($detalle_ids = null, $cobro_id = null)
     {
         $this->setSerieMount();
 
@@ -49,6 +54,22 @@ class Create extends Component
             'cantidad' => "1",
             'precio' => 0.00
         ]);
+
+        $this->empresa_id = plantilla::first()->empresa->id;
+
+
+        // Asignar cliente_id
+        $cobro = Cobros::find($cobro_id);
+
+        if ($cobro) {
+            $this->cliente = Clientes::find($cobro->clientes_id);
+            $this->clientes_id = $cobro->clientes_id;
+        }
+
+        // Procesar items si no son nulos
+        if ($detalle_ids) {
+            $this->procesarItems($detalle_ids);
+        }
     }
 
     public function render()
@@ -88,6 +109,45 @@ class Create extends Component
         } else {
 
             $this->reset('numero');
+        }
+    }
+    public function procesarItems($items)
+    {
+        $this->detalle_ids = $items;
+        $detalles = DetalleCobros::whereIn('id', $items)->get();
+
+        $detalles->each(function ($item) {
+            $cantidad = $this->calcularCantidad($item->cobro->periodo);
+            $valor_unitario = $item->cobro->producto->valor_unitario;
+
+            $this->items->push([
+                'producto_id' => $item->cobro->producto->id,
+                'producto' => $item->cobro->producto->descripcion,
+                'descripcion' => $item->cobro->descripcion,
+                'cantidad' => $cantidad,
+                'precio' => $valor_unitario,
+                'total' => round((floatval($cantidad) * floatval($valor_unitario)), 2),
+            ]);
+        });
+
+        $this->reCalTotal();
+    }
+
+    public function calcularCantidad($periodo)
+    {
+        switch ($periodo) {
+            case 'MENSUAL':
+                return 1;
+            case 'BIMENSUAL':
+                return 2;
+            case 'TRIMESTRAL':
+                return 3;
+            case 'SEMESTRAL':
+                return 6;
+            case 'ANUAL':
+                return 12;
+            default:
+                return 1;
         }
     }
 

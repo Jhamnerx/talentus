@@ -27,6 +27,7 @@ class CobrosRequest extends FormRequest
 
         $rules = [
             'clientes_id' => 'required',
+            'producto_id' => 'required',
 
             "comentario" => 'nullable',
             "periodo" => 'required',
@@ -56,7 +57,7 @@ class CobrosRequest extends FormRequest
         $messages = [
 
             'clientes_id.required' => 'Selecciona un cliente',
-
+            'producto_id.required' => 'Selecciona un producto',
             'periodo.required' => 'Selecciona un periodo',
             'divisa.required' => 'Selecciona una divisa',
             'monto_unidad.required' => 'Ingresa un monto',

@@ -3,11 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\RecibosRequest;
 use App\Models\Recibos;
-use App\Models\plantilla;
-use Illuminate\Http\Request;
-use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class RecibosController extends Controller
 {
@@ -24,10 +20,10 @@ class RecibosController extends Controller
         return view('admin.ventas.recibos.index');
     }
 
-    public function create()
+    public function create($detalle_ids = null, $cobro_id = null)
     {
-
-        return view('admin.ventas.recibos.create');
+        $detalle_ids = $detalle_ids ? json_decode($detalle_ids, true) : [];
+        return view('admin.ventas.recibos.create', compact('detalle_ids', 'cobro_id'));
     }
 
 

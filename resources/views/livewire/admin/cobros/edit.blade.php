@@ -88,8 +88,22 @@
                                 option-label="placa" option-value="id" />
                         </div>
                     </div>
-                    <div class="mt-10 col-span-12 sm:col-span-6">
+                    <div class="mt-10 col-span-12 sm:col-span-2">
                         <x-form.button label="Agregar" wire:click.prevent="agregarVehiculo" icon="plus" />
+                    </div>
+                    <div class="mt-1 col-span-12 sm:col-span-4">
+                        <x-form.select label="Producto asociado:" autocomplete="off" :clearable="false"
+                            wire:model.live="producto_id" id="producto_id" name="producto_id"
+                            placeholder="Seleccionar producto o servicio" :async-data="[
+                                'api' => route('api.productos.index'),
+                                'params' => ['local_id' => session('local_id')],
+                            ]" option-label="descripcion"
+                            option-value="id" option-description="option_description" :template="[
+                                'name' => 'user-option',
+                                'config' => ['src' => 'imagen'],
+                            ]"
+                            :always-fetch="true">
+                        </x-form.select>
                     </div>
                 </div>
 

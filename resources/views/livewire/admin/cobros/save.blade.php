@@ -78,17 +78,32 @@
                         </h2>
 
                     </div>
+
                     <div class="mt-1 col-span-12 sm:col-span-6">
-
-
                         <div class="mt-2 flex items-center text-sm text-gray-500">
                             <x-form.select label="Selecciona un Vehiculo:" wire:model.live="vehiculo_selected"
                                 placeholder="Busca una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
                                 option-label="placa" option-value="id" />
                         </div>
                     </div>
-                    <div class="mt-10 col-span-12 sm:col-span-6">
+
+                    <div class="mt-10 col-span-12 sm:col-span-2">
                         <x-form.button label="Agregar" wire:click.prevent="agregarVehiculo" icon="plus" />
+                    </div>
+
+                    <div class="mt-1 col-span-12 sm:col-span-4">
+                        <x-form.select label="Producto asociado:" autocomplete="off" :clearable="false"
+                            wire:model.live="producto_id" id="producto_id" name="producto_id"
+                            placeholder="Seleccionar producto o servicio" :async-data="[
+                                'api' => route('api.productos.index'),
+                                'params' => ['local_id' => session('local_id')],
+                            ]" option-label="descripcion"
+                            option-value="id" option-description="option_description" :template="[
+                                'name' => 'user-option',
+                                'config' => ['src' => 'imagen'],
+                            ]"
+                            :always-fetch="true">
+                        </x-form.select>
                     </div>
                 </div>
 
@@ -124,9 +139,6 @@
                     </div>
                 </div>
 
-
-
-
                 <div class="flex justify-between items-center" aria-hidden="true">
                     <svg class="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
                         <path d="M0 20c5.523 0 10-4.477 10-10S5.523 0 0 0h20v20H0Z" />
@@ -140,13 +152,15 @@
                 </div>
                 <div class="detallesvehiculos">
 
-                    @if ($items->count() > 0)
+                    @if ($items->count() >= 1)
                         @foreach ($items->all() as $placa => $vehiculo)
                             <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
 
                                 <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
-                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
+                                    <p class="text-gray-800 xs:text-base">
+                                        {{ $items[$placa]['placa'] }}
+                                    </p>
 
                                 </div>
 

@@ -22,8 +22,9 @@ class Save extends Component
 
     public $vehiculo_selected;
 
-
     public Collection $items;
+
+    public $producto_id;
 
     public function mount()
     {
@@ -85,6 +86,7 @@ class Save extends Component
                 'fecha_inicio' => $datos["fecha_inicio"],
                 'nota' => $datos["nota"],
                 'observacion' => $datos["observacion"],
+                'producto_id' => $datos["producto_id"],
             ]);
 
             Cobros::createItems($cobro, $datos["items"], 'create');
