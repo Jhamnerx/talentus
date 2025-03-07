@@ -32,7 +32,7 @@
             </ul>
         </div>
     </div>
-    {{ json_encode($errors->all()) }}
+
     <!-- Code block ends -->
     <div class="p-6 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-gray-50 dark:bg-gray-700 sm:p-6">

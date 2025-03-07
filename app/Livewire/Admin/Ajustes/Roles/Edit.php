@@ -74,7 +74,14 @@ class Edit extends Component
         $rol->save();
 
         $rol->syncPermissions($this->permission);
-        return redirect()->route('admin.ajustes.roles')->with('update', 'rol actualizado satisfactoriamente');
+        $this->dispatch(
+            'notify',
+            icon: 'success',
+            title: 'Rol Actualizado',
+            mensaje: 'Rol actualizado satisfactoriamente'
+        );
+        $this->closeModal();
+        // return redirect()->route('admin.ajustes.roles')->with('update', 'rol actualizado satisfactoriamente');
     }
 
     public function checkAll()

@@ -123,7 +123,7 @@ class Create extends Component
             $this->items->push([
                 'producto_id' => $item->cobro->producto->id,
                 'producto' => $item->cobro->producto->descripcion,
-                'descripcion' => $item->cobro->descripcion,
+                'descripcion' => $item->cobro->descripcion . " DE LA PLACA: " . $item->vehiculo->placa . ' HASTA LA FECHA ' . $item->fecha->format('d-m-Y'),
                 'cantidad' => $cantidad,
                 'precio' => $valor_unitario,
                 'total' => round((floatval($cantidad) * floatval($valor_unitario)), 2),

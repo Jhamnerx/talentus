@@ -1,7 +1,7 @@
  <x-guest-layout>
-     <x-jet-authentication-card>
+     <x-authentication-card>
          <x-slot name="logo">
-             <x-jet-authentication-card-logo />
+             <x-authentication-card-logo />
          </x-slot>
 
          <x-validation-errors class="mb-4" />
@@ -16,19 +16,19 @@
              @csrf
 
              <div>
-                 <x-jet-label for="email" value="{{ __('Email') }}" />
-                 <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
+                 <x-label for="email" value="{{ __('Email') }}" />
+                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
                      required autofocus />
              </div>
 
              <div class="mt-4">
-                 <x-jet-label for="password" value="{{ __('Password') }}" />
-                 <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" required
+                 <x-label for="password" value="{{ __('Password') }}" />
+                 <x-input id="password" class="block mt-1 w-full" type="password" name="password" required
                      autocomplete="current-password" />
              </div>
 
              <div class="mt-4">
-                 <x-jet-label for="empresa" value="{{ __('Empresa') }}" />
+                 <x-label for="empresa" value="{{ __('Empresa') }}" />
                  <select class="form-input block mt-1 w-full" name="empresa" id="empresa" required>
                      <option value="1">Talentus</option>
                      <option value="1">Katary</option>
@@ -54,5 +54,5 @@
                  </x-button>
              </div>
          </form>
-     </x-jet-authentication-card>
+     </x-authentication-card>
  </x-guest-layout>

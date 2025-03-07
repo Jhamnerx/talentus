@@ -1,5 +1,23 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-white shadow-lg rounded-sm border border-slate-200">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div class="max-w-[90%] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+        @if ($detalleIds)
+            <div class="col-span-full mb-4">
+                <div class="flex justify-center space-x-2 mb-2">
+                    @if ($cobro->clientes->tipo_documento_id == 1)
+                        <x-form.button full="true" cyan wire:click.prevent="createBoletaGeneral()"
+                            right-icon="currency-dollar" success label="Crear Boleta" />
+                    @endif
+                    @if ($cobro->clientes->tipo_documento_id == 6)
+                        <x-form.button full="true" sky wire:click.prevent="createFacturaGeneral()"
+                            right-icon="currency-dollar" success label="Crear Factura" />
+                    @endif
+                    <x-form.button full="true" slate wire:click.prevent="createReciboGeneral()"
+                        right-icon="currency-dollar" success label="Crear Recibo" />
+                </div>
+            </div>
+        @endif
+
         @foreach ($cobro->detalle as $item)
             @php
                 $diasRestantes = \Carbon\Carbon::now()->diffInDays($item->fecha, false);
@@ -16,10 +34,17 @@
                 }
             @endphp
             <div class="bg-white p-5 shadow-lg rounded-lg border {{ $colorBorde }}">
-                <div
-                    class="text-slate-800 font-semibold mb-2 uppercase {{ $item->estado == 0 ? 'bg-red-200' : 'bg-white' }}">
-                    Detalle de Cobro: <b> {{ $item->vehiculo ? $item->vehiculo->placa : '' }}</b>
+
+                <div class="flex justify-between items-center mb-2">
+                    <x-form.checkbox id="size-sm" wire:model.live="detalleIds" value="{{ $item->id }}" md />
+                    <div
+                        class="text-slate-800 mx-2 font-semibold uppercase {{ $item->estado == 0 ? 'bg-red-200' : 'bg-white' }}">
+                        Detalle de Cobro: <b> {{ $item->vehiculo ? $item->vehiculo->placa : '' }}</b>
+                    </div>
+
                 </div>
+
+
                 <ul class="mb-4">
                     <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
                         <div>Empresa: </div>
@@ -64,7 +89,6 @@
 
                 @livewire('admin.cobros.suspend', ['detalle' => $item], key('suspend' . $item->id))
 
-
                 @if ($item->estado)
                     @can('admin.payments.create')
                         <div class="flex justify-center mb-4">
@@ -79,14 +103,18 @@
 
                 </li>
                 <div class="mt-6">
-                    <div class="flex justify-center mb-2">
-                        <x-form.button full="true" cyan wire:click.prevent="createBoleta([{{ $item->id }}])"
-                            right-icon="currency-dollar" success label="Crear Boleta" />
-                    </div>
-                    <div class="flex justify-center mb-2">
-                        <x-form.button full="true" sky wire:click.prevent="createFactura([{{ $item->id }}])"
-                            right-icon="currency-dollar" success label="Crear Factura" />
-                    </div>
+                    @if ($cobro->clientes->tipo_documento_id == 1)
+                        <div class="flex justify-center mb-2">
+                            <x-form.button full="true" cyan wire:click.prevent="createBoleta([{{ $item->id }}])"
+                                right-icon="currency-dollar" success label="Crear Boleta" />
+                        </div>
+                    @endif
+                    @if ($cobro->clientes->tipo_documento_id == 6)
+                        <div class="flex justify-center mb-2">
+                            <x-form.button full="true" sky wire:click.prevent="createFactura([{{ $item->id }}])"
+                                right-icon="currency-dollar" success label="Crear Factura" />
+                        </div>
+                    @endif
                     <div class="flex justify-center mb-2">
                         <x-form.button full="true" slate wire:click.prevent="createRecibo([{{ $item->id }}])"
                             right-icon="currency-dollar" success label="Crear Recibo" />

@@ -607,21 +607,6 @@
                             @endif
                         </td>
 
-                        {{-- <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-
-                            <div class=" text-center space-x-1">
-                                <x-form.dropdown>
-                                    <x-form.dropdown.header label="Settings">
-                                        <x-form.dropdown.item icon="cog" label="Preferences" />
-                                        <x-form.dropdown.item icon="user" label="My Profile" />
-                                    </x-form.dropdown.header>
-
-                                    <x-form.dropdown.item separator label="Help Center" />
-                                    <x-form.dropdown.item label="Live Chat" />
-                                    <x-form.dropdown.item label="Logout" />
-                                </x-form.dropdown>
-                            </div>
-                        </td> --}}
 
                         {{-- Crear nota de crédito
                         Crear nota de débito

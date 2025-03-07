@@ -174,7 +174,7 @@
 
 
             <!-- Import button -->
-            @can('importar.sim_card')
+            @can('importar-sim_card')
                 <div class="relative inline-flex">
                     <button wire:click="openModalImport()" aria-controls="basic-modal"
                         class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">

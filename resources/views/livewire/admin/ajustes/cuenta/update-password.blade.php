@@ -43,24 +43,24 @@
 
                         <div class="grid grid-cols-12 gap-6">
                             <div class="col-span-6 sm:col-span-12">
-                                <x-jet-label for="current_password" value="{{ __('Current Password') }}" />
-                                <x-jet-input id="current_password" type="password" class="mt-1 block w-full"
+                                <x-label for="current_password" value="{{ __('Current Password') }}" />
+                                <x-input id="current_password" type="password" class="mt-1 block w-full"
                                     wire:model.live="state.current_password" autocomplete="current-password" />
-                                <x-jet-input-error for="current_password" class="mt-2" />
+                                <x-input-error for="current_password" class="mt-2" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-12">
-                                <x-jet-label for="password" value="{{ __('New Password') }}" />
-                                <x-jet-input id="password" type="password" class="mt-1 block w-full"
+                                <x-label for="password" value="{{ __('New Password') }}" />
+                                <x-input id="password" type="password" class="mt-1 block w-full"
                                     wire:model.live="state.password" autocomplete="new-password" />
-                                <x-jet-input-error for="password" class="mt-2" />
+                                <x-input-error for="password" class="mt-2" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-12">
-                                <x-jet-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
-                                <x-jet-input id="password_confirmation" type="password" class="mt-1 block w-full"
+                                <x-label for="password_confirmation" value="{{ __('Confirm Password') }}" />
+                                <x-input id="password_confirmation" type="password" class="mt-1 block w-full"
                                     wire:model.live="state.password_confirmation" autocomplete="new-password" />
-                                <x-jet-input-error for="password_confirmation" class="mt-2" />
+                                <x-input-error for="password_confirmation" class="mt-2" />
                             </div>
 
 
@@ -73,9 +73,9 @@
                         <div class="flex flex-wrap justify-end space-x-2">
                             <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
                                 wire:click="closeModal">Cerrar</button>
-                            <x-jet-action-message class="mr-3" on="saved-pass">
+                            <x-action-message class="mr-3" on="saved-pass">
                                 {{ __('Saved.') }}
-                            </x-jet-action-message>
+                            </x-action-message>
                             <button type="submit"
                                 class="btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">Guardar</button>
 

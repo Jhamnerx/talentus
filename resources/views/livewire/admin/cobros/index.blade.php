@@ -294,9 +294,9 @@
 
                                                                 @if ($cobro->detalle->isEmpty())
                                                                     <tr
-                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
 
-                                                                        <td colspan="2">NO SE REGISTRARON
+                                                                        <td colspan="4">NO SE REGISTRARON
                                                                             VEHICULOS</td>
 
                                                                     </tr>

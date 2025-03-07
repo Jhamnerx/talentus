@@ -9,8 +9,8 @@ use App\Models\DetalleCobros;
 
 class Show extends Component
 {
-
     public Cobros $cobro;
+    public $detalleIds = [];
 
     public function mount(Cobros $cobro)
     {
@@ -45,5 +45,18 @@ class Show extends Component
     public function createRecibo(array $detalleIds)
     {
         return redirect()->route('admin.ventas.recibos.create', ['detalle_ids' => json_encode($detalleIds), 'cobro_id' => $this->cobro->id]);
+    }
+
+    public function createBoletaGeneral()
+    {
+        return redirect()->route('admin.boleta.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
+    }
+    public function createFacturaGeneral()
+    {
+        return redirect()->route('admin.factura.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
+    }
+    public function createReciboGeneral()
+    {
+        return redirect()->route('admin.ventas.recibos.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
     }
 }

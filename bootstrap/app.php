@@ -40,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('activitylog:clean')->daily();
         $schedule->job(new checkMantenimientoVehiculos)->daily();
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
+        $schedule->command('backup:run')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

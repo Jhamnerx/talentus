@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('detalles_cobros', function (Blueprint $table) {
-            $table->boolean('estado')->default(0)->after('fecha');
-            $table->text('observacion')->nullable()->after('estado');
+        Schema::table('cobros', function (Blueprint $table) {
+
+            $table->unsignedBigInteger('producto_id')->nullable()->after('vehiculos_id');
+            $table->foreign('producto_id')->references('id')->on('productos');
         });
     }
 
@@ -22,8 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('detalles_cobros', function (Blueprint $table) {
-            $table->dropColumn('estado');
-        });
+        //
     }
 };

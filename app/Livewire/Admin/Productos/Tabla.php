@@ -64,7 +64,7 @@ final class Tabla extends PowerGridComponent
 
     public function columns(): array
     {
-        return [
+        $columns = [
 
             Column::add()
                 ->title('CODIGO')
@@ -91,15 +91,20 @@ final class Tabla extends PowerGridComponent
                 ->title('Stock')
                 ->field('stock_descripcion'),
 
-            Column::add()
+
+        ];
+
+        if (auth()->user()->can('cambiar.estado-producto'))
+            $columns[] = Column::add()
                 ->title('ESTADO')
                 ->field('estado')
                 ->toggleable(true, 1, 0)
-                ->sortable(),
+                ->sortable();
 
-            Column::action('ACCIONES'),
+        if (auth()->user()->can('editar-producto') || auth()->user()->can('eliminar-producto'))
+            $columns[] = Column::action('ACCIONES');
 
-        ];
+        return $columns;
     }
 
     public function filters(): array
@@ -109,7 +114,7 @@ final class Tabla extends PowerGridComponent
 
     public function actionsFromView($row): View
     {
-        return view('components.actions-view', ['row' => $row, 'actions' => ['edit', 'delete']]);
+        return view('components.actions-view', ['row' => $row, 'actions' => ['edit', 'delete'], 'model' => 'producto']);
     }
     public function onUpdatedToggleable(string|int $id, string $field, string $value): void
     {

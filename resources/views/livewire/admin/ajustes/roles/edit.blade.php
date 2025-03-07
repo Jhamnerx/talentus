@@ -1,4 +1,4 @@
-<x-form.modal.card title="Editar Rol" blur wire:model.live="openModalEdit" align="center" max-width='6xl'>
+<x-form.modal.card title="Editar Rol" blur wire:model.live="openModalEdit" align="center" width='7xl'>
 
 
     <div class="px-4 md:px-8 py-4 md:py-6">
