@@ -1,8 +1,6 @@
 <?php
 
-use App\Jobs\checkCobros;
-use App\Jobs\SendInvoiceTask;
-use App\Jobs\SendSignXmlTask;
+use App\Jobs\CheckDetalleCobros;
 use App\Jobs\CheckBirthdayContacts;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -36,11 +34,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('22:00');
         $schedule->job(new JobsCheckRecordatorios)->dailyAt('07:40');
-        $schedule->job(new checkCobros)->dailyAt('08:50');
+        $schedule->job(new CheckDetalleCobros)->dailyAt('08:50');
+        //$schedule->job(new CheckDetalleCobros)->everyMinute();
         $schedule->command('activitylog:clean')->daily();
         $schedule->job(new checkMantenimientoVehiculos)->daily();
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
-        $schedule->command('backup:run')->everyMinute();
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
