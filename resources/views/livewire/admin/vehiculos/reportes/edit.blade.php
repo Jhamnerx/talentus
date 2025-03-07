@@ -14,7 +14,8 @@
                 without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
         </div>
         <div class="col-span-12 sm:col-span-6">
-            <x-form.time.picker label="Hora Transmision:" placeholder="22:30" format="24" wire:model.live="hora_t" />
+            <x-form.time.picker military-time without-seconds label="Hora Transmision:" placeholder="22:30"
+                wire:model.live="hora_t" />
         </div>
         <div class="col-span-12 sm:col-span-12 mt-4">
             <div class=" grid grid-cols-1 sm:grid-cols-3 gap-4 content-center">
