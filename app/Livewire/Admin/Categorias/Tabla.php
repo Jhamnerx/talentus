@@ -74,6 +74,8 @@ final class Tabla extends PowerGridComponent
         if (auth()->user()->can('cambiar.estado-categoria'))
             $columns[] = Column::make('ESTADO', 'estado')->toggleable(true, 1, 0);
 
+        if (auth()->user()->can('editar-categoria') || auth()->user()->can('eliminar-categoria'))
+            $columns[] = Column::action('ACCIONES');
 
 
         return $columns;
