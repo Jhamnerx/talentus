@@ -32,11 +32,16 @@ class CheckDetalleCobros implements ShouldQueue
     {
         $hoy = Carbon::now()->format('Y-m-d');
 
-        // Buscar todos los cobros que tienen detalles de cobro con fechas dentro del rango de notificación
+        // Buscar todos los cobros que tienen detalles con estado = 1 y fechas en el rango de notificación
         $cobrosConDetalles = Cobros::whereHas('detalle', function ($query) use ($hoy) {
-            $query->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
+            $query->where('estado', 1) // Solo detalles activos
+                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
                 ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
-        })->with(['detalle.vehiculo'])
+        })->with(['detalle' => function ($query) use ($hoy) {
+            $query->where('estado', 1) // Solo detalles activos
+                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), [15, 7, 5, 3, 1]))
+                ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
+        }, 'detalle.vehiculo'])
             ->withoutGlobalScope(EmpresaScope::class)
             ->get();
 

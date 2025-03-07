@@ -24,8 +24,8 @@ class Save extends Component
     public function mount()
     {
         $now = Carbon::now();
-        $this->hora_t = $now;
-        $this->fecha_t = $now;
+        $this->hora_t = $now->format('H:i');
+        $this->fecha_t = $now->format('Y-m-d');
         $this->info = collect([
             [
                 'detalle' => 'Unidad en cochera',
