@@ -16,7 +16,7 @@ class CancelarModal extends Component
     public function cancel()
     {
         $this->tarea->estado = "CANCELED";
-        $this->tarea->fecha_termino = Carbon::now();
+        $this->tarea->fecha_termino = Carbon::now()->format('Y-m-d H:i');
         $this->tarea->save();
         $this->afterCancel();
     }

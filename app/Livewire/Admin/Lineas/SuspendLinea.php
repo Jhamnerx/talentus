@@ -39,8 +39,8 @@ class SuspendLinea extends Component
 
     public function mount()
     {
-        $this->fecha_suspencion = Carbon::now();
-        $this->date_to_suspend = Carbon::now()->addDays(60);
+        $this->fecha_suspencion = Carbon::now()->format('Y-m-d');
+        $this->date_to_suspend = Carbon::now()->addDays(60)->format('Y-m-d');
     }
 
 
