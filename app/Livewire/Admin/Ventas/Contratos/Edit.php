@@ -29,8 +29,8 @@ class Edit extends Component
         $this->ciudades_id = $contrato->ciudades_id;
         $this->fondo = $contrato->fondo;
         $this->sello = $contrato->sello;
-        $this->fecha = $contrato->fecha;
-        $this->fecha_emision = $contrato->fecha_emision;
+        $this->fecha = $contrato->fecha->format('Y-m-d');
+        $this->fecha_emision = $contrato->fecha_emision->format('Y-m-d');
 
         foreach ($this->contrato->detalle as $detalle) {
             $this->items[$detalle->vehiculos->placa] = [
