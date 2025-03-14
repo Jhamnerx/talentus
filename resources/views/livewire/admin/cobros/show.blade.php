@@ -70,7 +70,7 @@
                     <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
                         <div>Fecha Vencimiento: </div>
                         <div class="font-medium {{ $colorClase }}">
-                            {{ $cobro->fecha_vencimiento->format('d-m-Y') }}
+                            {{ $item->fecha->format('d-m-Y') }}
                         </div>
                     </li>
                     <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
