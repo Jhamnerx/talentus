@@ -25,6 +25,7 @@ class RecibosRequest extends FormRequest
                 }),
             ],
             'serie' => 'required',
+            'estado' => 'required',
             'numero' => 'required',
             'fecha_emision' => 'required|date',
             'fecha_pago' => 'nullable|date',
@@ -46,7 +47,7 @@ class RecibosRequest extends FormRequest
 
             $rules['serie_numero'] = [
                 'required',
-                Rule::unique('recibos', 'serie_numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))
+                Rule::unique('recibos', 'serie_numero')->where(fn($query) => $query->where('empresa_id', session('empresa')))
                     ->ignore($recibo->id),
 
             ];

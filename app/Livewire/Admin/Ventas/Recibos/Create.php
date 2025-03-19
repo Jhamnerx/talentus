@@ -18,7 +18,7 @@ class Create extends Component
 {
 
 
-    public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa = 'PEN', $estado = "BORRADOR";
+    public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa = 'PEN', $estado = "COMPLETADO";
     public $forma_pago = "009", $total = 0.0;
     public $tipo_venta = "CONTADO", $nota;
 
