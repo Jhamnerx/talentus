@@ -131,6 +131,9 @@
                                 <div class="font-semibold text-left">Total</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Estado Pago</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado</div>
                             </th>
 
@@ -229,8 +232,27 @@
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @switch($recibo->estado)
+                                        @case('BORRADOR')
+                                            <div
+                                                class="inline-flex font-medium bg-orange-100 text-orange-600 rounded-full text-center px-2.5 py-0.5">
+                                                ANULADO - BORRADOR
+                                            </div>
+                                        @break
+
+                                        @case('COMPLETADO')
+                                            <div
+                                                class="inline-flex font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2.5 py-0.5">
+                                                COMPLETADO
+                                            </div>
+                                        @break
+                                    @endswitch
+                                </td>
+
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>{{ $recibo->fecha_emision->format('d-m-Y') }}</div>
                                 </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>
                                         @if ($recibo->fecha_pago)
@@ -239,6 +261,7 @@
 
                                     </div>
                                 </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div>{{ $recibo->tipo_venta }}</div>
                                 </td>
@@ -302,6 +325,26 @@
                                                                     </path>
                                                                 </svg>
                                                                 Eliminar
+                                                            </a>
+                                                        </li>
+                                                    @endcan
+                                                    @can('eliminar-recibos')
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="toogleEstado({{ $recibo->id }})"
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                disabled="false" id="headlessui-menu-item-28"
+                                                                role="menuitem" tabindex="-1">
+
+                                                                <svg class="h-5 w-5 mr-3 text-gray-400 group-hover:text-green-500"
+                                                                    xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                    viewBox="0 0 24 24" stroke-width="1.5"
+                                                                    stroke="currentColor" class="size-6">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        d="M7.5 21 3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                                                                </svg>
+
+                                                                Cambiar Estado
                                                             </a>
                                                         </li>
                                                     @endcan
