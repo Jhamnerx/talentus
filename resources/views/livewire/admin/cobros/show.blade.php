@@ -72,6 +72,8 @@
                         <div class="font-medium {{ $colorClase }}">
                             {{ $item->fecha->format('d-m-Y') }}
                         </div>
+                        <x-form.button wire:click.prevent="refreshFecha({{ $item->id }})" right-icon="arrow-path"
+                            primary />
                     </li>
                     <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
                         <div>Periodo: </div>

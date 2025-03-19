@@ -118,7 +118,7 @@ class Create extends Component
 
         $detalles->each(function ($item) {
             $cantidad = $this->calcularCantidad($item->cobro->periodo);
-            $valor_unitario = $item->cobro->producto->valor_unitario;
+            $valor_unitario = $item->plan;
 
             $this->items->push([
                 'producto_id' => $item->cobro->producto->id,

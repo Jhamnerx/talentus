@@ -186,7 +186,7 @@ class Emitir extends Component
         $detalles = DetalleCobros::whereIn('id', $items)->get();
         foreach ($detalles as $detalle) {
             $cantidad = $this->calcularCantidad($detalle->cobro->periodo);
-            $igv = $this->calcularIgvProducto($detalle->cobro->producto->valor_unitario, $cantidad, 10);
+            $igv = $this->calcularIgvProducto($detalle->plan, $cantidad, 10);
             $this->addProducto([
                 'producto_id' => $detalle->cobro->producto_id,
                 'codigo' => $detalle->cobro->producto->codigo,
@@ -194,14 +194,14 @@ class Emitir extends Component
                 'unit' => $detalle->cobro->producto->unit_code,
                 'unit_name' => $detalle->cobro->producto->unit->descripcion,
                 'descripcion' => $detalle->cobro->producto->descripcion . " DE LA PLACA: " . $detalle->vehiculo->placa . ' HASTA LA FECHA ' . $detalle->fecha->format('d-m-Y'),
-                'valor_unitario' => round(floatval($detalle->cobro->producto->valor_unitario)),
-                'precio_unitario' => round(floatval($this->calcularPrecioUnitario($detalle->cobro->producto->valor_unitario, 10)), 4),
+                'valor_unitario' => round(floatval($detalle->plan)),
+                'precio_unitario' => round(floatval($this->calcularPrecioUnitario($detalle->plan, 10)), 4),
                 'igv' => $igv,
                 'porcentaje_igv' => 18,
                 'icbper' => 0.00,
                 'total_icbper' => 0.00,
-                'sub_total' => round(floatval($detalle->cobro->producto->valor_unitario)) * $cantidad,
-                'total' => round(floatval($detalle->cobro->producto->valor_unitario) * $cantidad + $igv, 4),
+                'sub_total' => round(floatval($detalle->plan)) * $cantidad,
+                'total' => round(floatval($detalle->plan) * $cantidad + $igv, 4),
                 'codigo_afectacion' => 10,
                 'afecto_icbper' => false,
                 'tipo' => $detalle->cobro->producto->tipo,

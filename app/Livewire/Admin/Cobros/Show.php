@@ -33,6 +33,32 @@ class Show extends Component
         $this->render();
     }
 
+    public function refreshFecha(DetalleCobros $detalle)
+    {
+        $periodo = $detalle->cobro->periodo;
+        $dias = match ($periodo) {
+            'MENSUAL' => 30,
+            'BIMENSUAL' => 60,
+            'TRIMESTRAL' => 90,
+            'SEMESTRAL' => 180,
+            'ANUAL' => 365,
+            default => 0,
+        };
+
+        $nuevaFecha = $detalle->fecha->addDays($dias);
+
+        $detalle->update(['fecha' => $nuevaFecha]);
+
+        $this->dispatch('update-cobros');
+
+        $this->dispatch(
+            'notify-toast',
+            icon: 'success',
+            title: 'FECHA ACTUALIZADA',
+            mensaje: 'Se actualizo la fecha correctamente'
+        );
+    }
+
 
     public function createBoleta(array $detalleIds)
     {

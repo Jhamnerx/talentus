@@ -180,9 +180,9 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Tipo Comprobante</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            {{-- <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Crear Invoice</div>
-                            </th>
+                            </th> --}}
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Observacion</div>
                             </th>
@@ -400,11 +400,11 @@
                                     </div>
 
                                 </td>
-
+                                {{-- 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
                                     <x-form.mini.button wire:click="createInvoice({{ $cobro->id }})" rounded
                                         icon="bookmark" flat info hover:outline.negative focus:solid.positive />
-                                </td>
+                                </td> --}}
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
