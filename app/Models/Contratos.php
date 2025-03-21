@@ -100,7 +100,7 @@ class Contratos extends Model
 
     public function periodo()
     {
-        return $this->fecha_emision->subDay(2)->diffInMonths($this->fecha);
+        return round($this->fecha_emision->subDay(2)->diffInMonths($this->fecha));
     }
 
     public function getPDFData()
