@@ -358,7 +358,7 @@ class Emitir extends Component
             $this->detalle_cuotas->push([
                 'n_cuota' => $i + 1,
                 'dias' => $this->vence_cuotas,
-                'fecha' => $fecha->addDays($this->vence_cuotas)->format('Y-m-d'),
+                'fecha' => $fecha->addDays((int)$this->vence_cuotas)->format('Y-m-d'),
                 'dia_semana' => ucfirst($fecha->dayName),
                 'importe' => $this->total > 0 ? $importe : 0.00,
             ]);
