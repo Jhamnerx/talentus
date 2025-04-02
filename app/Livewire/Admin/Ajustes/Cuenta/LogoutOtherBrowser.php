@@ -1,13 +1,14 @@
 <?php
 
 namespace App\Livewire\Admin\Ajustes\Cuenta;
+
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
-use Jenssegers\Agent\Agent;
+use Laravel\Jetstream\Agent;
 use Livewire\Component;
 
 class LogoutOtherBrowser extends Component
@@ -54,7 +55,7 @@ class LogoutOtherBrowser extends Component
 
         $this->resetErrorBag();
 
-        if (! Hash::check($this->password, Auth::user()->password)) {
+        if (!Hash::check($this->password, Auth::user()->password)) {
             throw ValidationException::withMessages([
                 'password' => [__('This password does not match our records.')],
             ]);
@@ -65,7 +66,7 @@ class LogoutOtherBrowser extends Component
         $this->deleteOtherSessionRecords();
 
         request()->session()->put([
-            'password_hash_'.Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
+            'password_hash_' . Auth::getDefaultDriver() => Auth::user()->getAuthPassword(),
         ]);
 
         $this->confirmingLogout = false;
@@ -103,9 +104,9 @@ class LogoutOtherBrowser extends Component
 
         return collect(
             DB::connection(config('session.connection'))->table(config('session.table', 'sessions'))
-                    ->where('user_id', Auth::user()->getAuthIdentifier())
-                    ->orderBy('last_activity', 'desc')
-                    ->get()
+                ->where('user_id', Auth::user()->getAuthIdentifier())
+                ->orderBy('last_activity', 'desc')
+                ->get()
         )->map(function ($session) {
             return (object) [
                 'agent' => $this->createAgent($session),
