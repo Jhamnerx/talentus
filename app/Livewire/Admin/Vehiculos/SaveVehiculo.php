@@ -13,12 +13,12 @@ use App\Models\Lineas;
 
 class SaveVehiculo extends Component
 {
+    public $modalSaveV = false;
+
     public $flotas;
 
     public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $dispositivo_imei = '', $modelo_gps,
         $sim_card_id, $numero, $sim_card, $operador, $clientes_id, $dispositivos_id, $descripcion;
-
-    public $modalSaveV = false;
 
     public $flotas_selected = [];
 
