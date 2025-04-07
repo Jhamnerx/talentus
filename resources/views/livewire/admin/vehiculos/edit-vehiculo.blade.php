@@ -46,8 +46,7 @@
                 :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close" primary flat
-                        full>
+                    <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" primary flat full>
                         <span x-html="`Crear cliente <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>
@@ -84,7 +83,7 @@
                 :async-data="route('api.lineas.index')" option-label="numero" option-value="numero">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='addLinea(`${search}`)' x-on:click="close" primary flat full>
+                    <x-form.button wire:click.prevent='addLinea(`${search}`)' primary flat full>
                         <span x-html="`Registrar Linea <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>
@@ -114,7 +113,7 @@
                 :async-data="route('api.dispositivos.index')" option-label="imei" option-value="imei">
 
                 <x-slot name="beforeOptions" class="p-2 flex justify-center">
-                    <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat full>
+                    <x-form.button wire:click.prevent='registarImei(`${search}`)' primary flat full>
                         <span x-html="`Registrar Imei <b>${search}</b>`"></span>
                     </x-form.button>
                 </x-slot>
@@ -172,7 +171,7 @@
         <div class="flex justify-end gap-x-4">
 
             <div class="flex">
-                <x-form.button flat label="Cancelar" x-on:click="close" wire:click="close" />
+                <x-form.button flat label="Cancelar" wire:click="close" />
                 <x-form.button primary label="Guardar" wire:click="save" />
             </div>
         </div>
