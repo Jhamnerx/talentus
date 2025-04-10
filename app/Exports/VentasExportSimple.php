@@ -11,8 +11,10 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithCustomValueBinder, ShouldAutoSize
+class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithCustomValueBinder, ShouldAutoSize, WithColumnFormatting
 {
     use Exportable;
 
@@ -56,6 +58,13 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             'VENDEDOR',
             'SUNAT ESTADO'
 
+        ];
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'K' => NumberFormat::FORMAT_NUMBER_00,
         ];
     }
 
