@@ -53,6 +53,12 @@
                         label="POR PAGAR" />
                     <!-- End -->
                 </div>
+                <div class="m-3">
+
+                    <x-form.radio id="lg" lg wire:model.live="estado" value="Todos" name="estado"
+                        label="POR PAGAR" />
+                    <!-- End -->
+                </div>
 
             </div>
 
@@ -65,8 +71,6 @@
             <x-form.button icon="clipboard" secondary label="EXCEl" wire:click.prevent="exportar" spinner="exportar" />
             {{-- <x-form.button icon="clipboard" secondary label="PDF" /> --}}
         </div>
-
-
 
     </div>
 
