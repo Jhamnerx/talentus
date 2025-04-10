@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\WithCustomValueBinder;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, WithCustomValueBinder, ShouldAutoSize, WithColumnFormatting
+class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinder implements FromQuery, WithMapping, WithHeadings, ShouldAutoSize, WithColumnFormatting
 {
     use Exportable;
 
@@ -53,6 +53,7 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             'SUB TOTAL',
             'IGV',
             'TOTAL',
+            'DIVISA',
             'ESTADO',
             'ESTADO PAGO',
             'VENDEDOR',
@@ -75,7 +76,7 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $venta->anulado == 'si' && $venta->envioResumen == true &&
             $venta->envioResumen->fe_estado == '1'
         ) {
-            $status_anulado = "comunicacion de baja";
+            $status_anulado = " | comunicacion de baja";
         }
 
         return [
@@ -89,7 +90,8 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $venta->op_inafectas,
             $venta->sub_total,
             $venta->igv,
-            $venta->total,
+            (float) $venta->total, // Convertimos explícitamente a float
+            $venta->divisa == 'PEN ' ? 'SOLES' : 'DOLARES',
             $venta->estado->name,
             $venta->pago_estado == 'UNPAID' ? 'PENDIENTE' : 'PAGADO',
             $venta->user->name,
