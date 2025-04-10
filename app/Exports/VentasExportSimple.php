@@ -55,11 +55,20 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             'ESTADO PAGO',
             'VENDEDOR',
             'SUNAT ESTADO'
+
         ];
     }
 
     public function map($venta): array
     {
+        $status_anulado = false;
+        if (
+            $venta->anulado == 'si' && $venta->envioResumen == true &&
+            $venta->envioResumen->fe_estado == '1'
+        ) {
+            $status_anulado = "comunicacion de baja";
+        }
+
         return [
             Carbon::parse($venta->fecha_emision)->format('d/m/Y'),
             $venta->serie_correlativo,
@@ -75,7 +84,7 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $venta->estado->name,
             $venta->pago_estado == 'UNPAID' ? 'PENDIENTE' : 'PAGADO',
             $venta->user->name,
-            $venta->fe_mensaje_sunat
+            $venta->fe_mensaje_sunat . ' ' . $status_anulado
 
         ];
     }

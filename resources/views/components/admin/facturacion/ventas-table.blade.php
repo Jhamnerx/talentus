@@ -224,9 +224,9 @@
                                         </svg>
                                     </button>
                                 </a>
-
                             </div>
                             @else
+                            
                             <div class="space-x-1">
                                 -
                             </div>
