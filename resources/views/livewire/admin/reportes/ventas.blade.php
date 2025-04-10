@@ -56,7 +56,7 @@
                 <div class="m-3">
 
                     <x-form.radio id="lg" lg wire:model.live="estado" value="Todos" name="estado"
-                        label="POR PAGAR" />
+                        label="TODOS" />
                     <!-- End -->
                 </div>
 
