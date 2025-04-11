@@ -41,7 +41,7 @@ class CobrosRequest extends FormRequest
             "observacion" => 'nullable',
 
             'items' => 'array|between:1,100',
-            'items.*.plan' => 'required|decimal:0,2',
+            'items.*.plan' => 'required|decimal:0,4',
             'items.*.placa' => 'required',
             'items.*.fecha' => 'required|date',
             'items.*.vehiculo_id' => 'required',
