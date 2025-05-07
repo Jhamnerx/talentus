@@ -53,6 +53,7 @@ use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+use App\Http\Controllers\CertificadosAntifatigaController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -206,6 +207,10 @@ Route::resource('certificados-gps', CertificadosGpsController::class)->names('ad
 
 Route::resource('certificados-velocimetros', CertificadosVelocimetrosController::class)->names('admin.certificados.velocimetros')->parameters([
     'certificados-velocimetros' => 'certificado'
+]);
+
+Route::resource('certificados-antifatiga', CertificadosAntifatigaController::class)->names('admin.certificados.antifatiga')->parameters([
+    'certificados-antifatiga' => 'certificado'
 ]);
 
 

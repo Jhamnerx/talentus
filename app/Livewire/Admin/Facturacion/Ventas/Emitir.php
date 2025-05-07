@@ -173,6 +173,7 @@ class Emitir extends Component
             $this->cliente = Clientes::find($cobro->clientes_id);
             $this->direccion = $this->cliente->direccion;
             $this->cliente_id = $cobro->clientes_id;
+            $this->divisa = $cobro->divisa;
         }
 
         // Procesar items si no son nulos
@@ -194,13 +195,13 @@ class Emitir extends Component
                 'unit' => $detalle->cobro->producto->unit_code,
                 'unit_name' => $detalle->cobro->producto->unit->descripcion,
                 'descripcion' => $detalle->cobro->producto->descripcion . " DE LA PLACA: " . $detalle->vehiculo->placa . ' HASTA LA FECHA ' . $detalle->fecha->format('d-m-Y'),
-                'valor_unitario' => round(floatval($detalle->plan)),
+                'valor_unitario' => round(floatval($detalle->plan), 4),
                 'precio_unitario' => round(floatval($this->calcularPrecioUnitario($detalle->plan, 10)), 4),
                 'igv' => $igv,
                 'porcentaje_igv' => 18,
                 'icbper' => 0.00,
                 'total_icbper' => 0.00,
-                'sub_total' => round(floatval($detalle->plan)) * $cantidad,
+                'sub_total' => round(floatval($detalle->plan), 4) * $cantidad,
                 'total' => round(floatval($detalle->plan) * $cantidad + $igv, 4),
                 'codigo_afectacion' => 10,
                 'afecto_icbper' => false,

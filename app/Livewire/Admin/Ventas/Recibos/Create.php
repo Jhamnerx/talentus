@@ -64,6 +64,7 @@ class Create extends Component
         if ($cobro) {
             $this->cliente = Clientes::find($cobro->clientes_id);
             $this->clientes_id = $cobro->clientes_id;
+            $this->divisa = $cobro->divisa;
         }
 
         // Procesar items si no son nulos

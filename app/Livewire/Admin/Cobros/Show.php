@@ -36,16 +36,16 @@ class Show extends Component
     public function refreshFecha(DetalleCobros $detalle)
     {
         $periodo = $detalle->cobro->periodo;
-        $dias = match ($periodo) {
-            'MENSUAL' => 30,
-            'BIMENSUAL' => 60,
-            'TRIMESTRAL' => 90,
-            'SEMESTRAL' => 180,
-            'ANUAL' => 365,
-            default => 0,
-        };
 
-        $nuevaFecha = $detalle->fecha->addDays($dias);
+        // Usar addMonths, addYears, etc. en lugar de addDays para mantener el mismo día del mes
+        $nuevaFecha = match ($periodo) {
+            'MENSUAL' => $detalle->fecha->addMonth(),
+            'BIMENSUAL' => $detalle->fecha->addMonths(2),
+            'TRIMESTRAL' => $detalle->fecha->addMonths(3),
+            'SEMESTRAL' => $detalle->fecha->addMonths(6),
+            'ANUAL' => $detalle->fecha->addYear(),
+            default => $detalle->fecha,
+        };
 
         $detalle->update(['fecha' => $nuevaFecha]);
 
@@ -55,10 +55,9 @@ class Show extends Component
             'notify-toast',
             icon: 'success',
             title: 'FECHA ACTUALIZADA',
-            mensaje: 'Se actualizo la fecha correctamente'
+            mensaje: 'Se actualizó la fecha correctamente'
         );
     }
-
 
     public function createBoleta(array $detalleIds)
     {
