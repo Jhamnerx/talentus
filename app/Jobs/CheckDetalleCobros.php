@@ -22,6 +22,7 @@ class CheckDetalleCobros implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $notificaciones = [15, 7, 5, 3, 1];
+    protected $timeout = 600;
 
     public function __construct()
     {
@@ -64,7 +65,6 @@ class CheckDetalleCobros implements ShouldQueue
                     ];
                 }
             }
-            dd($detallesAgrupados);
 
             if (!empty($detallesAgrupados)) {
                 $this->enviarNotificacion($cobro, $detallesAgrupados);
