@@ -64,6 +64,7 @@ class CheckDetalleCobros implements ShouldQueue
                     ];
                 }
             }
+            dd($detallesAgrupados);
 
             if (!empty($detallesAgrupados)) {
                 $this->enviarNotificacion($cobro, $detallesAgrupados);
@@ -77,6 +78,7 @@ class CheckDetalleCobros implements ShouldQueue
             15 => 'POR VENCER EN 15 DÍAS',
             7  => 'POR VENCER EN 7 DÍAS',
             5  => 'POR VENCER EN 5 DÍAS',
+            4  => 'POR VENCER EN 4 DÍAS',
             3  => 'POR VENCER EN 3 DÍAS',
             1  => 'POR VENCER EN 1 DÍA',
             default => 'POR VENCER',

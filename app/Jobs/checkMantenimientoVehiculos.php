@@ -24,13 +24,13 @@ class checkMantenimientoVehiculos implements ShouldQueue
     public function handle()
     {
         $mantenimientos = Mantenimiento::whereBetween('fecha_hora_mantenimiento', [Carbon::now()->format('Y-m-d'), Carbon::now()->addDays(4)->format('Y-m-d')])
-
             ->get();
-        foreach ($mantenimientos as $mantenimiento) {
 
+        foreach ($mantenimientos as $mantenimiento) {
+            // Inicializar $data como null para verificar después si se definió
+            $data = null;
 
             if (Carbon::now()->floatDiffInDays($mantenimiento->fecha_hora_mantenimiento, false) <= 4 && Carbon::now()->floatDiffInDays($mantenimiento->fecha_hora_mantenimiento, false) > 0) {
-
                 $data = array(
                     'body' => 'maintenance_coming_soon',
                     'asunto' => 'MANTENIMIENTO APROXIMANDOSE',
@@ -40,8 +40,8 @@ class checkMantenimientoVehiculos implements ShouldQueue
                     'id_mantenimiento' => $mantenimiento->id,
                 );
             }
-            if (Carbon::now()->floatDiffInDays($mantenimiento->fecha_vencimiento, false) <= 0) {
 
+            if (Carbon::now()->floatDiffInDays($mantenimiento->fecha_vencimiento, false) <= 0) {
                 $data = array(
                     'body' => 'maintenance_today',
                     'asunto' => 'MANTENIMIENTO PROGRAMADO PARA HOY',
@@ -52,16 +52,17 @@ class checkMantenimientoVehiculos implements ShouldQueue
                 );
             }
 
+            // Solo enviar mensajes si $data fue definido
+            if ($data !== null) {
+                if ($mantenimiento->notify_admin) {
+                    $mensaje = new Mensaje();
+                    $mensaje->sendMantenimientoMessageAdmin($data, $mantenimiento);
+                }
 
-            if ($mantenimiento->notify_admin) {
-                $mensaje = new Mensaje();
-                $mensaje->sendMantenimientoMessageAdmin($data, $mantenimiento);
-            }
-
-
-            if ($mantenimiento->notify_client) {
-                $mensaje = new Mensaje();
-                $mensaje->sendMantenimientoMessageClient($data, $mantenimiento, $mantenimiento->vehiculo->cliente);
+                if ($mantenimiento->notify_client) {
+                    $mensaje = new Mensaje();
+                    $mensaje->sendMantenimientoMessageClient($data, $mantenimiento, $mantenimiento->vehiculo->cliente);
+                }
             }
         }
     }
