@@ -17,7 +17,7 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
 
     public function __construct($mensaje)
     {
-        dd($mensaje);
+
         $this->mensaje = $mensaje;
     }
 
