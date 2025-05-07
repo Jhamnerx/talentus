@@ -34,7 +34,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('22:00');
         $schedule->job(new JobsCheckRecordatorios)->dailyAt('07:40');
-        $schedule->job(new CheckDetalleCobros)->everyMinute();
+        $schedule->job(new CheckDetalleCobros)->dailyAt('08:50');
         //$schedule->job(new CheckDetalleCobros)->everyMinute();
         $schedule->command('activitylog:clean')->daily();
         $schedule->job(new checkMantenimientoVehiculos)->daily();
