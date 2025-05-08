@@ -23,6 +23,7 @@ class CheckDetalleCobros implements ShouldQueue
 
     protected $notificaciones = [15, 7, 5, 3, 1];
     protected $timeout = 600;
+    protected $adminEmail = 'administracion@talentustechnology.com';
 
     public function __construct()
     {
@@ -32,6 +33,7 @@ class CheckDetalleCobros implements ShouldQueue
     public function handle()
     {
         $hoy = Carbon::now()->format('Y-m-d');
+        $cobrosConsolidados = [];
 
         // Buscar todos los cobros que tienen detalles con estado = 1 y fechas en el rango de notificación
         $cobrosConDetalles = Cobros::whereHas('detalle', function ($query) use ($hoy) {
@@ -40,7 +42,7 @@ class CheckDetalleCobros implements ShouldQueue
                 ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
         })->with(['detalle' => function ($query) use ($hoy) {
             $query->where('estado', 1) // Solo detalles activos
-                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), [15, 7, 5, 3, 1]))
+                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
                 ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
         }, 'detalle.vehiculo'])
             ->withoutGlobalScope(EmpresaScope::class)
@@ -57,18 +59,30 @@ class CheckDetalleCobros implements ShouldQueue
                     $detallesAgrupados[$estadoNotificacion][] = [
                         'placa' => $detalle->vehiculo?->placa ?? 'Sin vehículo',
                         'fecha_vencimiento' => $detalle->fecha,
+                        'cobro_id' => $cobro->id,
                     ];
                 } elseif ($diasRestantes <= 0) {
                     $detallesAgrupados['VENCIDO'][] = [
                         'placa' => $detalle->vehiculo?->placa ?? 'Sin vehículo',
                         'fecha_vencimiento' => $detalle->fecha,
+                        'cobro_id' => $cobro->id,
                     ];
                 }
             }
 
             if (!empty($detallesAgrupados)) {
-                $this->enviarNotificacion($cobro, $detallesAgrupados);
+                // Agregar los detalles al arreglo consolidado
+                foreach ($detallesAgrupados as $estado => $detalles) {
+                    foreach ($detalles as $detalle) {
+                        $cobrosConsolidados[$estado][] = $detalle;
+                    }
+                }
             }
+        }
+
+        // Enviar una única notificación con todos los cobros consolidados
+        if (!empty($cobrosConsolidados)) {
+            $this->enviarNotificacionConsolidada($cobrosConsolidados);
         }
     }
 
@@ -85,20 +99,28 @@ class CheckDetalleCobros implements ShouldQueue
         };
     }
 
-    private function enviarNotificacion($cobro, $detallesAgrupados)
+    private function enviarNotificacionConsolidada($cobrosConsolidados)
     {
-        $users = User::role('admin')->get();
+        // Buscar o crear un usuario con el correo de administración
+        $user = User::firstOrCreate(
+            ['email' => $this->adminEmail],
+            [
+                'name' => 'Administración Talentus',
+                'password' => bcrypt(uniqid())
+            ]
+        );
 
         $mensaje = [
-            'body' => "Listado de vehículos con cobros próximos a vencer para el cobro #{$cobro->id}.",
-            'asunto' => "NOTIFICACIÓN DE DETALLES DE COBROS (Cobro #{$cobro->id})",
+            'body' => "Listado consolidado de vehículos con cobros próximos a vencer.",
+            'asunto' => "NOTIFICACIÓN CONSOLIDADA DE DETALLES DE COBROS - " . Carbon::now()->format('d/m/Y'),
             'estado' => "Cobros por vencer",
             'accion' => 'notification_detalle_cobro',
-            'url' => "admin.cobros.show",
-            'id_cobro' => $cobro->id,
-            'detalles' => $detallesAgrupados,
+            'url' => "admin.cobros.index",
+            'id_cobro' => 0, // No hay un ID específico para el consolidado
+            'detalles' => $cobrosConsolidados,
         ];
 
-        Notification::send($users, new EnviarMensajeCobro($mensaje));
+        // Enviar notificación solo al usuario de administración
+        $user->notify(new EnviarMensajeCobro($mensaje));
     }
 }

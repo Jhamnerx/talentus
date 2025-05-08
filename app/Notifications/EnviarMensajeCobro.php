@@ -17,7 +17,6 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
 
     public function __construct($mensaje)
     {
-
         $this->mensaje = $mensaje;
     }
 
@@ -36,11 +35,11 @@ class EnviarMensajeCobro extends Notification implements ShouldQueue
     public function toDatabase($notifiable)
     {
         return [
-            'url' => config('app.url') . '/admin/cobros/' . $this->mensaje['id_cobro'],
+            'url' => config('app.url') . '/admin/cobros',
             'asunto' => $this->mensaje["asunto"],
             'mensaje' => $this->mensaje["body"],
             'accion' => $this->mensaje["accion"],
-            'tipo' => 'cobro',
+            'tipo' => 'cobro_consolidado',
         ];
     }
 
