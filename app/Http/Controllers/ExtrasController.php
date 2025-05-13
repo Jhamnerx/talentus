@@ -12,6 +12,8 @@ class ExtrasController extends Controller
     public function __invoke(Tareas $tarea)
     {
 
+        $tarea->withoutGlobalScopes();
+
         return view('app.extras.confirmacion', compact('tarea'));
     }
 }
