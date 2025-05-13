@@ -38,7 +38,8 @@ class Complete extends Component
             ->orWhere('numero', 'LIKE', '%' . $this->search . '%')
             ->with('vehiculo', 'cliente', 'user', 'tipo_tarea', 'image')
             ->estado('COMPLETE')
-            ->paginate(5, ['*'], 'completePage');
+            ->orderBy('id', 'desc')
+            ->paginate(10, ['*'], 'completePage');
 
         return view('livewire.admin.tecnico.tareas.modales.complete', compact('tareas'));
     }
