@@ -131,7 +131,7 @@
                     </tr>
                     <tr>
                         <td width="60%" align="left"><strong>Motivo Traslado:</strong>  {{ doc.envio.desTraslado }} </td>
-                        <td width="40%" align="left"><strong>Modalidad de Transporte:</strong>  {{ doc.envio.modTraslado }} </td>
+                        <td width="40%" align="left"><strong>Modalidad de Transporte:</strong>  {{ doc.envio.modTraslado =='02' ? 'TRANSPORTE PRIVADO': 'TRANSPORTE PUBLICO' }} </td>
                     </tr>
                     <tr>
                         <td width="60%" align="left"><strong>Peso Bruto Total ({{ doc.envio.undPesoTotal }}):</strong>  {{ doc.envio.pesoTotal }} </td>

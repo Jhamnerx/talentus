@@ -760,12 +760,14 @@ class ApiFacturacion extends Controller
             $envio->setPuerto($puerto);
         }
 
+        $envio->setDesTraslado($guia->motivoTraslado->descripcion);
 
         //VERIFICA SI EL MOTIVO DE TRASLADO ES OTRO Y AGREGA LA DESCRIPCION
         if ($guia->motivo_traslado_id == '13') {
 
             $envio->setDesTraslado($guia->descripcion_motivo_traslado);
         }
+
         //ESTABLECER GUIA DE REMISION
         $despatch = new Despatch();
         $despatch->setVersion('2022')

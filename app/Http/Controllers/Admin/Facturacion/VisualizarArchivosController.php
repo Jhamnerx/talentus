@@ -19,9 +19,7 @@ class VisualizarArchivosController extends Controller
         return $venta->getPdf();
     }
 
-    public function ticket($serie_correlativo)
-    {
-    }
+    public function ticket($serie_correlativo) {}
 
     public function xml($serie_correlativo)
     {
@@ -30,14 +28,13 @@ class VisualizarArchivosController extends Controller
         return $venta->downloadXml();
     }
 
-    public function cdr($serie_correlativo)
-    {
-    }
+    public function cdr($serie_correlativo) {}
 
 
     public function pdf_guia($id, $serie_correlativo)
     {
         $guia = GuiaRemision::where('serie_correlativo', $serie_correlativo)->where('id', $id)->firstOrFail();
+
         return $guia->getPdf();
     }
 

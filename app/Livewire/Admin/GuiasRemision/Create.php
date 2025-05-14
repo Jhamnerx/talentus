@@ -9,6 +9,7 @@ use App\Models\Series;
 use App\Models\SimCard;
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\Dispositivos;
 use App\Models\GuiaRemision;
@@ -17,10 +18,10 @@ use PhpParser\Builder\Function_;
 use PhpParser\Node\Stmt\TryCatch;
 use App\Models\ModelosDispositivo;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\GuiaRemisionRequest;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
-use App\Models\plantilla;
 
 class Create extends Component
 {
@@ -199,6 +200,7 @@ class Create extends Component
         $data = $this->validate($request->rules(null, $this->motivo_traslado_id, $this->docu_rel_tipo, $this->plantilla->ruc), $request->messages());
 
         try {
+            DB::beginTransaction();
             $guia = GuiaRemision::create($data);
 
             GuiaRemision::createItems($guia, $data["items"]);
@@ -242,8 +244,9 @@ class Create extends Component
                     $this->redirectRoute('admin.almacen.guias.index');
                 }
             }
+            DB::commit();
         } catch (\Throwable $th) {
-
+            DB::rollBack();
             $this->dispatch(
                 'error',
                 title: 'ERROR: ',
