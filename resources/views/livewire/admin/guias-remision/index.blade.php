@@ -627,7 +627,7 @@
                                             @role('admin')
                                                 @if (!$guia->clase && $guia->fe_estado == '0')
                                                     <x-dropdown.item wire:click.prevent='createXml({{ $guia->id }})'
-                                                        icon='refresh' label="Crear XML" />
+                                                        icon='arrow-path' label="Crear XML" />
                                                 @endif
                                             @endrole
                                             @can('editar-guias')
