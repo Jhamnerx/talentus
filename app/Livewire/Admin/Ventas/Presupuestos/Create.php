@@ -200,7 +200,7 @@ class Create extends Component
 
     public function calcularCuotas($nCuotas)
     {
-        dd($this->vence_cuotas);
+
         $this->detalle_cuotas = collect();
         $fecha = Carbon::now();
         //$this->total_cuotas = 0.00;
