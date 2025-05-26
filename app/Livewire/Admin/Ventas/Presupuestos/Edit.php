@@ -24,8 +24,8 @@ class Edit extends Component
         $divisa = "PEN", $tipo_cambio, $metodo_pago_id = "009", $comentario,
         $tipo_descuento = "cantidad", $descuento_factor,
         $adelanto = 0.00,  $numero_cuotas = 0,
-        $vence_cuotas = 30, $forma_pago = "CONTADO";
-
+        $forma_pago = "CONTADO";
+    public int $vence_cuotas = 30;
     public $sub_total = 0.00, $op_gravadas = 0.00, $op_exoneradas = 0.00, $op_inafectas = 0.00,
         $op_gratuitas = 0.00, $descuento = 0.00, $igv = 0.00, $icbper = 0.00,  $total = 0.00;
 

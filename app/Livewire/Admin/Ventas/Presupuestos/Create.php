@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
 
+
 class Create extends Component
 {
 
@@ -31,8 +32,8 @@ class Create extends Component
         $divisa = "PEN", $tipo_cambio, $metodo_pago_id = "009", $comentario,
         $igv_op = 0.00, $tipo_descuento = "cantidad", $descuento_factor,
         $adelanto = 0.00,  $numero_cuotas = 0,
-        $vence_cuotas = 30, $forma_pago = "CONTADO";
-
+        $forma_pago = "CONTADO";
+    public int $vence_cuotas = 30;
     public $sub_total = 0.00, $op_gravadas = 0.00, $op_exoneradas = 0.00, $op_inafectas = 0.00,
         $op_gratuitas = 0.00, $descuento = 0.00, $igv = 0.00, $icbper = 0.00,  $total = 0.00;
 
@@ -199,6 +200,7 @@ class Create extends Component
 
     public function calcularCuotas($nCuotas)
     {
+        dd($this->vence_cuotas);
         $this->detalle_cuotas = collect();
         $fecha = Carbon::now();
         //$this->total_cuotas = 0.00;
