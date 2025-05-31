@@ -18,7 +18,8 @@ class Show extends Component
         if ($this->vehiculo->dispositivos) {
 
 
-            $info = $api->getDevice($this->vehiculo->dispositivos->imei);
+            $info = $api->getDevice($this->vehiculo->dispositivoPrincipal->dispositivo->imei);
+
 
             if ($info) {
                 $this->dispositivo = collect([

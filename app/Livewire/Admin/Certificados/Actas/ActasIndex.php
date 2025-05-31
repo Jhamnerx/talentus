@@ -53,7 +53,6 @@ class ActasIndex extends Component
         $this->dispatch('actualizarActa', acta: $acta);
     }
 
-
     public function openModalDelete(Actas $acta)
     {
         $this->dispatch('EliminarActa', acta: $acta);
@@ -74,8 +73,6 @@ class ActasIndex extends Component
 
         $this->dispatch('modalOpenSend', $acta);
     }
-
-
 
     public function toggleStatus(Actas $acta)
     {

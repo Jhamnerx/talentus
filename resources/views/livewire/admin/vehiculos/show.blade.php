@@ -156,10 +156,7 @@
                                                             <span>{{ $vehiculo->color }}</span>
                                                             |
                                                             <span>
-                                                                {{ $vehiculo->dispositivos
-                                                                    ? $vehiculo->dispositivos->modelo->modelo
-                                                                    : 'SIN
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                GPS' }}
+                                                                {{ $vehiculo->dispositivoPrincipal ? $vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo : 'SIN  GPS' }}
                                                             </span>
                                                         </div>
                                                     </div>
@@ -431,17 +428,20 @@
                         <div class="flex items-center justify-between">
                             <!-- Left side -->
                             @if ($vehiculo->dispositivos)
-                                <div class="flex shrink-0 -space-x-3 -ml-px">
-                                    @if ($vehiculo->dispositivos->modelo->image)
-                                        <a class="block" href="javascript: void(0)">
-                                            <img class="rounded-full border-2 border-white box-content"
-                                                src="{{ Storage::url($vehiculo->dispositivos->modelo->image->url) }}.webp"
-                                                width="82" height="82" />
-                                        @else
-                                    @endif
+                                @foreach ($vehiculo->dispositivos as $item)
+                                    <div class="flex shrink-0 -space-x-3 -ml-px">
+                                        @if ($item->dispositivo->modelo->image)
+                                            <a class="block" href="javascript: void(0)">
+                                                <img class="rounded-full border-2 border-white box-content"
+                                                    src="{{ Storage::url($item->dispositivo->modelo->image->url) }}.webp"
+                                                    width="82" height="82" />
+                                            @else
+                                        @endif
 
-                                    </a>
-                                </div>
+                                        </a>
+                                    </div>
+                                @endforeach
+
                             @endif
                         </div>
                         @if ($dispositivo['status'] == 'ok')
@@ -551,10 +551,15 @@
                             <div class="max-w-sm w-full mx-auto lg:max-w-none">
 
                                 @if ($vehiculo->dispositivos)
-                                    <h2 class="text-2xl text-slate-800 font-bold mb-6">
-                                        {{ $vehiculo->dispositivos->imei }} -
-                                        {{ $vehiculo->dispositivos->modelo->modelo }}
-                                    </h2>
+
+                                    @foreach ($vehiculo->dispositivos as $item)
+                                        <h2 class="text-2xl text-slate-800 font-bold mb-6">
+                                            {{ $item->dispositivo->imei }} -
+                                            {{ $item->dispositivo->modelo->modelo }}
+                                        </h2>
+                                    @endforeach
+
+
                                 @endif
 
                             </div>

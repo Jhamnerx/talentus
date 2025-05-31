@@ -182,12 +182,19 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-medium text-slate-800">
-                                        @if ($certificado->vehiculo->dispositivos)
-                                            {{ $certificado->vehiculo->dispositivos->modelo->modelo }}
+                                        @php
+                                            // Obtenemos el dispositivo principal (is_principal = 1)
+                                            $dispositivoPrincipal = $certificado->vehiculo->dispositivos
+                                                ->where('is_principal', 1)
+                                                ->first();
+                                        @endphp
+
+                                        @if ($dispositivoPrincipal && $dispositivoPrincipal->dispositivo && $dispositivoPrincipal->dispositivo->modelo)
+                                            {{ $dispositivoPrincipal->dispositivo->modelo->modelo }}
+                                            <br><small>(IMEI: {{ $dispositivoPrincipal->imei }})</small>
                                         @else
                                             Registrar dispositivo
                                         @endif
-
                                     </div>
                                 </td>
 

@@ -30,7 +30,7 @@ use App\Models\ModalidadTransporte;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Builder;
 
 class SelectsController extends Controller
 {
@@ -356,52 +356,44 @@ class SelectsController extends Controller
                 return $linea;
             });
     }
+
     public function dispositivos(Request $request): Collection
     {
         return Dispositivos::query()
-
             ->with(['modelo' => function ($query) {
                 $query->select('modelo', 'id');
             }])
             ->select('id', 'imei', 'modelo_id')
             ->when(
                 $request->search,
-                fn(Builder $query) => $query
-                    ->where('imei', 'like', "%{$request->search}%")
-
+                function (Builder $query) use ($request) {
+                    $query->where('imei', 'like', "%{$request->search}%")
+                        ->orWhereHas('modelo', function ($q) use ($request) {
+                            $q->where('modelo', 'like', "%{$request->search}%");
+                        });
+                }
             )
             ->withoutGlobalScopes()
             ->when(
                 $request->exists('selected'),
                 fn(Builder $query) => $query->whereIn('imei', $request->input('selected', [])),
                 fn(Builder $query) => $query->limit(50)
-
             )
             ->get()->map(function (Dispositivos $dispositivo) {
+                $vehiculo_actual = $dispositivo->vehiculoActual();
 
-
-                if ($dispositivo->vehiculos) {
-
-                    if ($dispositivo->modelo) {
-
-                        $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . "<b>" . $dispositivo->vehiculos->placa . "</b>";
-                    } else {
-
-                        $dispositivo->option_description = '';
-                    }
+                if ($vehiculo_actual && $dispositivo->modelo) {
+                    $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . "<b>" . $vehiculo_actual->placa . "</b>";
+                } elseif ($dispositivo->modelo) {
+                    $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . 'LIBRE';
                 } else {
-                    if ($dispositivo->modelo) {
-                        $dispositivo->option_description = $dispositivo->modelo->modelo . " - " . 'LIBRE';
-                    } else {
-
-                        $dispositivo->option_description = '';
-                    }
+                    $dispositivo->option_description = '';
                 }
-                //
 
                 return $dispositivo;
             });
     }
+
     public function vehiculos(Request $request): Collection
     {
         return Vehiculos::query()

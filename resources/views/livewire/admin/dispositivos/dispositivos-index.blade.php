@@ -275,9 +275,9 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                    @if (!empty($dispositivo->vehiculos))
+                                    @if (!empty($dispositivo->vehiculoActual()))
                                         <div class="font-medium text-sky-500">
-                                            {{ $dispositivo->vehiculos->placa }}
+                                            {{ $dispositivo->vehiculoActual()->placa }}
                                         </div>
                                     @else
                                         <div class="font-medium text-emerald-500">

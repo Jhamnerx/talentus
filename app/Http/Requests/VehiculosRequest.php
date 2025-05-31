@@ -44,18 +44,17 @@ class VehiculosRequest extends FormRequest
             "modelo_gps" => 'nullable',
             "operador" => 'nullable',
             "sim_card" => 'nullable',
-            "dispositivo_imei" => 'required|exists:dispositivos,imei',
+            "dispositivo_imei" => 'nullable',  // Cambiado a nullable, ya no es obligatorio
             "descripcion" => 'nullable',
 
             // "dispositivos_id" => "required|unique:vehiculos",
 
         ];
-
         if ($vehicle) {
 
             $rules['placa'] = 'required|unique:vehiculos,placa,' . $vehicle->id;
             $rules['numero'] = 'required|unique:vehiculos,numero,' . $vehicle->id;
-            $rules['dispositivos_id'] = 'required|unique:vehiculos,dispositivos_id,' . $vehicle->id;
+            $rules['dispositivos_id'] = 'nullable|unique:vehiculos,dispositivos_id,' . $vehicle->id;
         }
         return $rules;
     }
@@ -80,9 +79,6 @@ class VehiculosRequest extends FormRequest
             'sim_card_id.required' => 'Debe seleccionas un numero asignado',
             'numero.required' => 'El numero es requerido',
             'numero.unique' => 'ya estas registrando este sim en la placa ' . $numero . '',
-            'dispositivos_id.required' => 'El imei es requerido',
-            'dispositivo_imei.required' => 'Debes seleccionar un imei',
-            'dispositivo_imei.exists' => 'El imei debe estar registrado',
             'dispositivos_id.unique' => 'Este imei ya esta registrado en la placa ' . $placa . '',
 
         ];

@@ -48,7 +48,7 @@ class DispositivosExport extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $dispositivo->imei,
             $dispositivo->modelo->modelo,
             $dispositivo->modelo->marca,
-            ($dispositivo->vehiculos) ? $dispositivo->vehiculos->placa : 'Disponible',
+            ($dispositivo->vehiculoActual()) ? $dispositivo->vehiculoActual()->placa : 'Disponible',
             $dispositivo->user ? $dispositivo->user->name : '',
             Carbon::createFromFormat('Y-m-d H:i:s', $dispositivo->created_at)->format('d-m-Y'),
 

@@ -168,8 +168,9 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
-                                        {{ $certificado->vehiculo->cliente->razon_social }}
+                                    <div class="font-medium text-slate-800 truncate"
+                                        title="{{ $certificado->cliente['razon_social'] }}">
+                                        {{ $certificado->cliente['razon_social'] }}
                                     </div>
                                 </td>
 
@@ -268,59 +269,6 @@
 
 
 
-                                                    </li>
-
-                                                    <li>
-                                                        <a wire:click.prevent="cambiarEstado('{{ $certificado->id }}', 'estado', '{{ $certificado->estado ? 0 : 1 }}')"
-                                                            class="text-gray-700 group hover:cursor-pointer flex items-center px-4 py-2 text-sm font-normal"
-                                                            disabled="false" id="headlessui-menu-item-29"
-                                                            role="menuitem" tabindex="-1">
-                                                            @if (!$certificado->estado)
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-6 w-6 mr-3" viewBox="0 0 48 48">
-                                                                    <g stroke-linecap="square"
-                                                                        transform="translate(0.5 0.5)" fill="none"
-                                                                        stroke="currentColor" stroke-linejoin="miter"
-                                                                        class="nc-icon-wrapper"
-                                                                        stroke-miterlimit="10">
-                                                                        <path data-cap="butt"
-                                                                            d="M16,10H32A14,14,0,0,1,46,24h0A14,14,0,0,1,32,38H16"
-                                                                            stroke-linecap="butt"></path>
-                                                                        <circle cx="16" cy="24" r="14">
-                                                                        </circle>
-                                                                    </g>
-                                                                </svg>
-                                                            @else
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="h-6 w-6 mr-3" viewBox="0 0 48 48">
-                                                                    <g class="nc-icon-wrapper">
-                                                                        <path
-                                                                            d="M33,9H15a15,15,0,0,0,0,30H33A15,15,0,0,0,33,9Z"
-                                                                            fill="#6cc4f5"></path>
-                                                                        <circle cx="15" cy="24" r="13"
-                                                                            fill="#fff">
-                                                                        </circle>
-                                                                    </g>
-                                                                </svg>
-                                                            @endif
-                                                            Cambiar Estado
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript: void(0)"
-                                                            wire:click="modalOpenSend({{ $certificado->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                            disabled="false" id="headlessui-menu-item-32"
-                                                            role="menuitem" tabindex="-1">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor"
-                                                                class="h-5 w-5 mr-3 text-gray-400 group-hover:text-cyan-600">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8">
-                                                                </path>
-                                                            </svg> Enviar
-                                                        </a>
                                                     </li>
 
                                                 </ul>

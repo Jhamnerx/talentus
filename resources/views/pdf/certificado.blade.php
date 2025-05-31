@@ -10,46 +10,50 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     {{ header('Content-type:application/pdf') }}
-
-
     <style type="text/css">
         /* -- Base -- */
         body {
-
-            font-family: "Arial, Helvetica, sans-serif";
+            font-family: 'Arial', sans-serif;
             background-repeat: no-repeat;
-            background-size: 100%;
-
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            height: 100%;
+            width: 100%;
         }
 
         html {
-            margin: 0px;
-            padding: 0px;
-
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
+        /* Estructura principal */
         .certificado {
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
-            padding: 2rem;
-            // margin: 0rem 4rem;
-
+            margin: 0;
+            width: 100%;
+            background-color: transparent;
         }
 
-
-
+        /* Contenido interno con margen */
+        .contenido {
+            width: calc(100% - 60px);
+            margin: 80px 30px 30px 30px;
+            padding-top: 30px;
+            position: relative;
+            box-sizing: border-box;
+        }
 
         .certifica {
-            margin-top: -2.2rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            // position: relative;
-
+            margin: 1rem 3rem;
+            text-align: justify;
+            font-size: 12px;
+            line-height: 1.6;
         }
 
         .certifica .acredita {
@@ -57,14 +61,12 @@
         }
 
         .descripcion {
-            margin-top: 1.1rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            text-align: left;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2.5rem 0;
+            font-size: 12px;
+            color: #333;
         }
 
         .descripcion span {
@@ -72,105 +74,154 @@
         }
 
         .tabla {
-            padding: 0rem 7.2rem;
-            text-align: left;
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 650px;
+            margin: 0 auto;
         }
 
-        .footer {
-            font-size: 14px;
-            color: #000;
-            width: 100%;
+        .descripcion .tabla {
+            font-size: 11px;
+        }
 
+        .descripcion td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .descripcion td:first-child {
+            font-weight: 600;
+            width: 40%;
+            font-family: 'Arial', sans-serif;
+            color: #444;
+        }
+
+        .descripcion td:last-child {
+            color: #333;
+        }
+
+        /* Estilo para los cuadrados destacados */
+        .descripcion tr.destacado {
+            margin-top: 15px;
+        }
+
+        .descripcion tr.destacado td {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            font-weight: bold;
+            text-align: center;
+            padding: 8px;
+            color: #333;
+        }
+
+        /* Pie de página con sello y fecha */
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-right: 0;
         }
 
         .footer .sello {
-            margin-top: 2rem;
-            width: 50%;
-            text-align: center;
-        }
-
-        .data {
-            margin-top: 3rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 2.2;
-            text-align: left;
-        }
-
-        .fecha {
+            width: auto;
             text-align: right;
-            margin-top: -2.4rem;
-            padding-right: 4rem;
+            margin-right: 6rem;
         }
 
         .sello img {
-            width: 150px;
+            width: 120px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
 
+        .fecha {
+            width: auto;
+            text-align: right;
+            font-size: 12px;
+            padding-top: 1rem;
+            margin-right: 6rem;
+        }
 
-
-        .header {
+        .data {
+            width: 100%;
             display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            margin-left: 5rem;
-            margin-top: 2rem;
+            justify-content: center;
+            margin: 1.5rem 0 2.5rem 0;
+        }
 
+        /* Cabecera con número de certificado */
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 2rem;
+            margin-top: 1rem;
         }
 
         .numero {
-            width: 100%;
-            overflow: hidden;
-            color: rgb(238, 34, 34);
-            font-style: !important;
+            color: rgb(255, 255, 255);
             font-weight: bold;
             font-size: 26px;
-            font-family: "DejaVu Sans";
-            margin-left: 31rem;
-            margin-top: -1.4rem;
-
+            font-family: 'Arial', sans-serif;
+            text-align: right;
+            margin-right: 7rem;
         }
 
+        /* Título y QR */
         .titulo {
-            display: grid;
-            grid-template-columns: 30% 70% 1fr;
-            grid-template-rows: 1fr;
-            gap: 0px 7em;
-            height: 160px;
-
+            width: 100%;
+            display: block;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
         }
-
-
-        .qr {
-            padding-left: 37rem;
-            position: relative;
-            top: -22px;
-        }
-
 
         .title {
-
             font-weight: bold;
-            font-size: 20px;
+            font-size: 22px;
+            display: inline-block;
             text-align: center;
-            justify-content: center;
-            width: 50%;
-            padding-left: 12.5rem;
-            position: relative;
+            font-family: 'Arial', sans-serif;
+            width: 100%;
         }
 
-        .title span {
-            position: relative;
-            top: 50px;
+        /* QR Code y Hash en la misma línea */
+        .qr {
+            text-align: left;
+            margin-left: 2rem;
+            width: 140px;
+            position: fixed;
+            bottom: 60px;
+            left: 74px;
+            z-index: 10;
         }
 
+        /* Hash identificador */
         .hash {
-            padding-left: 31rem;
-            padding-top: 3rem;
-            font-size: 12px;
+            text-align: right;
+            width: 100%;
+            padding-right: 2rem;
+            font-size: 10px;
+            color: #666;
+            position: fixed;
+            bottom: 60px;
+            right: 30px;
+        }
+
+        .verification-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .qr img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
         }
     </style>
 
@@ -178,7 +229,8 @@
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
+    <body
+        style="background-image: url('data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}'); background-size: 100% 100%; background-repeat: no-repeat;">
     @else
 
         <body>
@@ -186,23 +238,25 @@
 
 
 <div class="certificado">
-
     <div class="header">
-
         <div class="numero">
             {{ $certificado->codigo }}
         </div>
-
     </div>
-    <div class="titulo">
-        <div class="title">
-            <span>CERTIFICADO DE INSTALACION</span>
+
+    <div class="contenido">
+        <div class="titulo">
+            <div class="title">
+                <span>CERTIFICADO DE INSTALACIÓN</span>
+            </div>
         </div>
 
         @php
             $qr = base64_encode(
                 QrCode::format('png')
-                    ->size(120)
+                    ->size(140)
+                    ->margin(0)
+                    ->errorCorrection('H')
                     ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
                     ->style('square')
                     ->eye('circle')
@@ -219,32 +273,25 @@
                     ),
             );
         @endphp
+        <div class="certifica">
+            <p>
+                <strong>TALENTUS TECHNOLOGY EIRL</strong>, con RUC: 20496172168, registro N° 6260 autorizada y
+                Homologada por el
+                MTC como empresa Prestadora de servicios de Valor añadido.
+                <strong>CERTIFICA</strong> que la empresa:
+                <strong>{{ $certificado->vehiculo->cliente->razon_social }}</strong>
+                cuenta con el sistema localizador vía
+                GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
 
-        <div class="qr">
-            <img src="data:image/jpeg;base64, {{ $qr }}">
+                @php
+                    // Obtenemos el dispositivo principal (is_principal = 1)
+                    $dispositivoPrincipal = $certificado->vehiculo->dispositivos->where('is_principal', 1)->first();
+                @endphp
 
-        </div>
-
-    </div>
-
-
-    <div class="certifica">
-        <div>
-            <span>TALENTUS TECHNOLOGY EIRL con RUC: 20496172168, registro N° 6260 autorizada y Homologa por el
-                MTC como
-                empresa Prestadora de servicios de Valor añadido.</span>
-            <span>
-                <p>
-                    <b>CERTIFICA</b> que la empresa: <b>{{ $certificado->vehiculo->cliente->razon_social }}</b>
-                    cuenta
-                    con el
-                    sistema localizador vía
-                    GPS/GPRS/GSM, con el Modelo Standar de equipo GPS
-
-                    {{ $certificado->vehiculo->dispositivos
-                        ? $certificado->vehiculo->dispositivos->modelo->modelo
-                        : 'Registrar dispositivo' }}
-                </p>
+                {{ $dispositivoPrincipal && $dispositivoPrincipal->dispositivo && $dispositivoPrincipal->dispositivo->modelo
+                    ? $dispositivoPrincipal->dispositivo->modelo->modelo
+                    : 'Registrar dispositivo' }}
+            </p>
 
             </span>
             <span class="acredita">
@@ -256,67 +303,74 @@
             </span>
         </div>
     </div>
-
     <div class="descripcion">
-        <span>Con las siguientes características:</span>
-        <ul>
-            @if ($certificado->vehiculo->dispositivos)
-                @if ($certificado->vehiculo->dispositivos->modelo->caracteristicas)
-                    @foreach ($certificado->vehiculo->dispositivos->modelo->caracteristicas as $caracteristica)
-                        <li>
-                            {{ $caracteristica['text'] }}
-                        </li>
+        <table class="tabla">
+            @php
+                // Obtenemos el dispositivo principal (is_principal = 1) si no se definió antes
+                if (!isset($dispositivoPrincipal)) {
+                    $dispositivoPrincipal = $certificado->vehiculo->dispositivos->where('is_principal', 1)->first();
+                }
+            @endphp
+
+            <!-- Características del Dispositivo en un cuadrado destacado -->
+            <tr class="destacado">
+                <td colspan="2"
+                    style="text-align: center; background-color: #f5f5f5; border: 1px solid #ddd; padding: 8px;">
+                    <strong>CARACTERÍSTICAS DEL DISPOSITIVO</strong>
+                </td>
+            </tr>
+
+            @if ($dispositivoPrincipal && $dispositivoPrincipal->dispositivo && $dispositivoPrincipal->dispositivo->modelo)
+                @if ($dispositivoPrincipal->dispositivo->modelo->caracteristicas)
+                    @foreach ($dispositivoPrincipal->dispositivo->modelo->caracteristicas as $caracteristica)
+                        <tr>
+                            <td>{{ $loop->index == 0 ? 'Características' : '' }}</td>
+                            <td>: {{ $caracteristica['text'] }}</td>
+                        </tr>
                     @endforeach
-                @else
-                    <li>No existen caracteristicas</li>
                 @endif
             @else
-                <li style="color: red">Añadir Dispositivo</li>
+                <tr>
+                    <td>Dispositivo</td>
+                    <td>: <span style="color: red">Añadir Dispositivo</span></td>
+                </tr>
             @endif
+
+            <!-- Destacar Fecha de Instalación en un cuadrado -->
+            <tr class="destacado">
+                <td colspan="2"
+                    style="text-align: center; background-color: #f5f5f5; border: 1px solid #ddd; padding: 8px; margin-top: 15px;">
+                    <strong>FECHA DE INSTALACIÓN</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Fecha</td>
+                <td>: <strong>{{ $certificado->fecha_instalacion->format('d-m-Y') }}</strong></td>
+            </tr>
+
+            <!-- Placa del vehículo -->
+            <tr class="destacado">
+                <td colspan="2"
+                    style="text-align: center; background-color: #f5f5f5; border: 1px solid #ddd; padding: 8px; margin-top: 15px;">
+                    <strong>VEHÍCULO</strong>
+                </td>
+            </tr>
+            <tr>
+                <td>Placa</td>
+                <td>: <strong>{{ $certificado->vehiculo->placa }}</strong></td>
+            </tr>
 
             @if (!$certificado->accesorios->isEmpty())
-                <li>Accesorios Instalados: {{ implode(',', $certificado->accesorios->toArray()) }}</li>
-            @endif
-
-            <li style="padding-top: 10px;  font-size: 16px">
-                <b>Placa de la unidad: {{ $certificado->vehiculo->placa }}</b>
-            </li>
-        </ul>
-
-    </div>
-
-    <div class="data">
-
-        <div class="vehiculo">
-            <table style="border: 1px solid">
-                <tr style="border: 1px solid">
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            Fecha de Instalación
-                        </span>
-                    </td>
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            {{ $certificado->fecha_instalacion->format('d-m-Y') }}
-                        </span>
-                    </td>
+                <tr>
+                    <td>Accesorios</td>
+                    <td>: {{ implode(', ', $certificado->accesorios->toArray()) }}</td>
                 </tr>
-                {{-- <tr style="border: 1px solid">
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            Fecha de Vencimiento
-                        </span>
-                    </td>
-                    <td style="border: 1px solid">
-                        <span style="padding-left: 2px; padding-right: 4px">
-                            {{ $certificado->fin_cobertura->format('d-m-Y') }}
-                        </span>
-
-                    </td>
-                </tr> --}}
-            </table>
-        </div>
-
+            @endif
+            <tr>
+                <td>Fin de Cobertura</td>
+                <td>: <strong>{{ $certificado->fin_cobertura->format('d-m-Y') }}</strong></td>
+            </tr>
+        </table>
     </div>
 
     <div class="footer">
@@ -324,20 +378,45 @@
             @if ($certificado->sello)
                 <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
             @endif
-
         </div>
         <div class="fecha">
             <p>{{ $certificado->fecha }}</p>
         </div>
     </div>
 
-    <div class="hash">
-        {{ $certificado->unique_hash }}
-    </div>
-
+    @php
+        $qr = base64_encode(
+            QrCode::format('png')
+                ->size(140)
+                ->margin(0)
+                ->errorCorrection('H')
+                ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+                ->style('square')
+                ->eye('circle')
+                ->encoding('UTF-8')
+                ->generate(
+                    ' VEHICULO: ' .
+                        $certificado->vehiculo->placa .
+                        '|' .
+                        " \nVALIDO HASTA: " .
+                        $certificado->fin_cobertura->format('d-m-Y') .
+                        '|' .
+                        "\nEXPEDIDO A: " .
+                        $certificado->vehiculo->cliente->razon_social,
+                ),
+        );
+    @endphp
+</div> <!-- Cierre del div de contenido -->
 </div>
 
-
+<div class="qr">
+    <img src="data:image/jpeg;base64, {{ $qr }}">
+</div>
+<div class="verification-row">
+    <div class="hash">
+        Código de verificación: {{ $certificado->unique_hash }}
+    </div>
+</div>
 
 </body>
 

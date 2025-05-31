@@ -216,18 +216,15 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Datos</div>
                             </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3">
+                                <div class="font-semibold text-left max-w-[180px]">Cliente</div>
+                            </th>
 
-                            <th class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="font-semibold text-left">Cliente</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="font-semibold text-left">Ver info Plataforma</div>
-                            </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">SIM#</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Dispositivo#</div>
+                                <div class="font-semibold text-left">Dispositivos</div>
                             </th>
 
                             @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
@@ -379,9 +376,8 @@
 
                                     {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
                                 </td>
-
-                                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <div class="font-medium text-sky-500">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 max-w-[180px]">
+                                    <div class="font-medium text-sky-500 break-words">
                                         @if ($vehiculo->cliente)
                                             {{ $vehiculo->cliente->razon_social }}
                                         @else
@@ -399,10 +395,7 @@
                                     @endif
 
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                    <x-form.button label="Info" emerald icon="information-circle"
-                                        wire:click.prevent="openModalInfoWox({{ $vehiculo->id }})" />
-                                </td>
+
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
 
@@ -424,14 +417,138 @@
                                     @endif
 
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800 text-center">
-                                        @if ($vehiculo->dispositivos)
-                                            {{ $vehiculo->dispositivos->modelo->modelo . ' | ' . $vehiculo->dispositivos->imei }}
-                                        @else
-                                            {{ $vehiculo->dispositivo_imei }}
-                                        @endif
+                                <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
+                                        @mouseleave="open = false">
+                                        <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                            aria-haspopup="true" :aria-expanded="open" @focus="open = true"
+                                            @focusout="open = false" @click.prevent>
+                                            <span class="mr-2">
+                                                DISPOSITIVOS
+                                            </span>
+                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                                viewBox="0 0 12 12">
+                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                            </svg>
+                                        </button>
+                                        <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
+                                            <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-[400px] overflow-y-auto"
+                                                x-show="open"
+                                                x-transition:enter="transition ease-out duration-200 transform"
+                                                x-transition:enter-start="opacity-0 translate-y-2"
+                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                x-transition:leave="transition ease-out duration-200"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" x-cloak>
+                                                <div class="">
+                                                    <div class="font-medium text-slate-800 mb-0.5 pb-2 text-base">
+                                                        <b>Dispositivos para {{ $vehiculo->placa }}</b>
+                                                    </div>
+                                                    <div
+                                                        class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
+                                                        <table
+                                                            class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                                            <thead
+                                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                                                <tr>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        DISPOSITIVO
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        IMEI
+                                                                    </th>
+                                                                    <th scope="col" class="px-6 py-3">
+                                                                        ESTADO
+                                                                    </th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if ($vehiculo->dispositivos->count() > 0)
+                                                                    @foreach ($vehiculo->dispositivos as $dispositivo)
+                                                                        <tr
+                                                                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 
+                                                                            {{ $dispositivo->is_principal ? 'bg-green-50 font-semibold' : '' }}">
 
+                                                                            <td
+                                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                                                                {{ $dispositivo->dispositivo->modelo->modelo ?? 'Sin modelo' }}
+                                                                                @if ($dispositivo->is_principal)
+                                                                                    <span
+                                                                                        class="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                                        Principal
+                                                                                    </span>
+                                                                                @endif
+                                                                            </td>
+
+                                                                            <td class="px-6 py-4">
+                                                                                {{ $dispositivo->imei }}
+                                                                            </td>
+
+                                                                            <td class="px-6 py-4">
+                                                                                @if ($dispositivo->fecha_desinstalacion)
+                                                                                    <span
+                                                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                                                                        Desinstalado -
+                                                                                        {{ $dispositivo->fecha_desinstalacion->format('d-m-Y') }}
+                                                                                    </span>
+                                                                                @else
+                                                                                    <span
+                                                                                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                                                                        Activo
+                                                                                    </span>
+                                                                                @endif
+                                                                            </td>
+
+                                                                        </tr>
+                                                                    @endforeach
+                                                                @else
+                                                                    <tr>
+                                                                        <td colspan="3"
+                                                                            class="px-6 py-4 text-center">
+                                                                            @if ($vehiculo->dispositivo_imei)
+                                                                                {{ $vehiculo->dispositivo_imei }}
+                                                                                <span
+                                                                                    class="text-xs text-gray-500">(Dispositivo
+                                                                                    antiguo)</span>
+                                                                            @else
+                                                                                No hay dispositivos registrados
+                                                                            @endif
+                                                                        </td>
+                                                                    </tr>
+                                                                @endif
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="font-medium text-slate-800">
+                                        @if ($vehiculo->dispositivoPrincipal)
+                                            <div class="font-medium text-emerald-600">
+                                                {{ $vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo }}
+                                                <span class="text-xs text-slate-500">Principal</span>
+                                            </div>
+                                            <div class="text-xs text-slate-500">
+                                                IMEI: {{ $vehiculo->dispositivoPrincipal->imei }}
+                                            </div>
+                                        @elseif ($vehiculo->dispositivos->count() > 0)
+                                            <div class="font-medium text-slate-600">
+                                                {{ $vehiculo->dispositivos->first()->dispositivo->modelo->modelo }}
+                                            </div>
+                                            <div class="text-xs text-slate-500">
+                                                IMEI: {{ $vehiculo->dispositivos->first()->imei }}
+                                            </div>
+                                        @elseif ($vehiculo->dispositivo_imei)
+                                            <div class="font-medium text-red-500">
+                                                {{ $vehiculo->dispositivo_imei }}
+                                                <span class="text-xs">(Antiguo)</span>
+                                            </div>
+                                        @else
+                                            <div class="font-medium text-red-500">
+                                                Sin dispositivo
+                                            </div>
+                                        @endif
                                     </div>
                                 </td>
                                 @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos',

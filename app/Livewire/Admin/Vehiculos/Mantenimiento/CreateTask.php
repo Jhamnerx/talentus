@@ -56,7 +56,8 @@ class CreateTask extends Component
         $this->cliente_id = $mantenimiento->vehiculo->cliente ? $mantenimiento->vehiculo->cliente->id : null;
         $this->tipo_tarea_id = 5;
         $this->vehiculos_id = $mantenimiento->vehiculo_id;
-        $this->dispositivo = $mantenimiento->vehiculo->dispositivos ?  $mantenimiento->vehiculo->dispositivos->modelo->modelo : 'Actualiza el vehiculo o ingresa el modelo';
+
+        $this->dispositivo = $mantenimiento->vehiculo->dispositivoPrincipal ?  $mantenimiento->vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo : 'Actualiza el vehiculo o ingresa el modelo';
         $this->fecha_hora = $mantenimiento->fecha_hora_mantenimiento->format('Y-m-d H:i');
         $this->openModal();
     }

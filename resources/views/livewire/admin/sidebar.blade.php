@@ -739,9 +739,15 @@
                     @endcanany
 
                     <!-- Certificados -->
-                    @canany(['ver-certificados-actas', 'ver-certificados-gps', 'ver-certificados-velocimetros'])
-                        <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['actas', 'certificados-gps', 'certificados-velocimetros'])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['actas', 'certificados-gps', 'certificados-velocimetros']) ? 1 : 0 }} }">
+                    @canany(['ver-certificados-actas', 'ver-certificados-gps', 'ver-certificados-velocimetros',
+                        'ver-certificados-antifatiga'])
+                        <li class="px-3 py-2 rounded-sm mb-0.5 last:mb-0 @if (in_array(Request::segment(2), [
+                                'actas',
+                                'certificados-gps',
+                                'certificados-velocimetros',
+                                'certificados-antifatiga',
+                            ])) {{ $empresa->nombre == 'talentus' ? 'bg-blue-950' : 'bg-orange-200' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(2), ['actas', 'certificados-gps', 'certificados-velocimetros', 'certificados-antifatiga']) ? 1 : 0 }} }">
 
                             <a class="block {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }} {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }} truncate transition duration-150"
                                 href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
@@ -805,6 +811,7 @@
                                             </a>
                                         </li>
                                     @endcan
+
                                     @can('ver-certificados-velocimetros')
                                         <li class="mb-1 last:mb-0">
                                             <a class=" block
@@ -816,6 +823,20 @@
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Certificados
                                                     Velocimetros</span>
+                                            </a>
+                                        </li>
+                                    @endcan
+                                    @can('ver-certificados-antifatiga')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class=" block
+                                                {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
+                                                {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
+                                                @if (Route::is('admin.certificados.antifatiga.index')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                transition duration-150 truncate"
+                                                href="{{ route('admin.certificados.antifatiga.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Certificados
+                                                    Antifatiga</span>
                                             </a>
                                         </li>
                                     @endcan

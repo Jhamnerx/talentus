@@ -74,31 +74,51 @@ class Actas extends Model
     {
         return $this->belongsTo(Vehiculos::class, 'vehiculos_id')->withTrashed()->withoutGlobalScope(EmpresaScope::class);
     }
-
     public function getPDFData()
     {
-
-        $plantilla = plantilla::first();
-        $fondo = $plantilla->img_documentos;
-        $sello = $plantilla->img_firma;
-        view()->share([
-            'acta' => $this,
-            'plantilla' => $plantilla,
-            'fondo' => $fondo,
-            'sello' => $sello,
-
+        // 1) Cargar relaciones y datos
+        $this->load([
+            'vehiculo.cliente',
+            'vehiculo.dispositivoPrincipal.dispositivo.modelo',
+            'ciudades'
         ]);
 
+        $plantilla = plantilla::first();
+        $fondo     = $plantilla->img_documentos;
+        $sello     = $plantilla->img_firma;
 
+        view()->share([
+            'acta'      => $this,
+            'plantilla' => $plantilla,
+            'fondo'     => $fondo,
+            'sello'     => $sello,
+        ]);
+
+        // 2) Generar el PDF desde la vista
         $pdf = PDF::loadView('pdf.acta');
 
-        return $pdf->stream('ACTA-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
-        //return $pdf;
-        //return view('pdf.acta');
-    }
+        // 3) Acceder al canvas y al CPDF de dompdf
+        $canvas = $pdf->getDomPDF()->get_canvas();
+        $cpdf   = $canvas->get_cpdf();
 
+        // 4) Agregar metadatos
+        $cpdf->addInfo('Author',   'Talentus Technology E.I.R.L.');
+        $cpdf->addInfo('Subject',  'Acta de instalación de equipo GPS');
+        $cpdf->addInfo('Keywords', 'GPS,Acta,Instalación,Talentus');
+        // Opcionalmente también:
+        $cpdf->addInfo('Title',    'ACTA ' . $this->vehiculo->placa . ' ' . $this->codigo);
+        $cpdf->addInfo('Creator',  env('APP_NAME', 'Talentus GPS'));
+        // Producer normalmente ya lo pone dompdf, puedes sobreescribirlo:
+
+
+        // 5) Enviar al navegador
+        return $pdf->stream('ACTA-' . $this->vehiculo->placa . ' ' . $this->codigo . '.pdf');
+    }
     public function getPDFDataToMail($data)
     {
+        // Cargar relaciones necesarias para el PDF
+        $this->load(['vehiculo.cliente', 'vehiculo.dispositivoPrincipal.dispositivo.modelo', 'ciudades']);
+
         $plantilla = plantilla::first();
         $fondo = $plantilla->img_documentos;
         $sello = $plantilla->img_firma;

@@ -67,6 +67,7 @@ class Presupuestos extends Model
         'user_id' => 'integer',
         'viewed' => 'boolean',
         'sent' => 'boolean',
+        'vence_cuotas' => 'integer',
         'detalle_cuotas' => AsCollection::class,
         'estado' => PresupuestosStatus::class,
         'terminos' => AsCollection::class,

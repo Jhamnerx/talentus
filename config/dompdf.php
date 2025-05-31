@@ -46,7 +46,28 @@ return [
          * Symbol, ZapfDingbats.
          */
         'font_dir' => storage_path('fonts'), // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
+        'fonts' => [
 
+            // … otras entradas …
+
+            // Registra Merriweather
+            'Merriweather' => [
+                'R'  => storage_path('fonts/merriweather_normal_84e65ca00461b19b9ee4496df8e8d63a.ttf'),
+                'I'  => storage_path('fonts/merriweather_300_italic_314ad81e7b2e51c0d3f14631cb060c23.ttf'),
+                'B'  => storage_path('fonts/merriweather_bold_295934b7be56024776c81e06a78d9bbe.ttf'),
+                'BI' => storage_path('fonts/merriweather_bold_italic_4ab5e2cb98f85a327ca774b3a27051ff.ttf'),
+            ],
+
+            // Registra Montserrat
+            'Montserrat' => [
+                'R'  => storage_path('fonts/montserrat_normal_8b39ecf1e92b671adb8930c94175e08.ttf'),
+                'B'  => storage_path('fonts/montserrat_bold_d6f7b66b1ae15f51f1e1cecb60246712.ttf'),
+                'I'  => storage_path('fonts/montserrat_italic_4a32dc2378b50649c05807a84eec5f6e.ttf'),
+                'BI' => storage_path('fonts/montserrat_bold_italic_xyz.ttf'), // si la tienes
+            ],
+
+            // … cualquier otra fuente …
+        ],
         /**
          * The location of the DOMPDF font cache directory
          *

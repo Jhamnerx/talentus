@@ -3,8 +3,8 @@
 
 <head>
     @if ($acta->vehiculo && $acta->ciudades)
-        <title>ACTA {{ $acta->vehiculo->placa }}
-            {{ $acta->ciudades->prefijo . '-' . $acta->year . '-' . $acta->numero }}
+        <title>
+            {{ 'ACTA ' . $acta->vehiculo->placa . ' ' . $acta->ciudades->prefijo . '-' . $acta->year . '-' . $acta->numero }}
         </title>
     @else
         <title>Faltan datos en esta acta, por favor corrigelas</title>
@@ -12,152 +12,201 @@
 
 
 
+
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     {{ header('Content-type:application/pdf') }}
-
-
     <style type="text/css">
         /* -- Base -- */
         body {
-
-            font-family: "Arial, Helvetica, sans-serif";
+            font-family: 'Arial', sans-serif;
             background-repeat: no-repeat;
-            background-size: 100%;
-
+            background-size: cover;
+            /* Cambiado de 100% a cover para mejor escalado */
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            height: 100%;
+            width: 100%;
         }
 
         html {
-            margin: 0px;
-            padding: 0px;
-
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
+        /* Estructura principal */
         .acta {
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
-            padding: 2rem;
-            // margin: 0rem 4rem;
-
-        }
-
-
-
-
-        .certifica {
-            margin-top: -1rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 16px;
-            color: #000;
-            line-height: 1.7;
-            // position: relative;
-
-        }
-
-        .descripcion {
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14.5px;
-            color: #000;
-            text-align: center;
-        }
-
-        .tabla {
-            padding: 0rem 7.2rem;
-            text-align: left;
-        }
-
-        .footer {
-            font-size: 16px;
-            color: #000;
+            margin: 0;
             width: 100%;
-
+            background-color: transparent;
         }
 
-        .footer .sello {
-            margin-top: 1.6rem;
-            width: 50%;
-            text-align: center;
+        /* Contenido interno con margen */
+        .contenido {
+            width: calc(100% - 60px);
+            margin: 80px 30px 30px 30px;
+            /* Aumentado de 50px a 80px el margen superior */
+            padding-top: 30px;
+            /* Aumentado de 20px a 30px el padding superior */
+            position: relative;
+            box-sizing: border-box;
         }
 
-        .fecha {
-            text-align: right;
-            margin-top: -2rem;
-            padding-right: 4rem;
-        }
-
-        .sello img {
-            width: 150px;
-        }
-
+        /* Cabecera con número de acta */
         .header {
+            width: 100%;
             display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            margin-left: 5rem;
-            margin-top: 2rem;
-
+            justify-content: flex-end;
+            padding-right: 2rem;
+            margin-top: 1rem;
         }
 
         .numero {
-            width: 100%;
-            overflow: hidden;
-            color: rgb(238, 34, 34);
-            font-style: !important;
+            color: rgb(255, 255, 255);
             font-weight: bold;
-            font-size: 24px;
-            font-family: "DejaVu Sans";
-            margin-left: 30rem;
-            margin-top: -1.4rem;
-
+            font-size: 26px;
+            font-family: 'Arial', sans-serif;
+            text-align: right;
+            margin-right: 7rem;
         }
 
-
-
+        /* Título y QR */
         .titulo {
-            display: grid;
-            grid-template-columns: 30% 70% 1fr;
-            grid-template-rows: 1fr;
-            gap: 0px 7em;
-            height: 160px;
-
+            width: 100%;
+            display: block;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
         }
-
-
-        .qr {
-            padding-left: 37rem;
-            position: relative;
-            top: -42px;
-        }
-
-
 
         .title {
-
             font-weight: bold;
             font-size: 22px;
+            display: inline-block;
             text-align: center;
-            justify-content: center;
-            width: 50%;
-            padding-left: 12.5rem;
-            position: relative;
-
+            font-family: 'Arial', sans-serif;
+            width: 100%;
         }
 
-        .title span {
+        /* QR Code y Hash en la misma línea */
+        .verification-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
             position: relative;
-            top: 50px;
         }
 
-        .hash {
-            padding-left: 31rem;
-            padding-top: 2rem;
+        .qr {
+            text-align: left;
+            margin-left: 2rem;
+            width: 140px;
+            /* Ajustado al nuevo tamaño */
+            position: fixed;
+            bottom: 60px;
+            /* Posición fija desde abajo */
+            left: 74px;
+            /* Posición desde la izquierda */
+            z-index: 10;
+            /* Para asegurar que esté por encima del fondo */
+        }
+
+        .qr img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        /* Sección de certificación */
+        .certifica {
+            margin: 1rem 3rem;
+            text-align: justify;
             font-size: 12px;
+            line-height: 1.6;
+        }
+
+        /* Tabla de datos */
+        .descripcion {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 1.5rem 0 2.5rem 0;
+        }
+
+        .tabla {
+            border-collapse: collapse;
+            width: 80%;
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .descripcion .tabla {
+            font-size: 11px;
+        }
+
+        .descripcion td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .descripcion td:first-child {
+            font-weight: 600;
+            width: 40%;
+            font-family: 'Arial', sans-serif;
+            color: #444;
+        }
+
+        .descripcion td:last-child {
+            color: #333;
+        }
+
+        /* Pie de página con sello y fecha */
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-right: 0;
+        }
+
+        .footer .sello {
+            width: auto;
+            text-align: right;
+            margin-right: 6rem;
+        }
+
+        .sello img {
+            width: 120px;
+            image-rendering: -webkit-optimize-contrast;
+            /* Mejora la calidad de la imagen */
+            image-rendering: crisp-edges;
+        }
+
+        .fecha {
+            width: auto;
+            text-align: right;
+            font-size: 12px;
+            padding-top: 1rem;
+            margin-right: 6rem;
+        }
+
+        /* Hash identificador */
+        .hash {
+            text-align: right;
+            width: 100%;
+            padding-right: 2rem;
+            font-size: 10px;
+            color: #666;
+            position: fixed;
+            bottom: 60px;
+            right: 30px;
         }
     </style>
 
@@ -165,7 +214,8 @@
 
 @if ($acta->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
+    <body
+        style="background-image: url('data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}'); background-size: 100% 100%; background-repeat: no-repeat;">
     @else
 
         <body>
@@ -173,26 +223,115 @@
 
 
 <div class="acta">
-
     <div class="header">
-
-
-
         <div class="numero">
             {{ $acta->codigo }}
         </div>
-
     </div>
-    <div class="titulo">
-        <div class=" title">
-            <span>ACTA DE INSTALACIÓN DE EQUIPO GPS</span>
+
+    <div class="contenido">
+        <div class="titulo">
+            <div class="title">
+                <span>ACTA DE INSTALACIÓN DE EQUIPO GPS</span>
+            </div>
         </div>
-
-        @php
-
+        <div class="certifica">
+            <p>
+                <strong>{{ $plantilla->razon_social }}</strong>, con RUC {{ $plantilla->ruc }}, certifica que nuestro
+                cliente
+                <strong>{{ $acta->vehiculo->cliente ? strtoupper($acta->vehiculo->cliente->razon_social) : 'NO REGISTRADO' }}</strong>
+                con DNI/RUC: {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'PENDIENTE' }},
+                ha adquirido un equipo GPS para la unidad que se detalla a continuación.
+                Asimismo, se confirma que a la fecha, dicho equipo se encuentra transmitiendo a nuestra Plataforma de
+                Monitoreo Satelital en tiempo real.
+            </p>
+        </div>
+        <div class="descripcion">
+            <table class="tabla">
+                <tr>
+                    <td>Fecha de Instalación</td>
+                    <td>: {{ $acta->fecha_instalacion ? $acta->fecha_instalacion->format('d-m-Y') : 'Pendiente' }}</td>
+                </tr>
+                <tr>
+                    <td>Modelo GPS</td>
+                    <td>:
+                        {{ $acta->vehiculo->dispositivoPrincipal ? $acta->vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo : 'Pendiente' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>IMEI</td>
+                    <td>:
+                        {{ $acta->vehiculo->dispositivoPrincipal ? $acta->vehiculo->dispositivoPrincipal->imei : 'Pendiente' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Certificado de Homologación</td>
+                    <td>:
+                        {{ $acta->vehiculo->dispositivoPrincipal ? $acta->vehiculo->dispositivoPrincipal->dispositivo->modelo->certificado : 'Pendiente' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Placa</td>
+                    <td>: {{ $acta->vehiculo->placa }}</td>
+                </tr>
+                <tr>
+                    <td>Marca</td>
+                    <td>: {{ $acta->vehiculo->marca }}</td>
+                </tr>
+                <tr>
+                    <td>Modelo</td>
+                    <td>: {{ $acta->vehiculo->modelo }}</td>
+                </tr>
+                <tr>
+                    <td>Tipo</td>
+                    <td>: {{ $acta->vehiculo->tipo }}</td>
+                </tr>
+                <tr>
+                    <td>Año</td>
+                    <td>: {{ $acta->vehiculo->year }}</td>
+                </tr>
+                <tr>
+                    <td>Color</td>
+                    <td>: {{ $acta->vehiculo->color }}</td>
+                </tr>
+                <tr>
+                    <td>Motor</td>
+                    <td>: {{ $acta->vehiculo->motor }}</td>
+                </tr>
+                <tr>
+                    <td>Serie</td>
+                    <td>: {{ $acta->vehiculo->serie }}</td>
+                </tr>
+                <tr>
+                    <td>Plataforma</td>
+                    <td>: <strong>{{ ucfirst($acta->plataforma) }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Inicio Cobertura</td>
+                    <td>: <strong>{{ $acta->inicio_cobertura->format('d-m-Y') }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Fin de Cobertura</td>
+                    <td>: <strong>{{ $acta->fin_cobertura->format('d-m-Y') }}</strong></td>
+                </tr>
+            </table>
+        </div>
+        <div class="footer">
+            <div class="sello">
+                @if ($acta->sello)
+                    <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}"
+                        alt="Sello de la empresa">
+                @endif
+            </div>
+            <div class="fecha">
+                <p>{{ $acta->fecha }}</p>
+            </div>
+        </div> @php
             $qr = base64_encode(
                 QrCode::format('png')
-                    ->size(120)
+                    ->size(140) // Aumentado el tamaño para mejor calidad
+                    ->margin(0)
+                    ->errorCorrection('H') // Alta corrección de errores para mejor reconocimiento
                     ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
                     ->style('square')
                     ->eye('circle')
@@ -206,142 +345,23 @@
                             ' HASTA ' .
                             $acta->fin_cobertura->format('d-m-Y') .
                             "
-                \nCONSULTAR VALIDEZ EN: " .
+            \nCONSULTAR VALIDEZ EN: " .
                             route('consulta.actas', $acta->codigo),
                     ),
             );
-
         @endphp
-        <div class="qr">
-            <img src="data:image/jpeg;base64, {{ $qr }}">
 
-        </div>
-
-    </div>
-
-
-    <div class="certifica">
-        <div>
-            <span>
-                <b>{{ $plantilla->razon_social }}</b>, con RUC {{ $plantilla->ruc }}, Certifica que nuestro
-                cliente:
-                <b>{{ $acta->vehiculo->cliente
-                    ? strtoupper($acta->vehiculo->cliente->razon_social)
-                    : 'no
-                                                                                                                                                                                            existe' }}</b>
-                con DNI/RUC:
-                {{ $acta->vehiculo->cliente ? $acta->vehiculo->cliente->numero_documento : 'REGISTRAR CLIENTE' }}, ha
-                adquirido un equipo
-                GPS,
-                para la unidad que se detalla a continuación:
-                Así mismo a la fecha se encuentra transmitiendo a nuestra Plataforma de Monitoreo Satelital en
-                tiempo real.
-            </span>
-        </div>
-    </div>
-
-    <div class="descripcion">
-        <table class="tabla">
-            <tr>
-                <td height="20">Fecha de Instalación</td>
-                <td height="20">:
-                    {{ $acta->fecha_instalacion ? $acta->fecha_instalacion->format('d-m-Y') : 'completar dato' }}</td>
-            </tr>
-
-
-            <tr>
-                <td height="20">Modelo GPS</td>
-                <td height="20">:
-                    {{ $acta->vehiculo->dispositivos ? $acta->vehiculo->dispositivos->modelo->modelo : '##COMPLETAR DATOS' }}
-                </td>
-            </tr>
-
-            <tr>
-                <td height="20">Imei</td>
-                <td height="20">:
-                    {{ $acta->vehiculo->dispositivos ? $acta->vehiculo->dispositivos->imei : '##COMPLETAR DATOS' }}
-                </td>
-            </tr>
-
-            <tr>
-                <td height="20">Certificado de Homologación</td>
-                <td height="20">:
-                    {{ $acta->vehiculo->dispositivos ? $acta->vehiculo->dispositivos->modelo->certificado : '##COMPLETAR DATOS' }}
-                </td>
-            </tr>
-
-            <tr>
-                <td height="20">Placa</td>
-                <td height="20">: {{ $acta->vehiculo->placa }}</td>
-            </tr>
-            <tr>
-                <td height="20">Marca</td>
-                <td height="20">: {{ $acta->vehiculo->marca }}</td>
-            </tr>
-            <tr>
-                <td height="20">Modelo</td>
-                <td height="30">: {{ $acta->vehiculo->modelo }}</td>
-
-            </tr>
-            <tr>
-                <td height="20">Tipo</td>
-                <td height="20">: {{ $acta->vehiculo->tipo }}</td>
-
-            </tr>
-            <tr>
-                <td height="20">A&ntilde;o</td>
-                <td height="20">: {{ $acta->vehiculo->year }}</td>
-            </tr>
-            <tr>
-                <td height="20">Color</td>
-                <td height="20">: {{ $acta->vehiculo->color }}</td>
-            </tr>
-            <tr>
-                <td height="20">Motor</td>
-                <td height="20">: {{ $acta->vehiculo->motor }}</td>
-            </tr>
-            <tr>
-                <td height="20">Serie</td>
-                <td height="20">: {{ $acta->vehiculo->serie }}</td>
-            </tr>
-            <tr>
-                <td height="20">Plataforma</td>
-                <td height="20">: <b>{{ ucfirst($acta->plataforma) }}</b></td>
-
-            </tr>
-            <tr>
-                <td height="20">Inicio Cobertura</td>
-                <td height="20">: <b>{{ $acta->inicio_cobertura->format('d-m-Y') }}</b></td>
-
-            </tr>
-            <tr>
-                <td height="20">Fin de cobertura</td>
-                <td height="20">: <b>{{ $acta->fin_cobertura->format('d-m-Y') }}</b></td>
-            </tr>
-        </table>
-
-    </div>
-
-    <div class="footer">
-        <div class="sello">
-            @if ($acta->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
-            @endif
-
-        </div>
-        <div class="fecha">
-            <p>{{ $acta->fecha }}</p>
-        </div>
-    </div>
-
-    <div class="hash">
-        {{ $acta->unique_hash }}
-    </div>
-
+    </div> <!-- Cierre del div de contenido -->
 </div>
 
-
-
+<div class="qr">
+    <img src="data:image/jpeg;base64, {{ $qr }}">
+</div>
+<div class="verification-row">
+    <div class="hash">
+        Código de verificación: {{ $acta->unique_hash }}
+    </div>
+</div>
 </body>
 
 </html>

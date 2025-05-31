@@ -2,414 +2,397 @@
 <html>
 
 <head>
-
     <title>CERTIFICADO VELOCIMETRO {{ $certificado->vehiculo->placa }}
         {{ $certificado->ciudades->prefijo . '-' . $certificado->year . '-' . $certificado->numero }}</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     {{ header('Content-type:application/pdf') }}
-
-
     <style type="text/css">
         /* -- Base -- */
         body {
-
-            font-family: "Arial, Helvetica, sans-serif";
+            font-family: 'Arial', sans-serif;
             background-repeat: no-repeat;
-            font-size: 10px;
-            background-size: 100%;
-            text-align: justify;
-            text-justify: inter-word;
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            height: 100%;
+            width: 100%;
         }
 
         html {
-            margin: 0px;
-            padding: 0px;
-
+            margin: 0;
+            padding: 0;
+            height: 100%;
         }
 
+        /* Estructura principal */
         .certificado {
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
-            padding: 2rem;
-            // margin: 0rem 4rem;
-
-        }
-
-        .certifica {
-            margin-top: 0.3rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            // position: relative;
-
-        }
-
-        .subtitulo {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-        }
-
-        .descripcion {
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            text-align: left;
-        }
-
-        .texto {
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            text-align: left;
-            text-align: justify;
-            text-justify: inter-word;
-        }
-
-        .observaciones {
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            text-align: left;
-            text-align: justify;
-            text-justify: inter-word;
-        }
-
-        .datos-velocimetro {
-            margin-top: 0.5rem;
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-left: 5rem;
-            font-size: 14px;
-            color: #000;
-            line-height: 1.7;
-            text-align: left;
-        }
-
-        .descripcion span {
-            font-size: 14px;
-        }
-
-        .descripcion table {}
-
-        .tabla {
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-            align-content: center;
-        }
-
-        .table {
-            padding: 0rem 7.2rem;
-            text-align: left;
-            padding-top: 1rem;
-        }
-
-        .footer {
-            color: #000;
+            margin: 0;
             width: 100%;
-            margin-top: 0.1rem;
-            text-justify: auto;
-            margin-left: 2rem;
-            font-size: 14px;
-            line-height: 1.7;
-            text-align: right;
+            background-color: transparent;
         }
 
-        .footer .sello {
-
-            text-align: right;
-            padding-right: 4rem;
+        /* Contenido interno con margen */
+        .contenido {
+            width: calc(100% - 60px);
+            margin: 80px 30px 30px 30px;
+            padding-top: 30px;
+            position: relative;
+            box-sizing: border-box;
         }
 
-
-        .fecha {
-            text-align: right;
-            padding-right: 4rem;
-        }
-
-        .sello img {
-            width: 150px;
-        }
-
-
-
+        /* Cabecera con numero de certificado */
         .header {
+            width: 100%;
             display: flex;
-            flex-wrap: wrap;
-            overflow: hidden;
-            margin-left: 5rem;
-            margin-top: 2rem;
-
+            justify-content: flex-end;
+            padding-right: 2rem;
+            margin-top: 1rem;
         }
 
         .numero {
-            width: 100%;
-            overflow: hidden;
-            color: #052c52;
-            font-style: !important;
+            color: rgb(255, 255, 255);
             font-weight: bold;
-            font-size: 24px;
-            font-family: "DejaVu Sans";
-            margin-left: 31rem;
-            margin-top: -1rem;
-
+            font-size: 26px;
+            font-family: 'Arial', sans-serif;
+            text-align: right;
+            margin-right: 7rem;
         }
 
-
+        /* Titulo */
         .titulo {
-
-            display: grid;
-            grid-template-columns: 30% 70% 1fr;
-            grid-template-rows: 1fr;
-            gap: 0px 1em;
-            height: 100px;
-
+            width: 100%;
+            display: block;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            text-align: center;
         }
-
-        .qr {
-            padding-left: 37rem;
-            position: relative;
-            top: -48px;
-        }
-
 
         .title {
-
             font-weight: bold;
             font-size: 22px;
+            display: inline-block;
             text-align: center;
-            justify-content: center;
-            width: 50%;
-            padding-left: 12.5rem;
-            position: relative;
-
+            font-family: 'Arial', sans-serif;
+            width: 100%;
         }
 
-        .title span {
-            position: relative;
-            top: 5px;
-        }
-
-        .hash {
-            margin-bottom: 1rem;
-            text-justify: auto;
-            margin-right: 0.5rem;
+        .certifica {
+            margin: 1rem 3rem;
+            text-align: justify;
             font-size: 12px;
-            color: #000;
-            line-height: 1.7;
-            text-align: right;
+            line-height: 1.6;
+        }
+
+        .subtitulo {
+            margin: 1rem 3rem;
+            text-align: justify;
+            font-size: 12px;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+
+        .descripcion {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            margin: 1.5rem 3rem 2.5rem 3rem;
+            font-size: 12px;
+            color: #333;
+            flex-direction: column;
+        }
+
+        .descripcion span {
+            font-size: 12px;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
+        }
+
+        .texto,
+        .observaciones,
+        .datos-velocimetro {
+            margin: 1rem 3rem;
+            text-align: justify;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .tabla {
+            border-collapse: collapse;
+            width: 90%;
+            max-width: 650px;
+            margin: 0.5rem 0;
+        }
+
+        .descripcion .tabla,
+        .datos-velocimetro .tabla {
+            font-size: 11px;
+            margin-right: 3rem;
+            /* Agregado margen derecho */
         }
 
         table,
         th,
         td {
-            border: 1px solid black;
+            border: 1px solid #e0e0e0;
             border-collapse: collapse;
-            text-align: center;
-            padding: 0.01rem 0.4rem;
+            padding: 6px 8px;
+            text-align: left;
+        }
+
+        table td:first-child {
+            font-weight: 600;
+            width: 8%;
+            /* Reducido el ancho de la columna de números */
+            font-family: 'Arial', sans-serif;
+            color: #444;
+        }
+
+        table td:last-child {
+            color: #333;
+        }
+
+        /* Pie de pagina con sello y fecha */
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+            padding-right: 0;
+        }
+
+        .footer .sello {
+            width: auto;
+            text-align: right;
+            margin-right: 6rem;
+        }
+
+        .sello img {
+            width: 120px;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .fecha {
+            width: auto;
+            text-align: right;
+            font-size: 12px;
+            padding-top: 1rem;
+            margin-right: 6rem;
+        }
+
+        /* QR Code y Hash en la misma línea */
+        .qr {
+            text-align: left;
+            width: 140px;
+            position: fixed;
+            bottom: 60px;
+            left: 105px;
+            /* Movido más a la derecha */
+            z-index: 10;
+        }
+
+        .qr img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+        }
+
+        .hash {
+            text-align: right;
+            width: 100%;
+            padding-right: 2rem;
+            font-size: 10px;
+            color: #666;
+            position: fixed;
+            bottom: 60px;
+            right: 30px;
+        }
+
+        .verification-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            width: 100%;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+            position: relative;
         }
     </style>
-
 </head>
 
 @if ($certificado->fondo)
 
-    <body background="data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}">
+    <body
+        style="background-image: url('data:image/jpeg;base64, {{ base64_encode(Storage::get($fondo)) }}'); background-size: 100% 100%; background-repeat: no-repeat;">
     @else
 
         <body>
 @endif
 
-
 <div class="certificado">
-
     <div class="header">
-
-
-
         <div class="numero">
             {{ $certificado->codigo }}
         </div>
-
     </div>
-    @php
-        $cliente = $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : '';
-        $placa = $certificado->vehiculo ? $certificado->vehiculo->placa : '';
-        $marca = $certificado->vehiculo ? $certificado->vehiculo->marca : '';
-        $modelo = $certificado->vehiculo ? $certificado->vehiculo->modelo : '';
-        $year = $certificado->vehiculo ? $certificado->vehiculo->year : '';
-        $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
-        $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
-        $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
 
-    @endphp
-    <div class="titulo">
-        <div class="title">
+    <div class="contenido">
+        <div class="titulo">
+            <div class="title">
+                <span>CERTIFICADO DE LIMITADOR DE VELOCIDAD</span>
+            </div>
+        </div>
+
+        <div class="certifica">
+            <div>
+                <span>
+                    De acuerdo a lo establecido por la Octava Disposición Complementaria
+                    Transitoria del Reglamento Nacional de Administración de Transportes aprobado por Decreto
+                    Supremo N° 017-2009-MTC, <b>TALENTUS TECHNOLOGY EIRL</b>
+                </span>
+            </div>
+        </div>
+
+        <div class="subtitulo">
             <span>
-                CERTIFICADO DE LIMITADOR DE VELOCIDAD
+                <b>CERTIFICA:</b>
             </span>
         </div>
-        <div class="qr">
-            <img
-                src="data:image/jpeg;base64, {{ base64_encode(
-                    QrCode::format('png')->size(100)->gradient(10, 88, 147, 5, 44, 82, 'vertical')->style('square')->eye('circle')->encoding('UTF-8')->generate($datos),
-                ) }}">
 
+        <div class="descripcion">
+            <span>Que el vehículo materia de inspección y que consigna las siguientes características:</span>
         </div>
 
-    </div>
+        <div class="descripcion">
+            <table class="tabla" border="1">
+                <tr>
+                    <td height="5" width="30" style="width: 30px; text-align: center;">1</td>
+                    <td height="5">TITULAR:</td>
+                    <td height="5">
+                        {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : 'SIN - DATOS' }}
+                    </td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">2</td>
+                    <td height="5">PLACA:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->placa : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">3</td>
+                    <td height="5">CATEGORIA:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->tipo : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">4</td>
+                    <td height="5">MARCA:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->marca : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">5</td>
+                    <td height="5">MODELO:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->modelo : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">6</td>
+                    <td height="5">AÑO DE FABRICACIÓN:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->year : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">7</td>
+                    <td height="5">VIN/N° DE SERIE:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->serie : 'SIN DATOS' }}</td>
+                </tr>
+                <tr>
+                    <td height="5" style="text-align: center;">8</td>
+                    <td height="5">N° DE MOTOR:</td>
+                    <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->motor : 'SIN DATOS' }}</td>
+                </tr>
+            </table>
+        </div>
 
-
-    <div class="certifica">
-        <div>
-            <span>
-                De acuerdo a lo establecido por la Octava Disposición Complementaria
-                Transitoria del Reglamento Nacional de Administración de Transportes aprobado por Decreto
-                Supremo N° 017-2009-MTC, <b>TALENTUS TECHNOLOGY EIRL</b>
+        <div class="texto">
+            <span>Cuenta con una alarma sonora en la cabina del conductor y en el salón del vehículo que se activa
+                cuando
+                excede la velocidad máxima permitida por las normas de tránsito.
             </span>
-
         </div>
 
-    </div>
-    <div class="subtitulo">
-        <span>
-            <b>
-                CERTIFICA:
-
-            </b>
-        </span>
-    </div>
-
-    <div class="descripcion">
-        <span>Que el vehículo materia de inspección y que consigna las siguientes características:</span>
-
-        <table class="tabla" border="1">
-            <tr>
-                <td height="5" width="20">1</td>
-                <td height="5">TITULAR:</td>
-                <td height="5">
-                    {{ $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : 'SIN - DATOS' }}
-                </td>
-            </tr>
-            <tr>
-                <td height="5">2</td>
-                <td height="5">PLACA:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->placa : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">3</td>
-                <td height="5">CATEGORIA:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->tipo : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">4</td>
-                <td height="5">MARCA:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->marca : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">5</td>
-                <td height="5">MODELO:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->modelo : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">6</td>
-                <td height="5">AÑO DE FABRICACIÓN:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->year : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">7</td>
-                <td height="5">VIN/N° DE SERIE:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->serie : 'SIN DATOS' }}</td>
-            </tr>
-            <tr>
-                <td height="5">8</td>
-                <td height="5">N° DE MOTOR:</td>
-                <td height="5">{{ $certificado->vehiculo ? $certificado->vehiculo->motor : 'SIN DATOS' }}</td>
-            </tr>
-
-        </table>
-
-    </div>
-
-    <div class="texto">
-        <span>Cuenta con una alarma sonora en la cabina del conductor y en el salón del vehículo que se activa cuando
-            excede la velocidad máxima permitida por las normas de tránsito.
-        </span>
-
-
-    </div>
-
-    <div class="observaciones">
-        <span>
-            <b>
-                {{ $certificado->observaciones ? $certificado->observaciones : '' }}
-            </b>
-        </span>
-    </div>
-    <div class="datos-velocimetro">
-
-        <table class="tabla" border="1">
-            <tr>
-                <td height="5"><b>MARCA:</b></td>
-                <td height="5">
-                    MICRODEV
-                </td>
-            </tr>
-            <tr>
-                <td height="5"> <b>MODELO:</b></td>
-                <td height="5">{{ $certificado->velocimetro_modelo }}</td>
-            </tr>
-
-
-        </table>
-
-    </div>
-    <div class="footer">
-
-        <div class="fecha">
-            <p>Se expide el presente certificado en la ciudad de {{ $certificado->fecha }}</p>
+        <div class="observaciones">
+            <span>
+                <b>
+                    {{ $certificado->observaciones ? $certificado->observaciones : '' }}
+                </b>
+            </span>
         </div>
 
-        <div class="sello">
-            @if ($certificado->sello)
-                <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
-            @endif
-
+        <div class="datos-velocimetro">
+            <table class="tabla" border="1" style="width: 90%; margin-right: 3rem;">
+                <tr>
+                    <td height="5" style="width: 40%;"><b>MARCA:</b></td>
+                    <td height="5">
+                        MICRODEV
+                    </td>
+                </tr>
+                <tr>
+                    <td height="5"> <b>MODELO:</b></td>
+                    <td height="5">{{ $certificado->velocimetro_modelo }}</td>
+                </tr>
+            </table>
         </div>
 
+        <div class="footer">
+            <div class="fecha">
+                <p>Se expide el presente certificado en la ciudad de {{ $certificado->fecha }}</p>
+            </div>
+
+            <div class="sello">
+                @if ($certificado->sello)
+                    <img src="data:image/jpeg;base64, {{ base64_encode(Storage::get($sello)) }}" alt="">
+                @endif
+            </div>
+        </div>
     </div>
-
-    <div class="hash">
-        <span>{{ $certificado->unique_hash }}</span>
-
-    </div>
-
 </div>
 
+@php
+    $cliente = $certificado->vehiculo->cliente ? $certificado->vehiculo->cliente->razon_social : '';
+    $placa = $certificado->vehiculo ? $certificado->vehiculo->placa : '';
+    $marca = $certificado->vehiculo ? $certificado->vehiculo->marca : '';
+    $modelo = $certificado->vehiculo ? $certificado->vehiculo->modelo : '';
+    $year = $certificado->vehiculo ? $certificado->vehiculo->year : '';
+    $serie = $certificado->vehiculo ? $certificado->vehiculo->serie : '';
+    $motor = $certificado->vehiculo ? $certificado->vehiculo->motor : '';
+    $datos = $cliente . '|' . $placa . '|' . $marca . '|' . $modelo . '|' . $year . '|' . $serie . '|' . $motor;
 
+    $qr = base64_encode(
+        QrCode::format('png')
+            ->size(140)
+            ->margin(0)
+            ->errorCorrection('H')
+            ->gradient(10, 88, 147, 5, 44, 82, 'vertical')
+            ->style('square')
+            ->eye('circle')
+            ->encoding('UTF-8')
+            ->generate($datos),
+    );
+@endphp
+
+<div class="qr">
+    <img src="data:image/jpeg;base64, {{ $qr }}">
+</div>
+
+<div class="verification-row">
+    <div class="hash">
+        Código de verificación: {{ $certificado->unique_hash }}
+    </div>
+</div>
 
 </body>
 

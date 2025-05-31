@@ -42,8 +42,9 @@ class VehiculosIndex extends Component
         })->orwhereHas('cliente', function ($query) {
 
             $query->where('razon_social', 'LIKE', '%' . $this->search . '%');
-        })->orwhereHas('dispositivos', function ($query) {
-            $query->where('imei', 'LIKE', '%' . $this->search . '%');
+        })->orwhereHas('dispositivosAsignados', function ($query) {
+            // Usando la relación directa a los dispositivos
+            $query->where('dispositivos.imei', 'LIKE', '%' . $this->search . '%');
         })->orWhere('placa', 'like', '%' . $this->search . '%')
             ->orWhere('marca', 'like', '%' . $this->search . '%')
             ->orWhere('modelo', 'like', '%' . $this->search . '%')
@@ -57,8 +58,6 @@ class VehiculosIndex extends Component
             ->orWhere('year', 'like', '%' . $this->search . '%')
             ->orderBy('id', 'desc')
             ->paginate(15);
-
-
 
 
         $total = Vehiculos::all()->count();

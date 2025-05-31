@@ -93,7 +93,7 @@ class Edit extends Component
 
 
         $this->numero_cuotas = $this->presupuesto->numero_cuotas;
-        $this->vence_cuotas = $this->presupuesto->vence_cuotas;
+        $this->vence_cuotas = $this->presupuesto->vence_cuotas !== null ? $this->presupuesto->vence_cuotas : 0;
         $this->forma_pago = $this->presupuesto->forma_pago;
 
 

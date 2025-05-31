@@ -18,7 +18,6 @@ class CertificadosGpsIndex extends Component
 
     public function render()
     {
-
         $certificados = Certificados::whereHas('ciudades', function ($query) {
             $query->where('nombre', 'like', '%' . $this->search . '%')
                 ->orwhere('prefijo', 'like', '%' . $this->search . '%');
@@ -27,11 +26,15 @@ class CertificadosGpsIndex extends Component
             $query->orWhereHas('cliente', function ($cliente) {
                 $cliente->where('razon_social', 'like', '%' . $this->search . '%');
             });
+            // Buscar por IMEI en la tabla pivot de dispositivos
+            $query->orWhereHas('dispositivos', function ($dispositivo) {
+                $dispositivo->where('imei', 'like', '%' . $this->search . '%');
+            });
         })->orWhere('fin_cobertura', 'like', '%' . $this->search . '%')
             ->orWhere('numero', 'like', '%' . $this->search . '%')
             ->orWhere('codigo', 'like', '%' . $this->search . '%')
             ->orWhere('fecha', 'like', '%' . $this->search . '%')
-            ->with('vehiculo.dispositivos.modelo', 'vehiculo.dispositivos')
+            ->with('vehiculo.dispositivos.dispositivo.modelo', 'vehiculo.dispositivos')
             ->orderBy('numero', 'desc')
             ->paginate(10);
 
