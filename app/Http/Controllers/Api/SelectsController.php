@@ -271,6 +271,7 @@ class SelectsController extends Controller
             )
             ->get();
     }
+
     public function tipoComprobantes(Request $request): Collection
     {
 
@@ -600,6 +601,7 @@ class SelectsController extends Controller
                 return $detraccion;
             });
     }
+
     public function metodosPago(Request $request): Collection
     {
 
@@ -638,7 +640,6 @@ class SelectsController extends Controller
             ->role('tecnico')
             ->get();
     }
-
 
     public function prueba(Request $request)
     {

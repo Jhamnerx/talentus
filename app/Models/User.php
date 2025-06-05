@@ -40,6 +40,7 @@ class User extends Authenticatable
         'numero_documento',
         'telefonos',
         'password',
+        'series_id',
     ];
 
     // protected $attributes = [
@@ -134,5 +135,10 @@ class User extends Authenticatable
     public function tareas()
     {
         return $this->hasMany(Tareas::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function series()
+    {
+        return $this->hasOne(Series::class, 'id', 'series_id');
     }
 }

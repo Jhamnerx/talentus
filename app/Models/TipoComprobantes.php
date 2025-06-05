@@ -28,7 +28,7 @@ class TipoComprobantes extends Model
 
     public function compras(): HasMany
     {
-        return $this->hasMany(ComprasFacturas::class);
+        return $this->hasMany(Compras::class);
     }
 
     public function ventas(): HasMany

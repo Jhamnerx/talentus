@@ -10,6 +10,7 @@ class Index extends Component
 {
     use WithPagination;
     public $search;
+    public $roleFilter = '';
 
     #[\Livewire\Attributes\On('update-table')]
     public function updateTable()
@@ -19,13 +20,22 @@ class Index extends Component
 
     public function render()
     {
-        $usuarios = User::Where('name', 'like', '%' . $this->search . '%')
+        $roles = \Spatie\Permission\Models\Role::all(['id', 'name']);
+        $usuariosQuery = User::query();
+        if ($this->search) {
+            $usuariosQuery->where('name', 'like', '%' . $this->search . '%');
+        }
+        if ($this->roleFilter) {
+            $usuariosQuery->whereHas('roles', function ($q) {
+                $q->where('id', $this->roleFilter);
+            });
+        }
+        $usuarios = $usuariosQuery
             ->excludeEmail('jhamnerx1x@gmail.com')
             ->orderBy('id', 'desc')
             ->paginate(10);
-
-        $total = User::all()->count() - 1;
-        return view('livewire.admin.usuarios.index', compact('usuarios', 'total'));
+        $total = User::count() - 1;
+        return view('livewire.admin.usuarios.index', compact('usuarios', 'total', 'roles'));
     }
 
     public function toggleStatus(User $user)

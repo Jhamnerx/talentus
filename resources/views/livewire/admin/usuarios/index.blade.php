@@ -158,156 +158,139 @@
                 </div>
             </div>
 
-            <!-- Filter button -->
-            <div class="relative inline-flex">
-                <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
-                    <span class="sr-only">Filtro</span><wbr>
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
-                        <path
-                            d="M9 15H7a1 1 0 010-2h2a1 1 0 010 2zM11 11H5a1 1 0 010-2h6a1 1 0 010 2zM13 7H3a1 1 0 010-2h10a1 1 0 010 2zM15 3H1a1 1 0 010-2h14a1 1 0 010 2z" />
-                    </svg>
-                </button>
-            </div>
         </div>
 
     </div>
 
+    <!-- Filtro por Rol -->
+    <div class="mb-4 sm:mb-0">
+        <select wire:model.live="roleFilter" class="form-select border-slate-300 rounded shadow-sm">
+            <option value="">Todos los roles</option>
+            @foreach ($roles as $rol)
+                <option value="{{ $rol->id }}">{{ $rol->name }}</option>
+            @endforeach
+        </select>
+    </div>
+
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
-        <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Usuarios <span
-                    class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
+    <div class="bg-white shadow-lg rounded-lg border border-slate-200 mb-8 overflow-x-auto">
+        <header class="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+            <h2 class="font-semibold text-slate-800 flex items-center gap-2">
+                <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Usuarios <span class="text-slate-400 font-medium">{{ $usuarios->total() }}</span>
             </h2>
         </header>
         <div>
-
-            <!-- Table -->
-            <div class="overflow-x-auto">
-                <table class="table-auto w-full">
-                    <!-- Table header -->
-                    <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
-                        <tr>
-
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Nombres</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Email</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Roles</div>
-                            </th>
-                            @can('admin.usuarios.status')
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Estado</div>
-                                </th>
-                            @endcan
-                            @canany(['admin.usuarios.edit', 'admin.usuarios.delete'])
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Acciones</div>
-                                </th>
-                            @endcanany
-                        </tr>
-                    </thead>
-                    <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
-                        <!-- Row -->
-
-                        @foreach ($usuarios as $usuario)
-                            @if ($usuario->email !== 'jhamnerx1x@gmail.com')
-                                <tr wire:key='u-{{ $usuario->id }}'>
-
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-blue-500">{{ $usuario->name }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">{{ $usuario->email }}</div>
-                                    </td>
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-slate-800">
-                                            @if (!empty($usuario->getRoleNames()))
-                                                @foreach ($usuario->getRoleNames() as $rolName)
-                                                    {{ $rolName }}
-                                                @endforeach
-                                            @endif
+            <table class="table-auto w-full text-sm">
+                <thead
+                    class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                    <tr>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">ID</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Nombre</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Email</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Tipo Doc</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">N° Doc</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Dirección</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Teléfonos</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Cumpleaños</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Cliente</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Serie</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Activo</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Estado</th>
+                        <th class="px-2 py-3 whitespace-nowrap text-left">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200">
+                    @foreach ($usuarios as $usuario)
+                        @if ($usuario->email !== 'jhamnerx1x@gmail.com')
+                            <tr wire:key='u-{{ $usuario->id }}' class="hover:bg-slate-50 transition">
+                                <td class="px-2 py-3 whitespace-nowrap text-slate-600">{{ $usuario->id }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap text-blue-500 font-semibold">
+                                    {{ $usuario->name }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->email }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->tipo_documento }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->numero_documento }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->direccion }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">{{ $usuario->telefonos }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">
+                                    {{ $usuario->birthday ? $usuario->birthday->format('d/m/Y') : '' }}</td>
+                                <td class="px-2 py-3 whitespace-nowrap">
+                                    <span
+                                        class="inline-block px-2 py-1 rounded text-xs {{ $usuario->is_client === 'si' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500' }}">
+                                        {{ $usuario->is_client === 'si' ? 'Sí' : 'No' }}
+                                    </span>
+                                </td>
+                                <td class="px-2 py-3 whitespace-nowrap">
+                                    {{ optional($usuario->series)->serie }}
+                                </td>
+                                <td class="px-2 py-3 whitespace-nowrap">
+                                    <div class="m-3">
+                                        <div class="flex items-center mt-2" x-data="{ checked: {{ $usuario->is_active ? 'true' : 'false' }} }">
+                                            <div class="form-switch">
+                                                <input wire:click="toggleStatus({{ $usuario->id }})" type="checkbox"
+                                                    id="switch-e{{ $usuario->id }}" class="sr-only"
+                                                    x-model="checked" {{ $usuario->is_active ? 'checked' : '' }} />
+                                                <label class="bg-slate-400" for="switch-e{{ $usuario->id }}">
+                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                    <span class="sr-only">Estado</span>
+                                                </label>
+                                            </div>
+                                            <div class="text-sm text-slate-400 italic ml-2"
+                                                x-text="checked ? 'Activo' : 'Inactivo'"></div>
                                         </div>
-                                    </td>
-                                    @can('admin.usuarios.status')
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                            <div>
-                                                <div class="m-3 ">
-                                                    <div class="flex items-center mt-2" x-data="{ checked: {{ $usuario->is_active ? 'true' : 'false' }} }">
-                                                        <div class="form-switch">
-                                                            <input wire:click="toggleStatus({{ $usuario->id }})"
-                                                                type="checkbox" id="switch-e{{ $usuario->id }}"
-                                                                class="sr-only" x-model="checked" />
-                                                            <label class="bg-slate-400" for="switch-e{{ $usuario->id }}">
-                                                                <span class="bg-white shadow-sm"
-                                                                    aria-hidden="true"></span>
-                                                                <span class="sr-only">Estado</span>
-                                                            </label>
-                                                        </div>
-                                                        <div class="text-sm text-slate-400 italic ml-2"
-                                                            x-text="checked ? 'Activo' : 'Inactivo'"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    @endcan
-
-                                    @canany(['admin.usuarios.edit', 'admin.usuarios.delete'])
-                                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                            <div class="space-x-1">
-                                                @can('admin.usuarios.edit')
-                                                    <button wire:click.prevent="openModalEdit({{ $usuario->id }})"
-                                                        class="text-slate-400 hover:text-slate-500 rounded-full">
-                                                        <span class="sr-only">Editar</span>
-                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                            <path
-                                                                d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
-                                                        </svg>
-                                                    </button>
-                                                @endcan
-                                                {{--
-                                                @can('admin.usuarios.delete')
-                                                    <button @click.prevent="modalDelete = true" aria-controls="danger-modal"
-                                                        class="text-rose-500 hover:text-rose-600 rounded-full">
-                                                        <span class="sr-only">Eliminar</span>
-                                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
-                                                            <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                            <path
-                                                                d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                                        </svg>
-                                                    </button>
-                                                @endcan --}}
-
-                                            </div>
-                                        </td>
-                                    @endcanany
-
-                                </tr>
-                            @endif
-                        @endforeach
-                        @if ($usuarios->count() < 1)
-                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                                    </div>
+                                </td>
+                                <td class="px-2 py-3 whitespace-nowrap">
+                                    <span
+                                        class="inline-block px-2 py-1 rounded text-xs {{ $usuario->estado ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                        {{ $usuario->estado ? 'Activo' : 'Inactivo' }}
+                                    </span>
+                                </td>
+                                <td class="px-2 py-3 whitespace-nowrap w-px">
+                                    <div class="flex gap-1">
+                                        @can('admin.usuarios.edit')
+                                            <button wire:click.prevent="openModalEdit({{ $usuario->id }})"
+                                                class="text-slate-400 hover:text-indigo-600 rounded-full p-1"
+                                                title="Editar">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m2-2l-6 6" />
+                                                </svg>
+                                            </button>
+                                        @endcan
+                                        @can('admin.usuarios.delete')
+                                            <button @click.prevent="modalDelete = true"
+                                                class="text-rose-500 hover:text-rose-600 rounded-full p-1"
+                                                title="Eliminar">
+                                                <svg class="w-6 h-6" fill="none" stroke="currentColor"
+                                                    stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                        @endcan
+                                    </div>
+                                </td>
+                            </tr>
                         @endif
-
-
-                    </tbody>
-                </table>
-
-            </div>
+                    @endforeach
+                    @if ($usuarios->count() < 1)
+                        <tr>
+                            <td colspan="13" class="px-2 py-3 text-center text-slate-400">No hay Registros</td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
         </div>
     </div>
     <!-- Pagination -->
     <div class="mt-8 w-full">
         {{ $usuarios->links() }}
-        {{-- @include('admin.partials.pagination-classic') --}}
-
     </div>
 
 

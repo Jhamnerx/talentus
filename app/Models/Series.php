@@ -42,4 +42,9 @@ class Series extends Model
     {
         return $this->belongsTo(\App\Models\TipoComprobantes::class, 'tipo_comprobante_id', 'codigo');
     }
+
+    public function users(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id', 'series_id');
+    }
 }
