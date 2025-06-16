@@ -151,8 +151,7 @@
                     </svg>
                 </div>
                 <div class="detallesvehiculos">
-                    {{ json_encode($items->all()) }}
-                    {{-- Lista de vehiculos --}}
+
                     @if ($items->count() >= 1)
                         @foreach ($items->all() as $placa => $vehiculo)
                             <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">

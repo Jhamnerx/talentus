@@ -151,7 +151,7 @@
                 </div>
                 <div class="detallesvehiculos">
                     {{-- ITEMS --}}
-                    {{ json_encode($items) }}
+
                     @if ($items->count() > 0)
                         @foreach ($items as $placa => $vehiculo)
                             @if (isset($placa) && !empty($placa))
