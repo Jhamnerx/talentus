@@ -34,16 +34,28 @@ class CheckDetalleCobros implements ShouldQueue
     {
         $hoy = Carbon::now()->format('Y-m-d');
         $cobrosConsolidados = [];
+        $vehiculosOmitidos = [];
 
         // Buscar todos los cobros que tienen detalles con estado = 1 y fechas en el rango de notificación
+        // y que estén asociados a vehículos activos
         $cobrosConDetalles = Cobros::whereHas('detalle', function ($query) use ($hoy) {
             $query->where('estado', 1) // Solo detalles activos
-                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
-                ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
+                ->whereHas('vehiculo', function ($vehiculoQuery) {
+                    $vehiculoQuery->where('is_active', 1); // Solo vehículos activos
+                })
+                ->where(function ($q) use ($hoy) {
+                    $q->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
+                        ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
+                });
         })->with(['detalle' => function ($query) use ($hoy) {
             $query->where('estado', 1) // Solo detalles activos
-                ->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
-                ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
+                ->whereHas('vehiculo', function ($vehiculoQuery) {
+                    $vehiculoQuery->where('is_active', 1); // Solo vehículos activos
+                })
+                ->where(function ($q) use ($hoy) {
+                    $q->whereIn('fecha', array_map(fn($dias) => Carbon::now()->addDays($dias)->format('Y-m-d'), $this->notificaciones))
+                        ->orWhere('fecha', '<', $hoy); // Para detectar los vencidos
+                });
         }, 'detalle.vehiculo'])
             ->withoutGlobalScope(EmpresaScope::class)
             ->get();
@@ -52,18 +64,32 @@ class CheckDetalleCobros implements ShouldQueue
             $detallesAgrupados = [];
 
             foreach ($cobro->detalle as $detalle) {
+                // Verificar si el vehículo existe y está activo
+                if (!$detalle->vehiculo || $detalle->vehiculo->is_active != 1) {
+                    // Registrar vehículos omitidos para propósitos de diagnóstico
+                    $vehiculosOmitidos[] = [
+                        'detalle_id' => $detalle->id,
+                        'cobro_id' => $cobro->id,
+                        'placa' => $detalle->vehiculo ? $detalle->vehiculo->placa : 'Sin vehículo',
+                        'estado_vehiculo' => $detalle->vehiculo ? ($detalle->vehiculo->is_active ? 'Activo' : 'Inactivo') : 'N/A',
+                    ];
+
+                    // Omitir detalles con vehículos inactivos o sin vehículo
+                    continue;
+                }
+
                 $diasRestantes = Carbon::now()->floatDiffInDays($detalle->fecha, false);
 
                 if ($diasRestantes <= 15 && $diasRestantes > 0) {
                     $estadoNotificacion = $this->getEstadoNotificacion($diasRestantes);
                     $detallesAgrupados[$estadoNotificacion][] = [
-                        'placa' => $detalle->vehiculo?->placa ?? 'Sin vehículo',
+                        'placa' => $detalle->vehiculo->placa,
                         'fecha_vencimiento' => $detalle->fecha,
                         'cobro_id' => $cobro->id,
                     ];
                 } elseif ($diasRestantes <= 0) {
                     $detallesAgrupados['VENCIDO'][] = [
-                        'placa' => $detalle->vehiculo?->placa ?? 'Sin vehículo',
+                        'placa' => $detalle->vehiculo->placa,
                         'fecha_vencimiento' => $detalle->fecha,
                         'cobro_id' => $cobro->id,
                     ];
@@ -78,6 +104,11 @@ class CheckDetalleCobros implements ShouldQueue
                     }
                 }
             }
+        }
+
+        // Registrar vehículos omitidos
+        if (!empty($vehiculosOmitidos)) {
+            Log::info('Vehículos omitidos en CheckDetalleCobros por estar inactivos:', $vehiculosOmitidos);
         }
 
         // Enviar una única notificación con todos los cobros consolidados
