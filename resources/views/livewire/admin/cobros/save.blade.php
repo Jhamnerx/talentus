@@ -151,7 +151,8 @@
                     </svg>
                 </div>
                 <div class="detallesvehiculos">
-
+                    {{ json_encode($items->all()) }}
+                    {{-- Lista de vehiculos --}}
                     @if ($items->count() >= 1)
                         @foreach ($items->all() as $placa => $vehiculo)
                             <div wire:key="item-{{ $placa }}" class="flex -mx-1 px-2 py-4 border-b box-border">
@@ -159,7 +160,7 @@
                                 <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
 
                                     <p class="text-gray-800 xs:text-base">
-                                        {{ $items[$placa]['placa'] }}
+                                        {{ $vehiculo['placa'] }}
                                     </p>
 
                                 </div>
@@ -178,9 +179,10 @@
                                 </div>
                                 <div class="flex-auto xl:w-28 text-center">
 
-                                    <x-form.datetime.picker id="fecha_vencimiento_i" name="fecha_vencimiento_i"
-                                        wire:model.live="items.{{ $placa }}.fecha" without-time
-                                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+
+
+                                    <input class="form-input" type="date" id="fecha_{{ $placa }}"
+                                        wire:model.live="items.{{ $placa }}.fecha" />
                                 </div>
 
                                 <div class="flex-auto xl:w-20 text-center">

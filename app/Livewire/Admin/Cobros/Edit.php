@@ -15,7 +15,7 @@ use Symfony\Component\Mailer\Transport\Dsn;
 class Edit extends Component
 {
     public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
-    public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
+    public $fecha_inicio, $fecha_vencimiento, $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
     public $nota;
 
     public $vehiculo_selected;
@@ -40,17 +40,19 @@ class Edit extends Component
         $this->cobro = $cobro;
         $this->producto_id = $cobro->producto_id;
 
-        $this->items = collect($this->cobro->detalle->mapWithKeys(function ($detalle) {
-            return [
-                $detalle->vehiculo->placa => [
+        // Inicializar la colección de items con verificación de vehículo
+        $this->items = collect();
+        foreach ($this->cobro->detalle as $detalle) {
+            if ($detalle->vehiculo) {
+                $this->items[$detalle->vehiculo->placa] = [
                     'vehiculo_id' => $detalle->vehiculo_id,
                     'placa' => $detalle->vehiculo->placa,
                     'plan' => $detalle->plan,
                     'fecha' => $detalle->fecha->format('Y-m-d'),
                     'estado' => $detalle->estado,
-                ],
-            ];
-        }));
+                ];
+            }
+        }
     }
 
     public function render()
@@ -60,13 +62,10 @@ class Edit extends Component
 
     public function updatedCliente($id)
     {
-
         $cliente = Clientes::where('id', $id)->first();
-
         $data = [];
 
         foreach ($cliente->vehiculos as $vehiculo) {
-
             if ($vehiculo->is_active) {
                 $data[] = [
                     'id' => $vehiculo->id,
@@ -82,8 +81,8 @@ class Edit extends Component
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR EL AÑADIR',
-                mensaje: 'Debes seleccionar un vehiculo',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'Debes seleccionar un vehículo',
             );
             return;
         }
@@ -96,37 +95,69 @@ class Edit extends Component
 
     public function addVehiculo(Vehiculos $vehiculo)
     {
-        if (array_key_exists($vehiculo->placa, $this->items->all())) {
-
+        if (!$vehiculo || !$vehiculo->placa) {
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR EL AÑADIR',
-                mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'Vehículo no válido o sin placa',
+            );
+            return;
+        }
+
+        if (array_key_exists($vehiculo->placa, $this->items->all())) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'El vehículo ' . $vehiculo->placa . ' ya está agregado',
             );
         } else {
-
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                title: 'VEHICULO AÑADIDO',
+                title: 'VEHÍCULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
+            // Asegurarse de que todos los campos necesarios estén presentes
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
                 'placa' => $vehiculo->placa,
-                'plan' => 30,
-                'fecha' => $this->fecha_vencimiento,
+                'plan' => $this->monto_unidad ?? 30,
+                'fecha' => $this->fecha_vencimiento ?? Carbon::now()->addDay(30)->format('Y-m-d'),
                 'estado' => 1,
             ];
+
+            // Forzar la actualización de la colección
+            $this->items = $this->items->collect();
         }
     }
 
     public function eliminarVehiculo($key)
     {
-        unset($this->items[$key]);
-        $this->items;
+        // Verificar que la clave existe antes de intentar eliminarla
+        if ($this->items->has($key)) {
+            // Olvidar el elemento de la colección
+            $this->items->forget($key);
+
+            // Forzar la actualización de la colección
+            $this->items = $this->items->collect();
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'VEHÍCULO ELIMINADO',
+                mensaje: 'Se eliminó el vehículo con placa ' . $key,
+            );
+        } else {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR AL ELIMINAR',
+                mensaje: 'No se encontró el vehículo con placa ' . $key,
+            );
+        }
     }
 
     public function updatedPeriodo($periodo)
@@ -150,12 +181,6 @@ class Edit extends Component
         }
     }
 
-    public function updated($label)
-    {
-        $requestCobros = new CobrosRequest();
-        $this->validateOnly($label, $requestCobros->rules(), $requestCobros->messages());
-    }
-
     public function save()
     {
         $requestCobros = new CobrosRequest();
@@ -164,7 +189,6 @@ class Edit extends Component
         $this->cantidad_unidades = $this->items->count();
 
         try {
-
             $this->cobro->update([
                 'clientes_id' => $datos["clientes_id"],
                 'comentario' => $datos["comentario"],
@@ -183,8 +207,8 @@ class Edit extends Component
 
             Cobros::createItems($this->cobro, $datos["items"], 'update');
 
-            session()->flash('cobro-actualizado', 'Se Actualizo con exito el cobro');
-            return redirect()->route('admin.cobros.index')->with('update', 'Se actualizo con exito');
+            session()->flash('cobro-actualizado', 'Se actualizó con éxito el cobro');
+            return redirect()->route('admin.cobros.index')->with('update', 'Se actualizó con éxito');
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',

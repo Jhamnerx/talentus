@@ -1,5 +1,4 @@
-<div class="shadow overflow-hidden sm:rounded-md" x-data="{ vehiculosPanelOpen: @entangle('panelVehiculosOpen').live }"
-    @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
+<div class="shadow overflow-hidden sm:rounded-md" @set-vehiculosPanelOpen="vehiculosPanelOpen = $event.detail">
     <div class="px-4 py-2 bg-gray-50 sm:p-6">
 
         <div class="grid grid-cols-12 gap-2">
@@ -151,45 +150,45 @@
                     </svg>
                 </div>
                 <div class="detallesvehiculos">
-
+                    {{-- ITEMS --}}
+                    {{ json_encode($items) }}
                     @if ($items->count() > 0)
-                        @foreach ($items->all() as $placa => $vehiculo)
-                            <div wire:key="item-{{ $placa }}"
-                                class="flex -mx-1 px-2 py-4 border-b box-border {{ $vehiculo['estado'] == 0 ? 'bg-red-200' : 'bg-white' }}">
+                        @foreach ($items as $placa => $vehiculo)
+                            @if (isset($placa) && !empty($placa))
+                                <div wire:key="item-{{ $placa }}"
+                                    class="flex -mx-1 px-2 py-4 border-b box-border {{ isset($vehiculo['estado']) && $vehiculo['estado'] == 0 ? 'bg-red-200' : 'bg-white' }}">
+                                    <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+                                        <p class="text-gray-800 xs:text-base">{{ $placa }}</p>
+                                    </div>
 
-                                <div class="flex-auto px-1 md:px-5 lg:px-5 xl:w-32 text-center">
+                                    <div class="flex-auto xl:w-28 text-center">
+                                        @if (isset($vehiculo['plan']))
+                                            <input wire:model.live="items.{{ $placa }}.plan"
+                                                class="form-input w-16 md:w-28 lg:w-28" type="text">
 
-                                    <p class="text-gray-800 xs:text-base">{{ $vehiculo['placa'] }}</p>
+                                            @if ($errors->has('items.' . $placa . '.plan'))
+                                                <p class="mt-2  text-pink-600 text-sm">
+                                                    {{ $errors->first('items.' . $placa . '.plan') }}
+                                                </p>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <div class="flex-auto xl:w-28 text-center">
 
+
+                                        <input class="form-input" type="date"
+                                            wire:model.live="items.{{ $placa }}.fecha" />
+
+                                    </div>
+
+                                    <div class="flex-auto xl:w-20 text-center">
+                                        <x-form.button label="Eliminar"
+                                            wire:click.prevent="eliminarVehiculo('{{ $placa }}')"
+                                            spinner="eliminarVehiculo('{{ $placa }}')" outline red sm
+                                            icon="trash" />
+                                    </div>
                                 </div>
-
-                                <div class="flex-auto xl:w-28 text-center">
-
-                                    <input wire:model.live="items.{{ $placa }}.plan"
-                                        class="form-input w-16 md:w-28 lg:w-28" type="text">
-
-                                    @if ($errors->has('items.' . $placa . '.plan'))
-                                        <p class="mt-2  text-pink-600 text-sm">
-                                            {{ $errors->first('items.' . $placa . '.plan') }}
-                                        </p>
-                                    @endif
-
-                                </div>
-                                <div class="flex-auto xl:w-28 text-center">
-
-                                    <x-form.datetime.picker id="fecha_vencimiento_i" name="fecha_vencimiento_i"
-                                        wire:model.live="items.{{ $placa }}.fecha" without-time
-                                        parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
-                                </div>
-
-                                <div class="flex-auto xl:w-20 text-center">
-
-                                    <x-form.button label="Eliminar"
-                                        wire:click.prevent="eliminarVehiculo('{{ $placa }}')" outline red sm
-                                        icon="trash" />
-                                </div>
-
-                            </div>
+                            @endif
                         @endforeach
                     @else
                         <div class="filas flex -mx-1 px-2 py-4 border-b box-border" id="fila">
