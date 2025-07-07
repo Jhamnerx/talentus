@@ -38,7 +38,7 @@
         <div class="px-4 py-2 bg-gray-50 dark:bg-gray-700 sm:p-6">
 
             <div class="grid grid-cols-12 gap-2">
-
+                {{-- Mensaje de error --}}
                 <div class="col-span-12 grid grid-cols-12 md:col-span-6 border-dashed lg:border-r-2 pr-0 md:pr-4 gap-2">
 
                     {{-- CLIENTE --}}
@@ -81,6 +81,9 @@
 
                         <x-form.number id="correlativo" name="numero" wire:model.live="numero"
                             label="Número Recibo:" />
+                        @error('serie_numero')
+                            <span class="text-red-500 text-xs">{{ $message }}</span>
+                        @enderror
 
                     </div>
 

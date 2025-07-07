@@ -17,11 +17,13 @@ use App\Models\DetalleCobros;
 use App\Models\TipoComprobantes;
 use Livewire\Attributes\Reactive;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use App\Models\CodigosDetracciones;
 use App\Http\Requests\VentasRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+
 
 class Emitir extends Component
 {
@@ -471,7 +473,7 @@ class Emitir extends Component
         $request = new VentasRequest();
         $datos = $this->validate($request->rules($this->detraccion), $request->messages());
         try {
-
+            DB::beginTransaction();
             $venta = Ventas::create($datos);
 
             //ACTUALIZAR DIRECCION
@@ -513,19 +515,22 @@ class Emitir extends Component
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
+                    DB::commit();
                     $this->redirectRoute('admin.ventas.index');
                 } else {
 
                     session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
+                    DB::commit();
                     $this->redirectRoute('admin.ventas.index');
                 }
             } else {
 
                 session()->flash('venta-registrada', 'Nota de venta registrada');
+                DB::commit();
                 $this->redirectRoute('admin.ventas.index');
             }
         } catch (\Throwable $th) {
-
+            DB::rollBack();
             $this->dispatch(
                 'error',
                 title: 'ERROR: ',
