@@ -72,7 +72,10 @@ class VentasRequest extends FormRequest
             'items.*.cantidad' => 'required|gte:1',
             'items.*.unit' => 'required',
             'items.*.unit_name' => 'required',
-            'items.*.descripcion' => 'required',
+            'items.*.descripcion' => [
+                'required',
+                'regex:/^[\pL\pN\s\.\,\-\_\(\)\[\]\{\}\:\;\'\"\!\?\@\/\\\&\%\#\*\+\=]*$/u'
+            ],
             'items.*.valor_unitario' => 'required',
             'items.*.precio_unitario' => 'required',
             'items.*.porcentaje_igv' => 'required',
