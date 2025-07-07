@@ -506,7 +506,7 @@ class Emitir extends Component
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
-
+            DB::commit();
             if ($this->metodo_type != '03') {
                 $api = new ApiFacturacion();
 
@@ -515,18 +515,18 @@ class Emitir extends Component
                 if ($mensaje['fe_codigo_error']) {
 
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-                    DB::commit();
+
                     $this->redirectRoute('admin.ventas.index');
                 } else {
 
                     session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
-                    DB::commit();
+
                     $this->redirectRoute('admin.ventas.index');
                 }
             } else {
 
                 session()->flash('venta-registrada', 'Nota de venta registrada');
-                DB::commit();
+
                 $this->redirectRoute('admin.ventas.index');
             }
         } catch (\Throwable $th) {
