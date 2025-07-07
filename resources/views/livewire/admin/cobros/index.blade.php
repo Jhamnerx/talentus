@@ -171,9 +171,7 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Comentario</div>
                             </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">Fecha Vencimiento</div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Periodo</div>
                             </th>
@@ -380,11 +378,7 @@
                                     <div>{{ $cobro->comentario }}</div>
 
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                    <div>{{ $cobro->fecha_vencimiento->format('d-m-Y') }}</div>
-
-                                </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                                     <div class="font-medium text-slate-800">
