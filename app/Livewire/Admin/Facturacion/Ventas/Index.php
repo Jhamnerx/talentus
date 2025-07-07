@@ -2,14 +2,15 @@
 
 namespace App\Livewire\Admin\Facturacion\Ventas;
 
-use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
-use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
-use App\Models\EnvioResumen;
-use App\Models\Ventas;
-use Livewire\Component;
-use Livewire\WithPagination;
 use DateTime;
 use Carbon\Carbon;
+use App\Models\Ventas;
+use Livewire\Component;
+use App\Models\EnvioResumen;
+use Livewire\WithPagination;
+use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 
 class Index extends Component
 {
@@ -112,6 +113,7 @@ class Index extends Component
                 title: 'ERROR: ',
                 mensaje: $th->getMessage(),
             );
+            Log::error('Datos error:', json_encode($th));
         }
     }
 
