@@ -112,6 +112,7 @@ class Edit extends Component
         $this->op_inafectas = $this->presupuesto->op_inafectas;
         $this->op_gratuitas = $this->presupuesto->op_gratuitas;
         $this->descuento = $this->presupuesto->descuento;
+        $this->descuento_monto = $this->presupuesto->descuento;
         $this->igv = $this->presupuesto->igv;
         $this->icbper = $this->presupuesto->icbper;
         $this->total = $this->presupuesto->total;
