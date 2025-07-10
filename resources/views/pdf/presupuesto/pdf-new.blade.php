@@ -448,6 +448,13 @@
                                         {{ number_format($presupuesto->descuento, 2) }}</td>
                                 </tr>
                             @endif
+                            @if ($presupuesto->op_gravadas)
+                                <tr>
+                                    <td>OP. GRAVADAS:</td>
+                                    <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}
+                                        {{ number_format($presupuesto->op_gravadas, 2) }}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td>IGV: 18%</td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->igv, 2) }}
