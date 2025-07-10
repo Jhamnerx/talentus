@@ -314,6 +314,12 @@
                                 <td>SUB TOTAL:</td>
                                 <td>S/. {{ number_format($presupuesto->sub_total_soles, 2) }}</td>
                             </tr>
+                            @if ($presupuesto->descuento)
+                                <tr>
+                                    <td>DESCUENTO:</td>
+                                    <td>S/. {{ number_format($presupuesto->descuento, 2) }}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td>IGV: 18%</td>
                                 <td>S/. {{ number_format($presupuesto->igv_soles, 2) }}</td>
@@ -435,6 +441,13 @@
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->sub_total, 2) }}
                                 </td>
                             </tr>
+                            @if ($presupuesto->descuento)
+                                <tr>
+                                    <td>DESCUENTO:</td>
+                                    <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}
+                                        {{ number_format($presupuesto->descuento, 2) }}</td>
+                                </tr>
+                            @endif
                             <tr>
                                 <td>IGV: 18%</td>
                                 <td>{{ $presupuesto->divisa == 'PEN' ? 'S/. ' : '$' }}{{ number_format($presupuesto->igv, 2) }}

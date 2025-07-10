@@ -1,6 +1,5 @@
 import plugin from "tailwindcss/plugin";
 import aspectRatio from "@tailwindcss/aspect-ratio";
-import aspectRatio from "@tailwindcss/aspect-ratio";
 import colors from "tailwindcss/colors";
 import wireuiConfig from "./vendor/wireui/wireui/tailwind.config.js";
 
