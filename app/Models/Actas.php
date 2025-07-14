@@ -107,7 +107,7 @@ class Actas extends Model
         $cpdf->addInfo('Keywords', 'GPS,Acta,Instalación,Talentus');
         // Opcionalmente también:
         $cpdf->addInfo('Title',    'ACTA ' . $this->vehiculo->placa . ' ' . $this->codigo);
-        $cpdf->addInfo('Creator',  env('APP_NAME', 'Talentus GPS'));
+        $cpdf->addInfo('Creator',  config('app.name', 'Talentus GPS'));
         // Producer normalmente ya lo pone dompdf, puedes sobreescribirlo:
 
 

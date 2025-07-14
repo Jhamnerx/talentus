@@ -50,5 +50,5 @@
             </span>
         </p>
     </div> --}}
-    Consulte su documento electrónico en: {{ env('APP_URL') }}/consulta/invoice
+    Consulte su documento electrónico en: {{ config('app.url') }}/consulta/invoice
 </h6>

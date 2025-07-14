@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'token_fota_web' => env('TOKEN_FOTAWEB', null), // Token para la API de FotaWeb
     /*
     |--------------------------------------------------------------------------
     | Application Environment

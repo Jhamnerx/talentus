@@ -14,8 +14,7 @@ class FotaWebApiController extends Controller
     public function getDevice($imei)
     {
 
-        $token = env('TOKEN_FOTAWEB', '1956|T7pj3AZZQbblLCOShdPbFcNGJmekLsOpvlW6bJP1');
-
+        $token = config('app.token_fota_web');
         $client = new Client(['base_uri' => 'https://api.teltonika.lt', 'verify' => false]);
 
         $parameters = [
@@ -43,7 +42,7 @@ class FotaWebApiController extends Controller
     public function getDevices()
     {
 
-        $token = env('TOKEN_FOTAWEB', '1956|T7pj3AZZQbblLCOShdPbFcNGJmekLsOpvlW6bJP1');
+        $token = config('app.token_fota_web');
 
         $client = new Client(['base_uri' => 'https://api.teltonika.lt', 'verify' => false]);
 

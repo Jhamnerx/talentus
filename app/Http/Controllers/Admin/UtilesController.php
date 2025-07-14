@@ -26,7 +26,7 @@ class UtilesController extends Controller
 
             try {
 
-                $token = env('TOKEN_API_CONSULTA_SUNAT');
+                $token = config('app.token_sunat');
 
                 $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -88,7 +88,7 @@ class UtilesController extends Controller
     public function consultaEmpresa($numero)
     {
         // Datos
-        $token = env('TOKEN_API_SUNAT');
+        $token = config('app.token_sunat');
 
         $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
 
@@ -113,7 +113,7 @@ class UtilesController extends Controller
     public function consultaPersona($numero)
     {
         //datos
-        $token = env('TOKEN_API_SUNAT');
+        $token = config('app.token_sunat');
         $client = new Client(['base_uri' => 'https://api.apis.net.pe', 'verify' => false]);
         // Iniciar llamada a API
         $parameters = [
@@ -231,7 +231,7 @@ class UtilesController extends Controller
 
     public function consultaDni($numero)
     {
-        $token = env('TOKEN_API_FACTILIZA');
+        $token = config('app.token_sunat');
         $client = new Client(['base_uri' => 'https://api.factiliza.com', 'verify' => false]);
         // Iniciar llamada a API
         $parameters = [

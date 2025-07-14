@@ -82,7 +82,7 @@ class Util extends Controller
             'cache' => storage_path('framework/cache/data/facturacion/see'),
         ]);
 
-        if ($this->plantilla->modo == 'local' || env('APP_ENV') == 'local') {
+        if ($this->plantilla->modo == 'local' || config('app.env') == 'local') {
             $see->setService(SunatEndpoints::FE_BETA);
         } else {
             $see->setService(SunatEndpoints::FE_PRODUCCION);
@@ -112,7 +112,7 @@ class Util extends Controller
 
         $ruta_certificado = $this->plantilla->empresa->nombre . '/' . $this->plantilla->ruta_cert . '.pem';
 
-        if ($this->plantilla->modo == 'local' || env('APP_ENV') == 'local') {
+        if ($this->plantilla->modo == 'local' || config('app.env') == 'local') {
 
             $api = new \Greenter\Api([
                 'auth' => 'https://gre-test.nubefact.com/v1',
