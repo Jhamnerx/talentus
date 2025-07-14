@@ -24,3 +24,4 @@ yarn-error.log
 storage/app/facturacion/
 storage/app/talentus/
 storage/talentus-scheduler.log
+composer.lock
