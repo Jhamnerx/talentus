@@ -23,4 +23,9 @@ class ConsultasController extends Controller
     {
         return view('app.consulta.vehiculos.index');
     }
+
+    public function transmision()
+    {
+        return view('app.consulta.transmision.index');
+    }
 }

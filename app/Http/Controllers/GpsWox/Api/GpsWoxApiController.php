@@ -10,7 +10,7 @@ class GpsWoxApiController extends Controller
 {
     protected $client;
     public $baseUri  = 'https://plataforma.talentustechnology.com/api/';
-    public $apiHash = '$2y$10$WX7epAyKfPDORgti1T68Ie7RGfFA5yWGGlQvmLOQNlUDkRmRa/SZ2';
+    public $apiHash = '$2y$10$Cju1OG.5wPtYMK9/wO1NKezifGuKPmpydOiKTnQ4uItj6h/c9vDJi';
     //public $apiHash = '$2y$10$E/DVaHmycEsXBCI6Uw3BDu/sSXyPPIg1X8vaFYzZ72TjG9uah/ZhC';
 
 
@@ -21,6 +21,30 @@ class GpsWoxApiController extends Controller
         ]);
     }
 
+    public function getDeviceByPlateNumber(Request $request)
+    {
+        // Validamos que el parámetro 'plate_number' esté presente
+        if (!$request->has('plate_number') || empty($request->query('plate_number'))) {
+            return response()->json(['error' => 'Plate number is required'], 400);
+        }
+
+        // Construimos los parámetros de consulta
+        $queryParams = [
+            'plate_number' => $request->query('plate_number'),
+            'user_api_hash' => $this->apiHash,
+        ];
+
+        // Realizamos la solicitud GET
+        $response = $this->client->request('GET', $this->baseUri . 'get_device_by_plate_number', [
+            'query' => $queryParams,
+            'headers' => [
+                'Accept' => 'application/json',
+            ],
+        ]);
+
+        // Retornamos el cuerpo de la respuesta
+        return json_decode($response->getBody(), true);
+    }
 
     public function getDevices(Request $request)
     {

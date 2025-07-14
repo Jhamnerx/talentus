@@ -98,13 +98,10 @@ class Create extends Component
         $this->prepayments = collect();
     }
 
-
     public function render()
     {
         return view('livewire.admin.ventas.presupuestos.create');
     }
-
-
 
     public function updatedClienteId($value)
     {

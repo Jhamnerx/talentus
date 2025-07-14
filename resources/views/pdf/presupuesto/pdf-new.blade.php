@@ -317,7 +317,7 @@
                             @if ($presupuesto->descuento)
                                 <tr>
                                     <td>DESCUENTO:</td>
-                                    <td>S/. {{ number_format($presupuesto->descuento, 2) }}</td>
+                                    <td>S/. {{ number_format($presupuesto->descuento_soles, 2) }}</td>
                                 </tr>
                             @endif
                             <tr>

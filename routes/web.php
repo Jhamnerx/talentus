@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ExtrasController;
 use App\Http\Controllers\ConsultasController;
+use App\Http\Controllers\GpsWox\Api\GpsWoxApiController;
 use App\Http\Controllers\PlatBasicaController;
 use App\Http\Controllers\PlatPremiumController;
 use App\Http\Controllers\SolicitudesController;
@@ -52,3 +53,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('consulta/vehiculos', [Cons
 
 
 Route::get('consulta/cpe', [Testcontroller::class, 'cpe'])->name('consulta.cpe');
+
+Route::get('consultas/transmisiones', [ConsultasController::class, 'transmision'])->name('consulta.transmision');
