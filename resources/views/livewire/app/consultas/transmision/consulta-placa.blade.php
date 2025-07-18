@@ -10,7 +10,7 @@
                 </label>
                 <input type="text" wire:model="plate_number" id="plate_number"
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                    placeholder="Ej: T6G-611">
+                    placeholder="Ej: ABC-123">
             </div>
 
             <!-- Mensajes de error -->
