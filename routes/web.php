@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WebController;
 use App\Http\Controllers\ExtrasController;
 use App\Http\Controllers\ConsultasController;
+use App\Http\Controllers\ConsultaPlacaPdfController;
 use App\Http\Controllers\GpsWox\Api\GpsWoxApiController;
 use App\Http\Controllers\PlatBasicaController;
 use App\Http\Controllers\PlatPremiumController;
@@ -55,3 +56,6 @@ Route::middleware(['auth:sanctum', 'verified'])->get('consulta/vehiculos', [Cons
 Route::get('consulta/cpe', [Testcontroller::class, 'cpe'])->name('consulta.cpe');
 
 Route::get('consultas/transmisiones', [ConsultasController::class, 'transmision'])->name('consulta.transmision');
+
+// Ruta para mostrar PDF del acta desde la consulta de placa
+Route::get('consulta/acta-pdf/{acta}', [ConsultaPlacaPdfController::class, 'mostrarActaPdf'])->name('consulta.acta.pdf');

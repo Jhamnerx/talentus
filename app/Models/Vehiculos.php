@@ -107,7 +107,7 @@ class Vehiculos extends Model
     //Relacion muchos a ,muchos
     public function contratos()
     {
-        return $this->belongsToMany(Contratos::class);
+        return $this->belongsToMany(Contratos::class, 'detalle_contratos', 'vehiculos_id', 'contratos_id')->withTrashed();
     }
 
     //relacion uno a muchos

@@ -47,7 +47,17 @@ class ConsultaPlaca extends Component
                 $vehiculo = Vehiculos::where('placa', $this->plate_number)->first();
 
                 if ($vehiculo) {
-                    // Mantener los datos originales y agregar los datos del cliente
+                    // Obtener la última acta creada para este vehículo
+                    $ultima_acta = $vehiculo->actas()
+                        ->orderBy('created_at', 'desc')
+                        ->first();
+
+                    // Obtener todos los contratos del vehículo
+                    $contratos = $vehiculo->contratos()
+                        ->orderBy('created_at', 'desc')
+                        ->get();
+
+                    // Mantener los datos originales y agregar los datos del cliente y acta
                     foreach ($this->devices as &$group) {
                         foreach ($group['items'] as &$device) {
                             if (isset($device['device_data'])) {
@@ -55,6 +65,38 @@ class ConsultaPlaca extends Component
                                 $device['device_data']['object_owner'] = $vehiculo->cliente->razon_social;
                                 $device['device_data']['owner_tipo_documento'] = $vehiculo->cliente->tipo_documento_id == '6' ? 'RUC' : 'DNI';
                                 $device['device_data']['owner_document_number'] = $vehiculo->cliente->tipo_documento_id == '6' ? $vehiculo->cliente->numero_documento : 'N/A';
+
+                                // Agregar datos de la última acta si existe
+                                if ($ultima_acta) {
+                                    $device['device_data']['ultima_acta'] = [
+                                        'numero' => $ultima_acta->numero ?? 'N/A',
+                                        'fecha_creacion' => $ultima_acta->created_at->format('d/m/Y H:i:s'),
+                                        'estado' => $ultima_acta->estado ?? 'N/A',
+                                        'tipo' => $ultima_acta->tipo ?? 'N/A',
+                                        'id' => $ultima_acta->id,
+                                        'codigo' => $ultima_acta->codigo ?? 'N/A'
+                                    ];
+                                } else {
+                                    $device['device_data']['ultima_acta'] = null;
+                                }
+
+                                // Agregar datos de contratos si existen
+                                if ($contratos->count() > 0) {
+                                    $device['device_data']['contratos'] = $contratos->map(function ($contrato) {
+                                        return [
+                                            'id' => $contrato->id,
+                                            'numero' => $contrato->numero ?? 'N/A',
+                                            'unique_hash' => $contrato->unique_hash,
+                                            'fecha_inicio' => $contrato->fecha ? $contrato->fecha->format('d/m/Y') : 'N/A',
+                                            'fecha_fin' => $contrato->fecha_emision ? $contrato->fecha_emision->format('d/m/Y') : 'N/A',
+                                            'estado' => $contrato->estado ? 'activo' : 'inactivo',
+                                            'tipo' => $contrato->tipo ?? 'N/A',
+                                            'monto' => $contrato->detalle->first()->plan ?? 'N/A'
+                                        ];
+                                    })->toArray();
+                                } else {
+                                    $device['device_data']['contratos'] = [];
+                                }
                             }
                         }
                     }
@@ -75,6 +117,33 @@ class ConsultaPlaca extends Component
         $this->devices = [];
         $this->error = '';
         $this->loading = false;
+    }
+
+    public function verActaPDF($actaId)
+    {
+        try {
+            $acta = \App\Models\Actas::findOrFail($actaId);
+
+            // Usar el método getPDFData() que ya retorna el PDF renderizado
+            return $acta->getPDFData();
+        } catch (\Exception $e) {
+            $this->error = 'Error al mostrar el PDF: ' . $e->getMessage();
+            return null;
+        }
+    }
+
+    public function verContratoPDF($contratoId)
+    {
+        try {
+            $contrato = \App\Models\Contratos::findOrFail($contratoId);
+
+            // Si el contrato tiene un método para generar PDF, usarlo
+            // Sino, redirigir a una ruta específica de contratos
+            return redirect()->route('admin.pdf.contrato', ['contrato' => $contrato->id]);
+        } catch (\Exception $e) {
+            $this->error = 'Error al mostrar el contrato: ' . $e->getMessage();
+            return null;
+        }
     }
 
     public function render()

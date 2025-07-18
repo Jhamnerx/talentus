@@ -20,7 +20,7 @@
                 <div class="container mx-auto px-4 text-gray-800">
                     <div class="block-title text-center">
                         <div class="block-title__line line-two"></div>
-                        <h3>CONSULTA TRANMISION</span></h3>
+                        <h3>CONSULTA TRANSMISIÓN</span></h3>
                     </div>
                     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
                         <div class="bg-white w-full rounded-2xl shadow-xl px-8 py-12 sm:px-6 lg:px-8">
