@@ -71,6 +71,9 @@ class ConsultaPlaca extends Component
                                     $device['device_data']['ultima_acta'] = [
                                         'numero' => $ultima_acta->numero ?? 'N/A',
                                         'fecha_creacion' => $ultima_acta->created_at->format('d/m/Y H:i:s'),
+                                        'fecha_instalacion' => $ultima_acta->fecha_instalacion ? $ultima_acta->fecha_instalacion->format('d/m/Y') : 'N/A',
+                                        'inicio_cobertura' => $ultima_acta->inicio_cobertura ? $ultima_acta->inicio_cobertura->format('d/m/Y') : 'N/A',
+                                        'fin_cobertura' => $ultima_acta->fin_cobertura ? $ultima_acta->fin_cobertura->format('d/m/Y') : 'N/A',
                                         'estado' => $ultima_acta->estado ?? 'N/A',
                                         'tipo' => $ultima_acta->tipo ?? 'N/A',
                                         'id' => $ultima_acta->id,

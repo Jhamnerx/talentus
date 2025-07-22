@@ -227,16 +227,13 @@
                                         @if (isset($device['device_data']['ultima_acta']) && $device['device_data']['ultima_acta'])
                                             <div class="bg-white rounded p-2 border border-gray-200 sm:col-span-2">
                                                 <p class="text-xs font-medium text-gray-600 mb-1">Última Acta</p>
-                                                <div class="space-y-2">
+                                                <div class="space-y-3">
                                                     <div
                                                         class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                                                         <div>
                                                             <p class="text-sm font-semibold text-gray-900">
                                                                 Nº
                                                                 {{ $device['device_data']['ultima_acta']['numero'] }}
-                                                            </p>
-                                                            <p class="text-xs text-gray-600">
-                                                                {{ $device['device_data']['ultima_acta']['fecha_creacion'] }}
                                                             </p>
 
                                                         </div>
@@ -253,6 +250,34 @@
                                                                 </svg>
                                                                 Ver PDF
                                                             </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Fechas adicionales del acta -->
+                                                    <div
+                                                        class="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-gray-200">
+                                                        <div class="bg-blue-50 rounded p-2">
+                                                            <p class="text-xs font-medium text-blue-700 mb-1">Fecha de
+                                                                Instalación</p>
+                                                            <p class="text-sm font-semibold text-blue-900">
+                                                                {{ $device['device_data']['ultima_acta']['fecha_instalacion'] ?? 'N/A' }}
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="bg-green-50 rounded p-2">
+                                                            <p class="text-xs font-medium text-green-700 mb-1">Inicio
+                                                                de Cobertura</p>
+                                                            <p class="text-sm font-semibold text-green-900">
+                                                                {{ $device['device_data']['ultima_acta']['inicio_cobertura'] ?? 'N/A' }}
+                                                            </p>
+                                                        </div>
+
+                                                        <div class="bg-orange-50 rounded p-2">
+                                                            <p class="text-xs font-medium text-orange-700 mb-1">Fin de
+                                                                Cobertura</p>
+                                                            <p class="text-sm font-semibold text-orange-900">
+                                                                {{ $device['device_data']['ultima_acta']['fin_cobertura'] ?? 'N/A' }}
+                                                            </p>
                                                         </div>
                                                     </div>
                                                 </div>
