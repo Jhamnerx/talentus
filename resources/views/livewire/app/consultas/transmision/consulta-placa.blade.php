@@ -80,9 +80,9 @@
 
                                         // Verificar si contiene texto "desactivado"
                                         if (stripos($device['time'], 'desactivado') !== false) {
-                                            $deviceStatus = 'desactivado';
+                                            $deviceStatus = 'sin_servicio';
                                             $statusColor = 'bg-gray-500';
-                                            $statusText = 'DESACTIVADO';
+                                            $statusText = 'SIN SERVICIO';
                                             $statusDot = 'bg-gray-200';
                                         } else {
                                             // Intentar parsear la fecha

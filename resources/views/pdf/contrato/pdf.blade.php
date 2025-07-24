@@ -18,10 +18,10 @@
                 body:before {
                     display: block;
                     position: fixed;
-                    top: -65px;
-                    right: -28px;
-                    bottom: -84px;
-                    left: -82px;
+                    top: -50px;
+                    right: -20px;
+                    bottom: -70px;
+                    left: -65px;
                     background-image: url("data:image/jpeg;base64,{{ $fondo }}");
                     background-size: 100%;
                     background-repeat: no-repeat;
@@ -38,10 +38,10 @@
             body:before {
                 display: block;
                 position: fixed;
-                top: -65px;
-                right: -28px;
-                bottom: -84px;
-                left: -82px;
+                top: -50px;
+                right: -20px;
+                bottom: -70px;
+                left: -65px;
                 /* opacity: .2; */
                 content: "";
                 z-index: -1000;
@@ -67,7 +67,7 @@
                     <b>CONTRATO DE PRESTACIÓN DE SERVICIO.</b>
                 </h2>
 
-                <p>
+                <p style="font-size: 12px;">
                     Conste por el presente documento, el contrato de prestación de servicio de rastreo y
                     monitoreo satelital, que celebran de una parte <b>{{ $contrato->cliente->razon_social }}</b>, con
                     DNI/RUC N° {{ $contrato->cliente->numero_documento }},
@@ -106,7 +106,7 @@
 
                 </h2>
 
-                <p>
+                <p style="font-size: 12px;">
                     <b>1.1.- EL CLIENTE</b>
                     requiere de una empresa especializada en servicios de rastreo y monitoreo satelital para la
                     ubicación
@@ -115,7 +115,7 @@
                     pasajeros y/o servicios particulares.
                 </p>
 
-                <p>
+                <p style="font-size: 12px;">
                     <b>1.2.- TALENTUS TECHNOLOGY E.I.R.L.</b>
                     es una persona jurídica debidamente constituida, registrada y reconocida como tal, especializada en
                     tecnología, con equipos de Tecnología GPS (Global Positioning System), homologados por el Ministerio
@@ -142,7 +142,7 @@
                         <u>Cláusula segunda: Objeto del contrato</u>
                     </b><b>.</b>
                 </h2>
-                <p>
+                <p style="font-size: 12px;">
                     <b>2.1.- </b>La <b></b>cobertura del servicio,<b></b>que <b>TALENTUS TECHNOLOGY
                         E.I.R.L.</b>&nbsp;brindará a&nbsp;<b>EL CLIENTE</b>&nbsp;por el servicio descrito en la
                     cláusula
@@ -178,7 +178,7 @@
                     de chip.
                     <br>
                 </p>
-                <p class="padding-4">
+                <p class="padding-4" style="font-size: 12px;">
                     <b>2.2.- TALENTUS TECHNOLOGY E.I.R.L.</b>&nbsp;no se responsabiliza por los eventuales
                     cortes en
                     la
@@ -201,7 +201,7 @@
                     reportes, ya que la data almacenada son 3 meses como máximo a fin de evitar la pérdida de
                     información.
                 </p>
-                <p>
+                <p style="font-size: 12px;">
                     <b>2.3.- TALENTUS TECHNOLOGY E.I.R.L.</b>, declara contar con una Central de Operaciones,
                     Monitoreo
                     y
@@ -227,7 +227,7 @@
                         <u>Cláusula tercera: Contraprestación</u>
                     </b><b>.</b>
                 </h2>
-                <p>
+                <p style="font-size: 12px;">
                     <b>3.1.-</b> En virtud del presente contrato, EL CLIENTE se obliga ante EL LOCADOR a pagar
                     en
                     calidad de contraprestación el monto
@@ -265,15 +265,15 @@
 
                                     @for ($i = 0; $i < $contrato->detalle->count(); $i++)
                                         <tr>
-                                            <td class="tabla-vehiculos" style="font-size: 10px"> {{ $i + 1 }}
+                                            <td class="tabla-vehiculos" style="font-size: 8px"> {{ $i + 1 }}
                                             </td>
-                                            <td class="tabla-vehiculos" style="font-size: 10px">
+                                            <td class="tabla-vehiculos" style="font-size: 8px">
                                                 {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                             </td>
-                                            <td class="tabla-vehiculos" style="font-size: 12px">
+                                            <td class="tabla-vehiculos" style="font-size: 10px">
                                                 {{ $contrato->detalle[$i]->vehiculos->placa }}
                                             </td>
-                                            <td class="tabla-vehiculos" style="font-size: 12px">
+                                            <td class="tabla-vehiculos" style="font-size: 10px">
                                                 {{ $contrato->detalle[$i]->plan }}
                                             </td>
                                             {{-- <td class="tabla-vehiculos" style="font-size: 12px">
@@ -314,15 +314,15 @@
 
                                         @for ($i = 0; $i < 5; $i++)
                                             <tr>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $i + 1 }} </td>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->plan }}
                                                 </td>
                                             </tr>
@@ -351,15 +351,15 @@
 
                                         @for ($i = 5; $i < $contrato->detalle->count(); $i++)
                                             <tr>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $i + 1 }} </td>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->plan }}
                                                 </td>
 
@@ -396,15 +396,15 @@
 
                                         @for ($i = 0; $i < 10; $i++)
                                             <tr>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $i + 1 }} </td>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 11px">
+                                                <td class="tabla-vehiculos" style="font-size: 9px">
                                                     {{ $contrato->detalle[$i]->plan }}
                                                 </td>
 
@@ -435,15 +435,15 @@
 
                                         @for ($i = 10; $i < $contrato->detalle->count(); $i++)
                                             <tr>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $i + 1 }} </td>
-                                                <td class="tabla-vehiculos" style="font-size: 10px">
+                                                <td class="tabla-vehiculos" style="font-size: 8px">
                                                     {{ $contrato->detalle[$i]->vehiculos->tipo }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 12px">
+                                                <td class="tabla-vehiculos" style="font-size: 10px">
                                                     {{ $contrato->detalle[$i]->vehiculos->placa }}
                                                 </td>
-                                                <td class="tabla-vehiculos" style="font-size: 11px">
+                                                <td class="tabla-vehiculos" style="font-size: 9px">
                                                     {{ $contrato->detalle[$i]->plan }}
                                                 </td>
 
