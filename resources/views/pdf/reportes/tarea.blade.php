@@ -256,6 +256,86 @@
             width: 200px;
             max-width: 200px;
         }
+
+        /* Estilos para contenido de CKEditor */
+        .formatted-content {
+            font-family: Arial, sans-serif;
+            font-size: 0.875rem;
+            color: #333;
+            line-height: 1.5;
+            margin: 1rem 0;
+        }
+
+        /* Párrafos */
+        .formatted-content p {
+            margin: 0.5rem 0;
+            line-height: 1.5;
+        }
+
+        /* Párrafos vacíos con &nbsp; */
+        .formatted-content p:empty,
+        .formatted-content p:contains('&nbsp;') {
+            height: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        /* Elementos strong */
+        .formatted-content strong {
+            font-weight: bold;
+        }
+
+        /* Figure table (contenedor de CKEditor) */
+        .formatted-content figure.table {
+            margin: 1rem auto !important;
+            display: block;
+            text-align: center;
+            width: 400px !important;
+        }
+
+        /* Tablas dentro de figure */
+        .formatted-content figure.table table {
+            width: 400px !important;
+            border-collapse: collapse;
+            margin: 0 auto;
+            background-color: white !important;
+            border: 1px solid black !important;
+        }
+
+        /* Todas las tablas */
+        .formatted-content table {
+            border-collapse: collapse;
+            background-color: white !important;
+            border: 1px solid black !important;
+        }
+
+        /* Celdas de encabezado */
+        .formatted-content th {
+            border: 1px solid black !important;
+            padding: 0.5rem;
+            background-color: white !important;
+            font-weight: bold;
+            text-align: center !important;
+        }
+
+        /* Celdas de datos */
+        .formatted-content td {
+            border: 1px solid black !important;
+            padding: 0.5rem;
+            background-color: white !important;
+        }
+
+        /* Párrafos dentro de celdas */
+        .formatted-content th p,
+        .formatted-content td p {
+            margin: 0;
+            text-align: inherit;
+        }
+
+        /* Texto centrado específico */
+        .formatted-content [style*="text-align:center"],
+        .formatted-content [style*="text-align: center"] {
+            text-align: center !important;
+        }
     </style>
 </head>
 
@@ -446,7 +526,9 @@
 
     @if ($tarea->informe->message)
         <div class="page-break"></div>
-        {!! $tarea->informe ? html_entity_decode($tarea->informe->message) : '' !!}
+        <div class="formatted-content" style="text-align: center;">
+            {!! $tarea->informe ? html_entity_decode($tarea->informe->message) : '' !!}
+        </div>
     @endif
 
 </body>
