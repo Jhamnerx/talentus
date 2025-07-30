@@ -93,14 +93,14 @@
 
 
     <script>
-        window.addEventListener('set-data', event => {
-            console.log(event.detail);
-            ck.setData(event.detail[0].data);
-        })
+        // window.addEventListener('set-data', event => {
+        //     console.log(event.detail);
+        //     ck.setData(event.detail[0].data);
+        // })
 
         Livewire.on('set-data', (event) => {
 
-            console.log(event);
+            ck.setData(event.data);
 
         });
     </script>
