@@ -94,7 +94,7 @@
 
     <script>
         window.addEventListener('set-data', event => {
-            console.log(event);
+            console.log(event.detail);
             ck.setData(event.detail.data);
 
         })
