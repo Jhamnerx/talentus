@@ -25,7 +25,7 @@ class InformTask extends Component
     {
         $this->tarea = $tarea;
         $this->openModal = true;
-        $this->dispatch('set-data', ['data' => $tarea->informe ? $tarea->informe->message : '']);
+        $this->dispatch('set-data', data: $tarea->informe ? $tarea->informe->message : '');
     }
 
     public function closeModal()
