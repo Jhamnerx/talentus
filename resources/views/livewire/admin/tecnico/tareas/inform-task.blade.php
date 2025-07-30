@@ -94,9 +94,15 @@
 
     <script>
         window.addEventListener('set-data', event => {
-            console.log(event.detail[0].data);
+            console.log(event.detail);
             ck.setData(event.detail[0].data);
         })
+
+        Livewire.on('set-data', (event) => {
+
+            console.log(event);
+
+        });
     </script>
 
 
