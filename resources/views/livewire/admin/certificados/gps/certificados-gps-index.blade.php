@@ -273,7 +273,15 @@
                                                                             </th>
 
                                                                             <td class="px-6 py-4">
-                                                                                {{ $accesorio }}
+                                                                                @if (is_array($accesorio) && isset($accesorio['nombre']) && $accesorio['nombre'] === 'BUZZER')
+                                                                                    {{ $accesorio['nombre'] }}
+                                                                                    @if (!empty($accesorio['detalle']))
+                                                                                        <br><small
+                                                                                            class="text-gray-500">({{ $accesorio['detalle'] }})</small>
+                                                                                    @endif
+                                                                                @else
+                                                                                    {{ is_array($accesorio) ? $accesorio['nombre'] : $accesorio }}
+                                                                                @endif
                                                                             </td>
 
                                                                         </tr>
