@@ -15,6 +15,7 @@ class Edit extends Component
 
     public Certificados $certificado;
     public $numero, $vehiculos_id, $fecha_instalacion, $fin_cobertura, $ciudades_id, $fondo = true, $sello = true, $accesorios;
+    public $buzzer_detalle = '';
 
 
     public function render()
@@ -38,6 +39,7 @@ class Edit extends Component
         $this->fin_cobertura = null;
         $this->ciudades_id = null;
         $this->accesorios = [];
+        $this->buzzer_detalle = '';
         $this->fondo = 1;
         $this->sello = 1;
     }
@@ -52,7 +54,21 @@ class Edit extends Component
         $this->numero = $certificado->numero;
         $this->vehiculos_id = $certificado->vehiculos_id;
         $this->ciudades_id = $certificado->ciudades_id;
-        $this->accesorios = $certificado->accesorios;
+
+        // Procesar accesorios para extraer array simple y detalle de buzzer
+        $accesoriosArray = [];
+        $this->buzzer_detalle = '';
+
+        foreach ($certificado->accesorios as $accesorio) {
+            if (is_array($accesorio) && isset($accesorio['nombre']) && $accesorio['nombre'] === 'BUZZER') {
+                $accesoriosArray[] = 'BUZZER';
+                $this->buzzer_detalle = $accesorio['detalle'] ?? '';
+            } else {
+                $accesoriosArray[] = is_array($accesorio) ? $accesorio['nombre'] : $accesorio;
+            }
+        }
+
+        $this->accesorios = $accesoriosArray;
         $this->fondo = $certificado->fondo;
         $this->sello = $certificado->sello;
         $this->fecha_instalacion = $certificado->fecha_instalacion->format('Y-m-d');
@@ -71,6 +87,19 @@ class Edit extends Component
         try {
             $codigo = $ciudad->prefijo . "-" . $data["numero"];
 
+            // Procesar accesorios para incluir detalle de buzzer
+            $accesoriosProcessed = [];
+            foreach ($this->accesorios as $accesorio) {
+                if ($accesorio === 'BUZZER' && !empty($this->buzzer_detalle)) {
+                    $accesoriosProcessed[] = [
+                        'nombre' => 'BUZZER',
+                        'detalle' => $this->buzzer_detalle
+                    ];
+                } else {
+                    $accesoriosProcessed[] = $accesorio;
+                }
+            }
+
             $this->certificado->update(
                 [
                     'numero' => $data["numero"],
@@ -83,7 +112,7 @@ class Edit extends Component
                     'vehiculos_id' => $data["vehiculos_id"],
                     'ciudades_id' => $data["ciudades_id"],
                     'codigo' =>  $codigo,
-                    'accesorios' => $this->accesorios,
+                    'accesorios' => $accesoriosProcessed,
 
                 ]
             );

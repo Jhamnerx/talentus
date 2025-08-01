@@ -19,6 +19,7 @@ class Save extends Component
     public $fecha_instalacion;
     public $fin_cobertura;
     public $accesorios = [];
+    public $buzzer_detalle = '';
 
 
     public function render()
@@ -61,6 +62,19 @@ class Save extends Component
         try {
             $codigo = $ciudad->prefijo . "-" . $data["numero"];
 
+            // Procesar accesorios para incluir detalle de buzzer
+            $accesoriosProcessed = [];
+            foreach ($this->accesorios as $accesorio) {
+                if ($accesorio === 'BUZZER' && !empty($this->buzzer_detalle)) {
+                    $accesoriosProcessed[] = [
+                        'nombre' => 'BUZZER',
+                        'detalle' => $this->buzzer_detalle
+                    ];
+                } else {
+                    $accesoriosProcessed[] = $accesorio;
+                }
+            }
+
             $certificado = Certificados::create(
 
                 [
@@ -74,7 +88,7 @@ class Save extends Component
                     'vehiculos_id' => $data["vehiculos_id"],
                     'ciudades_id' => $data["ciudades_id"],
                     'codigo' =>  $codigo,
-                    'accesorios' => $this->accesorios,
+                    'accesorios' => $accesoriosProcessed,
 
 
 
@@ -117,6 +131,7 @@ class Save extends Component
         $this->fin_cobertura = null;
         $this->ciudades_id = null;
         $this->accesorios = [];
+        $this->buzzer_detalle = '';
         $this->fondo = 1;
         $this->sello = 1;
     }

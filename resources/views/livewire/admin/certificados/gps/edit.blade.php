@@ -10,8 +10,8 @@
         <div class="col-span-12 sm:col-span-6">
 
             <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculos_id"
-                placeholder="Selecciona una placa" option-description="option_description"
-                :async-data="route('api.vehiculos.index')" option-label="placa" option-value="id" />
+                placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"
+                option-label="placa" option-value="id" />
 
         </div>
         <div class="col-span-12 sm:col-span-4">
@@ -29,8 +29,7 @@
         <div class="col-span-12 sm:col-span-4">
 
             <x-form.select label="Selecciona una Ciudad:" wire:model.live="ciudades_id"
-                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre"
-                option-value="id" />
+                placeholder="Selecciona una ciudad" :async-data="route('api.ciudades.index')" option-label="nombre" option-value="id" />
 
         </div>
 
@@ -123,11 +122,19 @@
                 </div>
             </div>
 
+            <!-- Campo de detalle para BUZZER -->
+            @if (is_array($accesorios) && in_array('BUZZER', $accesorios))
+                <div class="col-span-12 mt-2">
+                    <x-form.input wire:model.live="buzzer_detalle" label="Detalle del BUZZER:"
+                        placeholder="Especifique el detalle del buzzer..." />
+                </div>
+            @endif
+
 
             @error('accesorios')
-            <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
-                {{ $message }}
-            </p>
+                <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
+                    {{ $message }}
+                </p>
             @enderror
 
         </div>

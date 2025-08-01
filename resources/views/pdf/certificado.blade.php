@@ -363,7 +363,27 @@
             @if (!$certificado->accesorios->isEmpty())
                 <tr>
                     <td>Accesorios</td>
-                    <td>: {{ implode(', ', $certificado->accesorios->toArray()) }}</td>
+                    <td>:
+                        @php
+                            $accesoriosTexto = [];
+                            foreach ($certificado->accesorios as $accesorio) {
+                                if (
+                                    is_array($accesorio) &&
+                                    isset($accesorio['nombre']) &&
+                                    $accesorio['nombre'] === 'BUZZER'
+                                ) {
+                                    $buzzerTexto = 'BUZZER';
+                                    if (!empty($accesorio['detalle'])) {
+                                        $buzzerTexto .= ' (' . $accesorio['detalle'] . ')';
+                                    }
+                                    $accesoriosTexto[] = $buzzerTexto;
+                                } else {
+                                    $accesoriosTexto[] = is_array($accesorio) ? $accesorio['nombre'] : $accesorio;
+                                }
+                            }
+                        @endphp
+                        {{ implode(', ', $accesoriosTexto) }}
+                    </td>
                 </tr>
             @endif
             <tr>
