@@ -1048,7 +1048,114 @@
                     </div>
                 </div>
             </div>
+            {{-- CERIFICADO ANTIFATIGA --}}
+            <div class="flex flex-col space-y-1">
+                <p wire:click="checkCategory('certificados-antifatiga')"
+                    class="text-sm text-gray-500 border-b border-gray-200 pb-1 mb-2 cursor-pointer">
+                    Certificado Antifatiga
+                </p>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="ver-certificados-antifatiga" id="ver-certificados-antifatiga" variant="indigo"
+                                type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="ver-certificados-antifatiga" class="font-medium text-gray-600 cursor-pointer">
+                                ver cert. antifatiga
+                            </label>
 
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="crear-certificados-antifatiga" id="crear-certificados-antifatiga"
+                                variant="indigo" type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="crear-certificados-antifatiga"
+                                class="font-medium text-gray-600 cursor-pointer">
+                                crear cert. antifatiga
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="editar-certificados-antifatiga" id="editar-certificados-antifatiga"
+                                variant="indigo" type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="editar-certificados-antifatiga"
+                                class="font-medium text-gray-600 cursor-pointer">
+                                editar cert. antifatiga
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="descargar-certificados-antifatiga" id="descargar-certificados-antifatiga"
+                                variant="indigo" type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="descargar-certificados-antifatiga"
+                                class="font-medium text-gray-600 cursor-pointer">
+                                descargar cert. antifatiga
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="enviar-certificados-antifatiga" id="enviar-certificados-antifatiga"
+                                variant="indigo" type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="enviar-certificados-antifatiga"
+                                class="font-medium text-gray-600 cursor-pointer">
+                                enviar cert. antifatiga
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="flex">
+                    <div class="relative flex items-start" variant="indigo">
+                        <div class="flex items-center h-5">
+                            <input name="permission[]" wire:model.live="permission"
+                                value="eliminar-certificados-antifatiga" id="eliminar-certificados-antifatiga"
+                                variant="indigo" type="checkbox"
+                                class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="eliminar-certificados-antifatiga"
+                                class="font-medium text-gray-600 cursor-pointer">
+                                eliminar cert. antifatiga
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
             {{-- ADMIN PERMISOS --}}
             <div class="flex flex-col space-y-1">
                 <p wire:click="checkCategory('solicitudes')"
@@ -1058,8 +1165,9 @@
                 <div class="flex">
                     <div class="relative flex items-start" variant="indigo">
                         <div class="flex items-center h-5">
-                            <input name="permission[]" wire:model.live="permission" value="admin.solicitudes.index"
-                                id="admin.solicitudes.index" variant="indigo" type="checkbox"
+                            <input name="permission[]" wire:model.live="permission"
+                                value="admin.solicitudes.index" id="admin.solicitudes.index" variant="indigo"
+                                type="checkbox"
                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                         </div>
                         <div class="ml-3 text-sm">
@@ -1074,12 +1182,13 @@
                     <div class="relative flex items-start" variant="indigo">
                         <div class="flex items-center h-5">
                             <input name="permission[]" wire:model.live="permission"
-                                value="admin.solicitudes.finalize" id="admin.solicitudes.finalize" variant="indigo"
-                                type="checkbox"
+                                value="admin.solicitudes.finalize" id="admin.solicitudes.finalize"
+                                variant="indigo" type="checkbox"
                                 class="w-4 h-4 border-gray-300 rounded cursor-pointer text-indigo-600 focus:ring-indigo-500">
                         </div>
                         <div class="ml-3 text-sm">
-                            <label for="admin.solicitudes.finalize" class="font-medium text-gray-600 cursor-pointer">
+                            <label for="admin.solicitudes.finalize"
+                                class="font-medium text-gray-600 cursor-pointer">
                                 Finalizar solicitud
                             </label>
 
