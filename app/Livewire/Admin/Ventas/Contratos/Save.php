@@ -66,7 +66,7 @@ class Save extends Component
             $this->items[$vehiculo->placa] = [
                 'vehiculos_id' => $vehiculo->id,
                 'placa' => $vehiculo->placa,
-                'plan' => 30
+                'plan' => 35
             ];
         }
     }
