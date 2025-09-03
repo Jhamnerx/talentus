@@ -309,7 +309,7 @@
                 </div>
                 <div class="medium-4 large-offset-3 columns totals">
                     <table>
-                        <tbody>
+                        {{-- <tbody>
                             <tr>
                                 <td>SUB TOTAL:</td>
                                 <td>S/. {{ number_format($presupuesto->sub_total_soles, 2) }}</td>
@@ -331,7 +331,7 @@
                                 <td>Monto Total:</td>
                                 <td>S/. {{ number_format($presupuesto->total_soles, 2) }}</td>
                             </tr>
-                        </tfoot>
+                        </tfoot> --}}
                     </table>
                 </div>
                 <div class="medium-4 large-offset-3 columns totals">

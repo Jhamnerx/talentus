@@ -37,7 +37,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->job(new CheckDetalleCobros)->dailyAt('08:50');
         //$schedule->job(new CheckDetalleCobros)->everyMinute();
         $schedule->command('activitylog:clean')->daily();
-        $schedule->job(new checkMantenimientoVehiculos)->daily();
+        //$schedule->job(new checkMantenimientoVehiculos)->daily();
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
         $schedule->command('telescope:prune')->daily();
     })
