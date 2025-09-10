@@ -91,7 +91,7 @@ class VentasExportSimple extends \PhpOffice\PhpSpreadsheet\Cell\StringValueBinde
             $venta->sub_total,
             $venta->igv,
             (float) $venta->total, // Convertimos explícitamente a float
-            $venta->divisa == 'PEN ' ? 'SOLES' : 'DOLARES',
+            $venta->divisa == 'PEN' ? 'SOLES' : 'DOLARES',
             $venta->estado->name,
             $venta->pago_estado == 'UNPAID' ? 'PENDIENTE' : 'PAGADO',
             $venta->user->name,
