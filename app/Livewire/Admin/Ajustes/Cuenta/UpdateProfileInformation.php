@@ -18,15 +18,15 @@ class UpdateProfileInformation extends Component
         'render' => 'render'
     ];
 
-    public function mount(){
+    public function mount()
+    {
 
         $this->state = Auth::user()->withoutRelations()->toArray();
     }
-    
+
     public function render()
     {
         return view('livewire.admin.ajustes.cuenta.update-profile-information');
-        
     }
 
     public function updateProfileInformation(UpdatesUserProfileInformation $updater)
@@ -53,7 +53,6 @@ class UpdateProfileInformation extends Component
         Auth::user()->deleteProfilePhoto();
         $this->getUserProperty();
         $this->render();
-        
     }
     public function sendEmailVerification()
     {
@@ -67,7 +66,8 @@ class UpdateProfileInformation extends Component
         return Auth::user();
     }
 
-    public function openModalPassword(){
+    public function openModalPassword()
+    {
         $this->dispatch('openModalPassword');
     }
 }

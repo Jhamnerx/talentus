@@ -35,9 +35,6 @@ class VehiculosRequest extends FormRequest
             "color" => 'nullable',
             "motor" => 'nullable',
             "serie" => 'nullable',
-            "sim_card_id" => 'required',
-            "numero" =>
-            'required|unique:vehiculos,numero',
             "clientes_id"  => "required",
             "dispositivos_id" =>
             'nullable|unique:vehiculos',
@@ -50,10 +47,19 @@ class VehiculosRequest extends FormRequest
             // "dispositivos_id" => "required|unique:vehiculos",
 
         ];
-        if ($vehicle) {
 
+        // Solo validar sim_card_id y numero como requeridos si no se está editando
+        if (!$vehicle) {
+            $rules["sim_card_id"] = 'required';
+            $rules["numero"] = 'required|unique:vehiculos,numero';
+        } else {
+            // En modo edición, hacer estos campos opcionales
+            $rules["sim_card_id"] = 'nullable';
+            $rules["numero"] = 'nullable|unique:vehiculos,numero,' . $vehicle->id;
+        }
+
+        if ($vehicle) {
             $rules['placa'] = 'required|unique:vehiculos,placa,' . $vehicle->id;
-            $rules['numero'] = 'required|unique:vehiculos,numero,' . $vehicle->id;
             $rules['dispositivos_id'] = 'nullable|unique:vehiculos,dispositivos_id,' . $vehicle->id;
         }
         return $rules;
