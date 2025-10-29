@@ -224,88 +224,7 @@
 
             @if ($presupuesto->divisa == 'USD')
                 <div class="medium-3 columns bottom-left show-for-medium-up ">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><strong>Metodos de Pago:</strong> </th>
-                            </tr>
-                        </thead>
-                        @if ($plantilla->empresa_id == 1)
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p><strong>METODOS DE PAGO NACIONAL</strong></p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
-                                    </td>
-                                </tr>
-                                <tr>
 
-                                    <td>
-                                        <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25
-                                        </p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><strong>METODOS DE PAGO INTERNACIONAL</strong></p>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>CODIGO SWIF: BCONPEPL </strong>
-                                            CUENTA: 00110248 26 0200481886</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        @elseif ($plantilla->empresa_id == 2)
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p>KATARY SERVICIOS GENERALES</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><strong>BCP CTA CTE SOLES: </strong>245-2669042-0-66</p>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BCP CCI SOLES: </strong>00224500266904206691</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BCP CTA DOLARES: </strong>245-2663487-1-64 | CCI:
-                                            00224500266348716499</p>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>CODIGO SWIF: BCONPEPL </strong>
-                                            CUENTA: 00110248 26 0200481886</p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        @endif
-
-                    </table>
                 </div>
                 <div class="medium-4 large-offset-3 columns totals">
                     <table>
@@ -368,70 +287,7 @@
                 </div>
             @else
                 <div class="medium-6 columns bottom-left show-for-medium-up ">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th><strong>Metodos de Pago:</strong> </th>
-                            </tr>
-                        </thead>
-                        @if ($plantilla->empresa_id == 1)
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p><strong>BCP SOLES: </strong>245-2172979-0-27 | CCI: 00224500217297902795</p>
-                                    </td>
-                                </tr>
-                                <tr>
 
-                                    <td>
-                                        <p><strong>BCP USD: </strong>245-2126663-1-36 | CCI: 00224500216266313696</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BBVA: </strong>0011-0248-02-00393480 | CCI: 011-248-000200399480-25
-                                        </p>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        @elseif ($plantilla->empresa_id == 2)
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p>KATARY SERVICIOS GENERALES</p>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <p><strong>BCP CTA CTE SOLES: </strong>245-2669042-0-66</p>
-                                    </td>
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BCP CCI SOLES: </strong>00224500266904206691</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BCP CTA DOLARES: </strong>245-2663487-1-64</p>
-                                    </td>
-
-                                </tr>
-                                <tr>
-
-                                    <td>
-                                        <p><strong>BCP CCI DOLARES: </strong>00224500266348716499 </p>
-                                    </td>
-
-                                </tr>
-                            </tbody>
-                        @endif
-                    </table>
                 </div>
                 <div class="medium-6 large-offset-3 columns totals">
                     <table>
