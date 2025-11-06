@@ -93,6 +93,27 @@ class Index extends Component
         }
     }
 
+    public function consultarCdrPendiente(Ventas $venta)
+    {
+        try {
+            $api = new ApiFacturacion();
+            $mensaje = $api->consultarYActualizarCdr($venta);
+
+            if ($mensaje['fe_codigo_error']) {
+                $this->afterGetCdr($mensaje['fe_mensaje_error'], 'ERROR AL CONSULTAR CDR', 'error');
+            } else {
+                $this->afterGetCdr($mensaje['fe_mensaje_sunat'], 'CDR OBTENIDO Y ACTUALIZADO', 'success');
+            }
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR: ',
+                mensaje: $th->getMessage(),
+            );
+        }
+    }
+
     public function createXml(Ventas $venta)
     {
         try {

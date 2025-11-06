@@ -1320,4 +1320,95 @@ class ApiFacturacion extends Controller
 
         return $service->getStatus(...$arguments);
     }
+
+    /**
+     * Consultar y actualizar CDR de una venta cuando no se recibió inicialmente
+     * 
+     * @param Ventas $venta
+     * @return array
+     */
+    public function consultarYActualizarCdr(Ventas $venta): array
+    {
+        try {
+            $util = Util::getInstance();
+
+            // Consultar el CDR en SUNAT
+            $datos = [
+                'ruc' => $venta->plantilla->ruc ?? $util->plantilla->ruc,
+                'tipo' => $venta->tipo_comprobante_id,
+                'serie' => $venta->serie,
+                'correlativo' => $venta->correlativo,
+                'cdr' => true // Indica que queremos el CDR completo
+            ];
+
+            $result = $this->getStatusCdr($datos);
+
+            if (!$result) {
+                return [
+                    'fe_codigo_error' => 'ERROR',
+                    'fe_mensaje_error' => 'No se pudo consultar el CDR en SUNAT',
+                    'fe_mensaje_sunat' => null,
+                ];
+            }
+
+            // Si la consulta fue exitosa y hay CDR
+            if ($result->isSuccess() && $result->getCdrZip()) {
+                $cdr = $result->getCdrResponse();
+                $code = (int)$result->getCode();
+
+                // Recrear el objeto Invoice para obtener el nombre correcto
+                $invoice = $this->createObjetInvoice($venta, $venta->tipo_operacion);
+
+                // Guardar el CDR
+                $util->writeCdr($invoice, $result->getCdrZip());
+
+                // Determinar el estado
+                $fe_estado = '1'; // Aceptado por defecto
+                $estado_texto = 'ACEPTADA';
+
+                if ($code === 0) {
+                    $fe_estado = '1';
+                    $estado_texto = 'ACEPTADA';
+                } else if ($code >= 2000 && $code <= 3999) {
+                    $fe_estado = '2';
+                    $estado_texto = 'ACEPTADA CON OBSERVACIONES';
+                } else {
+                    $fe_estado = '3';
+                    $estado_texto = 'RECHAZADA';
+                }
+
+                // Actualizar el comprobante
+                $venta->update([
+                    'fe_estado' => $fe_estado,
+                    'estado_texto' => $estado_texto,
+                    'fe_codigo_error' => null,
+                    'fe_mensaje_error' => null,
+                    'fe_mensaje_sunat' => $cdr ? $cdr->getDescription() : $result->getMessage(),
+                    'nombre_cdr' => 'R-' . $invoice->getName(),
+                    'cdr_base64' => base64_encode($result->getCdrZip()),
+                    'hash_cdr' => $util->hash_cdr,
+                    'code_sunat' => $code,
+                ]);
+
+                return [
+                    'fe_codigo_error' => null,
+                    'fe_mensaje_error' => null,
+                    'fe_mensaje_sunat' => $cdr ? $cdr->getDescription() : $result->getMessage(),
+                ];
+            }
+
+            // Si no se encontró el CDR
+            return [
+                'fe_codigo_error' => 'CDR',
+                'fe_mensaje_error' => 'CDR no encontrado en SUNAT',
+                'fe_mensaje_sunat' => $result->getMessage(),
+            ];
+        } catch (\Throwable $th) {
+            return [
+                'fe_codigo_error' => 'EXCEPTION',
+                'fe_mensaje_error' => $th->getMessage(),
+                'fe_mensaje_sunat' => null,
+            ];
+        }
+    }
 }

@@ -49,7 +49,7 @@ class ConsultaCdr extends Component
         $api = new ApiFacturacion();
         // Assign the result to a variable
         $res = $api->getStatusCdr($datos);
-        dd($res->getCdrZip());
+
         $this->resultado = [
             'is_success' => $res->isSuccess(),
             'codigo' => $res->getCode(),

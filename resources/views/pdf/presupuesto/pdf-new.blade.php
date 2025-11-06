@@ -45,16 +45,18 @@
         }
 
         .contenedor-caracteristicas {
-            padding: 2rem, 2rem;
+            padding: 1rem 1.5rem;
             font-size: 12px;
             display: block;
             flex-wrap: wrap;
             overflow: hidden;
+            max-width: 95%;
+            box-sizing: border-box;
 
-            margin-top: 3.8rem;
-            margin-left: 2.8rem;
-            margin-right: 6rem;
-            margin-bottom: 3.8rem;
+            margin-top: 1rem;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 1rem;
             padding-bottom: 1rem;
         }
 
@@ -404,99 +406,81 @@
     @if ($presupuesto->features)
         <div class="page-break"></div>
 
-        <p style="text-align:center;"><strong>Ofrecemos una solución PERSONALIZABLE y ESCALABLE para la gestión de su
-                flota de vehículos, con las siguientes características.</strong></p>
+        <p style="text-align:center; margin-bottom: 20px; padding: 0;"><strong
+                style="font-size: 16px; color: #ed832f;">NUESTROS
+                PRINCIPALES DIFERENCIALES</strong></p>
         <div class="row contenedor-caracteristicas">
 
-            <p style="text-align:justify;"><span style="color:black;">1. Visualización en tiempo real de la ubicación de
-                    sus
-                    vehículos en todo el territorio nacional.</span></p>
-            <p style="text-align:justify;"><span style="color:black;">2. Transmisión/Actualización de la posición según
-                    plan
-                    seleccionado cuando el vehículo se encuentre en movimiento, en caso no haya eventos (1min).</span>
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Homologación oficial</span>
+                <span style="color:black;"> por SUTRAN, OSINERGMIN, MININTER y Cia Minera Buenaventura en Los Proyectos
+                    De Coimolache Y Minera La Zanja.</span>
             </p>
-            <p style="text-align:justify;"><span style="color:black;">3. Rutas recorridas por cada unidad.</span></p>
-            <p style="text-align:justify;"><span style="color:black;">4. Velocidad durante estos desplazamientos.</span>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Equipos europeos Teltonika,</span>
+                <span style="color:black;"> de alta precisión y durabilidad.</span>
             </p>
-            <p style="text-align:justify;"><span style="color:black;">5. Tiempo y lugar de cada una de sus
-                    paradas.</span>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Distribuidores oficiales Teltonika</span>
+                <span style="color:black;"> en Perú.</span>
             </p>
-            <p style="text-align:justify;"><span style="color:black;">6. <strong>Geocercas, sólo plataforma
-                        premium</strong></span></p>
-            <p style="text-align:justify;"><span style="color:black;">7. Alerta de Velocidad con Zumbador en Cabina
-                    (opcional)</span></p>
-            <p style="text-align:justify;"><span style="color:black;">8. Soporte técnico ilimitado para absolución de
-                    dudas
-                    y consultas en línea&nbsp;</span></p>
-            <p style="text-align:justify;"><span style="color:black;">9. Consulta de Reportes hasta 30 días de
-                    almacenamiento de la unidad.</span></p>
-            <p style="text-align:justify;"><span style="color:black;">10. Central de Monitoreo las 24 horas del día los
-                    365
-                    días del año.</span></p>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Soporte técnico inmediato y especializado,</span>
+                <span style="color:black;"> con atención en línea o presencial.</span>
+            </p>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Atención personalizada,</span>
+                <span style="color:black;"> orientada a las necesidades de cada cliente y tipo de flota.</span>
+            </p>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Reportes automatizados,</span>
+                <span style="color:black;"> generados a través de bots inteligentes o programación avanzada de la
+                    plataforma, configurados según los indicadores del cliente.</span>
+            </p>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Alertas y notificaciones inteligentes,</span>
+                <span style="color:black;"> en tiempo real, vía plataforma, correo o WhatsApp.</span>
+            </p>
+
+            <p
+                style="text-align:justify; margin-bottom: 10px; line-height: 1.5; padding-right: 0; word-wrap: break-word; overflow-wrap: break-word;">
+                <span style="color:#ed832f; font-weight: bold; font-size: 15px;">•</span>
+                <span style="color:black; font-weight: 600;">Monitoreo 24/7,</span>
+                <span style="color:black;"> con personal técnico calificado y respuesta rápida ante cualquier
+                    eventualidad.</span>
+            </p>
+
+            <p
+                style="text-align:justify; margin-top: 15px; padding: 10px; background-color: #f5f5f5; border-left: 4px solid #ed832f; line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word; margin-right: 0;">
+                <span style="color:black; font-style: italic;">Con <strong>Talentus Technology</strong>, no solo
+                    adquiere un GPS, sino una <strong>solución tecnológica completa, segura y certificada</strong>,
+                    respaldada por una empresa autorizada y homologada por las principales entidades del país.</span>
+            </p>
+
             <p>&nbsp;</p>
 
             <main id="main" class="site-main" style="margin-top: 20rem">
-                {{-- FMB920 --}}
-                <div class="ast-woocommerce-container">
-                    <div class="woocommerce-notices-wrapper"></div>
-                    <div id="product-312"
-                        class="ast-article-single ast-woo-product-no-review desktop-align-left tablet-align-left mobile-align-left product type-product post-312 status-publish first instock product_cat-feminine-deodorants has-post-thumbnail shipping-taxable purchasable product-type-simple">
-                        <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
-                            data-columns="4" style="opacity: 1; transition: opacity 0.25s ease-in-out 0s;">
-                            <figure class="image">
-                                <img width="350px"
-                                    src="data:image/jpeg;base64, {{ base64_encode(file_get_contents('images/fmb920-840xAuto.png')) }}"
-                                    alt="fmb920.png">
-                            </figure>
-                        </div>
-                        <div class="summary entry-summary">
-                            <span class="single-product-category">
-                                <a rel="tag">Teltonika</a>
-                            </span>
-                            <h1 class="product_title entry-title">FMB920 -2G</h1>
-                            <p class="price"><span class="woocommerce-Price-amount amount"><bdi><span
-                                            class="woocommerce-Price-currencySymbol">-
-                                        </span>Características</bdi></span></p>
 
-                            <div class="woocommerce-product-details__short-description">
-                                <ul style="list-style-type:disc;">
-                                    <li style="text-align:justify;"><span style="color:black;">Cobertura 2G</span>
-                                    </li>
-                                    <li style="text-align:justify;"><span style="color:black;">Memoria de
-                                            128mg.</span></li>
-                                    <li style="text-align:justify;"><span style="color:black;">Buzzer o pánico.</span>
-                                    </li>
-                                    <li style="text-align:justify;"><span style="color:black;">Condiciones de manejo:
-                                            Frenado
-                                            aceleración
-                                            y
-                                            giro brusco (en plataforma premium)</span></li>
-                                    <li style="text-align:justify;"><span style="color:black;">Detección de
-                                            Jumping</span>
-                                    </li>
-                                    <li style="text-align:justify;"><span style="color:black;">Diferentes tipos de
-                                            reportes:
-                                            (Paradas,
-                                            Alertas, kilometrajes, etc, en plataforma premium)</span></li>
-                                    <li style="text-align:justify;"><span style="color:black;">Geo cercas amarradas a
-                                            reglas
-                                            de velocidad
-                                            (en
-                                            plataforma premium)</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="product_meta">
-                                <span class="posted_in">Mas info:
-                                    <a href="https://talentustechnology.com/servicios/venta-de-equipos/"
-                                        rel="tag">
-                                        Click Aquí
-                                    </a>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {{-- FMC920 --}}
                 <div class="ast-woocommerce-container">

@@ -331,6 +331,16 @@
                                             aria-haspopup="true" @click="open = !open" type="button"
                                             :aria-expanded="open">
                                             <div class="flex items-center truncate">
+                                                @if($venta->fe_codigo_error == 'CDR')
+                                                {{-- ICONO AMARILLO/NARANJA PARA CDR PENDIENTE --}}
+                                                <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                                    <circle cx="32" cy="32" r="30" fill="#FFA500"/>
+                                                    <path d="M32 16c-1.5 0-2.5 1-2.5 2.5v16c0 1.5 1 2.5 2.5 2.5s2.5-1 2.5-2.5v-16c0-1.5-1-2.5-2.5-2.5z" fill="#FFF"/>
+                                                    <circle cx="32" cy="44" r="3" fill="#FFF"/>
+                                                    <text x="32" y="52" font-size="8" fill="#FFF" text-anchor="middle" font-weight="bold">CDR</text>
+                                                </svg>
+                                                @else
+                                                {{-- ICONO ROJO PARA RECHAZADO --}}
                                                 <svg class="w-8 h-8" id="icons" enable-background="new 0 0 64 64"
                                                     height="512" viewBox="0 0 64 64" width="512"
                                                     xmlns="http://www.w3.org/2000/svg">
@@ -377,6 +387,7 @@
                                                         </g>
                                                     </g>
                                                 </svg>
+                                                @endif
 
                                                 <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
                                                     viewBox="0 0 12 12">
@@ -392,12 +403,12 @@
                                             aria-labelledby="options-menu">
 
                                             <div
-                                                class="flex flex-nowrap px-4 py-2 text-sm hover:bg-gray-100 hover:text-gray-900">
+                                                class="flex flex-nowrap px-4 py-2 text-sm {{ $venta->fe_codigo_error == 'CDR' ? 'bg-orange-50' : '' }} hover:bg-gray-100 hover:text-gray-900">
                                                 <div class="w-full">
                                                     <span>COMPROBANTE: </span>
                                                 </div>
                                                 <div class="w-full">
-                                                    <x-form.badge indigo md label="{{ $venta->serie_correlativo }}" />
+                                                    <x-form.badge {{ $venta->fe_codigo_error == 'CDR' ? 'warning' : 'indigo' }} md label="{{ $venta->serie_correlativo }}" />
                                                 </div>
                                             </div>
 
@@ -407,7 +418,11 @@
                                                     <span>Estado:</span>
                                                 </div>
                                                 <div class="w-full">
-                                                    <x-form.badge indigo md label="{{ $venta->estado_texto }}" />
+                                                    @if($venta->fe_codigo_error == 'CDR')
+                                                        <x-form.badge warning md label="CDR PENDIENTE" />
+                                                    @else
+                                                        <x-form.badge indigo md label="{{ $venta->estado_texto }}" />
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -429,6 +444,19 @@
                                                     {{ $venta->fe_mensaje_error }}
                                                 </div>
                                             </div>
+
+                                            @if($venta->fe_codigo_error == 'CDR')
+                                            <div class="px-4 py-2 border-t border-slate-200">
+                                                <button 
+                                                    wire:click.prevent="consultarCdrPendiente({{ $venta->id }})" 
+                                                    class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-md">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                                    </svg>
+                                                    Consultar CDR en SUNAT
+                                                </button>
+                                            </div>
+                                            @endif
 
                                         </div>
                                     </div>
@@ -575,6 +603,20 @@
 
                                 {{-- RECHAZADO --}}
                                 @case('2')
+                                @if($venta->fe_codigo_error == 'CDR')
+                                {{-- BOTON NARANJA PARA CDR PENDIENTE --}}
+                                <button type="button" wire:click.prevent="consultarCdrPendiente({{ $venta->id }})" 
+                                    class="bg-white hover:bg-orange-50 rounded p-1 transition-colors" 
+                                    title="Click para consultar CDR en SUNAT">
+                                    <svg class="w-8 h-8" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                                        <circle cx="32" cy="32" r="30" fill="#FFA500"/>
+                                        <path d="M32 16c-1.5 0-2.5 1-2.5 2.5v16c0 1.5 1 2.5 2.5 2.5s2.5-1 2.5-2.5v-16c0-1.5-1-2.5-2.5-2.5z" fill="#FFF"/>
+                                        <circle cx="32" cy="44" r="3" fill="#FFF"/>
+                                        <text x="32" y="52" font-size="7" fill="#FFF" text-anchor="middle" font-weight="bold">CDR?</text>
+                                    </svg>
+                                </button>
+                                @else
+                                {{-- BOTON ROJO PARA RECHAZADO --}}
                                 <button type="button" class="bg-white cursor-default">
                                     <svg class="w-8 h-8" id="icons" enable-background="new 0 0 64 64" height="512"
                                         viewBox="0 0 64 64" width="512" xmlns="http://www.w3.org/2000/svg">
@@ -622,6 +664,7 @@
                                         </g>
                                     </svg>
                                 </button>
+                                @endif
                                 @break
 
                                 {{-- ACEPTADO PERO CON OBSERVACIONES --}}
