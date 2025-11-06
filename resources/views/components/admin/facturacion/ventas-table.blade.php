@@ -889,6 +889,21 @@
                                     @endif
                                     @endrole
 
+                                    @if($venta->tipo_comprobante_id != '02')
+                                    <x-dropdown.item 
+                                        x-on:click="$dispatch('open-modal-consulta-cdr')"
+                                        icon='magnifying-glass' 
+                                        label="Consultar CDR Manual" />
+                                    @endif
+
+                                    @if($venta->fe_codigo_error == 'CDR')
+                                    <x-dropdown.item 
+                                        wire:click.prevent='consultarCdrPendiente({{ $venta->id }})'
+                                        icon='arrow-path' 
+                                        label="Consultar y Actualizar CDR" 
+                                        separator />
+                                    @endif
+
                                     <x-dropdown.item icon='envelope-open' label="Enviar a cliente" />
 
                                     @if ($venta->tipo_comprobante_id == '01')
