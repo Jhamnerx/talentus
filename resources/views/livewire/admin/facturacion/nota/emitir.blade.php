@@ -50,7 +50,7 @@
                         <div class="col-span-12 md:col-span-6">
 
                             <x-form.datetime.picker label="Fecha de Emision:" wire:model.live="fecha_emision"
-                                :min="now()->subDays(1)" :max="now()" without-time parse-format="YYYY-MM-DD"
+                                :min="now()->subDays(3)" :max="now()" without-time parse-format="YYYY-MM-DD"
                                 display-format="DD-MM-YYYY" :clearable="false" />
 
                         </div>
