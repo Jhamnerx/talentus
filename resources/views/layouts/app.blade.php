@@ -14,11 +14,8 @@
     <!-- Styles -->
     @vite('resources/css/cliente.css')
 
-    @vite('resources/css/fontawesome-all.min.css')
-
-
     @livewireStyles
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="font-sans antialiased">

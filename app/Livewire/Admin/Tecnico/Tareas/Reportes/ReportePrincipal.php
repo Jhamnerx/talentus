@@ -117,7 +117,7 @@ class ReportePrincipal extends Component
                 ->setPaper('Legal', 'landscape')->output();
 
             return response()->streamDownload(
-                fn () => print($pdfContent),
+                fn() => print($pdfContent),
                 "reporte_tareas.pdf"
             );
         } catch (\Throwable $th) {

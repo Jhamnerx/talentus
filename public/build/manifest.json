@@ -1,22 +1,25 @@
 {
-  "_iziToast-BMxtxNnE.js": {
-    "file": "assets/iziToast-BMxtxNnE.js",
+  "_iziToast-BlSgvP1x.js": {
+    "file": "assets/iziToast-BlSgvP1x.js",
     "name": "iziToast"
   },
   "resources/css/app.css": {
-    "file": "assets/app-Bs4_gvhB.css",
+    "file": "assets/app-CnFzCCYH.css",
     "src": "resources/css/app.css",
-    "isEntry": true
+    "isEntry": true,
+    "name": "app",
+    "names": [
+      "app.css"
+    ]
   },
   "resources/css/cliente.css": {
-    "file": "assets/cliente-BA3k1leE.css",
+    "file": "assets/cliente-OVaOe9Z7.css",
     "src": "resources/css/cliente.css",
-    "isEntry": true
-  },
-  "resources/css/fontawesome-all.min.css": {
-    "file": "assets/fontawesome-all-BGoowDde.css",
-    "src": "resources/css/fontawesome-all.min.css",
-    "isEntry": true
+    "isEntry": true,
+    "name": "cliente",
+    "names": [
+      "cliente.css"
+    ]
   },
   "resources/fonts/fa-brands-400.eot": {
     "file": "assets/fa-brands-400-BniAJAuf.eot",
@@ -424,7 +427,7 @@
   },
   "resources/images/cliente/footer-bg-2-2.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/loader.png": {
     "file": "assets/loader-SKFHWXF3.png",
@@ -652,7 +655,7 @@
   },
   "resources/images/cliente/shapes/footer-bg-1-3.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/shapes/footer-bg-2-1.png": {
     "file": "assets/footer-bg-2-1-CEuuTWTS.png",
@@ -660,7 +663,7 @@
   },
   "resources/images/cliente/shapes/footer-bg-2-2.png": {
     "file": "assets/footer-bg-1-3-BJYKoBi1.png",
-    "src": "resources/images/cliente/shapes/footer-bg-1-3.png"
+    "src": "resources/images/cliente/footer-bg-2-2.png"
   },
   "resources/images/cliente/shapes/sec-stripe-1-1.png": {
     "file": "assets/sec-stripe-1-1-ezczVw_B.png",
@@ -912,15 +915,15 @@
   },
   "resources/images/slider-bg-1.png": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/slider/slider-bg.jpg": {
     "file": "assets/slider-bg-BDa6tSKo.jpg",
-    "src": "resources/images/slider-bg.jpg"
+    "src": "resources/images/slider-bg-1.png"
   },
   "resources/images/task-image-01.jpg": {
     "file": "assets/task-image-01-yEnpb4kW.jpg",
@@ -1147,24 +1150,24 @@
     "src": "resources/images/user-avatar-80.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-TUxmkysN.js",
+    "file": "assets/app-BvJOSQse.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
     "imports": [
-      "_iziToast-BMxtxNnE.js"
+      "_iziToast-BlSgvP1x.js"
     ],
     "css": [
-      "assets/app-BI2sCKC-.css"
+      "assets/app-B4UGdpYb.css"
     ]
   },
   "resources/js/cliente.js": {
-    "file": "assets/cliente-4Wx52Y1M.js",
+    "file": "assets/cliente-DtuNP1XI.js",
     "name": "cliente",
     "src": "resources/js/cliente.js",
     "isEntry": true,
     "imports": [
-      "_iziToast-BMxtxNnE.js"
+      "_iziToast-BlSgvP1x.js"
     ]
   }
 }

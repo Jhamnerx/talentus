@@ -1,21 +1,23 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@import "tailwindcss";
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
 
-@import "cliente/contact.css";
+@import "./cliente/contact.css";
 
-@import "cliente/bootstrap.min.css";
-@import "cliente/animate.min.css";
-@import "cliente/bootstrap-datepicker.min.css";
-@import "cliente/bootstrap-select.min.css";
-@import "cliente/fontawesome-all.min.css";
-@import "cliente/magnific-popup.css";
-/* @import "cliente/owl.carousel.min.css";
-@import "cliente/owl.theme.default.min.css"; */
-@import "cliente/seolight-icons.css";
+@import "./cliente/bootstrap.min.css";
+@import "./cliente/animate.min.css";
+@import "./cliente/bootstrap-datepicker.min.css";
+@import "./cliente/bootstrap-select.min.css";
+@import "./cliente/fontawesome-all.min.css";
+@import "./cliente/magnific-popup.css";
+/* @import "./cliente/owl.carousel.min.css";
+@import "./cliente/owl.theme.default.min.css"; */
+@import "./cliente/seolight-icons.css";
 
-@import "cliente/style.css";
-@import "cliente/responsive.css";
+@import "./cliente/style.css";
+@import "./cliente/responsive.css";
 
 .search {
     margin-bottom: auto;

@@ -1,4 +1,6 @@
-<svg class="shrink-0 h-6 w-6" viewBox="0 0 73 73" version="1.1" xmlns="http://www.w3.org/2000/svg"
+@props(['active' => false])
+
+<svg class="shrink-0 h-6 w-6 @if ($active) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" viewBox="0 0 73 73" version="1.1" xmlns="http://www.w3.org/2000/svg"
     xmlns:xlink="http://www.w3.org/1999/xlink">
 
     <title>build-tools/task-runners</title>

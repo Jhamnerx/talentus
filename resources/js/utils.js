@@ -1,25 +1,3 @@
-import resolveConfig from "tailwindcss/resolveConfig";
-
-export const tailwindConfig = () => {
-    // Tailwind config
-    return resolveConfig("./tailwind.config.js");
-};
-export const hexToRGB = (h) => {
-    let r = 0;
-    let g = 0;
-    let b = 0;
-    if (h.length === 4) {
-        r = `0x${h[1]}${h[1]}`;
-        g = `0x${h[2]}${h[2]}`;
-        b = `0x${h[3]}${h[3]}`;
-    } else if (h.length === 7) {
-        r = `0x${h[1]}${h[2]}`;
-        g = `0x${h[3]}${h[4]}`;
-        b = `0x${h[5]}${h[6]}`;
-    }
-    return `${+r},${+g},${+b}`;
-};
-
 export const formatValue = (value) =>
     Intl.NumberFormat("en-US", {
         style: "currency",
@@ -34,54 +12,59 @@ export const formatThousands = (value) =>
         notation: "compact",
     }).format(value);
 
-function dropdownHandler(element) {
-    let single = element.getElementsByTagName("ul")[0];
-    single.classList.toggle("hidden");
-}
-function MenuHandler(el, val) {
-    let MainList = el.parentElement.parentElement.getElementsByTagName("ul")[0];
-    let closeIcon =
-        el.parentElement.parentElement.getElementsByClassName(
-            "close-m-menu"
-        )[0];
-    let showIcon =
-        el.parentElement.parentElement.getElementsByClassName("show-m-menu")[0];
-    if (val) {
-        MainList.classList.remove("hidden");
-        el.classList.add("hidden");
-        closeIcon.classList.remove("hidden");
+export const getCssVariable = (variable) => {
+    return getComputedStyle(document.documentElement)
+        .getPropertyValue(variable)
+        .trim();
+};
+
+const adjustHexOpacity = (hexColor, opacity) => {
+    // Remove the '#' if it exists
+    hexColor = hexColor.replace("#", "");
+
+    // Convert hex to RGB
+    const r = parseInt(hexColor.substring(0, 2), 16);
+    const g = parseInt(hexColor.substring(2, 4), 16);
+    const b = parseInt(hexColor.substring(4, 6), 16);
+
+    // Return RGBA string
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
+const adjustHSLOpacity = (hslColor, opacity) => {
+    // Convert HSL to HSLA
+    return hslColor.replace("hsl(", "hsla(").replace(")", `, ${opacity})`);
+};
+
+const adjustOKLCHOpacity = (oklchColor, opacity) => {
+    // Add alpha value to OKLCH color
+    return oklchColor.replace(
+        /oklch\((.*?)\)/,
+        (match, p1) => `oklch(${p1} / ${opacity})`
+    );
+};
+
+export const adjustColorOpacity = (color, opacity) => {
+    if (color.startsWith("#")) {
+        return adjustHexOpacity(color, opacity);
+    } else if (color.startsWith("hsl")) {
+        return adjustHSLOpacity(color, opacity);
+    } else if (color.startsWith("oklch")) {
+        return adjustOKLCHOpacity(color, opacity);
     } else {
-        showIcon.classList.remove("hidden");
-        MainList.classList.add("hidden");
-        el.classList.add("hidden");
-    }
-}
-// ------------------------------------------------------
-let sideBar = document.getElementById("mobile-nav");
-let menu = document.getElementById("menu");
-let cross = document.getElementById("cross");
-const sidebarHandler = (check) => {
-    if (check) {
-        sideBar.style.transform = "translateX(0px)";
-        menu.classList.add("hidden");
-        cross.classList.remove("hidden");
-    } else {
-        sideBar.style.transform = "translateX(-100%)";
-        menu.classList.remove("hidden");
-        cross.classList.add("hidden");
+        throw new Error("Unsupported color format");
     }
 };
-let list = document.getElementById("list");
-let chevrondown = document.getElementById("chevrondown");
-let chevronup = document.getElementById("chevronup");
-const listHandler = (check) => {
-    if (check) {
-        list.classList.remove("hidden");
-        chevrondown.classList.remove("hidden");
-        chevronup.classList.add("hidden");
-    } else {
-        list.classList.add("hidden");
-        chevrondown.classList.add("hidden");
-        chevronup.classList.remove("hidden");
-    }
+
+export const oklchToRGBA = (oklchColor) => {
+    // Create a temporary div to use for color conversion
+    const tempDiv = document.createElement("div");
+    tempDiv.style.color = oklchColor;
+    document.body.appendChild(tempDiv);
+
+    // Get the computed style and convert to RGB
+    const computedColor = window.getComputedStyle(tempDiv).color;
+    document.body.removeChild(tempDiv);
+
+    return computedColor;
 };

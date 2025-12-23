@@ -49,6 +49,7 @@ window.FilePond = FilePond;
 // // DecoupledEditor.builtinPlugins = [Base64UploadAdapter];
 document.addEventListener("DOMContentLoaded", () => {
     // Light switcher
+    // Light switcher
     const lightSwitches = document.querySelectorAll(".light-switch");
     if (lightSwitches.length > 0) {
         lightSwitches.forEach((lightSwitch, i) => {
@@ -62,9 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         el.checked = checked;
                     }
                 });
-                document.documentElement.classList.add(
-                    "[&_*]:!transition-none"
-                );
+                document.documentElement.classList.add("**:transition-none!");
                 if (lightSwitch.checked) {
                     document.documentElement.classList.add("dark");
                     document.querySelector("html").style.colorScheme = "dark";
@@ -82,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 setTimeout(() => {
                     document.documentElement.classList.remove(
-                        "[&_*]:!transition-none"
+                        "**:transition-none!"
                     );
                 }, 1);
             });

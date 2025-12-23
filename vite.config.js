@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import path from "path";
 import laravel from "laravel-vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     plugins: [
@@ -11,17 +12,9 @@ export default defineConfig({
 
                 "resources/css/cliente.css",
                 "resources/js/cliente.js",
-                "resources/css/fontawesome-all.min.css",
             ],
             refresh: true,
         }),
+        tailwindcss(),
     ],
-    resolve: {
-        alias: {
-            "@tailwindConfig": path.resolve(__dirname, "tailwind.config.js"),
-        },
-    },
-    optimizeDeps: {
-        include: ["@tailwindConfig"],
-    },
 });

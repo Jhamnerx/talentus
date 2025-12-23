@@ -66,9 +66,7 @@ class EditTask extends Component
             'modelo_velocimetro.required_if' => 'Seleccione un modelo',
         ];
     }
-    public function mount()
-    {
-    }
+    public function mount() {}
 
     public function render()
     {

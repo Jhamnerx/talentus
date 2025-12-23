@@ -48,6 +48,8 @@ use App\Http\Controllers\Admin\ServicioTecnicoController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
+use App\Http\Controllers\Admin\WorkOrderController;
+use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
@@ -412,4 +414,12 @@ Route::controller(UtilesController::class)->group(function () {
 
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
     Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
+});
+
+// ÓRDENES DE TRABAJO (WORK ORDERS)
+// Las acciones (crear, editar, estados) se manejan con Livewire
+Route::prefix('work-orders')->name('work-orders.')->middleware(['auth'])->group(function () {
+    Route::get('/', [WorkOrderController::class, 'index'])->name('index');
+    Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
+    Route::get('/{workOrder}/pdf', [WorkOrderPdfController::class, 'generate'])->name('pdf');
 });

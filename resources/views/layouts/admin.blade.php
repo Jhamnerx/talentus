@@ -8,7 +8,11 @@
     <meta http-equiv="Content-Security-Policy" content="frame-src 'self'">
     <link rel="icon" href="{{ asset('images/favicon2023.png') }}">
     <title>{{ config('app.name', 'Laravel') }}</title>
-    <!-- Styles -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&display=swap" rel="stylesheet" />
 
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -20,8 +24,22 @@
     {{-- CKEDITOR --}}
     <script src="{{ asset('plugins/ckeditor/ckeditor.js') }}"></script>
 
+
+    <!-- Styles -->
+
     @livewireStyles
     <wireui:scripts />
+
+
+    <script>
+        if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
+            document.querySelector('html').classList.remove('dark');
+            document.querySelector('html').style.colorScheme = 'light';
+        } else {
+            document.querySelector('html').classList.add('dark');
+            document.querySelector('html').style.colorScheme = 'dark';
+        }
+    </script>
 </head>
 
 
@@ -37,26 +55,37 @@
         }
     </script>
 
-    <script>
-        if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
-            document.querySelector('html').classList.remove('dark');
-            document.querySelector('html').style.colorScheme = 'light';
-        } else {
-            document.querySelector('html').classList.add('dark');
-            document.querySelector('html').style.colorScheme = 'dark';
-        }
-    </script>
+    <div class="flex h-dvh overflow-hidden">
 
-    <!-- Page wrapper -->
-    <div class="flex h-screen overflow-hidden">
-
-        <!-- Sidebar -->
-        @livewire('admin.sidebar')
+        <x-admin.sidebar :variant="$attributes['sidebarVariant']" />
 
         <!-- Content area -->
+        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden @if ($attributes['background']) {{ $attributes['background'] }} @endif"
+            x-ref="contentarea">
+
+            {{-- <x-app.header :variant="$attributes['headerVariant']" /> --}}
+            @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
+
+            <main class="grow">
+                {{ $slot }}
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- Page wrapper -->
+    {{-- <div class="flex h-screen overflow-hidden">
+
+
+        @livewire('admin.sidebar')
+        <x-admin.sidebar :variant="$attributes['sidebarVariant']" />
+
+
         <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
 
-            <!-- Site header -->
+
             @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
 
             <x-banner />
@@ -84,16 +113,20 @@
 
             </main>
 
+            <main class="grow">
+                {{ $slot }}
+            </main>
+
         </div>
 
-    </div>
+    </div> --}}
 
     @stack('modals')
 
     @livewireScripts
 
-
 </body>
+
 <script>
     $(document).ready(function() {
         var Toast = Swal.mixin({
