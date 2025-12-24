@@ -2,17 +2,19 @@
 
 namespace App\Livewire\Admin\WorkOrders;
 
-use App\Enums\ChecklistResultado;
-use App\Models\WorkOrder;
-use App\Models\WorkOrderChecklist;
-use App\Models\ChecklistTemplate;
 use Livewire\Component;
+use App\Models\WorkOrder;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
-use WireUi\Traits\Actions;
+use WireUi\Traits\WireUiActions;
+use App\Enums\ChecklistResultado;
+use App\Models\ChecklistTemplate;
+use App\Models\WorkOrderChecklist;
+use Illuminate\Support\Facades\Auth;
 
 class Checklist extends Component
 {
-    use WithFileUploads, Actions;
+    use WithFileUploads, WireUiActions;
 
     public WorkOrder $workOrder;
     public string $fase = 'before'; // before o after
@@ -23,6 +25,7 @@ class Checklist extends Component
 
     public int $totalItems = 0;
     public int $completados = 0;
+    public ?int $fotoTemplateId = null; // ID del template para subir foto
 
     public function mount(WorkOrder $workOrder, string $fase = 'before'): void
     {
@@ -98,23 +101,53 @@ class Checklist extends Component
         $this->dispatch('checklist-updated', workOrderId: $this->workOrder->id);
     }
 
-    public function subirFoto(int $templateId): void
+    public function abrirModalFoto(int $templateId): void
     {
+        $this->fotoTemplateId = $templateId;
+    }
+
+    public function cerrarModalFoto(): void
+    {
+        $this->fotoTemplateId = null;
+    }
+
+    public function subirFoto(): void
+    {
+        if (!$this->fotoTemplateId) {
+            return;
+        }
+
         $this->validate([
-            "fotos.{$templateId}" => 'required|image|max:5120', // 5MB
+            "fotos.{$this->fotoTemplateId}" => 'required|image|max:5120', // 5MB
         ]);
 
-        $foto = $this->fotos[$templateId];
-        $path = $foto->store('work-orders/' . $this->workOrder->id . '/checklist', 'private');
+        $foto = $this->fotos[$this->fotoTemplateId];
+        $originalFilename = $foto->getClientOriginalName();
+        $extension = $foto->getClientOriginalExtension();
+
+        // Generar nombre descriptivo: orden_fase_item_timestamp.ext
+        $nombreItem = Str::slug($this->checklist[$this->fotoTemplateId]['nombre']);
+        $nuevoNombre = "{$this->workOrder->codigo}_{$this->fase}_{$nombreItem}_" . time() . ".{$extension}";
+
+        $path = $foto->storeAs(
+            'work-orders/' . $this->workOrder->id . '/checklist',
+            $nuevoNombre,
+            'private'
+        );
 
         // Crear registro en work_order_photos
         $this->workOrder->photos()->create([
-            'ruta' => $path,
+            'filename' => $nuevoNombre,
+            'path' => $path,
+            'disk' => 'private',
+            'mime_type' => $foto->getMimeType(),
+            'size' => $foto->getSize(),
             'tipo' => 'checklist',
-            'descripcion' => $this->checklist[$templateId]['nombre'] . ' - Fase: ' . strtoupper($this->fase),
+            'fase' => $this->fase,
+            'descripcion' => $this->checklist[$this->fotoTemplateId]['nombre'] . ' - Fase: ' . strtoupper($this->fase),
             'latitude' => null, // Obtener del JS si es necesario
             'longitude' => null,
-            'empresa_id' => $this->workOrder->empresa_id,
+            'uploaded_by' => Auth::user()->id,
         ]);
 
         $this->notification([
@@ -123,7 +156,8 @@ class Checklist extends Component
             'icon' => 'success',
         ]);
 
-        unset($this->fotos[$templateId]);
+        unset($this->fotos[$this->fotoTemplateId]);
+        $this->cerrarModalFoto();
     }
 
     public function calcularProgreso(): void

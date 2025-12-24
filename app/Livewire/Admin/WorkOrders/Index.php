@@ -20,18 +20,6 @@ class Index extends Component
     public $fecha_hasta = '';
     public $perPage = 10;
 
-    // Propiedades para Tipos de Órdenes
-    public $showTipoModal = false;
-    public $editingTipoId = null;
-    public $tipoNombre = '';
-    public $tipoDescripcion = '';
-    public $tipoCostoBase = 0;
-    public $tipoRequiereImei = false;
-    public $tipoRequiereSim = false;
-    public $tipoRequiereAccesorios = false;
-    public $tipoRequiereChecklist = true;
-    public $tipoIsActive = true;
-
     #[On('work-order-created')]
     public function refresh()
     {
@@ -42,6 +30,12 @@ class Index extends Component
     public function refreshUpdated()
     {
         // Refresh automático después de actualizar
+    }
+
+    #[On('tipo-guardado')]
+    public function refreshTipos()
+    {
+        // Refresh automático después de guardar tipo
     }
 
     public function render()
@@ -198,77 +192,12 @@ class Index extends Component
 
     public function crearTipo()
     {
-        $this->reset([
-            'editingTipoId',
-            'tipoNombre',
-            'tipoDescripcion',
-            'tipoCostoBase',
-            'tipoRequiereImei',
-            'tipoRequiereSim',
-            'tipoRequiereAccesorios',
-            'tipoRequiereChecklist',
-            'tipoIsActive'
-        ]);
-        $this->tipoRequiereChecklist = true;
-        $this->tipoIsActive = true;
-        $this->showTipoModal = true;
+        $this->dispatch('open-tipo-modal');
     }
 
     public function editarTipo(WorkOrderType $tipo)
     {
-        $this->editingTipoId = $tipo->id;
-        $this->tipoNombre = $tipo->nombre;
-        $this->tipoDescripcion = $tipo->descripcion;
-        $this->tipoCostoBase = $tipo->costo_base;
-        $this->tipoRequiereImei = $tipo->requiere_imei;
-        $this->tipoRequiereSim = $tipo->requiere_sim;
-        $this->tipoRequiereAccesorios = $tipo->requiere_accesorios;
-        $this->tipoRequiereChecklist = $tipo->requiere_checklist;
-        $this->tipoIsActive = $tipo->is_active;
-        $this->showTipoModal = true;
-    }
-
-    public function guardarTipo()
-    {
-        $validated = $this->validate([
-            'tipoNombre' => 'required|string|max:100',
-            'tipoDescripcion' => 'nullable|string|max:500',
-            'tipoCostoBase' => 'nullable|numeric|min:0',
-            'tipoRequiereImei' => 'boolean',
-            'tipoRequiereSim' => 'boolean',
-            'tipoRequiereAccesorios' => 'boolean',
-            'tipoRequiereChecklist' => 'boolean',
-            'tipoIsActive' => 'boolean',
-        ]);
-
-        $data = [
-            'nombre' => $this->tipoNombre,
-            'descripcion' => $this->tipoDescripcion,
-            'costo_base' => $this->tipoCostoBase ?? 0,
-            'requiere_imei' => $this->tipoRequiereImei,
-            'requiere_sim' => $this->tipoRequiereSim,
-            'requiere_accesorios' => $this->tipoRequiereAccesorios,
-            'requiere_checklist' => $this->tipoRequiereChecklist,
-            'is_active' => $this->tipoIsActive,
-            'empresa_id' => session('empresa'),
-        ];
-
-        if ($this->editingTipoId) {
-            $tipo = WorkOrderType::findOrFail($this->editingTipoId);
-            $tipo->update($data);
-            $mensaje = 'Tipo de orden actualizado correctamente';
-        } else {
-            WorkOrderType::create($data);
-            $mensaje = 'Tipo de orden creado correctamente';
-        }
-
-        $this->showTipoModal = false;
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'ÉXITO',
-            mensaje: $mensaje
-        );
+        $this->dispatch('open-tipo-modal', tipoId: $tipo->id);
     }
 
     public function toggleActivoTipo(WorkOrderType $tipo)

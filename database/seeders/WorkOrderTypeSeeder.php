@@ -24,7 +24,7 @@ class WorkOrderTypeSeeder extends Seeder
         $types = [
             [
                 'nombre' => 'Instalación de GPS',
-                'descripcion' => 'Instalación completa de dispositivo GPS con accesorios',
+                'descripcion' => 'Instalación de GPS %modelo_gps% en vehículo: %placa%, Fecha instalación: %fecha% - Hora: %hora%',
                 'requiere_imei' => true,
                 'requiere_sim' => true,
                 'requiere_accesorios' => true,
@@ -33,7 +33,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Retiro de GPS',
-                'descripcion' => 'Retiro completo de dispositivo GPS',
+                'descripcion' => 'Retiro de GPS modelo %modelo_gps% (IMEI: %imei%) del vehículo %placa% - Cliente: %cliente%. Fecha: %fecha%',
                 'requiere_imei' => true,
                 'requiere_sim' => false,
                 'requiere_accesorios' => false,
@@ -42,7 +42,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Cambio de GPS',
-                'descripcion' => 'Reemplazo de dispositivo GPS por otro',
+                'descripcion' => 'Cambio de GPS en vehículo %placa% - %velo_modelo%. Nuevo equipo: %modelo_gps% (IMEI: %imei%, SIM: %sim%). Técnico: %tecnico%',
                 'requiere_imei' => true,
                 'requiere_sim' => true,
                 'requiere_accesorios' => false,
@@ -51,7 +51,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Cambio de SIM',
-                'descripcion' => 'Reemplazo de tarjeta SIM del dispositivo',
+                'descripcion' => 'Cambio de tarjeta SIM en GPS del vehículo %placa%. Nueva SIM: %sim%. Cliente: %cliente%',
                 'requiere_imei' => false,
                 'requiere_sim' => true,
                 'requiere_accesorios' => false,
@@ -60,7 +60,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Mantenimiento preventivo',
-                'descripcion' => 'Revisión y mantenimiento de dispositivo GPS instalado',
+                'descripcion' => 'Mantenimiento preventivo GPS en vehículo %placa% - %velo_modelo%. Cliente: %cliente%. Programado: %fecha% %hora%',
                 'requiere_imei' => false,
                 'requiere_sim' => false,
                 'requiere_accesorios' => false,
@@ -69,7 +69,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Instalación de accesorios',
-                'descripcion' => 'Instalación de accesorios adicionales (sirena, botón pánico, micrófono)',
+                'descripcion' => 'Instalación de accesorios en vehículo %placa% del cliente %cliente%. Técnico asignado: %tecnico%. Fecha: %fecha%',
                 'requiere_imei' => false,
                 'requiere_sim' => false,
                 'requiere_accesorios' => true,
@@ -78,7 +78,7 @@ class WorkOrderTypeSeeder extends Seeder
             ],
             [
                 'nombre' => 'Reparación de GPS',
-                'descripcion' => 'Reparación de dispositivo con fallas',
+                'descripcion' => 'Reparación de GPS %modelo_gps% (IMEI: %imei%) en vehículo %placa%. Cliente: %cliente%. Hora: %hora%',
                 'requiere_imei' => true,
                 'requiere_sim' => false,
                 'requiere_accesorios' => false,
@@ -90,13 +90,13 @@ class WorkOrderTypeSeeder extends Seeder
         // Crear tipos para cada empresa
         foreach ($empresas as $empresa) {
             $this->command->info("🏢 Creando tipos de órdenes para empresa: {$empresa->nombre} (ID: {$empresa->id})");
-            
+
             foreach ($types as $type) {
                 WorkOrderType::create(array_merge($type, [
                     'empresa_id' => $empresa->id,
                 ]));
             }
-            
+
             $this->command->info("✅ {$empresa->nombre}: 7 tipos creados");
         }
 

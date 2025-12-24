@@ -4,7 +4,7 @@
     "name": "iziToast"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DVY1WJJ8.css",
+    "file": "assets/app-CDq2C7LP.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -13,7 +13,7 @@
     ]
   },
   "resources/css/cliente.css": {
-    "file": "assets/cliente-BCAw0rgo.css",
+    "file": "assets/cliente-DPB1StYC.css",
     "src": "resources/css/cliente.css",
     "isEntry": true,
     "name": "cliente",

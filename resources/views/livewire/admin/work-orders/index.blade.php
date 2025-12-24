@@ -1,6 +1,6 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
     {{-- Header --}}
-    <div class="sm:flex sm:justify-between sm:items-center mb-8">
+    <div class="sm:flex sm:justify-between sm:items-center mb-5">
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">Órdenes de Trabajo</h1>
         </div>
@@ -228,7 +228,8 @@
         <div class="sm:flex sm:justify-between sm:items-center mb-4">
             <div>
                 <h2 class="text-xl font-bold text-slate-800 dark:text-slate-100">Tipos de Órdenes de Trabajo</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Configuración de tipos de órdenes disponibles</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Configuración de tipos de órdenes disponibles
+                </p>
             </div>
             <div>
                 <x-form.button primary label="Crear Tipo Orden" wire:click="crearTipo" icon="plus" />
@@ -239,14 +240,26 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">#</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Descripción</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Costo Base</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Total Órdenes</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Requisitos</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Estado</th>
-                        <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            #</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Descripción</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Costo Base</th>
+                        <th
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Total Órdenes</th>
+                        <th
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Requisitos</th>
+                        <th
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Estado</th>
+                        <th
+                            class="px-6 py-3 text-center text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                            Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -256,7 +269,8 @@
                                 {{ $loop->iteration }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $tipo->nombre }}</div>
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $tipo->nombre }}
+                                </div>
                             </td>
                             <td class="px-6 py-4">
                                 <div class="text-sm text-gray-500 dark:text-gray-400">
@@ -267,58 +281,69 @@
                                 S/ {{ number_format($tipo->costo_base, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                                     {{ $tipo->work_orders_count }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
                                 <div class="flex flex-wrap justify-center gap-1">
-                                    @if($tipo->requiere_imei)
-                                        <span class="px-2 py-1 text-xs rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200" title="Requiere IMEI">IMEI</span>
+                                    @if ($tipo->requiere_imei)
+                                        <span
+                                            class="px-2 py-1 text-xs rounded bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200"
+                                            title="Requiere IMEI">IMEI</span>
                                     @endif
-                                    @if($tipo->requiere_sim)
-                                        <span class="px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200" title="Requiere SIM">SIM</span>
+                                    @if ($tipo->requiere_sim)
+                                        <span
+                                            class="px-2 py-1 text-xs rounded bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200"
+                                            title="Requiere SIM">SIM</span>
                                     @endif
-                                    @if($tipo->requiere_accesorios)
-                                        <span class="px-2 py-1 text-xs rounded bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200" title="Requiere Accesorios">ACC</span>
+                                    @if ($tipo->requiere_accesorios)
+                                        <span
+                                            class="px-2 py-1 text-xs rounded bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200"
+                                            title="Requiere Accesorios">ACC</span>
                                     @endif
-                                    @if($tipo->requiere_checklist)
-                                        <span class="px-2 py-1 text-xs rounded bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200" title="Requiere Checklist">CHK</span>
+                                    @if ($tipo->requiere_checklist)
+                                        <span
+                                            class="px-2 py-1 text-xs rounded bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-200"
+                                            title="Requiere Checklist">CHK</span>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
-                                @if($tipo->is_active)
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                                @if ($tipo->is_active)
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                         Activo
                                     </span>
                                 @else
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                                    <span
+                                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
                                         Inactivo
                                     </span>
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2 text-center">
-                                <x-form.button xs flat icon="pencil" wire:click="editarTipo({{ $tipo->id }})" teal />
-                                
-                                <x-form.button xs flat 
-                                    icon="{{ $tipo->is_active ? 'eye-slash' : 'eye' }}" 
+                                <x-form.button xs flat icon="pencil" wire:click="editarTipo({{ $tipo->id }})"
+                                    teal />
+
+                                <x-form.button xs flat icon="{{ $tipo->is_active ? 'eye-slash' : 'eye' }}"
                                     wire:click="toggleActivoTipo({{ $tipo->id }})"
                                     {{ $tipo->is_active ? 'orange' : 'green' }} />
-                                
-                                @if($tipo->work_orders_count == 0)
-                                    <x-form.button xs flat icon="trash" 
+
+                                @if ($tipo->work_orders_count == 0)
+                                    <x-form.button xs flat icon="trash"
                                         wire:click="eliminarTipo({{ $tipo->id }})"
-                                        wire:confirm="¿Eliminar el tipo '{{ $tipo->nombre }}'?"
-                                        negative />
+                                        wire:confirm="¿Eliminar el tipo '{{ $tipo->nombre }}'?" negative />
                                 @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
                             <td colspan="8" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                                No hay tipos de órdenes registrados. 
-                                <button wire:click="crearTipo" class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
+                                No hay tipos de órdenes registrados.
+                                <button wire:click="crearTipo"
+                                    class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium">
                                     Crear el primero
                                 </button>
                             </td>
@@ -329,46 +354,7 @@
         </div>
     </div>
 
-    {{-- Modal para Crear/Editar Tipo --}}
-    <x-form.modal.card title="{{ $editingTipoId ? 'Editar Tipo de Orden' : 'Crear Tipo de Orden' }}" 
-        blur wire:model.defer="showTipoModal" max-width="2xl">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="sm:col-span-2">
-                <x-form.input wire:model="tipoNombre" label="Nombre del Tipo *" placeholder="Ej: Instalación GPS" />
-            </div>
+    {{-- Modal para Crear/Editar Tipo (Componente separado) --}}
+    @livewire('admin.work-orders.types.create')
 
-            <div class="sm:col-span-2">
-                <x-form.textarea wire:model="tipoDescripcion" label="Descripción" 
-                    placeholder="Descripción detallada del tipo de orden..." rows="3" />
-            </div>
-
-            <div>
-                <x-form.input wire:model="tipoCostoBase" label="Costo Base (S/)" type="number" step="0.01" min="0" />
-            </div>
-
-            <div class="sm:col-span-2">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                    Requisitos del Tipo de Orden
-                </label>
-                <div class="grid grid-cols-2 gap-3">
-                    <x-form.checkbox wire:model="tipoRequiereImei" label="Requiere IMEI" />
-                    <x-form.checkbox wire:model="tipoRequiereSim" label="Requiere SIM/ICCID" />
-                    <x-form.checkbox wire:model="tipoRequiereAccesorios" label="Requiere Accesorios" />
-                    <x-form.checkbox wire:model="tipoRequiereChecklist" label="Requiere Checklist" />
-                </div>
-            </div>
-
-            <div class="sm:col-span-2">
-                <x-form.toggle wire:model="tipoIsActive" label="Tipo Activo" 
-                    description="Si está inactivo, no podrá seleccionarse al crear órdenes" lg />
-            </div>
-        </div>
-
-        <x-slot name="footer">
-            <div class="flex justify-end gap-x-2">
-                <x-form.button flat label="Cancelar" x-on:click="close" />
-                <x-form.button primary label="{{ $editingTipoId ? 'Actualizar' : 'Crear' }}" wire:click="guardarTipo" />
-            </div>
-        </x-slot>
-    </x-form.modal.card>
 </div>

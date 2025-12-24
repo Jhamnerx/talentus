@@ -44,7 +44,8 @@
 <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
     :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '{{ $attributes->get('ruta', '') }}', {{ $attributes->get('panel', '') }} sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
-
+    <x-form.notifications />
+    <x-form.dialog />
     <script>
         if (localStorage.getItem('sidebar-expanded') == 'true') {
             document.querySelector('body').classList.add('sidebar-expanded');

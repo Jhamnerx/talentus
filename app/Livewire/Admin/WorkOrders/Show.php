@@ -2,12 +2,24 @@
 
 namespace App\Livewire\Admin\WorkOrders;
 
-use App\Models\WorkOrder;
 use Livewire\Component;
+use App\Models\WorkOrder;
+use WireUi\Traits\WireUiActions;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class Show extends Component
 {
+    use WireUiActions;
+
     public WorkOrder $workOrder;
+
+    // Propiedades para firma
+    public bool $modalFirma = false;
+    public string $nombreFirmante = '';
+    public string $tipoFirmante = 'cliente';
+    public string $documentoFirmante = '';
+    public ?string $signatureData = null;
 
     protected $listeners = [
         'work-order-updated' => 'refreshWorkOrder',
@@ -56,18 +68,14 @@ class Show extends Component
             $this->workOrder->iniciar();
             $this->refreshWorkOrder();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: 'ORDEN INICIADA',
-                mensaje: "Orden {$this->workOrder->codigo} iniciada correctamente"
+                description: "Orden {$this->workOrder->codigo} iniciada correctamente"
             );
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: $e->getMessage()
+                description: $e->getMessage()
             );
         }
     }
@@ -83,18 +91,14 @@ class Show extends Component
             $this->workOrder->finalizar();
             $this->refreshWorkOrder();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: 'ORDEN FINALIZADA',
-                mensaje: "Orden {$this->workOrder->codigo} finalizada correctamente"
+                description: "Orden {$this->workOrder->codigo} finalizada correctamente"
             );
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: $e->getMessage()
+                description: $e->getMessage()
             );
         }
     }
@@ -105,18 +109,14 @@ class Show extends Component
             $this->workOrder->cerrar();
             $this->refreshWorkOrder();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: 'ORDEN CERRADA',
-                mensaje: "Orden {$this->workOrder->codigo} cerrada y bloqueada"
+                description: "Orden {$this->workOrder->codigo} cerrada y bloqueada"
             );
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: $e->getMessage()
+                description: $e->getMessage()
             );
         }
     }
@@ -127,18 +127,14 @@ class Show extends Component
             $this->workOrder->cancelar($motivo);
             $this->refreshWorkOrder();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
+            $this->notification()->success(
                 title: 'ORDEN CANCELADA',
-                mensaje: "Orden {$this->workOrder->codigo} cancelada correctamente"
+                description: "Orden {$this->workOrder->codigo} cancelada correctamente"
             );
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
+            $this->notification()->error(
                 title: 'ERROR',
-                mensaje: $e->getMessage()
+                description: $e->getMessage()
             );
         }
     }
@@ -153,13 +149,76 @@ class Show extends Component
 
     public function descargarPDF()
     {
-        // TODO: Implementar generación de PDF
-        $this->dispatch(
-            'notify-toast',
-            icon: 'info',
-            title: 'GENERANDO PDF',
-            mensaje: 'El PDF está siendo generado...'
-        );
+        return redirect()->route('admin.work-orders.pdf', $this->workOrder);
+    }
+
+    public function abrirModalFirma()
+    {
+        $this->modalFirma = true;
+        $this->nombreFirmante = '';
+        $this->tipoFirmante = 'cliente';
+        $this->documentoFirmante = '';
+        $this->signatureData = null;
+    }
+
+    public function guardarFirma()
+    {
+        $this->validate([
+            'nombreFirmante' => 'required|string|max:255',
+            'tipoFirmante' => 'required|in:cliente,conductor,encargado,supervisor',
+            'signatureData' => 'required',
+        ], [
+            'nombreFirmante.required' => 'El nombre del firmante es obligatorio',
+            'signatureData.required' => 'Debe firmar en el recuadro',
+        ]);
+
+        try {
+            // Decodificar la firma base64
+            $signatureImage = str_replace('data:image/png;base64,', '', $this->signatureData);
+            $signatureImage = str_replace(' ', '+', $signatureImage);
+            $signatureData = base64_decode($signatureImage);
+
+            // Generar nombre de archivo
+            $filename = "firma_conformidad_{$this->workOrder->codigo}_" . time() . ".png";
+            $path = "work-orders/{$this->workOrder->id}/signatures/{$filename}";
+
+            // Guardar archivo
+            Storage::disk('private')->put($path, $signatureData);
+
+            // Calcular hash
+            $hash = hash('sha256', $signatureData);
+
+            // Crear registro en la base de datos
+            $this->workOrder->signatures()->create([
+                'tipo' => 'conformidad',
+                'filename' => $filename,
+                'path' => $path,
+                'disk' => 'private',
+                'nombre_firmante' => $this->nombreFirmante,
+                'tipo_firmante' => $this->tipoFirmante,
+                'documento_firmante' => $this->documentoFirmante ?: null,
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'latitude' => null, // Puede obtenerse con JavaScript
+                'longitude' => null,
+                'firmado_at' => now(),
+                'tecnico_id' => Auth::user()->id,
+                'hash' => $hash,
+            ]);
+
+            $this->modalFirma = false;
+            $this->refreshWorkOrder();
+
+            $this->notification()->success(
+                title: 'FIRMA GUARDADA',
+                description: 'La firma de conformidad se registró correctamente'
+            );
+        } catch (\Exception $e) {
+            $this->notification()->error(
+                title: 'ERROR',
+                description: 'No se pudo guardar la firma: ' . $e->getMessage()
+            );
+        }
     }
 
     public function render()

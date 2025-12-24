@@ -50,6 +50,7 @@ use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
 use App\Http\Controllers\Admin\WorkOrderController;
 use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
+use App\Models\WorkOrder;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
@@ -418,11 +419,22 @@ Route::controller(UtilesController::class)->group(function () {
 
 // ÓRDENES DE TRABAJO (WORK ORDERS)
 
-Route::prefix('work-orders')->name('work-orders.')->middleware(['auth'])->group(function () {
+Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->group(function () {
     Route::get('/', [WorkOrderController::class, 'index'])->name('index');
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
     Route::get('/{workOrder}/pdf', [WorkOrderPdfController::class, 'generate'])->name('pdf');
     Route::get('/{workOrder}/checklist/{fase}', function (WorkOrder $workOrder, string $fase) {
         return view('admin.work-orders.checklist', compact('workOrder', 'fase'));
     })->name('checklist');
+
+    // Servir archivos privados de work orders
+    Route::get('/{workOrder}/file/{type}/{filename}', function (WorkOrder $workOrder, string $type, string $filename) {
+        $path = "work-orders/{$workOrder->id}/{$type}/{$filename}";
+
+        if (!Storage::disk('private')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('private')->path($path));
+    })->name('file');
 });

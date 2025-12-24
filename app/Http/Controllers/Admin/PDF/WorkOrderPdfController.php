@@ -25,7 +25,8 @@ class WorkOrderPdfController extends Controller
             'accessories.producto'
         ]);
 
-        $pdf = Pdf::loadView('admin.pdf.work-order', compact('workOrder'));
+        $pdf = Pdf::loadView('admin.pdf.work-order', compact('workOrder'))
+            ->setPaper('a4', 'portrait');
 
         return $pdf->stream('Orden_Trabajo_' . $workOrder->codigo . '.pdf');
     }

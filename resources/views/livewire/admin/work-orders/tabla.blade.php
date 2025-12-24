@@ -73,6 +73,17 @@
                                 <x-form.button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})"
                                     primary />
                             @endif
+
+                            @if (in_array($orden->estado->value, ['finalizado', 'cancelado']) || $orden->bloqueado)
+                                <a href="{{ route('admin.work-orders.pdf', $orden) }}" target="_blank"
+                                    class="inline-flex items-center px-2.5 py-1.5 text-xs font-medium rounded border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600">
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                    </svg>
+                                    PDF
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @empty

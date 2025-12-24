@@ -260,45 +260,96 @@
         <div class="info-section">
             <h2>Checklist de Inspección</h2>
 
-            <h3 style="margin-top: 15px; font-size: 14px;">Antes del Trabajo</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ítem</th>
-                        <th>Resultado</th>
-                        <th>Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($workOrder->checklists->where('fase', 'before') as $item)
-                        <tr>
-                            <td>{{ $item->template->nombre }}</td>
-                            <td>{{ $item->resultado->label() }}</td>
-                            <td>{{ $item->observaciones ?? '-' }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            @php
+                $checklistBefore = $workOrder->checklists->where('fase', 'before');
+                $checklistAfter = $workOrder->checklists->where('fase', 'after');
+            @endphp
 
-            <h3 style="margin-top: 15px; font-size: 14px;">Después del Trabajo</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Ítem</th>
-                        <th>Resultado</th>
-                        <th>Observaciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($workOrder->checklists->where('fase', 'after') as $item)
+            @if ($checklistBefore->count() > 0)
+                <h3 style="margin-top: 15px; font-size: 14px; color: #2563eb;">✓ Antes del Trabajo</h3>
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ $item->template->nombre }}</td>
-                            <td>{{ $item->resultado->label() }}</td>
-                            <td>{{ $item->observaciones ?? '-' }}</td>
+                            <th style="width: 35%;">Categoría / Ítem</th>
+                            <th style="width: 15%; text-align: center;">Resultado</th>
+                            <th style="width: 50%;">Observaciones</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($checklistBefore->groupBy('template.categoria') as $categoria => $items)
+                            <tr style="background: #f9fafb;">
+                                <td colspan="3" style="font-weight: bold; color: #1f2937; padding: 6px 8px;">
+                                    {{ strtoupper($categoria) }}
+                                </td>
+                            </tr>
+                            @foreach ($items as $item)
+                                <tr>
+                                    <td style="padding-left: 20px;">{{ $item->template->nombre }}</td>
+                                    <td style="text-align: center;">
+                                        @if ($item->resultado->value === 'ok')
+                                            <span
+                                                style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">✓
+                                                OK</span>
+                                        @elseif($item->resultado->value === 'observado')
+                                            <span
+                                                style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">⚠
+                                                OBSERVADO</span>
+                                        @else
+                                            <span
+                                                style="background: #e5e7eb; color: #6b7280; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">—
+                                                N/A</span>
+                                        @endif
+                                    </td>
+                                    <td style="font-size: 11px;">{{ $item->observaciones ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
+
+            @if ($checklistAfter->count() > 0)
+                <h3 style="margin-top: 20px; font-size: 14px; color: #10b981;">✓ Después del Trabajo</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 35%;">Categoría / Ítem</th>
+                            <th style="width: 15%; text-align: center;">Resultado</th>
+                            <th style="width: 50%;">Observaciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($checklistAfter->groupBy('template.categoria') as $categoria => $items)
+                            <tr style="background: #f9fafb;">
+                                <td colspan="3" style="font-weight: bold; color: #1f2937; padding: 6px 8px;">
+                                    {{ strtoupper($categoria) }}
+                                </td>
+                            </tr>
+                            @foreach ($items as $item)
+                                <tr>
+                                    <td style="padding-left: 20px;">{{ $item->template->nombre }}</td>
+                                    <td style="text-align: center;">
+                                        @if ($item->resultado->value === 'ok')
+                                            <span
+                                                style="background: #d1fae5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">✓
+                                                OK</span>
+                                        @elseif($item->resultado->value === 'observado')
+                                            <span
+                                                style="background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">⚠
+                                                OBSERVADO</span>
+                                        @else
+                                            <span
+                                                style="background: #e5e7eb; color: #6b7280; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: bold;">—
+                                                N/A</span>
+                                        @endif
+                                    </td>
+                                    <td style="font-size: 11px;">{{ $item->observaciones ?? '-' }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    </tbody>
+                </table>
+            @endif
         </div>
     @endif
 
@@ -402,37 +453,67 @@
 
     <!-- Firmas -->
     @if ($workOrder->signatures->count() > 0)
-        <div style="margin-top: 40px;">
+        <div class="info-section" style="page-break-inside: avoid;">
             <h2>Firmas Digitales</h2>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Tipo</th>
-                        <th>Firmante</th>
-                        <th>Documento</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
+                        <th style="width: 15%;">Tipo</th>
+                        <th style="width: 25%;">Firmante</th>
+                        <th style="width: 15%;">Documento</th>
+                        <th style="width: 20%;">Fecha</th>
+                        <th style="width: 25%; text-align: center;">Estado</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($workOrder->signatures as $signature)
                         <tr>
-                            <td>{{ ucfirst($signature->tipo) }}</td>
-                            <td>{{ $signature->nombre_firmante }}</td>
+                            <td style="font-weight: bold;">{{ ucfirst($signature->tipo) }}</td>
+                            <td>{{ $signature->nombre_firmante }}
+                                @if ($signature->tipo_firmante)
+                                    <br><span
+                                        style="font-size: 10px; color: #6b7280;">({{ ucfirst($signature->tipo_firmante) }})</span>
+                                @endif
+                            </td>
                             <td>{{ $signature->documento_firmante ?? '-' }}</td>
                             <td>{{ $signature->firmado_at->format('d/m/Y H:i') }}</td>
-                            <td>
+                            <td style="text-align: center;">
                                 @if ($signature->verificarIntegridad())
-                                    ✓ Verificada
+                                    <span
+                                        style="background: #d1fae5; color: #065f46; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: bold;">✓
+                                        VERIFICADA</span>
                                 @else
-                                    ✗ Comprometida
+                                    <span
+                                        style="background: #fee2e2; color: #991b1b; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: bold;">✗
+                                        COMPROMETIDA</span>
                                 @endif
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+
+            <!-- Mostrar imágenes de firmas -->
+            @foreach ($workOrder->signatures as $signature)
+                @php
+                    $signaturePath = storage_path('app/private/' . $signature->path);
+                @endphp
+                @if (file_exists($signaturePath))
+                    <div class="signature-box" style="margin-top: 20px; page-break-inside: avoid;">
+                        <h3 style="margin: 0 0 10px 0; font-size: 12px;">Firma de {{ ucfirst($signature->tipo) }} -
+                            {{ $signature->nombre_firmante }}</h3>
+                        <div style="border: 1px solid #d1d5db; padding: 10px; background: #fff;">
+                            <img src="{{ $signaturePath }}" alt="Firma"
+                                style="max-width: 300px; max-height: 150px; display: block; margin: 0 auto;">
+                        </div>
+                        <div style="margin-top: 10px; font-size: 10px; color: #6b7280;">
+                            <strong>IP:</strong> {{ $signature->ip_address }} |
+                            <strong>Hash:</strong> {{ substr($signature->hash, 0, 16) }}...
+                        </div>
+                    </div>
+                @endif
+            @endforeach
         </div>
     @endif
 
