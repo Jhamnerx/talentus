@@ -41,6 +41,18 @@ class WorkOrder extends Model
         'bloqueado' => 'boolean',
     ];
 
+    // Accessor para generar código dinámicamente
+    public function getCodigoAttribute($value): string
+    {
+        // Si existe un código guardado, usarlo (para retrocompatibilidad)
+        if ($value) {
+            return $value;
+        }
+        
+        // Generar código basado en el ID: OT-000001, OT-000002, etc.
+        return 'OT-' . str_pad($this->id, 6, '0', STR_PAD_LEFT);
+    }
+
     // Global Scope - Multi-empresa
     protected static function booted()
     {

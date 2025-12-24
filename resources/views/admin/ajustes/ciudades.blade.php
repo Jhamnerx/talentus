@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'ciudades',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -37,15 +34,8 @@
 
     </div>
 
-
-@stop
-@push('modals')
     @livewire('admin.ajustes.ciudades.save')
     @livewire('admin.ajustes.ciudades.edit')
     @livewire('admin.ajustes.ciudades.delete')
-@endpush
 
-
-@section('js')
-
-@endsection
+</x-admin-layout>

@@ -4,35 +4,58 @@ namespace App\Livewire\Admin\Productos;
 
 use Livewire\Component;
 use App\Models\Productos;
+
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
-use Netflie\WhatsAppCloudApi\WebHook\Notification\Support\Products;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ProductosIndex extends Component
 {
     use WithPagination;
-    public $search;
+
+    public $search = '';
+    public $estadoFilter = '';
+    public $categoriaFilter = '';
+    public $tipoFilter = '';
 
     public function render()
     {
-
-        $productos = Productos::whereHas('categoria', function ($query) {
-            $query->where('nombre', 'like', '%' . $this->search . '%');
-        })->orWhere('codigo', 'like', '%' . $this->search . '%')
-            ->orWhere('unit_code', 'like', '%' . $this->search . '%')
-            ->orWhere('descripcion', 'like', '%' . $this->search . '%')
-            ->orWhere('valor_unitario', 'like', '%' . $this->search . '%')
-            ->orWhere('tipo', 'like', '%' . $this->search . '%')
+        $productos = Productos::query()
             ->with('image', 'categoria', 'unit')
+            ->when($this->search, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('codigo', 'like', '%' . $this->search . '%')
+                        ->orWhere('descripcion', 'like', '%' . $this->search . '%')
+                        ->orWhere('valor_unitario', 'like', '%' . $this->search . '%')
+                        ->orWhere('tipo', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('categoria', function ($query) {
+                            $query->where('nombre', 'like', '%' . $this->search . '%');
+                        });
+                });
+            })
+            ->when($this->estadoFilter !== '', function ($query) {
+                $query->where('estado', $this->estadoFilter);
+            })
+            ->when($this->categoriaFilter, function ($query) {
+                $query->where('categoria_id', $this->categoriaFilter);
+            })
+            ->when($this->tipoFilter, function ($query) {
+                $query->where('tipo', $this->tipoFilter);
+            })
             ->orderBy('id', 'desc')
             ->paginate(10);
-        return view('livewire.admin.productos.productos-index', compact('productos'));
+
+        $categorias = \App\Models\Categoria::where('estado', 1)->orderBy('nombre')->get();
+
+        return view('livewire.admin.productos.productos-index', compact('productos', 'categorias'));
     }
 
     public function openModalCreate()
     {
         $this->dispatch('open-modal-create');
     }
+
     public function openModalEdit(Productos $producto)
     {
         $this->dispatch('open-modal-edit', producto: $producto);
@@ -43,8 +66,6 @@ class ProductosIndex extends Component
         $this->dispatch('open-modal-delete', producto: $producto);
     }
 
-
-
     #[On('update-table')]
     public function updateTable()
     {
@@ -53,7 +74,9 @@ class ProductosIndex extends Component
 
     public function toggleStatus(Productos $producto)
     {
-        $producto->is_active = !$producto->is_active; // Cambia el estado del toggle
-        $producto->save(); // Guarda el cambio en el modelo
+        if (Auth::user()->can('cambiar.estado-producto')) {
+            $producto->estado = !$producto->estado;
+            $producto->save();
+        }
     }
 }

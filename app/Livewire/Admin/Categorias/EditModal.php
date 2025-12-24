@@ -10,10 +10,8 @@ use App\Http\Requests\CategoriaRequest;
 class EditModal extends Component
 {
     public $modalEdit = false;
-
     public $nombre, $descripcion;
-    public Categoria $categoria;
-
+    public ?Categoria $categoria = null;
 
     public function render()
     {
@@ -23,6 +21,7 @@ class EditModal extends Component
     #[On('open-modal-edit')]
     public function openModal(Categoria $categoria)
     {
+        $this->resetValidation();
         $this->categoria = $categoria;
         $this->nombre = $categoria->nombre;
         $this->descripcion = $categoria->descripcion;
@@ -31,44 +30,34 @@ class EditModal extends Component
 
     public function closeModal()
     {
-
         $this->modalEdit = false;
+        $this->resetProp();
     }
 
-    public function save()
+    public function update()
     {
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules($this->categoria), $request->messages());
 
         try {
-
             $this->categoria->update($datos);
-            $this->afterSave($this->categoria);
+            $this->closeModal();
+            $this->notification()->success(
+                title: 'CATEGORIA ACTUALIZADA',
+                description: 'La Categoria ' . $this->categoria->nombre . ' fue actualizada correctamente'
+            );
+            $this->dispatch('categoria-saved');
+            $this->resetProp();
         } catch (\Throwable $th) {
-
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR:',
-                mensaje: $th->getMessage(),
+            $this->notification()->error(
+                title: 'ERROR',
+                description: $th->getMessage()
             );
         }
     }
 
-    public function afterSave($categoria)
-    {
-        $this->closeModal();
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'CATEGORIA ACTUALIZADA',
-            mensaje: 'La Categoria ' . $categoria->nombre . ' fue actualizada correctamente'
-        );
-        $this->dispatch('pg:eventRefresh-TablaCategorias');
-        $this->resetProp();
-    }
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion']);
+        $this->reset(['nombre', 'descripcion', 'categoria']);
     }
 }

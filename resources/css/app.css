@@ -8,6 +8,10 @@
 
 /* @import "contact.css"; */
 @import "./additional-styles/utility-patterns.css";
+
+@plugin "@tailwindcss/forms" {
+    strategy: base;
+}
 @import "./additional-styles/iziToast.css";
 
 @import "./additional-styles/flatpickr.css";

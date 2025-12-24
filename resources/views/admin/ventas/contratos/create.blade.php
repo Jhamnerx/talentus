@@ -1,6 +1,5 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-contratos')
-@section('contenido')
+<x-admin-layout ruta="ventas-contratos">
+
     <!-- Code block starts -->
     <div
         class="my-6 lg:my-12 container px-6 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
@@ -50,10 +49,6 @@
         </div>
     </div>
 
-
-
-@endsection
-
-@push('modals')
     @livewire('admin.clientes.save')
-@endpush
+
+</x-admin-layout>

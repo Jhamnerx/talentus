@@ -18,6 +18,10 @@ class Categoria extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
+    protected $casts = [
+        'estado' => 'boolean',
+    ];
+
     use HasFactory;
     use SoftDeletes;
     use LogsActivity;

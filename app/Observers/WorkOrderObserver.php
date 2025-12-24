@@ -3,6 +3,9 @@
 namespace App\Observers;
 
 use App\Models\WorkOrder;
+use App\Events\WorkOrderCreated;
+use App\Events\WorkOrderUpdated;
+use App\Notifications\NuevaOrdenAsignada;
 use Illuminate\Support\Str;
 use jhamnerx\LaravelIdGenerator\IdGenerator;
 
@@ -46,8 +49,13 @@ class WorkOrderObserver
 
         $workOrder->saveQuietly(); // Evita disparar eventos nuevamente
 
-        // Aquí puedes enviar notificaciones al técnico
-        // $workOrder->tecnico->notify(new NuevaOrdenTrabajo($workOrder));
+        // Enviar notificación al técnico asignado
+        if ($workOrder->tecnico) {
+            $workOrder->tecnico->notify(new NuevaOrdenAsignada($workOrder));
+        }
+
+        // Disparar evento de broadcasting
+        broadcast(new WorkOrderCreated($workOrder))->toOthers();
     }
 
     public function updating(WorkOrder $workOrder): void
@@ -60,7 +68,27 @@ class WorkOrderObserver
 
     public function updated(WorkOrder $workOrder): void
     {
-        // Registrar cambios importantes en activity log
+        // Detectar cambios importantes
+        $changes = [];
+
+        if ($workOrder->wasChanged('estado')) {
+            $changes['estado'] = [
+                'anterior' => $workOrder->getOriginal('estado'),
+                'nuevo' => $workOrder->estado,
+            ];
+        }
+
+        if ($workOrder->wasChanged('tecnico_id')) {
+            $changes['tecnico'] = [
+                'anterior' => $workOrder->getOriginal('tecnico_id'),
+                'nuevo' => $workOrder->tecnico_id,
+            ];
+        }
+
+        // Disparar evento de actualización si hubo cambios relevantes
+        if (!empty($changes)) {
+            broadcast(new WorkOrderUpdated($workOrder, $changes))->toOthers();
+        }
     }
 
     public function deleted(WorkOrder $workOrder): void

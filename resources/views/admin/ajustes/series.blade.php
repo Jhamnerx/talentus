@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'series',")
-@section('contenido')
+<x-admin-layout>
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
         <!-- Page header -->
@@ -34,12 +31,6 @@
 
     </div>
 
-
-@stop
-
-@push('modals')
     @livewire('admin.ajustes.series.delete')
-@endpush
-@section('js')
 
-@endsection
+</x-admin-layout>

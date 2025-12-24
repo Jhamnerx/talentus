@@ -1,19 +1,6 @@
-@extends('layouts.admin')
-
-@section('ruta', 'admin-notificaciones')
-
-
-
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
 
-@stop
-
-
-
-{{-- section de js --}}
-@section('js')
-
-@stop
+</x-admin-layout>

@@ -2,23 +2,24 @@
     {{-- Filtros --}}
     <div class="bg-white rounded-lg shadow p-4">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <x-input wire:model.live.debounce.300ms="search" placeholder="Buscar por código, placa..." icon="search" />
+            <x-form.input wire:model.live.debounce.300ms="search" placeholder="Buscar por código, placa..."
+                icon="search" />
 
-            <x-select wire:model.live="estado_filter" placeholder="Todos los estados">
+            <x-form.select wire:model.live="estado_filter" placeholder="Todos los estados">
                 <x-select.option value="">Todos</x-select.option>
                 <x-select.option value="pendiente">Pendiente</x-select.option>
                 <x-select.option value="en_proceso">En Proceso</x-select.option>
                 <x-select.option value="finalizado">Finalizado</x-select.option>
                 <x-select.option value="cancelado">Cancelado</x-select.option>
-            </x-select>
+            </x-form.select>
 
-            <x-datetime-picker wire:model.live="fecha_desde" placeholder="Fecha desde" without-time />
-            <x-datetime-picker wire:model.live="fecha_hasta" placeholder="Fecha hasta" without-time />
+            <x-form.datetime.picker wire:model.live="fecha_desde" placeholder="Fecha desde" without-time />
+            <x-form.datetime.picker wire:model.live="fecha_hasta" placeholder="Fecha hasta" without-time />
         </div>
 
         @if ($search || $estado_filter || $fecha_desde || $fecha_hasta)
             <div class="mt-4">
-                <x-button wire:click="limpiarFiltros" flat label="Limpiar filtros" icon="x" />
+                <x-form.button wire:click="limpiarFiltros" flat label="Limpiar filtros" icon="x" />
             </div>
         @endif
     </div>
@@ -66,10 +67,11 @@
                             </span>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                            <x-button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat />
+                            <x-form.button xs icon="eye" wire:click="verDetalle({{ $orden->id }})" flat />
 
                             @if ($orden->estado->value === 'pendiente')
-                                <x-button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})" primary />
+                                <x-form.button xs icon="play" wire:click="iniciarOrden({{ $orden->id }})"
+                                    primary />
                             @endif
                         </td>
                     </tr>

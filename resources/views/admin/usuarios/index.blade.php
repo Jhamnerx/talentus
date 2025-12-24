@@ -1,20 +1,10 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-usuarios')
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.usuarios.index')
 
-@stop
-
-
-@push('modals')
     @livewire('admin.usuarios.create')
     @livewire('admin.usuarios.edit')
-@endpush
-
-
-@section('js')
 
     @if (session('delete'))
         <script>
@@ -60,9 +50,4 @@
         </script>
     @endif
 
-
-
-
-
-
-@stop
+</x-admin-layout>

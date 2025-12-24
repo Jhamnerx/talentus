@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\WorkOrderType;
+use App\Models\Empresa;
 
 class WorkOrderTypeSeeder extends Seeder
 {
@@ -12,7 +13,13 @@ class WorkOrderTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        $empresa_id = 1; // Ajustar según tu estructura
+        // Obtener todas las empresas activas
+        $empresas = Empresa::all();
+
+        if ($empresas->isEmpty()) {
+            $this->command->warn('⚠️  No hay empresas registradas. Por favor crea al menos una empresa antes de ejecutar este seeder.');
+            return;
+        }
 
         $types = [
             [
@@ -23,7 +30,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => true,
                 'requiere_checklist' => true,
                 'costo_base' => 150.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Retiro de GPS',
@@ -33,7 +39,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => false,
                 'requiere_checklist' => true,
                 'costo_base' => 50.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Cambio de GPS',
@@ -43,7 +48,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => false,
                 'requiere_checklist' => true,
                 'costo_base' => 80.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Cambio de SIM',
@@ -53,7 +57,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => false,
                 'requiere_checklist' => false,
                 'costo_base' => 30.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Mantenimiento preventivo',
@@ -63,7 +66,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => false,
                 'requiere_checklist' => true,
                 'costo_base' => 40.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Instalación de accesorios',
@@ -73,7 +75,6 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => true,
                 'requiere_checklist' => true,
                 'costo_base' => 60.00,
-                'empresa_id' => $empresa_id,
             ],
             [
                 'nombre' => 'Reparación de GPS',
@@ -83,12 +84,23 @@ class WorkOrderTypeSeeder extends Seeder
                 'requiere_accesorios' => false,
                 'requiere_checklist' => true,
                 'costo_base' => 100.00,
-                'empresa_id' => $empresa_id,
             ],
         ];
 
-        foreach ($types as $type) {
-            WorkOrderType::create($type);
+        // Crear tipos para cada empresa
+        foreach ($empresas as $empresa) {
+            $this->command->info("🏢 Creando tipos de órdenes para empresa: {$empresa->nombre} (ID: {$empresa->id})");
+            
+            foreach ($types as $type) {
+                WorkOrderType::create(array_merge($type, [
+                    'empresa_id' => $empresa->id,
+                ]));
+            }
+            
+            $this->command->info("✅ {$empresa->nombre}: 7 tipos creados");
         }
+
+        $totalCreated = $empresas->count() * count($types);
+        $this->command->info("🎉 Total: {$totalCreated} tipos de órdenes creados para {$empresas->count()} empresa(s)");
     }
 }

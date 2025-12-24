@@ -1,6 +1,5 @@
 <x-app-layout>
 
-    @section('contenido')
     <div class="page-wrapper">
 
         <x-navigation></x-navigation>
@@ -84,6 +83,5 @@
 
         <x-slide-menu></x-slide-menu>
     </div>
-    @endsection
 
 </x-app-layout>

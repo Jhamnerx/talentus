@@ -25,8 +25,7 @@
     <!-- Page Content -->
     <main class="min-h-full">
 
-        @yield('contenido')
-
+        {{ $slot }}
 
     </main>
 
@@ -34,8 +33,6 @@
     @stack('modals')
 
     @livewireScripts
-
-    @yield('js')
 
 
 

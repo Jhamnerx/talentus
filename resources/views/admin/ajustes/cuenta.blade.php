@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'account',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -134,5 +131,4 @@
 
     </div>
 
-
-@stop
+</x-admin-layout>

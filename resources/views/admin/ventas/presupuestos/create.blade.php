@@ -1,15 +1,8 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-presupuestos')
-
-
-@section('contenido')
+<x-admin-layout ruta="ventas-presupuestos">
 
     @livewire('admin.ventas.presupuestos.create')
 
-@stop
-
-
-@push('modals')
     @livewire('admin.clientes.save')
     @livewire('admin.productos.modal-add-producto')
-@endpush
+
+</x-admin-layout>

@@ -3,25 +3,27 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use Illuminate\View\View;
 
 class AdminLayout extends Component
 {
     /**
-     * Create a new component instance.
-     *
-     * @return void
+     * The route name or page identifier.
      */
-    public function __construct()
+    public ?string $ruta;
+
+    /**
+     * Create a new component instance.
+     */
+    public function __construct(?string $ruta = null)
     {
-        //
+        $this->ruta = $ruta;
     }
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
      */
-    public function render()
+    public function render(): View
     {
         return view('layouts.admin');
     }

@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-reportes-gerenciales')
-@section('contenido')
+<x-admin-layout ruta="administracion-reportes-gerenciales">
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
 
@@ -29,16 +27,11 @@
 
     </div>
 
-@stop
-
-@push('modals')
     @livewire('admin.gerencia.reportes.modales.reporte-productos')
     @livewire('admin.gerencia.reportes.modales.reporte-lineas')
     @livewire('admin.gerencia.reportes.modales.reporte-clientes')
     @livewire('admin.gerencia.reportes.modales.reporte-vehiculos')
-@endpush
 
-@section('js')
     <script>
         // INICIALIZAR LOS INPUTS DE FECHA
         $(document).ready(function() {
@@ -132,7 +125,4 @@
         })
     </script>
 
-
-
-
-@stop
+</x-admin-layout>

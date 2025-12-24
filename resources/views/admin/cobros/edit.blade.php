@@ -1,8 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-cobros')
-
-@section('contenido')
-
+<x-admin-layout>
 
     <!-- Code block starts -->
 
@@ -47,6 +43,4 @@
 
     </div>
 
-
-
-@stop
+</x-admin-layout>

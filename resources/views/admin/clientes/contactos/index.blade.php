@@ -1,19 +1,12 @@
-@extends('layouts.admin')
-@section('ruta', 'clientes-contactos')
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.clientes.contactos.contactos-index')
 
-@stop
-
-@push('modals')
     @livewire('admin.clientes.contactos.save')
     @livewire('admin.clientes.contactos.edit')
     @livewire('admin.clientes.contactos.delete')
-@endpush
 
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -59,5 +52,4 @@
         </script>
     @endif
 
-
-@stop
+</x-admin-layout>

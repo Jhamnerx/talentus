@@ -10,7 +10,6 @@ use App\Http\Requests\CategoriaRequest;
 class CreateModal extends Component
 {
     public $modalCreate = false;
-
     public $nombre, $descripcion;
 
     public function render()
@@ -21,14 +20,17 @@ class CreateModal extends Component
     #[On('open-modal-create')]
     public function openModal()
     {
+
+        $this->resetValidation();
+        $this->resetProp();
         $this->modalCreate = true;
     }
+
     public function closeModal()
     {
-
         $this->modalCreate = false;
+        $this->resetProp();
     }
-
 
     public function save()
     {
@@ -37,28 +39,19 @@ class CreateModal extends Component
 
         try {
             $categoria = Categoria::create($datos);
-            $this->afterSave($categoria);
+            $this->closeModal();
+            $this->notification()->success(
+                title: 'CATEGORIA REGISTRADA',
+                description: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
+            );
+            $this->dispatch('categoria-saved');
+            $this->resetProp();
         } catch (\Throwable $th) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR:',
-                mensaje: $th->getMessage(),
+            $this->notification()->error(
+                title: 'ERROR',
+                description: $th->getMessage()
             );
         }
-    }
-
-    public function afterSave($categoria)
-    {
-        $this->closeModal();
-        $this->dispatch(
-            'notify',
-            icon: 'success',
-            title: 'CATEGORIA REGISTRADA',
-            mensaje: 'La Categoria ' . $categoria->nombre . ' fue guardada correctamente'
-        );
-        $this->dispatch('pg:eventRefresh-TablaCategorias');
-        $this->resetProp();
     }
 
     public function resetProp()

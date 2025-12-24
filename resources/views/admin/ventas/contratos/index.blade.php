@@ -1,15 +1,9 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-contratos')
-@section('contenido')
+<x-admin-layout ruta="ventas-contratos">
 
     <!-- Table -->
     @livewire('admin.ventas.contratos.index')
     @livewire('admin.ventas.contratos.delete')
     @livewire('admin.ventas.contratos.send')
-
-@stop
-
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -56,5 +50,4 @@
         })
     </script>
 
-
-@stop
+</x-admin-layout>

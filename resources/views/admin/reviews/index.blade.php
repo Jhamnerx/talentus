@@ -1,20 +1,6 @@
-@extends('layouts.admin')
-
-@section('ruta', 'administracion-reviews')
-
-
-
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.reviews.index')
 
-@stop
-
-
-
-{{-- section de js --}}
-@section('js')
-
-
-@stop
+</x-admin-layout>

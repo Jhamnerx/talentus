@@ -1,6 +1,5 @@
 <x-app-layout>
 
-    @section('contenido')
     <div class="page-wrapper">
 
         <x-navigation></x-navigation>
@@ -58,22 +57,22 @@
 
         <x-slide-menu></x-slide-menu>
     </div><!-- /.page-wrapper -->
-    @endsection
+@endsection
 
-    @section('js')
+@section('js')
     <script>
         window.addEventListener('solicitud-send', event => {
-                iziToast.success({
-                    position: 'topRight',
-                    title: 'SOLICITUD ENVIADA',
-                    message: 'Tu solicitud fue enviada en breve te responderemos',
-                });
+            iziToast.success({
+                position: 'topRight',
+                title: 'SOLICITUD ENVIADA',
+                message: 'Tu solicitud fue enviada en breve te responderemos',
+            });
 
-            })
+        })
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
-        // Your code to run since DOM is loaded and ready
+            // Your code to run since DOM is loaded and ready
             flatpickr('.fecha', {
                 mode: 'single',
                 dateFormat: "Y-m-d",
@@ -81,7 +80,6 @@
                 nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
             });
         });
-
     </script>
-    @endsection
+
 </x-app-layout>

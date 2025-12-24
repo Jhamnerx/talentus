@@ -1,10 +1,8 @@
-@extends('layouts.admin')
-@section('ruta', 'vehiculos-vehiculos')
-@section('contenido')
+<x-admin-layout>
 
 
 
     @livewire('admin.vehiculos.show', ['vehiculo' => $vehiculo])
 
 
-@stop
+</x-admin-layout>

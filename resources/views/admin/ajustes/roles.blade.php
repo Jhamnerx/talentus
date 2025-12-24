@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'roles',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -37,14 +34,9 @@
 
     </div>
 
-
-@stop
-@push('modals')
     @livewire('admin.ajustes.roles.save')
     @livewire('admin.ajustes.roles.edit')
-@endpush
 
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -73,4 +65,5 @@
             });
         </script>
     @endif
-@endsection
+
+</x-admin-layout>

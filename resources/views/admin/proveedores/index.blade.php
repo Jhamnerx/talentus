@@ -1,21 +1,12 @@
-@extends('layouts.admin')
-@section('ruta', 'proveedores')
-
-@section('contenido')
+<x-admin-layout>
 
     @livewire('admin.proveedores.proveedores-index')
-@stop
 
-
-@push('modals')
     @livewire('admin.proveedores.import')
     @livewire('admin.proveedores.create')
     @livewire('admin.proveedores.edit')
     @livewire('admin.proveedores.delete')
-@endpush
 
-
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -84,4 +75,4 @@
         })
     </script>
 
-@stop
+</x-admin-layout>

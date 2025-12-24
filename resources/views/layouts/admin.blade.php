@@ -17,7 +17,6 @@
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link rel="stylesheet" href="{{ asset('css/fontawesome-all.min.css') }}">
-    @yield('css')
 
     {{-- plugins --}}
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
@@ -27,9 +26,8 @@
 
     <!-- Styles -->
 
-    @livewireStyles
     <wireui:scripts />
-
+    @livewireStyles
 
     <script>
         if (localStorage.getItem('dark-mode') === 'false' || !('dark-mode' in localStorage)) {
@@ -44,7 +42,7 @@
 
 
 <body class="font-inter antialiased bg-gray-100 dark:bg-gray-900 text-gray-600 dark:text-gray-400"
-    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '@yield('ruta')', @yield('panel') sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
+    :class="{ 'sidebar-expanded': sidebarExpanded }" x-data="{ page: '{{ $attributes->get('ruta', '') }}', {{ $attributes->get('panel', '') }} sidebarOpen: false, sidebarExpanded: localStorage.getItem('sidebar-expanded') == 'true' }" x-init="$watch('sidebarExpanded', value => localStorage.setItem('sidebar-expanded', value))">
 
 
     <script>
@@ -75,56 +73,10 @@
     </div>
 
 
-    <!-- Page wrapper -->
-    {{-- <div class="flex h-screen overflow-hidden">
-
-
-        @livewire('admin.sidebar')
-        <x-admin.sidebar :variant="$attributes['sidebarVariant']" />
-
-
-        <div class="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden bg-slate-50 dark:bg-gray-800">
-
-
-            @livewire('admin.header', ['page' => request()->fullUrl(), 'variant' => 'v3'])
-
-            <x-banner />
-
-            <header class="sticky top-0 md:hidden bg-white border-b border-slate-200 z-10">
-                <div class="px-4 sm:px-6 lg:px-8">
-                    <div class="flex items-center h-16 -mb-px">
-
-                        <div class="hover text-left mx-2">
-                            <p class="text-talentus-200 text-wrap ">EMPRESA: <b
-                                    class="hover:text-talentus-200">{{ \App\Models\plantilla::first()->razon_social }}</b>
-                            </p>
-                        </div>
-
-                    </div>
-                </div>
-            </header>
-
-            <x-admin.comprobantes />
-
-            <main>
-
-
-                @yield('contenido')
-
-            </main>
-
-            <main class="grow">
-                {{ $slot }}
-            </main>
-
-        </div>
-
-    </div> --}}
 
     @stack('modals')
-
+    @stack('scripts')
     @livewireScripts
-
 </body>
 
 <script>
@@ -233,9 +185,6 @@
 
     });
 </script>
-@yield('js')
-
-@stack('scripts')
 
 @if (session('venta-registrada'))
     <script>

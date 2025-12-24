@@ -84,5 +84,6 @@ class DatabaseSeeder extends Seeder
         // $this->call(ClientesSeeder::class);
         //$this->call(PermisosUpdateSeeder::class);
         //$this->call(SustentosSeeder::class);
+        $this->call(ChecklistTemplateSeeder::class);
     }
 }

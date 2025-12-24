@@ -1,23 +1,10 @@
-@extends('layouts.admin')
-
-@section('ruta', 'admin-notificaciones')
+<x-admin-layout>
 
 
 
-@section('contenido')
-
-
-
-@livewire('admin.notificaciones.importes')
+    @livewire('admin.notificaciones.importes')
 
 
 
 
-@stop
-
-
-
-{{-- section de js --}}
-@section('js')
-
-@stop
+</x-admin-layout>

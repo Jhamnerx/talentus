@@ -77,6 +77,77 @@ class Tabla extends Component
         }
     }
 
+    public function finalizarOrden($ordenId, $observaciones = null)
+    {
+        try {
+            $orden = WorkOrder::findOrFail($ordenId);
+
+            if ($observaciones) {
+                $orden->observaciones_final = $observaciones;
+                $orden->save();
+            }
+
+            $orden->finalizar();
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'ORDEN FINALIZADA',
+                mensaje: "Orden {$orden->codigo} finalizada correctamente"
+            );
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: $e->getMessage()
+            );
+        }
+    }
+
+    public function cerrarOrden(WorkOrder $orden)
+    {
+        try {
+            $orden->cerrar();
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'ORDEN CERRADA',
+                mensaje: "Orden {$orden->codigo} cerrada y bloqueada"
+            );
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: $e->getMessage()
+            );
+        }
+    }
+
+    public function cancelarOrden($ordenId, $motivo)
+    {
+        try {
+            $orden = WorkOrder::findOrFail($ordenId);
+            $orden->cancelar($motivo);
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'ORDEN CANCELADA',
+                mensaje: "Orden {$orden->codigo} cancelada correctamente"
+            );
+        } catch (\Exception $e) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: $e->getMessage()
+            );
+        }
+    }
+
     public function updatingSearch()
     {
         $this->resetPage();

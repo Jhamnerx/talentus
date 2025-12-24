@@ -36,7 +36,7 @@ return new class extends Migration
 
             // Índices
             $table->index(['work_order_id', 'fase']);
-            $table->unique(['work_order_id', 'checklist_template_id', 'fase']);
+            $table->unique(['work_order_id', 'checklist_template_id', 'fase'], 'wo_checklist_unique');
         });
     }
 

@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'admin-work-orders-show')
-@section('contenido')
+<x-admin-layout>
 
     <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
 
@@ -52,7 +50,8 @@
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Costo Base</p>
-                            <p class="font-medium">S/ {{ number_format($workOrder->tipo_data['costo_base'] ?? 0, 2) }}</p>
+                            <p class="font-medium">S/ {{ number_format($workOrder->tipo_data['costo_base'] ?? 0, 2) }}
+                            </p>
                         </div>
                         <div>
                             <p class="text-sm text-gray-600">Vehículo</p>
@@ -94,7 +93,8 @@
                                     </div>
                                     <div class="ml-4 flex-1">
                                         <p class="text-sm font-medium text-gray-900">Orden Creada</p>
-                                        <p class="text-xs text-gray-500">{{ $workOrder->created_at->format('d/m/Y H:i') }}
+                                        <p class="text-xs text-gray-500">
+                                            {{ $workOrder->created_at->format('d/m/Y H:i') }}
                                         </p>
                                         <p class="text-sm text-gray-600 mt-1">Por {{ $workOrder->creador->name }}</p>
                                     </div>
@@ -157,7 +157,8 @@
                                             <p class="text-xs text-gray-500">
                                                 {{ $workOrder->updated_at->format('d/m/Y H:i') }}</p>
                                             @if ($workOrder->motivo_cancelacion)
-                                                <p class="text-sm text-gray-600 mt-1">{{ $workOrder->motivo_cancelacion }}
+                                                <p class="text-sm text-gray-600 mt-1">
+                                                    {{ $workOrder->motivo_cancelacion }}
                                                 </p>
                                             @endif
                                         </div>
@@ -269,7 +270,8 @@
                                             <td class="py-2">{{ $accessory->nombre }}</td>
                                             <td class="py-2">{{ $accessory->cantidad }}</td>
                                             <td class="py-2">{{ ucfirst($accessory->accion) }}</td>
-                                            <td class="py-2 text-right">S/ {{ number_format($accessory->subtotal, 2) }}
+                                            <td class="py-2 text-right">S/
+                                                {{ number_format($accessory->subtotal, 2) }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -342,7 +344,8 @@
                                 <div class="border rounded p-3">
                                     <p class="text-sm font-medium">{{ ucfirst($signature->tipo) }}</p>
                                     <p class="text-xs text-gray-600">{{ $signature->nombre_firmante }}</p>
-                                    <p class="text-xs text-gray-500">{{ $signature->firmado_at->format('d/m/Y H:i') }}</p>
+                                    <p class="text-xs text-gray-500">{{ $signature->firmado_at->format('d/m/Y H:i') }}
+                                    </p>
 
                                     @if ($signature->verificarIntegridad())
                                         <span class="inline-flex items-center text-xs text-green-600 mt-2">
@@ -401,4 +404,4 @@
 
     </div>
 
-@stop
+</x-admin-layout>

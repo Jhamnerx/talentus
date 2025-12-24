@@ -3,8 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SelectsController;
+use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Admin\UtilesController;
-use App\Http\Controllers\Admin\WorkOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +27,18 @@ use App\Http\Controllers\Admin\WorkOrderController;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+/*
+|--------------------------------------------------------------------------
+| FCM TOKENS API
+|--------------------------------------------------------------------------
+| API para gestionar tokens de Firebase Cloud Messaging (notificaciones push)
+*/
+
+Route::middleware('auth:sanctum')->prefix('fcm')->name('api.fcm.')->group(function () {
+    Route::post('token', [App\Http\Controllers\Api\FcmTokenController::class, 'store'])->name('token.store');
+    Route::delete('token', [App\Http\Controllers\Api\FcmTokenController::class, 'destroy'])->name('token.destroy');
 });
 
 /*

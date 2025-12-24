@@ -1,15 +1,8 @@
-@extends('layouts.admin')
-@section('ruta', 'vehiculos-vehiculos')
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.vehiculos.vehiculos-index', [], key('vehiculos-index'))
 
-
-@stop
-
-
-@push('modals')
     @livewire('admin.vehiculos.save-vehiculo', [], key('save-vehiculo'))
     @livewire('admin.vehiculos.edit-vehiculo', [], key('edit-vehiculo'))
 
@@ -24,8 +17,7 @@
     @livewire('admin.clientes.save', [], key('clientes-save'))
     @livewire('admin.vehiculos.get-devices-wox', [], key('devices-wox'))
     @livewire('admin.vehiculos.get-info-device-wox', [], key('devices-info-wox'))
-@endpush
-@section('js')
+
     <script>
         Livewire.on('updated-numero', (event) => {
 
@@ -51,4 +43,4 @@
 
         });
     </script>
-@stop
+</x-admin-layout>

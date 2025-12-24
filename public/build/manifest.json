@@ -4,7 +4,7 @@
     "name": "iziToast"
   },
   "resources/css/app.css": {
-    "file": "assets/app-CnFzCCYH.css",
+    "file": "assets/app-DVY1WJJ8.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "name": "app",
@@ -13,7 +13,7 @@
     ]
   },
   "resources/css/cliente.css": {
-    "file": "assets/cliente-OVaOe9Z7.css",
+    "file": "assets/cliente-BCAw0rgo.css",
     "src": "resources/css/cliente.css",
     "isEntry": true,
     "name": "cliente",
@@ -1150,7 +1150,7 @@
     "src": "resources/images/user-avatar-80.png"
   },
   "resources/js/app.js": {
-    "file": "assets/app-BvJOSQse.js",
+    "file": "assets/app-BNEUeW8y.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -1158,7 +1158,7 @@
       "_iziToast-BlSgvP1x.js"
     ],
     "css": [
-      "assets/app-B4UGdpYb.css"
+      "assets/app-Dz2Vt4Vt.css"
     ]
   },
   "resources/js/cliente.js": {

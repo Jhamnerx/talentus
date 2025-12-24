@@ -1,9 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'ventas-presupuestos')
-
-
-@section('contenido')
-
+<x-admin-layout ruta="ventas-presupuestos">
 
     <!-- Code block starts -->
 
@@ -22,12 +17,14 @@
                             <div class=" flex space-x-1 items-center">
                                 <div
                                     class=" focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 cursor-pointer w-3 h-3 rounded-full bg-white flex justify-center items-center">
-                                    <img src="{{ asset('images/plantilla/admin/header-2-svg2.svg') }}" alt="left arrow" />
+                                    <img src="{{ asset('images/plantilla/admin/header-2-svg2.svg') }}"
+                                        alt="left arrow" />
                                 </div>
                                 <a class="focus:text-gray-700 hover:text-gray-700 duration-100 border-b border-gray-600 dark:border-gray-200 font-normal text-xs leading-3 text-gray-600 dark:text-gray-200 pb-1"
                                     href="{{ route('admin.ventas.presupuestos.index') }}">Volver a Presupuestos</a>
                             </div>
-                            <h2 class=" font-bold text-xl leading-5 text-gray-800 dark:text-white ">Detalle del presupuesto
+                            <h2 class=" font-bold text-xl leading-5 text-gray-800 dark:text-white ">Detalle del
+                                presupuesto
                             </h2>
                         </div>
                         <div class="flex flex-row lg:space-x-3 xl:space-x-4">
@@ -81,7 +78,8 @@
                             <a class="focus:outline-none focus:text-gray-700 hover:text-gray-700 duration-100 dark:border-gray-200 dark:text-gray-200 border-b border-gray-600 font-normal text-xs leading-3 text-gray-600 pb-1"
                                 href="{{ route('admin.ventas.presupuestos.index') }}">Volver a presupuestos</a>
                         </div>
-                        <h2 class=" font-bold text-xl leading-5 text-gray-800 dark:tet-white">Detalle del presupuesto</h2>
+                        <h2 class=" font-bold text-xl leading-5 text-gray-800 dark:tet-white">Detalle del presupuesto
+                        </h2>
                     </div>
                     <div class="hidden sm:flex flex-row space-x-6 ">
 
@@ -159,8 +157,8 @@
                                         <a href="{{ route('admin.pdf.presupuesto', $presupuesto) }}" target="_blank"
                                             class="inline-flex items-center text-sm font-medium text-blue-500 hover:opacity-75 ">
                                             Descargar <svg class="ml-0.5 h-4 w-4 fill-current"
-                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                                aria-hidden="true">
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                fill="currentColor" aria-hidden="true">
                                                 <path
                                                     d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z">
                                                 </path>
@@ -202,10 +200,12 @@
                                         </div>
                                     </td>
 
-                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->cantidad }} </td>
+                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->cantidad }}
+                                    </td>
                                     <td class="whitespace-nowrap text-gray-600 truncate">{{ $detalle->precio }}</td>
                                     <td class="whitespace-nowrap text-gray-600 truncate"></td>
-                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->importe }} </td>
+                                    <td class="whitespace-nowrap text-gray-600 truncate"> {{ $detalle->importe }}
+                                    </td>
                                 </tr>
                             @endforeach
 
@@ -257,7 +257,8 @@
                                 <div>
                                     <p class="font-bold text-black text-lg"> Monto Total </p>
                                 </div>
-                                <p class="font-bold text-black text-lg"> {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}
+                                <p class="font-bold text-black text-lg">
+                                    {{ $presupuesto->divisa == 'PEN' ? 'S/.' : '$' }}
                                     {{ number_format($presupuesto->total, 2) }} </p>
                             </div>
                         </div>
@@ -267,9 +268,6 @@
         </div>
     </section>
 
-@stop
-
-@section('js')
     <script>
         function toggleMenu() {
 
@@ -284,4 +282,5 @@
 
         }
     </script>
-@endsection
+
+</x-admin-layout>

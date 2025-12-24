@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'notifications',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -37,5 +34,4 @@
 
     </div>
 
-
-@stop
+</x-admin-layout>

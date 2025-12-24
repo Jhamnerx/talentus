@@ -1,13 +1,6 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-paymentes')
-
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.payments.index')
 
-@stop
-
-@section('js')
-
-@stop
+</x-admin-layout>

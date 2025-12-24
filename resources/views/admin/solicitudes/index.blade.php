@@ -1,20 +1,7 @@
-@extends('layouts.admin')
-
-@section('ruta', 'administracion-solicitudes')
-
-
-
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.solicitudes.index')
-
-@stop
-
-
-
-{{-- section de js --}}
-@section('js')
 
     @if (session('store'))
         <script>
@@ -74,6 +61,4 @@
         </script>
     @endif
 
-
-
-@stop
+</x-admin-layout>

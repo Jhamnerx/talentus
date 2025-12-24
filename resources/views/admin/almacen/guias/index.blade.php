@@ -1,15 +1,9 @@
-@extends('layouts.admin')
-@section('ruta', 'almacen-guias')
-@section('contenido')
-
+<x-admin-layout>
 
     <!-- Table -->
     @livewire('admin.guias-remision.index')
     @livewire('admin.guias-remision.delete')
 
-@stop
-
-@section('js')
     @if (session('store'))
         <script>
             $(document).ready(function() {
@@ -56,6 +50,4 @@
         })
     </script>
 
-
-
-@stop
+</x-admin-layout>

@@ -1,14 +1,9 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-cobros')
-@section('contenido')
+<x-admin-layout>
 
     @livewire('admin.cobros.show', ['cobro' => $cobro])
 
-@stop
-
-
-@push('modals')
     @livewire('admin.cobros.payment')
     @livewire('admin.cobros.modal-suspend')
     @livewire('admin.cobros.modal-activar')
-@endpush
+
+</x-admin-layout>

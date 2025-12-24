@@ -1,21 +1,8 @@
-@extends('layouts.admin')
-@section('ruta', 'vehiculos-reportes')
-@section('contenido')
-
-
+<x-admin-layout ruta="vehiculos-reportes">
 
     @livewire('admin.vehiculos.reportes.show', ['reporte' => $reporte])
 
-
-@stop
-
-@push('modals')
     @livewire('admin.vehiculos.reportes.show-detalle')
-@endpush
-
-
-
-@section('js')
 
     <script>
         window.addEventListener('reporte-edit', event => {
@@ -29,6 +16,4 @@
         })
     </script>
 
-
-
-@stop
+</x-admin-layout>

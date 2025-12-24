@@ -417,9 +417,12 @@ Route::controller(UtilesController::class)->group(function () {
 });
 
 // ÓRDENES DE TRABAJO (WORK ORDERS)
-// Las acciones (crear, editar, estados) se manejan con Livewire
+
 Route::prefix('work-orders')->name('work-orders.')->middleware(['auth'])->group(function () {
     Route::get('/', [WorkOrderController::class, 'index'])->name('index');
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
     Route::get('/{workOrder}/pdf', [WorkOrderPdfController::class, 'generate'])->name('pdf');
+    Route::get('/{workOrder}/checklist/{fase}', function (WorkOrder $workOrder, string $fase) {
+        return view('admin.work-orders.checklist', compact('workOrder', 'fase'));
+    })->name('checklist');
 });

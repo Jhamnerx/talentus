@@ -1,7 +1,4 @@
-@extends('layouts.admin')
-@section('ruta', 'administracion-ajustes')
-@section('panel', "settingsPanel: 'sunat',")
-@section('contenido')
+<x-admin-layout>
 
     <!-- Table -->
 
@@ -53,11 +50,4 @@
 
     </div>
 
-
-@stop
-
-
-
-@section('js')
-
-@endsection
+</x-admin-layout>
