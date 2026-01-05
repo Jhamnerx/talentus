@@ -14,15 +14,22 @@ class Show extends Component
 
     public WorkOrder $workOrder;
 
-    // Propiedades para firma
     public bool $modalFirma = false;
     public string $nombreFirmante = '';
     public string $tipoFirmante = 'cliente';
     public string $documentoFirmante = '';
     public ?string $signatureData = null;
 
+    // Propiedades para captura de dispositivos
+    public bool $modalDispositivo = false;
+    public string $tipoDispositivo = 'imei'; // 'imei' o 'sim'
+    public string $codigoDispositivo = '';
+    public string $accionDispositivo = 'instalado'; // 'instalado', 'retirado', 'reemplazado'
+    public string $observacionesDispositivo = '';
+
     protected $listeners = [
         'work-order-updated' => 'refreshWorkOrder',
+        'codigo-escaneado' => 'recibirCodigoEscaneado',
     ];
 
     public function mount(WorkOrder $workOrder)
@@ -150,6 +157,65 @@ class Show extends Component
     public function descargarPDF()
     {
         return redirect()->route('admin.work-orders.pdf', $this->workOrder);
+    }
+
+    public function abrirModalDispositivo(string $tipo, string $accion = 'instalado')
+    {
+        $this->modalDispositivo = true;
+        $this->tipoDispositivo = $tipo;
+        $this->accionDispositivo = $accion;
+        $this->codigoDispositivo = '';
+        $this->observacionesDispositivo = '';
+    }
+
+    public function recibirCodigoEscaneado($codigo)
+    {
+        $this->codigoDispositivo = $codigo;
+    }
+
+    public function guardarDispositivo()
+    {
+        $this->validate([
+            'codigoDispositivo' => 'required|string',
+            'accionDispositivo' => 'required|in:instalado,retirado,reemplazado',
+        ], [
+            'codigoDispositivo.required' => 'El código es obligatorio',
+        ]);
+
+        try {
+            $data = [
+                'work_order_id' => $this->workOrder->id,
+                'vehiculo_id' => $this->workOrder->vehiculo_id,
+                'fecha_instalacion' => now(),
+                'observaciones' => $this->observacionesDispositivo,
+            ];
+
+            if ($this->tipoDispositivo === 'imei') {
+                $data['imei'] = $this->codigoDispositivo;
+                $data['accion_imei'] = $this->accionDispositivo;
+                $data['accion_sim'] = 'ninguna';
+            } else {
+                $data['iccid'] = $this->codigoDispositivo;
+                $data['numero_linea'] = $this->codigoDispositivo;
+                $data['accion_sim'] = $this->accionDispositivo;
+                $data['accion_imei'] = 'ninguna';
+            }
+
+            $this->workOrder->deviceHistory()->create($data);
+
+            $this->modalDispositivo = false;
+            $this->refreshWorkOrder();
+
+            $this->notification()->success(
+                title: 'DISPOSITIVO REGISTRADO',
+                description: strtoupper($this->tipoDispositivo) . ' ' . $this->accionDispositivo . ' correctamente'
+            );
+        } catch (\Exception $e) {
+            $this->notification()->error(
+                title: 'ERROR',
+                description: 'No se pudo registrar: ' . $e->getMessage()
+            );
+        }
     }
 
     public function abrirModalFirma()

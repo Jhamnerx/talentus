@@ -20,7 +20,7 @@ return new class extends Migration
             $table->boolean('requiere_accesorios')->default(false);
             $table->boolean('requiere_checklist')->default(true);
             $table->decimal('costo_base', 10, 2)->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->boolean('active')->default(true);
             $table->unsignedBigInteger('empresa_id');
             $table->timestamps();
             $table->softDeletes();

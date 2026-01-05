@@ -23,7 +23,10 @@ class CheckDetalleCobros implements ShouldQueue
 
     protected $notificaciones = [15, 7, 5, 3, 1];
     protected $timeout = 600;
-    protected $adminEmail = 'administracion@talentustechnology.com';
+    protected $adminEmails = [
+        'administracion@talentustechnology.com',
+        'monitoreo@talentustechnology.com'
+    ];
 
     public function __construct()
     {
@@ -132,15 +135,6 @@ class CheckDetalleCobros implements ShouldQueue
 
     private function enviarNotificacionConsolidada($cobrosConsolidados)
     {
-        // Buscar o crear un usuario con el correo de administración
-        $user = User::firstOrCreate(
-            ['email' => $this->adminEmail],
-            [
-                'name' => 'Administración Talentus',
-                'password' => bcrypt(uniqid())
-            ]
-        );
-
         $mensaje = [
             'body' => "Listado consolidado de vehículos con cobros próximos a vencer.",
             'asunto' => "NOTIFICACIÓN CONSOLIDADA DE DETALLES DE COBROS - " . Carbon::now()->format('d/m/Y'),
@@ -151,7 +145,15 @@ class CheckDetalleCobros implements ShouldQueue
             'detalles' => $cobrosConsolidados,
         ];
 
-        // Enviar notificación solo al usuario de administración
-        $user->notify(new EnviarMensajeCobro($mensaje));
+        // Enviar notificación a todos los correos configurados
+        foreach ($this->adminEmails as $email) {
+            $user = User::where('email', $email)->first();
+
+            if ($user) {
+                $user->notify(new EnviarMensajeCobro($mensaje));
+            } else {
+                Log::warning("Usuario no encontrado para enviar notificación de cobros: {$email}");
+            }
+        }
     }
 }

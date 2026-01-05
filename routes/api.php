@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Api\WorkOrderController;
+use App\Http\Controllers\Api\ConsultasApiController;
+use App\Http\Controllers\Api\ContactoApiController;
 use App\Http\Controllers\Admin\UtilesController;
 
 /*
@@ -207,3 +209,54 @@ Route::prefix('work-orders')->name('api.work-orders.')->middleware(['auth:sanctu
     // Eliminar accesorio (solo si orden no está bloqueada)
     Route::delete('/accesorios/{accessory}', [WorkOrderController::class, 'eliminarAccesorio'])->name('accesorios.eliminar');
 });
+
+/*
+|--------------------------------------------------------------------------
+| CONSULTAS PÚBLICAS API
+|--------------------------------------------------------------------------
+| API pública para consultar documentos (actas, certificados) por código.
+| Estas rutas son públicas y no requieren autenticación.
+*/
+
+Route::prefix('consultas')->name('api.consultas.')->group(function () {
+    // GET /api/consultas/acta/{codigo}
+    // Buscar acta por código
+    // Respuesta: { "success": true, "data": { "acta": {...}, "vehiculo": {...}, "cliente": {...} } }
+    Route::get('/acta/{codigo}', [ConsultasApiController::class, 'buscarActa'])->name('acta');
+
+    // GET /api/consultas/certificado-gps/{codigo}
+    // Buscar certificado GPS por código
+    // Respuesta: { "success": true, "data": { "certificado": {...}, "vehiculo": {...}, "cliente": {...} } }
+    Route::get('/certificado-gps/{codigo}', [ConsultasApiController::class, 'buscarCertificadoGps'])->name('certificado.gps');
+
+    // GET /api/consultas/certificado-velocimetro/{codigo}
+    // Buscar certificado de velocímetro por código
+    // Respuesta: { "success": true, "data": { "certificado": {...}, "vehiculo": {...}, "cliente": {...} } }
+    Route::get('/certificado-velocimetro/{codigo}', [ConsultasApiController::class, 'buscarCertificadoVelocimetro'])->name('certificado.velocimetro');
+
+    // GET /api/consultas/transmision/{placa}
+    // Consultar si un vehículo está transmitiendo
+    // Respuesta: { "success": true, "data": { "vehiculo": {...}, "dispositivo": {...}, "transmitiendo": bool } }
+    Route::get('/transmision/{placa}', [ConsultasApiController::class, 'consultarTransmision'])->name('transmision');
+
+    // GET /api/consultas/acta/{codigo}/pdf
+    // Obtener PDF de acta en base64
+    Route::get('/acta/{codigo}/pdf', [ConsultasApiController::class, 'obtenerPdfActa'])->name('acta.pdf');
+
+    // GET /api/consultas/contrato/{hash}/pdf
+    // Obtener PDF de contrato en base64
+    Route::get('/contrato/{hash}/pdf', [ConsultasApiController::class, 'obtenerPdfContrato'])->name('contrato.pdf');
+});
+
+/*
+|--------------------------------------------------------------------------
+| CONTACTO API
+|--------------------------------------------------------------------------
+| API pública para recibir mensajes de contacto desde la web.
+*/
+
+// POST /api/contacto
+// Recibir mensaje de contacto
+// Body: { "name": "...", "email": "...", "phone": "...", "company": "...", "message": "...", "g-recaptcha-response": "..." }
+// Respuesta: { "success": true, "message": "Mensaje enviado correctamente" }
+Route::post('/contacto', [ContactoApiController::class, 'store'])->name('api.contacto.store');

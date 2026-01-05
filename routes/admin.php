@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\WorkOrder;
 use Maatwebsite\Excel\Row;
 use App\Models\Dispositivos;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\GpsController;
 use App\Http\Controllers\Admin\RolController;
@@ -18,6 +20,7 @@ use App\Http\Controllers\Admin\FlotasController;
 use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
+use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\RecibosController;
 use App\Http\Controllers\Admin\SimCardController;
@@ -30,6 +33,7 @@ use App\Http\Controllers\Admin\ContratosController;
 use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ReportesGerenciales;
 use App\Http\Controllers\Admin\VehiculosController;
+use App\Http\Controllers\Admin\WorkOrderController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PresupuestoController;
 use App\Http\Controllers\Admin\ProveedoresController;
@@ -42,22 +46,19 @@ use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PDF\FacturaPdfController;
 use App\Http\Controllers\Admin\VentasFacturasController;
 use App\Http\Controllers\Admin\CertificadosGpsController;
-use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\PDF\ContratoPdfController;
 use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
+use App\Http\Controllers\CertificadosAntifatigaController;
 use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
 use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
-use App\Http\Controllers\Admin\WorkOrderController;
-use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
-use App\Models\WorkOrder;
 use App\Http\Controllers\Admin\RecibosPagosVariosController;
 use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
-use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoAntifatigaPdfController;
-use App\Http\Controllers\CertificadosAntifatigaController;
+use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
@@ -107,11 +108,14 @@ Route::controller(ClientesController::class)->group(function () {
     //Route::get('clientes/{cliente}/editar', 'edit')->name('admin.clientes.edit');
 });
 
-
-
 Route::controller(ContactosController::class)->group(function () {
     Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
 });
+
+// Mensajes de Contacto Web
+Route::get('mensajes-contacto', function () {
+    return view('admin.contactos.index');
+})->name('admin.contactos.index');
 
 
 Route::controller(ProveedoresController::class)->group(function () {
@@ -410,7 +414,6 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/metodos-pago', 'metodosPago')->name('api.metodos.pago.index');
 });
 
-
 Route::controller(UtilesController::class)->group(function () {
 
     Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
@@ -418,7 +421,6 @@ Route::controller(UtilesController::class)->group(function () {
 });
 
 // ÓRDENES DE TRABAJO (WORK ORDERS)
-
 Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->group(function () {
     Route::get('/', [WorkOrderController::class, 'index'])->name('index');
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');
@@ -427,7 +429,6 @@ Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->
         return view('admin.work-orders.checklist', compact('workOrder', 'fase'));
     })->name('checklist');
 
-    // Servir archivos privados de work orders
     Route::get('/{workOrder}/file/{type}/{filename}', function (WorkOrder $workOrder, string $type, string $filename) {
         $path = "work-orders/{$workOrder->id}/{$type}/{$filename}";
 

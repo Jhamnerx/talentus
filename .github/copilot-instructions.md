@@ -243,6 +243,75 @@ php artisan db:seed --class=ChecklistTemplateSeeder
 -   **Traducciones**: `lang/es.json` + `lang/es/` para validaciones Laravel
 -   **Zona horaria**: America/Lima (Perú)
 
+## WireUI Components (Aliases)
+
+**IMPORTANTE**: Todos los componentes de WireUI en esta aplicación usan el prefijo `form.` en sus alias. Siempre usar estos alias configurados:
+
+### Componentes de Formulario
+
+-   `<x-form.input>` - Input de texto
+-   `<x-form.textarea>` - Área de texto
+-   `<x-form.select>` - Select con `<x-select.option>`
+-   `<x-form.native.select>` - Select nativo HTML
+-   `<x-form.checkbox>` - Checkbox
+-   `<x-form.radio>` - Radio button
+-   `<x-form.toggle>` - Switch/toggle
+-   `<x-form.password>` - Input de contraseña
+-   `<x-form.maskable>` - Input con máscara
+-   `<x-form.number>` - Input numérico
+-   `<x-form.currency>` - Input de moneda
+-   `<x-form.phone>` - Input de teléfono
+-   `<x-form.color.picker>` - Selector de color
+-   `<x-form.datetime.picker>` - Date/time picker
+-   `<x-form.time.picker>` - Time picker
+-   `<x-form.time.selector>` - Time selector
+
+### Componentes de UI
+
+-   `<x-form.button>` - Botón (flat, primary, secondary, negative, positive, warning)
+-   `<x-form.mini.button>` - Botón mini
+-   `<x-form.link>` - Enlace estilizado
+-   `<x-form.card>` - Card/tarjeta
+-   `<x-form.modal>` - Modal simple
+-   `<x-form.modal.card>` - Modal con card integrado (preferido para formularios)
+-   `<x-form.dropdown>` - Dropdown menu
+-   `<x-form.dialog>` - Diálogo de confirmación
+-   `<x-form.badge>` - Badge
+-   `<x-form.mini.badge>` - Badge mini
+-   `<x-form.avatar>` - Avatar de usuario
+-   `<x-form.icon>` - Icono
+-   `<x-form.alert>` - Alerta
+-   `<x-form.errors>` - Errores de validación
+-   `<x-form.notifications>` - Sistema de notificaciones
+
+### Ejemplos de Uso
+
+```blade
+{{-- Modal con formulario --}}
+<x-form.modal.card title="Crear Usuario" wire:model="showModal" blur max-width="2xl">
+    <x-form.input label="Nombre" wire:model="name" />
+    <x-form.select label="Estado" wire:model="status">
+        <x-form.select.option label="Activo" value="1" />
+        <x-form.select.option label="Inactivo" value="0" />
+    </x-form.select>
+
+    <x-slot name="footer">
+        <x-form.button flat label="Cancelar" wire:click="closeModal" />
+        <x-form.button primary label="Guardar" wire:click="save" />
+    </x-slot>
+</x-form.modal.card>
+
+{{-- Notificaciones desde Livewire --}}
+$this->notification()->success('Registro guardado correctamente');
+```
+
+### Reglas de Uso
+
+-   **NUNCA** usar componentes HTML nativos (`<select>`, `<input>`, `<button>`) cuando exista alternativa de WireUI
+-   **SIEMPRE** usar el prefijo `form.` en los componentes: `<x-form.button>` NO `<x-button>`
+-   Para modales con formularios, preferir `<x-form.modal.card>` sobre `<x-form.modal>` + `<x-form.card>`
+-   Usar trait `WireUiActions` en componentes Livewire para acceder a `$this->notification()`
+
 ## Notas Importantes
 
 -   **NO usar Alpine.js** directamente; Livewire 3 maneja reactividad

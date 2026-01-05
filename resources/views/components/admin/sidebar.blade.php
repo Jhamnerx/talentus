@@ -299,6 +299,16 @@
                                         </li>
                                     @endcan
 
+                                    <!-- Mensajes de Contacto Web -->
+                                    <li class="mb-1 last:mb-0">
+                                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.contactos.index')) {{ 'text-violet-500!' }} @endif"
+                                            href="{{ route('admin.contactos.index') }}">
+                                            <span
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mensajes Web
+                                            </span>
+                                        </a>
+                                    </li>
+
                                 </ul>
 
                             </div>
@@ -1041,6 +1051,42 @@
                             </div>
                         </li>
                     @endcanany
+
+                    <!-- Marketing -->
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['mensajes-contacto'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                        x-data="{ open: {{ in_array(Request::segment(2), ['mensajes-contacto']) ? 1 : 0 }} }">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                            href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <svg class="shrink-0 h-6 w-6 @if (Request::segment(2) == 'mensajes-contacto') {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24" fill="none">
+                                        <path class="fill-current" d="M21 8V20.993C20.9982 21.5519 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.556 3 21.008V2.992C3 2.455 3.44495 2 3.9934 2H14V8ZM21 6H16V1L21 6ZM8 7V9H11V7H8ZM8 11V13H16V11H8ZM8 15V17H16V15H8Z"/>
+                                    </svg>
+                                    <span
+                                        class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Marketing</span>
+                                </div>
+                                <div class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                    <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
+                                        :class="open && 'transform rotate-180'" viewBox="0 0 12 12">
+                                        <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                            <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <li class="mb-1 last:mb-0">
+                                    <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.contactos.index')) {{ 'text-violet-500!' }} @endif"
+                                        href="{{ route('admin.contactos.index') }}">
+                                        <span
+                                            class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mensajes de Contacto
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
 
                 </ul>
             </div>

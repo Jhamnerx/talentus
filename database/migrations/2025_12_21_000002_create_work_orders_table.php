@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo')->unique(); // OT-000001
             $table->string('uuid')->unique();
 
             // Relaciones principales
@@ -38,7 +37,11 @@ return new class extends Migration
             $table->text('observaciones_tecnico')->nullable();
             $table->text('observaciones_final')->nullable();
             $table->text('motivo_cancelacion')->nullable();
-
+            $table->string('imei', 15)->nullable()->comment('IMEI del dispositivo GPS instalado (15 dígitos)');
+            $table->string('iccid', 20)->nullable()->comment('ICCID de la tarjeta SIM (19-20 dígitos)');
+            $table->string('modelo_dispositivo', 100)->nullable()->comment('Modelo del dispositivo GPS instalado');
+            $table->string('ubicacion_dispositivo')->nullable()->comment('Ubicación física del dispositivo en el vehículo');
+            $table->datetime('fecha_termino')->nullable()->comment('Fecha y hora real de terminación del trabajo');
             // Metadata - Guardar snapshot del tipo para preservar costos
             $table->json('tipo_data')->nullable(); // {nombre, costo_base, requiere_imei, etc}
             $table->json('metadata')->nullable();

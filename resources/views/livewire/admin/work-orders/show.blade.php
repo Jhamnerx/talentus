@@ -125,6 +125,14 @@
                 @endif
 
                 @if ($workOrder->estado->value === 'en_proceso')
+                    <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')">
+                        Registrar IMEI
+                    </x-form.button>
+
+                    <x-form.button purple icon="identification" wire:click="abrirModalDispositivo('sim', 'instalado')">
+                        Registrar SIM
+                    </x-form.button>
+
                     <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')">
                         Checklist Inicial
                     </x-form.button>
@@ -485,6 +493,158 @@
                         initSignatureCanvas();
                     }
                 }, 500);
+            });
+        </script>
+    @endpush
+
+    {{-- Modal Captura de Dispositivo (IMEI/SIM) --}}
+    <x-form.modal.card title="{{ $tipoDispositivo === 'imei' ? 'Registrar IMEI' : 'Registrar SIM Card' }}"
+        wire:model="modalDispositivo" max-width="2xl">
+        <div class="space-y-4">
+            {{-- Selector de Acción --}}
+            <x-form.select wire:model="accionDispositivo" label="Acción" placeholder="Seleccione una acción">
+                <x-select.option value="instalado">Instalado</x-select.option>
+                <x-select.option value="retirado">Retirado</x-select.option>
+                <x-select.option value="reemplazado">Reemplazado</x-select.option>
+            </x-form.select>
+
+            {{-- Área de Escaneo --}}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    {{ $tipoDispositivo === 'imei' ? 'Escanear Código QR del Equipo' : 'Escanear Código de Barras de SIM' }}
+                </label>
+
+                <div
+                    class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-gray-50 dark:bg-gray-900">
+                    {{-- Video para la cámara --}}
+                    <div id="scanner-container-{{ $tipoDispositivo }}" wire:ignore class="mb-4">
+                        <div id="reader" style="width: 100%; max-width: 500px; margin: 0 auto;"></div>
+                    </div>
+
+                    {{-- Botones de control --}}
+                    <div class="flex justify-center gap-2 mb-4">
+                        <x-form.button xs primary icon="camera" onclick="iniciarEscaner('{{ $tipoDispositivo }}')"
+                            type="button">
+                            Activar Cámara
+                        </x-form.button>
+                        <x-form.button xs secondary icon="stop" onclick="detenerEscaner()" type="button">
+                            Detener
+                        </x-form.button>
+                    </div>
+
+                    <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                        @if ($tipoDispositivo === 'imei')
+                            📱 Coloca el código QR del equipo frente a la cámara
+                        @else
+                            📊 Coloca el código de barras de la SIM frente a la cámara
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            {{-- Campo de Entrada Manual --}}
+            <div>
+                <x-form.input wire:model.live="codigoDispositivo" :label="$tipoDispositivo === 'imei' ? 'Código IMEI' : 'Código ICCID/Número'"
+                    placeholder="O ingresa el código manualmente" icon="hashtag" />
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">
+                    @if ($tipoDispositivo === 'imei')
+                        IMEI: 15 dígitos (ej: 868018071097359)
+                    @else
+                        ICCID: 19-20 dígitos (ej: 89512010030469935)
+                    @endif
+                </p>
+            </div>
+
+            {{-- Observaciones --}}
+            <div>
+                <x-form.textarea wire:model="observacionesDispositivo" label="Observaciones (Opcional)"
+                    placeholder="Agrega notas adicionales..." rows="3" />
+            </div>
+        </div>
+
+        <x-slot name="footer">
+            <div class="flex justify-between w-full">
+                <x-form.button flat label="Cancelar" x-on:click="close"
+                    wire:click="$set('modalDispositivo', false)" />
+                <x-form.button primary label="Guardar" wire:click="guardarDispositivo" />
+            </div>
+        </x-slot>
+    </x-form.modal.card>
+
+    @push('scripts')
+        {{-- Librería html5-qrcode para escaneo de códigos --}}
+        <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+
+        <script>
+            let html5QrcodeScanner = null;
+
+            window.iniciarEscaner = function(tipo) {
+                // Detener escáner anterior si existe
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.clear().catch(error => {
+                        console.error("Error al limpiar escáner anterior", error);
+                    });
+                }
+
+                // Configuración según tipo
+                const config = {
+                    fps: 10,
+                    qrbox: tipo === 'imei' ? 250 : {
+                        width: 300,
+                        height: 150
+                    },
+                    aspectRatio: tipo === 'imei' ? 1.0 : 2.0,
+                    formatsToSupport: tipo === 'imei' ? [Html5QrcodeSupportedFormats.QR_CODE] : [
+                        Html5QrcodeSupportedFormats.EAN_13,
+                        Html5QrcodeSupportedFormats.EAN_8,
+                        Html5QrcodeSupportedFormats.CODE_128,
+                        Html5QrcodeSupportedFormats.CODE_39,
+                        Html5QrcodeSupportedFormats.ITF
+                    ]
+                };
+
+                html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
+
+                html5QrcodeScanner.render(onScanSuccess, onScanError);
+            };
+
+            function onScanSuccess(decodedText, decodedResult) {
+                // Enviar código a Livewire
+                @this.call('recibirCodigoEscaneado', decodedText);
+
+                // Mostrar notificación
+                window.$wireui.notify({
+                    title: 'Código Escaneado',
+                    description: decodedText,
+                    icon: 'success'
+                });
+
+                // Detener escáner
+                detenerEscaner();
+            }
+
+            function onScanError(errorMessage) {
+                // Silenciar errores comunes de escaneo
+            }
+
+            window.detenerEscaner = function() {
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.clear().then(() => {
+                        html5QrcodeScanner = null;
+                    }).catch(error => {
+                        console.error("Error al detener escáner", error);
+                    });
+                }
+            };
+
+            // Limpiar escáner cuando se cierra el modal
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.hook('morph.updated', () => {
+                    const modalDispositivo = @this.modalDispositivo;
+                    if (!modalDispositivo && html5QrcodeScanner) {
+                        detenerEscaner();
+                    }
+                });
             });
         </script>
     @endpush
