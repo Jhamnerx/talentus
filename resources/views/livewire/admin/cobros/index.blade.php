@@ -48,6 +48,20 @@
     <!-- More actions -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
+        <!-- Left side - Per Page Selector -->
+        <div class="flex items-center gap-2 mb-4 sm:mb-0">
+            <label for="perPage" class="text-sm text-slate-600">Mostrar:</label>
+            <select wire:model.live="perPage" id="perPage"
+                class="form-select text-sm py-1 px-2 border-slate-200 hover:border-slate-300 focus:border-indigo-300 rounded">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+            <span class="text-sm text-slate-600">registros</span>
+        </div>
+
         <!-- Right side -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
@@ -63,7 +77,7 @@
 
             <!-- Dropdown -->
 
-            <div class="relative float-right" x-data="{ open: false, selected: 2 }">
+            <div class="relative float-right" x-data="{ open: false, selected: 3 }">
                 <button wire:ignore
                     class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
@@ -88,7 +102,7 @@
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
                     <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="setEstado(1)" tabindex="0"
+                        <button wire:click="setFiltroFecha('por_vencer')" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -97,9 +111,9 @@
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
-                            <span>Por Vencer</span>
+                            <span>Por Vencer (7 días)</span>
                         </button>
-                        <button wire:click="setEstado(2)" tabindex="0"
+                        <button wire:click="setFiltroFecha('vencidos')" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
@@ -110,13 +124,25 @@
                             </svg>
                             <span>Vencidos</span>
                         </button>
-
-                        <button wire:click="setEstado(null)" tabindex="0"
+                        <button wire:click="setFiltroFecha('proximo_mes')" tabindex="0"
                             class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
                                 :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                <path
+                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                            </svg>
+                            <span>Próximo Mes</span>
+                        </button>
+
+                        <button wire:click="setFiltroFecha(null)" tabindex="0"
+                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
+                            @focus="open = true" @focusout="open = false">
+                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                :class="selected !== 3 && 'invisible'" width="12" height="9"
+                                viewBox="0 0 12 9">
                                 <path
                                     d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
                             </svg>
@@ -156,17 +182,17 @@
                     <thead
                         class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">ver</div>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="font-semibold text-left">Expandir</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                <div class="font-semibold text-left">Ver</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Empresa</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Contacto</div>
-                            </th>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-left">VEHICULOS</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Comentario</div>
@@ -190,18 +216,26 @@
                         </tr>
                     </thead>
 
-                    <tbody class="text-sm divide-y divide-slate-200">
-
-                        @foreach ($cobros as $cobro)
-                            <tr wire:key='cobro-{{ $cobro->id }}'>
+                    @foreach ($cobros as $cobro)
+                        <tbody class="text-sm" wire:key='cobro-{{ $cobro->id }}' x-data="{ open: false }">
+                            <!-- Fila principal -->
+                            <tr>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                    <button class="text-gray-400 hover:text-gray-500 transform transition-transform"
+                                        :class="{ 'rotate-180': open }" @click.prevent="open = !open"
+                                        :aria-expanded="open" aria-controls="vehiculos-{{ $cobro->id }}">
+                                        <span class="sr-only">Expandir</span>
+                                        <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
+                                            <path d="M16 20l-5.4-5.4 1.4-1.4 4 4 4-4 1.4 1.4z" />
+                                        </svg>
+                                    </button>
+                                </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <a href="{{ route('admin.cobros.show', $cobro) }}"
-                                        class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                        disabled="false" id="headlessui-menu-item-29" role="menuitem"
-                                        tabindex="-1">
+                                        class="text-gray-700 group flex items-center text-sm font-normal">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor"
-                                            class="h-5 w-5 mr-3 text-gray-400 group-hover:text-violet-500">
+                                            class="h-5 w-5 text-gray-400 group-hover:text-violet-500">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                                             </path>
@@ -212,202 +246,43 @@
                                     </a>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="font-medium text-sky-600">
-                                        {{ $cobro->clientes->razon_social }}
-
+                                    <div class="flex items-center">
+                                        <div class="font-medium text-sky-600">
+                                            {{ $cobro->clientes->razon_social }}
+                                        </div>
+                                        @if (!$cobro->detalle->isEmpty())
+                                            <span
+                                                class="ml-2 px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                {{ $cobro->detalle->count() }} vehículos
+                                            </span>
+                                        @endif
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
                                     <div class="font-medium text-slate-800">
                                         @if (count($cobro->clientes->contactos) >= 1)
                                             @foreach ($cobro->clientes->contactos as $contacto)
                                                 <ul>
-                                                    <li>
-                                                        {{ $contacto->nombre }}
-                                                    </li>
+                                                    <li>{{ $contacto->nombre }}</li>
                                                 </ul>
                                             @endforeach
                                         @else
                                             #añadir
                                         @endif
-
                                     </div>
-
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
-                                        @mouseleave="open = false">
-                                        <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
-                                            aria-haspopup="true" :aria-expanded="open" @focus="open = true"
-                                            @focusout="open = false" @click.prevent>
-                                            <span class="mr-2">Ver vehiculos
-                                                @if (!$cobro->detalle->isEmpty())
-                                                    ({{ $cobro->detalle->count() }})
-                                                @endif
-
-
-                                            </span>
-                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
-                                                viewBox="0 0 12 12">
-                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                            </svg>
-                                        </button>
-                                        <div
-                                            class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2 h-[calc(100vh-64px)]">
-                                            <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-full overflow-y-auto"
-                                                x-show="open"
-                                                x-transition:enter="transition ease-out duration-200 transform"
-                                                x-transition:enter-start="opacity-0 translate-y-2"
-                                                x-transition:enter-end="opacity-100 translate-y-0"
-                                                x-transition:leave="transition ease-out duration-200"
-                                                x-transition:leave-start="opacity-100"
-                                                x-transition:leave-end="opacity-0" x-cloak>
-                                                <div class="">
-                                                    <div class="font-medium text-slate-800 mb-0.5 pb-2  text-base">
-                                                        <b>VEHICULOS</b>
-                                                    </div>
-                                                    <div
-                                                        class="relative overflow-y-auto overflow-x-auto shadow-md sm:rounded-lg">
-                                                        <table
-                                                            class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                                            <thead
-                                                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                                                <tr>
-                                                                    <th scope="col" class="px-6 py-3">
-                                                                        Placa
-                                                                    </th>
-                                                                    <th scope="col" class="px-6 py-3">
-                                                                        Plan
-                                                                    </th>
-                                                                    <th scope="col" class="px-6 py-3">
-                                                                        Fecha Vencimiento
-                                                                    </th>
-                                                                    <th scope="col" class="px-6 py-3">
-                                                                        Estado
-                                                                    </th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody class="a overflow-y-auto">
-
-                                                                @if ($cobro->detalle->isEmpty())
-                                                                    <tr
-                                                                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-center">
-
-                                                                        <td colspan="4">NO SE REGISTRARON
-                                                                            VEHICULOS</td>
-
-                                                                    </tr>
-                                                                @else
-                                                                    @foreach ($cobro->detalle as $detalle)
-                                                                        @php
-                                                                            $diasRestantes = \Carbon\Carbon::now()->diffInDays(
-                                                                                $detalle->fecha,
-                                                                                false,
-                                                                            );
-                                                                            $colorClase = '';
-                                                                            if ($diasRestantes > 30) {
-                                                                                $colorClase = 'text-green-500';
-                                                                            } elseif (
-                                                                                $diasRestantes <= 30 &&
-                                                                                $diasRestantes > 15
-                                                                            ) {
-                                                                                $colorClase = 'text-orange-500';
-                                                                            } elseif ($diasRestantes <= 15) {
-                                                                                $colorClase = 'text-red-500';
-                                                                            }
-                                                                        @endphp
-                                                                        <tr
-                                                                            class=" border-b {{ $detalle->estado == 0 ? 'bg-red-200' : 'bg-white' }}">
-                                                                            <th scope="row"
-                                                                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap {{ $colorClase }}">
-                                                                                @if ($detalle->vehiculo)
-                                                                                    {{ $detalle->vehiculo->placa }}
-                                                                                @else
-                                                                                    -
-                                                                                @endif
-                                                                            </th>
-                                                                            <td class="px-6 py-4">
-                                                                                S/. {{ $detalle->plan }}
-                                                                            </td>
-                                                                            <td class="px-6 py-4">
-
-                                                                                <span class="{{ $colorClase }}">
-                                                                                    {{ $detalle->fecha->format('d-m-Y') }}
-                                                                                </span>
-                                                                            </td>
-
-                                                                            <td class="px-6 py-4">
-                                                                                <div class="m-3">
-                                                                                    <div class="flex items-center mt-2"
-                                                                                        x-data="{ checked: {{ $detalle->estado ? 'true' : 'false' }} }">
-                                                                                        <div class="form-switch">
-                                                                                            <input
-                                                                                                wire:click="cambiarEstado({{ $detalle->id }})"
-                                                                                                type="checkbox"
-                                                                                                id="switch{{ $detalle->id }}"
-                                                                                                class="sr-only"
-                                                                                                x-model="checked" />
-                                                                                            <label class="bg-slate-400"
-                                                                                                for="switch{{ $detalle->id }}">
-                                                                                                <span
-                                                                                                    class="bg-white shadow-sm"
-                                                                                                    aria-hidden="true"></span>
-                                                                                                <span
-                                                                                                    class="sr-only">Estado</span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @endif
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
                                 </td>
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
                                     <div>{{ $cobro->comentario }}</div>
-
                                 </td>
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="font-medium text-slate-800">
-                                        {{ $cobro->periodo }}
-                                    </div>
-
+                                    <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
                                 </td>
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="font-medium text-slate-800">
-                                        {{ $cobro->tipo_pago }}
-                                    </div>
-
+                                    <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
                                 </td>
-                                {{-- 
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
-                                    <x-form.mini.button wire:click="createInvoice({{ $cobro->id }})" rounded
-                                        icon="bookmark" flat info hover:outline.negative focus:solid.positive />
-                                </td> --}}
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-
-                                    <div class="font-medium text-slate-800">
-                                        {{ $cobro->observacion }}
-                                    </div>
-
+                                    <div class="font-medium text-slate-800">{{ $cobro->observacion }}</div>
                                 </td>
-
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
@@ -421,7 +296,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -434,9 +309,7 @@
                                                     @can('admin.cobros.edit')
                                                         <li>
                                                             <a href="{{ route('admin.cobros.edit', $cobro) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-27"
-                                                                role="menuitem" tabindex="-1">
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
                                                                     class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
@@ -445,7 +318,6 @@
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
                                                                     </path>
                                                                 </svg> Editar
-
                                                             </a>
                                                         </li>
                                                     @endcan
@@ -453,9 +325,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="openModalDelete({{ $cobro->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                disabled="false" id="headlessui-menu-item-28"
-                                                                role="menuitem" tabindex="-1">
+                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
                                                                     class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
@@ -470,12 +340,10 @@
                                                     @endcan
                                                     <li>
                                                         <a href="{{ route('admin.cobros.show', $cobro) }}"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                            disabled="false" id="headlessui-menu-item-29"
-                                                            role="menuitem" tabindex="-1"><svg
-                                                                xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor"
-                                                                class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                class="h-5 w-5 mr-3 text-gray-400 group-hover:text-violet-500">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
                                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -491,26 +359,166 @@
                                             </div>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                        @endforeach
-
-                        @if ($cobros->count() < 1)
-                            <td colspan="12" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
-                        @endif
-                    </tbody>
-                </table>
-
             </div>
+            </td>
+            </tr>
+
+            <!-- Fila collapsible con vehículos -->
+            <tr id="vehiculos-{{ $cobro->id }}" role="region" x-show="open" x-cloak>
+                <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3">
+                    <div class="bg-slate-50 p-5 -mt-3">
+                        <h3 class="text-sm font-semibold text-slate-700 mb-3">
+                            VEHÍCULOS ({{ $cobro->detalle->count() }})
+                        </h3>
+
+                        @if ($cobro->detalle->isEmpty())
+                            <div class="text-center py-4 text-slate-500">
+                                No se registraron vehículos
+                            </div>
+                        @else
+                            <div class="space-y-2">
+                                @foreach ($cobro->detalle as $detalle)
+                                    @php
+                                        $diasRestantes = (int) \Carbon\Carbon::now()->diffInDays(
+                                            $detalle->fecha,
+                                            false,
+                                        );
+                                        $bgColor = '';
+                                        $textColor = '';
+                                        $borderLeftColor = '';
+
+                                        if ($diasRestantes < 0) {
+                                            $bgColor = 'bg-red-50';
+                                            $textColor = 'text-red-700';
+                                            $borderLeftColor = 'border-l-red-500';
+                                            $estadoTexto = 'VENCIDO';
+                                        } elseif ($diasRestantes <= 7) {
+                                            $bgColor = 'bg-orange-50';
+                                            $textColor = 'text-orange-700';
+                                            $borderLeftColor = 'border-l-orange-500';
+                                            $estadoTexto = 'POR VENCER';
+                                        } elseif ($diasRestantes <= 15) {
+                                            $bgColor = 'bg-yellow-50';
+                                            $textColor = 'text-yellow-700';
+                                            $borderLeftColor = 'border-l-yellow-500';
+                                            $estadoTexto = 'PRÓXIMO';
+                                        } else {
+                                            $bgColor = 'bg-green-50';
+                                            $textColor = 'text-green-700';
+                                            $borderLeftColor = 'border-l-green-500';
+                                            $estadoTexto = 'VIGENTE';
+                                        }
+                                    @endphp
+
+                                    <div
+                                        class="flex items-center gap-4 p-3 {{ $bgColor }} border-l-4 {{ $borderLeftColor }} rounded hover:shadow-sm transition-shadow">
+                                        <!-- Placa y Vehículo -->
+                                        <div class="w-32 flex-shrink-0">
+                                            @if ($detalle->vehiculo)
+                                                <div class="font-bold {{ $textColor }}">
+                                                    {{ $detalle->vehiculo->placa }}
+                                                </div>
+                                                @if ($detalle->vehiculo->marca || $detalle->vehiculo->modelo)
+                                                    <div class="text-xs text-slate-600">
+                                                        {{ $detalle->vehiculo->marca }}
+                                                        {{ $detalle->vehiculo->modelo }}
+                                                    </div>
+                                                @endif
+                                            @else
+                                                <div class="font-bold text-slate-400">Sin vehículo</div>
+                                            @endif
+                                        </div>
+
+                                        <!-- Tipo y Año -->
+                                        @if ($detalle->vehiculo)
+                                            <div class="w-32 flex-shrink-0 text-sm">
+                                                @if ($detalle->vehiculo->tipo)
+                                                    <div class="text-slate-600">{{ $detalle->vehiculo->tipo }}</div>
+                                                @endif
+                                                @if ($detalle->vehiculo->año)
+                                                    <div class="text-slate-500 text-xs">Año:
+                                                        {{ $detalle->vehiculo->año }}</div>
+                                                @endif
+                                            </div>
+                                        @endif
+
+                                        <!-- Plan -->
+                                        <div class="w-24 flex-shrink-0 text-sm">
+                                            <div class="text-slate-600 text-xs">Plan</div>
+                                            <div class="font-medium text-slate-900">S/. {{ $detalle->plan }}</div>
+                                        </div>
+
+                                        <!-- Vencimiento -->
+                                        <div class="w-28 flex-shrink-0 text-sm">
+                                            <div class="text-slate-600 text-xs">Vencimiento</div>
+                                            <div class="font-medium {{ $textColor }}">
+                                                {{ $detalle->fecha->format('d-m-Y') }}
+                                            </div>
+                                        </div>
+
+                                        <!-- Días restantes -->
+                                        <div class="w-28 flex-shrink-0 text-sm">
+                                            <div class="text-slate-600 text-xs">Días restantes</div>
+                                            <div class="font-bold {{ $textColor }}">
+                                                {{ $diasRestantes >= 0 ? $diasRestantes . ' días' : 'Vencido hace ' . abs($diasRestantes) . ' días' }}
+                                            </div>
+                                        </div>
+
+                                        <!-- Estado Badge -->
+                                        <div class="w-24 flex-shrink-0">
+                                            <span
+                                                class="px-2 py-1 text-xs font-semibold {{ $textColor }} bg-white border border-current rounded">
+                                                {{ $estadoTexto }}
+                                            </span>
+                                        </div>
+
+                                        <!-- Toggle Estado -->
+                                        <div class="flex items-center gap-2 ml-auto" x-data="{ checked: {{ $detalle->estado ? 'true' : 'false' }} }">
+                                            <span class="text-xs text-slate-600">Estado:</span>
+                                            <div class="form-switch">
+                                                <input wire:click="cambiarEstado({{ $detalle->id }})"
+                                                    type="checkbox" id="switchCollapse{{ $detalle->id }}"
+                                                    class="sr-only" x-model="checked" />
+                                                <label class="bg-slate-400" for="switchCollapse{{ $detalle->id }}">
+                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                    <span class="sr-only">Estado</span>
+                                                </label>
+                                            </div>
+                                            <span class="text-xs"
+                                                :class="checked ? 'text-green-600' : 'text-red-600'">
+                                                <span x-show="checked">Activo</span>
+                                                <span x-show="!checked">Inactivo</span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+            @endforeach
+
+            @if ($cobros->count() < 1)
+                <tbody>
+                    <tr>
+                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                            <div class="text-center">No hay Registros</div>
+                        </td>
+                    </tr>
+                </tbody>
+            @endif
+            </table>
+
         </div>
     </div>
+</div>
 
-    <!-- Pagination -->
-    <div class="mt-8 w-full">
-        {{ $cobros->links() }}
+<!-- Pagination -->
+<div class="mt-8 w-full">
+    {{ $cobros->links() }}
 
-    </div>
+</div>
 
 </div>
