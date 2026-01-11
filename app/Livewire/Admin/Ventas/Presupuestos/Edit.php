@@ -12,7 +12,7 @@ use Livewire\Attributes\On;
 use App\Models\Presupuestos;
 use Illuminate\Support\Collection;
 use App\Http\Requests\PresupuestosRequest;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
 
 class Edit extends Component
 {
@@ -82,8 +82,9 @@ class Edit extends Component
 
 
         //  CONSULTAR TIPO CAMBIO
-        $util = new UtilesController;
-        $this->tipo_cambio = $util->tipoCambio();
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarTipoCambio();
+        $this->tipo_cambio = $resultado['venta'] ?? 0;
         $this->plantilla = plantilla::first();
 
         $this->metodo_pago_id = $this->presupuesto->metodo_pago_id;

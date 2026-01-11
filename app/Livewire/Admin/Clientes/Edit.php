@@ -7,10 +7,12 @@ use App\Models\Clientes;
 use Livewire\Attributes\On;
 use Illuminate\Validation\Rule;
 use App\Http\Requests\ClientesRequest;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
+use WireUi\Traits\WireUiActions;
 
 class Edit extends Component
 {
+    use WireUiActions;
     public $modalEdit = false;
     public $tipo_documento_id = 1, $numero_documento, $razon_social, $telefono, $email, $web_site, $direccion;
 
@@ -36,59 +38,68 @@ class Edit extends Component
         $this->direccion = $cliente->direccion;
     }
 
-    public function updatedNumeroDocumento($numero)
+    public function buscarDocumento()
     {
+        $this->reset('errorConsulta');
+        $numero = trim($this->numero_documento);
 
-        $this->consultarCliente($numero);
-    }
-
-
-    public function consultarCliente($numero)
-    {
-        $util = new UtilesController;
-
-        if ($this->tipo_documento_id == 1 && strlen($numero) ==  8) {
-
-            $resultado = $util->consultaPersona($numero);
-
-            if ($resultado) {
-                if (!array_key_exists('error', $resultado)) {
-
-                    if ($resultado["nombre"]) {
-                        $this->reset('errorConsulta');
-                        $this->razon_social = $resultado["nombre"];
-                        $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
-                    } else {
-                        $this->errorConsulta = "No se encuentra el nombre";
-                    }
-                } else {
-                    $this->errorConsulta = "Hay un error en el documento";
-                }
-            } else {
-                $this->errorConsulta = "No se encuentra el documento";
-            }
+        // Validar que solo contenga números
+        if (!ctype_digit($numero)) {
+            $this->errorConsulta = 'El número de documento solo debe contener dígitos';
+            return;
         }
 
-        if ($this->tipo_documento_id == 6 && strlen($numero) ==  11) {
-
-            $resultado = $util->consultaEmpresa($numero);
-
-            if ($resultado) {
-                if (!array_key_exists('error', $resultado)) {
-
-                    if ($resultado["nombre"]) {
-                        $this->reset('errorConsulta');
-                        $this->razon_social = $resultado["nombre"];
-                        $this->direccion = $resultado["direccion"] . "" . $resultado["provincia"] . " - " . $resultado["departamento"];
-                    } else {
-                        $this->errorConsulta = "No se encuentra el nombre";
-                    }
-                } else {
-                    $this->errorConsulta = "Hay un error en el documento";
-                }
-            } else {
-                $this->errorConsulta = "No se encuentra el documento";
+        // Validar formato según tipo de documento
+        if ($this->tipo_documento_id == 1) {
+            if (strlen($numero) != 8) {
+                $this->errorConsulta = 'El DNI debe tener exactamente 8 dígitos';
+                return;
             }
+            $this->consultarDni($numero);
+        } elseif ($this->tipo_documento_id == 6) {
+            if (strlen($numero) != 11) {
+                $this->errorConsulta = 'El RUC debe tener exactamente 11 dígitos';
+                return;
+            }
+            $this->consultarRuc($numero);
+        } else {
+            $this->errorConsulta = 'Tipo de documento no válido para búsqueda automática';
+        }
+    }
+
+    protected function consultarDni($numero)
+    {
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarDni($numero);
+
+        if ($resultado['success'] ?? false) {
+            if ($resultado['nombres'] ?? false) {
+                $this->razon_social = $resultado['nombre_completo'];
+                $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->notification()->success('DNI encontrado', 'Datos cargados correctamente');
+            } else {
+                $this->errorConsulta = 'No se encontró información para este DNI';
+            }
+        } else {
+            $this->errorConsulta = $resultado['message'] ?? 'Error al consultar el DNI';
+        }
+    }
+
+    protected function consultarRuc($numero)
+    {
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarRuc($numero);
+
+        if ($resultado['success'] ?? false) {
+            if ($resultado['nombre_o_razon_social'] ?? false) {
+                $this->razon_social = $resultado['nombre_o_razon_social'];
+                $this->direccion = $resultado['direccion_completa'] ?? '';
+                $this->notification()->success('RUC encontrado', 'Datos cargados correctamente');
+            } else {
+                $this->errorConsulta = 'No se encontró información para este RUC';
+            }
+        } else {
+            $this->errorConsulta = $resultado['message'] ?? 'Error al consultar el RUC';
         }
     }
 

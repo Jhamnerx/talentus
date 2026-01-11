@@ -14,7 +14,6 @@
         "doctrine/dbal": "^3.5",
         "dompdf/dompdf": "*",
         "greenter/greenter": "^3.0",
-        "guzzlehttp/guzzle": "^7.4",
         "intervention/image": "*",
         "jhamnerx/laravel-id-generator": "dev-master",
         "laravel-lang/common": "^6.4",
@@ -54,7 +53,10 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {

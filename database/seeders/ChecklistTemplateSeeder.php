@@ -144,20 +144,20 @@ class ChecklistTemplateSeeder extends Seeder
             ],
 
             // ACCESORIOS
-            [
-                'nombre' => 'Llanta de Repuesto',
-                'categoria' => ChecklistCategoria::ACCESORIOS,
-                'descripcion' => 'Verificar presencia y estado de llanta de repuesto',
-                'requiere_foto' => true,
-                'orden' => 17,
-            ],
-            [
-                'nombre' => 'Gata y Llave de Ruedas',
-                'categoria' => ChecklistCategoria::ACCESORIOS,
-                'descripcion' => 'Verificar presencia de gata hidráulica y llave de ruedas',
-                'requiere_foto' => true,
-                'orden' => 18,
-            ],
+            // [
+            //     'nombre' => 'Llanta de Repuesto',
+            //     'categoria' => ChecklistCategoria::ACCESORIOS,
+            //     'descripcion' => 'Verificar presencia y estado de llanta de repuesto',
+            //     'requiere_foto' => true,
+            //     'orden' => 17,
+            // ],
+            // [
+            //     'nombre' => 'Gata y Llave de Ruedas',
+            //     'categoria' => ChecklistCategoria::ACCESORIOS,
+            //     'descripcion' => 'Verificar presencia de gata hidráulica y llave de ruedas',
+            //     'requiere_foto' => true,
+            //     'orden' => 18,
+            // ],
             [
                 'nombre' => 'Tapa de Tanque de Combustible',
                 'categoria' => ChecklistCategoria::ACCESORIOS,
@@ -174,20 +174,20 @@ class ChecklistTemplateSeeder extends Seeder
             ],
 
             // DOCUMENTOS
-            [
-                'nombre' => 'Tarjeta de Propiedad',
-                'categoria' => ChecklistCategoria::DOCUMENTOS,
-                'descripcion' => 'Verificar presencia de tarjeta de propiedad vehicular',
-                'requiere_foto' => false,
-                'orden' => 21,
-            ],
-            [
-                'nombre' => 'SOAT Vigente',
-                'categoria' => ChecklistCategoria::DOCUMENTOS,
-                'descripcion' => 'Verificar presencia y vigencia del Seguro Obligatorio de Accidentes de Tránsito',
-                'requiere_foto' => false,
-                'orden' => 22,
-            ],
+            // [
+            //     'nombre' => 'Tarjeta de Propiedad',
+            //     'categoria' => ChecklistCategoria::DOCUMENTOS,
+            //     'descripcion' => 'Verificar presencia de tarjeta de propiedad vehicular',
+            //     'requiere_foto' => false,
+            //     'orden' => 21,
+            // ],
+            // [
+            //     'nombre' => 'SOAT Vigente',
+            //     'categoria' => ChecklistCategoria::DOCUMENTOS,
+            //     'descripcion' => 'Verificar presencia y vigencia del Seguro Obligatorio de Accidentes de Tránsito',
+            //     'requiere_foto' => false,
+            //     'orden' => 22,
+            // ],
 
             // NEUMATICOS
             [
@@ -199,20 +199,20 @@ class ChecklistTemplateSeeder extends Seeder
             ],
 
             // MOTOR
-            [
-                'nombre' => 'Nivel de Aceite',
-                'categoria' => ChecklistCategoria::MOTOR,
-                'descripcion' => 'Verificar nivel de aceite del motor',
-                'requiere_foto' => false,
-                'orden' => 24,
-            ],
-            [
-                'nombre' => 'Nivel de Líquido Refrigerante',
-                'categoria' => ChecklistCategoria::MOTOR,
-                'descripcion' => 'Verificar nivel de refrigerante',
-                'requiere_foto' => false,
-                'orden' => 25,
-            ],
+            // [
+            //     'nombre' => 'Nivel de Aceite',
+            //     'categoria' => ChecklistCategoria::MOTOR,
+            //     'descripcion' => 'Verificar nivel de aceite del motor',
+            //     'requiere_foto' => false,
+            //     'orden' => 24,
+            // ],
+            // [
+            //     'nombre' => 'Nivel de Líquido Refrigerante',
+            //     'categoria' => ChecklistCategoria::MOTOR,
+            //     'descripcion' => 'Verificar nivel de refrigerante',
+            //     'requiere_foto' => false,
+            //     'orden' => 25,
+            // ],
         ];
 
         // Crear templates para cada empresa

@@ -41,7 +41,7 @@
                             x-data="{ open: {{ in_array(Request::segment(1), ['dashboard']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
                                         <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['dashboard'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +86,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     <li class="mb-1 last:mb-0">
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.home')) {{ 'text-violet-500!' }} @endif"
                                             href="{{ route('admin.home') }}">
@@ -101,17 +101,17 @@
 
                     <!-- Almacen -->
                     @canany(['ver-categoria', 'ver-producto', 'ver-sim_card', 'ver-dispositivo', 'ver-guias'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos']) ? 1 : 0 }} }">
 
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
 
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['categorias', 'productos', 'sim-card', 'lineas', 'dispositivos', 'guias', 'modelos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 64 64">
                                             <g fill="currentColor" class="nc-icon-wrapper">
                                                 <path
@@ -169,7 +169,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
 
                                     @can('ver-categoria')
                                         <li class="mb-1 last:mb-0">
@@ -241,15 +241,15 @@
 
                     <!-- Clientes -->
                     @canany(['ver-cliente', 'ver-contacto'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['clientes', 'contactos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['clientes', 'contactos']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['clientes', 'contactos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['clientes', 'contactos']) ? 1 : 0 }} }">
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (in_array(Request::segment(2), ['clientes', 'contactos'])) text-violet-500! @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (in_array(Request::segment(1), ['clientes', 'contactos'])) text-violet-500! @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['clientes', 'contactos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['clientes', 'contactos'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 64 64">
                                             <g fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
                                                 <path
@@ -276,7 +276,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     @can('ver-cliente')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.clientes.index')) {{ 'text-violet-500!' }} @endif"
@@ -300,14 +300,14 @@
                                     @endcan
 
                                     <!-- Mensajes de Contacto Web -->
-                                    <li class="mb-1 last:mb-0">
+                                    {{-- <li class="mb-1 last:mb-0">
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.contactos.index')) {{ 'text-violet-500!' }} @endif"
                                             href="{{ route('admin.contactos.index') }}">
                                             <span
                                                 class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Mensajes Web
                                             </span>
                                         </a>
-                                    </li>
+                                    </li> --}}
 
                                 </ul>
 
@@ -319,7 +319,7 @@
                     <!-- Proveedores -->
                     @can('ver-proveedor')
                         <li
-                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['proovedores'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
+                            class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['proovedores'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
                             <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.proveedores.index')) {{ 'text-violet-500!' }} @endif"
                                 href="{{ route('admin.proveedores.index') }}">
                                 <div class="flex items-center">
@@ -344,13 +344,13 @@
 
                     <!-- Compras -->
                     @canany(['ver-compras_facturas', 'crear-compras_facturas'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['compras'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['compras']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['compras'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['compras']) ? 1 : 0 }} }">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['compras'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" viewBox="0 0 1024 1024"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['compras'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" viewBox="0 0 1024 1024"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path fill="currentColor"
                                                 d="M256 640v192h640V384H768v-64h150.976c14.272 0 19.456 1.472 24.64 4.288a29.056 29.056 0 0 1 12.16 12.096c2.752 5.184 4.224 10.368 4.224 24.64v493.952c0 14.272-1.472 19.456-4.288 24.64a29.056 29.056 0 0 1-12.096 12.16c-5.184 2.752-10.368 4.224-24.64 4.224H233.024c-14.272 0-19.456-1.472-24.64-4.288a29.056 29.056 0 0 1-12.16-12.096c-2.688-5.184-4.224-10.368-4.224-24.576V640h64z" />
@@ -373,7 +373,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     <li class="mb-1 last:mb-0">
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.compras.index')) {{ 'text-violet-500!' }} @endif"
                                             href="{{ route('admin.compras.index') }}">
@@ -400,15 +400,15 @@
                         'comprobantes-emitir-nota-venta', 'comprobantes-emitir-nota-debito',
                         'comprobantes-emitir-nota-credito', 'ver-cotizaciones'])
 
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['emitir', 'ventas', 'presupuestos', 'recibos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), ['dashboard'])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
 
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" fill="currentColor" width="800px" height="800px"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" fill="currentColor" width="800px" height="800px"
                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                             <path
                                                 d="M15,8a1,1,0,0,1-1,1H6A1,1,0,0,1,6,7h8A1,1,0,0,1,15,8Zm-1,3H6a1,1,0,0,0,0,2h8a1,1,0,0,0,0-2Zm-4,4H6a1,1,0,0,0,0,2h4a1,1,0,0,0,0-2Zm13-3v8a3,3,0,0,1-3,3H4a3,3,0,0,1-3-3V4A3,3,0,0,1,4,1H16a3,3,0,0,1,3,3v7h3A1,1,0,0,1,23,12ZM17,4a1,1,0,0,0-1-1H4A1,1,0,0,0,3,4V20a1,1,0,0,0,1,1H17Zm4,9H19v8h1a1,1,0,0,0,1-1Z" />
@@ -421,7 +421,7 @@
                                     <!-- Icon -->
                                     <div
                                         class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 @if (in_array(Request::segment(2), ['comprobantes'])) {{ 'rotate-180' }} @endif"
+                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400 @if (in_array(Request::segment(1), ['comprobantes'])) {{ 'rotate-180' }} @endif"
                                             :class="open ? 'rotate-180' : 'rotate-0'" viewBox="0 0 12 12">
                                             <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                         </svg>
@@ -430,7 +430,7 @@
                             </a>
 
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1 @if (!in_array(Request::segment(2), ['ventas'])) {{ 'hidden' }} @endif"
+                                <ul class="pl-8 mt-1 @if (!in_array(Request::segment(1), ['emitir', 'ventas', 'presupuestos', 'recibos', 'notas'])) {{ 'hidden' }} @endif"
                                     :class="open ? 'block!' : 'hidden'">
 
                                     @can('ver-cotizaciones')
@@ -543,14 +543,14 @@
                                 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4': page
                                     .startsWith('ventas-')
                             }" x-data="{ open: false }" x-init="$nextTick(() => open = page.startsWith('ventas-'))">
-                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                             :class="page.startsWith('ventas-') &&
                                     'hover:text-gray-900 dark:hover:text-white'"
-                            href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
                                     <svg xmlns="http://www.w3.org/2000/svg"
-                                        class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['ventas'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-businessplan"
+                                        class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['ventas'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-businessplan"
                                         viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
                                         stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -581,7 +581,7 @@
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
 
-                            <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                            <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
 
                                 @can('ver-ventas-facturas')
                                 <li class="mb-1 last:mb-0">
@@ -615,8 +615,8 @@
                     @endcanany --}}
 
                     @can('ver-contrato')
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['contratos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['contratos']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['contratos'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['contratos']) ? 1 : 0 }} }">
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (Route::is('admin.ventas.contratos.index')) {{ 'text-violet-500!' }} @endif"
                                 href="{{ route('admin.ventas.contratos.index') }}">
                                 <div class="flex items-center">
@@ -648,16 +648,16 @@
                     <!-- Vehiculos -->
                     @canany(['ver-vehiculos-flotas', 'ver-vehiculos-vehiculos', 'ver-vehiculos-reportes',
                         'ver-mantenimientos-vehiculos'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition
-                                @if (in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) hover:text-gray-900 dark:hover:text-white @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                                @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) hover:text-gray-900 dark:hover:text-white @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['flotas', 'vehiculos', 'mantenimiento', 'reportes'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-car" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -680,7 +680,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     @can('ver-vehiculos-flotas')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
@@ -748,21 +748,21 @@
                     <!-- Certificados -->
                     @canany(['ver-certificados-actas', 'ver-certificados-gps', 'ver-certificados-velocimetros',
                         'ver-certificados-antifatiga'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), [
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), [
                                 'actas',
                                 'certificados-gps',
                                 'certificados-velocimetros',
                                 'certificados-antifatiga',
                             ])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['actas', 'certificados-gps', 'certificados-velocimetros', 'certificados-antifatiga']) ? 1 : 0 }} }">
+                            x-data="{ open: {{ in_array(Request::segment(1), ['actas', 'certificados-gps', 'certificados-velocimetros', 'certificados-antifatiga']) ? 1 : 0 }} }">
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
                                         <svg xmlns="http://www.w3.org/2000/svg"
-                                            class="shrink-0 h-6 w-6 @if (in_array(Request::segment(2), ['actas', 'certificados-gps', 'certificados-velocimetros', 'certificados-antifatiga'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-certificate"
+                                            class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['actas', 'certificados-gps', 'certificados-velocimetros', 'certificados-antifatiga'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif icon icon-tabler icon-tabler-certificate"
                                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
                                             stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -789,7 +789,7 @@
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
 
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     @can('ver-certificados-actas')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
@@ -853,7 +853,7 @@
                     @endcanany
 
                     <!-- Órdenes de Trabajo -->
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['work-orders'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['work-orders'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif">
                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.work-orders.index')) {{ 'text-violet-500!' }} @endif"
                             href="{{ route('admin.work-orders.index') }}">
                             <div class="flex items-center">
@@ -872,7 +872,7 @@
                     @canany(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',
                         'admin.cobros.index', 'admin.payments.index', 'admin.settings.ciudades.index',
                         'admin.settings.roles.index', 'admin.settings.plantilla.index'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), [
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), [
                                 'solicitudes',
                                 'reviews',
                                 'gerencia',
@@ -882,7 +882,7 @@
                                 'recibos-pagos',
                                 'ajustes',
                             ])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), [
+                            x-data="{ open: {{ in_array(Request::segment(1), [
                                 'solicitudes',
                                 'reviews',
                                 'gerencia',
@@ -896,12 +896,12 @@
                                 : 0 }} }">
 
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <x-admin.iconos.admin :active="in_array(Request::segment(2), ['solicitudes', 'reviews', 'gerencia', 'usuarios', 'cobros', 'payments', 'recibos-pagos', 'ajustes'])">
+                                        <x-admin.iconos.admin :active="in_array(Request::segment(1), ['solicitudes', 'reviews', 'gerencia', 'usuarios', 'cobros', 'payments', 'recibos-pagos', 'ajustes'])">
                                         </x-admin.iconos.admin>
 
                                         <span
@@ -918,7 +918,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     @can('admin.solicitudes.index')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block
@@ -1053,13 +1053,13 @@
                     @endcanany
 
                     <!-- Marketing -->
-                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['mensajes-contacto'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                        x-data="{ open: {{ in_array(Request::segment(2), ['mensajes-contacto']) ? 1 : 0 }} }">
-                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                            href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                    <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['mensajes-contacto'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                        x-data="{ open: {{ in_array(Request::segment(1), ['mensajes-contacto']) ? 1 : 0 }} }">
+                        <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                            href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                             <div class="flex items-center justify-between">
                                 <div class="flex items-center">
-                                    <svg class="shrink-0 h-6 w-6 @if (Request::segment(2) == 'mensajes-contacto') {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                    <svg class="shrink-0 h-6 w-6 @if (Request::segment(1) == 'mensajes-contacto') {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                         viewBox="0 0 24 24" fill="none">
                                         <path class="fill-current" d="M21 8V20.993C20.9982 21.5519 20.5551 22 20.0066 22H3.9934C3.44476 22 3 21.556 3 21.008V2.992C3 2.455 3.44495 2 3.9934 2H14V8ZM21 6H16V1L21 6ZM8 7V9H11V7H8ZM8 11V13H16V11H8ZM8 15V17H16V15H8Z"/>
                                     </svg>
@@ -1075,7 +1075,7 @@
                             </div>
                         </a>
                         <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                            <ul class="pl-8 mt-1" :class="!open && 'hidden'" x-cloak>
+                            <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                 <li class="mb-1 last:mb-0">
                                     <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate @if (Route::is('admin.contactos.index')) {{ 'text-violet-500!' }} @endif"
                                         href="{{ route('admin.contactos.index') }}">
@@ -1106,16 +1106,16 @@
                     </h3>
                     <ul class="mt-3">
                         <!-- tecnico -->
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(2), ['tecnico'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(2), ['tecnico']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['tecnico'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['tecnico']) ? 1 : 0 }} }">
 
-                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(2), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
-                                href="#0" @click.prevent="sidebarExpanded ? open = !open : sidebarExpanded = true">
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
 
-                                        <x-admin.iconos.task :active="in_array(Request::segment(2), ['tecnico'])">
+                                        <x-admin.iconos.task :active="in_array(Request::segment(1), ['tecnico'])">
                                         </x-admin.iconos.task>
 
                                         <span
@@ -1134,7 +1134,7 @@
                                 </div>
                             </a>
                             <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
-                                <ul class="pl-8 mt-1" :class="{ 'hidden': !open }" x-cloak>
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
                                     <li class="mb-1 last:mb-0">
                                         <a class="block
                                             text-gray-800 dark:text-gray-100

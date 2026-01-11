@@ -8,7 +8,7 @@ use Livewire\Component;
 use App\Models\Productos;
 use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
 
 class CreateInvoice extends Component
 {
@@ -43,8 +43,9 @@ class CreateInvoice extends Component
         $this->detalle_cuotas = collect();
 
         //  CONSULTAR TIPO CAMBIO
-        $util = new UtilesController;
-        $this->tipo_cambio = $util->tipoCambio();
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarTipoCambio();
+        $this->tipo_cambio = $resultado['venta'] ?? 0;
     }
 
     public function render()

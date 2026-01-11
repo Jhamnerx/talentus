@@ -8,19 +8,6 @@ use Illuminate\View\View;
 class AdminLayout extends Component
 {
     /**
-     * The route name or page identifier.
-     */
-    public ?string $ruta;
-
-    /**
-     * Create a new component instance.
-     */
-    public function __construct(?string $ruta = null)
-    {
-        $this->ruta = $ruta;
-    }
-
-    /**
      * Get the view / contents that represent the component.
      */
     public function render(): View

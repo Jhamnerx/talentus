@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\GpsController;
 use App\Http\Controllers\Admin\RolController;
 use App\Http\Controllers\Admin\HomeController;
@@ -18,7 +17,6 @@ use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Admin\CobrosController;
 use App\Http\Controllers\Admin\FlotasController;
 use App\Http\Controllers\Admin\LineasController;
-use App\Http\Controllers\Admin\UtilesController;
 use App\Http\Controllers\Admin\AjustesController;
 use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\MensajeController;
@@ -63,7 +61,7 @@ use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
 Route::get('', [HomeController::class, 'index'])->name('admin.home');
 
 
-// ALMACEN
+
 Route::controller(CategoriaController::class)->group(function () {
     Route::get('categorias', 'index')->name('admin.almacen.categorias.index');
 });
@@ -267,32 +265,9 @@ Route::controller(ServicioTecnicoController::class)->prefix('tecnico')->group(fu
     Route::get('index', 'tecnicos')->name('admin.tecnico.tecnico.index');
 });
 
-
-
-Route::controller(SearchController::class)->prefix('search')->group(function () {
-
-    // Route::get('clientes', 'clientes')->name('search.clientes');
-    //Route::get('cliente/{cliente?}', 'cliente')->name('search.cliente');
-    //Route::get('proveedores', 'proveedores')->name('search.proveedores');
-    //Route::get('proveedor/{proveedor?}', 'proveedor')->name('search.proveedor');
-    //Route::get('flotas', 'flotas')->name('search.flotas');
-    // Route::get('flota', 'flota')->name('search.flota');
-
-    // Route::get('sim_card', 'sim_card')->name('search.sim_card');
-    // Route::get('lineas', 'lineas')->name('search.lineas');
-    // Route::get('dispositivos', 'dispositivos')->name('search.dispositivos');
-    // //Route::get('modelos/dispositivos', 'modelos')->name('search.dispositivos.modelos');
-    // Route::get('vehiculos', 'vehiculos')->name('search.vehiculos');
-    // Route::get('ciudades', 'ciudades')->name('search.ciudades');
-    // Route::get('productos', 'productos')->name('search.productos');
-    // Route::get('facturas', 'facturas')->name('search.facturas');
-    // Route::get('ubigeos', 'ubigeos')->name('search.ubigeos');
-    // Route::get('users', 'users')->name('search.users');
-});
-
-//consulta sunat
-Route::get('consulta/documento', [SearchController::class, 'sunat'])->name('consulta.sunat');
-Route::get('consulta/placa', [SearchController::class, 'placa'])->name('consulta.placa');
+// Todas las consultas de SUNAT/Factiliza ahora se realizan directamente desde los componentes Livewire
+// usando el servicio FactilizaService: (new FactilizaService())->consultarDni() / consultarRuc() / consultarPlaca()
+// Ver: app/Livewire/Admin/Clientes/Save.php y Edit.php
 
 
 // VERIFICAR
@@ -361,7 +336,7 @@ Route::get('/user/profile', [UserProfileController::class, 'show'])->name('admin
 // DATA CHARTS
 
 Route::get('/json-data-ventas', [HomeController::class, 'getDataVentas'])->name('json_data_feed');
-Route::get('/test/sunat', [UtilesController::class, 'sunatConsulta'])->name('sunat.consulta');
+// Route de test SUNAT eliminada - usar FactilizaService directamente
 
 
 
@@ -414,13 +389,9 @@ Route::controller(SelectsController::class)->group(function () {
     Route::get('api/metodos-pago', 'metodosPago')->name('api.metodos.pago.index');
 });
 
-Route::controller(UtilesController::class)->group(function () {
+// Rutas de UtilesController eliminadas - tipo_cambio ahora se consulta con FactilizaService
 
-    Route::get('api/tipo_cambio', 'tipoCambio')->name('api.tipo-cambio.index');
-    Route::post('upload/cdt', 'uploadCdt')->name('api.upload.cdt');
-});
 
-// ÓRDENES DE TRABAJO (WORK ORDERS)
 Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->group(function () {
     Route::get('/', [WorkOrderController::class, 'index'])->name('index');
     Route::get('/{workOrder}', [WorkOrderController::class, 'show'])->name('show');

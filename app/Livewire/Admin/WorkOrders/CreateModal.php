@@ -92,7 +92,7 @@ class CreateModal extends Component
                 'notify-toast',
                 icon: 'success',
                 title: 'ÉXITO',
-                mensaje: "Orden {$workOrder->codigo} creada correctamente"
+                mensaje: "Orden " . str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) . " creada correctamente"
             );
 
             $this->closeModal();

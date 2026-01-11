@@ -1,53 +1,28 @@
-<div class="m-1.5 flex">
-
-    <div x-data="{ modalDelete: @entangle('modalDelete').live }">
-        <!-- Modal backdrop -->
-        <div class="fixed inset-0 bg-slate-900 bg-opacity-30 z-50 transition-opacity" x-show="modalDelete"
-            x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0"
-            x-transition:enter-end="opacity-100" x-transition:leave="transition ease-out duration-100"
-            x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" aria-hidden="true" x-cloak></div>
-        <!-- Modal dialog -->
-        <div id="danger-modal"
-            class="fixed inset-0 z-50 overflow-hidden flex items-center my-4 justify-center transform px-4 sm:px-6"
-            role="dialog" aria-modal="true" x-show="modalDelete"
-            x-transition:enter="transition ease-in-out duration-200" x-transition:enter-start="opacity-0 translate-y-4"
-            x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in-out duration-200"
-            x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 translate-y-4"
-            x-cloak>
-            <div class="bg-white rounded shadow-lg overflow-auto max-w-lg w-full max-h-full"
-                @click.outside="modalDelete = false" @keydown.escape.window="modalDelete = false">
-                <div class="p-5 flex space-x-4">
-                    <!-- Icon -->
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center shrink-0 bg-rose-100">
-                        <svg class="w-4 h-4 shrink-0 fill-current text-rose-500" viewBox="0 0 16 16">
-                            <path
-                                d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
-                        </svg>
-                    </div>
-                    <!-- Content -->
-                    <div>
-                        <!-- Modal header -->
-                        <div class="mb-2">
-                            <div class="text-lg font-semibold text-slate-800">Eliminar Guia</div>
-
-                        </div>
-                        <!-- Modal content -->
-                        <div class="text-sm mb-10">
-                            <div class="space-y-2">
-                                <p> Estas seguro de eliminar Guia remisíon?. </p>
-                            </div>
-                        </div>
-                        <!-- Modal footer -->
-                        <div class="flex flex-wrap justify-end space-x-2 text-right">
-                            <button class="btn-sm border-slate-200 hover:border-slate-300 text-slate-600"
-                                @click="modalDelete = false">Cancelar</button>
-                            <button wire:click="delete" class="btn-sm bg-rose-500 hover:bg-rose-600 text-white"
-                                @click="modalDelete = false">
-                                Si, Eliminar</button>
-                        </div>
-                    </div>
-                </div>
+﻿<x-form.modal.card title="Eliminar Guia" wire:model.live="modalDelete" width="md">
+    <div class="flex gap-4">
+        <!-- Icon -->
+        <div class="flex-shrink-0">
+            <div class="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/20">
+                <svg class="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
             </div>
         </div>
+
+        <!-- Content -->
+        <div class="flex-1">
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+                Estas seguro de eliminar Guia remisÃ­on?.
+            </p>
+        </div>
     </div>
-</div>
+
+    <x-slot name="footer">
+        <div class="flex justify-end gap-x-2">
+            <x-form.button flat label="Cancelar" x-on:click="close" />
+            <x-form.button negative label="Sí, Eliminar" wire:click="delete" />
+        </div>
+    </x-slot>
+</x-form.modal.card>

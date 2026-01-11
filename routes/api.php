@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;
-use App\Http\Controllers\Admin\UtilesController;
 
 /*
 |--------------------------------------------------------------------------

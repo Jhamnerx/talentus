@@ -3,10 +3,10 @@
     <!-- Table -->
     @livewire('admin.clientes.clientes-index')
 
-    @livewire('admin.clientes.import')
-    @livewire('admin.clientes.save')
-    @livewire('admin.clientes.edit')
-    @livewire('admin.clientes.delete')
+    @livewire('admin.clientes.import', key('import-clientes'))
+    @livewire('admin.clientes.save', key('save-clientes'))
+    @livewire('admin.clientes.edit', key('edit-clientes'))
+
 
     <script>
         window.addEventListener('clientes-import', event => {
@@ -18,5 +18,9 @@
 
         })
     </script>
+
+    @push('modals')
+        @livewire('admin.clientes.eliminar-cliente', key('eliminar-cliente'))
+    @endpush
 
 </x-admin-layout>

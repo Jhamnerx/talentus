@@ -8,7 +8,7 @@ use App\Models\Empresa;
 use App\Models\Productos;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
 
 class Edit extends Component
 {
@@ -53,8 +53,9 @@ class Edit extends Component
         $this->empresa = Empresa::first();
 
         //  CONSULTAR TIPO CAMBIO
-        $util = new UtilesController;
-        $this->tipo_cambio = $util->tipoCambio();
+        $factiliza = new FactilizaService();
+        $resultado = $factiliza->consultarTipoCambio();
+        $this->tipo_cambio = $resultado['venta'] ?? 0;
         $this->reCalTotal();
     }
 

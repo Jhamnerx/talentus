@@ -3,10 +3,11 @@
 namespace App\Observers;
 
 use App\Models\WorkOrder;
+use Illuminate\Support\Str;
 use App\Events\WorkOrderCreated;
 use App\Events\WorkOrderUpdated;
+use Illuminate\Support\Facades\Auth;
 use App\Notifications\NuevaOrdenAsignada;
-use Illuminate\Support\Str;
 use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class WorkOrderObserver
@@ -19,7 +20,7 @@ class WorkOrderObserver
 
         // Asignar usuario creador si no está definido
         if (!$workOrder->created_by) {
-            $workOrder->created_by = auth()->id();
+            $workOrder->created_by = Auth::user()->id;
         }
 
         // Asignar empresa si no está definida
@@ -30,9 +31,7 @@ class WorkOrderObserver
 
     public function created(WorkOrder $workOrder): void
     {
-        // Generar código basado en el ID: OT25-000001
-        $codigo = 'OT' . date('y') . '-' . str_pad($workOrder->id, 6, '0', STR_PAD_LEFT);
-        $workOrder->codigo = $codigo;
+
 
         // Guardar snapshot del tipo de orden (preservar costos y configuración)
         if ($workOrder->tipo && !$workOrder->tipo_data) {

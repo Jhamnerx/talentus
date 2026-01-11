@@ -7,7 +7,8 @@
                     Checklist {{ strtoupper($fase) }}
                 </h2>
                 <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                    Orden: {{ $workOrder->codigo }} | Vehículo: {{ $workOrder->vehiculo->placa ?? 'N/A' }}
+                    Orden: {{ str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) }} | Vehículo:
+                    {{ $workOrder->vehiculo->placa ?? 'N/A' }}
                 </p>
             </div>
 
@@ -194,7 +195,7 @@
 
     {{-- Modal para Subir Foto --}}
     @if ($fotoTemplateId)
-        <x-form.modal.card wire:model="fotoTemplateId" title="Subir Evidencia Fotográfica" max-width="md">
+        <x-form.modal.card wire:model="fotoTemplateId" title="Subir Evidencia Fotográfica" width="md">
             <div class="space-y-4">
                 <p class="text-sm text-gray-600 dark:text-gray-400">
                     {{ $checklist[$fotoTemplateId]['nombre'] ?? '' }}

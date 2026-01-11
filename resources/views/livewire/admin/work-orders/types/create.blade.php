@@ -54,7 +54,7 @@
 
         {{-- Estado Activo --}}
         <div class="col-span-2">
-            <x-form.toggle wire:model="is_active" label="Tipo Activo"
+            <x-form.toggle wire:model="active" label="Tipo Activo"
                 description="Los tipos inactivos no aparecerán al crear órdenes" />
         </div>
     </div>

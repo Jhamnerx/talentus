@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\WorkOrder;
+use Illuminate\Http\Request;
+use App\Models\DeviceHistory;
+use App\Enums\WorkOrderStatus;
 use App\Models\WorkOrderPhoto;
-use App\Models\WorkOrderSignature;
+use App\Models\ChecklistTemplate;
 use App\Models\WorkOrderAccessory;
 use App\Models\WorkOrderChecklist;
-use App\Models\DeviceHistory;
-use App\Models\ChecklistTemplate;
-use App\Enums\WorkOrderStatus;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Models\WorkOrderSignature;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class WorkOrderController extends Controller
 {
@@ -173,7 +174,7 @@ class WorkOrderController extends Controller
                     'resultado' => $request->resultado,
                     'observaciones' => $request->observaciones,
                     'inspeccionado_at' => now(),
-                    'inspeccionado_by' => auth()->id(),
+                    'inspeccionado_by' => Auth::user()->id,
                 ]
             );
 
@@ -231,7 +232,7 @@ class WorkOrderController extends Controller
                 'descripcion' => $request->descripcion,
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
-                'uploaded_by' => auth()->id(),
+                'uploaded_by' => Auth::user()->id,
             ]);
 
             return response()->json([
@@ -349,7 +350,7 @@ class WorkOrderController extends Controller
                 'latitude' => $request->latitude,
                 'longitude' => $request->longitude,
                 'firmado_at' => now(),
-                'tecnico_id' => auth()->id(),
+                'tecnico_id' => Auth::user()->id,
             ]);
 
             // El hash se genera automáticamente en el Observer

@@ -17,7 +17,7 @@ class Create extends Component
     public $requiere_sim = false;
     public $requiere_accesorios = false;
     public $requiere_checklist = true;
-    public $is_active = true;
+    public $active = true;
 
     /**
      * Variables disponibles para usar en la descripción del tipo de orden.
@@ -54,7 +54,7 @@ class Create extends Component
             $this->requiere_sim = $tipo->requiere_sim;
             $this->requiere_accesorios = $tipo->requiere_accesorios;
             $this->requiere_checklist = $tipo->requiere_checklist;
-            $this->is_active = $tipo->is_active;
+            $this->active = $tipo->active;
         } else {
             $this->reset([
                 'editingId',
@@ -65,10 +65,10 @@ class Create extends Component
                 'requiere_sim',
                 'requiere_accesorios',
                 'requiere_checklist',
-                'is_active'
+                'active'
             ]);
             $this->requiere_checklist = true;
-            $this->is_active = true;
+            $this->active = true;
         }
 
         $this->showModal = true;
@@ -89,7 +89,7 @@ class Create extends Component
             'requiere_sim' => 'boolean',
             'requiere_accesorios' => 'boolean',
             'requiere_checklist' => 'boolean',
-            'is_active' => 'boolean',
+            'active' => 'boolean',
         ]);
 
         $data = [
@@ -100,7 +100,7 @@ class Create extends Component
             'requiere_sim' => $this->requiere_sim,
             'requiere_accesorios' => $this->requiere_accesorios,
             'requiere_checklist' => $this->requiere_checklist,
-            'is_active' => $this->is_active,
+            'active' => $this->active,
             'empresa_id' => session('empresa'),
         ];
 

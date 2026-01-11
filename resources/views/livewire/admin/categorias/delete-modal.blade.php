@@ -1,5 +1,5 @@
 <div>
-    <x-form.modal.card title="Eliminar Categoría" wire:model="modalDelete" max-width="md">
+    <x-form.modal.card title="Eliminar Categoría" wire:model="modalDelete" width="md">
         <div class="text-center">
             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900 mb-4">
                 <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24"

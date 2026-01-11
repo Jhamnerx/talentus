@@ -23,7 +23,8 @@
             :options="$tecnicos" option-label="name" option-value="id" />
 
         {{-- Fecha Programada --}}
-        <x-form.datetime.picker label="Fecha Programada *" wire:model="fecha_programada" without-timezone />
+        <x-form.datetime.picker label="Fecha Programada *" wire:model.live="fecha_programada"
+            parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" :clearable="false" />
 
         {{-- Observaciones --}}
         <x-form.textarea label="Observaciones Iniciales" wire:model="observaciones_inicial"

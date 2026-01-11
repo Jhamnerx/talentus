@@ -30,7 +30,7 @@ class WorkOrderType extends Model
         'requiere_sim' => 'boolean',
         'requiere_accesorios' => 'boolean',
         'requiere_checklist' => 'boolean',
-        'is_active' => 'boolean',
+        'active' => 'boolean',
         'costo_base' => 'decimal:2',
     ];
 
@@ -49,6 +49,6 @@ class WorkOrderType extends Model
     // Scopes
     public function scopeActive($query)
     {
-        return $query->where('is_active', true);
+        return $query->where('active', true);
     }
 }

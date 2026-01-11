@@ -9,14 +9,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Component
 {
-
-    public Clientes $cliente;
     public $modalDelete = false;
+    public  $cliente = 0;
+
 
     public function delete()
     {
         try {
-            $this->cliente->delete();
+            if (!$this->cliente) {
+                throw new \Exception('No se ha seleccionado ningún cliente');
+            }
+
+            //$this->cliente->delete();
             $this->afterDelete();
         } catch (\Throwable $th) {
             $this->dispatch(
@@ -37,7 +41,6 @@ class Delete extends Component
 
     public function closeModal()
     {
-
         $this->modalDelete = false;
     }
 

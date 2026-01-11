@@ -5,7 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\plantilla;
-use App\Http\Controllers\Admin\UtilesController;
+use App\Services\FactilizaService;
 
 class Header extends Component
 {
@@ -43,15 +43,21 @@ class Header extends Component
 
     public function getTipoCambio()
     {
-        $util = new UtilesController;
-        $res = $util->tipoCambio();
+        $resultado = actualizar_tipo_cambio();
 
-        if ($res != "error") {
+        if ($resultado) {
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                title: 'TIPO CAMBIO CONSULTADO',
-                mensaje: 'El tipo de cambio hoy es: ' . $res
+                title: 'TIPO CAMBIO ACTUALIZADO',
+                mensaje: "Venta: S/ {$resultado['venta']} | Compra: S/ {$resultado['compra']}"
+            );
+        } else {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'No se pudo obtener el tipo de cambio'
             );
         }
     }

@@ -30,17 +30,19 @@
 
                 <div class="m-1.5">
                     <!-- Start -->
+                    @php
+                        $tcVenta = tipo_cambio_venta();
+                        $tcCompra = tipo_cambio_compra();
+                    @endphp
 
-                    @if (!Cache::has('precioVenta'))
+                    @if (!$tcVenta)
                         Obtener TC
                         <x-form.mini.button wire:click.prevent="getTipoCambio()" spinner="getTipoCambio" positive
                             icon="arrow-path" xs />
                     @else
                         <div
                             class="text-sm hidden md:inline-flex font-medium bg-amber-100 text-amber-600 rounded-full text-center px-2.5 py-1">
-                            TC - Venta: {{ Cache::get('precioVenta') }} Compra: {{ Cache::get('precioCompra') }}
-
-
+                            TC - Venta: {{ number_format($tcVenta, 3) }} | Compra: {{ number_format($tcCompra, 3) }}
                         </div>
                     @endif
 

@@ -50,7 +50,7 @@ class Index extends Component
         $ordenes = WorkOrder::query()
             ->with(['tipo', 'vehiculo', 'cliente', 'tecnico'])
             ->when($this->search, function ($query) {
-                $query->where('codigo', 'like', "%{$this->search}%")
+                $query->where('id', 'like', "%{$this->search}%")
                     ->orWhereHas('vehiculo', function ($q) {
                         $q->where('placa', 'like', "%{$this->search}%");
                     })
@@ -62,7 +62,7 @@ class Index extends Component
             ->when($this->tecnico_filter, fn($q) => $q->tecnico($this->tecnico_filter))
             ->when($this->fecha_desde, fn($q) => $q->whereDate('fecha_programada', '>=', $this->fecha_desde))
             ->when($this->fecha_hasta, fn($q) => $q->whereDate('fecha_programada', '<=', $this->fecha_hasta))
-            ->latest('fecha_programada')
+            ->orderBy('id', 'desc')
             ->paginate($this->perPage);
 
         // Cargar tipos de órdenes
@@ -95,7 +95,7 @@ class Index extends Component
                 'notify-toast',
                 icon: 'success',
                 title: 'ORDEN INICIADA',
-                mensaje: "Orden {$orden->codigo} iniciada correctamente"
+                mensaje: "Orden {$orden->id} iniciada correctamente"
             );
         } catch (\Exception $e) {
             $this->dispatch(
@@ -123,7 +123,7 @@ class Index extends Component
                 'notify-toast',
                 icon: 'success',
                 title: 'ORDEN FINALIZADA',
-                mensaje: "Orden {$orden->codigo} finalizada correctamente"
+                mensaje: "Orden {$orden->id} finalizada correctamente"
             );
         } catch (\Exception $e) {
             $this->dispatch(
@@ -144,7 +144,7 @@ class Index extends Component
                 'notify-toast',
                 icon: 'success',
                 title: 'ORDEN CERRADA',
-                mensaje: "Orden {$orden->codigo} cerrada y bloqueada"
+                mensaje: "Orden {$orden->id} cerrada y bloqueada"
             );
         } catch (\Exception $e) {
             $this->dispatch(
@@ -166,7 +166,7 @@ class Index extends Component
                 'notify-toast',
                 icon: 'success',
                 title: 'ORDEN CANCELADA',
-                mensaje: "Orden {$orden->codigo} cancelada correctamente"
+                mensaje: "Orden {$orden->id} cancelada correctamente"
             );
         } catch (\Exception $e) {
             $this->dispatch(
@@ -232,5 +232,12 @@ class Index extends Component
             title: 'ELIMINADO',
             mensaje: "Tipo '{$tipo->nombre}' eliminado correctamente"
         );
+    }
+
+    // ========== MÉTODOS PARA EXPORTACIÓN ==========
+
+    public function abrirModalExport()
+    {
+        $this->dispatch('open-export-modal');
     }
 }

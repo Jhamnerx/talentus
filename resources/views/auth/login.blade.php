@@ -1,150 +1,112 @@
 <x-guest-layout>
-    <main class="bg-white">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
 
-        <div class="relative flex">
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
 
-            <!-- Content -->
-            <div class="w-full md:w-1/2">
+        .talentus-gradient {
+            background: linear-gradient(135deg, #060b34 0%, #0e2157 35%, #122f71 70%, #888989 100%);
+        }
+    </style>
 
-                <div class="min-h-screen h-full flex flex-col after:flex-1">
-
-                    <!-- Header -->
-                    <div class="flex-1">
-                        <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                            <!-- Logo -->
-                            <a class="block" href="{{ route('web.home') }}">
-
-                                <img src="{{ asset('images/logo-2-1.png') }}" alt="">
-                            </a>
-                        </div>
-                    </div>
-
-                    @if (session('status'))
-                        <div class="mb-4 font-medium text-sm text-green-600">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-                    <div class="max-w-sm mx-auto px-4 py-8">
-
-                        <h1 class="text-3xl text-slate-800 font-bold mb-6">BIENVENIDO A TALENTUS APP! ✨</h1>
-                        <!-- Form -->
-                        <x-validation-errors class="mb-4" />
-                        <form method="POST" action="{{ route('login') }}">
-                            @csrf
-                            <p tabindex="0"
-                                class="focus:outline-none text-2xl font-extrabold leading-6 text-gray-800">
-                                Ingresa en tu cuenta</p>
-
-                            {{--
-                            <button aria-label="Continue with google" role="button"
-                                class="focus:outline-none hover:bg-slate-50 hover:border-gray-400 focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-10">
-                                <img src="{{ asset('images/icons/google.svg') }}" alt="google">
-                                <p class="text-base font-medium ml-4 text-gray-700">Ingresar con Google</p>
-                            </button>
-                            <button aria-label="Continue with facebook" role="button"
-                                class="focus:outline-none hover:bg-slate-50 hover:border-gray-400 focus:ring-2 focus:ring-offset-1 focus:ring-gray-700 py-3.5 px-4 border rounded-lg border-gray-700 flex items-center w-full mt-4">
-                                <img class="w-5 h-5" src="{{ asset('images/icons/facebook.svg') }}" alt="facebook">
-                                <p class="text-base font-medium ml-4 text-gray-700">Ingresar con Facebook</p>
-                            </button>
-
-                            <div class="w-full flex items-center justify-between py-5">
-                                <hr class="w-full bg-gray-400">
-                                <p class="text-base font-medium leading-4 px-2.5 text-gray-400">O</p>
-                                <hr class="w-full bg-gray-400  ">
-                            </div> --}}
-
-
-                            <div class="space-y-4">
-                                <div>
-                                    <label class="block text-sm font-medium mb-1" for="email">Correo
-                                        Electronico</label>
-                                    <input id="email"
-                                        class="w-full bg-gray-100 border rounded form-input text-xs font-medium leading-none text-gray-800 py-3 pl-3 mt-2"
-                                        name="email" value="{{ old('email') }}" type="email" required autofocus />
-                                </div>
-                                <label class="block text-sm font-medium mb-1" for="password">Contraseña</label>
-                                <div class="relative flex items-center justify-center">
-
-                                    <input autocomplete="on" required autocomplete="current-password" id="password"
-                                        type="password" name="password"
-                                        class="bg-gray-200 border rounded form-input text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2" />
-                                    <div class="absolute right-0 mt-2 mr-3 cursor-pointer">
-                                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/sign_in-svg5.svg"
-                                            alt="viewport">
-                                    </div>
-                                </div>
-                                {{-- <div>
-                                    <label class="block text-sm font-medium mb-1" for="empresa">Empresa:</label>
-                                    <select class="form-select block mt-1 w-full" name="empresa" id="empresa" required>
-                                        <option value="1">Talentus</option>
-                                        <option value="2">Katary</option>
-                                    </select>
-                                </div> --}}
-                            </div>
-                            <div class="block mt-4">
-                                <label for="remember_me" class="flex items-center">
-                                    <x-checkbox id="remember_me" name="remember" />
-                                    <span class="ml-2 text-sm text-gray-600">Recuerdame</span>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between mt-6">
-                                <div class="mr-1">
-                                    @if (Route::has('password.request'))
-                                        <a class="text-sm underline hover:no-underline"
-                                            href="{{ route('password.request') }}">Olvidaste tu
-                                            Contraseña?</a>
-                                    @endif
-                                </div>
-
-                                <x-button class="btn bg-indigo-500 hover:bg-indigo-600 text-white ml-3">
-                                    INGRESAR
-                                </x-button>
-                            </div>
-
-                        </form>
-
-
-
-                        <!-- Footer -->
-                        <div class="pt-5 mt-6 border-t border-slate-200">
-                            {{-- <div class="text-sm">
-                                No tienes una cuenta? <a class="font-medium text-indigo-500 hover:text-indigo-600"
-                                    href="{{ route('register') }}">Registrate</a>
-                            </div> --}}
-                            <!-- Warning -->
-                            <div class="mt-5">
-                                <div class="bg-yellow-100 text-yellow-600 px-3 py-2 rounded">
-                                    <svg class="inline w-3 h-3 shrink-0 fill-current" viewBox="0 0 12 12">
-                                        <path
-                                            d="M10.28 1.28L3.989 7.575 1.695 5.28A1 1 0 00.28 6.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28 1.28z" />
-                                    </svg>
-                                    <span class="text-sm">
-                                        Panel Disponible solo para administradores y personal
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-
+    <div
+        class="min-h-screen talentus-gradient flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <!-- Decorative elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-40 -left-40 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+            <div
+                class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full bg-gradient-to-br from-white/5 to-transparent">
             </div>
-
-            <!-- Image -->
-            <div class="hidden md:block absolute top-0 bottom-0 right-0 md:w-1/2" aria-hidden="true">
-                <img class="object-cover object-center w-full h-full" src="images/auth-image.jpg" width="760"
-                    height="1024" alt="Authentication image" />
-                <img class="absolute top-1/4 left-0 transform -translate-x-1/2 ml-8 hidden lg:block"
-                    src="images/auth-decoration-2.png" width="536" height="548" alt="Authentication decoration" />
-            </div>
-            {{-- <div class="block md:hidden absolute top-0 bottom-0 -z-10 right-0 md:w-1/2" aria-hidden="true">
-                <img class="object-cover object-center bg-no-repeat w-full h-full" src="images/auth-mobile.jpg"
-                    alt="Authentication image" />
-
-            </div> --}}
-
         </div>
 
-    </main>
+        <div class="w-full max-w-md relative z-10">
+            <!-- Logo -->
+            <div class="flex justify-center mb-8">
+                <img src="{{ asset('images/logo-2-1.png') }}" alt="Talentus" class="h-16 w-auto">
+            </div>
+
+            <!-- Card Principal -->
+            <x-form.card class="shadow-2xl border-0 bg-white/95 backdrop-blur-sm">
+                <!-- Título -->
+                <div class="text-center mb-8">
+                    <h1 class="text-3xl font-bold text-[#060b34] mb-2"
+                        style="font-family: 'Montserrat', sans-serif; font-weight: 700;">
+                        ¡Bienvenido a Talentus! ✨
+                    </h1>
+                    <p class="text-gray-600 text-sm" style="font-family: 'Montserrat', sans-serif;">
+                        Ingresa tus credenciales para acceder al panel
+                    </p>
+                </div>
+
+                @if (session('status'))
+                    <x-form.alert class="mb-6" positive>
+                        {{ session('status') }}
+                    </x-form.alert>
+                @endif
+
+                <x-form.errors class="mb-6" />
+
+                <!-- Formulario -->
+                <form method="POST" action="{{ route('login') }}" class="space-y-6">
+                    @csrf
+
+                    <!-- Email -->
+                    <x-form.input label="Correo Electrónico" name="email" type="email"
+                        placeholder="correo@ejemplo.com" value="{{ old('email') }}" required autofocus />
+
+                    <!-- Password -->
+                    <x-form.password label="Contraseña" name="password" placeholder="Ingresa tu contraseña" required
+                        autocomplete="current-password" />
+
+                    <!-- Remember & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <x-form.checkbox id="remember_me" name="remember" label="Recuérdame" />
+
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}"
+                                class="text-sm font-medium text-[#122f71] hover:text-[#0e2157] transition-colors">
+                                ¿Olvidaste tu contraseña?
+                            </a>
+                        @endif
+                    </div>
+
+                    <!-- Botón de Login -->
+                    <x-form.button type="submit" primary class="w-full bg-[#122f71] hover:bg-[#0e2157] border-0"
+                        right-icon="arrow-right">
+                        Iniciar Sesión
+                    </x-form.button>
+                </form>
+
+                <!-- Divider -->
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-gray-300"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-2 bg-white text-gray-500">Información</span>
+                    </div>
+                </div>
+
+                <!-- Warning Footer -->
+                <x-form.alert warning class="text-center">
+                    <div class="flex items-center justify-center gap-2">
+                        <x-form.icon name="shield-check" class="w-5 h-5" />
+                        <span class="text-sm">
+                            Panel exclusivo para administradores y personal autorizado
+                        </span>
+                    </div>
+                </x-form.alert>
+            </x-form.card>
+
+            <!-- Footer -->
+            <div class="mt-8 text-center">
+                <p class="text-sm text-white/80" style="font-family: 'Montserrat', sans-serif;">
+                    © {{ date('Y') }} Talentus. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </div>
 </x-guest-layout>

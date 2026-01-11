@@ -119,9 +119,10 @@
         </div>
     </div>
 
-    {{-- Botón Crear --}}
-    <div class="mb-6">
-        <x-form.button primary label="Nueva Orden de Trabajo" wire:click="openCreateModal" />
+    {{-- Botón Crear y Exportar --}}
+    <div class="mb-6 flex gap-3">
+        <x-form.button primary label="Nueva Orden de Trabajo" wire:click="openCreateModal" icon="plus" />
+        <x-form.button secondary label="Exportar a Excel" wire:click="abrirModalExport" icon="document-arrow-down" />
     </div>
 
     {{-- Filtros --}}
@@ -144,7 +145,7 @@
 
         @if ($search || $estado_filter || $fecha_desde || $fecha_hasta)
             <div class="mt-4">
-                <x-form.button wire:click="limpiarFiltros" flat label="Limpiar filtros" icon="x" />
+                <x-form.button wire:click="limpiarFiltros" flat label="Limpiar filtros" icon="x-mark" />
             </div>
         @endif
     </div>
@@ -164,7 +165,8 @@
                         Cliente</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
                         Técnico</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">Fecha
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                        Fecha
                     </th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
                         Estado</th>
@@ -176,7 +178,7 @@
                 @forelse($ordenes as $orden)
                     <tr wire:key="orden-{{ $orden->id }}">
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                            {{ $orden->codigo }}
+                            {{ $orden->id }}
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                             {{ $orden->tipo->nombre }}
@@ -323,7 +325,7 @@
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-center">
-                                @if ($tipo->is_active)
+                                @if ($tipo->active)
                                     <span
                                         class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                                         Activo
@@ -339,9 +341,9 @@
                                 <x-form.button xs flat icon="pencil" wire:click="editarTipo({{ $tipo->id }})"
                                     teal />
 
-                                <x-form.button xs flat icon="{{ $tipo->is_active ? 'eye-slash' : 'eye' }}"
+                                <x-form.button xs flat icon="{{ $tipo->active ? 'eye-slash' : 'eye' }}"
                                     wire:click="toggleActivoTipo({{ $tipo->id }})"
-                                    {{ $tipo->is_active ? 'orange' : 'green' }} />
+                                    {{ $tipo->active ? 'orange' : 'green' }} />
 
                                 @if ($tipo->work_orders_count == 0)
                                     <x-form.button xs flat icon="trash"

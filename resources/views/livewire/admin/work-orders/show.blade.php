@@ -16,7 +16,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-                        Orden: {{ $workOrder->codigo }}
+                        Orden: {{ str_pad($workOrder->id, 5, '0', STR_PAD_LEFT) }}
                     </h1>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
                         Creada: {{ $workOrder->created_at->format('d/m/Y H:i') }}
@@ -119,54 +119,62 @@
 
             <div class="flex flex-wrap gap-3">
                 @if ($workOrder->estado->value === 'pendiente')
-                    <x-form.button primary icon="play" wire:click="iniciar">
+                    <x-form.button primary icon="play" wire:click="iniciar" spinner="iniciar">
                         Iniciar Trabajo
                     </x-form.button>
                 @endif
 
                 @if ($workOrder->estado->value === 'en_proceso')
-                    <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')">
+                    <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')"
+                        spinner="abrirModalDispositivo">
                         Registrar IMEI
                     </x-form.button>
 
-                    <x-form.button purple icon="identification" wire:click="abrirModalDispositivo('sim', 'instalado')">
+                    <x-form.button purple icon="identification" wire:click="abrirModalDispositivo('sim', 'instalado')"
+                        spinner="abrirModalDispositivo">
                         Registrar SIM
                     </x-form.button>
 
-                    <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')">
+                    <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')"
+                        spinner="verChecklist">
                         Checklist Inicial
                     </x-form.button>
 
-                    <x-form.button secondary icon="clipboard-document-check" wire:click="verChecklist('after')">
+                    <x-form.button secondary icon="clipboard-document-check" wire:click="verChecklist('after')"
+                        spinner="verChecklist">
                         Checklist Final
                     </x-form.button>
 
                     @if (!$workOrder->signatures()->where('tipo', 'conformidad')->exists())
-                        <x-form.button warning icon="pencil-square" wire:click="abrirModalFirma">
+                        <x-form.button warning icon="pencil-square" wire:click="abrirModalFirma"
+                            spinner="abrirModalFirma">
                             Firma de Conformidad
                         </x-form.button>
                     @endif
 
-                    <x-form.button positive icon="check" wire:click="finalizar">
+                    <x-form.button positive icon="check" wire:click="finalizar" spinner="finalizar">
                         Finalizar Trabajo
                     </x-form.button>
                 @endif
 
                 @if ($workOrder->estado->value === 'finalizado')
-                    <x-form.button info icon="lock-closed" wire:click="cerrar">
+                    <x-form.button info icon="lock-closed" wire:click="cerrar" spinner="cerrar">
                         Cerrar y Bloquear
                     </x-form.button>
                 @endif
 
                 @if (in_array($workOrder->estado->value, ['pendiente', 'en_proceso']))
-                    <x-form.button negative icon="x-mark" wire:click="cancelar('Cancelado por usuario')">
+                    <x-form.button negative icon="x-mark" wire:click="cancelar('Cancelado por usuario')"
+                        spinner="cancelar">
                         Cancelar Orden
                     </x-form.button>
                 @endif
 
-                <x-form.button outline secondary icon="document-arrow-down" wire:click="descargarPDF">
-                    Descargar PDF
-                </x-form.button>
+                <a href="{{ route('admin.work-orders.pdf', $workOrder) }}" target="_blank">
+                    <x-form.button outline secondary icon="document-arrow-down">
+                        Descargar PDF
+                    </x-form.button>
+                </a>
             </div>
         </div>
     @endif
@@ -566,7 +574,8 @@
             <div class="flex justify-between w-full">
                 <x-form.button flat label="Cancelar" x-on:click="close"
                     wire:click="$set('modalDispositivo', false)" />
-                <x-form.button primary label="Guardar" wire:click="guardarDispositivo" />
+                <x-form.button primary label="Guardar" wire:click="guardarDispositivo"
+                    spinner="guardarDispositivo" />
             </div>
         </x-slot>
     </x-form.modal.card>
@@ -586,21 +595,28 @@
                     });
                 }
 
-                // Configuración según tipo
+                // Configuración optimizada según tipo
                 const config = {
                     fps: 10,
-                    qrbox: tipo === 'imei' ? 250 : {
-                        width: 300,
-                        height: 150
+                    qrbox: function(viewfinderWidth, viewfinderHeight) {
+                        // Área de escaneo adaptativa
+                        let minEdgePercentage = 0.7;
+                        let minEdgeSize = Math.min(viewfinderWidth, viewfinderHeight);
+                        let qrboxSize = Math.floor(minEdgeSize * minEdgePercentage);
+                        return {
+                            width: qrboxSize,
+                            height: tipo === 'imei' ? qrboxSize : Math.floor(qrboxSize * 0.6)
+                        };
                     },
-                    aspectRatio: tipo === 'imei' ? 1.0 : 2.0,
-                    formatsToSupport: tipo === 'imei' ? [Html5QrcodeSupportedFormats.QR_CODE] : [
-                        Html5QrcodeSupportedFormats.EAN_13,
-                        Html5QrcodeSupportedFormats.EAN_8,
-                        Html5QrcodeSupportedFormats.CODE_128,
-                        Html5QrcodeSupportedFormats.CODE_39,
-                        Html5QrcodeSupportedFormats.ITF
-                    ]
+                    aspectRatio: 1.777778, // 16:9
+                    disableFlip: false,
+                    rememberLastUsedCamera: true,
+                    showTorchButtonIfSupported: true,
+                    experimentalFeatures: {
+                        useBarCodeDetectorIfSupported: true
+                    },
+                    // NO especificar formatsToSupport para permitir todos los formatos
+                    // Esto es más flexible y detecta mejor
                 };
 
                 html5QrcodeScanner = new Html5QrcodeScanner("reader", config, false);
@@ -609,6 +625,8 @@
             };
 
             function onScanSuccess(decodedText, decodedResult) {
+                console.log('Código detectado:', decodedText, decodedResult);
+
                 // Enviar código a Livewire
                 @this.call('recibirCodigoEscaneado', decodedText);
 
@@ -624,28 +642,31 @@
             }
 
             function onScanError(errorMessage) {
-                // Silenciar errores comunes de escaneo
-            }
+                // Solo mostrar errores significativos, no los de escaneo continuo
+                const errorString = typeof errorMessage === 'string' ? errorMessage : String(errorMessage);
+                if (!errorString.includes('No MultiFormat') &&
+                    !errorString.includes('NotFoundException')) {}
 
-            window.detenerEscaner = function() {
-                if (html5QrcodeScanner) {
-                    html5QrcodeScanner.clear().then(() => {
-                        html5QrcodeScanner = null;
-                    }).catch(error => {
-                        console.error("Error al detener escáner", error);
-                    });
-                }
-            };
-
-            // Limpiar escáner cuando se cierra el modal
-            document.addEventListener('livewire:initialized', () => {
-                Livewire.hook('morph.updated', () => {
-                    const modalDispositivo = @this.modalDispositivo;
-                    if (!modalDispositivo && html5QrcodeScanner) {
-                        detenerEscaner();
+                window.detenerEscaner = function() {
+                    if (html5QrcodeScanner) {
+                        html5QrcodeScanner.clear().then(() => {
+                            html5QrcodeScanner = null;
+                        }).catch(error => {
+                            console.error("Error al detener escáner", error);
+                        });
                     }
+                };
+
+                // Limpiar escáner cuando se cierra el modal
+                document.addEventListener('livewire:initialized', () => {
+                    Livewire.hook('morph.updated', () => {
+                        const modalDispositivo = @this.modalDispositivo;
+                        if (!modalDispositivo && html5QrcodeScanner) {
+                            detenerEscaner();
+                        }
+                    });
                 });
-            });
+            }
         </script>
     @endpush
 </div>

@@ -7,7 +7,6 @@ use App\Models\Facturas;
 use App\Models\plantilla;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Admin\UtilesController;
 use App\Models\Recibos;
 use App\Models\Ventas;
 use Illuminate\Support\Arr;
@@ -43,8 +42,7 @@ class HomeController extends Controller
 
         $fecha = Carbon::now();
 
-        //$labels = $this->getLabels(6);
-        $labels = UtilesController::getLabels(6);
+        $labels = $this->getLabels(6);
 
         $total_facturas = $this->getTotalesFacturas(6, $request->divisa);
         $total_recibos = $this->getTotalesRecibos(6, $request->divisa);
@@ -65,6 +63,26 @@ class HomeController extends Controller
             ]
 
         ];
+    }
+
+    /**
+     * Genera un array de labels con fechas en formato m-d-Y
+     * retrocediendo desde el mes actual
+     * 
+     * @param int $months Número de meses a generar
+     * @return array
+     */
+    private function getLabels($months = 1)
+    {
+        $labels = [];
+        for ($i = 0; $i < $months; $i++) {
+            array_push(
+                $labels,
+                Carbon::now()->startOfMonth()->subMonth($i)->format('m-d-Y')
+            );
+        }
+
+        return $labels;
     }
 
 
