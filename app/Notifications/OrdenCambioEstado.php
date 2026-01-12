@@ -7,9 +7,8 @@ use App\Enums\WorkOrderStatus;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
-use NotificationChannels\Fcm\FcmChannel;
-use NotificationChannels\Fcm\FcmMessage;
-use NotificationChannels\Fcm\Resources\Notification as FcmNotification;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification as FirebaseNotification;
 
 class OrdenCambioEstado extends Notification implements ShouldQueue
 {
@@ -25,14 +24,26 @@ class OrdenCambioEstado extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database', FcmChannel::class];
+        $channels = ['database', 'broadcast'];
+
+        // Solo enviar por Firebase si el usuario tiene token FCM
+        if ($notifiable->fcm_token) {
+            $channels[] = \App\Channels\FirebaseChannel::class;
+        }
+
+        return $channels;
     }
 
     /**
-     * Get the FCM representation of the notification.
+     * Get the Firebase Cloud Messaging representation of the notification.
      */
-    public function toFcm(object $notifiable): FcmMessage
+    public function toFirebase(object $notifiable): ?CloudMessage
     {
+        // Si el usuario no tiene token FCM, retornar null
+        if (!$notifiable->fcm_token) {
+            return null;
+        }
+
         $emoji = match ($this->workOrder->estado) {
             WorkOrderStatus::EN_PROCESO => '🚀',
             WorkOrderStatus::FINALIZADO => '✅',
@@ -40,29 +51,42 @@ class OrdenCambioEstado extends Notification implements ShouldQueue
             default => '📋',
         };
 
-        return (new FcmMessage(notification: new FcmNotification(
-            title: sprintf('%s Orden %s', $emoji, $this->workOrder->codigo),
-            body: sprintf(
+        $notification = FirebaseNotification::create(
+            sprintf('%s Orden %s', $emoji, $this->workOrder->codigo),
+            sprintf(
                 'Estado: %s → %s',
                 $this->estadoAnterior->value,
                 $this->workOrder->estado->value
-            ),
-        )))
-            ->data([
-                'work_order_id' => $this->workOrder->id,
-                'work_order_codigo' => $this->workOrder->codigo,
-                'estado_anterior' => $this->estadoAnterior->value,
-                'estado_actual' => $this->workOrder->estado->value,
-                'vehiculo_placa' => $this->workOrder->vehiculo->placa ?? null,
-                'action' => 'work_order_status_changed',
-                'url' => route('admin.work-orders.show', $this->workOrder),
+            )
+        );
+
+        $data = [
+            'work_order_id' => (string) $this->workOrder->id,
+            'work_order_codigo' => $this->workOrder->codigo,
+            'estado_anterior' => $this->estadoAnterior->value,
+            'estado_actual' => $this->workOrder->estado->value,
+            'vehiculo_placa' => $this->workOrder->vehiculo->placa ?? '',
+            'action' => 'work_order_status_changed',
+            'url' => route('admin.work-orders.show', $this->workOrder),
+        ];
+
+        return CloudMessage::new()
+            ->toToken($notifiable->fcm_token)
+            ->withNotification($notification)
+            ->withData($data)
+            ->withAndroidConfig([
+                'priority' => 'high',
+                'notification' => [
+                    'sound' => 'default',
+                    'channel_id' => 'work_orders',
+                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                ],
             ])
-            ->custom([
-                'android' => [
-                    'priority' => 'high',
-                    'notification' => [
+            ->withApnsConfig([
+                'payload' => [
+                    'aps' => [
                         'sound' => 'default',
-                        'channel_id' => 'work_orders',
+                        'badge' => 1,
                     ],
                 ],
             ]);
@@ -70,6 +94,8 @@ class OrdenCambioEstado extends Notification implements ShouldQueue
 
     /**
      * Get the array representation of the notification.
+     *
+     * @return array<string, mixed>
      */
     public function toArray(object $notifiable): array
     {

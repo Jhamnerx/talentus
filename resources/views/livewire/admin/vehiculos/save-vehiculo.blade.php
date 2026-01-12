@@ -2,8 +2,17 @@
 
     <div class="grid grid-cols-12 gap-6">
 
-        <div class="col-span-6 sm:col-span-6">
-            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" />
+        <div class="col-span-12 sm:col-span-6">
+            <x-form.input wire:model.change="placa" label="Placa Unidad:" placeholder="ABC-780" class="uppercase"
+                x-on:input="$event.target.value = $event.target.value.toUpperCase()">
+                <x-slot name="append">
+                    <x-form.button class="h-full" icon="magnifying-glass" rounded="rounded-r-md" primary flat
+                        wire:click="buscarPlaca" wire:loading.attr="disabled" spinner="buscarPlaca" />
+                </x-slot>
+            </x-form.input>
+            @if ($errorConsultaPlaca)
+                <p class="mt-1 text-sm text-red-600">{{ $errorConsultaPlaca }}</p>
+            @endif
         </div>
 
         <div class="col-span-6 sm:col-span-6">
@@ -104,7 +113,8 @@
             <div class="col-span-12 sm:col-span-6 mb-4">
                 <x-form.select label="Seleccionar dispositivo GPS:" autocomplete='off' name="dispositivo_imei"
                     id="dispositivo_imei" wire:model.live="dispositivo_imei" placeholder="357073292893290"
-                    option-description="option_description" :async-data="route('api.dispositivos.index')" option-label="imei" option-value="imei">
+                    option-description="option_description" :async-data="route('api.dispositivos.index')" option-label="imei"
+                    option-value="imei">
 
                     <x-slot name="beforeOptions" class="p-2 flex justify-center">
                         <x-form.button wire:click.prevent='registarImei(`${search}`)' x-on:click="close" primary flat

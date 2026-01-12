@@ -6,6 +6,7 @@ use App\Models\WorkOrder;
 use Illuminate\Support\Str;
 use App\Events\WorkOrderCreated;
 use App\Events\WorkOrderUpdated;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\NuevaOrdenAsignada;
 use jhamnerx\LaravelIdGenerator\IdGenerator;
@@ -50,7 +51,15 @@ class WorkOrderObserver
 
         // Enviar notificación al técnico asignado
         if ($workOrder->tecnico) {
-            $workOrder->tecnico->notify(new NuevaOrdenAsignada($workOrder));
+            try {
+                $workOrder->tecnico->notify(new NuevaOrdenAsignada($workOrder));
+            } catch (\Exception $e) {
+                Log::error('Error enviando notificación FCM de nueva orden', [
+                    'work_order_id' => $workOrder->id,
+                    'tecnico_id' => $workOrder->tecnico_id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
 
         // Disparar evento de broadcasting

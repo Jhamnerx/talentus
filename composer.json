@@ -16,6 +16,7 @@
         "greenter/greenter": "^3.0",
         "intervention/image": "*",
         "jhamnerx/laravel-id-generator": "dev-master",
+        "kreait/laravel-firebase": "^6.2",
         "laravel-lang/common": "^6.4",
         "laravel/framework": "^12.0",
         "laravel/jetstream": "^5.0",

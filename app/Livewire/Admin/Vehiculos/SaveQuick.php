@@ -6,6 +6,7 @@ use App\Models\Clientes;
 use App\Models\Vehiculos;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use App\Services\FactilizaService;
 
 class SaveQuick extends Component
 {
@@ -14,6 +15,7 @@ class SaveQuick extends Component
     public $flotas;
     public $flotas_selected = [];
     public $placa, $marca, $modelo, $tipo, $year, $color, $motor, $serie, $clientes_id;
+    public $errorConsultaPlaca = null;
 
 
     protected function rules()
@@ -105,5 +107,44 @@ class SaveQuick extends Component
         $this->closeModal();
         $this->dispatch('update-table');
         $this->reset();
+    }
+
+    public function buscarPlaca()
+    {
+        $this->errorConsultaPlaca = null;
+
+        if (empty($this->placa)) {
+            $this->errorConsultaPlaca = 'Ingrese una placa para buscar';
+            return;
+        }
+
+        try {
+            // Limpiar la placa: quitar espacios, guiones y convertir a mayúsculas
+            $placaLimpia = strtoupper(str_replace([' ', '-'], '', $this->placa));
+
+            $factilizaService = app(FactilizaService::class);
+            $resultado = $factilizaService->consultarPlaca($placaLimpia);
+
+            if (($resultado['status'] ?? 0) == 200 && ($resultado['success'] ?? false)) {
+                // Rellenar los campos con los datos obtenidos directamente
+                //$this->placa = $resultado['placa'] ?? $this->placa;
+                $this->marca = $resultado['marca'] ?? $this->marca;
+                $this->modelo = $resultado['modelo'] ?? $this->modelo;
+                $this->serie = $resultado['serie'] ?? $this->serie;
+                $this->color = $resultado['color'] ?? $this->color;
+                $this->motor = $resultado['motor'] ?? $this->motor;
+
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'success',
+                    title: 'PLACA ENCONTRADA',
+                    mensaje: 'Datos del vehículo cargados correctamente'
+                );
+            } else {
+                $this->errorConsultaPlaca = $resultado['message'] ?? 'No se encontraron datos para esta placa';
+            }
+        } catch (\Throwable $th) {
+            $this->errorConsultaPlaca = 'Error al consultar la placa: ' . $th->getMessage();
+        }
     }
 }

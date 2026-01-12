@@ -18,29 +18,33 @@
     @livewire('admin.vehiculos.get-devices-wox', [], key('devices-wox'))
     @livewire('admin.vehiculos.get-info-device-wox', [], key('devices-info-wox'))
 
+
     <script>
-        Livewire.on('updated-numero', (event) => {
+        document.addEventListener('livewire:init', function() {
+            Livewire.on('updated-numero', (event) => {
 
-            Swal.fire({
-                icon: 'success',
-                title: 'VEHICULO ACTUALIZADO',
-                text: 'La Actualización cambio el numero, deseas registrar una programación de mantenimiento?',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, Registrar!',
-                cancelButtonText: 'Cerrar!'
-            }).then((result) => {
-                if (result.isConfirmed) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'VEHICULO ACTUALIZADO',
+                    text: 'La Actualización cambio el numero, deseas registrar una programación de mantenimiento?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, Registrar!',
+                    cancelButtonText: 'Cerrar!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
 
-                    Livewire.dispatch('create-mantenimiento', {
-                        placa: event.placa
-                    })
-                } else if (result.isDenied) {
+                        Livewire.dispatch('create-mantenimiento', {
+                            placa: event.placa
+                        })
+                    } else if (result.isDenied) {
 
-                }
-            })
+                    }
+                })
 
+            });
         });
     </script>
+
 </x-admin-layout>

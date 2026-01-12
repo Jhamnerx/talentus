@@ -1,212 +1,216 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Vehiculos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Vehiculos ✨</h1>
         </div>
 
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-            <!-- Search form -->
-            <form class="relative">
-                <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
-                    type="search" placeholder="Buscar Vehiculo" />
-                <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
-                        viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                        <path
-                            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                    </svg>
-                </button>
-            </form>
-
-
-            {{-- BOTON Y MODAL PARA CREAR VEHICULO --}}
-
             @can('crear-vehiculos-vehiculos')
-                <div class="relative inline-flex">
+                <button wire:click="openModalSave()" aria-controls="basic-modal"
+                    class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
+                </button>
 
-                    <!-- Create button -->
-                    <button wire:click="openModalSave()" aria-controls="basic-modal"
-                        class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
-                    </button>
-
-                    <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
-                        <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                            <path
-                                d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                        </svg>
-                        <span class="hidden xs:block ml-2">Registro Rapido</span>
-                    </button>
-                </div>
+                <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                        <path
+                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Registro Rapido</span>
+                </button>
             @endcan
 
         </div>
 
     </div>
 
-    <!-- More actions -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-5">
+    <!-- Filters Bar -->
+    <div class="mb-5">
+        <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl p-4">
+            <div class="grid grid-cols-12 gap-4">
 
-        <!-- Right side -->
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start mb-4 sm:justify-end gap-2">
-
-            <!-- Dropdown -->
-            <div class="relative float-right hidden sm:block" x-data="{ open: false, selected: 4 }">
-                <button wire:ignore
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
-                            <path
-                                d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-                        </svg>
-                        <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
-                        <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 0 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                <!-- Search -->
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Buscar</label>
+                    <div class="relative">
+                        <input wire:model.live='search' class="form-input w-full pl-9" type="search"
+                            placeholder="Placa, IMEI, Cliente..." />
+                        <button class="absolute inset-0 right-auto group" type="button">
+                            <svg class="w-4 h-4 shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2"
+                                viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                                 <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Hoy</span>
-                        </button>
-                        <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 1 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
+                                    d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
                                 <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
                             </svg>
-                            <span>Ultimos 7 días</span>
                         </button>
-                        <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 2 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimo Mes</span>
-                        </button>
-                        <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 3 && 'invisible'" width="12" height="9" viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Ultimos 12 Meses</span>
-                        </button>
-                        <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
-                            :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
-                            @focus="open = true" @focusout="open = false">
-                            <svg class="shrink-0 mr-2 fill-current text-indigo-500"
-                                :class="selected !== 4 && 'invisible'" width="12" height="9"
-                                viewBox="0 0 12 9">
-                                <path
-                                    d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                            </svg>
-                            <span>Todos</span>
-                        </button>
-
                     </div>
                 </div>
+
+                <!-- Cliente Filter -->
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <x-form.select label="Cliente" wire:model.live="clientes_id" placeholder="Todos los clientes"
+                        option-description="numero_documento" :async-data="route('api.clientes.index')" option-label="razon_social"
+                        option-value="id">
+                    </x-form.select>
+                </div>
+
+                <!-- Marca Filter -->
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <x-form.select label="Marca" wire:model.live="marca_filter" placeholder="Todas las marcas">
+                        <x-select.option label="Todas las marcas" value="" />
+                        @foreach ($marcas as $marca)
+                            <x-select.option label="{{ $marca }}" value="{{ $marca }}" />
+                        @endforeach
+                    </x-form.select>
+                </div>
+
             </div>
-            <!-- Export button -->
-            @can('exportar.vehiculos-vehiculos')
-                <div class="relative inline-flex">
 
-
-                    <x-form.button wire:click.prevent='exportVehiculos()' spinner="exportVehiculos" label="Exportar"
-                        positive md icon="arrow-down-tray" />
+            <!-- Filter Actions -->
+            <div class="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700/60">
+                <div class="flex items-center gap-2">
+                    @if ($clientes_id || $marca_filter || $search)
+                        <x-form.button wire:click="clearFilters" flat negative sm icon="x-mark">
+                            Limpiar Filtros
+                        </x-form.button>
+                    @endif
                 </div>
-            @endcan
-            <!-- Import button -->
-            @can('importar-vehiculos-vehiculos')
-                <div class="relative inline-flex">
 
-                    <x-form.button wire:click="openModalImport()" label="Importar" info md icon="arrow-up-tray" />
+                <div class="flex items-center gap-2">
+                    <!-- Date Range Filter -->
+                    <div class="relative" x-data="{ open: false, selected: 4 }">
+                        <button
+                            class="btn justify-between min-w-44 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-500 dark:text-gray-400"
+                            @click.prevent="open = !open" :aria-expanded="open">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 fill-current shrink-0 mr-2" viewBox="0 0 16 16">
+                                    <path
+                                        d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
+                                </svg>
+                                <span
+                                    x-text="$refs.options && $refs.options.children[selected] && $refs.options.children[selected].children[1] ? $refs.options.children[selected].children[1].innerHTML : 'Seleccionar periodo'"></span>
+                            </span>
+                            <svg class="shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" width="11"
+                                height="7">
+                                <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
+                            </svg>
+                        </button>
+                        <div class="z-10 absolute top-full right-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                            @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
+                            x-transition:enter="transition ease-out duration-100 transform"
+                            x-transition:enter-start="opacity-0 -translate-y-2"
+                            x-transition:enter-end="opacity-100 translate-y-0"
+                            x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
+                            x-transition:leave-end="opacity-0" x-cloak>
+                            <div class="font-medium text-sm text-gray-600 dark:text-gray-300" x-ref="options">
+                                <button wire:click="filter(1)" tabindex="0"
+                                    class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
+                                    :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false">
+                                    <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                        :class="selected !== 0 && 'invisible'" width="12" height="9">
+                                        <path
+                                            d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    </svg>
+                                    <span>Hoy</span>
+                                </button>
+                                <button wire:click="filter(7)" tabindex="0"
+                                    class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
+                                    :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false">
+                                    <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                        :class="selected !== 1 && 'invisible'" width="12" height="9">
+                                        <path
+                                            d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    </svg>
+                                    <span>Últimos 7 días</span>
+                                </button>
+                                <button wire:click="filter(30)" tabindex="0"
+                                    class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
+                                    :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false">
+                                    <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                        :class="selected !== 2 && 'invisible'" width="12" height="9">
+                                        <path
+                                            d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    </svg>
+                                    <span>Último Mes</span>
+                                </button>
+                                <button wire:click="filter(12)" tabindex="0"
+                                    class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
+                                    :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false">
+                                    <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                        :class="selected !== 3 && 'invisible'" width="12" height="9">
+                                        <path
+                                            d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    </svg>
+                                    <span>Últimos 12 Meses</span>
+                                </button>
+                                <button wire:click="filter(0)" tabindex="0"
+                                    class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
+                                    :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false">
+                                    <svg class="shrink-0 mr-2 fill-current text-indigo-500"
+                                        :class="selected !== 4 && 'invisible'" width="12" height="9">
+                                        <path
+                                            d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
+                                    </svg>
+                                    <span>Todos</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    @can('exportar.vehiculos-vehiculos')
+                        <x-form.button wire:click.prevent='exportVehiculos()' spinner="exportVehiculos" label="Exportar"
+                            positive sm icon="arrow-down-tray" />
+                    @endcan
+
+                    @can('importar-vehiculos-vehiculos')
+                        <x-form.button wire:click="openModalImport()" label="Importar" info sm icon="arrow-up-tray" />
+                    @endcan
+
+                    <x-form.button wire:click="getDevicesWox()" label="Plataforma" info sm icon="briefcase" />
                 </div>
-            @endcan
-
-            <div class="relative inline-flex">
-
-                <x-form.button wire:click="getDevicesWox()" label="Vehiculos plataforma" info md icon="briefcase" />
             </div>
         </div>
-        <!-- Left side -->
-        <div class="mb-4 sm:mb-0">
-            <ul class="flex flex-wrap -m-1">
-                <li class="m-1">
-                    <button
-                        class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-4 py-1 border border-transparent shadow-sm bg-indigo-500 text-white duration-150 ease-in-out">Todas
-                        <span class="ml-1 text-indigo-200">{{ $vehiculos->total() }}</span></button>
-                </li>
-            </ul>
-        </div>
+    </div>
+
+    <!-- Stats Bar -->
+    <div class="mb-4 sm:mb-0">
+        <ul class="flex flex-wrap -m-1">
+            <li class="m-1">
+                <button
+                    class="inline-flex items-center justify-center text-sm font-medium leading-5 rounded-full px-3 py-1 border border-transparent shadow-xs bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-800 transition">Todas
+                    <span class="ml-1 text-gray-400 dark:text-gray-500">{{ $vehiculos->total() }}</span></button>
+            </li>
+        </ul>
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+    <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">vehiculos <span
-                    class="text-slate-400 font-medium">{{ $vehiculos->total() }}</span>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Vehiculos <span
+                    class="text-gray-400 dark:text-gray-500 font-medium">{{ $vehiculos->total() }}</span>
             </h2>
         </header>
         <div>
 
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">
-                <table class="table-auto w-full">
+            <div class="overflow-x-auto">
+                <table class="table-auto w-full dark:text-gray-300">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
                         <tr>
-                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                <div class="flex items-center">
-                                    <label class="inline-flex">
-                                        <span class="sr-only">Seleccionar todo</span>
-                                        <input id="parent-checkbox" class="form-checkbox" type="checkbox" />
-                                    </label>
-                                </div>
-                            </th>
+
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Placa</div>
                             </th>
@@ -217,7 +221,7 @@
                                 <div class="font-semibold text-left">Datos</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="font-semibold text-left max-w-[180px]">Cliente</div>
+                                <div class="font-semibold text-left max-w-45">Cliente</div>
                             </th>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -235,36 +239,30 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
                         <!-- Row -->
                         @foreach ($vehiculos as $vehiculo)
                             <tr wire:key='vehi-{{ $vehiculo->id }}'>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <div class="flex items-center">
-                                        <label class="inline-flex">
-                                            <span class="sr-only">Select</span>
-                                            <input class="table-item form-checkbox" type="checkbox" />
-                                        </label>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-medium text-sky-600">{{ $vehiculo->placa }}</div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">{{ $vehiculo->marca }}
                                     </div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-blue-500">{{ $vehiculo->placa }}</div>
-                                </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $vehiculo->marca }}</div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                         @mouseleave="open = false">
-                                        <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                        <button
+                                            class="btn border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800"
                                             aria-haspopup="true" :aria-expanded="open" @focus="open = true"
                                             @focusout="open = false" @click.prevent>
                                             <span class="mr-2">
                                                 VER INFO
                                             </span>
 
-                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
                                                 viewBox="0 0 12 12">
                                                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                             </svg>
@@ -376,8 +374,8 @@
 
                                     {{-- <div class="font-medium text-blue-500">AHF-960</div> --}}
                                 </td>
-                                <td class="px-2 first:pl-5 last:pr-5 py-3 max-w-[180px]">
-                                    <div class="font-medium text-sky-500 break-words">
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 max-w-45">
+                                    <div class="font-medium text-sky-500 wrap-break-word">
                                         @if ($vehiculo->cliente)
                                             {{ $vehiculo->cliente->razon_social }}
                                         @else
@@ -386,7 +384,7 @@
 
                                     </div>
                                     @if ($vehiculo->cliente)
-                                        <div class="font-sm text-slate-900">
+                                        <div class="font-sm text-gray-800 dark:text-gray-300">
                                             <p class="text-xs">
                                                 {{ $vehiculo->cliente->numero_documento }}
                                             </p>
@@ -420,19 +418,20 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3">
                                     <div class="relative" x-data="{ open: false }" @mouseenter="open = true"
                                         @mouseleave="open = false">
-                                        <button class="btn border-slate-200 hover:border-slate-300 text-slate-600"
+                                        <button
+                                            class="btn border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 dark:text-gray-300 bg-white dark:bg-gray-800"
                                             aria-haspopup="true" :aria-expanded="open" @focus="open = true"
                                             @focusout="open = false" @click.prevent>
                                             <span class="mr-2">
                                                 DISPOSITIVOS
                                             </span>
-                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-slate-400"
+                                            <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
                                                 viewBox="0 0 12 12">
                                                 <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
                                             </svg>
                                         </button>
                                         <div class="z-10 absolute top-3/4 left-1/2 transform -translate-x-1/2">
-                                            <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-slate-100 shadow-2xl shadow-gray-800 overflow-auto max-h-[400px] overflow-y-auto"
+                                            <div class="min-w-72 p-3 z-10 rounded-2xl mb-2 bg-white dark:bg-gray-800 shadow-2xl overflow-auto max-h-100 overflow-y-auto"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
                                                 x-transition:enter-start="opacity-0 translate-y-2"
@@ -441,7 +440,8 @@
                                                 x-transition:leave-start="opacity-100"
                                                 x-transition:leave-end="opacity-0" x-cloak>
                                                 <div class="">
-                                                    <div class="font-medium text-slate-800 mb-0.5 pb-2 text-base">
+                                                    <div
+                                                        class="font-medium text-gray-800 dark:text-gray-100 mb-0.5 pb-2 text-base">
                                                         <b>Dispositivos para {{ $vehiculo->placa }}</b>
                                                     </div>
                                                     <div
@@ -467,7 +467,7 @@
                                                                     @foreach ($vehiculo->dispositivos as $dispositivo)
                                                                         <tr
                                                                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 
-                                                                            {{ $dispositivo->is_principal ? 'bg-green-50 font-semibold' : '' }}">
+                                                                        {{ $dispositivo->is_principal ? 'bg-green-50 font-semibold' : '' }}">
 
                                                                             <td
                                                                                 class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
@@ -523,20 +523,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="font-medium text-slate-800">
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">
                                         @if ($vehiculo->dispositivoPrincipal)
                                             <div class="font-medium text-emerald-600">
                                                 {{ $vehiculo->dispositivoPrincipal->dispositivo->modelo->modelo }}
-                                                <span class="text-xs text-slate-500">Principal</span>
+                                                <span class="text-xs text-gray-500 dark:text-gray-400">Principal</span>
                                             </div>
-                                            <div class="text-xs text-slate-500">
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
                                                 IMEI: {{ $vehiculo->dispositivoPrincipal->imei }}
                                             </div>
                                         @elseif ($vehiculo->dispositivos->count() > 0)
-                                            <div class="font-medium text-slate-600">
+                                            <div class="font-medium text-gray-600 dark:text-gray-300">
                                                 {{ $vehiculo->dispositivos->first()->dispositivo->modelo->modelo }}
                                             </div>
-                                            <div class="text-xs text-slate-500">
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">
                                                 IMEI: {{ $vehiculo->dispositivos->first()->imei }}
                                             </div>
                                         @elseif ($vehiculo->dispositivo_imei)
@@ -556,9 +556,11 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="relative inline-flex" x-data="{ open: false }">
                                             <div class="relative inline-block h-full text-left">
-                                                <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                    :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                    @click.prevent="open = !open" :aria-expanded="open">
+                                                <button
+                                                    class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 rounded-full"
+                                                    :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400': open }"
+                                                    aria-haspopup="true" @click.prevent="open = !open"
+                                                    :aria-expanded="open">
                                                     <span class="sr-only">Menu</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <circle cx="16" cy="16" r="2" />
@@ -566,7 +568,7 @@
                                                         <circle cx="22" cy="16" r="2" />
                                                     </svg>
                                                 </button>
-                                                <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                                <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700/60 focus:outline-none"
                                                     @click.outside="open = false" @keydown.escape.window="open = false"
                                                     x-show="open"
                                                     x-transition:enter="transition ease-out duration-200 transform"
@@ -710,23 +712,22 @@
                             </tr>
                         @endforeach
                         @if ($vehiculos->count() < 1)
-                            <td colspan="10" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
-                            </td>
+                            <tr>
+                                <td colspan="10"
+                                    class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
+                                    <div class="text-center">No hay Registros</div>
+                                </td>
+                            </tr>
                         @endif
-
-
                     </tbody>
                 </table>
-
             </div>
         </div>
-    </div>
-    <!-- Pagination -->
-    <div class="mt-8 w-full">
-        {{ $vehiculos->links() }}
 
+        <!-- Pagination -->
+        <div class="mt-8">
+            {{ $vehiculos->links() }}
+        </div>
     </div>
-
 
 </div>
