@@ -316,6 +316,81 @@
                     @endcanany
 
 
+                    <!-- Pagos -->
+                    @canany(['ver-payments', 'ver-payment-methods', 'admin.cobros.index'])
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['pagos', 'cobros'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['pagos', 'cobros']) ? 1 : 0 }} }">
+
+                            <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
+                                href="#0" @click.prevent="open = !open; sidebarExpanded = true">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['pagos', 'cobros'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 64 64">
+                                            <g fill="currentColor" stroke="currentColor" class="nc-icon-wrapper">
+                                                <rect x="4" y="14" width="56" height="36" rx="4" ry="4" fill="none" 
+                                                    stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+                                                <line x1="4" y1="26" x2="60" y2="26" fill="none" 
+                                                    stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+                                                <line data-color="color-2" x1="12" y1="38" x2="24" y2="38" fill="none" 
+                                                    stroke-linecap="square" stroke-miterlimit="10" stroke-width="2"/>
+                                            </g>
+                                        </svg>
+                                        <span
+                                            class="text-sm font-medium ml-4 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Pagos</span>
+                                    </div>
+                                    <!-- Icon -->
+                                    <div
+                                        class="flex shrink-0 ml-2 lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
+                                        <svg class="w-3 h-3 shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500"
+                                            :class="open && 'transform rotate-180'" viewBox="0 0 12 12">
+                                            <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="lg:hidden lg:sidebar-expanded:block 2xl:block">
+                                <ul class="pl-8 mt-1" :class="open ? 'block!' : 'hidden'" x-cloak>
+                                    @can('ver-payments')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.payments.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.payments.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Listado de Pagos
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('ver-payment-methods')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.payments.metodos-pago')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.payments.metodos-pago') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Métodos de Pago
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('admin.cobros.index')
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.*')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.cobros.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
+                                                </span>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                </ul>
+
+                            </div>
+                        </li>
+                    @endcanany
+
+
                     <!-- Proveedores -->
                     @can('ver-proveedor')
                         <li

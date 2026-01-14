@@ -31,6 +31,10 @@ class Vehiculos extends Model
     protected $table = 'vehiculos';
     protected $primaryKey = 'id';
 
+    protected $casts = [
+        'gpswox_id' => 'integer',
+    ];
+
     //GLOBAL SCOPE EMPRESA
     protected static function booted()
     {

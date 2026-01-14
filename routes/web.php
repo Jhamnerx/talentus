@@ -113,6 +113,20 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
     });
 
+    // PAGOS
+    Route::controller(PaymentsController::class)->group(function () {
+        Route::get('pagos', 'index')->name('admin.payments.index');
+        Route::get('pagos/metodos-pago', 'metodosPago')->name('admin.payments.metodos-pago');
+    });
+
+    // COBROS (dentro del módulo de pagos)
+    Route::controller(CobrosController::class)->group(function () {
+        Route::get('cobros/crear', 'create')->name('admin.cobros.create');
+        Route::get('cobros', 'index')->name('admin.cobros.index');
+        Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
+        Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
+    });
+
     // Mensajes de Contacto Web
     Route::get('mensajes-contacto', function () {
         return view('admin.contactos.index');
@@ -228,27 +242,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('usuarios', UsersController::class)->names('admin.users')->parameters([
         'usuarios' => 'user'
     ]);
-
-    //Route::resource('cobros', CobrosController::class)->names('admin.cobros');
-    // Route::resource('payments', PaymentsController::class)->names('admin.payments');
-
-
-    Route::controller(CobrosController::class)->group(function () {
-
-        Route::get('cobros/crear', 'create')->name('admin.cobros.create');
-        Route::get('cobros', 'index')->name('admin.cobros.index');
-        Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
-        Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
-    });
-
-
-
-
-    Route::controller(PaymentsController::class)->group(function () {
-
-        Route::get('payments', 'index')->name('admin.payments.index');
-        Route::get('payments/{payment}', 'show')->name('admin.payments.show');
-    });
 
     Route::get('ajustes/cuenta', [AjustesController::class, 'cuenta'])->name('admin.ajustes.cuenta');
     Route::get('ajustes/ciudades', [AjustesController::class, 'ciudades'])->name('admin.ajustes.ciudades');

@@ -9,12 +9,21 @@ use jhamnerx\LaravelIdGenerator\IdGenerator;
 
 class PaymentsController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:ver-payments', ['only' => ['index']]);
+        $this->middleware('permission:ver-payment-methods', ['only' => ['metodosPago']]);
+    }
 
     public function index()
     {
         return view('admin.payments.index');
     }
 
+    public function metodosPago()
+    {
+        return view('admin.payments.metodos-pago');
+    }
 
     public function setNextSequenceNumber()
     {

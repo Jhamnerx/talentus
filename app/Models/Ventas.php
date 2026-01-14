@@ -10,6 +10,7 @@ use App\Scopes\EmpresaScope;
 use App\Models\VentasDetalle;
 use App\Models\PaymentMethods;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\PaymentMethodType;
 use App\Observers\VentasObserver;
 use Spatie\Activitylog\LogOptions;
 use App\Models\EnvioResumenDetalle;
@@ -148,7 +149,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo

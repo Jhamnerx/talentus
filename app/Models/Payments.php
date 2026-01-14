@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\PaymentMethodType;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
@@ -102,7 +103,7 @@ class Payments extends Model
 
     public function paymentMethod()
     {
-        return $this->belongsTo(PaymentMethods::class, 'payment_method_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'payment_method_id', 'id');
     }
 
 

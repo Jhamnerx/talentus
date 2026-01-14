@@ -15,6 +15,7 @@
         "dompdf/dompdf": "*",
         "greenter/greenter": "^3.0",
         "intervention/image": "*",
+        "jhamnerx/gpswox-api": "dev-main",
         "jhamnerx/laravel-id-generator": "dev-master",
         "kreait/laravel-firebase": "^6.2",
         "laravel-lang/common": "^6.4",
@@ -42,7 +43,7 @@
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.23",
-        "laravel/boost": "^1.0",
+        "laravel/boost": "^1.8",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",

@@ -238,7 +238,7 @@
                                             placeholder="Selecciona" :async-data="[
                                                 'api' => route('api.metodos.pago.index'),
                                             ]" option-label="descripcion"
-                                            option-value="codigo" />
+                                            option-value="id" />
                                     </div>
 
                                     <div class="col-span-12 sm:col-span-6">

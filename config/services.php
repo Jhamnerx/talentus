@@ -34,4 +34,9 @@ return [
         'token' => env('FACTILIZA_TOKEN'),
     ],
 
+    'gpswox' => [
+        'base_uri' => 'https://plataforma.talentustechnology.com',
+        'api_hash' => env('GPSWOX_API_HASH'),
+    ],
+
 ];

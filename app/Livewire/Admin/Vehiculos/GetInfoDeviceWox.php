@@ -35,7 +35,6 @@ class GetInfoDeviceWox extends Component
         ]));
 
         $this->devices = $this->extractItemsFromGroups($response);
-        dd($this->devices);
     }
 
     private function extractItemsFromGroups(array $groups): array

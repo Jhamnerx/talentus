@@ -2,18 +2,18 @@
 
 namespace App\Livewire\Admin\Cobros;
 
-use App\Http\Controllers\Admin\PaymentsController;
-use App\Http\Requests\PaymentsRequest;
-use App\Models\Clientes;
-use App\Models\Cobros;
-use App\Models\DetalleCobros;
-use App\Models\PaymentMethods;
-use App\Models\Payments;
-use App\Models\Recibos;
-use App\Models\Ventas;
 use Carbon\Carbon;
-use Livewire\Attributes\On;
+use App\Models\Cobros;
+use App\Models\Ventas;
+use App\Models\Recibos;
 use Livewire\Component;
+use App\Models\Clientes;
+use App\Models\Payments;
+use Livewire\Attributes\On;
+use App\Models\DetalleCobros;
+use App\Models\PaymentMethodType;
+use App\Http\Requests\PaymentsRequest;
+use App\Http\Controllers\Admin\PaymentsController;
 
 
 class Payment extends Component
@@ -35,7 +35,7 @@ class Payment extends Component
 
     public function mount()
     {
-        $this->paymentsMethods = PaymentMethods::all();
+        $this->paymentsMethods = PaymentMethodType::whereActive(true)->orderByDescription()->get();;
     }
 
     public function render()
