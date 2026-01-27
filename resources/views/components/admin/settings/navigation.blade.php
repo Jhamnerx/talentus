@@ -1,34 +1,33 @@
 <div
-    class="flex flex-nowrap overflow-x-scroll no-scrollbar md:block md:overflow-auto px-3 py-6 border-b md:border-b-0 md:border-r border-slate-200 min-w-60 md:space-y-3">
+    class="flex flex-nowrap overflow-x-scroll no-scrollbar md:block md:overflow-auto px-3 py-6 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700/60 min-w-60 md:space-y-3">
     <!-- Group 1 -->
     <div>
-        <div class="text-xs font-semibold text-slate-400 uppercase mb-3">Ajustes del Sistema</div>
+        <div class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase mb-3">Ajustes del Sistema</div>
         <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'account' && 'bg-indigo-50'" href="{{ route('admin.ajustes.cuenta') }}">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'account' && 'text-indigo-400'" viewBox="0 0 16 16">
+                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.cuenta')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif"
+                    href="{{ route('admin.ajustes.cuenta') }}">
+                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.cuenta')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                        width="16" height="16" viewBox="0 0 16 16">
                         <path
-                            d="M12.311 9.527c-1.161-.393-1.85-.825-2.143-1.175A3.991 3.991 0 0012 5V4c0-2.206-1.794-4-4-4S4 1.794 4 4v1c0 1.406.732 2.639 1.832 3.352-.292.35-.981.782-2.142 1.175A3.942 3.942 0 001 13.26V16h14v-2.74c0-1.69-1.081-3.19-2.689-3.733zM6 4c0-1.103.897-2 2-2s2 .897 2 2v1c0 1.103-.897 2-2 2s-2-.897-2-2V4zm7 10H3v-.74c0-.831.534-1.569 1.33-1.838 1.845-.624 3-1.436 3.452-2.422h.436c.452.986 1.607 1.798 3.453 2.422A1.943 1.943 0 0113 13.26V14z" />
+                            d="M8 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8Zm0-2a2 2 0 1 0 0-4 2 2 0 0 0 0 4Zm-5.143 7.91a1 1 0 1 1-1.714-1.033A7.996 7.996 0 0 1 8 10a7.996 7.996 0 0 1 6.857 3.877 1 1 0 1 1-1.714 1.032A5.996 5.996 0 0 0 8 12a5.996 5.996 0 0 0-5.143 2.91Z" />
                     </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'account' ? 'text-indigo-500' : 'hover:text-slate-700'">
+                    <span
+                        class="text-sm font-medium @if (Route::is('admin.ajustes.cuenta')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
                         Mi Cuenta
                     </span>
                 </a>
             </li>
             <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'notifications' && 'bg-indigo-50'"
+                <a class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.notificaciones')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif"
                     href="{{ route('admin.ajustes.notificaciones') }}">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'notifications' && 'text-indigo-400'" viewBox="0 0 16 16">
+                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.notificaciones')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                        width="16" height="16" viewBox="0 0 16 16">
                         <path
-                            d="M14.3.3c.4-.4 1-.4 1.4 0 .4.4.4 1 0 1.4l-8 8c-.2.2-.4.3-.7.3-.3 0-.5-.1-.7-.3-.4-.4-.4-1 0-1.4l8-8zM15 7c.6 0 1 .4 1 1 0 4.4-3.6 8-8 8s-8-3.6-8-8 3.6-8 8-8c.6 0 1 .4 1 1s-.4 1-1 1C4.7 2 2 4.7 2 8s2.7 6 6 6 6-2.7 6-6c0-.6.4-1 1-1z" />
+                            d="m9 12.614 4.806 1.374a.15.15 0 0 0 .174-.21L8.133 2.082a.15.15 0 0 0-.268 0L2.02 13.777a.149.149 0 0 0 .174.21L7 12.614V9a1 1 0 1 1 2 0v3.614Zm-1 1.794-5.257 1.503c-1.798.514-3.35-1.355-2.513-3.028L6.076 1.188c.791-1.584 3.052-1.584 3.845 0l5.848 11.695c.836 1.672-.714 3.54-2.512 3.028L8 14.408Z" />
                     </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'notifications' ? 'text-indigo-500' : 'hover:text-slate-700'">
+                    <span
+                        class="text-sm font-medium @if (Route::is('admin.ajustes.notificaciones')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
                         Mis Notificaciones
                     </span>
                 </a>
@@ -72,71 +71,82 @@
             @can('admin.settings.series.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.series') }}"
-                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                        :class="settingsPanel === 'series' && 'bg-indigo-50'">
-                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                            :class="settingsPanel === 'series' && 'text-indigo-400'" viewBox="0 0 16 16">
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.series')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.series')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
                             <path
-                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                                d="M14.5 0h-13A.5.5 0 0 0 1 .5v15a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5V.5a.5.5 0 0 0-.5-.5ZM3 4h10v1H3V4Zm0 3h10v1H3V7Zm0 3h10v1H3v-1Z" />
                         </svg>
-                        <span class="text-sm font-medium text-slate-600"
-                            :class="settingsPanel === 'series' ? 'text-indigo-500' : 'hover:text-slate-700'">Series
-                            Comprobantes</span>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.series')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Series Comprobantes
+                        </span>
                     </a>
                 </li>
             @endcan
             @can('admin.settings.plantilla.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.plantilla') }}"
-                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                        :class="settingsPanel === 'plantilla' && 'bg-indigo-50'">
-                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                            :class="settingsPanel === 'plantilla' && 'text-indigo-400'" viewBox="0 0 16 16">
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.plantilla')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.plantilla')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
                             <path
-                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                                d="M14.5 1h-13a.5.5 0 0 0-.5.5v13a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 .5-.5v-13a.5.5 0 0 0-.5-.5ZM3 13V9h10v4H3Zm10-6H3V3h10v4Z" />
                         </svg>
-                        <span class="text-sm font-medium text-slate-600"
-                            :class="settingsPanel === 'plantilla' ? 'text-indigo-500' : 'hover:text-slate-700'">Plantilla</span>
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.plantilla')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                            Plantilla
+                        </span>
                     </a>
                 </li>
             @endcan
             @can('admin.settings.plantilla.index')
                 <li class="mr-0.5 md:mr-0 md:mb-0.5">
                     <a href="{{ route('admin.ajustes.sunat') }}"
-                        class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                        :class="settingsPanel === 'sunat' && 'bg-indigo-50'">
-                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                            :class="settingsPanel === 'sunat' && 'text-indigo-400'" viewBox="0 0 16 16">
+                        class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.sunat')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                        <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.sunat')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                            width="16" height="16" viewBox="0 0 16 16">
                             <path
-                                d="M15 4c.6 0 1 .4 1 1v10c0 .6-.4 1-1 1H3c-1.7 0-3-1.3-3-3V3c0-1.7 1.3-3 3-3h7c.6 0 1 .4 1 1v3h4zM2 3v1h7V2H3c-.6 0-1 .4-1 1zm12 11V6H2v7c0 .6.4 1 1 1h11zm-3-5h2v2h-2V9z" />
+                                d="M8 0a1 1 0 0 1 1 1v5.268l4.562-2.634a1 1 0 1 1 1 1.732L10 8l4.562 2.634a1 1 0 1 1-1 1.732L9 9.732V15a1 1 0 1 1-2 0V9.732l-4.562 2.634a1 1 0 1 1-1-1.732L6 8 1.438 5.366a1 1 0 0 1 1-1.732L7 6.268V1a1 1 0 0 1 1-1Z" />
                         </svg>
-                        <span class="text-sm font-medium text-slate-600"
-                            :class="settingsPanel === 'sunat' ? 'text-indigo-500' : 'hover:text-slate-700'">
+                        <span
+                            class="text-sm font-medium @if (Route::is('admin.ajustes.sunat')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
                             Ajustes Sunat
                         </span>
                     </a>
                 </li>
             @endcan
+            
+            <!-- Bancos y Cuentas Bancarias -->
+            <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                <a href="{{ route('admin.ajustes.bancos') }}"
+                    class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.bancos')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                        width="16" height="16" viewBox="0 0 16 16">
+                        <path
+                            d="M8 0 0 3v1h16V3L8 0ZM2 6h2v6H2V6Zm4 0h2v6H6V6Zm4 0h2v6h-2V6ZM0 14h16v2H0v-2Z" />
+                    </svg>
+                    <span
+                        class="text-sm font-medium @if (Route::is('admin.ajustes.bancos')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                        Bancos
+                    </span>
+                </a>
+            </li>
+            <li class="mr-0.5 md:mr-0 md:mb-0.5">
+                <a href="{{ route('admin.ajustes.cuentas-bancarias') }}"
+                    class="flex items-center px-2.5 py-2 rounded-lg whitespace-nowrap @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'bg-linear-to-r from-violet-500/12 dark:from-violet-500/24 to-violet-500/' }} @endif">
+                    <svg class="shrink-0 fill-current mr-2 @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif"
+                        width="16" height="16" viewBox="0 0 16 16">
+                        <path
+                            d="M2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1H2V4Zm0 3v5a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H2Zm3 3a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z" />
+                    </svg>
+                    <span
+                        class="text-sm font-medium @if (Route::is('admin.ajustes.cuentas-bancarias')) {{ 'text-violet-500 dark:text-violet-400' }}@else{{ 'text-gray-600 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-200' }} @endif">
+                        Cuentas Bancarias
+                    </span>
+                </a>
+            </li>
 
         </ul>
     </div>
-    <!-- Group 2 -->
-    {{-- <div>
-        <div class="text-xs font-semibold text-slate-400 uppercase mb-3">Experience</div>
-        <ul class="flex flex-nowrap md:block mr-3 md:mr-0">
-            <li class="mr-0.5 md:mr-0 md:mb-0.5">
-                <a class="flex items-center px-2.5 py-2 rounded whitespace-nowrap"
-                    :class="settingsPanel === 'feedback' && 'bg-indigo-50'" href="feedback.html">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 mr-2"
-                        :class="settingsPanel === 'feedback' && 'text-indigo-400'" viewBox="0 0 16 16">
-                        <path
-                            d="M7.001 3h2v4h-2V3zm1 7a1 1 0 110-2 1 1 0 010 2zM15 16a1 1 0 01-.6-.2L10.667 13H1a1 1 0 01-1-1V1a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1zM2 11h9a1 1 0 01.6.2L14 13V2H2v9z" />
-                    </svg>
-                    <span class="text-sm font-medium text-slate-600"
-                        :class="settingsPanel === 'feedback' ? 'text-indigo-500' : 'hover:text-slate-700'">Give
-                        Feedback</span>
-                </a>
-            </li>
-        </ul>
-    </div> --}}
 </div>

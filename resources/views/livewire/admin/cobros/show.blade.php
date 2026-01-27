@@ -1,19 +1,108 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-white shadow-lg rounded-sm border border-slate-200">
-    <div class="max-w-[90%] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-        @if ($detalleIds)
-            <div class="col-span-full mb-4">
-                <div class="flex justify-center space-x-2 mb-2">
-                    @if ($cobro->clientes->tipo_documento_id == 1)
-                        <x-form.button full="true" cyan wire:click.prevent="createBoletaGeneral()"
-                            right-icon="currency-dollar" success label="Crear Boleta" />
-                    @endif
-                    @if ($cobro->clientes->tipo_documento_id == 6)
-                        <x-form.button full="true" sky wire:click.prevent="createFacturaGeneral()"
-                            right-icon="currency-dollar" success label="Crear Factura" />
-                    @endif
-                    <x-form.button full="true" slate wire:click.prevent="createReciboGeneral()"
-                        right-icon="currency-dollar" success label="Crear Recibo" />
+    <!-- Page header -->
+    <div class="mb-8">
+        <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Detalle de Cobranza ✨</h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">{{ $cobro->clientes->razon_social }} -
+            {{ $cobro->periodo }}</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+
+        @if ($detalleIds && count($detalleIds) > 0)
+            <div class="col-span-full mb-6">
+                <div
+                    class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl shadow-xs p-6 border-2 border-indigo-200 dark:border-indigo-700/60">
+                    <div class="flex items-center justify-between mb-4">
+                        <div>
+                            <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100">Acciones Masivas</h3>
+                            <p class="text-sm text-indigo-600 dark:text-indigo-300 mt-1">
+                                {{ count($detalleIds) }} vehículo(s) seleccionado(s)
+                            </p>
+                        </div>
+                        <button wire:click="$set('detalleIds', [])"
+                            class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 text-sm font-medium">
+                            Limpiar selección
+                        </button>
+                    </div>
+
+                    {{-- Alerta informativa --}}
+                    <div
+                        class="mb-4 p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg border-2 border-blue-300 dark:border-blue-600/50">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-sm text-blue-900 dark:text-blue-100">
+                                <p class="font-bold mb-2 text-base">Flujo recomendado:</p>
+                                <ol class="list-decimal list-inside space-y-1.5 text-blue-800 dark:text-blue-200">
+                                    <li class="font-medium">Crear Factura/Boleta/Recibo con los vehículos seleccionados
+                                    </li>
+                                    <li class="font-medium">Regresar aquí con las flechas del navegador (los vehículos
+                                        quedan seleccionados)</li>
+                                    <li class="font-medium">Click en "Pagar Todo" para registrar el pago y auto-renovar
+                                        fechas</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        {{-- Paso 1: Crear Documento --}}
+                        <div>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span
+                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">1</span>
+                                Crear Documento
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                @if ($cobro->clientes->tipo_documento_id == 6)
+                                    <x-form.button full="true" sky wire:click.prevent="createFacturaGeneral()"
+                                        right-icon="document-text" label="Crear Factura" />
+                                @endif
+                                @if ($cobro->clientes->tipo_documento_id == 1)
+                                    <x-form.button full="true" cyan wire:click.prevent="createBoletaGeneral()"
+                                        right-icon="document-text" label="Crear Boleta" />
+                                @endif
+                                <x-form.button full="true" slate wire:click.prevent="createReciboGeneral()"
+                                    right-icon="document" label="Crear Recibo" />
+                            </div>
+                        </div>
+
+                        {{-- Paso 2: Registrar Pago --}}
+                        <div>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span
+                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">2</span>
+                                Registrar Pago (Documento ya debe existir)
+                            </h4>
+                            <x-form.button full="true" primary wire:click="openModalPaymentBulk()"
+                                right-icon="currency-dollar" label="Pagar Todo" />
+                        </div>
+
+                        {{-- Gestión de Estado --}}
+                        <div>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                                </svg>
+                                Gestión de Estado
+                            </h4>
+                            <div class="grid grid-cols-2 gap-2">
+                                <x-form.button full="true" warning wire:click="suspenderSeleccionados()"
+                                    right-icon="pause" label="Suspender" />
+                                <x-form.button full="true" positive wire:click="activarSeleccionados()"
+                                    right-icon="check-circle" label="Activar" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         @endif
@@ -22,72 +111,77 @@
             @php
                 $diasRestantes = \Carbon\Carbon::now()->diffInDays($item->fecha, false);
                 $colorClase = '';
+                $colorBg = '';
                 if ($diasRestantes > 30) {
-                    $colorClase = 'text-emerald-600';
-                    $colorBorde = 'border-emerald-600';
+                    $colorClase = 'text-emerald-600 dark:text-emerald-400';
+                    $colorBorde = 'border-emerald-500 dark:border-emerald-600';
+                    $colorBg = 'bg-emerald-50 dark:bg-emerald-900/20';
                 } elseif ($diasRestantes <= 30 && $diasRestantes > 15) {
-                    $colorClase = 'text-orange-500';
-                    $colorBorde = 'border-orange-500';
+                    $colorClase = 'text-orange-500 dark:text-orange-400';
+                    $colorBorde = 'border-orange-500 dark:border-orange-600';
+                    $colorBg = 'bg-orange-50 dark:bg-orange-900/20';
                 } elseif ($diasRestantes <= 15) {
-                    $colorClase = 'text-red-500';
-                    $colorBorde = 'border-red-500';
+                    $colorClase = 'text-red-500 dark:text-red-400';
+                    $colorBorde = 'border-red-500 dark:border-red-600';
+                    $colorBg = 'bg-red-50 dark:bg-red-900/20';
                 }
             @endphp
-            <div class="bg-white p-5 shadow-lg rounded-lg border {{ $colorBorde }}">
+            <div class="bg-white dark:bg-gray-800 p-6 shadow-xs rounded-xl border-l-4 {{ $colorBorde }}">
 
-                <div class="flex justify-between items-center mb-2">
+                <div
+                    class="flex justify-between items-center mb-4 pb-4 border-b border-gray-200 dark:border-gray-700/60">
                     <x-form.checkbox id="size-sm" wire:model.live="detalleIds" value="{{ $item->id }}" md />
-                    <div
-                        class="text-slate-800 mx-2 font-semibold uppercase {{ $item->estado == 0 ? 'bg-red-200' : 'bg-white' }}">
-                        Detalle de Cobro: <b> {{ $item->vehiculo ? $item->vehiculo->placa : '' }}</b>
+                    <div class="flex items-center gap-2 flex-1 mx-2">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+                            {{ $item->vehiculo ? $item->vehiculo->placa : 'Sin vehículo' }}
+                        </h3>
+                        @if ($item->estado == 0)
+                            <span
+                                class="px-2 py-1 text-xs font-semibold bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-400 rounded-full">Suspendido</span>
+                        @else
+                            <span
+                                class="px-2 py-1 text-xs font-semibold bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 rounded-full">Activo</span>
+                        @endif
                     </div>
-
                 </div>
 
 
-                <ul class="mb-4">
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Empresa: </div>
-                        <div class="font-medium text-slate-800"> {{ $cobro->clientes->razon_social }}</div>
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Placa: </div>
-                        <div class="font-medium text-slate-800">
-                            {{ $item->vehiculo ? $item->vehiculo->placa : '' }}</div>
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Estado: </div>
-                        @if ($item->estado == '0')
-                            <div class="text-sm font-semibold text-white px-1.5 bg-red-500 rounded-full">
-                                Suspendido
-                            </div>
-                        @else
-                            <div class="text-sm font-semibold text-white px-1.5 bg-emerald-500 rounded-full">
-                                Activo
-                            </div>
-                        @endif
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Fecha Vencimiento: </div>
-                        <div class="font-medium {{ $colorClase }}">
-                            {{ $item->fecha->format('d-m-Y') }}
+                <div class="space-y-3 mb-6">
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Empresa</span>
+                        <span
+                            class="text-sm font-semibold text-gray-800 dark:text-gray-100">{{ $cobro->clientes->razon_social }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Placa</span>
+                        <span
+                            class="text-sm font-semibold text-gray-800 dark:text-gray-100">{{ $item->vehiculo ? $item->vehiculo->placa : 'N/A' }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Fecha Vencimiento</span>
+                        <div class="flex items-center gap-2">
+                            <span
+                                class="text-sm font-semibold {{ $colorClase }}">{{ $item->fecha->format('d-m-Y') }}</span>
+                            <x-form.button wire:click.prevent="refreshFecha({{ $item->id }})" icon="arrow-path" xs
+                                primary />
                         </div>
-                        <x-form.button wire:click.prevent="refreshFecha({{ $item->id }})" right-icon="arrow-path"
-                            primary />
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Periodo: </div>
-                        <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Plan: </div>
-                        <div class="font-medium text-slate-800">{{ $item->plan }}</div>
-                    </li>
-                    <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                        <div>Tipo Pago: </div>
-                        <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
-                    </li>
-                </ul>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Periodo</span>
+                        <span
+                            class="text-sm font-semibold text-gray-800 dark:text-gray-100">{{ $cobro->periodo }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Plan</span>
+                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">S/.
+                            {{ $item->plan }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo Pago</span>
+                        <span
+                            class="text-sm font-semibold text-gray-800 dark:text-gray-100">{{ $cobro->tipo_pago }}</span>
+                    </div>
+                </div>
 
                 @livewire('admin.cobros.suspend', ['detalle' => $item], key('suspend' . $item->id))
 
@@ -100,95 +194,101 @@
                     @endcan
                 @endif
 
-                <li class="text-sm flex justify-between py-3 border-b border-slate-200 font-bold">
-                    <div>Opciones Facturación: </div>
-
-                </li>
-                <div class="mt-6">
-                    @if ($cobro->clientes->tipo_documento_id == 1)
-                        <div class="flex justify-center mb-2">
-                            <x-form.button full="true" cyan wire:click.prevent="createBoleta([{{ $item->id }}])"
-                                right-icon="currency-dollar" success label="Crear Boleta" />
-                        </div>
-                    @endif
-                    @if ($cobro->clientes->tipo_documento_id == 6)
-                        <div class="flex justify-center mb-2">
-                            <x-form.button full="true" sky wire:click.prevent="createFactura([{{ $item->id }}])"
-                                right-icon="currency-dollar" success label="Crear Factura" />
-                        </div>
-                    @endif
-                    <div class="flex justify-center mb-2">
+                <div class="border-t border-gray-200 dark:border-gray-700/60 pt-4 mt-4">
+                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Opciones de Facturación
+                    </h4>
+                    <div class="space-y-2">
+                        @if ($cobro->clientes->tipo_documento_id == 1)
+                            <x-form.button full="true" cyan
+                                wire:click.prevent="createBoleta([{{ $item->id }}])" right-icon="currency-dollar"
+                                label="Crear Boleta" />
+                        @endif
+                        @if ($cobro->clientes->tipo_documento_id == 6)
+                            <x-form.button full="true" sky
+                                wire:click.prevent="createFactura([{{ $item->id }}])"
+                                right-icon="currency-dollar" label="Crear Factura" />
+                        @endif
                         <x-form.button full="true" slate wire:click.prevent="createRecibo([{{ $item->id }}])"
-                            right-icon="currency-dollar" success label="Crear Recibo" />
+                            right-icon="currency-dollar" label="Crear Recibo" />
                     </div>
                 </div>
 
-                <div class="text-xs text-slate-500 italic text-center">
-                    {{ $cobro->comentario }}
-                </div>
+                @if ($cobro->comentario)
+                    <div class="mt-4 p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+                        <p class="text-xs text-gray-600 dark:text-gray-400 italic">{{ $cobro->comentario }}</p>
+                    </div>
+                @endif
             </div>
         @endforeach
 
         @if ($cobro->detalle->count() < 1)
-            <div class="bg-white p-5 shadow-lg rounded-lg border border-slate-200">
-                <span>NO HAY DETALLE</span>
+            <div class="col-span-full">
+                <div
+                    class="bg-white dark:bg-gray-800 p-8 shadow-xs rounded-xl border border-gray-200 dark:border-gray-700/60 text-center">
+                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-400 dark:text-gray-500" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium">No hay detalles de cobranza registrados</p>
+                </div>
             </div>
         @endif
     </div>
 
     {{-- PAGOS REALIZADOS --}}
-    @if ($cobro->payments)
-        <div class="overflow-auto min-h-screen h-screen">
-            @foreach ($cobro->payments as $payment)
-                <div class="sm:flex items-center py-6 border-b border-slate-200 bg-white shadow-md mx-2 px-2">
-                    <a class="block mb-4 sm:mb-0 mr-5 md:w-32 xl:w-auto shrink-0">
-
-                        <svg class="w-44 h-44" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
-                            <g class="nc-icon-wrapper">
-                                <path
-                                    d="M42,47H6a1,1,0,0,1-.983-1.187L9,24.906V14a1,1,0,0,1,1-1H38a1,1,0,0,1,1,1V24.906l3.982,20.907A1,1,0,0,1,42,47Z"
-                                    fill="#ffd764"></path>
-                                <path
-                                    d="M31,21a1,1,0,0,1-1-1V9A6,6,0,0,0,18,9V20a1,1,0,0,1-2,0V9A8,8,0,0,1,32,9V20A1,1,0,0,1,31,21Z"
-                                    fill="#a2703f"></path>
-                            </g>
-                        </svg>
-                    </a>
-                    <div class="grow">
-
-                        <h3 class="text-lg font-semibold text-slate-800 mb-1">
-                            PAGO DEL DOCUMENTO {{ $payment->paymentable->serie_numero }} .
-                        </h3>
-
-                        <div class="text-sm mb-2">
-                            Pago Realizado en
-                            <span
-                                class="font-semibold text-slate-900">{{ $payment->paymentMethod->descripcion }}</span>
-                            con número de operación
-                            <span class="font-semibold text-slate-900">{{ $payment->numero_operacion }}</span>
-                        </div>
-                        <!-- Product meta -->
-                        <div class="flex flex-wrap justify-between items-center">
-                            <!-- Rating and price -->
-                            <div class="flex flex-wrap items-center space-x-2 mr-2">
-
-                                <div class="text-slate-400">{{ $payment->numero }}</div>
-                                <!-- Price -->
-                                <div>
-                                    <div
-                                        class="inline-flex text-sm font-medium bg-emerald-100 text-emerald-600 rounded-full text-center px-2 py-0.5">
-                                        {{ $payment->paymentable->divisa }}
-                                        {{ $payment->monto }}
-                                    </div>
+    @if ($cobro->payments && $cobro->payments->count() > 0)
+        <div class="mt-8">
+            <div
+                class="bg-white dark:bg-gray-800 shadow-xs rounded-xl border border-gray-200 dark:border-gray-700/60 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700/60 bg-gray-50 dark:bg-gray-900/20">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Pagos Realizados</h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $cobro->payments->count() }}
+                        {{ $cobro->payments->count() == 1 ? 'pago registrado' : 'pagos registrados' }}</p>
+                </div>
+                <div class="divide-y divide-gray-200 dark:divide-gray-700/60">
+                    @foreach ($cobro->payments as $payment)
+                        <div
+                            class="flex items-center gap-4 p-6 hover:bg-gray-100/50 dark:hover:bg-gray-700/30 transition-colors">
+                            <div class="shrink-0">
+                                <div
+                                    class="w-16 h-16 bg-emerald-100 dark:bg-emerald-900/40 rounded-full flex items-center justify-center border border-emerald-200 dark:border-emerald-800">
+                                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
                                 </div>
                             </div>
-                            <button
-                                class="text-sm underline hover:no-underline">{{ $payment->fecha->format('d-m-Y') }}</button>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">
+                                    Pago del Documento <span
+                                        class="text-emerald-600 dark:text-emerald-400">{{ $payment->paymentable->serie_numero }}</span>
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                    Realizado en <span
+                                        class="font-semibold text-gray-900 dark:text-white">{{ $payment->paymentMethod->descripcion }}</span>
+                                    con operación <span
+                                        class="font-semibold text-gray-900 dark:text-white">#{{ $payment->numero_operacion }}</span>
+                                </p>
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <span
+                                        class="px-2 py-1 text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-700/50 rounded">N°
+                                        {{ $payment->numero }}</span>
+                                    <span
+                                        class="px-3 py-1 text-sm font-semibold bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 rounded-full border border-emerald-200 dark:border-emerald-800">
+                                        {{ $payment->paymentable->divisa }} {{ number_format($payment->monto, 2) }}
+                                    </span>
+                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        {{ $payment->fecha->format('d/m/Y') }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
-            @endforeach
+            </div>
         </div>
-
     @endif
 </div>

@@ -3,6 +3,7 @@
     @livewire('admin.cobros.show', ['cobro' => $cobro])
 
     @livewire('admin.cobros.payment')
+    @livewire('admin.cobros.payment-bulk')
     @livewire('admin.cobros.modal-suspend')
     @livewire('admin.cobros.modal-activar')
 

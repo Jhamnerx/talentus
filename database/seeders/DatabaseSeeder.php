@@ -86,5 +86,6 @@ class DatabaseSeeder extends Seeder
         //$this->call(SustentosSeeder::class);
         $this->call(ChecklistTemplateSeeder::class);
         $this->call(WorkOrderTypeSeeder::class);
+        $this->call(TicketCategorySeeder::class);
     }
 }

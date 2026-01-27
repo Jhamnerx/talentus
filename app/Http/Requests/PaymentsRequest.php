@@ -26,7 +26,7 @@ class PaymentsRequest extends FormRequest
         //dd($divisa);
 
         $rules = [
-            'numero' => ['required', Rule::unique('payments', 'numero')->where(fn ($query) => $query->where('empresa_id', session('empresa')))],
+            'numero' => ['required', Rule::unique('payments', 'numero')->where(fn($query) => $query->where('empresa_id', session('empresa')))],
             "numero_operacion" => 'required',
             "monto" => 'required|numeric',
             "divisa" => 'same:divisaDoc',

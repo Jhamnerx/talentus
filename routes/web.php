@@ -57,12 +57,48 @@ use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
 use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
 use App\Http\Controllers\Admin\PDF\CertificadoAntifatigaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+use App\Http\Controllers\Admin\Finanzas\FinanzasController;
+use App\Http\Controllers\Admin\PDF\CajaChicaPdfController;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('admin.home');
     Route::get('dashboard', [HomeController::class, 'index'])->name('admin.home');
 
+    // ==================== FINANZAS ====================
+    Route::controller(FinanzasController::class)->prefix('finanzas')->name('finanzas.')->group(function () {
+        Route::get('caja-chica', 'cajaChica')->name('caja-chica.index');
+        Route::get('movimientos', 'movimientos')->name('movimientos.index');
+        Route::get('ingresos', 'ingresos')->name('ingresos.index');
+        Route::get('transacciones', 'transacciones')->name('transacciones.index');
+        Route::get('cuentas-cobrar', 'cuentasCobrar')->name('cuentas-cobrar.index');
+        Route::get('cuentas-pagar', 'cuentasPagar')->name('cuentas-pagar.index');
+        Route::get('balance', 'balance')->name('balance.index');
+        Route::get('pagos', 'pagos')->name('pagos.index'); // Redirige a admin.payments.index
+    });
+
+    // Reportes de Caja Chica (igual que FactuPRO)
+    Route::controller(CajaChicaPdfController::class)->prefix('finanzas/caja-chica')->name('finanzas.caja-chica.')->group(function () {
+        // Dropdown "Reporte"
+        Route::get('{caja}/reporte-a4', 'reportA4')->name('reporte-a4');
+        Route::get('{caja}/reporte-ticket/{width?}', 'reportTicket')->name('reporte-ticket');
+        Route::get('{caja}/reporte-ticket-resumen', 'reportTicketResumen')->name('reporte-ticket-resumen');
+        Route::get('{caja}/reporte-simple-a4', 'reportSimpleA4')->name('reporte-simple-a4');
+        Route::get('{caja}/reporte-excel', 'reportExcel')->name('reporte-excel');
+        Route::get('{caja}/reporte-operaciones', 'reportSummaryDailyOperations')->name('reporte-operaciones');
+
+        // Dropdown "Reporte Efectivo"
+        Route::get('{caja}/efectivo-excel', 'reportCashPaymentExcel')->name('efectivo-excel');
+        Route::get('{caja}/ingresos-egresos', 'reportIncomeEgress')->name('ingresos-egresos');
+        Route::get('{caja}/pagos-asociados', 'reportPaymentsAssociated')->name('pagos-asociados');
+
+        // Dropdown "Reporte Productos"
+        Route::get('{caja}/productos-pdf', 'reportProductsPdf')->name('productos-pdf');
+        Route::get('{caja}/productos-excel', 'reportProductsExcel')->name('productos-excel');
+
+        // Reporte General
+        Route::get('reporte-general', 'reportGeneral')->name('reporte-general');
+    });
 
     // ALMACEN
     Route::controller(CategoriaController::class)->group(function () {
@@ -113,7 +149,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('contactos', 'index')->name('admin.clientes.contactos.index');
     });
 
-    // PAGOS
+    // PAGOS (Mantener por compatibilidad pero redireccionar)
     Route::controller(PaymentsController::class)->group(function () {
         Route::get('pagos', 'index')->name('admin.payments.index');
         Route::get('pagos/metodos-pago', 'metodosPago')->name('admin.payments.metodos-pago');
@@ -250,6 +286,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('ajustes/series', [AjustesController::class, 'series'])->name('admin.ajustes.series');
     Route::get('ajustes/plantilla', [AjustesController::class, 'plantilla'])->name('admin.ajustes.plantilla');
     Route::get('ajustes/sunat', [AjustesController::class, 'sunat'])->name('admin.ajustes.sunat');
+
+    // Banking module routes
+    Route::view('ajustes/bancos', 'admin.ajustes.bancos')->name('admin.ajustes.bancos');
+    Route::view('ajustes/cuentas-bancarias', 'admin.ajustes.cuentas-bancarias')->name('admin.ajustes.cuentas-bancarias');
 
     //Route::resource('ajustes/plantilla', RolController::class)->names('admin.ajustes.roles');
     Route::post('ajustes/roles/store', [RolController::class, 'store'])->name('admin.ajustes.roles.store');
@@ -406,5 +446,17 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
             return response()->file(Storage::disk('private')->path($path));
         })->name('file');
+    });
+
+    // TICKETS
+    Route::controller(\App\Http\Controllers\Admin\TicketsController::class)->group(function () {
+        Route::get('tickets', 'index')->name('admin.tickets.index');
+        Route::get('tickets/{ticket}', 'show')->name('admin.tickets.show');
+
+        // Dashboard endpoints
+        Route::get('tickets-dashboard/summary', 'dashboardSummary')->name('admin.tickets.dashboard.summary');
+        Route::get('tickets-dashboard/trends', 'dashboardTrends')->name('admin.tickets.dashboard.trends');
+        Route::get('tickets-dashboard/agents', 'dashboardAgentPerformance')->name('admin.tickets.dashboard.agents');
+        Route::get('tickets-dashboard/teams', 'dashboardTeamLoad')->name('admin.tickets.dashboard.teams');
     });
 });

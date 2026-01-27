@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CobroEstado;
 use App\Scopes\EmpresaScope;
 use App\Observers\CobrosObserver;
 use Spatie\Activitylog\LogOptions;
@@ -33,14 +34,14 @@ class Cobros extends Model
 
     protected $table = 'cobros';
     protected $casts = [
-
         'clientes_id' => 'integer',
         'vehiculos_id' => 'integer',
         'contratos_id' => 'integer',
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'vencido' => 'boolean',
-
+        'auto_renovar' => 'boolean',
+        'estado_cobro' => CobroEstado::class,
     ];
     //SCOPE GLOBAL DE EMPRES
     protected static function booted()
@@ -68,6 +69,26 @@ class Cobros extends Model
     public function scopeVerificado($query, $estado = 0)
     {
         return $query->where('verificado', $estado);
+    }
+
+    public function scopeActivos($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::ACTIVO);
+    }
+
+    public function scopeSuspendidos($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::SUSPENDIDO);
+    }
+
+    public function scopeCancelados($query)
+    {
+        return $query->where('estado_cobro', CobroEstado::CANCELADO);
+    }
+
+    public function scopeEstadoCobro($query, CobroEstado $estado)
+    {
+        return $query->where('estado_cobro', $estado);
     }
     //Relacion uno a muchos inversa
 

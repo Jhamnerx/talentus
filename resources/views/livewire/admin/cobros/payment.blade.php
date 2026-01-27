@@ -2,19 +2,21 @@
 
     <form autocomplete="off" autocapitalize="true">
 
-        <div class="px-8 py-5 bg-white sm:p-6">
+        <div class="px-8 py-5 bg-white dark:bg-gray-800 sm:p-6">
 
             <div class="grid grid-cols-12 gap-6">
                 {{-- TIPO PAGO --}}
 
                 <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium mb-1" for="numero">Número: <span
-                            class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="numero">Número:
+                        <span class="text-rose-500">*</span></label>
                     <div class="relative" lang="es">
 
-                        <input type="text" class="form-input w-full" wire:model.live='numero' disabled>
+                        <input type="text"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                            wire:model.live='numero' disabled>
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="absolute inset-0 right-auto flex items-center pointer-events-none"
+                            <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 ml-3 mr-2"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                 <g fill="none" class="nc-icon-wrapper">
                                     <path
@@ -31,19 +33,20 @@
                     @enderror
                 </div>
                 <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium mb-1" for="tipo_pago">Tipo Pago: <span
-                            class="text-rose-500">*</span></label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="tipo_pago">Tipo
+                        Pago: <span class="text-rose-500">*</span></label>
                     <div class="relative" lang="es">
 
                         <select id="tipo_pago" name="tipo_pago" wire:model.live="tipo_pago"
-                            class="tipo_pago w-full form-input pl-9" required>
+                            class="tipo_pago w-full form-input pl-9 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                            required>
                             <option selected value="FACTURA">FACTURA</option>
                             <option value="RECIBO">RECIBO</option>
 
                         </select>
 
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 fill-current text-slate-800 shrink-0 ml-3 mr-2"
+                            <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 ml-3 mr-2"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                 <g class="nc-icon-wrapper">
                                     <path
@@ -87,7 +90,7 @@
                 </div>
 
                 <div class="col-span-12 sm:col-span-12">
-                    <label class="block text-sm font-medium mb-1" for="plataforma">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="plataforma">
                         Marcar como pagado:
                     </label>
                     <div class="flex flex-wrap items-center">
@@ -95,7 +98,7 @@
                         <div class="m-3">
                             <label class="flex items-center">
                                 <input type="checkbox" class="form-checkbox" wire:model.live="pay" value="true" />
-                                <span class="text-sm ml-2">Si</span>
+                                <span class="text-sm ml-2 text-gray-700 dark:text-gray-300">Si</span>
                             </label>
                         </div>
                     </div>
@@ -104,14 +107,16 @@
                 {{-- monto --}}
                 <div class="col-span-12 sm:col-span-6">
 
-                    <label class="block text-sm font-medium mb-1" for="monto">Monto:</label>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                        for="monto">Monto:</label>
 
                     <div class="relative">
 
-                        <input wire:model.live="monto" type="text" class="form-input w-full pl-12"
+                        <input wire:model.live="monto" type="text"
+                            class="form-input w-full pl-12 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                             placeholder="$199.00">
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <span class="text-sm text-slate-400 font-medium px-3">S/</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 font-medium px-3">S/</span>
                         </div>
                     </div>
                     @error('monto')
@@ -122,16 +127,18 @@
                 </div>
                 <div class="col-span-12 sm:col-span-6">
 
-                    <label class="block text-sm font-medium mb-1" for="numeronumero_operacion">Numero de
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                        for="numeronumero_operacion">Numero de
                         operación:</label>
 
                     <div class="relative">
 
-                        <input wire:model.live="numero_operacion" type="text" class="form-input w-full pl-12"
+                        <input wire:model.live="numero_operacion" type="text"
+                            class="form-input w-full pl-12 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
                             placeholder="45474001">
 
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 fill-current text-slate-600 shrink-0 ml-3 mr-2"
+                            <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 ml-3 mr-2"
                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                 <g stroke-linecap="square" stroke-miterlimit="10" fill="none" stroke="currentColor"
                                     stroke-linejoin="miter" class="nc-icon-wrapper">
@@ -167,18 +174,18 @@
                 </div>
                 {{-- nota --}}
                 <div class="col-span-12 sm:col-span-12 mb-2">
-                    <label class="block text-sm font-medium mb-1" for="nota">
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="nota">
                         Nota:
                     </label>
 
                     <div class="relative">
-                        <textarea class="w-full form-input pl-9" wire:model.live="nota" name="nota" id="" rows="4"
-                            placeholder="Ingresa una nota">
+                        <textarea class="w-full form-input pl-9 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                            wire:model.live="nota" name="nota" id="" rows="4" placeholder="Ingresa una nota">
                                     </textarea>
 
                         <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 fill-current  shrink-0 ml-3 mr-2" xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 48 48">
+                            <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 ml-3 mr-2"
+                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                                 <g class="nc-icon-wrapper">
                                     <path d="M46,4V42a4,4,0,0,1-4,4H6l4-14V4a2,2,0,0,1,2-2H44A2,2,0,0,1,46,4Z"
                                         fill="#e3e3e3"></path>

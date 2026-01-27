@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Livewire\Admin\Tickets;
+
+use App\Models\Ticket;
+use App\Models\Clientes;
+use App\Models\Team;
+use App\Models\User;
+use App\Models\TicketCategory;
+use App\Enums\TicketStatus;
+use App\Enums\TicketPriority;
+use Illuminate\Support\Facades\Auth;
+use Livewire\Component;
+use WireUi\Traits\WireUiActions;
+
+class Create extends Component
+{
+    use WireUiActions;
+
+    public $showModal = false;
+    public $subject = '';
+    public $description = '';
+    public $priority = 'medium';
+    public $customer_id = '';
+    public $category_id = '';
+    public $team_id = '';
+    public $assigned_to = '';
+
+    protected $listeners = ['open-modal-create-ticket' => 'openModal'];
+
+    public function rules()
+    {
+        return [
+            'subject' => 'required|string|max:255',
+            'description' => 'required|string',
+            'priority' => 'required|in:' . implode(',', array_column(TicketPriority::cases(), 'value')),
+            'customer_id' => 'required|exists:clientes,id',
+            'category_id' => 'nullable|exists:ticket_categories,id',
+            'team_id' => 'nullable|exists:teams,id',
+            'assigned_to' => 'nullable|exists:users,id',
+        ];
+    }
+
+    protected $messages = [
+        'subject.required' => 'El asunto es obligatorio',
+        'description.required' => 'La descripción es obligatoria',
+        'customer_id.required' => 'El cliente es obligatorio',
+        'customer_id.exists' => 'El cliente seleccionado no existe',
+    ];
+
+    public function render()
+    {
+        $customers = Clientes::active(1)->orderBy('razon_social')->get();
+        $categories = TicketCategory::where('is_active', true)->orderBy('name')->get();
+        $teams = Team::active()->orderBy('name')->get();
+        $users = User::whereHas('roles', fn($q) => $q->whereIn('name', ['admin', 'agente']))
+            ->orderBy('name')->get();
+
+        return view('livewire.admin.tickets.create', compact('customers', 'categories', 'teams', 'users'));
+    }
+
+    public function openModal()
+    {
+        $this->resetValidation();
+        $this->reset(['subject', 'description', 'priority', 'customer_id', 'category_id', 'team_id', 'assigned_to']);
+        $this->showModal = true;
+    }
+
+    public function save()
+    {
+        $this->authorize('create', Ticket::class);
+
+        $data = $this->validate();
+        $data['status'] = TicketStatus::NEW->value;
+        $data['created_by'] = Auth::user()->id;
+
+        $ticket = Ticket::create($data);
+
+        $this->showModal = false;
+        $this->dispatch('update-table');
+        $this->notification()->success('Ticket creado', 'Código: ' . $ticket->code);
+    }
+}

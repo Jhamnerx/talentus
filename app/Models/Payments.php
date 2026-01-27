@@ -90,30 +90,61 @@ class Payments extends Model
 
     public function paymentable()
     {
-
         return $this->morphTo();
     }
 
     public function cobros()
     {
-
         return $this->belongsTo(Cobros::class, 'cobros_id');
     }
-
 
     public function paymentMethod()
     {
         return $this->belongsTo(PaymentMethodType::class, 'payment_method_id', 'id');
     }
 
-
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
     public function image()
     {
-
         return $this->morphOne(Imagen::class, 'imageable');
+    }
+
+    /**
+     * Relación con GlobalPayment
+     */
+    public function globalPayment()
+    {
+        return $this->morphOne(GlobalPayment::class, 'payment');
+    }
+
+    /**
+     * Determinar si el pago es un ingreso
+     */
+    public function isIncome()
+    {
+        if (!$this->paymentable) {
+            return false;
+        }
+
+        $ingresos = [
+            'App\\Models\\Recibos',
+            'App\\Models\\Factura',
+            'App\\Models\\Ventas',
+            'App\\Models\\RecibosPagosVarios',
+        ];
+
+        return in_array($this->paymentable_type, $ingresos);
+    }
+
+    /**
+     * Determinar si el pago es un egreso
+     */
+    public function isExpense()
+    {
+        return !$this->isIncome();
     }
 }

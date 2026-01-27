@@ -5,7 +5,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Registro de Cobranza ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Registro de Cobranza ✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -14,10 +14,11 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live='search' id="action-search" class="form-input pl-9 focus:border-slate-300"
+                <input wire:model.live='search' id="action-search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
                     type="search" placeholder="Buscar Cobro" />
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -30,7 +31,8 @@
             <!-- Create invoice button -->
             @can('admin.cobros.create')
                 <a href="{{ route('admin.cobros.create') }}">
-                    <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <button
+                        class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
                         <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                             <path
                                 d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
@@ -50,16 +52,16 @@
 
         <!-- Left side - Per Page Selector -->
         <div class="flex items-center gap-2 mb-4 sm:mb-0">
-            <label for="perPage" class="text-sm text-slate-600">Mostrar:</label>
+            <label for="perPage" class="text-sm text-gray-600 dark:text-gray-300">Mostrar:</label>
             <select wire:model.live="perPage" id="perPage"
-                class="form-select text-sm py-1 px-2 border-slate-200 hover:border-slate-300 focus:border-indigo-300 rounded">
+                class="form-select text-sm py-1 px-2 border-slate-200 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100 hover:border-slate-300 focus:border-indigo-300 rounded">
                 <option value="10">10</option>
                 <option value="15">15</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
             </select>
-            <span class="text-sm text-slate-600">registros</span>
+            <span class="text-sm text-gray-600 dark:text-gray-300">registros</span>
         </div>
 
         <!-- Right side -->
@@ -68,10 +70,11 @@
             <!-- Eliminar button -->
             <div class="table-items-action hidden">
                 <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> Items Seleccionados</div>
+                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        <span class="table-items-count"></span> Items Seleccionados
+                    </div>
                     <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Eliminar</button>
+                        class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-rose-500 hover:text-rose-600">Eliminar</button>
                 </div>
             </div>
 
@@ -79,31 +82,32 @@
 
             <div class="relative float-right" x-data="{ open: false, selected: 3 }">
                 <button wire:ignore
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+                    class="btn justify-between min-w-44 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
                     <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
+                        <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 mr-2"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" width="11"
+                        height="7" viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                <div class="z-10 absolute top-full right-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                     @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
                     x-transition:enter="transition ease-out duration-100 transform"
                     x-transition:enter-start="opacity-0 -translate-y-2"
                     x-transition:enter-end="opacity-100 translate-y-0"
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
+                    <div class="font-medium text-sm text-gray-600 dark:text-gray-300" x-ref="options">
                         <button wire:click="setFiltroFecha('por_vencer')" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -114,7 +118,7 @@
                             <span>Por Vencer (7 días)</span>
                         </button>
                         <button wire:click="setFiltroFecha('vencidos')" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -125,7 +129,7 @@
                             <span>Vencidos</span>
                         </button>
                         <button wire:click="setFiltroFecha('proximo_mes')" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -137,7 +141,7 @@
                         </button>
 
                         <button wire:click="setFiltroFecha(null)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -156,7 +160,7 @@
             <!-- Filter button -->
             <div class="relative inline-flex">
                 <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
+                    class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <span class="sr-only">Filtro</span><wbr>
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                         <path
@@ -168,19 +172,19 @@
 
     </div>
 
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200 mb-8">
+    <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Registros de cobros
-                <span class="text-slate-400 font-medium">{{ $cobros->total() }}</span>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Registros de cobros
+                <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $cobros->total() }}</span>
             </h2>
         </header>
         <div>
 
             <div class="overflow-x-auto min-h-screen">
-                <table class="table-auto w-full">
+                <table class="table-auto w-full dark:text-gray-300">
 
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="font-semibold text-left">Expandir</div>
@@ -221,7 +225,8 @@
                             <!-- Fila principal -->
                             <tr>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
-                                    <button class="text-gray-400 hover:text-gray-500 transform transition-transform"
+                                    <button
+                                        class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 transform transition-transform"
                                         :class="{ 'rotate-180': open }" @click.prevent="open = !open"
                                         :aria-expanded="open" aria-controls="vehiculos-{{ $cobro->id }}">
                                         <span class="sr-only">Expandir</span>
@@ -232,10 +237,10 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <a href="{{ route('admin.cobros.show', $cobro) }}"
-                                        class="text-gray-700 group flex items-center text-sm font-normal">
+                                        class="text-gray-700 dark:text-gray-300 group flex items-center text-sm font-normal">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor"
-                                            class="h-5 w-5 text-gray-400 group-hover:text-violet-500">
+                                            class="h-5 w-5 text-gray-400 dark:text-gray-500 group-hover:text-violet-500">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
                                             </path>
@@ -247,19 +252,19 @@
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="font-medium text-sky-600">
+                                        <div class="font-medium text-sky-600 dark:text-sky-400">
                                             {{ $cobro->clientes->razon_social }}
                                         </div>
                                         @if (!$cobro->detalle->isEmpty())
                                             <span
-                                                class="ml-2 px-2 py-0.5 text-xs font-medium bg-indigo-100 text-indigo-800 rounded-full">
+                                                class="ml-2 px-2 py-0.5 text-xs font-medium bg-indigo-100 dark:bg-indigo-900/50 text-indigo-800 dark:text-indigo-300 rounded-full">
                                                 {{ $cobro->detalle->count() }} vehículos
                                             </span>
                                         @endif
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">
                                         @if (count($cobro->clientes->contactos) >= 1)
                                             @foreach ($cobro->clientes->contactos as $contacto)
                                                 <ul>
@@ -272,23 +277,28 @@
                                     </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div>{{ $cobro->comentario }}</div>
+                                    <div class="text-gray-800 dark:text-gray-100">{{ $cobro->comentario }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $cobro->periodo }}</div>
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">{{ $cobro->periodo }}
+                                    </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $cobro->tipo_pago }}</div>
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">{{ $cobro->tipo_pago }}
+                                    </div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-medium text-slate-800">{{ $cobro->observacion }}</div>
+                                    <div class="font-medium text-gray-800 dark:text-gray-100">
+                                        {{ $cobro->observacion }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                @click.prevent="open = !open" :aria-expanded="open">
+                                            <button
+                                                class="text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 rounded-full"
+                                                :class="{ 'bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400': open }"
+                                                aria-haspopup="true" @click.prevent="open = !open"
+                                                :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                     <circle cx="16" cy="16" r="2" />
@@ -296,7 +306,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right z-10 absolute transform -translate-x-3/4 top-full left-0 min-w-36 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1 ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 dark:divide-gray-700 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -309,10 +319,10 @@
                                                     @can('admin.cobros.edit')
                                                         <li>
                                                             <a href="{{ route('admin.cobros.edit', $cobro) }}"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                                class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                    class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-blue-500">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2"
                                                                         d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -325,10 +335,10 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="openModalDelete({{ $cobro->id }})"
-                                                                class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                                class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke="currentColor"
-                                                                    class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                    class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-red-500">
                                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                                         stroke-width="2"
                                                                         d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -340,10 +350,10 @@
                                                     @endcan
                                                     <li>
                                                         <a href="{{ route('admin.cobros.show', $cobro) }}"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal">
+                                                            class="text-gray-700 dark:text-gray-300 group flex items-center px-4 py-2 text-sm font-normal">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor"
-                                                                class="h-5 w-5 mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-violet-500">
                                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                                     stroke-width="2"
                                                                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -366,13 +376,13 @@
             <!-- Fila collapsible con vehículos -->
             <tr id="vehiculos-{{ $cobro->id }}" role="region" x-show="open" x-cloak>
                 <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3">
-                    <div class="bg-slate-50 p-5 -mt-3">
-                        <h3 class="text-sm font-semibold text-slate-700 mb-3">
+                    <div class="bg-gray-50 dark:bg-gray-900/20 p-5 -mt-3">
+                        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
                             VEHÍCULOS ({{ $cobro->detalle->count() }})
                         </h3>
 
                         @if ($cobro->detalle->isEmpty())
-                            <div class="text-center py-4 text-slate-500">
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400">
                                 No se registraron vehículos
                             </div>
                         @else
@@ -388,24 +398,24 @@
                                         $borderLeftColor = '';
 
                                         if ($diasRestantes < 0) {
-                                            $bgColor = 'bg-red-50';
-                                            $textColor = 'text-red-700';
-                                            $borderLeftColor = 'border-l-red-500';
+                                            $bgColor = 'bg-red-50 dark:bg-red-900/20';
+                                            $textColor = 'text-red-700 dark:text-red-400';
+                                            $borderLeftColor = 'border-l-red-500 dark:border-l-red-600';
                                             $estadoTexto = 'VENCIDO';
                                         } elseif ($diasRestantes <= 7) {
-                                            $bgColor = 'bg-orange-50';
-                                            $textColor = 'text-orange-700';
-                                            $borderLeftColor = 'border-l-orange-500';
+                                            $bgColor = 'bg-orange-50 dark:bg-orange-900/20';
+                                            $textColor = 'text-orange-700 dark:text-orange-400';
+                                            $borderLeftColor = 'border-l-orange-500 dark:border-l-orange-600';
                                             $estadoTexto = 'POR VENCER';
                                         } elseif ($diasRestantes <= 15) {
-                                            $bgColor = 'bg-yellow-50';
-                                            $textColor = 'text-yellow-700';
-                                            $borderLeftColor = 'border-l-yellow-500';
+                                            $bgColor = 'bg-yellow-50 dark:bg-yellow-900/20';
+                                            $textColor = 'text-yellow-700 dark:text-yellow-400';
+                                            $borderLeftColor = 'border-l-yellow-500 dark:border-l-yellow-600';
                                             $estadoTexto = 'PRÓXIMO';
                                         } else {
-                                            $bgColor = 'bg-green-50';
-                                            $textColor = 'text-green-700';
-                                            $borderLeftColor = 'border-l-green-500';
+                                            $bgColor = 'bg-green-50 dark:bg-green-900/20';
+                                            $textColor = 'text-green-700 dark:text-green-400';
+                                            $borderLeftColor = 'border-l-green-500 dark:border-l-green-600';
                                             $estadoTexto = 'VIGENTE';
                                         }
                                     @endphp
@@ -413,74 +423,79 @@
                                     <div
                                         class="flex items-center gap-4 p-3 {{ $bgColor }} border-l-4 {{ $borderLeftColor }} rounded hover:shadow-sm transition-shadow">
                                         <!-- Placa y Vehículo -->
-                                        <div class="w-32 flex-shrink-0">
+                                        <div class="w-32 shrink-0">
                                             @if ($detalle->vehiculo)
                                                 <div class="font-bold {{ $textColor }}">
                                                     {{ $detalle->vehiculo->placa }}
                                                 </div>
                                                 @if ($detalle->vehiculo->marca || $detalle->vehiculo->modelo)
-                                                    <div class="text-xs text-slate-600">
+                                                    <div class="text-xs text-gray-600 dark:text-gray-400">
                                                         {{ $detalle->vehiculo->marca }}
                                                         {{ $detalle->vehiculo->modelo }}
                                                     </div>
                                                 @endif
                                             @else
-                                                <div class="font-bold text-slate-400">Sin vehículo</div>
+                                                <div class="font-bold text-gray-400 dark:text-gray-500">Sin vehículo
+                                                </div>
                                             @endif
                                         </div>
 
                                         <!-- Tipo y Año -->
                                         @if ($detalle->vehiculo)
-                                            <div class="w-32 flex-shrink-0 text-sm">
+                                            <div class="w-32 shrink-0 text-sm">
                                                 @if ($detalle->vehiculo->tipo)
-                                                    <div class="text-slate-600">{{ $detalle->vehiculo->tipo }}</div>
+                                                    <div class="text-gray-600 dark:text-gray-400">
+                                                        {{ $detalle->vehiculo->tipo }}</div>
                                                 @endif
                                                 @if ($detalle->vehiculo->año)
-                                                    <div class="text-slate-500 text-xs">Año:
+                                                    <div class="text-gray-500 dark:text-gray-500 text-xs">Año:
                                                         {{ $detalle->vehiculo->año }}</div>
                                                 @endif
                                             </div>
                                         @endif
 
                                         <!-- Plan -->
-                                        <div class="w-24 flex-shrink-0 text-sm">
-                                            <div class="text-slate-600 text-xs">Plan</div>
-                                            <div class="font-medium text-slate-900">S/. {{ $detalle->plan }}</div>
+                                        <div class="w-24 shrink-0 text-sm">
+                                            <div class="text-gray-600 dark:text-gray-400 text-xs">Plan</div>
+                                            <div class="font-medium text-gray-900 dark:text-gray-100">S/.
+                                                {{ $detalle->plan }}</div>
                                         </div>
 
                                         <!-- Vencimiento -->
-                                        <div class="w-28 flex-shrink-0 text-sm">
-                                            <div class="text-slate-600 text-xs">Vencimiento</div>
+                                        <div class="w-28 shrink-0 text-sm">
+                                            <div class="text-gray-600 dark:text-gray-400 text-xs">Vencimiento</div>
                                             <div class="font-medium {{ $textColor }}">
                                                 {{ $detalle->fecha->format('d-m-Y') }}
                                             </div>
                                         </div>
 
                                         <!-- Días restantes -->
-                                        <div class="w-28 flex-shrink-0 text-sm">
-                                            <div class="text-slate-600 text-xs">Días restantes</div>
+                                        <div class="w-28 shrink-0 text-sm">
+                                            <div class="text-gray-600 dark:text-gray-400 text-xs">Días restantes</div>
                                             <div class="font-bold {{ $textColor }}">
                                                 {{ $diasRestantes >= 0 ? $diasRestantes . ' días' : 'Vencido hace ' . abs($diasRestantes) . ' días' }}
                                             </div>
                                         </div>
 
                                         <!-- Estado Badge -->
-                                        <div class="w-24 flex-shrink-0">
+                                        <div class="w-24 shrink-0">
                                             <span
-                                                class="px-2 py-1 text-xs font-semibold {{ $textColor }} bg-white border border-current rounded">
+                                                class="px-2 py-1 text-xs font-semibold {{ $textColor }} bg-white dark:bg-gray-800 border border-current rounded">
                                                 {{ $estadoTexto }}
                                             </span>
                                         </div>
 
                                         <!-- Toggle Estado -->
                                         <div class="flex items-center gap-2 ml-auto" x-data="{ checked: {{ $detalle->estado ? 'true' : 'false' }} }">
-                                            <span class="text-xs text-slate-600">Estado:</span>
+                                            <span class="text-xs text-gray-600 dark:text-gray-400">Estado:</span>
                                             <div class="form-switch">
                                                 <input wire:click="cambiarEstado({{ $detalle->id }})"
                                                     type="checkbox" id="switchCollapse{{ $detalle->id }}"
                                                     class="sr-only" x-model="checked" />
-                                                <label class="bg-slate-400" for="switchCollapse{{ $detalle->id }}">
-                                                    <span class="bg-white shadow-sm" aria-hidden="true"></span>
+                                                <label class="bg-gray-400 dark:bg-gray-700"
+                                                    for="switchCollapse{{ $detalle->id }}">
+                                                    <span class="bg-white dark:bg-gray-300 shadow-sm"
+                                                        aria-hidden="true"></span>
                                                     <span class="sr-only">Estado</span>
                                                 </label>
                                             </div>
@@ -504,7 +519,7 @@
                 <tbody>
                     <tr>
                         <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                            <div class="text-center">No hay Registros</div>
+                            <div class="text-center text-gray-500 dark:text-gray-400">No hay Registros</div>
                         </td>
                     </tr>
                 </tbody>

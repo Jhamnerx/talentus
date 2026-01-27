@@ -5,7 +5,7 @@
 
             <!-- Left: Title -->
             <div class="mb-4 sm:mb-0">
-                <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">VENTAS ✨</h1>
+                <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-gray-100 font-bold">VENTAS ✨</h1>
             </div>
 
         </div>
@@ -15,7 +15,7 @@
 
             <!-- Left side -->
             <div class="mb-4 sm:mb-0">
-                <div class="contenedor-estados-sunat flex flex-wrap -m-1">
+                <div class="contenedor-estados-sunat flex flex-wrap -m-1 text-gray-700 dark:text-gray-300">
                     <div class="sunat-estado m-1">
                         <label class="estadosunat">
                         </label>
@@ -56,10 +56,11 @@
 
                 <form class="relative">
                     <label for="action-search" class="sr-only">Search</label>
-                    <input name="serie_correlativo" id="action-search" class="form-input pl-9 focus:border-slate-300"
+                    <input name="serie_correlativo" id="action-search"
+                        class="form-input pl-9 focus:border-slate-300 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
                         type="search" wire:model.live="search" placeholder="Buscar Factura o Boleta…" />
                     <button type="button" class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                        <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-400 group-hover:text-slate-500 dark:group-hover:text-gray-300 ml-3 mr-2"
                             viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                             <path
                                 d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />

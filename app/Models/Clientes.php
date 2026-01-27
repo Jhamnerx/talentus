@@ -138,4 +138,9 @@ class Clientes extends Model
     {
         return $this->hasOne(TipoDocumento::class, 'codigo', 'tipo_documento_id');
     }
+
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class, 'customer_id')->withoutGlobalScope(EmpresaScope::class);
+    }
 }

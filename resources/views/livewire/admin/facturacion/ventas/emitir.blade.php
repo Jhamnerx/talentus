@@ -1,6 +1,6 @@
 <div>
     <div
-        class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300">
+        class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300 dark:border-gray-600">
         <!-- Add customer button -->
         <a href="{{ route('admin.ventas.index') }}">
             <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
@@ -28,7 +28,8 @@
                 {{-- COLUMNA IZQUIERDA --}}
                 <div class="col-span-12 md:col-span-9">
                     {{-- PRIMERA FILA --}}
-                    <div class="grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+                    <div
+                        class="grid grid-cols-12 gap-2 bg-white dark:bg-gray-800 items-start border border-gray-200 dark:border-gray-600 rounded-md m-3 p-4">
 
                         {{-- LOGO --}}
                         <div class="col-span-12 lg:col-span-2">
@@ -41,7 +42,7 @@
                         {{-- DATOS DE LA EMPRESA --}}
                         <div
                             class="col-span-12 lg:col-span-4 xl:col-span-6 pl-6 self-center overflow-hidden text-ellipsis">
-                            <div class="mb-0" style="line-height: initial;">
+                            <div class="mb-0 text-gray-800 dark:text-gray-200" style="line-height: initial;">
                                 <span class="font-bold">
                                     {{ $plantilla->razon_social }}
                                 </span>
@@ -76,7 +77,7 @@
 
                     {{-- SEGUNDA FILA --}}
                     <div
-                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white dark:bg-gray-800 items-start border border-gray-200 dark:border-gray-600 rounded-md m-3 p-4">
 
 
                         <div class="col-span-12 xs:col-span-4">
@@ -126,7 +127,7 @@
                     </div>
 
                     <div
-                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+                        class="col-span-12 md:col-span-9 grid grid-cols-12 gap-2 bg-white dark:bg-gray-800 items-start border border-gray-200 dark:border-gray-600 rounded-md m-3 p-4">
 
                         <div class="col-span-12 md:col-span-6">
 
@@ -161,7 +162,7 @@
                 <div class="col-span-12 md:col-span-3">
 
                     <div
-                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-4 bg-white items-start border rounded-md m-3 p-4">
+                        class="col-span-12 md:col-span-3 grid grid-cols-12 gap-4 bg-white dark:bg-gray-800 items-start border border-gray-200 dark:border-gray-600 rounded-md m-3 p-4">
 
                         <div class="col-span-12">
                             <x-form.checkbox left-label="Disminuir Stock:" value="true" lg id="decrease_stock"
@@ -202,7 +203,7 @@
                                 wire:model.live="openModalDt" align="center">
 
                                 <div
-                                    class="grid grid-cols-12 gap-6 text-sm col-span-12 rounded-lg shadow-lg bg-white text-center border border-gray-300 px-4 py-4">
+                                    class="grid grid-cols-12 gap-6 text-sm col-span-12 rounded-lg shadow-lg bg-white dark:bg-gray-800 text-center border border-gray-300 dark:border-gray-600 px-4 py-4">
 
                                     <div class="col-span-12">
 
@@ -263,7 +264,7 @@
                     {{-- DIV PARA MOSTRAR INFO DE LA DETRACCION --}}
                     @if ($detraccion)
                         <div
-                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border rounded-md m-3 p-4">
+                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white dark:bg-gray-800 items-start border border-gray-200 dark:border-gray-600 rounded-md m-3 p-4">
                             <div class="col-span-12">
                                 @error('datosDetraccion')
                                     <p class="mt-2 peer-invalid:visible text-pink-600 text-sm">
@@ -321,7 +322,7 @@
                     {{-- componente venta al credito --}}
                     @if ($showCredit)
                         <div
-                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white items-start border border-gray-300 rounded-md m-3">
+                            class="col-span-12 md:col-span-3 grid grid-cols-12 gap-2 bg-white dark:bg-gray-800 items-start border border-gray-300 dark:border-gray-600 rounded-md m-3">
 
                             <x-admin.facturacion.detalle-cuotas-table :cuotas="$detalle_cuotas" :totalcuotas="$total_cuotas">
                             </x-admin.facturacion.detalle-cuotas-table>
@@ -378,9 +379,9 @@
 
             <div class="grid grid-cols-12 gap-2">
 
-                <div class="col-span-12 mt-2 pt-2 bg-white shadow-lg rounded-lg px-3">
+                <div class="col-span-12 mt-2 pt-2 bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3">
 
-                    <div class="grid grid-cols-5 gap-2 mt-2 pt-2 pb-2 bg-white px-3 mb-2">
+                    <div class="grid grid-cols-5 gap-2 mt-2 pt-2 pb-2 bg-white dark:bg-gray-800 px-3 mb-2">
 
                         <div class="col-span-6 sm:col-span-2">
 
@@ -402,8 +403,8 @@
                         <div class="grid grid-cols-12 gap-4 w-full px-4 mx-4 py-2 ml-auto mt-5">
 
                             {{-- TIPO DESCUENTO --}}
-                            <div class="col-span-12 border-b border-cyan-600">
-                                <h4 class="font-semibold">DESCUENTO</h4>
+                            <div class="col-span-12 border-b border-cyan-600 dark:border-cyan-400">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">DESCUENTO</h4>
                             </div>
 
                             <div class="col-span-12 md:col-span-12">
@@ -453,15 +454,17 @@
 
                         {{-- DIV PARA SUB Y TOTALES DERECHA --}}
                         <div class="py-2 ml-auto mt-5 w-full mx-4">
-                            <div class="text-right mb-4 border-b">
-                                <h4 class="font-semibold">RESUMEN</h4>
+                            <div class="text-right mb-4 border-b border-gray-300 dark:border-gray-600">
+                                <h4 class="font-semibold text-gray-800 dark:text-gray-200">RESUMEN</h4>
                             </div>
 
                             <div class="flex justify-between ">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">SUB TOTAL
+                                <div
+                                    class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                    SUB TOTAL
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">
+                                    <div class="text-gray-800 dark:text-gray-200 text-sm">
                                         {{ $simbolo }} <span>{{ round($sub_total, 4) }}</span>
                                     </div>
 
@@ -469,10 +472,12 @@
                             </div>
                             @if ($deduce_anticipos)
                                 <div class="flex justify-between ">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">ANTICIPOS
+                                    <div
+                                        class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                        ANTICIPOS
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
+                                        <div class="text-gray-800 dark:text-gray-200 text-sm">
                                             {{ $simbolo }} <span>{{ round($total_anticipos, 4) }}</span>
                                         </div>
 
@@ -480,10 +485,12 @@
                                 </div>
                             @endif
                             <div class="flex justify-between mt-2">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP. GRAVADAS
+                                <div
+                                    class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                    OP. GRAVADAS
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">
+                                    <div class="text-gray-800 dark:text-gray-200 text-sm">
                                         {{ $simbolo }} <span>{{ round($op_gravadas, 4) }}</span>
                                     </div>
 
@@ -492,11 +499,13 @@
 
                             @if ($op_exoneradas > 0)
                                 <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    <div
+                                        class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                        OP.
                                         EXONERADAS
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
+                                        <div class="text-gray-800 dark:text-gray-200 text-sm">
                                             {{ $simbolo }} <span>{{ round($op_exoneradas, 4) }}</span>
                                         </div>
 
@@ -506,11 +515,13 @@
 
                             @if ($op_inafectas > 0)
                                 <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    <div
+                                        class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                        OP.
                                         INAFECTAS
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
+                                        <div class="text-gray-800 dark:text-gray-200 text-sm">
                                             {{ $simbolo }} <span>{{ round($op_inafectas, 4) }}</span>
                                         </div>
 
@@ -519,11 +530,13 @@
                             @endif
                             @if ($op_gratuitas > 0)
                                 <div class="flex justify-between mt-2">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">OP.
+                                    <div
+                                        class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                        OP.
                                         GRATUITAS
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-gray-800 text-sm">
+                                        <div class="text-gray-800 dark:text-gray-200 text-sm">
                                             {{ $simbolo }} <span>{{ round($op_gratuitas, 4) }}</span>
                                         </div>
 
@@ -532,11 +545,13 @@
                             @endif
 
                             <div class="flex justify-between mt-2">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm text-lg">DESCUENTO
+                                <div
+                                    class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm text-lg">
+                                    DESCUENTO
                                     (-)
                                 </div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">
+                                    <div class="text-gray-800 dark:text-gray-200 text-sm">
                                         {{ $simbolo }} <span>{{ round($descuento, 2) }}</span>
                                     </div>
 
@@ -545,30 +560,34 @@
 
 
                             <div class="flex justify-between mb-4 mt-2">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">IGV(18%)</div>
+                                <div class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm">
+                                    IGV(18%)</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
+                                    <div class="text-gray-800 dark:text-gray-200 text-sm">{{ $simbolo }}
                                         <span>{{ round($igv, 4) }}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="flex justify-between mb-4 mt-2">
-                                <div class="text-gray-900 text-right flex-1 font-medium text-sm">ICBPER</div>
+                                <div class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm">
+                                    ICBPER</div>
                                 <div class="text-right w-40">
-                                    <div class="text-gray-800 text-sm">{{ $simbolo }}
+                                    <div class="text-gray-800 dark:text-gray-200 text-sm">{{ $simbolo }}
                                         <span>{{ number_format($icbper, 2) }}</span>
                                     </div>
                                 </div>
                             </div>
 
 
-                            <div class="py-2 border-t border-b border-indigo-500">
+                            <div class="py-2 border-t border-b border-indigo-500 dark:border-indigo-400">
                                 <div class="flex justify-between">
-                                    <div class="text-gray-900 text-right flex-1 font-medium text-sm">Importe Total
+                                    <div
+                                        class="text-gray-900 dark:text-gray-100 text-right flex-1 font-medium text-sm">
+                                        Importe Total
                                     </div>
                                     <div class="text-right w-40">
-                                        <div class="text-xl text-gray-800 font-bold">
+                                        <div class="text-xl text-gray-800 dark:text-gray-200 font-bold">
                                             {{ $simbolo }}<span>{{ round($total, 4) }}</span>
                                         </div>
                                     </div>
@@ -598,7 +617,8 @@
             @if (app()->environment('local'))
                 {{ json_encode($errors->all()) }}
             @endif
-            <div class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white border-b border-slate-200 z-5">
+            <div
+                class="px-4 py-3 text-right sm:px-6 sticky my-2 bg-white dark:bg-gray-800 border-b border-slate-200 dark:border-gray-600 z-5">
 
                 <div class="grid {{ $tipo_comprobante_id == '02' ? '' : 'sm:grid-cols-2' }}  gap-2 content-end">
                     @if ($tipo_comprobante_id == '01' || $tipo_comprobante_id == '03')
@@ -617,7 +637,8 @@
                                         </svg>
                                     </div>
                                 </label>
-                                <label class="mt-px cursor-pointer select-none font-light text-gray-700 text-sm"
+                                <label
+                                    class="mt-px cursor-pointer select-none font-light text-gray-700 dark:text-gray-300 text-sm"
                                     for="metodo_1">
                                     SOLO FIRMAR E IMPRIMIR
                                 </label>
@@ -637,7 +658,8 @@
                                         </svg>
                                     </div>
                                 </label>
-                                <label class="mt-px cursor-pointer select-none font-light text-gray-700 text-sm"
+                                <label
+                                    class="mt-px cursor-pointer select-none font-light text-gray-700 dark:text-gray-300 text-sm"
                                     for="metodo_2">
                                     ENVIAR A SUNAT AHORA
                                 </label>

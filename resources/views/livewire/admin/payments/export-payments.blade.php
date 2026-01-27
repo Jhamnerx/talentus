@@ -47,7 +47,7 @@
     <x-slot name="footer">
         <div class="flex justify-end gap-2">
             <x-form.button flat label="Cancelar" wire:click="closeModal" />
-            <x-form.button primary label="Exportar" wire:click="exportar" spinner="exportar" icon="document-download" />
+            <x-form.button primary label="Exportar" wire:click="exportar" spinner="exportar" icon="arrow-down-tray" />
         </div>
     </x-slot>
 </x-form.modal.card>

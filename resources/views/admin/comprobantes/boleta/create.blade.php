@@ -1,7 +1,7 @@
 <x-admin-layout>
 
     @livewire('admin.facturacion.ventas.emitir', [
-        'comprobante_slug' => Request::segment(3),
+        'comprobante_slug' => Request::segment(2),
         'detalle_ids' => $detalle_ids,
         'cobro_id' => $cobro_id,
     ])

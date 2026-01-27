@@ -12,6 +12,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Payments;
+use App\Observers\PaymentObserver;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -34,6 +36,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        // Registrar observer para GlobalPayment
+        Payments::observe(PaymentObserver::class);
 
         try {
             Storage::extend('google', function ($app, $config) {

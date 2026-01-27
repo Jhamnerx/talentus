@@ -143,6 +143,28 @@ class User extends Authenticatable
         return $this->hasOne(Series::class, 'id', 'series_id');
     }
 
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, 'team_user')
+            ->withTimestamps()
+            ->withPivot('role_in_team');
+    }
+
+    public function createdTickets()
+    {
+        return $this->hasMany(Ticket::class, 'created_by');
+    }
+
+    public function assignedTickets()
+    {
+        return $this->hasMany(Ticket::class, 'assigned_to');
+    }
+
+    public function ticketMessages()
+    {
+        return $this->hasMany(TicketMessage::class, 'author_id');
+    }
+
     /**
      * Specifies the user's FCM token(s)
      *

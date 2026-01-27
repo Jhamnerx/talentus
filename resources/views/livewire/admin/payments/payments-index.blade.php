@@ -81,7 +81,7 @@
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Export button -->
             @can('exportar-payments')
-                <x-form.button flat label="Exportar" wire:click="openExportModal" icon="document-download" />
+                <x-form.button flat label="Exportar" wire:click="openExportModal" icon="arrow-down-tray" />
             @endcan
 
             <!-- Dropdown -->
