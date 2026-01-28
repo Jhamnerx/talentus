@@ -35,6 +35,15 @@
                 placeholder="Seleccione un método" :options="$paymentMethods" option-label="description" option-value="id" />
         </div>
 
+        <!-- Destino del Pago (Caja o Cuenta Bancaria) -->
+        <div class="col-span-12 md:col-span-6">
+            <x-form.select label="Destino" wire:model.defer="destination_type"
+                placeholder="Seleccione destino (opcional)">
+                <x-select.option label="Caja Chica" value="cash" />
+                <x-select.option label="Cuenta Bancaria" value="bank" />
+            </x-form.select>
+        </div>
+
         <!-- Número de Operación -->
         <div class="col-span-12 md:col-span-6">
             <x-form.input label="Número de Operación" wire:model.defer="numero_operacion" />

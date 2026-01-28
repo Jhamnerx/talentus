@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('global_payments', function (Blueprint $table) {
             $table->id();
+            $table->string('type_movement', 20)->nullable()->comment('INGRESO o EGRESO');
+            $table->date('date')->nullable()->comment('Fecha del pago');
+            $table->text('description')->nullable()->comment('Descripción del movimiento');
             $table->unsignedBigInteger('destination_id')->nullable();
             $table->string('destination_type')->nullable(); // Cash::class, BankAccount::class
             $table->unsignedBigInteger('payment_id');
             $table->string('payment_type'); // Payment::class, otros tipos futuros
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('empresa_id');
+
             $table->timestamps();
 
             // Índices para optimizar búsquedas polimórficas

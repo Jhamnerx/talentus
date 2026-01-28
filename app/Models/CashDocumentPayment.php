@@ -20,6 +20,7 @@ class CashDocumentPayment extends Model
         'cash_id',
         'payment_id',
         'cash_document_id',
+        'cash_document_credit_id',
     ];
 
     // Relaciones
@@ -36,6 +37,11 @@ class CashDocumentPayment extends Model
     public function cashDocument(): BelongsTo
     {
         return $this->belongsTo(CashDocument::class);
+    }
+
+    public function cashDocumentCredit(): BelongsTo
+    {
+        return $this->belongsTo(CashDocumentCredit::class);
     }
 
     /**

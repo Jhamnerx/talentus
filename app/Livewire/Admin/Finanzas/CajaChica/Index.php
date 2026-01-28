@@ -86,4 +86,10 @@ class Index extends Component
         // Generar reporte PDF de caja
         return redirect()->route('finanzas.caja-chica.reporte', $id);
     }
+
+    public function verReporteIngreso($id)
+    {
+        // Generar reporte PDF de ingresos y egresos
+        return redirect()->route('finanzas.caja-chica.ingresos-egresos', $id);
+    }
 }

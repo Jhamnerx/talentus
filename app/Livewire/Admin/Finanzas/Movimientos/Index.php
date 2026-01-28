@@ -2,11 +2,15 @@
 
 namespace App\Livewire\Admin\Finanzas\Movimientos;
 
-use App\Models\GlobalPayment;
 use App\Models\Cash;
+use App\Models\GlobalPayment;
+use App\Models\BankAccount;
+use App\Http\Resources\MovementCollection;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MovimientosExport;
 
 class Index extends Component
 {
@@ -15,40 +19,42 @@ class Index extends Component
     public $search = '';
     public $from = '';
     public $to = '';
-    public $payment_type = '';
-    public $destination_type = '';
-    public $type_movement = ''; // INGRESO o EGRESO
+    public $tipo_filter = ''; // all, ingreso, egreso
+    public $destination_type = ''; // all, cash, bank
     public $cash_id = '';
-
-    public function mount()
-    {
-        // Establecer fechas por defecto al mes actual
-        $this->from = now()->startOfMonth()->format('Y-m-d');
-        $this->to = now()->format('Y-m-d');
-    }
+    public $bank_account_id = '';
 
     #[On('render')]
     public function render()
     {
-        $query = GlobalPayment::with(['payment.paymentable.cliente', 'destination', 'user'])
-            ->whereBetween('created_at', [
-                $this->from ?: now()->startOfMonth(),
-                $this->to ?: now()->endOfDay()
-            ]);
+        $query = GlobalPayment::query()
+            ->withRelationsForReport()
+            ->latestPayments();
 
-        // Filtro por búsqueda general
-        if ($this->search) {
+        // Búsqueda por texto
+        if (!empty($this->search)) {
             $query->where(function ($q) {
-                $q->whereHas('payment.paymentable', function ($query) {
-                    $query->where('numero', 'like', '%' . $this->search . '%')
-                        ->orWhere('numero_comprobante', 'like', '%' . $this->search . '%');
-                });
+                // Buscar por descripción del GlobalPayment
+                $q->where('description', 'like', '%' . $this->search . '%')
+                    // O buscar en datos del payment relacionado
+                    ->orWhereHas('payment', function ($paymentQ) {
+                        $paymentQ->where('numero', 'like', '%' . $this->search . '%')
+                            ->orWhere('numero_operacion', 'like', '%' . $this->search . '%');
+                    });
             });
         }
 
-        // Filtro por tipo de destino (Caja o Cuenta Bancaria)
-        if ($this->destination_type) {
-            $query->where('destination_type', $this->destination_type);
+        // Filtro por tipo de movimiento
+        if ($this->tipo_filter === 'ingreso') {
+            $query->ingresos();
+        } elseif ($this->tipo_filter === 'egreso') {
+            $query->egresos();
+        }
+
+        // Filtro por tipo de destino
+        if ($this->destination_type === 'cash') {
+            $query->whereCashDestination();
+        } elseif ($this->destination_type === 'bank') {
         }
 
         // Filtro por caja específica
@@ -56,17 +62,75 @@ class Index extends Component
             $query->byCash($this->cash_id);
         }
 
-        // Filtro por tipo de movimiento (INGRESO o EGRESO)
-        if ($this->type_movement === 'INGRESO') {
-            $query->ingresos();
-        } elseif ($this->type_movement === 'EGRESO') {
-            $query->egresos();
+        // Filtro por cuenta bancaria específica
+        if ($this->bank_account_id) {
+            $query->byDestinationType(BankAccount::class)
+                ->where('destination_id', $this->bank_account_id);
         }
 
-        $movimientos = $query->latest('created_at')->paginate(20);
-        $cajas = Cash::where('estado', 1)->get();
+        // Filtro por rango de fechas
+        if (!empty($this->from) && !empty($this->to)) {
+            $query->whereDateBetween($this->from, $this->to);
+        }
 
-        return view('livewire.admin.finanzas.movimientos.index', compact('movimientos', 'cajas'));
+        // Usar MovementCollection para cálculos optimizados con calculateResiduary
+        $paginator = $query->paginate(15);
+
+        // Pasar filtros a la request para calculateResiduary
+        request()->merge([
+            'search' => $this->search,
+            'tipo_filter' => $this->tipo_filter,
+            'destination_type' => $this->destination_type,
+            'cash_id' => $this->cash_id,
+            'bank_account_id' => $this->bank_account_id,
+            'from' => $this->from,
+            'to' => $this->to,
+            'per_page' => 15,
+        ]);
+
+        // MovementCollection procesa y calcula saldos acumulados
+        $movementCollection = new MovementCollection($paginator);
+        $processedData = $movementCollection->toArray(request());
+
+        // Mantener paginación pero con datos procesados
+        $movimientos = $paginator->setCollection(collect($processedData));
+
+        // Calcular totales
+        $totales = $this->calcularTotales($query);
+
+        $cajas = Cash::all();
+        $cuentasBancarias = BankAccount::where('status', true)->get();
+
+        return view('livewire.admin.finanzas.movimientos.index', compact(
+            'movimientos',
+            'totales',
+            'cajas',
+            'cuentasBancarias'
+        ));
+    }
+
+    private function calcularTotales($query)
+    {
+        // Clonar query para no afectar paginación
+        $allRecords = (clone $query)->get();
+
+        $ingresos = 0;
+        $egresos = 0;
+
+        foreach ($allRecords as $record) {
+            $monto = $record->monto;
+            if ($record->type_movement === 'INGRESO') {
+                $ingresos += $monto;
+            } else {
+                $egresos += $monto;
+            }
+        }
+
+        return [
+            'ingresos' => $ingresos,
+            'egresos' => $egresos,
+            'saldo' => $ingresos - $egresos,
+        ];
     }
 
     public function filter($dias)
@@ -85,9 +149,25 @@ class Index extends Component
                 $this->to = date('Y-m-d');
                 break;
             case '0':
-                $this->from = now()->startOfMonth()->format('Y-m-d');
-                $this->to = now()->format('Y-m-d');
+                $this->from = '';
+                $this->to = '';
                 break;
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(
+            new MovimientosExport(
+                $this->from,
+                $this->to,
+                $this->tipo_filter,
+                $this->destination_type,
+                $this->cash_id,
+                $this->bank_account_id,
+                $this->search
+            ),
+            'movimientos_' . date('Y-m-d_His') . '.xlsx'
+        );
     }
 }

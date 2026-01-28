@@ -2,8 +2,10 @@
 
 namespace App\Livewire\Admin\Finanzas\Transacciones;
 
-use App\Models\CashMovement;
-use App\Enums\MovementType;
+use App\Models\Cash;
+use App\Models\GlobalPayment;
+use App\Models\BankAccount;
+use App\Http\Resources\MovementCollection;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -17,37 +19,118 @@ class Index extends Component
     public $search = '';
     public $from = '';
     public $to = '';
-    public $tipo_filter = '';
+    public $tipo_filter = ''; // all, ingreso, egreso
+    public $destination_type = ''; // all, cash, bank
     public $cash_id = '';
+    public $bank_account_id = '';
 
     #[On('render')]
     public function render()
     {
-        $query = CashMovement::with(['cash', 'cliente', 'user'])
-            ->where(function ($q) {
-                $q->where('numero', 'like', '%' . $this->search . '%')
-                    ->orWhere('descripcion', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('cliente', function ($query) {
-                        $query->where('razon_social', 'like', '%' . $this->search . '%');
-                    });
+        $query = GlobalPayment::query()
+            ->withRelationsForReport()
+            ->latestPayments();
+
+        // Búsqueda por texto
+        if (!empty($this->search)) {
+            $query->where(function ($q) {
+                $q->whereHas('payment.paymentable', function ($subQ) {
+                    $subQ->where('numero', 'like', '%' . $this->search . '%')
+                        ->orWhere('numero_comprobante', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('cliente', function ($clienteQ) {
+                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
+                        })
+                        ->orWhereHas('proveedor', function ($provQ) {
+                            $provQ->where('nombre', 'like', '%' . $this->search . '%');
+                        });
+                });
             });
-
-        if ($this->tipo_filter !== '') {
-            $query->where('tipo', $this->tipo_filter);
         }
 
+        // Filtro por tipo de movimiento
+        if ($this->tipo_filter === 'ingreso') {
+            $query->ingresos();
+        } elseif ($this->tipo_filter === 'egreso') {
+            $query->egresos();
+        }
+
+        // Filtro por tipo de destino
+        if ($this->destination_type === 'cash') {
+            $query->whereCashDestination();
+        } elseif ($this->destination_type === 'bank') {
+            $query->whereBankDestination();
+        }
+
+        // Filtro por caja específica
         if ($this->cash_id) {
-            $query->where('cash_id', $this->cash_id);
+            $query->byCash($this->cash_id);
         }
 
+        // Filtro por cuenta bancaria específica
+        if ($this->bank_account_id) {
+            $query->byDestinationType(BankAccount::class)
+                ->where('destination_id', $this->bank_account_id);
+        }
+
+        // Filtro por rango de fechas
         if (!empty($this->from) && !empty($this->to)) {
-            $query->whereBetween('fecha', [$this->from, $this->to]);
+            $query->whereDateBetween($this->from, $this->to);
         }
 
-        $movimientos = $query->orderBy('fecha', 'desc')->paginate(10);
-        $cajas = \App\Models\Cash::all();
+        // Usar MovementCollection para performance optimizado
+        $paginator = $query->paginate(15);
 
-        return view('livewire.admin.finanzas.transacciones.index', compact('movimientos', 'cajas'));
+        // Pasar filtros a la request para calculateResiduary
+        request()->merge([
+            'search' => $this->search,
+            'tipo_filter' => $this->tipo_filter,
+            'destination_type' => $this->destination_type,
+            'cash_id' => $this->cash_id,
+            'bank_account_id' => $this->bank_account_id,
+            'from' => $this->from,
+            'to' => $this->to,
+            'per_page' => 15,
+        ]);
+
+        $movimientos = new MovementCollection($paginator);
+        $movimientos = $paginator->setCollection(collect($movimientos->toArray(request())));
+
+        // Calcular totales
+        $totales = $this->calcularTotales($query);
+
+        $cajas = Cash::all();
+        $cuentasBancarias = BankAccount::where('status', true)->get();
+
+        return view('livewire.admin.finanzas.transacciones.index', compact(
+            'movimientos',
+            'totales',
+            'cajas',
+            'cuentasBancarias'
+        ));
+    }
+
+    private function calcularTotales($query)
+    {
+        // Clonar query para no afectar paginación
+        $allRecords = (clone $query)->get();
+
+        $ingresos = 0;
+        $egresos = 0;
+
+        foreach ($allRecords as $record) {
+            $monto = $record->monto;
+            if ($record->type_movement === 'INGRESO') {
+                $ingresos += $monto;
+            } else {
+                $egresos += $monto;
+            }
+        }
+
+        return [
+            'ingresos' => $ingresos,
+            'egresos' => $egresos,
+            'saldo' => $ingresos - $egresos,
+        ];
     }
 
     public function filter($dias)
@@ -75,8 +158,16 @@ class Index extends Component
     public function export()
     {
         return Excel::download(
-            new TransaccionesExport($this->from, $this->to, $this->tipo_filter, $this->cash_id, $this->search),
-            'transacciones_' . date('Y-m-d') . '.xlsx'
+            new TransaccionesExport(
+                $this->from,
+                $this->to,
+                $this->tipo_filter,
+                $this->destination_type,
+                $this->cash_id,
+                $this->bank_account_id,
+                $this->search
+            ),
+            'transacciones_' . date('Y-m-d_His') . '.xlsx'
         );
     }
 }

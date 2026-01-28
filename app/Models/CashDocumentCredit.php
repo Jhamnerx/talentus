@@ -16,9 +16,15 @@ class CashDocumentCredit extends Model
 
     protected $fillable = [
         'cash_id',
-        'factura_id',
+        'cash_id_processed',
+        // 'factura_id', // Campo existe en DB por compatibilidad con FactuPRO, pero NO se usa en Talentus
         'recibo_id',
         'venta_id',
+        'status',
+    ];
+
+    protected $casts = [
+        'status' => 'string',
     ];
 
     // Relaciones
@@ -27,9 +33,9 @@ class CashDocumentCredit extends Model
         return $this->belongsTo(Cash::class);
     }
 
-    public function factura(): BelongsTo
+    public function cashProcessed(): BelongsTo
     {
-        return $this->belongsTo(Factura::class);
+        return $this->belongsTo(Cash::class, 'cash_id_processed');
     }
 
     public function recibo(): BelongsTo
@@ -43,11 +49,56 @@ class CashDocumentCredit extends Model
     }
 
     /**
-     * Obtiene el documento asociado
+     * Obtiene el documento asociado (Recibo o Venta)
+     * Nota: En Talentus NO existe modelo Factura, solo Recibos y Ventas
+     * El campo factura_id existe en la tabla pero NO se usa
      */
     public function getDocumento()
     {
-        return $this->factura ?? $this->recibo ?? $this->venta;
+        return $this->recibo ?? $this->venta;
+    }
+
+    /**
+     * Verifica si el crédito está pendiente de pago
+     */
+    public function isPending(): bool
+    {
+        return $this->status === 'PENDING';
+    }
+
+    /**
+     * Verifica si el crédito ya fue procesado
+     */
+    public function isProcessed(): bool
+    {
+        return $this->status === 'PROCESSED';
+    }
+
+    /**
+     * Marca el crédito como procesado en una caja
+     */
+    public function markAsProcessed($cashId): void
+    {
+        $this->update([
+            'cash_id_processed' => $cashId,
+            'status' => 'PROCESSED',
+        ]);
+    }
+
+    /**
+     * Scope para obtener créditos pendientes
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'PENDING');
+    }
+
+    /**
+     * Scope para obtener créditos procesados
+     */
+    public function scopeProcessed($query)
+    {
+        return $query->where('status', 'PROCESSED');
     }
 
     /**

@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\ComprasDetalle;
-use App\Models\PaymentMethods;
+use App\Models\PaymentMethodType;
 use App\Observers\ComprasObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -50,7 +50,7 @@ class Compras extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethods::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'codigo');
     }
 
     public function user(): BelongsTo
@@ -62,6 +62,53 @@ class Compras extends Model
     public function proveedor(): BelongsTo
     {
         return $this->belongsTo(Proveedores::class, 'proveedor_id', 'id')->withTrashed();
+    }
+
+    /**
+     * Pagos de gastos asociados a esta compra
+     */
+    public function expensePayments(): HasMany
+    {
+        return $this->hasMany(ExpensePayment::class, 'expense_id', 'id');
+    }
+
+    /**
+     * Movimientos financieros globales (vía ExpensePayments)
+     */
+    public function globalPayments()
+    {
+        return $this->hasManyThrough(
+            GlobalPayment::class,
+            ExpensePayment::class,
+            'expense_id',      // FK en expense_payments
+            'payment_id',      // FK en global_payments
+            'id',              // PK en compras
+            'id'               // PK en expense_payments
+        );
+    }
+
+    /**
+     * Total pagado de esta compra
+     */
+    public function getTotalPagadoAttribute(): float
+    {
+        return (float) $this->expensePayments()->sum('payment');
+    }
+
+    /**
+     * Saldo pendiente de pago
+     */
+    public function getSaldoPendienteAttribute(): float
+    {
+        return $this->total - $this->total_pagado;
+    }
+
+    /**
+     * Verifica si la compra está completamente pagada
+     */
+    public function isPaid(): bool
+    {
+        return $this->total_pagado >= $this->total;
     }
 
     //CREAR ITEM DETALLE VENTA

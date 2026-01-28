@@ -12,6 +12,32 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * @property int $id
+ * @property int $empresa_id
+ * @property int $cliente_id
+ * @property int|null $venta_id
+ * @property int|null $recibo_id
+ * @property int|null $cobro_id
+ * @property string|null $numero_documento
+ * @property \Carbon\Carbon $fecha_emision
+ * @property \Carbon\Carbon $fecha_vencimiento
+ * @property float $monto_total
+ * @property float $monto_pagado
+ * @property float $saldo_pendiente
+ * @property PaymentStatus $estado
+ * @property string|null $observaciones
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property \Carbon\Carbon|null $deleted_at
+ * @property-read Clientes $cliente
+ * @property-read Ventas|null $venta
+ * @property-read Recibos|null $recibo
+ * @property-read Cobros|null $cobro
+ * @property-read int|null $dias_mora
+ * @property-read float $total_pendiente_real
+ * @property-read bool $esta_vencida
+ */
 class AccountReceivable extends Model
 {
     use HasFactory, SoftDeletes, LogsActivity;
@@ -88,5 +114,71 @@ class AccountReceivable extends Model
     public function cobro(): BelongsTo
     {
         return $this->belongsTo(Cobros::class, 'cobro_id');
+    }
+
+    /**
+     * Calcula los días de mora desde la fecha de vencimiento
+     *
+     * @return int|null
+     */
+    public function getDiasMoraAttribute(): ?int
+    {
+        if ($this->saldo_pendiente <= 0) {
+            return null;
+        }
+
+        if (!$this->fecha_vencimiento) {
+            return null;
+        }
+
+        $now = now();
+        $vencimiento = $this->fecha_vencimiento;
+
+        if ($now->gt($vencimiento)) {
+            return $now->diffInDays($vencimiento);
+        }
+
+        return null;
+    }
+
+    /**
+     * Obtiene el total real pendiente considerando todos los factores
+     *
+     * @return float
+     */
+    public function getTotalPendienteRealAttribute(): float
+    {
+        return max(0, $this->monto_total - $this->monto_pagado);
+    }
+
+    /**
+     * Verifica si la cuenta está vencida
+     *
+     * @return bool
+     */
+    public function getEstaVencidaAttribute(): bool
+    {
+        if ($this->saldo_pendiente <= 0) {
+            return false;
+        }
+
+        if (!$this->fecha_vencimiento) {
+            return false;
+        }
+
+        return now()->gt($this->fecha_vencimiento);
+    }
+
+    /**
+     * Scope para cuentas vencidas
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeConMora($query)
+    {
+        return $query->where('saldo_pendiente', '>', 0)
+            ->whereNotNull('fecha_vencimiento')
+            ->where('fecha_vencimiento', '<', now());
     }
 }

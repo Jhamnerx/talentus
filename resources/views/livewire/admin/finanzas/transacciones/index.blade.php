@@ -1,232 +1,159 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-48 mx-auto">
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Transacciones ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Transacciones 💳</h1>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Vista por tipo de operación</p>
         </div>
 
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <button wire:click="export" class="btn bg-emerald-600 text-white hover:bg-emerald-700">
-                <svg class="fill-current shrink-0" width="16" height="16" viewBox="0 0 16 16">
+                <svg class="fill-current shrink-0 w-4 h-4" viewBox="0 0 16 16">
                     <path
                         d="M9 13H1c-.6 0-1-.4-1-1V4c0-.6.4-1 1-1h6v2H2v6h7v-2h2v3c0 .6-.4 1-1 1zM16 9l-5-5v3H7v4h4v3l5-5z" />
                 </svg>
-                <span class="max-xs:sr-only xs:ml-2">Exportar Excel</span>
+                <span class="ml-2">Exportar</span>
             </button>
         </div>
     </div>
 
-    <!-- Search -->
-    <div class="mb-4">
-        <div class="relative">
-            <label for="action-search" class="sr-only">Buscar</label>
-            <input id="action-search" class="form-input pl-9 focus:border-gray-300 w-full" type="search"
-                placeholder="Buscar transacción..." wire:model.live="search" />
-            <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2"
-                    width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                    <path
-                        d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                </svg>
-            </button>
+    <!-- Totales -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        <div class="bg-linear-to-br from-emerald-500 to-emerald-600 rounded-lg p-4 shadow-lg">
+            <div class="text-emerald-100 text-sm font-medium mb-1">Total Ingresos</div>
+            <div class="text-white text-2xl font-bold">S/ {{ number_format($totales['ingresos'], 2) }}</div>
+        </div>
+        <div class="bg-linear-to-br from-rose-500 to-rose-600 rounded-lg p-4 shadow-lg">
+            <div class="text-rose-100 text-sm font-medium mb-1">Total Egresos</div>
+            <div class="text-white text-2xl font-bold">S/ {{ number_format($totales['egresos'], 2) }}</div>
+        </div>
+        <div class="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg p-4 shadow-lg">
+            <div class="text-blue-100 text-sm font-medium mb-1">Saldo</div>
+            <div class="text-white text-2xl font-bold">S/ {{ number_format($totales['saldo'], 2) }}</div>
         </div>
     </div>
 
-    <!-- Filters -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-4">
-        <div class="flex items-center gap-2">
-            <!-- Date filter dropdown -->
-            <div class="relative inline-flex" x-data="{ open: false, selected: 4 }">
-                <button
-                    class="btn justify-between min-w-[120px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="shrink-0 mr-2 fill-current text-gray-500" width="16" height="16"
-                            viewBox="0 0 16 16">
-                            <path d="M5 4a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z" />
-                            <path
-                                d="M4 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4ZM2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Z" />
-                        </svg>
-                        <span
-                            x-text="{
-                            1: 'Hoy',
-                            7: 'Últimos 7 días',
-                            30: 'Últimos 30 días',
-                            4: 'Todas las Fechas'
-                        }[selected]"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-gray-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full left-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 1 && 'text-violet-500'"
-                        @click="selected = 1; open = false; $wire.filter(1)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 1 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Hoy</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 7 && 'text-violet-500'"
-                        @click="selected = 7; open = false; $wire.filter(7)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 7 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Últimos 7 días</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 30 && 'text-violet-500'"
-                        @click="selected = 30; open = false; $wire.filter(30)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 30 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Últimos 30 días</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 4 && 'text-violet-500'"
-                        @click="selected = 4; open = false; $wire.filter(0)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 4 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Todas las Fechas</span>
-                    </button>
-                </div>
+    <!-- Filtros -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+            <div class="lg:col-span-2">
+                <x-form.input wire:model.live.debounce.500ms="search" label="Buscar" placeholder="Número, cliente..." />
             </div>
 
-            <!-- Tipo filter -->
-            <select class="form-select w-auto" wire:model.live="tipo_filter">
-                <option value="">Todos los Tipos</option>
-                <option value="INGRESO">Ingresos</option>
-                <option value="EGRESO">Egresos</option>
-            </select>
+            <div>
+                <x-form.select wire:model.live="tipo_filter" label="Tipo" placeholder="Todos">
+                    <x-select.option label="Todos" value="" />
+                    <x-select.option label="Ingresos" value="ingreso" />
+                    <x-select.option label="Egresos" value="egreso" />
+                </x-form.select>
+            </div>
 
-            <!-- Caja filter -->
-            <select class="form-select w-auto" wire:model.live="cash_id">
-                <option value="">Todas las Cajas</option>
-                @foreach (\App\Models\Cash::abierta()->get() as $caja)
-                    <option value="{{ $caja->id }}">{{ $caja->nombre }}</option>
-                @endforeach
-            </select>
+            <div>
+                <x-form.select wire:model.live="destination_type" label="Destino" placeholder="Todos">
+                    <x-select.option label="Todos" value="" />
+                    <x-select.option label="Caja" value="cash" />
+                    <x-select.option label="Banco" value="bank" />
+                </x-form.select>
+            </div>
+
+            <div>
+                <x-form.datetime.picker wire:model.live="from" label="Desde" without-time display-format="DD/MM/YYYY"
+                    parse-format="YYYY-MM-DD" />
+            </div>
+
+            <div>
+                <x-form.datetime.picker wire:model.live="to" label="Hasta" without-time display-format="DD/MM/YYYY"
+                    parse-format="YYYY-MM-DD" />
+            </div>
+        </div>
+
+        <div class="flex gap-2 mt-4">
+            <button wire:click="filter(1)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Hoy</button>
+            <button wire:click="filter(7)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">7 días</button>
+            <button wire:click="filter(30)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">30 días</button>
+            <button wire:click="filter(0)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Limpiar</button>
         </div>
     </div>
 
-    <!-- Table -->
-    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 relative">
+    <!-- Tabla -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <table class="table-auto w-full">
                 <thead
-                    class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-gray-200 dark:border-gray-700/60">
+                    class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-200 dark:border-gray-700/60">
                     <tr>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Número</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Caja</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Tipo</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Fecha</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Comprobante</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Cliente</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Descripción</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-right">Monto</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Usuario</div>
-                        </th>
+                        <th class="px-4 py-3 text-left font-semibold">Fecha</th>
+                        <th class="px-4 py-3 text-left font-semibold">Tipo</th>
+                        <th class="px-4 py-3 text-left font-semibold">Documento</th>
+                        <th class="px-4 py-3 text-left font-semibold">Persona</th>
+                        <th class="px-4 py-3 text-left font-semibold">Destino</th>
+                        <th class="px-4 py-3 text-right font-semibold">Ingreso</th>
+                        <th class="px-4 py-3 text-right font-semibold">Egreso</th>
                     </tr>
                 </thead>
-                <tbody
-                    class="text-sm divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
-                    @forelse($transacciones as $transaccion)
+                <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
+                    @forelse($movimientos as $mov)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-gray-800 dark:text-gray-100">{{ $transaccion->numero }}
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100 text-sm">
+                                    {{ $mov->fecha_formateada }}
                                 </div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $transaccion->cash->nombre }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <td class="px-4 py-3 whitespace-nowrap">
                                 <span
-                                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-                                    {{ $transaccion->tipo->value === 'INGRESO' ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-400' : 'bg-rose-100 text-rose-800 dark:bg-rose-400/10 dark:text-rose-400' }}">
-                                    {{ $transaccion->tipo->label() }}
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ $mov->type_movement === 'INGRESO'
+                                        ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-400'
+                                        : 'bg-rose-100 text-rose-800 dark:bg-rose-400/10 dark:text-rose-400' }}">
+                                    {{ $mov->instance_type_description }}
                                 </span>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $transaccion->fecha->format('d/m/Y H:i') }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $transaccion->numero_comprobante ?: '-' }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $transaccion->cliente?->nombre_completo ?: '-' }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                <div class="text-gray-800 dark:text-gray-100 max-w-xs truncate">
-                                    {{ $transaccion->descripcion }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div
-                                    class="font-semibold text-right {{ $transaccion->tipo->value === 'INGRESO' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}">
-                                    {{ $transaccion->tipo->value === 'INGRESO' ? '+' : '-' }} S/
-                                    {{ number_format($transaccion->monto, 2) }}
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100 font-medium">
+                                    {{ $mov->document_number }}
                                 </div>
                             </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $transaccion->user->name }}</div>
+                            <td class="px-4 py-3">
+                                <div class="text-gray-800 dark:text-gray-100 max-w-xs truncate">
+                                    {{ $mov->person_name }}
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                <div class="text-gray-600 dark:text-gray-400 text-xs max-w-xs truncate">
+                                    {{ $mov->destination_description }}
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap text-right">
+                                @if ($mov->type_movement === 'INGRESO')
+                                    <div class="text-emerald-600 dark:text-emerald-400 font-semibold">
+                                        +S/ {{ number_format($mov->monto, 2) }}
+                                    </div>
+                                @else
+                                    <div class="text-gray-400">-</div>
+                                @endif
+                            </td>
+                            <td class="px-4 py-3 whitespace-nowrap text-right">
+                                @if ($mov->type_movement === 'EGRESO')
+                                    <div class="text-rose-600 dark:text-rose-400 font-semibold">
+                                        S/ {{ number_format($mov->monto, 2) }}
+                                    </div>
+                                @else
+                                    <div class="text-gray-400">-</div>
+                                @endif
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-10 text-center">
+                            <td colspan="8" class="px-4 py-12 text-center">
                                 <div class="text-gray-400 dark:text-gray-500">
-                                    <svg class="inline-block w-12 h-12 mb-2" fill="none" stroke="currentColor"
+                                    <svg class="inline-block w-12 h-12 mb-3" fill="none" stroke="currentColor"
                                         viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                         </path>
                                     </svg>
-                                    <p class="font-medium">No se encontraron transacciones</p>
-                                    <p class="text-sm">Intenta con otros filtros</p>
+                                    <p class="font-medium text-lg">No se encontraron transacciones</p>
+                                    <p class="text-sm mt-1">Intenta ajustar los filtros de búsqueda</p>
                                 </div>
                             </td>
                         </tr>
@@ -237,7 +164,7 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-4">
-        {{ $transacciones->links() }}
+    <div class="mt-6">
+        {{ $movimientos->links() }}
     </div>
 </div>

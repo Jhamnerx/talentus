@@ -120,28 +120,32 @@
             width: 100%;
         }
 
-        .totales-row {
-            display: table-row;
+        .totales-table table {
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .totales-table td {
+            border: none;
+            padding: 5px 0;
         }
 
         .totales-label {
-            display: table-cell;
             font-weight: 600;
             padding: 5px 0;
             width: 70%;
         }
 
         .totales-value {
-            display: table-cell;
             text-align: right;
             padding: 5px 0;
             font-weight: 600;
         }
 
-        .totales-final {
+        .totales-final td {
             font-size: 14px;
             padding-top: 10px;
-            margin-top: 10px;
             border-top: 2px solid #4F46E5;
         }
 
@@ -294,26 +298,28 @@
     <!-- Totales Generales -->
     <div class="totales">
         <div class="totales-table">
-            <div class="totales-row">
-                <div class="totales-label">Saldo Inicial:</div>
-                <div class="totales-value">S/ {{ number_format($caja->saldo_inicial, 2) }}</div>
-            </div>
-            <div class="totales-row">
-                <div class="totales-label">Total Ingresos:</div>
-                <div class="totales-value" style="color: #065F46;">+ S/ {{ number_format($totales['ingresos'], 2) }}
-                </div>
-            </div>
-            <div class="totales-row">
-                <div class="totales-label">Total Egresos:</div>
-                <div class="totales-value" style="color: #991B1B;">- S/ {{ number_format($totales['egresos'], 2) }}
-                </div>
-            </div>
-            <div class="totales-row totales-final">
-                <div class="totales-label">SALDO FINAL:</div>
-                <div class="totales-value" style="color: #4F46E5;">
-                    S/ {{ number_format($totales['saldo_final'], 2) }}
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td class="totales-label">Saldo Inicial:</td>
+                    <td class="totales-value">S/ {{ number_format($caja->saldo_inicial, 2) }}</td>
+                </tr>
+                <tr>
+                    <td class="totales-label">Total Ingresos:</td>
+                    <td class="totales-value" style="color: #065F46;">+ S/ {{ number_format($totales['ingresos'], 2) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="totales-label">Total Egresos:</td>
+                    <td class="totales-value" style="color: #991B1B;">- S/ {{ number_format($totales['egresos'], 2) }}
+                    </td>
+                </tr>
+                <tr class="totales-final">
+                    <td class="totales-label">SALDO FINAL:</td>
+                    <td class="totales-value" style="color: #4F46E5;">
+                        S/ {{ number_format($totales['saldo_final'], 2) }}
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->decimal('saldo_inicial', 12, 2)->default(0);
             $table->decimal('saldo_actual', 12, 2)->default(0);
             $table->string('moneda', 3)->default('PEN');
+            $table->string('reference_number')->nullable();
             $table->date('fecha_apertura');
             $table->date('fecha_cierre')->nullable();
             $table->boolean('estado')->default(1); // 1 = Abierta, 0 = Cerrada
@@ -28,6 +29,7 @@ return new class extends Migration
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('empresa_id')->references('id')->on('empresas');
+            $table->index('reference_number');
         });
     }
 

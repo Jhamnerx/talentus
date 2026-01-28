@@ -78,7 +78,7 @@ class GlobalPayment extends Model
                 }
 
                 // Si es un pago de documento de venta -> INGRESO
-                if ($this->payment_type === Payment::class) {
+                if ($this->payment_type === Payments::class) {
                     $paymentable = $this->payment->paymentable;
                     if ($paymentable) {
                         $ingresos = ['Recibos', 'Factura', 'Ventas', 'RecibosPagosVarios'];
@@ -181,15 +181,154 @@ class GlobalPayment extends Model
                     return '-';
                 }
 
-                return $paymentable->cliente?->razon_social
-                    ?? $paymentable->proveedor?->nombre
-                    ?? $paymentable->nombre_completo
-                    ?? '-';
+                try {
+                    // Recibos usa clientes() (plural)
+                    if (method_exists($paymentable, 'clientes') && $paymentable->clientes) {
+                        return $paymentable->clientes->nombre
+                            ?? $paymentable->clientes->razon_social
+                            ?? '-';
+                    }
+                    // Ventas/Compras usan cliente() o proveedor()
+                    if (method_exists($paymentable, 'cliente') && $paymentable->cliente) {
+                        return $paymentable->cliente->nombre
+                            ?? $paymentable->cliente->razon_social
+                            ?? '-';
+                    }
+                    if (method_exists($paymentable, 'proveedor') && $paymentable->proveedor) {
+                        return $paymentable->proveedor->nombre
+                            ?? $paymentable->proveedor->razon_social
+                            ?? '-';
+                    }
+                    // Fallback
+                    return $paymentable->nombre_completo ?? '-';
+                } catch (\Exception $e) {
+                    return '-';
+                }
             }
         );
     }
 
+    /**
+     * Obtener descripción del tipo de instancia
+     * Similar a instance_type_description de FactuPRO
+     */
+    protected function instanceTypeDescription(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                if (!$this->payment) {
+                    return 'DESCONOCIDO';
+                }
+
+                $paymentable = $this->payment->paymentable;
+                if (!$paymentable) {
+                    return 'PAGO SIN DOCUMENTO';
+                }
+
+                $class = class_basename($paymentable);
+                $mapping = [
+                    'Recibos' => 'RECIBO',
+                    'Factura' => 'FACTURA',
+                    'Ventas' => 'VENTA',
+                    'RecibosPagosVarios' => 'RECIBO PAGO',
+                    'Compras' => 'COMPRA',
+                    'ExpensePayments' => 'GASTO',
+                ];
+
+                return $mapping[$class] ?? strtoupper($class);
+            }
+        );
+    }
+
+    /**
+     * Obtener moneda del pago
+     */
+    protected function moneda(): Attribute
+    {
+        return new Attribute(
+            get: function () {
+                $paymentable = $this->payment?->paymentable;
+                return $paymentable?->moneda ?? 'PEN';
+            }
+        );
+    }
+
+    /**
+     * Obtener fecha del pago formateada
+     */
+    protected function fechaFormateada(): Attribute
+    {
+        return new Attribute(
+            get: fn() => $this->created_at?->format('d/m/Y H:i')
+        );
+    }
+
     // ==================== SCOPES ====================
+
+    /**
+     * Filtrar por rango de fechas
+     */
+    public function scopeWhereDateBetween($query, $dateStart, $dateEnd)
+    {
+        return $query->whereBetween('created_at', [
+            $dateStart . ' 00:00:00',
+            $dateEnd . ' 23:59:59'
+        ]);
+    }
+
+    /**
+     * Filtrar por empresa (aunque ya está en EmpresaScope, útil para queries directas)
+     */
+    public function scopeByEmpresa($query, $empresaId)
+    {
+        return $query->where('empresa_id', $empresaId);
+    }
+
+    /**
+     * Filtrar por usuario
+     */
+    public function scopeByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope para eager loading optimizado
+     * No cargamos cliente/proveedor aquí porque los modelos usan nombres diferentes
+     * (Recibos usa 'clientes', Ventas usa 'cliente', etc.)
+     */
+    public function scopeWithRelationsForReport($query)
+    {
+        return $query->with([
+            'destination',
+            'payment.paymentable',
+            'user:id,name'
+        ]);
+    }
+
+    /**
+     * Filtrar solo pagos con destino Cash
+     */
+    public function scopeWhereCashDestination($query)
+    {
+        return $query->where('destination_type', Cash::class);
+    }
+
+    /**
+     * Filtrar solo pagos con destino BankAccount
+     */
+    public function scopeWhereBankDestination($query)
+    {
+        return $query->where('destination_type', BankAccount::class);
+    }
+
+    /**
+     * Scope para ordenar por fecha de pago descendente
+     */
+    public function scopeLatestPayments($query)
+    {
+        return $query->orderBy('created_at', 'desc');
+    }
 
     public function scopeIngresos($query)
     {

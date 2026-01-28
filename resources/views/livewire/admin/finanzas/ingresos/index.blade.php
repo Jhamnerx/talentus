@@ -19,20 +19,7 @@
 
     <!-- Search -->
     <div class="mb-4">
-        <div class="relative">
-            <label for="action-search" class="sr-only">Buscar</label>
-            <input id="action-search" class="form-input pl-9 focus:border-gray-300 w-full" type="search"
-                placeholder="Buscar ingreso..." wire:model.live="search" />
-            <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2"
-                    width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                    <path
-                        d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                </svg>
-            </button>
-        </div>
+        <x-search-form placeholder="Buscar ingreso..." />
     </div>
 
     <!-- Filters -->
@@ -41,7 +28,7 @@
             <!-- Date filter dropdown -->
             <div class="relative inline-flex" x-data="{ open: false, selected: 4 }">
                 <button
-                    class="btn justify-between min-w-[120px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                    class="btn justify-between min-w-fit bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
                     <span class="flex items-center">
@@ -119,12 +106,11 @@
             </div>
 
             <!-- Tipo filter -->
-            <select class="form-select w-auto" wire:model.live="tipo_filter">
-                <option value="">Todos los Tipos</option>
-                <option value="RECIBO">Recibo</option>
-                <option value="NOTA_VENTA">Nota de Venta</option>
-                <option value="OTRO">Otro</option>
-            </select>
+            <x-form.select wire:model.live="tipo_filter" placeholder="Todos los Tipos">
+                <x-select.option label="Todos los Tipos" value="" />
+                <x-select.option label="Recibos" value="RECIBO" />
+                <x-select.option label="Ventas" value="VENTA" />
+            </x-form.select>
         </div>
     </div>
 
@@ -170,33 +156,52 @@
                 <tbody
                     class="text-sm divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
                     @forelse($ingresos as $ingreso)
+                        @php
+                            $documento = $ingreso->getDocumento();
+                            $tipo = $ingreso->getTipoDocumento();
+                        @endphp
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-medium text-gray-800 dark:text-gray-100">{{ $ingreso->numero }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $ingreso->tipo_comprobante }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $ingreso->fecha_emision->format('d/m/Y') }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $ingreso->cliente_nombre }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $ingreso->cliente_documento }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $ingreso->metodo_ingreso }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $ingreso->cuenta_destino ?: '-' }}
+                                <div class="font-medium text-gray-800 dark:text-gray-100">
+                                    {{ $documento->numero ?? ($documento->numero_comprobante ?? '-') }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-right text-emerald-600 dark:text-emerald-400">S/
-                                    {{ number_format($ingreso->monto_total, 2) }}</div>
+                                <span
+                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                                    {{ $tipo === 'Recibo' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
+                                    {{ $tipo }}
+                                </span>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100">
+                                    {{ $documento->fecha_emision->format('d/m/Y') ?? '-' }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100">
+                                    {{ $documento->clientes->razon_social ?? ($documento->cliente->razon_social ?? '-') }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100">
+                                    {{ $documento->clientes->numero_documento ?? ($documento->cliente->numero_documento ?? '-') }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100">
+                                    {{ $documento->payments->first()->forma_pago ?? '-' }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="text-gray-800 dark:text-gray-100">
+                                    {{ $ingreso->cash->nombre ?? '-' }}
+                                </div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-right text-emerald-600 dark:text-emerald-400">
+                                    S/ {{ number_format($documento->total ?? 0, 2) }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex justify-center">

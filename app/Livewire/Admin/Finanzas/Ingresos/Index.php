@@ -19,22 +19,45 @@ class Index extends Component
     #[On('render')]
     public function render()
     {
-        $query = CashDocument::with(['cliente', 'user'])
-            ->where(function ($q) {
-                $q->where('numero', 'like', '%' . $this->search . '%')
-                    ->orWhere('motivo', 'like', '%' . $this->search . '%')
-                    ->orWhere('cliente_nombre', 'like', '%' . $this->search . '%');
+        $query = CashDocument::with(['cash', 'recibo.clientes', 'venta.cliente'])
+            ->whereNotNull('cash_id');
+
+        // Búsqueda por número de documento
+        if (!empty($this->search)) {
+            $query->where(function ($q) {
+                $q->whereHas('recibo', function ($subQ) {
+                    $subQ->where('numero', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('clientes', function ($clienteQ) {
+                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
+                        });
+                })->orWhereHas('venta', function ($subQ) {
+                    $subQ->where('numero_comprobante', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('cliente', function ($clienteQ) {
+                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
+                        });
+                });
             });
-
-        if ($this->tipo_filter) {
-            $query->where('tipo_comprobante', $this->tipo_filter);
         }
 
+        // Filtro por tipo
+        if ($this->tipo_filter === 'RECIBO') {
+            $query->whereNotNull('recibo_id');
+        } elseif ($this->tipo_filter === 'VENTA') {
+            $query->whereNotNull('venta_id');
+        }
+
+        // Filtro por rango de fechas
         if (!empty($this->from) && !empty($this->to)) {
-            $query->whereBetween('fecha_emision', [$this->from, $this->to]);
+            $query->where(function ($q) {
+                $q->whereHas('recibo', function ($subQ) {
+                    $subQ->whereBetween('fecha_emision', [$this->from, $this->to]);
+                })->orWhereHas('venta', function ($subQ) {
+                    $subQ->whereBetween('fecha_emision', [$this->from, $this->to]);
+                });
+            });
         }
 
-        $ingresos = $query->orderBy('fecha_emision', 'desc')->paginate(10);
+        $ingresos = $query->latest('id')->paginate(10);
 
         return view('livewire.admin.finanzas.ingresos.index', compact('ingresos'));
     }

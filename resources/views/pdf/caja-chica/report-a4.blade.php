@@ -46,16 +46,21 @@
         }
 
         .info-grid {
-            display: table;
             width: 100%;
         }
 
-        .info-row {
-            display: table-row;
+        .info-grid table {
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .info-grid td {
+            border: none;
+            padding: 4px 0;
         }
 
         .info-label {
-            display: table-cell;
             font-weight: bold;
             color: #374151;
             padding: 4px 10px 4px 0;
@@ -63,7 +68,6 @@
         }
 
         .info-value {
-            display: table-cell;
             color: #1F2937;
             padding: 4px 0;
         }
@@ -154,12 +158,18 @@
             width: 100%;
         }
 
-        .totales-row {
-            display: table-row;
+        .totales-table table {
+            width: 100%;
+            border: none;
+            margin-bottom: 0;
+        }
+
+        .totales-table td {
+            border: none;
+            padding: 5px 0;
         }
 
         .totales-label {
-            display: table-cell;
             font-weight: 600;
             color: #374151;
             padding: 5px 10px 5px 0;
@@ -167,17 +177,15 @@
         }
 
         .totales-value {
-            display: table-cell;
             color: #1F2937;
             text-align: right;
             padding: 5px 0;
             font-weight: 600;
         }
 
-        .totales-final {
+        .totales-final td {
             font-size: 13px;
             padding-top: 8px;
-            margin-top: 8px;
             border-top: 2px solid #4F46E5;
         }
 
@@ -214,37 +222,39 @@
     <!-- Información de la Caja -->
     <div class="info-box">
         <div class="info-grid">
-            <div class="info-row">
-                <div class="info-label">Caja:</div>
-                <div class="info-value"><strong>{{ $caja->nombre }}</strong></div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Usuario:</div>
-                <div class="info-value">{{ $caja->user->name ?? 'N/A' }}</div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Fecha Apertura:</div>
-                <div class="info-value">{{ $caja->fecha_apertura?->format('d/m/Y H:i') ?? 'N/A' }}</div>
-            </div>
-            @if (!$caja->estado)
-                <div class="info-row">
-                    <div class="info-label">Fecha Cierre:</div>
-                    <div class="info-value">{{ $caja->fecha_cierre?->format('d/m/Y H:i') ?? 'N/A' }}</div>
-                </div>
-            @endif
-            <div class="info-row">
-                <div class="info-label">Estado:</div>
-                <div class="info-value">
-                    <span class="status {{ $caja->estado ? 'status-open' : 'status-closed' }}">
-                        {{ $caja->estado ? 'ABIERTA' : 'CERRADA' }}
-                    </span>
-                </div>
-            </div>
-            <div class="info-row">
-                <div class="info-label">Saldo Inicial:</div>
-                <div class="info-value"><span class="moneda">S/ {{ number_format($caja->saldo_inicial, 2) }}</span>
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td class="info-label">Caja:</td>
+                    <td class="info-value"><strong>{{ $caja->nombre }}</strong></td>
+                </tr>
+                <tr>
+                    <td class="info-label">Usuario:</td>
+                    <td class="info-value">{{ $caja->user->name ?? 'N/A' }}</td>
+                </tr>
+                <tr>
+                    <td class="info-label">Fecha Apertura:</td>
+                    <td class="info-value">{{ $caja->fecha_apertura?->format('d/m/Y H:i') ?? 'N/A' }}</td>
+                </tr>
+                @if (!$caja->estado)
+                    <tr>
+                        <td class="info-label">Fecha Cierre:</td>
+                        <td class="info-value">{{ $caja->fecha_cierre?->format('d/m/Y H:i') ?? 'N/A' }}</td>
+                    </tr>
+                @endif
+                <tr>
+                    <td class="info-label">Estado:</td>
+                    <td class="info-value">
+                        <span class="status {{ $caja->estado ? 'status-open' : 'status-closed' }}">
+                            {{ $caja->estado ? 'ABIERTA' : 'CERRADA' }}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="info-label">Saldo Inicial:</td>
+                    <td class="info-value"><span class="moneda">S/ {{ number_format($caja->saldo_inicial, 2) }}</span>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 
@@ -300,26 +310,28 @@
     <!-- Totales -->
     <div class="totales">
         <div class="totales-table">
-            <div class="totales-row">
-                <div class="totales-label">Saldo Inicial:</div>
-                <div class="totales-value">S/ {{ number_format($caja->saldo_inicial, 2) }}</div>
-            </div>
-            <div class="totales-row">
-                <div class="totales-label">Total Ingresos:</div>
-                <div class="totales-value" style="color: #065F46;">+ S/ {{ number_format($totales['ingresos'], 2) }}
-                </div>
-            </div>
-            <div class="totales-row">
-                <div class="totales-label">Total Egresos:</div>
-                <div class="totales-value" style="color: #991B1B;">- S/ {{ number_format($totales['egresos'], 2) }}
-                </div>
-            </div>
-            <div class="totales-row totales-final">
-                <div class="totales-label">SALDO FINAL:</div>
-                <div class="totales-value" style="color: #4F46E5; font-size: 14px;">
-                    S/ {{ number_format($totales['saldo_final'], 2) }}
-                </div>
-            </div>
+            <table>
+                <tr>
+                    <td class="totales-label">Saldo Inicial:</td>
+                    <td class="totales-value">S/ {{ number_format($caja->saldo_inicial, 2) }}</td>
+                </tr>
+                <tr>
+                    <td class="totales-label">Total Ingresos:</td>
+                    <td class="totales-value" style="color: #065F46;">+ S/ {{ number_format($totales['ingresos'], 2) }}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="totales-label">Total Egresos:</td>
+                    <td class="totales-value" style="color: #991B1B;">- S/ {{ number_format($totales['egresos'], 2) }}
+                    </td>
+                </tr>
+                <tr class="totales-final">
+                    <td class="totales-label">SALDO FINAL:</td>
+                    <td class="totales-value" style="color: #4F46E5; font-size: 14px;">
+                        S/ {{ number_format($totales['saldo_final'], 2) }}
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 

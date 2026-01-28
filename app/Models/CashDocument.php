@@ -18,7 +18,7 @@ class CashDocument extends Model
 
     protected $fillable = [
         'cash_id',
-        'factura_id',
+        // 'factura_id', // Campo existe en DB por compatibilidad con FactuPRO, pero NO se usa en Talentus
         'recibo_id',
         'venta_id',
         'expense_payment_id',
@@ -33,11 +33,6 @@ class CashDocument extends Model
         return $this->belongsTo(Cash::class);
     }
 
-    public function factura(): BelongsTo
-    {
-        return $this->belongsTo(Factura::class);
-    }
-
     public function recibo(): BelongsTo
     {
         return $this->belongsTo(Recibos::class);
@@ -48,6 +43,9 @@ class CashDocument extends Model
         return $this->belongsTo(Ventas::class);
     }
 
+    /**
+     * Pago de gasto asociado (ahora implementado)
+     */
     public function expensePayment(): BelongsTo
     {
         return $this->belongsTo(ExpensePayment::class);
@@ -55,12 +53,12 @@ class CashDocument extends Model
 
     public function compra(): BelongsTo
     {
-        return $this->belongsTo(Compra::class);
+        return $this->belongsTo(Compras::class);
     }
 
     public function cotizacion(): BelongsTo
     {
-        return $this->belongsTo(Cotizacion::class);
+        return $this->belongsTo(Cotizaciones::class);
     }
 
     public function ordenTrabajo(): BelongsTo
@@ -70,13 +68,13 @@ class CashDocument extends Model
 
     /**
      * Obtiene el documento asociado (cualquiera que no sea null)
+     * Nota: En Talentus NO existe modelo Factura, solo Recibos y Ventas
      * 
      * @return Model|null
      */
     public function getDocumento()
     {
-        return $this->factura
-            ?? $this->recibo
+        return $this->recibo
             ?? $this->venta
             ?? $this->expensePayment
             ?? $this->compra
@@ -91,7 +89,7 @@ class CashDocument extends Model
      */
     public function getTipoDocumento(): ?string
     {
-        if ($this->factura_id) return 'Factura';
+        // Campo factura_id existe en DB pero NO se usa en Talentus
         if ($this->recibo_id) return 'Recibo';
         if ($this->venta_id) return 'Venta';
         if ($this->expense_payment_id) return 'Gasto';
@@ -108,8 +106,8 @@ class CashDocument extends Model
     public function scopeIngresos($query)
     {
         return $query->where(function ($q) {
-            $q->whereNotNull('factura_id')
-                ->orWhereNotNull('recibo_id')
+            // Solo recibos y ventas son ingresos en Talentus (factura_id no se usa)
+            $q->whereNotNull('recibo_id')
                 ->orWhereNotNull('venta_id');
         });
     }

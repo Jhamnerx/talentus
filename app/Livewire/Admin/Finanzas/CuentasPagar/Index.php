@@ -8,16 +8,18 @@ use App\Enums\PaymentStatus;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
+use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WireUiActions;
 
     public $search = '';
     public $from = '';
     public $to = '';
     public $estado_filter = '';
     public $proveedor_id = '';
+    public $con_mora = false;
 
     #[On('render')]
     public function render()
@@ -26,26 +28,51 @@ class Index extends Component
             ->where(function ($q) {
                 $q->where('numero_documento', 'like', '%' . $this->search . '%')
                     ->orWhereHas('proveedor', function ($query) {
-                        $query->where('nombre', 'like', '%' . $this->search . '%');
+                        $query->where('razon_social', 'like', '%' . $this->search . '%')
+                            ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
                     });
             });
 
+        // Filtro por estado
         if ($this->estado_filter) {
             $query->where('estado', $this->estado_filter);
         }
 
+        // Filtro por proveedor
         if ($this->proveedor_id) {
             $query->where('proveedor_id', $this->proveedor_id);
         }
 
+        // Filtro por rango de fechas
         if (!empty($this->from) && !empty($this->to)) {
             $query->whereBetween('fecha_emision', [$this->from, $this->to]);
         }
 
-        $cuentas = $query->orderBy('fecha_emision', 'desc')->paginate(10);
-        $proveedores = Proveedores::orderBy('nombre')->get();
+        // Filtro por cuentas con mora
+        if ($this->con_mora) {
+            $query->conMora();
+        }
 
-        return view('livewire.admin.finanzas.cuentas-pagar.index', compact('cuentas', 'proveedores'));
+        $cuentas = $query->orderBy('fecha_emision', 'desc')->paginate(10);
+
+        // Transformar registros agregando cálculos adicionales
+        $cuentas->getCollection()->transform(function ($cuenta) {
+            $cuenta->dias_mora = $cuenta->dias_mora;
+            $cuenta->esta_vencida = $cuenta->esta_vencida;
+            $cuenta->total_pendiente_real = $cuenta->total_pendiente_real;
+            return $cuenta;
+        });
+
+        $proveedores = Proveedores::orderBy('razon_social')->get();
+
+        // Calcular totales
+        $totales = [
+            'total_por_pagar' => $query->sum('saldo_pendiente'),
+            'total_vencido' => (clone $query)->conMora()->sum('saldo_pendiente'),
+            'total_pagado' => AccountPayable::sum('monto_pagado'),
+        ];
+
+        return view('livewire.admin.finanzas.cuentas-pagar.index', compact('cuentas', 'totales'));
     }
 
     public function filter($dias)
@@ -68,10 +95,5 @@ class Index extends Component
                 $this->to = '';
                 break;
         }
-    }
-
-    public function registrarPago($id)
-    {
-        $this->dispatch('registrar-pago-proveedor', id: $id);
     }
 }

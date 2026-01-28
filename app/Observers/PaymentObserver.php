@@ -2,35 +2,23 @@
 
 namespace App\Observers;
 
-use App\Models\Payment;
-use App\Models\GlobalPayment;
-use App\Traits\FinanceTrait;
+use App\Models\Payments;
 
+/**
+ * Observer temporal - Este observer no tiene modelo asociado
+ * El modelo correcto es "Payments" (plural) con "PaymentsObserver"
+ * 
+ * TODO: Eliminar este archivo una vez limpiada la cache
+ */
 class PaymentObserver
 {
-    use FinanceTrait;
-
-    /**
-     * Handle the Payment "created" event.
-     */
-    public function created(Payment $payment): void
+    public function created(Payments $payment): void
     {
-        // Solo crear GlobalPayment si tiene un destino definido
-        if ($payment->destination_type && $payment->destination_id) {
-            $this->createGlobalPayment(
-                $payment,
-                $payment->destination_type,
-                $payment->destination_id
-            );
-        }
+        // Vacío - la lógica está en PaymentsObserver
     }
 
-    /**
-     * Handle the Payment "deleting" event.
-     */
-    public function deleting(Payment $payment): void
+    public function deleting(Payments $payment): void
     {
-        // Eliminar GlobalPayment asociado
-        $this->deleteGlobalPayment($payment);
+        // Vacío
     }
 }

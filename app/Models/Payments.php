@@ -134,7 +134,6 @@ class Payments extends Model
             'App\\Models\\Recibos',
             'App\\Models\\Factura',
             'App\\Models\\Ventas',
-            'App\\Models\\RecibosPagosVarios',
         ];
 
         return in_array($this->paymentable_type, $ingresos);
@@ -145,6 +144,15 @@ class Payments extends Model
      */
     public function isExpense()
     {
-        return !$this->isIncome();
+        if (!$this->paymentable) {
+            return false;
+        }
+
+        $egresos = [
+            'App\\Models\\Compras',
+            'App\\Models\\RecibosPagosVarios', // Recibos de egreso/salidas
+        ];
+
+        return in_array($this->paymentable_type, $egresos);
     }
 }

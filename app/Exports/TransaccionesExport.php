@@ -2,98 +2,111 @@
 
 namespace App\Exports;
 
-use App\Models\CashMovement;
-use Maatwebsite\Excel\Concerns\FromQuery;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithMapping;
-use Maatwebsite\Excel\Concerns\WithStyles;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use App\Models\GlobalPayment;
+use Illuminate\Contracts\View\View;
+use Maatwebsite\Excel\Concerns\FromView;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
-class TransaccionesExport implements FromQuery, WithHeadings, WithMapping, WithStyles
+class TransaccionesExport implements FromView, ShouldAutoSize, WithTitle
 {
-    protected $from;
-    protected $to;
-    protected $tipo;
-    protected $cashId;
-    protected $search;
+    use Exportable;
 
-    public function __construct($from = null, $to = null, $tipo = null, $cashId = null, $search = '')
-    {
-        $this->from = $from;
-        $this->to = $to;
-        $this->tipo = $tipo;
-        $this->cashId = $cashId;
-        $this->search = $search;
+    protected $records;
+    protected $company;
+    protected $dateStart;
+    protected $dateEnd;
+    protected $filters;
+
+    public function __construct(
+        $from = null,
+        $to = null,
+        $tipo = null,
+        $destinationType = null,
+        $cashId = null,
+        $bankAccountId = null,
+        $search = ''
+    ) {
+        $this->dateStart = $from;
+        $this->dateEnd = $to;
+        $this->filters = [
+            'tipo' => $tipo,
+            'destination_type' => $destinationType,
+            'cash_id' => $cashId,
+            'bank_account_id' => $bankAccountId,
+            'search' => $search,
+        ];
+
+        $this->buildRecords();
     }
 
-    public function query()
+    protected function buildRecords()
     {
-        $query = CashMovement::query()->with(['cash', 'cliente', 'user']);
+        $query = GlobalPayment::query()
+            ->withRelationsForReport()
+            ->latestPayments();
 
-        if ($this->search) {
+        // Aplicar filtros
+        if (!empty($this->filters['search'])) {
             $query->where(function ($q) {
-                $q->where('numero', 'like', '%' . $this->search . '%')
-                    ->orWhere('descripcion', 'like', '%' . $this->search . '%');
+                $q->whereHas('payment.paymentable', function ($subQ) {
+                    $subQ->where('numero', 'like', '%' . $this->filters['search'] . '%')
+                        ->orWhere('numero_comprobante', 'like', '%' . $this->filters['search'] . '%')
+                        ->orWhereHas('cliente', function ($clienteQ) {
+                            $clienteQ->where('razon_social', 'like', '%' . $this->filters['search'] . '%');
+                        })
+                        ->orWhereHas('proveedor', function ($provQ) {
+                            $provQ->where('nombre', 'like', '%' . $this->filters['search'] . '%');
+                        });
+                });
             });
         }
 
-        if ($this->tipo) {
-            $query->where('tipo', $this->tipo);
+        if ($this->filters['tipo'] === 'ingreso') {
+            $query->ingresos();
+        } elseif ($this->filters['tipo'] === 'egreso') {
+            $query->egresos();
         }
 
-        if ($this->cashId) {
-            $query->where('cash_id', $this->cashId);
+        if ($this->filters['destination_type'] === 'cash') {
+            $query->whereCashDestination();
+        } elseif ($this->filters['destination_type'] === 'bank') {
+            $query->whereBankDestination();
         }
 
-        if ($this->from && $this->to) {
-            $query->whereBetween('fecha', [$this->from, $this->to]);
+        if ($this->filters['cash_id']) {
+            $query->byCash($this->filters['cash_id']);
         }
 
-        return $query->orderBy('fecha', 'desc');
+        if ($this->filters['bank_account_id']) {
+            $query->byDestinationType(\App\Models\BankAccount::class)
+                ->where('destination_id', $this->filters['bank_account_id']);
+        }
+
+        if (!empty($this->dateStart) && !empty($this->dateEnd)) {
+            $query->whereDateBetween($this->dateStart, $this->dateEnd);
+        }
+
+        $this->records = $query->get();
     }
 
-    public function headings(): array
+    public function title(): string
     {
-        return [
-            'N°',
-            'Caja',
-            'Tipo',
-            'Fecha',
-            'Comprobante',
-            'N° Comprobante',
-            'Cliente',
-            'Descripción',
-            'Método',
-            'Monto',
-            'Moneda',
-            'Usuario',
-            'Fecha Registro',
-        ];
+        return substr('Transacciones', 0, 30);
     }
 
-    public function map($movement): array
+    public function view(): View
     {
-        return [
-            $movement->numero,
-            $movement->cash->nombre,
-            $movement->tipo->label(),
-            $movement->fecha->format('d/m/Y'),
-            $movement->tipo_comprobante ?? '-',
-            $movement->numero_comprobante ?? '-',
-            $movement->cliente ? $movement->cliente->nombre_completo : '-',
-            $movement->descripcion,
-            $movement->metodo_ingreso ?? '-',
-            number_format($movement->monto, 2),
-            $movement->moneda,
-            $movement->user->name,
-            $movement->created_at->format('d/m/Y H:i'),
-        ];
-    }
+        // Obtener empresa actual
+        $this->company = \App\Models\Empresa::find(session('empresa'));
 
-    public function styles(Worksheet $sheet)
-    {
-        return [
-            1 => ['font' => ['bold' => true]],
-        ];
+        return view('exports.transacciones', [
+            'records' => $this->records,
+            'company' => $this->company,
+            'dateStart' => $this->dateStart,
+            'dateEnd' => $this->dateEnd,
+            'filters' => $this->filters,
+        ]);
     }
 }

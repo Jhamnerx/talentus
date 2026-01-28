@@ -8,20 +8,7 @@
 
     <!-- Search -->
     <div class="mb-4">
-        <div class="relative">
-            <label for="action-search" class="sr-only">Buscar</label>
-            <input id="action-search" class="form-input pl-9 focus:border-gray-300 w-full" type="search"
-                placeholder="Buscar cuenta..." wire:model.live="search" />
-            <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                <svg class="shrink-0 fill-current text-gray-400 dark:text-gray-500 group-hover:text-gray-500 dark:group-hover:text-gray-400 ml-3 mr-2"
-                    width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                    <path
-                        d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                </svg>
-            </button>
-        </div>
+        <x-form.input wire:model.live="search" placeholder="Buscar cuenta..." icon="magnifying-glass" />
     </div>
 
     <!-- Filters -->
@@ -108,21 +95,17 @@
             </div>
 
             <!-- Estado filter -->
-            <select class="form-select w-auto" wire:model.live="estado_filter">
-                <option value="">Todos los Estados</option>
-                <option value="PENDIENTE">Pendiente</option>
-                <option value="PARCIAL">Parcial</option>
-                <option value="PAGADO">Pagado</option>
-                <option value="VENCIDO">Vencido</option>
-            </select>
+            <x-form.select placeholder="Todos los Estados" wire:model.live="estado_filter">
+                <x-select.option label="Todos los Estados" value="" />
+                <x-select.option label="Pendiente" value="PENDIENTE" />
+                <x-select.option label="Parcial" value="PARCIAL" />
+                <x-select.option label="Pagado" value="PAGADO" />
+                <x-select.option label="Vencido" value="VENCIDO" />
+            </x-form.select>
 
             <!-- Cliente filter -->
-            <select class="form-select w-auto" wire:model.live="cliente_id">
-                <option value="">Todos los Clientes</option>
-                @foreach ($clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nombre_completo }}</option>
-                @endforeach
-            </select>
+            <x-form.select placeholder="Todos los Clientes" wire:model.live="cliente_id"
+                option-description="numero_documento" :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id" />
         </div>
     </div>
 

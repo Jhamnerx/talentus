@@ -10,6 +10,4 @@
             @livewire('admin.finanzas.cuentas-pagar.index')
         </div>
     </div>
-
-    @livewire('admin.finanzas.cuentas-pagar.registrar-pago')
 </x-admin-layout>
