@@ -3,10 +3,10 @@
 namespace App\Livewire\Admin\Finanzas\Balance;
 
 use App\Models\Cash;
-use App\Models\CashMovement;
-use App\Models\AccountReceivable;
-use App\Models\AccountPayable;
+use App\Models\Ventas;
+use App\Models\Compras;
 use Livewire\Component;
+use App\Models\GlobalPayment;
 
 class Index extends Component
 {
@@ -25,32 +25,59 @@ class Index extends Component
         // Saldo total en cajas abiertas
         $saldoTotalCajas = Cash::abierta()->sum('saldo_actual');
 
-        // Movimientos en el período seleccionado
-        $ingresos = CashMovement::where('tipo', 'INGRESO')
-            ->whereBetween('fecha', [$this->from, $this->to])
-            ->sum('monto');
+        // Movimientos en el período seleccionado usando GlobalPayment
+        // Como type_movement y monto son accessors, debemos cargar todos y filtrar en memoria
+        $movimientos = GlobalPayment::with(['payment.paymentable'])
+            ->whereBetween('created_at', [$this->from . ' 00:00:00', $this->to . ' 23:59:59'])
+            ->get();
 
-        $egresos = CashMovement::where('tipo', 'EGRESO')
-            ->whereBetween('fecha', [$this->from, $this->to])
-            ->sum('monto');
+        $ingresos = $movimientos->filter(function ($gp) {
+            return $gp->type_movement === 'INGRESO';
+        })->sum('monto');
+
+        $egresos = $movimientos->filter(function ($gp) {
+            return $gp->type_movement === 'EGRESO';
+        })->sum('monto');
 
         $balance = $ingresos - $egresos;
 
-        // Cuentas por cobrar
-        $totalPorCobrar = AccountReceivable::whereIn('estado', ['PENDIENTE', 'PARCIAL'])
-            ->sum('saldo_pendiente');
+        // ========== CUENTAS POR COBRAR ==========
+        // Obtiene todas las ventas que no están completamente pagadas (UNPAID o PARTIAL)
+        // y calcula cuánto falta por cobrar de cada una
+        $ventasPendientes = Ventas::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+            ->with('payments')
+            ->get();
 
-        $cuentasVencidas = AccountReceivable::where('estado', 'VENCIDO')
-            ->count();
+        $totalPorCobrar = $ventasPendientes->sum(function ($venta) {
+            // Total de la venta menos lo que ya se pagó
+            $pagado = $venta->payments->sum('monto');
+            return max(0, $venta->total - $pagado);
+        });
 
-        // Cuentas por pagar
-        $totalPorPagar = AccountPayable::whereIn('estado', ['PENDIENTE', 'PARCIAL'])
-            ->sum('saldo_pendiente');
+        $cuentasVencidas = $ventasPendientes->filter(function ($venta) {
+            return $venta->fecha_vencimiento && $venta->fecha_vencimiento->isPast();
+        })->count();
 
-        $cuentasPorPagarVencidas = AccountPayable::where('estado', 'VENCIDO')
-            ->count();
+        // ========== CUENTAS POR PAGAR ==========
+        // Obtiene todas las compras que no están completamente pagadas (UNPAID o PARTIAL)
+        // y calcula cuánto falta por pagar de cada una
+        $comprasPendientes = Compras::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+            ->with('payments')
+            ->get();
 
-        // Totales generales
+        $totalPorPagar = $comprasPendientes->sum(function ($compra) {
+            // Total de la compra menos lo que ya se pagó
+            $pagado = $compra->payments->sum('monto');
+            return max(0, $compra->total - $pagado);
+        });
+
+        $cuentasPorPagarVencidas = $comprasPendientes->filter(function ($compra) {
+            return $compra->fecha_vencimiento && $compra->fecha_vencimiento->isPast();
+        })->count();
+
+        // ========== LIQUIDEZ NETA ==========
+        // Fórmula: Dinero disponible en cajas + Dinero que me deben - Dinero que debo
+        // Representa el capital real disponible si se cobrara todo y se pagara todo
         $liquidezNeta = $saldoTotalCajas + $totalPorCobrar - $totalPorPagar;
 
         return view('livewire.admin.finanzas.balance.index', compact(

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Reporte Caja Chica - {{ $caja->nombre }}</title>
+    <title>Reporte Caja Chica - CAJA GENERAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style type="text/css">
         * {
@@ -225,7 +225,7 @@
             <table>
                 <tr>
                     <td class="info-label">Caja:</td>
-                    <td class="info-value"><strong>{{ $caja->nombre }}</strong></td>
+                    <td class="info-value"><strong>CAJA GENERAL</strong></td>
                 </tr>
                 <tr>
                     <td class="info-label">Usuario:</td>
@@ -259,43 +259,62 @@
     </div>
 
     <!-- Tabla de Documentos -->
-    @if ($caja->cashDocuments->count() > 0)
+    @php
+        // Obtener documentos desde cash_documents (como FactuPRO)
+        $cashDocuments = $caja
+            ->cashDocuments()
+            ->with(['recibo.payments.paymentMethod', 'recibo.cliente', 'venta.payments.paymentMethod', 'venta.cliente'])
+            ->get();
+
+        // Convertir a estructura compatible con el reporte
+        $movimientos = collect();
+
+        foreach ($cashDocuments as $cashDoc) {
+            $documento = $cashDoc->recibo ?? $cashDoc->venta;
+
+            if (!$documento) {
+                continue;
+            }
+
+            foreach ($documento->payments as $payment) {
+                $movimientos->push(
+                    (object) [
+                        'type_movement' => 'INGRESO',
+                        'date_time' => $payment->created_at->format('d/m/Y H:i'),
+                        'document_type' => $documento instanceof \App\Models\Recibos ? 'Recibo' : 'Factura',
+                        'document_number' => $documento->numero ?? '-',
+                        'person_name' => $documento->cliente->nombre_comercial ?? '-',
+                        'payment_method' => $payment->paymentMethod->descripcion ?? '-',
+                        'monto' => $payment->monto,
+                    ],
+                );
+            }
+        }
+    @endphp
+    @if ($movimientos->count() > 0)
         <table>
             <thead>
                 <tr>
-                    <th style="width: 8%;">Tipo</th>
                     <th style="width: 15%;">Documento</th>
                     <th style="width: 12%;">Fecha</th>
-                    <th style="width: 25%;">Cliente/Proveedor</th>
-                    <th style="width: 8%;">Moneda</th>
-                    <th class="text-right" style="width: 12%;">Monto</th>
-                    <th class="text-right" style="width: 12%;">Monto PEN</th>
-                    <th style="width: 8%;">Tipo Mov.</th>
+                    <th style="width: 30%;">Cliente</th>
+                    <th style="width: 18%;">Método Pago</th>
+                    <th class="text-right" style="width: 15%;">Monto</th>
+                    <th style="width: 10%;">Tipo</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($caja->cashDocuments as $documento)
-                    @php
-                        $doc = $documento->getDocumento();
-                        $esIngreso =
-                            $documento->factura_id || $documento->recibo_id || $documento->venta_id ? true : false;
-                        $tipo = $documento->getTipoDocumento();
-                        $moneda = $doc->moneda ?? 'PEN';
-                        $monto = $doc->total_a_pagar ?? ($doc->total ?? 0);
-                        $montoPen = $caja->convertirAPen($monto, $moneda);
-                    @endphp
+                @foreach ($movimientos as $movimiento)
                     <tr>
-                        <td class="text-center">{{ $tipo }}</td>
-                        <td>{{ $doc->serie ?? 'N/A' }}-{{ $doc->numero ?? 'N/A' }}</td>
-                        <td>{{ $doc->fecha_emision ?? ($doc->fecha ?? 'N/A') }}</td>
-                        <td>{{ $doc->cliente_nombre ?? ($doc->proveedor ?? 'N/A') }}</td>
-                        <td class="text-center">{{ $moneda }}</td>
-                        <td class="text-right">{{ number_format($monto, 2) }}</td>
-                        <td class="text-right">{{ number_format($montoPen, 2) }}</td>
+                        <td>{{ $movimiento->document_type }}<br><small>{{ $movimiento->document_number }}</small></td>
+                        <td>{{ $movimiento->date_time }}</td>
+                        <td>{{ $movimiento->person_name }}</td>
+                        <td>{{ $movimiento->payment_method }}</td>
+                        <td class="text-right">
+                            <strong class="moneda">S/ {{ number_format($movimiento->monto, 2) }}</strong>
+                        </td>
                         <td class="text-center">
-                            <span class="tipo-badge {{ $esIngreso ? 'tipo-ingreso' : 'tipo-egreso' }}">
-                                {{ $esIngreso ? 'INGRESO' : 'EGRESO' }}
-                            </span>
+                            <span class="tipo-badge tipo-ingreso">Ingreso</span>
                         </td>
                     </tr>
                 @endforeach
@@ -303,7 +322,7 @@
         </table>
     @else
         <div class="empty-state">
-            No hay documentos registrados en esta caja.
+            <p>No se encontraron movimientos registrados en esta caja</p>
         </div>
     @endif
 

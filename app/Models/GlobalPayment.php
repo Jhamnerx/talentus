@@ -98,7 +98,7 @@ class GlobalPayment extends Model
     protected function monto(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->payment?->payment ?? 0
+            get: fn() => $this->payment?->monto ?? 0
         );
     }
 
@@ -164,7 +164,23 @@ class GlobalPayment extends Model
         return new Attribute(
             get: function () {
                 $paymentable = $this->payment?->paymentable;
-                return $paymentable?->numero ?? $paymentable?->numero_comprobante ?? '-';
+
+                if (!$paymentable) {
+                    return '-';
+                }
+
+                // Ventas: serie_correlativo (ejemplo: F001-123)
+                if (isset($paymentable->serie_correlativo)) {
+                    return $paymentable->serie_correlativo;
+                }
+
+                // Recibos: serie_numero (ejemplo: R001-456)
+                if (isset($paymentable->serie_numero)) {
+                    return $paymentable->serie_numero;
+                }
+
+                // Fallback: numero o numero_comprobante
+                return $paymentable->numero ?? $paymentable->numero_comprobante ?? '-';
             }
         );
     }

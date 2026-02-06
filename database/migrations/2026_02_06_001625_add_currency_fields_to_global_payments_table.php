@@ -12,18 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('global_payments', function (Blueprint $table) {
-            $table->string('type_movement', 20)->after('id')->nullable()->comment('INGRESO o EGRESO');
-            $table->date('date')->after('type_movement')->nullable()->comment('Fecha del pago');
-            $table->text('description')->after('date')->nullable()->comment('Descripción del movimiento');
+            //
         });
     }
 
     /**
-     * Reverse the migrations.     */
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('global_payments', function (Blueprint $table) {
-            $table->dropColumn(['type_movement', 'date', 'description']);
+            //
         });
     }
 };

@@ -21,8 +21,8 @@
 
             <tr class="border_top">
                 <td align="left">Medio Pago:</td>
-                <td align="left" colspan="5">{{ $venta->metodoPago->codigo }}
-                    {{ $venta->metodoPago ? $venta->metodoPago->descripcion : '' }}
+                <td align="left" colspan="5">{{ $venta->metodoPago->id }}
+                    {{ $venta->metodoPago ? $venta->metodoPago->description : '' }}
                 </td>
             </tr>
             <tr class="border_top">

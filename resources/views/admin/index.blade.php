@@ -55,6 +55,66 @@
             </div>
 
         </div>
+
+        <!-- Alerta de Movimientos Sin Destino -->
+        @php
+            $movimientosSinDestino = \App\Models\GlobalPayment::whereNull('destination_id')->count();
+        @endphp
+        @if ($movimientosSinDestino > 0)
+            <div class="mb-6">
+                <div
+                    class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 dark:border-yellow-600 p-4 rounded-lg shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <svg class="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3 flex-1">
+                            <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-200">
+                                Movimientos financieros sin destino asignado
+                            </h3>
+                            <div class="mt-2 text-sm text-yellow-700 dark:text-yellow-300">
+                                <p>
+                                    Hay <strong class="font-bold">{{ $movimientosSinDestino }}</strong>
+                                    {{ $movimientosSinDestino === 1 ? 'movimiento' : 'movimientos' }}
+                                    que no {{ $movimientosSinDestino === 1 ? 'tiene' : 'tienen' }} asignada una caja o
+                                    cuenta bancaria.
+                                    {{ $movimientosSinDestino === 1 ? 'Este movimiento fue' : 'Estos movimientos fueron' }}
+                                    registrado{{ $movimientosSinDestino === 1 ? '' : 's' }}
+                                    cuando no había cajas abiertas o cuentas disponibles.
+                                </p>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{{ route('admin.movimientos') }}?destination_type=sin_destino"
+                                    class="inline-flex items-center px-4 py-2 border border-yellow-600 dark:border-yellow-400 rounded-md shadow-sm text-sm font-medium text-yellow-800 dark:text-yellow-200 bg-yellow-100 dark:bg-yellow-900/40 hover:bg-yellow-200 dark:hover:bg-yellow-900/60 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors">
+                                    <svg class="mr-2 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                    </svg>
+                                    Asignar destinos ahora
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ml-4 flex-shrink-0 flex">
+                            <button type="button"
+                                class="inline-flex rounded-md text-yellow-400 hover:text-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500"
+                                onclick="this.closest('div').parentElement.parentElement.parentElement.remove()">
+                                <span class="sr-only">Cerrar</span>
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
+
         <div class="sm:flex sm:justify-between sm:items-center mb-8">
 
             <!-- Left: Avatars -->

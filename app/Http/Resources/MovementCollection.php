@@ -81,6 +81,7 @@ class MovementCollection extends ResourceCollection
 
             // Fecha y hora
             'date_of_payment' => $dateTime,
+            'date_time' => $dateTime, // Alias para compatibilidad con movimientos
             'created_at' => $row->created_at->format('d/m/Y H:i'),
 
             // Documento
@@ -93,26 +94,30 @@ class MovementCollection extends ResourceCollection
             'person_number' => $this->getPersonNumber($row),
 
             // Destino (Caja/Banco)
+            'destination_id' => $row->destination_id,
             'destination_description' => $row->destination_description,
             'destination_type' => class_basename($row->destination_type),
             'destination_name' => $this->getDestinationName($row),
             'destination_cci' => $this->getDestinationCCI($row),
 
             // Método de pago
-            'payment_method' => $row->payment?->payment_method?->nombre ?? '-',
-            'reference' => $row->payment?->referencia ?? '-',
+            'payment_method' => $row->payment?->paymentMethod?->description ?? '-',
+            'reference' => $row->payment?->numero_operacion ?? '-',
 
             // Montos
             'currency_type_id' => $this->getCurrencyType($row),
             'original_amount' => number_format($row->monto, 2, '.', ''),
             'amount_pen' => number_format($amount, 2, '.', ''),
+            'payment' => $amount, // Monto del pago para vista de movimientos
             'input' => $input,
             'output' => $output,
             'balance' => number_format(self::$balance, 2, '.', ''),
+            'residuary' => self::$balance, // Balance acumulado
 
             // Tipo de movimiento
             'type_movement' => $row->type_movement,
-            'instance_type' => $row->instance_type_description,
+            'instance_type' => $row->payment_type_description,
+            'instance_type_description' => $row->payment_type_description, // Alias para compatibilidad
 
             // Usuario
             'user_id' => $row->user_id,

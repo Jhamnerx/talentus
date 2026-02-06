@@ -391,7 +391,7 @@ class Util extends Controller
                 'header'     => 'Telf: ' . $this->plantilla->telefono, // Texto que se ubica debajo de la dirección de empresa
                 'extras'     => [
                     // Leyendas adicionales
-                    ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->descripcion],
+                    ['name' => 'CONDICION DE PAGO', 'value' => $venta->metodoPago->description],
                     ['name' => 'FORMA DE PAGO', 'value' => $venta->clase ? $venta->clase->getFormaPago()->getTipo() : $venta->forma_pago],
                     ['name' => 'VENDEDOR', 'value' => $venta->user->name],
                 ],

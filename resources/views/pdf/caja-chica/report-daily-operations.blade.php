@@ -270,8 +270,8 @@
         </thead>
         <tbody>
             @php
-                $documentosPorTipo = $caja->cashDocuments->groupBy(function ($doc) {
-                    return $doc->getTipoDocumento();
+                $documentosPorTipo = $movimientos->groupBy(function ($gp) {
+                    return $gp->payment_type_description;
                 });
             @endphp
 

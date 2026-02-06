@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('cash', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('descripcion')->nullable();
             $table->decimal('saldo_inicial', 12, 2)->default(0);
             $table->decimal('saldo_actual', 12, 2)->default(0);
             $table->string('moneda', 3)->default('PEN');

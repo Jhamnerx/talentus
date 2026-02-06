@@ -45,7 +45,15 @@ class Cash extends Model
     protected function numberFull(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->nombre . ($this->reference_number ? ' N° ' . $this->reference_number : ''),
+            get: fn() => 'CAJA GENERAL' . ($this->reference_number ? ' N° ' . $this->reference_number : ''),
+        );
+    }
+
+    // Accessor para compatibilidad (genera nombre dinámico)
+    protected function nombre(): Attribute
+    {
+        return new Attribute(
+            get: fn() => 'CAJA GENERAL',
         );
     }
 
@@ -149,26 +157,24 @@ class Cash extends Model
         $ingresos = 0;
         $egresos = 0;
 
-        foreach ($this->cashDocuments as $doc) {
-            $documento = $doc->getDocumento();
+        // Cargar los pagos desde global_payments usando la relación polimórfica
+        foreach ($this->globalDestination()->with('payment.paymentable')->get() as $globalPayment) {
+            $monto = $globalPayment->payment?->monto ?? 0;
 
-            if (!$documento) continue;
+            if (!$monto) continue;
 
-            // Convertir a PEN si es necesario
-            $total = $this->convertirAPen($documento->total_a_pagar ?? $documento->total ?? 0, $documento->moneda ?? 'PEN');
-
-            // Determinar si es ingreso o egreso (solo recibos y ventas son ingresos)
-            if ($doc->recibo_id || $doc->venta_id) {
-                $ingresos += $total;
-            } elseif ($doc->expense_payment_id || $doc->compra_id) {
-                $egresos += $total;
+            // Usar el accessor type_movement que ya determina INGRESO/EGRESO
+            if ($globalPayment->type_movement === 'INGRESO') {
+                $ingresos += $monto;
+            } else {
+                $egresos += $monto;
             }
         }
 
         return [
-            'ingresos' => $ingresos,
-            'egresos' => $egresos,
-            'saldo_final' => $this->saldo_inicial + $ingresos - $egresos,
+            'ingresos' => round($ingresos, 2),
+            'egresos' => round($egresos, 2),
+            'saldo_final' => round($this->saldo_inicial + $ingresos - $egresos, 2),
         ];
     }
 
@@ -192,24 +198,32 @@ class Cash extends Model
     {
         $recibosTotalPayments = 0;
         $ventasTotalPayments = 0;
+        $otrosIngresos = 0;
 
-        foreach ($this->cashDocuments()->with('recibo', 'venta')->get() as $cashDoc) {
-            $doc = $cashDoc->getDocumento();
-            if (!$doc) continue;
+        foreach ($this->globalDestination()->with('payment.paymentable')->get() as $globalPayment) {
+            if ($globalPayment->type_movement !== 'INGRESO') continue;
 
-            $total = $this->convertirAPen($doc->total ?? 0, $doc->moneda ?? 'PEN');
+            $monto = $globalPayment->payment?->monto ?? 0;
+            $paymentable = $globalPayment->payment?->paymentable;
 
-            if ($cashDoc->recibo_id) {
-                $recibosTotalPayments += $total;
-            } elseif ($cashDoc->venta_id) {
-                $ventasTotalPayments += $total;
+            if (!$paymentable || !$monto) continue;
+
+            $class = class_basename($paymentable);
+
+            if ($class === 'Recibos' || $class === 'RecibosPagosVarios') {
+                $recibosTotalPayments += $monto;
+            } elseif ($class === 'Ventas' || $class === 'Factura') {
+                $ventasTotalPayments += $monto;
+            } else {
+                $otrosIngresos += $monto;
             }
         }
 
         return [
             'recibos_total_payments' => round($recibosTotalPayments, 2),
             'ventas_total_payments' => round($ventasTotalPayments, 2),
-            'total_income' => round($recibosTotalPayments + $ventasTotalPayments, 2),
+            'otros_ingresos' => round($otrosIngresos, 2),
+            'total_income' => round($recibosTotalPayments + $ventasTotalPayments + $otrosIngresos, 2),
         ];
     }
 
@@ -219,26 +233,27 @@ class Cash extends Model
      */
     public function getIncomePaymentsData(): array
     {
-        $recibos = $this->cashDocuments()
-            ->whereNotNull('recibo_id')
-            ->with('recibo')
+        $ingresos = $this->globalDestination()
+            ->with('payment.paymentable')
             ->get()
-            ->sortBy(function ($doc) {
-                return $doc->recibo->fecha_emision ?? $doc->created_at;
-            });
+            ->filter(fn($gp) => $gp->type_movement === 'INGRESO')
+            ->sortBy('created_at');
 
-        $ventas = $this->cashDocuments()
-            ->whereNotNull('venta_id')
-            ->with('venta')
-            ->get()
-            ->sortBy(function ($doc) {
-                return $doc->venta->fecha ?? $doc->created_at;
-            });
+        $recibos = $ingresos->filter(function ($gp) {
+            $class = class_basename($gp->payment?->paymentable);
+            return in_array($class, ['Recibos', 'RecibosPagosVarios']);
+        });
+
+        $ventas = $ingresos->filter(function ($gp) {
+            $class = class_basename($gp->payment?->paymentable);
+            return in_array($class, ['Ventas', 'Factura']);
+        });
 
         return [
             'recibos' => $recibos,
             'ventas' => $ventas,
-            'all_sorted' => $recibos->merge($ventas)->sortBy('created_at'),
+            'ingresos' => $ingresos,
+            'all_sorted' => $ingresos,
         ];
     }
 

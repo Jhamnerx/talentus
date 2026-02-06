@@ -9,6 +9,7 @@ use App\Models\Recibos;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Payments;
+use App\Models\BankAccount;
 use Livewire\Attributes\On;
 use App\Models\DetalleCobros;
 use App\Models\PaymentMethodType;
@@ -23,19 +24,25 @@ class Payment extends Component
     public $tipo_pago = "FACTURA";
     public $documentos = [];
     public $titulo_documento = "Numero";
-    public $pay = false;
 
     public $paymentsMethods = [];
 
     public DetalleCobros $detalle;
     public Cobros $cobro;
 
-    public $numero, $payment_method_id = 1, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
-
+    public $numero, $payment_method_id = 1, $bank_account_id, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
+    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
+    public $availableCashes = [];
+    public $showBankAccountSelector = false;
+    public $bankAccounts = [];
 
     public function mount()
     {
-        $this->paymentsMethods = PaymentMethodType::whereActive(true)->orderByDescription()->get();;
+        $this->paymentsMethods = PaymentMethodType::whereActive(true)->get();
+
+        // Cargar destinos disponibles
+        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
+        $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
     }
 
     public function render()
@@ -43,6 +50,25 @@ class Payment extends Component
         return view('livewire.admin.cobros.payment');
     }
 
+    public function updatedPaymentMethodId($payment_method_id)
+    {
+        if (!$payment_method_id) {
+            $this->showBankAccountSelector = false;
+            $this->bank_account_id = null;
+            return;
+        }
+
+        $paymentMethod = PaymentMethodType::find($payment_method_id);
+
+        // Mostrar selector si es depósito bancario (is_credit = 1)
+        if ($paymentMethod && $paymentMethod->is_credit == 1) {
+            $this->showBankAccountSelector = true;
+            $this->bankAccounts = BankAccount::active()->get();
+        } else {
+            $this->showBankAccountSelector = false;
+            $this->bank_account_id = null;
+        }
+    }
 
     #[On('open-modal-payment')]
     public function openModal(DetalleCobros $detalle)
@@ -72,6 +98,34 @@ class Payment extends Component
         }
 
         $this->modalPayment = true;
+
+        // Verificar si hay cajas o cuentas disponibles
+        $this->checkAvailableDestinations();
+    }
+
+    /**
+     * Verificar si hay cajas abiertas o cuentas bancarias activas
+     */
+    protected function checkAvailableDestinations()
+    {
+        $hasCash = \App\Models\Cash::where('estado', true)->exists();
+        $hasBankAccount = BankAccount::where('status', true)->exists();
+
+        if (!$hasCash && !$hasBankAccount) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: '⚠️ Sin Destinos Disponibles',
+                mensaje: 'No hay cajas abiertas ni cuentas bancarias activas. El pago se registrará pero deberá asignar un destino después.',
+            );
+        } elseif (!$hasCash) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'info',
+                title: '💼 Sin Caja Abierta',
+                mensaje: 'No hay cajas abiertas. Para pagos en efectivo, el movimiento quedará sin destino hasta que abra una caja.',
+            );
+        }
     }
 
     public function updatedPaymentableId($paymentable_id)
@@ -105,6 +159,7 @@ class Payment extends Component
         $this->validate($request->rules(), $request->messages());
         $paymentController = new PaymentsController();
         $this->numero = $paymentController->setNextSequenceNumber();
+
         $payment = Payments::create([
             'numero' => $this->numero,
             'numero_operacion' => $this->numero_operacion,
@@ -116,13 +171,24 @@ class Payment extends Component
             'documento' => $this->paymentable_type == 'App\Models\Facturas' ? 'FACTURA' : 'RECIBO',
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
-            'payment_method_id' => $this->payment_method_id
+            'payment_method_id' => $this->payment_method_id,
+            'payment_destination_id' => $this->payment_destination_id, // ✅ Agregado
+            'bank_account_id' => $this->bank_account_id, // Mantener por compatibilidad
         ]);
 
-        if ($this->pay == "true") {
-            $payment->paymentable->pago_estado = 'PAID';
-            $payment->paymentable->estado = 'COMPLETADO';
-            $payment->paymentable->save();
+        // Verificar automáticamente si el documento está completamente pagado
+        if ($this->paymentable_id && $payment->paymentable) {
+            // Calcular el total de pagos realizados (incluyendo el nuevo)
+            $totalPagos = Payments::where('paymentable_type', $this->paymentable_type)
+                ->where('paymentable_id', $this->paymentable_id)
+                ->sum('monto');
+
+            // Si los pagos cubren el total, marcar como pagado
+            if ($totalPagos >= $payment->paymentable->total) {
+                $payment->paymentable->pago_estado = 'PAID';
+                $payment->paymentable->estado = 'COMPLETADO';
+                $payment->paymentable->save();
+            }
         }
 
         $this->dispatch(

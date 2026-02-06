@@ -87,6 +87,20 @@
                     </x-form.select>
                 </div>
 
+                {{-- ✅ NUEVO: Destino del Pago --}}
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
+                        placeholder="Seleccione destino">
+                        @if (count($availableCashes) > 0)
+                            <x-select.option label="💰 Caja" value="cash" />
+                        @endif
+                        @foreach ($bankAccounts as $account)
+                            <x-select.option label="🏦 {{ $account->description }} - {{ $account->currency_name }}"
+                                value="{{ $account->id }}" />
+                        @endforeach
+                    </x-form.select>
+                </div>
+
                 {{-- AUTO RENOVAR --}}
                 <div class="col-span-12">
                     <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg">

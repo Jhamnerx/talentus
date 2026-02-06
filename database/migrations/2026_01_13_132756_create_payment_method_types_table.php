@@ -16,9 +16,11 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->boolean('active')->default(true);
             $table->string('description');
+            $table->unsignedBigInteger('empresa_id')->default(1);
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
         });
 
-        DB::table('payment_method_types')->insert([
+        $metodos = [
             ['id' => '001', 'active' => true, 'description' => 'Depósito en cuenta'],
             ['id' => '002', 'active' => true, 'description' => 'Giro'],
             ['id' => '003', 'active' => true, 'description' => 'Transferencia de fondos'],
@@ -41,7 +43,17 @@ return new class extends Migration
             ['id' => '107', 'active' => true, 'description' => 'Carta de crédito simple - Comercio exterior'],
             ['id' => '108', 'active' => true, 'description' => 'Carta de crédito documentario - Comercio exterior'],
             ['id' => '999', 'active' => true, 'description' => 'Otros medios de pago'],
-        ]);
+        ];
+
+        // Insertar para empresa_id = 1
+        foreach ($metodos as $metodo) {
+            DB::table('payment_method_types')->insert(array_merge($metodo, ['empresa_id' => 1]));
+        }
+
+        // Insertar para empresa_id = 2
+        foreach ($metodos as $metodo) {
+            DB::table('payment_method_types')->insert(array_merge($metodo, ['empresa_id' => 2]));
+        }
     }
 
     /**

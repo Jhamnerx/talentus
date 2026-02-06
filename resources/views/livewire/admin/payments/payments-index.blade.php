@@ -13,32 +13,14 @@
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <!-- Search form -->
-            <form class="relative">
-                <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live="search"
-                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
-                    type="search" placeholder="Buscar Pagos" />
-                <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
-                        viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                        <path
-                            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                    </svg>
-                </button>
-            </form>
+            <div class="w-64">
+                <x-search-form wire:model.live="search" placeholder="Buscar Pagos" />
+            </div>
 
             <!-- Add payment button -->
             @can('crear-payments')
-                <button wire:click="$dispatch('open-modal-save')"
-                    class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 dark:hover:bg-white">
-                    <svg class="w-4 h-4 fill-current shrink-0 xs:hidden" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="max-xs:sr-only xs:block ml-2">Agregar Pago</span>
-                </button>
+                <x-form.button wire:click="openModalCreate" primary label="Agregar Pago" icon="plus"
+                    spinner="openModalCreate" />
             @endcan
         </div>
     </div>
@@ -286,8 +268,5 @@
     </div>
 
     <!-- Modales -->
-    @livewire('admin.payments.save')
-    @livewire('admin.payments.edit')
-    @livewire('admin.payments.eliminar-payment')
-    @livewire('admin.payments.export-payments')
+
 </div>

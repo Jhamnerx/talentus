@@ -19,3 +19,17 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+# SEGURIDAD: Bloquear acceso a archivos sensibles
+<FilesMatch "^\.env|^\.git|composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# CRÍTICO: Bloquear ejecución de PHP en directorios de storage
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>

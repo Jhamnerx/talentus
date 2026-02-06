@@ -40,16 +40,20 @@ class Save extends Component
         'initial_balance.required' => 'El saldo inicial es obligatorio',
     ];
 
-    #[On('open-bank-account-modal')]
+    #[On(['open-account-modal', 'edit-account-modal'])]
     public function openModal($id = null)
     {
+        // Resetear todo primero
+        $this->reset(['bank_account_id', 'bank_id', 'description', 'number', 'cci', 'currency_type_id', 'initial_balance', 'show_in_documents']);
         $this->resetValidation();
+
         $this->bank_account_id = $id;
 
         if ($id) {
             $bankAccount = BankAccount::find($id);
             if ($bankAccount) {
-                $this->bank_id = $bankAccount->bank_id;
+                // Convertir explícitamente a string para WireUI
+                $this->bank_id = (string) $bankAccount->bank_id;
                 $this->description = $bankAccount->description;
                 $this->number = $bankAccount->number;
                 $this->cci = $bankAccount->cci;
@@ -58,7 +62,6 @@ class Save extends Component
                 $this->show_in_documents = $bankAccount->show_in_documents;
             }
         } else {
-            $this->reset(['bank_id', 'description', 'number', 'cci', 'initial_balance']);
             $this->currency_type_id = 'PEN';
             $this->show_in_documents = true;
         }

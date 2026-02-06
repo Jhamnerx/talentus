@@ -31,12 +31,19 @@ class PaymentBulk extends Component
     public Cobros $cobro;
 
     public $numero, $payment_method_id = 1, $nota, $monto = 0, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
+    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
+    public $availableCashes = [];
+    public $bankAccounts = [];
     public $auto_renovar = true;
 
     public function mount()
     {
         $this->paymentsMethods = PaymentMethodType::whereActive(true)->orderByDescription()->get();
         $this->detalles = collect();
+
+        // Cargar destinos disponibles
+        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
+        $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
     }
 
     public function render()
@@ -119,7 +126,8 @@ class PaymentBulk extends Component
             'documento' => $this->paymentable_type == 'App\Models\Facturas' ? 'FACTURA' : 'RECIBO',
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
-            'payment_method_id' => $this->payment_method_id
+            'payment_method_id' => $this->payment_method_id,
+            'payment_destination_id' => $this->payment_destination_id, // ✅ Agregado
         ]);
 
         // Actualizar documento si se marca como pagado

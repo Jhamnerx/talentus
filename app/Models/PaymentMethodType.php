@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Scopes\EmpresaScope;
+
 class PaymentMethodType extends ModelCatalog
 {
     protected $table = "payment_method_types";
@@ -27,6 +29,16 @@ class PaymentMethodType extends ModelCatalog
         'is_credit' => 'boolean',
         'is_cash' => 'boolean',
     ];
+
+
+
+    protected static function booted()
+    {
+        //
+        static::addGlobalScope(new EmpresaScope);
+    }
+
+
 
     /**
      * Verifica si el método es a crédito

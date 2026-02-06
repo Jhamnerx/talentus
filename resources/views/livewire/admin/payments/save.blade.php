@@ -1,5 +1,6 @@
-<x-form.modal.card title="REGISTRAR PAGO" wire:model="modalSave" blur max-width="2xl">
+<x-form.modal.card title="REGISTRAR PAGO" wire:model.live="modalSave" blur width="2xl">
     <div class="grid grid-cols-12 gap-4">
+
         <!-- Número -->
         <div class="col-span-12 md:col-span-6">
             <x-form.input label="Número" wire:model="numero" readonly />
@@ -31,18 +32,45 @@
 
         <!-- Método de Pago -->
         <div class="col-span-12 md:col-span-6">
-            <x-form.select label="Método de Pago" wire:model.defer="payment_method_id"
-                placeholder="Seleccione un método" :options="$paymentMethods" option-label="description" option-value="id" />
+            <x-form.select label="Método de Pago" wire:model.live="payment_method_id" placeholder="Seleccione un método"
+                :options="$paymentMethods" option-label="description" option-value="id" />
         </div>
 
-        <!-- Destino del Pago (Caja o Cuenta Bancaria) -->
+        <!-- ✅ NUEVO: Destino del Pago (Caja o Cuenta Bancaria) -->
         <div class="col-span-12 md:col-span-6">
-            <x-form.select label="Destino" wire:model.defer="destination_type"
-                placeholder="Seleccione destino (opcional)">
-                <x-select.option label="Caja Chica" value="cash" />
-                <x-select.option label="Cuenta Bancaria" value="bank" />
+            <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
+                placeholder="Seleccione destino">
+                @if (count($availableCashes) > 0)
+                    <x-select.option label="💰 Caja" value="cash" />
+                @endif
+                @foreach ($bankAccounts as $account)
+                    <x-select.option
+                        label="🏦 {{ $account->description }} - {{ $account->currency_name }} ({{ $account->number }})"
+                        value="{{ $account->id }}" />
+                @endforeach
             </x-form.select>
+            <p class="text-xs text-gray-500 mt-1">
+                @if (count($availableCashes) == 0 && count($bankAccounts) == 0)
+                    ⚠️ No hay cajas ni cuentas disponibles
+                @else
+                    Seleccione si el dinero va a Caja o a una Cuenta Bancaria específica
+                @endif
+            </p>
         </div>
+
+        <!-- Cuenta Bancaria (solo si es depósito) - MANTENER POR COMPATIBILIDAD -->
+        @if ($showBankAccountSelector)
+            <div class="col-span-12 md:col-span-6">
+                <x-form.select label="Cuenta Bancaria" wire:model.defer="bank_account_id"
+                    placeholder="Seleccione una cuenta">
+                    @foreach ($bankAccounts as $account)
+                        <x-select.option
+                            label="{{ $account->bank->name }} - {{ $account->number }} ({{ $account->currency_type_id }})"
+                            value="{{ $account->id }}" />
+                    @endforeach
+                </x-form.select>
+            </div>
+        @endif
 
         <!-- Número de Operación -->
         <div class="col-span-12 md:col-span-6">
@@ -113,7 +141,7 @@
     <x-slot name="footer">
         <div class="flex justify-end gap-2">
             <x-form.button flat label="Cancelar" wire:click="closeModal" />
-            <x-form.button primary label="Guardar" wire:click="save" />
+            <x-form.button primary label="Guardar" wire:click="save" spinner="save" />
         </div>
     </x-slot>
 </x-form.modal.card>

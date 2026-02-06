@@ -198,9 +198,11 @@
     <!-- Sección INGRESOS -->
     <div class="section-title">INGRESOS</div>
     @php
-        $ingresos = $caja->cashDocuments->filter(function ($doc) {
-            return $doc->factura_id || $doc->recibo_id || $doc->venta_id;
-        });
+        $ingresos = $caja
+            ->globalDestination()
+            ->with('payment.paymentable')
+            ->get()
+            ->filter(fn($gp) => $gp->type_movement === 'INGRESO');
     @endphp
 
     @if ($ingresos->count() > 0)
@@ -212,27 +214,29 @@
                     <th style="width: 12%;">Fecha</th>
                     <th style="width: 38%;">Cliente</th>
                     <th class="text-center" style="width: 8%;">Moneda</th>
-                    <th class="text-right" style="width: 15%;">Monto PEN</th>
+                    <th class="text-right" style="width: 15%;">Monto</th>
                 </tr>
             </thead>
             <tbody>
                 @php $totalIngresos = 0; @endphp
-                @foreach ($ingresos as $documento)
+                @foreach ($ingresos as $globalPayment)
                     @php
-                        $doc = $documento->getDocumento();
-                        $tipo = $documento->getTipoDocumento();
-                        $moneda = $doc->moneda ?? 'PEN';
-                        $monto = $doc->total_a_pagar ?? ($doc->total ?? 0);
-                        $montoPen = $caja->convertirAPen($monto, $moneda);
-                        $totalIngresos += $montoPen;
+                        $payment = $globalPayment->payment;
+                        $doc = $payment?->paymentable;
+                        $monto = $payment?->monto ?? 0;
+                        $totalIngresos += $monto;
+                        $tipo = $globalPayment->payment_type_description;
+                        $numero = $globalPayment->document_number;
+                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
+                        $cliente = $globalPayment->person_name;
                     @endphp
                     <tr>
                         <td>{{ $tipo }}</td>
-                        <td>{{ $doc->serie ?? 'N/A' }}-{{ $doc->numero ?? 'N/A' }}</td>
-                        <td>{{ $doc->fecha_emision ?? ($doc->fecha ?? 'N/A') }}</td>
-                        <td>{{ $doc->cliente_nombre ?? 'N/A' }}</td>
-                        <td class="text-center">{{ $moneda }}</td>
-                        <td class="text-right">S/ {{ number_format($montoPen, 2) }}</td>
+                        <td>{{ $numero }}</td>
+                        <td>{{ $fecha }}</td>
+                        <td>{{ $cliente }}</td>
+                        <td class="text-center">PEN</td>
+                        <td class="text-right">S/ {{ number_format($monto, 2) }}</td>
                     </tr>
                 @endforeach
                 <tr class="subtotal">
@@ -248,9 +252,11 @@
     <!-- Sección EGRESOS -->
     <div class="section-title egreso">EGRESOS</div>
     @php
-        $egresos = $caja->cashDocuments->filter(function ($doc) {
-            return $doc->expense_payment_id || $doc->compra_id;
-        });
+        $egresos = $caja
+            ->globalDestination()
+            ->with('payment.paymentable')
+            ->get()
+            ->filter(fn($gp) => $gp->type_movement === 'EGRESO');
     @endphp
 
     @if ($egresos->count() > 0)
@@ -262,27 +268,28 @@
                     <th style="width: 12%;">Fecha</th>
                     <th style="width: 38%;">Proveedor/Concepto</th>
                     <th class="text-center" style="width: 8%;">Moneda</th>
-                    <th class="text-right" style="width: 15%;">Monto PEN</th>
+                    <th class="text-right" style="width: 15%;">Monto</th>
                 </tr>
             </thead>
             <tbody>
                 @php $totalEgresos = 0; @endphp
-                @foreach ($egresos as $documento)
+                @foreach ($egresos as $globalPayment)
                     @php
-                        $doc = $documento->getDocumento();
-                        $tipo = $documento->getTipoDocumento();
-                        $moneda = $doc->moneda ?? 'PEN';
-                        $monto = $doc->total_a_pagar ?? ($doc->total ?? 0);
-                        $montoPen = $caja->convertirAPen($monto, $moneda);
-                        $totalEgresos += $montoPen;
+                        $payment = $globalPayment->payment;
+                        $monto = $payment?->monto ?? 0;
+                        $totalEgresos += $monto;
+                        $tipo = $globalPayment->payment_type_description;
+                        $numero = $globalPayment->document_number;
+                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
+                        $proveedor = $globalPayment->person_name;
                     @endphp
                     <tr>
                         <td>{{ $tipo }}</td>
-                        <td>{{ $doc->serie ?? 'N/A' }}-{{ $doc->numero ?? 'N/A' }}</td>
-                        <td>{{ $doc->fecha ?? 'N/A' }}</td>
-                        <td>{{ $doc->proveedor ?? ($doc->concepto ?? 'N/A') }}</td>
-                        <td class="text-center">{{ $moneda }}</td>
-                        <td class="text-right">S/ {{ number_format($montoPen, 2) }}</td>
+                        <td>{{ $numero }}</td>
+                        <td>{{ $fecha }}</td>
+                        <td>{{ $proveedor }}</td>
+                        <td class="text-center">PEN</td>
+                        <td class="text-right">S/ {{ number_format($monto, 2) }}</td>
                     </tr>
                 @endforeach
                 <tr class="subtotal">

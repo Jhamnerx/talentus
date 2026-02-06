@@ -134,7 +134,10 @@
     <div class="count-section">
         <div class="count-row">
             <span class="info-label">Total Documentos:</span>
-            <span>{{ $caja->cashDocuments->count() }}</span>
+            @php
+                $movimientos = $caja->globalDestination()->with('payment.paymentable')->get();
+            @endphp
+            <span>{{ $movimientos->count() }}</span>
         </div>
         <div class="count-row">
             <span class="info-label">Ingresos:</span>

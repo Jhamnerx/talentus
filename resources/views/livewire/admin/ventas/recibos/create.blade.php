@@ -124,20 +124,85 @@
 
                     </div>
 
-                    {{-- FORMA DE PAGO --}}
-                    <div class="col-span-12 md:col-span-6">
-
-                        <x-form.select id="forma_pago" name="forma_pago" label="MÉTODO DE PAGO:" :options="[
-                            ['name' => 'En efectivo', 'id' => '009'],
-                            ['name' => 'Depósito en cuenta', 'id' => '001'],
-                            ['name' => 'Tarjeta de débito', 'id' => '005'],
-                            ['name' => 'Tarjeta de crédito', 'id' => '006'],
-                            ['name' => 'Transferencia bancaria', 'id' => '003'],
-                            ['name' => 'Giro', 'id' => '002'],
-                        ]"
-                            option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
-
-                    </div>
+                    {{-- Tabla de múltiples pagos (solo para CONTADO) --}}
+                    @if ($tipo_venta === 'CONTADO')
+                        <div class="col-span-12 mt-4">
+                            <h3 class="text-lg font-semibold mb-3">Métodos de Pago</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Método de pago</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Destino</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Referencia</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Monto</th>
+                                            <th class="px-4 py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @forelse($pagos_detalle as $index => $pago)
+                                            <tr>
+                                                <td class="px-4 py-2">
+                                                    <x-form.select
+                                                        wire:model="pagos_detalle.{{ $index }}.metodo_pago_id"
+                                                        :options="$payment_methods ? $payment_methods->toArray() : []" option-label="name" option-value="id"
+                                                        :clearable="false" />
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    @if ($payment_destinations && $payment_destinations->isNotEmpty())
+                                                        <x-form.select
+                                                            wire:model="pagos_detalle.{{ $index }}.payment_destination_id"
+                                                            :options="$payment_destinations->toArray()" option-label="description"
+                                                            option-value="id" placeholder="Seleccione destino" />
+                                                    @else
+                                                        <span class="text-gray-500 text-xs">Sin destinos</span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    <x-form.input
+                                                        wire:model="pagos_detalle.{{ $index }}.referencia"
+                                                        placeholder="Referencia" />
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    <x-form.input wire:model="pagos_detalle.{{ $index }}.monto"
+                                                        type="number" step="0.01" />
+                                                </td>
+                                                <td class="px-4 py-2 text-center">
+                                                    <x-form.button wire:click="eliminarPago({{ $index }})"
+                                                        negative flat icon="trash" />
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="px-4 py-3 text-center text-gray-500">No hay
+                                                    pagos registrados</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <x-form.button wire:click="agregarPago" primary flat icon="plus"
+                                class="mt-3">Agregar pago</x-form.button>
+                        </div>
+                    @else
+                        {{-- Selector simple para CREDITO --}}
+                        <div class="col-span-12 md:col-span-6">
+                            <x-form.select id="forma_pago" name="forma_pago" label="MÉTODO DE PAGO:"
+                                :options="[
+                                    ['name' => 'En efectivo', 'id' => '009'],
+                                    ['name' => 'Depósito en cuenta', 'id' => '001'],
+                                    ['name' => 'Tarjeta de débito', 'id' => '005'],
+                                    ['name' => 'Tarjeta de crédito', 'id' => '006'],
+                                    ['name' => 'Transferencia bancaria', 'id' => '003'],
+                                    ['name' => 'Giro', 'id' => '002'],
+                                ]" option-label="name" option-value="id" wire:model.live="forma_pago"
+                                :clearable="false" />
+                        </div>
+                    @endif
 
 
                     <div class="col-span-12">

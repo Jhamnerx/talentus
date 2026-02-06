@@ -2,19 +2,24 @@
 
 namespace App\Livewire\Admin\Ventas\Recibos;
 
-use App\Http\Requests\RecibosRequest;
-use App\Models\Clientes;
-use App\Models\PaymentMethods;
-use App\Models\Productos;
 use App\Models\Recibos;
-use Illuminate\Support\Collection;
 use Livewire\Component;
+use App\Models\Clientes;
+use App\Models\Payments;
+use App\Models\Productos;
+use App\Models\PaymentMethods;
+use App\Models\PaymentMethodType;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\RecibosRequest;
+use App\Helpers\PaymentDestinationHelper;
 
 class Edit extends Component
 {
     public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa, $estado;
     public $forma_pago, $total = 0.0;
-    public $tipo_venta, $nota;
+    public $tipo_venta, $nota, $payment_destination_id;
+    public $tipo_cambio = 0.00;
 
 
     public $showCredit = false;
@@ -27,9 +32,23 @@ class Edit extends Component
     public $simbolo = "S/. ";
     public $cliente;
     public $product_selected_id;
+    public Collection $payment_destinations;
+    public ?Collection $payment_methods = null;
+    public Collection $pagos_detalle;
 
     public function mount()
     {
+        // Cargar destinos de pago (Caja + Cuentas Bancarias)
+        $this->payment_destinations = PaymentDestinationHelper::getPaymentDestinations();
+
+        // Cargar métodos de pago desde catálogo
+        $this->payment_methods = PaymentMethodType::where('active', true)
+            ->get()
+            ->map(fn($method) => [
+                'id' => $method->id,
+                'name' => $method->description,
+            ]);
+
         $this->clientes_id = $this->recibo->clientes_id;
         $this->serie = $this->recibo->serie;
         $this->numero = $this->recibo->numero;
@@ -41,6 +60,7 @@ class Edit extends Component
         $this->forma_pago = $this->recibo->forma_pago;
         $this->total = $this->recibo->total;
         $this->tipo_venta = $this->recibo->tipo_venta;
+        $this->tipo_cambio = $this->recibo->tipo_cambio ?? 3.80;
 
         $this->nota = $this->recibo->nota;
 
@@ -60,6 +80,26 @@ class Edit extends Component
         }
 
         $this->cliente = Clientes::find($this->clientes_id);
+
+        // Cargar pagos existentes o inicializar con default
+        $existingPayments = $this->recibo->payments;
+        if ($existingPayments->isNotEmpty()) {
+            $this->pagos_detalle = $existingPayments->map(function ($payment) {
+                return [
+                    'metodo_pago_id' => $payment->payment_method_id,
+                    'payment_destination_id' => $payment->payment_destination_id,
+                    'referencia' => $payment->numero_operacion,
+                    'monto' => $payment->monto,
+                ];
+            });
+        } else {
+            $this->pagos_detalle = collect([[
+                'metodo_pago_id' => '009',
+                'payment_destination_id' => '',
+                'referencia' => '',
+                'monto' => 0.00,
+            ]]);
+        }
     }
 
     public function render()
@@ -146,6 +186,11 @@ class Edit extends Component
     public function reCalTotal()
     {
         $this->total =  $this->calcularTotal();
+
+        // Recalcular montos de pagos cuando cambia el total
+        if ($this->tipo_venta === 'CONTADO' && $this->pagos_detalle->count() > 0) {
+            $this->recalcularMontosPagos();
+        }
     }
 
 
@@ -204,6 +249,37 @@ class Edit extends Component
 
             Recibos::createItems($this->recibo, $data["items"]);
 
+            //ACTUALIZAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE
+            if ($this->forma_pago === '009') { // CONTADO
+                // Eliminar pagos anteriores
+                $this->recibo->payments()->delete();
+
+                // Validar que la suma de pagos coincida con el total
+                $total_pagos = $this->pagos_detalle->sum('monto');
+                if (round($total_pagos, 2) != round($this->total, 2)) {
+                    throw new \Exception("La suma de pagos (" . round($total_pagos, 2) . ") no coincide con el total (" . round($this->total, 2) . ")");
+                }
+
+                foreach ($this->pagos_detalle as $pago) {
+                    Payments::create([
+                        'paymentable_type' => Recibos::class,
+                        'paymentable_id' => $this->recibo->id,
+                        'payment_method_id' => $pago['metodo_pago_id'],
+                        'payment_destination_id' => $pago['payment_destination_id'],
+                        'numero_operacion' => $pago['referencia'] ?? null,
+                        'monto' => $pago['monto'],
+                        'fecha' => $this->fecha_emision,
+                        'divisa' => $this->divisa,
+                        'user_id' => Auth::user()->id,
+                        'empresa_id' => session('empresa'),
+                    ]);
+                }
+
+                // Actualizar pago_estado del recibo a PAID
+                $this->recibo->pago_estado = 'PAID';
+                $this->recibo->save();
+            }
+
             session()->flash('recibo-actualizo', 'El Recibo se actualizo con exito');
             $this->redirectRoute('admin.ventas.recibos.index');
         } catch (\Throwable $e) {
@@ -225,5 +301,65 @@ class Edit extends Component
     public function addProductoModal($producto)
     {
         $this->dispatch('add-producto-modal', producto: $producto);
+    }
+
+    public function agregarPago()
+    {
+        $this->pagos_detalle->push([
+            'metodo_pago_id' => '009',
+            'payment_destination_id' => '',
+            'referencia' => '',
+            'monto' => 0.00,
+        ]);
+        $this->recalcularMontosPagos();
+    }
+
+    public function eliminarPago($index)
+    {
+        if ($this->pagos_detalle->count() > 1) {
+            $this->pagos_detalle->forget($index);
+            $this->pagos_detalle = $this->pagos_detalle->values();
+            $this->recalcularMontosPagos();
+        } else {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'MÍNIMO UN PAGO',
+                mensaje: 'Debe existir al menos un método de pago',
+            );
+        }
+    }
+
+    public function recalcularMontosPagos()
+    {
+        $cantidad_pagos = $this->pagos_detalle->count();
+
+        if ($cantidad_pagos === 0) {
+            return;
+        }
+
+        if ($cantidad_pagos === 1) {
+            // Si hay un solo pago, asignar el total completo
+            $this->pagos_detalle = $this->pagos_detalle->map(function ($pago) {
+                $pago['monto'] = $this->total;
+                return $pago;
+            });
+        } else {
+            // Si hay múltiples pagos, dividir el total entre la cantidad
+            $monto_por_pago = round($this->total / $cantidad_pagos, 2);
+            $diferencia = round($this->total - ($monto_por_pago * $cantidad_pagos), 2);
+
+            $this->pagos_detalle = $this->pagos_detalle->map(function ($pago, $index) use ($monto_por_pago, $diferencia, $cantidad_pagos) {
+                // Asignar el monto dividido
+                $pago['monto'] = $monto_por_pago;
+
+                // Agregar la diferencia al último pago para cuadrar exactamente
+                if ($index === $cantidad_pagos - 1 && $diferencia != 0) {
+                    $pago['monto'] = round($pago['monto'] + $diferencia, 2);
+                }
+
+                return $pago;
+            });
+        }
     }
 }

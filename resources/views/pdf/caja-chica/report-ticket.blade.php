@@ -161,20 +161,23 @@
     </div>
 
     <!-- Documentos -->
-    @if ($caja->cashDocuments->count() > 0)
-        @foreach ($caja->cashDocuments as $documento)
+    @php
+        $movimientos = $caja->globalDestination()->with('payment.paymentable')->get();
+    @endphp
+    @if ($movimientos->count() > 0)
+        @foreach ($movimientos as $globalPayment)
             @php
-                $doc = $documento->getDocumento();
-                $esIngreso = $documento->factura_id || $documento->recibo_id || $documento->venta_id ? true : false;
-                $tipo = $documento->getTipoDocumento();
-                $moneda = $doc->moneda ?? 'PEN';
-                $monto = $doc->total_a_pagar ?? ($doc->total ?? 0);
-                $montoPen = $caja->convertirAPen($monto, $moneda);
+                $payment = $globalPayment->payment;
+                $monto = $payment?->monto ?? 0;
+                $tipo = $globalPayment->payment_type_description;
+                $numero = $globalPayment->document_number;
+                $persona = $globalPayment->person_name;
+                $tipoMov = $globalPayment->type_movement;
             @endphp
             <div class="doc-item">
                 <div class="doc-header">
-                    <span>{{ $tipo }} {{ $doc->serie ?? 'N/A' }}-{{ $doc->numero ?? 'N/A' }}</span>
-                    <span class="tipo-badge">{{ $esIngreso ? 'ING' : 'EGR' }}</span>
+                    <span>{{ $tipo }} {{ $numero }}</span>
+                    <span class="tipo-badge">{{ $tipoMov === 'INGRESO' ? 'ING' : 'EGR' }}</span>
                 </div>
                 <div class="doc-detail">
                     <span>{{ Str::limit($doc->cliente_nombre ?? ($doc->proveedor ?? 'N/A'), 25) }}</span>

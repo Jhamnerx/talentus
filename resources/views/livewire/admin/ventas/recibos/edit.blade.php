@@ -42,8 +42,8 @@
                     {{-- CLIENTE --}}
                     <div class="col-span-12 mb-2 selectCliente">
                         <x-form.select label="Selecciona un cliente:" wire:model.live="clientes_id"
-                            placeholder="Selecciona un cliente" option-description="numero_documento"
-                            :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id">
+                            placeholder="Selecciona un cliente" option-description="numero_documento" :async-data="route('api.clientes.index')"
+                            option-label="razon_social" option-value="id">
 
                             <x-slot name="afterOptions" class="p-2 flex justify-center"
                                 x-show="displayOptions.length === 0">
@@ -56,17 +56,18 @@
                     </div>
 
                     @if ($cliente)
-                    <x-admin.ventas.cliente-selected :cliente="$cliente">
-                    </x-admin.ventas.cliente-selected>
+                        <x-admin.ventas.cliente-selected :cliente="$cliente">
+                        </x-admin.ventas.cliente-selected>
                     @endif
 
                     {{-- NUMERO --}}
                     <div class="col-span-12 xs:col-span-6 mb-2">
-                        <x-form.select readonly disabled id="serie" name="serie" label="Serie:" wire:model.live="serie"
-                            placeholder="Selecciona una serie" :async-data="[
+                        <x-form.select readonly disabled id="serie" name="serie" label="Serie:"
+                            wire:model.live="serie" placeholder="Selecciona una serie" :async-data="[
                                 'api' => route('api.series.index'),
                                 'params' => ['tipo_comprobante' => '10'],
-                            ]" option-label="serie" option-value="serie" />
+                            ]"
+                            option-label="serie" option-value="serie" />
                     </div>
 
                     <div class="col-span-12 xs:col-span-6 mb-2">
@@ -84,8 +85,8 @@
                     <div class="col-span-12 xs:col-span-6 gap-2">
 
                         <x-form.datetime.picker label="Fecha de Pago:" id="fecha_pago" name="fecha_pago"
-                            wire:model.live="fecha_pago" :min="now()->subDays(15)" :max="now()->addDays(30)"
-                            without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
+                            wire:model.live="fecha_pago" :min="now()->subDays(15)" :max="now()->addDays(30)" without-time
+                            parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY" :clearable="false" />
                     </div>
 
                 </div>
@@ -94,8 +95,7 @@
                     {{-- moneda --}}
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <x-form.select label="Moneda:" id="divisa" name="divisa"
-                            :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
+                        <x-form.select label="Moneda:" id="divisa" name="divisa" :options="[['name' => 'SOLES', 'id' => 'PEN'], ['name' => 'DOLARES', 'id' => 'USD']]"
                             option-label="name" option-value="id" wire:model.live="divisa" :clearable="false"
                             icon='currency-dollar' />
 
@@ -103,25 +103,90 @@
 
                     <div class="col-span-12 md:col-span-6 mb-3">
 
-                        <x-form.select id="tipo_venta" name="tipo_venta" label="Forma Pago:"
-                            :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                        <x-form.select id="tipo_venta" name="tipo_venta" label="Forma Pago:" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
                             option-label="name" option-value="id" wire:model.live="tipo_venta" :clearable="false" />
 
                     </div>
 
-                    {{-- FORMA DE PAGO --}}
-                    <div class="col-span-12 md:col-span-6">
-
-                        <x-form.select id="forma_pago" name="forma_pago" label="MÉTODO DE PAGO:" :options="[
-                            ['name' => 'En efectivo', 'id' => '009'],
-                            ['name' => 'Depósito en cuenta', 'id' => '001'],
-                            ['name' => 'Tarjeta de débito', 'id' => '005'],
-                            ['name' => 'Tarjeta de crédito', 'id' => '006'],
-                            ['name' => 'Transferencia bancaria', 'id' => '003'],
-                            ['name' => 'Giro', 'id' => '002'],
-                        ]" option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
-
-                    </div>
+                    {{-- Tabla de múltiples pagos (solo para CONTADO) --}}
+                    @if ($tipo_venta === 'CONTADO')
+                        <div class="col-span-12 mt-4">
+                            <h3 class="text-lg font-semibold mb-3">Métodos de Pago</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Método de pago</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Destino</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Referencia</th>
+                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                                Monto</th>
+                                            <th class="px-4 py-2"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @forelse($pagos_detalle as $index => $pago)
+                                            <tr>
+                                                <td class="px-4 py-2">
+                                                    <x-form.select
+                                                        wire:model="pagos_detalle.{{ $index }}.metodo_pago_id"
+                                                        :options="$payment_methods ? $payment_methods->toArray() : []" option-label="name" option-value="id"
+                                                        :clearable="false" />
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    @if ($payment_destinations && $payment_destinations->isNotEmpty())
+                                                        <x-form.select
+                                                            wire:model="pagos_detalle.{{ $index }}.payment_destination_id"
+                                                            :options="$payment_destinations->toArray()" option-label="description"
+                                                            option-value="id" placeholder="Seleccione destino" />
+                                                    @else
+                                                        <span class="text-gray-500 text-xs">Sin destinos</span>
+                                                    @endif
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    <x-form.input
+                                                        wire:model="pagos_detalle.{{ $index }}.referencia"
+                                                        placeholder="Referencia" />
+                                                </td>
+                                                <td class="px-4 py-2">
+                                                    <x-form.input wire:model="pagos_detalle.{{ $index }}.monto"
+                                                        type="number" step="0.01" />
+                                                </td>
+                                                <td class="px-4 py-2 text-center">
+                                                    <x-form.button wire:click="eliminarPago({{ $index }})"
+                                                        negative flat icon="trash" />
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="5" class="px-4 py-3 text-center text-gray-500">No hay
+                                                    pagos registrados</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
+                            <x-form.button wire:click="agregarPago" primary flat icon="plus"
+                                class="mt-3">Agregar pago</x-form.button>
+                        </div>
+                    @else
+                        {{-- Selector simple para CREDITO --}}
+                        <div class="col-span-12 md:col-span-6">
+                            <x-form.select id="forma_pago" name="forma_pago" label="MÉTODO DE PAGO:"
+                                :options="[
+                                    ['name' => 'En efectivo', 'id' => '009'],
+                                    ['name' => 'Depósito en cuenta', 'id' => '001'],
+                                    ['name' => 'Tarjeta de débito', 'id' => '005'],
+                                    ['name' => 'Tarjeta de crédito', 'id' => '006'],
+                                    ['name' => 'Transferencia bancaria', 'id' => '003'],
+                                    ['name' => 'Giro', 'id' => '002'],
+                                ]" option-label="name" option-value="id" wire:model.live="forma_pago"
+                                :clearable="false" />
+                        </div>
+                    @endif
 
 
                     <div class="col-span-12">
@@ -140,7 +205,8 @@
                                     id="product_selected_id" name="product_selected_id"
                                     placeholder="Seleccionar producto o servicio" :async-data="[
                                         'api' => route('api.productos.index'),
-                                    ]" option-label="descripcion" option-value="id"
+                                    ]"
+                                    option-label="descripcion" option-value="id"
                                     option-description="option_description" :template="[
                                         'name' => 'user-option',
                                         'config' => ['src' => 'imagen'],
@@ -204,5 +270,5 @@
 
 </div>
 @section('js')
-<script></script>
+    <script></script>
 @endsection

@@ -139,7 +139,10 @@
     </div>
 
     <!-- Tabla Simple -->
-    @if ($caja->cashDocuments->count() > 0)
+    @php
+        $movimientos = $caja->globalDestination()->with('payment.paymentable')->get();
+    @endphp
+    @if ($movimientos->count() > 0)
         <table>
             <thead>
                 <tr>
@@ -151,22 +154,22 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($caja->cashDocuments as $documento)
+                @foreach ($movimientos as $globalPayment)
                     @php
-                        $doc = $documento->getDocumento();
-                        $esIngreso =
-                            $documento->factura_id || $documento->recibo_id || $documento->venta_id ? true : false;
-                        $tipo = $documento->getTipoDocumento();
-                        $moneda = $doc->moneda ?? 'PEN';
-                        $monto = $doc->total_a_pagar ?? ($doc->total ?? 0);
-                        $montoPen = $caja->convertirAPen($monto, $moneda);
+                        $payment = $globalPayment->payment;
+                        $monto = $payment?->monto ?? 0;
+                        $tipo = $globalPayment->payment_type_description;
+                        $numero = $globalPayment->document_number;
+                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
+                        $persona = $globalPayment->person_name;
+                        $tipoMov = $globalPayment->type_movement;
                     @endphp
                     <tr>
-                        <td>{{ $tipo }} {{ $doc->serie ?? 'N/A' }}-{{ $doc->numero ?? 'N/A' }}</td>
-                        <td>{{ $doc->cliente_nombre ?? ($doc->proveedor ?? 'N/A') }}</td>
-                        <td class="text-center">{{ $doc->fecha_emision ?? ($doc->fecha ?? 'N/A') }}</td>
-                        <td class="text-center">{{ $esIngreso ? 'ING' : 'EGR' }}</td>
-                        <td class="text-right">S/ {{ number_format($montoPen, 2) }}</td>
+                        <td>{{ $tipo }} {{ $numero }}</td>
+                        <td>{{ $persona }}</td>
+                        <td class="text-center">{{ $fecha }}</td>
+                        <td class="text-center">{{ $tipoMov === 'INGRESO' ? 'ING' : 'EGR' }}</td>
+                        <td class="text-right">S/ {{ number_format($monto, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>

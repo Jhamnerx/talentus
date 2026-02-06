@@ -2,16 +2,6 @@
     <x-form.modal.card title="{{ $cashId ? 'Editar Caja Chica' : 'Nueva Caja Chica' }}" wire:model="showModal" blur
         max-width="2xl">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div class="sm:col-span-2">
-                <x-form.input label="Nombre de la Caja *" placeholder="Ej: Caja Chica Oficina Principal"
-                    wire:model.live="nombre" />
-            </div>
-
-            <div class="sm:col-span-2">
-                <x-form.textarea label="Descripción" placeholder="Descripción opcional" wire:model.live="descripcion"
-                    rows="2" />
-            </div>
-
             <x-form.currency label="Saldo Inicial *" placeholder="0.00" wire:model.live="saldo_inicial" prefix="S/"
                 precision="2" thousands="," decimal="." />
 

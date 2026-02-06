@@ -52,10 +52,4 @@ class FinanzasController extends Controller
     {
         return view('admin.finanzas.balance.index');
     }
-
-    // Pagos redirige al módulo existente de Payments
-    public function pagos()
-    {
-        return redirect()->route('admin.payments.index');
-    }
 }

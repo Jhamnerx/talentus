@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\PDF;
 
 use App\Models\Cash;
 use App\Models\CashDocument;
+use App\Traits\FinanceTrait; // ✅ Agregar el trait
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -14,6 +15,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CajaChicaPdfController extends Controller
 {
+    use FinanceTrait; // ✅ Usar el trait para conversión de moneda
     /**
      * REPORTE 1: PDF A4 - Reporte principal con todos los documentos
      */
@@ -21,7 +23,7 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        $caja->load(['cashDocuments.getDocumento', 'cashDocuments.getTipoDocumento', 'user']);
+        $caja->load(['user']);
         $totales = $caja->calcularTotales();
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-a4', [
@@ -29,7 +31,7 @@ class CajaChicaPdfController extends Controller
             'totales' => $totales,
         ]);
 
-        return $pdf->stream("Reporte_Caja_{$caja->nombre}_{$caja->fecha_apertura}.pdf");
+        return $pdf->stream("Reporte_Caja_General_{$caja->fecha_apertura}.pdf");
     }
 
     /**
@@ -39,7 +41,7 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        $caja->load(['cashDocuments.getDocumento', 'user']);
+        $caja->load(['user']);
         $totales = $caja->calcularTotales();
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-ticket', [
@@ -76,7 +78,7 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        $caja->load(['cashDocuments.getDocumento', 'user']);
+        $caja->load(['user']);
         $totales = $caja->calcularTotales();
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-simple-a4', [
@@ -84,7 +86,7 @@ class CajaChicaPdfController extends Controller
             'totales' => $totales,
         ]);
 
-        return $pdf->stream("Reporte_Simple_{$caja->nombre}.pdf");
+        return $pdf->stream("Reporte_Simple_Caja_General.pdf");
     }
 
     /**
@@ -96,7 +98,7 @@ class CajaChicaPdfController extends Controller
 
         return Excel::download(
             new CashExport($caja),
-            "Reporte_Caja_{$caja->nombre}_{$caja->fecha_apertura}.xlsx"
+            "Reporte_Caja_General_{$caja->fecha_apertura}.xlsx"
         );
     }
 
@@ -107,7 +109,7 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        $caja->load(['cashDocuments.getDocumento', 'user']);
+        $caja->load(['user']);
         $totales = $caja->calcularTotales();
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-daily-operations', [
@@ -127,7 +129,7 @@ class CajaChicaPdfController extends Controller
 
         return Excel::download(
             new CashPaymentExport($caja),
-            "Reporte_Efectivo_{$caja->nombre}_{$caja->fecha_apertura}.xlsx"
+            "Reporte_Efectivo_Caja_General_{$caja->fecha_apertura}.xlsx"
         );
     }
 
@@ -138,7 +140,7 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        $caja->load(['cashDocuments.getDocumento', 'user']);
+        $caja->load(['user']);
         $totales = $caja->calcularTotales();
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-income-egress', [
@@ -192,7 +194,7 @@ class CajaChicaPdfController extends Controller
 
         return Excel::download(
             new CashProductExport($caja),
-            "Productos_{$caja->nombre}_{$caja->fecha_apertura}.xlsx"
+            "Productos_Caja_General_{$caja->fecha_apertura}.xlsx"
         );
     }
 
@@ -205,7 +207,7 @@ class CajaChicaPdfController extends Controller
 
         $fecha = $request->get('fecha', now()->format('Y-m-d'));
 
-        $cajas = Cash::with(['user', 'cashDocuments'])
+        $cajas = Cash::with(['user'])
             ->whereDate('fecha_apertura', $fecha)
             ->get();
 
@@ -214,13 +216,14 @@ class CajaChicaPdfController extends Controller
             'ingresos' => 0,
             'egresos' => 0,
             'saldo_final' => $cajas->sum('saldo_actual'),
-            'documentos' => $cajas->sum(fn($c) => $c->cashDocuments->count()),
+            'documentos' => 0,
         ];
 
         foreach ($cajas as $caja) {
             $totales = $caja->calcularTotales();
             $totalGeneral['ingresos'] += $totales['ingresos'];
             $totalGeneral['egresos'] += $totales['egresos'];
+            $totalGeneral['documentos'] += $caja->globalDestination()->count();
         }
 
         $pdf = Pdf::loadView('pdf.caja-chica.report-general', [
@@ -256,5 +259,42 @@ class CajaChicaPdfController extends Controller
         }
 
         return $productos;
+    }
+
+    /**
+     * ✅ EJEMPLO: Reporte con conversión de moneda usando FinanceTrait
+     * 
+     * Este método muestra cómo usar el trait para convertir pagos a PEN o USD
+     */
+    public function reportCurrencyConverted(Cash $caja, $currencyType = 'PEN')
+    {
+        $this->authorize('ver-caja-chica');
+
+        // Obtener todos los GlobalPayments de esta caja
+        $globalPayments = \App\Models\GlobalPayment::where('destination_type', \App\Models\Cash::class)
+            ->where('destination_id', $caja->id)
+            ->with('payment.paymentable') // Cargar Ventas/Recibos con divisa y tipo_cambio
+            ->get();
+
+        // Obtener solo los pagos
+        $payments = $globalPayments->pluck('payment')->filter();
+
+        // ✅ Usar FinanceTrait para calcular totales con conversión
+        $totalPEN = $this->calculateTotalCurrencyType($payments, 'PEN');
+        $totalUSD = $this->calculateTotalCurrencyType($payments, 'USD');
+
+        // ✅ Calcular balance en ambas monedas
+        $balancePEN = $this->getBalanceByCash($caja->id, 'PEN');
+        $balanceUSD = $this->getBalanceByCash($caja->id, 'USD');
+
+        $pdf = Pdf::loadView('pdf.caja-chica.report-currency-converted', [
+            'caja' => $caja,
+            'totalPEN' => $totalPEN,
+            'totalUSD' => $totalUSD,
+            'balancePEN' => $balancePEN,
+            'balanceUSD' => $balanceUSD,
+        ]);
+
+        return $pdf->stream("Reporte_Convertido_{$caja->fecha_apertura}.pdf");
     }
 }

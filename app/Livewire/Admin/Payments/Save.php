@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Payments;
 
 use App\Models\Payments;
 use App\Models\PaymentMethodType;
+use App\Models\BankAccount;
 use App\Models\Ventas;
 use App\Models\Recibos;
 use Livewire\Component;
@@ -24,6 +25,7 @@ class Save extends Component
     public $divisa = 'PEN';
     public $monto;
     public $payment_method_id;
+    public $bank_account_id;
     public $cobros_id;
     public $tipo_pago = 'FACTURA';
     public $documentos = [];
@@ -34,12 +36,34 @@ class Save extends Component
     public $totalDocumento = 0;
     public $pagosPrevios = 0;
     public $saldoPendiente = 0;
-    public $marcar_como_pagado = false;
+    public $showBankAccountSelector = false;
+    public $bankAccounts = [];
+    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
+    public $availableCashes = [];
+    public $showDestinationSelector = true; // Siempre mostrar selector de destino
 
     public function render()
     {
-        $paymentMethods = PaymentMethodType::whereActive(true)->orderByDescription()->get();
+        $paymentMethods = PaymentMethodType::whereActive(true)->get();
         return view('livewire.admin.payments.save', compact('paymentMethods'));
+    }
+
+    public function updatedPaymentMethodId($payment_method_id)
+    {
+        if (!$payment_method_id) {
+            return;
+        }
+
+        $paymentMethod = PaymentMethodType::find($payment_method_id);
+
+        // Si es efectivo (is_cash = 1), sugerir caja
+        if ($paymentMethod && $paymentMethod->is_cash == 1) {
+            // Auto-seleccionar caja si solo hay una
+            if (count($this->availableCashes) == 1) {
+                $this->payment_destination_id = 'cash';
+            }
+        }
+        // Si es bancario, el usuario debe seleccionar la cuenta manualmente
     }
 
     public function updatedTipoPago($tipo_pago)
@@ -65,7 +89,6 @@ class Save extends Component
             $this->totalDocumento = 0;
             $this->pagosPrevios = 0;
             $this->saldoPendiente = 0;
-            $this->marcar_como_pagado = false;
             return;
         }
 
@@ -82,10 +105,18 @@ class Save extends Component
                     ->sum('monto');
 
                 $this->saldoPendiente = $this->totalDocumento - $this->pagosPrevios;
-                $this->monto = $this->saldoPendiente;
 
-                // Auto-marcar si el saldo se completa
-                $this->marcar_como_pagado = false;
+                // Verificar si tiene saldo pendiente
+                if ($this->saldoPendiente <= 0) {
+                    $this->notification()->error(
+                        'Documento Pagado',
+                        'Esta factura ya está completamente pagada. No se pueden registrar más pagos.'
+                    );
+                    $this->reset('paymentable_id', 'divisaDoc', 'monto', 'totalDocumento', 'pagosPrevios', 'saldoPendiente');
+                    return;
+                }
+
+                $this->monto = $this->saldoPendiente;
             }
         }
 
@@ -102,10 +133,18 @@ class Save extends Component
                     ->sum('monto');
 
                 $this->saldoPendiente = $this->totalDocumento - $this->pagosPrevios;
-                $this->monto = $this->saldoPendiente;
 
-                // Auto-marcar si el saldo se completa
-                $this->marcar_como_pagado = false;
+                // Verificar si tiene saldo pendiente
+                if ($this->saldoPendiente <= 0) {
+                    $this->notification()->error(
+                        'Documento Pagado',
+                        'Este recibo ya está completamente pagado. No se pueden registrar más pagos.'
+                    );
+                    $this->reset('paymentable_id', 'divisaDoc', 'monto', 'totalDocumento', 'pagosPrevios', 'saldoPendiente');
+                    return;
+                }
+
+                $this->monto = $this->saldoPendiente;
             }
         }
     }
@@ -118,13 +157,23 @@ class Save extends Component
             ->get();
 
         foreach ($facturas as $invoice) {
-            $data[] = [
-                'id' => $invoice->id,
-                'text' => $invoice->serie_correlativo,
-                'fecha_emision' => $invoice->fecha_emision->format('d-m-Y'),
-                'monto' => $invoice->total,
-                'divisa' => $invoice->divisa,
-            ];
+            // Calcular saldo pendiente para cada factura
+            $pagosPrevios = Payments::where('paymentable_type', 'App\\Models\\Ventas')
+                ->where('paymentable_id', $invoice->id)
+                ->sum('monto');
+
+            $saldoPendiente = $invoice->total - $pagosPrevios;
+
+            // Solo agregar si tiene saldo pendiente
+            if ($saldoPendiente > 0) {
+                $data[] = [
+                    'id' => $invoice->id,
+                    'text' => $invoice->serie_correlativo . ' - Saldo: ' . number_format($saldoPendiente, 2),
+                    'fecha_emision' => $invoice->fecha_emision->format('d-m-Y'),
+                    'monto' => $invoice->total,
+                    'divisa' => $invoice->divisa,
+                ];
+            }
         }
 
         return $data;
@@ -138,13 +187,23 @@ class Save extends Component
             ->get();
 
         foreach ($recibos as $recibo) {
-            $data[] = [
-                'id' => $recibo->id,
-                'text' => $recibo->serie_numero,
-                'fecha_emision' => $recibo->created_at->format('d-m-Y'),
-                'monto' => $recibo->total,
-                'divisa' => $recibo->divisa,
-            ];
+            // Calcular saldo pendiente para cada recibo
+            $pagosPrevios = Payments::where('paymentable_type', 'App\\Models\\Recibos')
+                ->where('paymentable_id', $recibo->id)
+                ->sum('monto');
+
+            $saldoPendiente = $recibo->total - $pagosPrevios;
+
+            // Solo agregar si tiene saldo pendiente
+            if ($saldoPendiente > 0) {
+                $data[] = [
+                    'id' => $recibo->id,
+                    'text' => $recibo->serie_numero . ' - Saldo: ' . number_format($saldoPendiente, 2),
+                    'fecha_emision' => $recibo->created_at->format('d-m-Y'),
+                    'monto' => $recibo->total,
+                    'divisa' => $recibo->divisa,
+                ];
+            }
         }
 
         return $data;
@@ -160,12 +219,44 @@ class Save extends Component
         $this->tipo_pago = 'FACTURA';
         $this->documentos = $this->loadFacturas();
         $this->paymentable_type = Ventas::class;
+
+        // Cargar destinos disponibles
+        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
+        $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
+
+        // Verificar si hay destinos disponibles
+        $this->checkAvailableDestinations();
+
+        // Auto-seleccionar caja si solo hay una
+        if (count($this->availableCashes) == 1 && count($this->bankAccounts) == 0) {
+            $this->payment_destination_id = 'cash';
+        }
+    }
+
+    /**
+     * Verificar si hay cajas abiertas o cuentas bancarias activas
+     */
+    protected function checkAvailableDestinations()
+    {
+        $hasCash = \App\Models\Cash::where('estado', true)->exists();
+        $hasBankAccount = \App\Models\BankAccount::where('status', true)->exists();
+
+        if (!$hasCash && !$hasBankAccount) {
+            $this->notification()->warning(
+                '⚠️ Sin Destinos Disponibles',
+                'No hay cajas abiertas ni cuentas bancarias activas. El pago se registrará pero deberá asignar un destino después.'
+            );
+        } elseif (!$hasCash) {
+            $this->notification()->info(
+                '💼 Sin Caja Abierta',
+                'No hay cajas abiertas. Para pagos en efectivo, el movimiento quedará sin destino hasta que abra una caja.'
+            );
+        }
     }
 
     public function closeModal()
     {
         $this->modalSave = false;
-        $this->resetProp();
     }
 
     public function resetProp()
@@ -179,6 +270,7 @@ class Save extends Component
             'divisa',
             'monto',
             'payment_method_id',
+            'bank_account_id',
             'cobros_id',
             'tipo_pago',
             'documentos',
@@ -188,29 +280,55 @@ class Save extends Component
             'totalDocumento',
             'pagosPrevios',
             'saldoPendiente',
-            'marcar_como_pagado'
+            'showBankAccountSelector',
+            'bankAccounts',
+            'payment_destination_id',
+            'availableCashes'
         ]);
         $this->resetValidation();
     }
 
     public function save()
     {
-        $this->validate([
+        $rules = [
             'numero' => 'required|string|max:191',
             'fecha' => 'required|date',
-            'monto' => 'required|numeric|min:0',
+            'monto' => 'required|numeric|min:0.01',
             'payment_method_id' => 'required|exists:payment_method_types,id',
+            'payment_destination_id' => 'required', // ✅ Obligatorio: 'cash' o ID de cuenta
             'numero_operacion' => 'nullable|string|max:191',
             'documento' => 'nullable|string|max:191',
             'nota' => 'nullable|string|max:500',
             'divisa' => 'required|in:PEN,USD',
-        ], [
+        ];
+
+        $messages = [
             'numero.required' => 'El número es obligatorio',
             'fecha.required' => 'La fecha es obligatoria',
             'monto.required' => 'El monto es obligatorio',
             'monto.numeric' => 'El monto debe ser un valor numérico',
+            'monto.min' => 'El monto debe ser mayor a 0',
             'payment_method_id.required' => 'Debe seleccionar un método de pago',
-        ]);
+            'payment_destination_id.required' => 'Debe seleccionar un destino (caja o cuenta bancaria)',
+        ];
+
+        $this->validate($rules, $messages);
+
+        // Validar que si hay documento seleccionado, haya saldo pendiente
+        if ($this->paymentable_id && $this->saldoPendiente <= 0) {
+            $this->notification()->error('Error', 'Este documento ya está completamente pagado');
+            return;
+        }
+
+        // Validar que el monto no exceda el saldo pendiente
+        if ($this->paymentable_id && $this->monto > $this->saldoPendiente) {
+            $this->notification()->error(
+                'Error',
+                'El monto no puede ser mayor al saldo pendiente de ' .
+                    number_format($this->saldoPendiente, 2) . ' ' . $this->divisaDoc
+            );
+            return;
+        }
 
         try {
             $payment = Payments::create([
@@ -222,36 +340,57 @@ class Save extends Component
                 'divisa' => $this->divisa,
                 'monto' => $this->monto,
                 'payment_method_id' => $this->payment_method_id,
+                'payment_destination_id' => $this->payment_destination_id, // ✅ Agregado
+                'bank_account_id' => $this->bank_account_id, // Mantener por compatibilidad
                 'cobros_id' => $this->cobros_id,
                 'paymentable_type' => $this->paymentable_type,
                 'paymentable_id' => $this->paymentable_id,
             ]);
 
-            // Actualizar estado del documento si se marcó como pagado
-            if ($this->marcar_como_pagado && $this->paymentable_id) {
+            // Verificar automáticamente si el documento está completamente pagado
+            if ($this->paymentable_id) {
                 if ($this->paymentable_type == 'App\\Models\\Ventas') {
                     $documento = Ventas::find($this->paymentable_id);
                     if ($documento) {
-                        $documento->update([
-                            'pago_estado' => 'PAID',
-                            'estado' => 'COMPLETADO'
-                        ]);
+                        // Calcular el total de pagos realizados (incluyendo el nuevo)
+                        $totalPagos = Payments::where('paymentable_type', 'App\\Models\\Ventas')
+                            ->where('paymentable_id', $this->paymentable_id)
+                            ->sum('monto');
+
+                        // Si los pagos cubren el total, marcar como pagado
+                        if ($totalPagos >= $documento->total) {
+                            $documento->update([
+                                'pago_estado' => 'PAID',
+                                'estado' => 'COMPLETADO'
+                            ]);
+                        }
                     }
                 } elseif ($this->paymentable_type == 'App\\Models\\Recibos') {
                     $documento = Recibos::find($this->paymentable_id);
                     if ($documento) {
-                        $documento->update([
-                            'pago_estado' => 'PAID',
-                            'estado' => 'COMPLETADO'
-                        ]);
+                        // Calcular el total de pagos realizados (incluyendo el nuevo)
+                        $totalPagos = Payments::where('paymentable_type', 'App\\Models\\Recibos')
+                            ->where('paymentable_id', $this->paymentable_id)
+                            ->sum('monto');
+
+                        // Si los pagos cubren el total, marcar como pagado
+                        if ($totalPagos >= $documento->total) {
+                            $documento->update([
+                                'pago_estado' => 'PAID',
+                                'estado' => 'COMPLETADO'
+                            ]);
+                        }
                     }
                 }
             }
 
-            $this->closeModal();
+            // Primero notificar el éxito
             $this->notification()->success('Pago guardado', 'El pago fue registrado correctamente');
+
+            $this->closeModal();
+
+            // Actualizar tabla después de cerrar
             $this->dispatch('update-table');
-            $this->dispatch('payment-saved');
         } catch (\Throwable $th) {
             $this->notification()->error('Error', $th->getMessage());
         }

@@ -1,11 +1,13 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-48 mx-auto">
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
     <!-- Page header -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-8">
+    <div class="sm:flex sm:justify-between sm:items-center mb-5">
+
+        <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Transacciones 💳</h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Vista por tipo de operación</p>
         </div>
 
+        <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
             <button wire:click="export" class="btn bg-emerald-600 text-white hover:bg-emerald-700">
                 <svg class="fill-current shrink-0 w-4 h-4" viewBox="0 0 16 16">
@@ -15,6 +17,7 @@
                 <span class="ml-2">Exportar</span>
             </button>
         </div>
+
     </div>
 
     <!-- Totales -->
@@ -33,50 +36,66 @@
         </div>
     </div>
 
-    <!-- Filtros -->
-    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-4 mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
-            <div class="lg:col-span-2">
-                <x-form.input wire:model.live.debounce.500ms="search" label="Buscar" placeholder="Número, cliente..." />
-            </div>
+    <!-- More actions -->
+    <div class="sm:flex sm:justify-between sm:items-center mb-5">
 
-            <div>
-                <x-form.select wire:model.live="tipo_filter" label="Tipo" placeholder="Todos">
-                    <x-select.option label="Todos" value="" />
-                    <x-select.option label="Ingresos" value="ingreso" />
-                    <x-select.option label="Egresos" value="egreso" />
-                </x-form.select>
-            </div>
+        <!-- Right side -->
+        <div class="w-full">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg p-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="sm:col-span-2">
+                        <x-form.input wire:model.live.debounce.500ms="search" label="Buscar"
+                            placeholder="Número, cliente..." />
+                    </div>
 
-            <div>
-                <x-form.select wire:model.live="destination_type" label="Destino" placeholder="Todos">
-                    <x-select.option label="Todos" value="" />
-                    <x-select.option label="Caja" value="cash" />
-                    <x-select.option label="Banco" value="bank" />
-                </x-form.select>
-            </div>
+                    <div>
+                        <x-form.select wire:model.live="tipo_filter" label="Tipo" placeholder="Todos">
+                            <x-select.option label="Todos" value="" />
+                            <x-select.option label="Ingresos" value="ingreso" />
+                            <x-select.option label="Egresos" value="egreso" />
+                        </x-form.select>
+                    </div>
 
-            <div>
-                <x-form.datetime.picker wire:model.live="from" label="Desde" without-time display-format="DD/MM/YYYY"
-                    parse-format="YYYY-MM-DD" />
-            </div>
+                    <div>
+                        <x-form.select wire:model.live="destination_type" label="Destino" placeholder="Todos">
+                            <x-select.option label="Todos" value="" />
+                            <x-select.option label="Caja" value="cash" />
+                            <x-select.option label="Banco" value="bank" />
+                        </x-form.select>
+                    </div>
 
-            <div>
-                <x-form.datetime.picker wire:model.live="to" label="Hasta" without-time display-format="DD/MM/YYYY"
-                    parse-format="YYYY-MM-DD" />
+                    <div>
+                        <x-form.datetime.picker wire:model.live="from" label="Desde" without-time
+                            display-format="DD/MM/YYYY" parse-format="YYYY-MM-DD" />
+                    </div>
+
+                    <div>
+                        <x-form.datetime.picker wire:model.live="to" label="Hasta" without-time
+                            display-format="DD/MM/YYYY" parse-format="YYYY-MM-DD" />
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mt-4">
+                    <button wire:click="filter(1)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Hoy</button>
+                    <button wire:click="filter(7)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">7
+                        días</button>
+                    <button wire:click="filter(30)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">30
+                        días</button>
+                    <button wire:click="filter(0)"
+                        class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Limpiar</button>
+                </div>
             </div>
         </div>
 
-        <div class="flex gap-2 mt-4">
-            <button wire:click="filter(1)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Hoy</button>
-            <button wire:click="filter(7)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">7 días</button>
-            <button wire:click="filter(30)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">30 días</button>
-            <button wire:click="filter(0)" class="btn-sm bg-white dark:bg-gray-800 border-gray-200">Limpiar</button>
-        </div>
     </div>
 
-    <!-- Tabla -->
-    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+    <!-- Table -->
+    <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl mb-8">
+        <header class="px-5 py-4">
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Movimientos
+                <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $movimientos->total() }}</span>
+            </h2>
+        </header>
         <div class="overflow-x-auto">
             <table class="table-auto w-full">
                 <thead
@@ -96,46 +115,46 @@
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100 text-sm">
-                                    {{ $mov->fecha_formateada }}
+                                    {{ $mov['date_of_payment'] ?? ($mov['created_at'] ?? '-') }}
                                 </div>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    {{ $mov->type_movement === 'INGRESO'
+                                    {{ ($mov['type_movement'] ?? '') === 'INGRESO'
                                         ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-400'
                                         : 'bg-rose-100 text-rose-800 dark:bg-rose-400/10 dark:text-rose-400' }}">
-                                    {{ $mov->instance_type_description }}
+                                    {{ $mov['instance_type'] ?? '-' }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100 font-medium">
-                                    {{ $mov->document_number }}
+                                    {{ $mov['document_number'] ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-4 py-3">
                                 <div class="text-gray-800 dark:text-gray-100 max-w-xs truncate">
-                                    {{ $mov->person_name }}
+                                    {{ $mov['person_name'] ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-4 py-3">
                                 <div class="text-gray-600 dark:text-gray-400 text-xs max-w-xs truncate">
-                                    {{ $mov->destination_description }}
+                                    {{ $mov['destination_description'] ?? ($mov['destination_name'] ?? '-') }}
                                 </div>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap text-right">
-                                @if ($mov->type_movement === 'INGRESO')
+                                @if (($mov['type_movement'] ?? '') === 'INGRESO')
                                     <div class="text-emerald-600 dark:text-emerald-400 font-semibold">
-                                        +S/ {{ number_format($mov->monto, 2) }}
+                                        +{{ $mov['currency_type_id'] ?? 'S/' }} {{ $mov['input'] ?? '0.00' }}
                                     </div>
                                 @else
                                     <div class="text-gray-400">-</div>
                                 @endif
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap text-right">
-                                @if ($mov->type_movement === 'EGRESO')
+                                @if (($mov['type_movement'] ?? '') === 'EGRESO')
                                     <div class="text-rose-600 dark:text-rose-400 font-semibold">
-                                        S/ {{ number_format($mov->monto, 2) }}
+                                        {{ $mov['currency_type_id'] ?? 'S/' }} {{ $mov['output'] ?? '0.00' }}
                                     </div>
                                 @else
                                     <div class="text-gray-400">-</div>
@@ -164,7 +183,8 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-6">
+    <div class="mt-8 w-full">
         {{ $movimientos->links() }}
+
     </div>
 </div>

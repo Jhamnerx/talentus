@@ -157,50 +157,59 @@
                     class="text-sm divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
                     @forelse($ingresos as $ingreso)
                         @php
-                            $documento = $ingreso->getDocumento();
-                            $tipo = $ingreso->getTipoDocumento();
+                            $payment = $ingreso->payment;
+                            $paymentable = $payment?->paymentable;
+                            $tipoDoc = $paymentable ? class_basename($paymentable::class) : 'Desconocido';
+                            $cliente = null;
+
+                            if ($paymentable) {
+                                if (method_exists($paymentable, 'clientes')) {
+                                    $cliente = $paymentable->clientes;
+                                } elseif (method_exists($paymentable, 'cliente')) {
+                                    $cliente = $paymentable->cliente;
+                                }
+                            }
                         @endphp
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-gray-800 dark:text-gray-100">
-                                    {{ $documento->numero ?? ($documento->numero_comprobante ?? '-') }}
+                                    {{ $paymentable?->numero ?? ($paymentable?->numero_comprobante ?? '-') }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <span
-                                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                    {{ $tipo === 'Recibo' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800' }}">
-                                    {{ $tipo }}
+                                <span class=\"inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ $tipoDoc === 'Recibos' ? 'bg-blue-100 text-blue-800 dark:bg-blue-400/10 dark:text-blue-400' : 'bg-purple-100 text-purple-800 dark:bg-purple-400/10 dark:text-purple-400' }}\">
+                                    {{ $tipoDoc === 'Recibos' ? 'Recibo' : ($tipoDoc === 'Ventas' ? 'Venta' : $tipoDoc) }}
                                 </span>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $documento->fecha_emision->format('d/m/Y') ?? '-' }}
+                                    {{ $ingreso->created_at->format('d/m/Y') }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $documento->clientes->razon_social ?? ($documento->cliente->razon_social ?? '-') }}
+                                    {{ $cliente?->razon_social ?? ($cliente?->nombre ?? '-') }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $documento->clientes->numero_documento ?? ($documento->cliente->numero_documento ?? '-') }}
+                                    {{ $cliente?->numero_documento ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $documento->payments->first()->forma_pago ?? '-' }}
+                                    {{ $payment?->paymentMethod?->description ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $ingreso->cash->nombre ?? '-' }}
+                                <div class="text-gray-800 dark:text-gray-100 text-xs">
+                                    {{ $ingreso->destination_description }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-right text-emerald-600 dark:text-emerald-400">
-                                    S/ {{ number_format($documento->total ?? 0, 2) }}
+                                    {{ $payment?->divisa ?? 'PEN' }} {{ number_format($payment?->monto ?? 0, 2) }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

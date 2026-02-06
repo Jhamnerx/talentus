@@ -34,7 +34,26 @@ class Payments extends Model
 
     protected $casts = [
         'fecha' => 'date:Y/m/d',
+    ];
 
+    protected $fillable = [
+        'numero',
+        'numero_operacion',
+        'fecha',
+        'nota',
+        'documento',
+        'divisa',
+        'monto',
+        'payment_method_id',
+        'bank_account_id',
+        'payment_destination_id',
+        'cobros_id',
+        'paymentable_type',
+        'paymentable_id',
+        'destination_type',
+        'destination_id',
+        'user_id',
+        'empresa_id',
     ];
 
 
@@ -103,6 +122,11 @@ class Payments extends Model
         return $this->belongsTo(PaymentMethodType::class, 'payment_method_id', 'id');
     }
 
+    public function bankAccount()
+    {
+        return $this->belongsTo(BankAccount::class, 'bank_account_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -119,6 +143,14 @@ class Payments extends Model
     public function globalPayment()
     {
         return $this->morphOne(GlobalPayment::class, 'payment');
+    }
+
+    /**
+     * Destino del pago (Cash o BankAccount) - relación polimórfica
+     */
+    public function destination()
+    {
+        return $this->morphTo();
     }
 
     /**

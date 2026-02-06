@@ -14,6 +14,8 @@ class VentasObserver
     {
         $ventas->fecha_hora_emision = Carbon::now();
         $ventas->save();
+
+        // CashDocument ahora se crea automáticamente en PaymentsObserver
     }
 
     public function creating(Ventas $ventas): void

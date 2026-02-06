@@ -88,7 +88,7 @@
             </div>
 
             <!-- Tipo de movimiento filter -->
-            <div class="min-w-[180px]">
+            <div class="min-w-45">
                 <x-form.select wire:model.live="type_movement" placeholder="Todos los Movimientos">
                     <x-select.option label="Todos los Movimientos" value="" />
                     <x-select.option label="Ingresos" value="INGRESO" />
@@ -97,17 +97,18 @@
             </div>
 
             <!-- Destino filter -->
-            <div class="min-w-[160px]">
+            <div class="min-w-45">
                 <x-form.select wire:model.live="destination_type" placeholder="Todos los Destinos">
                     <x-select.option label="Todos los Destinos" value="" />
                     <x-select.option label="Caja" value="App\Models\Cash" />
                     <x-select.option label="Cuenta Bancaria" value="App\Models\BankAccount" />
+                    <x-select.option label="⚠️ Sin Destino" value="sin_destino" />
                 </x-form.select>
             </div>
 
             <!-- Caja filter -->
             @if ($cajas->count() > 0)
-                <div class="min-w-[140px]">
+                <div class="min-w-35">
                     <x-form.select wire:model.live="cash_id" placeholder="Todas las Cajas">
                         <x-select.option label="Todas las Cajas" value="" />
                         @foreach ($cajas as $caja)
@@ -143,6 +144,9 @@
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-right">Monto</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                            <span class="sr-only">Acciones</span>
                         </th>
                     </tr>
                 </thead>
@@ -191,10 +195,16 @@
                                     </div>
                                 @endif
                             </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
+                                @if (($movimiento['destination_id'] ?? null) === null)
+                                    <x-form.button xs warning icon="link" label="Asignar"
+                                        wire:click="openReassignModal({{ $movimiento['id'] ?? 0 }})" />
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-8 text-center text-gray-500">
+                            <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-8 text-center text-gray-500">
                                 No se encontraron movimientos en el período seleccionado
                             </td>
                         </tr>
@@ -208,4 +218,82 @@
     <div class="mt-4">
         {{ $movimientos->links() }}
     </div>
+
+    <!-- Modal de Reasignación de Destino -->
+    <x-form.modal.card title="Asignar Destino al Movimiento" wire:model="showReassignModal" blur max-width="lg">
+        @if ($selectedMovement)
+            <div class="space-y-4">
+                <!-- Información del movimiento -->
+                <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                    <div class="text-sm space-y-2">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Fecha:</span>
+                            <span class="font-medium">{{ $selectedMovement->date }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Descripción:</span>
+                            <span class="font-medium">{{ $selectedMovement->description }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Monto:</span>
+                            <span
+                                class="font-bold text-lg {{ $selectedMovement->type_movement === 'INGRESO' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $selectedMovement->type_movement === 'INGRESO' ? '+' : '-' }}
+                                S/ {{ number_format($selectedMovement->payment->monto ?? 0, 2) }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector de tipo de destino -->
+                <div>
+                    <x-form.select label="Tipo de Destino" wire:model.live="reassign_destination_type"
+                        placeholder="Seleccione tipo de destino">
+                        <x-select.option label="💰 Caja Chica" value="cash" />
+                        <x-select.option label="🏦 Cuenta Bancaria" value="bank" />
+                    </x-form.select>
+                </div>
+
+                <!-- Selector de caja (si tipo = cash) -->
+                @if ($reassign_destination_type === 'cash')
+                    <div>
+                        <x-form.select label="Caja Chica" wire:model.defer="reassign_cash_id"
+                            placeholder="Seleccione una caja" :options="App\Models\Cash::where('estado', true)->get()" option-label="nombre"
+                            option-value="id" />
+                    </div>
+                @endif
+
+                <!-- Selector de cuenta bancaria (si tipo = bank) -->
+                @if ($reassign_destination_type === 'bank')
+                    <div>
+                        <x-form.select label="Cuenta Bancaria" wire:model.defer="reassign_bank_account_id"
+                            placeholder="Seleccione una cuenta">
+                            @foreach (App\Models\BankAccount::where('status', true)->get() as $account)
+                                <x-select.option
+                                    label="{{ $account->bank->name }} - {{ $account->number }} ({{ $account->currency_type_id }})"
+                                    value="{{ $account->id }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+                @endif
+
+                <!-- Advertencia -->
+                <div
+                    class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                    <p class="text-xs text-yellow-800 dark:text-yellow-200">
+                        <strong>Nota:</strong> Esta acción actualizará el saldo del destino seleccionado. Asegúrese de
+                        elegir el destino correcto.
+                    </p>
+                </div>
+            </div>
+        @endif
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-2">
+                <x-form.button flat label="Cancelar" wire:click="closeReassignModal" />
+                <x-form.button primary label="Asignar Destino" wire:click="confirmReassign"
+                    spinner="confirmReassign" />
+            </div>
+        </x-slot>
+    </x-form.modal.card>
 </div>

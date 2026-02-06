@@ -74,7 +74,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('cuentas-cobrar', 'cuentasCobrar')->name('cuentas-cobrar.index');
         Route::get('cuentas-pagar', 'cuentasPagar')->name('cuentas-pagar.index');
         Route::get('balance', 'balance')->name('balance.index');
-        Route::get('pagos', 'pagos')->name('pagos.index'); // Redirige a admin.payments.index
     });
 
     // Reportes de Caja Chica (igual que FactuPRO)

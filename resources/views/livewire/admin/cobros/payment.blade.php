@@ -89,20 +89,33 @@
                     </x-form.select>
                 </div>
 
-                <div class="col-span-12 sm:col-span-12">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="plataforma">
-                        Marcar como pagado:
-                    </label>
-                    <div class="flex flex-wrap items-center">
-
-                        <div class="m-3">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox" wire:model.live="pay" value="true" />
-                                <span class="text-sm ml-2 text-gray-700 dark:text-gray-300">Si</span>
-                            </label>
-                        </div>
-                    </div>
+                {{-- ✅ NUEVO: Destino del Pago --}}
+                <div class="col-span-12 sm:col-span-6">
+                    <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
+                        placeholder="Seleccione destino">
+                        @if (count($availableCashes) > 0)
+                            <x-select.option label="💰 Caja" value="cash" />
+                        @endif
+                        @foreach ($bankAccounts as $account)
+                            <x-select.option label="🏦 {{ $account->description }} - {{ $account->currency_name }}"
+                                value="{{ $account->id }}" />
+                        @endforeach
+                    </x-form.select>
                 </div>
+
+                {{-- Cuenta Bancaria (solo si es depósito) --}}
+                @if ($showBankAccountSelector)
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select label="Cuenta Bancaria" wire:model.defer="bank_account_id"
+                            placeholder="Seleccione una cuenta">
+                            @foreach ($bankAccounts as $account)
+                                <x-select.option
+                                    label="{{ $account->bank->name }} - {{ $account->number }} ({{ $account->currency_type_id }})"
+                                    value="{{ $account->id }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+                @endif
 
                 {{-- monto --}}
                 <div class="col-span-12 sm:col-span-6">

@@ -149,7 +149,7 @@ class Ventas extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'id');
     }
 
     public function user(): BelongsTo
@@ -186,6 +186,15 @@ class Ventas extends Model
     {
         return $this->hasMany(Anticipos::class, 'venta_id', 'id');
     }
+
+    /**
+     * Relación polimórfica con los pagos
+     */
+    public function payments()
+    {
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
+
     //CREAR ITEM DETALLE VENTA
 
     public static function createItems(Ventas $venta, $ventaItems, $decrease_stock = false)

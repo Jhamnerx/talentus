@@ -2,10 +2,11 @@
 
 namespace App\Livewire\Admin\Finanzas\Ingresos;
 
-use App\Models\CashDocument;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use App\Models\CashDocument;
 use Livewire\WithPagination;
+use App\Models\GlobalPayment;
 
 class Index extends Component
 {
@@ -19,42 +20,43 @@ class Index extends Component
     #[On('render')]
     public function render()
     {
-        $query = CashDocument::with(['cash', 'recibo.clientes', 'venta.cliente'])
-            ->whereNotNull('cash_id');
+        // En Talentus los ingresos vienen de GlobalPayment con tipo INGRESO
+        $query = GlobalPayment::with(['payment.paymentable', 'destination', 'user'])
+            ->whereHas('payment', function ($q) {
+                // Solo mostrar ingresos (ventas y recibos)
+                $q->whereIn('paymentable_type', [
+                    'App\\Models\\Ventas',
+                    'App\\Models\\Recibos',
+                    'App\\Models\\RecibosPagosVarios'
+                ]);
+            });
 
-        // Búsqueda por número de documento
+        // Búsqueda por número de documento o cliente
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                $q->whereHas('recibo', function ($subQ) {
+                $q->whereHas('payment.paymentable', function ($subQ) {
+                    // Buscar por número de comprobante o documento
                     $subQ->where('numero', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('clientes', function ($clienteQ) {
-                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
-                        });
-                })->orWhereHas('venta', function ($subQ) {
-                    $subQ->where('numero_comprobante', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('cliente', function ($clienteQ) {
-                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
-                        });
+                        ->orWhere('numero_comprobante', 'like', '%' . $this->search . '%');
                 });
             });
         }
 
-        // Filtro por tipo
+        // Filtro por tipo de documento
         if ($this->tipo_filter === 'RECIBO') {
-            $query->whereNotNull('recibo_id');
+            $query->whereHas('payment', function ($q) {
+                $q->where('paymentable_type', 'App\\Models\\Recibos')
+                    ->orWhere('paymentable_type', 'App\\Models\\RecibosPagosVarios');
+            });
         } elseif ($this->tipo_filter === 'VENTA') {
-            $query->whereNotNull('venta_id');
+            $query->whereHas('payment', function ($q) {
+                $q->where('paymentable_type', 'App\\Models\\Ventas');
+            });
         }
 
         // Filtro por rango de fechas
         if (!empty($this->from) && !empty($this->to)) {
-            $query->where(function ($q) {
-                $q->whereHas('recibo', function ($subQ) {
-                    $subQ->whereBetween('fecha_emision', [$this->from, $this->to]);
-                })->orWhereHas('venta', function ($subQ) {
-                    $subQ->whereBetween('fecha_emision', [$this->from, $this->to]);
-                });
-            });
+            $query->whereBetween('created_at', [$this->from, $this->to]);
         }
 
         $ingresos = $query->latest('id')->paginate(10);

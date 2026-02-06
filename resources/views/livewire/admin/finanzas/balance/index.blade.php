@@ -10,7 +10,7 @@
             <!-- Date filter dropdown -->
             <div class="relative inline-flex" x-data="{ open: false, selected: 30 }">
                 <button
-                    class="btn justify-between min-w-[150px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                    class="btn justify-between min-w-37.5 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
                     <span class="flex items-center">
@@ -94,7 +94,7 @@
         <!-- Saldo en Cajas -->
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 p-5">
             <div class="flex items-center">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <div
                         class="flex items-center justify-center w-12 h-12 rounded-full bg-violet-100 dark:bg-violet-500/10">
                         <svg class="w-6 h-6 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor"
@@ -123,7 +123,7 @@
         <!-- Balance del Período -->
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 p-5">
             <div class="flex items-center">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <div
                         class="flex items-center justify-center w-12 h-12 rounded-full {{ $balance >= 0 ? 'bg-emerald-100 dark:bg-emerald-500/10' : 'bg-rose-100 dark:bg-rose-500/10' }}">
                         <svg class="w-6 h-6 {{ $balance >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400' }}"
@@ -153,7 +153,7 @@
         <!-- Por Cobrar -->
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 p-5">
             <div class="flex items-center">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <div
                         class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-500/10">
                         <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
@@ -187,7 +187,7 @@
         <!-- Por Pagar -->
         <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 p-5">
             <div class="flex items-center">
-                <div class="flex-shrink-0">
+                <div class="shrink-0">
                     <div
                         class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-500/10">
                         <svg class="w-6 h-6 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor"

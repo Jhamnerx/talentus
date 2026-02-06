@@ -8,11 +8,15 @@ use App\Models\Series;
 use App\Models\Recibos;
 use Livewire\Component;
 use App\Models\Clientes;
+use App\Models\Payments;
 use App\Models\plantilla;
 use App\Models\Productos;
 use App\Models\DetalleCobros;
+use App\Models\PaymentMethodType;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
+use App\Helpers\PaymentDestinationHelper;
 
 class Create extends Component
 {
@@ -20,7 +24,7 @@ class Create extends Component
 
     public $clientes_id, $serie, $numero, $serie_numero, $fecha_emision, $fecha_pago, $divisa = 'PEN', $estado = "COMPLETADO";
     public $forma_pago = "009", $total = 0.0;
-    public $tipo_venta = "CONTADO", $nota;
+    public $tipo_venta = "CONTADO", $nota, $payment_destination_id;
 
 
     public $showCredit = false;
@@ -32,12 +36,17 @@ class Create extends Component
     public $product_selected_id;
 
     public Collection $detalle_cuotas;
+    public Collection $payment_destinations;
+    public ?Collection $payment_methods = null;
+    public Collection $pagos_detalle;
 
 
     //DETALLE DESDE COBRO
     public $detalle_ids;
     public $cobro_id;
     public $empresa_id;
+
+    public $tipo_cambio = 0.00;
 
     public function mount($detalle_ids = null, $cobro_id = null)
     {
@@ -46,6 +55,34 @@ class Create extends Component
         $this->fecha_emision = Carbon::now()->format('Y-m-d');
         $this->fecha_pago = Carbon::now()->format('Y-m-d');
         $this->items = collect();
+
+        // Consultar tipo de cambio
+        try {
+            $factiliza = new \App\Services\FactilizaService();
+            $resultado = $factiliza->consultarTipoCambio();
+            $this->tipo_cambio = $resultado['venta'] ?? 3.80;
+        } catch (\Exception $e) {
+            $this->tipo_cambio = 3.80;
+        }
+
+        // Cargar destinos de pago (Caja + Cuentas Bancarias)
+        $this->payment_destinations = PaymentDestinationHelper::getPaymentDestinations();
+
+        // Cargar métodos de pago desde catálogo
+        $this->payment_methods = PaymentMethodType::where('active', true)
+            ->get()
+            ->map(fn($method) => [
+                'id' => $method->id,
+                'name' => $method->description,
+            ]);
+
+        // Inicializar pagos_detalle con un pago por defecto
+        $this->pagos_detalle = collect([[
+            'metodo_pago_id' => '009',
+            'payment_destination_id' => '',
+            'referencia' => '',
+            'monto' => 0.00,
+        ]]);
 
         $this->selected = collect([
             'producto_id' => null,
@@ -229,6 +266,11 @@ class Create extends Component
     public function reCalTotal()
     {
         $this->total =  $this->calcularTotal();
+
+        // Recalcular montos de pagos cuando cambia el total
+        if ($this->tipo_venta === 'CONTADO' && $this->pagos_detalle->count() > 0) {
+            $this->recalcularMontosPagos();
+        }
     }
 
 
@@ -282,6 +324,34 @@ class Create extends Component
 
         Recibos::createItems($recibo, $data["items"]);
 
+        //CREAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE
+        if ($this->forma_pago === '009') { // CONTADO
+            // Validar que la suma de pagos coincida con el total
+            $total_pagos = $this->pagos_detalle->sum('monto');
+            if (round($total_pagos, 2) != round($this->total, 2)) {
+                throw new \Exception("La suma de pagos (" . round($total_pagos, 2) . ") no coincide con el total (" . round($this->total, 2) . ")");
+            }
+
+            foreach ($this->pagos_detalle as $pago) {
+                Payments::create([
+                    'paymentable_type' => Recibos::class,
+                    'paymentable_id' => $recibo->id,
+                    'payment_method_id' => $pago['metodo_pago_id'],
+                    'payment_destination_id' => $pago['payment_destination_id'],
+                    'numero_operacion' => $pago['referencia'] ?? null,
+                    'monto' => $pago['monto'],
+                    'fecha' => $this->fecha_emision,
+                    'divisa' => $this->divisa,
+                    'user_id' => Auth::user()->id,
+                    'empresa_id' => session('empresa'),
+                ]);
+            }
+
+            // Actualizar pago_estado del recibo a PAID
+            $recibo->pago_estado = 'PAID';
+            $recibo->save();
+        }
+
         //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
         $recibo->getSerie->increment('correlativo');
 
@@ -298,5 +368,65 @@ class Create extends Component
     public function addProductoModal($producto)
     {
         $this->dispatch('add-producto-modal', producto: $producto);
+    }
+
+    public function agregarPago()
+    {
+        $this->pagos_detalle->push([
+            'metodo_pago_id' => '009',
+            'payment_destination_id' => '',
+            'referencia' => '',
+            'monto' => 0.00,
+        ]);
+        $this->recalcularMontosPagos();
+    }
+
+    public function eliminarPago($index)
+    {
+        if ($this->pagos_detalle->count() > 1) {
+            $this->pagos_detalle->forget($index);
+            $this->pagos_detalle = $this->pagos_detalle->values();
+            $this->recalcularMontosPagos();
+        } else {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'MÍNIMO UN PAGO',
+                mensaje: 'Debe existir al menos un método de pago',
+            );
+        }
+    }
+
+    public function recalcularMontosPagos()
+    {
+        $cantidad_pagos = $this->pagos_detalle->count();
+
+        if ($cantidad_pagos === 0) {
+            return;
+        }
+
+        if ($cantidad_pagos === 1) {
+            // Si hay un solo pago, asignar el total completo
+            $this->pagos_detalle = $this->pagos_detalle->map(function ($pago) {
+                $pago['monto'] = $this->total;
+                return $pago;
+            });
+        } else {
+            // Si hay múltiples pagos, dividir el total entre la cantidad
+            $monto_por_pago = round($this->total / $cantidad_pagos, 2);
+            $diferencia = round($this->total - ($monto_por_pago * $cantidad_pagos), 2);
+
+            $this->pagos_detalle = $this->pagos_detalle->map(function ($pago, $index) use ($monto_por_pago, $diferencia, $cantidad_pagos) {
+                // Asignar el monto dividido
+                $pago['monto'] = $monto_por_pago;
+
+                // Agregar la diferencia al último pago para cuadrar exactamente
+                if ($index === $cantidad_pagos - 1 && $diferencia != 0) {
+                    $pago['monto'] = round($pago['monto'] + $diferencia, 2);
+                }
+
+                return $pago;
+            });
+        }
     }
 }

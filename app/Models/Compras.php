@@ -50,7 +50,7 @@ class Compras extends Model
 
     public function metodoPago(): BelongsTo
     {
-        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'codigo');
+        return $this->belongsTo(PaymentMethodType::class, 'metodo_pago_id', 'id');
     }
 
     public function user(): BelongsTo
@@ -71,7 +71,13 @@ class Compras extends Model
     {
         return $this->hasMany(ExpensePayment::class, 'expense_id', 'id');
     }
-
+    /**
+     * Relación polimórfica con los pagos (nueva tabla unificada)
+     */
+    public function payments()
+    {
+        return $this->morphMany(Payments::class, 'paymentable');
+    }
     /**
      * Movimientos financieros globales (vía ExpensePayments)
      */

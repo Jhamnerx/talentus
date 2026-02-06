@@ -5,7 +5,8 @@
 
     @livewire('admin.payments.save', key('save-payments'))
     @livewire('admin.payments.edit', key('edit-payments'))
-
+    @livewire('admin.payments.eliminar-payment')
+    @livewire('admin.payments.export-payments')
     <script>
         window.addEventListener('payment-saved', event => {
             iziToast.success({
@@ -24,8 +25,5 @@
         })
     </script>
 
-    @push('modals')
-        @livewire('admin.payments.eliminar-payment', key('eliminar-payment'))
-    @endpush
 
 </x-admin-layout>

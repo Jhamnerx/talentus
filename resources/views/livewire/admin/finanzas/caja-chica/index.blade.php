@@ -181,7 +181,7 @@
                                 <div class="text-center">
                                     <span
                                         class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        {{ $caja->cash_documents_count }}
+                                        {{ $caja->movimientos_count }}
                                     </span>
                                 </div>
                             </td>
@@ -420,32 +420,22 @@
                                     @endif
                                     @can('editar-caja-chica')
                                         @if ($caja->estado)
-                                            <button wire:click="edit({{ $caja->id }})"
-                                                class="text-gray-400 hover:text-gray-500" title="Editar">
-                                                <svg class="w-5 h-5 fill-current" viewBox="0 0 32 32">
-                                                    <path
-                                                        d="M19.7 8.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM12.6 22H10v-2.6l6-6 2.6 2.6-6 6zm7.4-7.4L17.4 12l1.6-1.6 2.6 2.6-1.6 1.6z" />
+                                            <x-form.button xs primary icon="pencil"
+                                                wire:click="edit({{ $caja->id }})" title="Editar caja" />
+
+                                            <x-form.button xs warning wire:click="closeCash({{ $caja->id }})"
+                                                title="Cerrar caja">
+                                                <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                        clip-rule="evenodd" />
                                                 </svg>
-                                            </button>
-                                            <button wire:click="closeCash({{ $caja->id }})"
-                                                class="text-orange-500 hover:text-orange-600" title="Cerrar Caja">
-                                                <svg class="w-5 h-5 fill-current" viewBox="0 0 32 32">
-                                                    <path d="M13 15h2v6h-2zM13 11h2v2h-2z" />
-                                                    <path
-                                                        d="M16 31C7.2 31 0 23.8 0 15S7.2-1 16-1s16 7.2 16 16-7.2 16-16 16zm0-30C8.3 1 2 7.3 2 15s6.3 14 14 14 14-6.3 14-14S23.7 1 16 1z" />
-                                                </svg>
-                                            </button>
+                                            </x-form.button>
                                         @endif
                                     @endcan
                                     @can('eliminar-caja-chica')
-                                        <button wire:click="confirmDelete({{ $caja->id }})"
-                                            class="text-red-500 hover:text-red-600" title="Eliminar">
-                                            <svg class="w-5 h-5 fill-current" viewBox="0 0 32 32">
-                                                <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
-                                                <path
-                                                    d="M20 9c0-.6-.4-1-1-1h-6c-.6 0-1 .4-1 1v2H8v2h1v10c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V13h1v-2h-4V9zm-6 1h4v1h-4v-1zm7 3v9H11v-9h10z" />
-                                            </svg>
-                                        </button>
+                                        <x-form.button xs negative icon="trash"
+                                            wire:click="confirmDelete({{ $caja->id }})" title="Eliminar caja" />
                                     @endcan
                                 </div>
                             </td>

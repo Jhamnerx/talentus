@@ -93,6 +93,11 @@ class PaymentsIndex extends Component
         $this->reset(['search', 'from', 'to', 'divisa', 'payment_method_id']);
     }
 
+    public function openModalCreate()
+    {
+        $this->dispatch('open-modal-save');
+    }
+
     public function editPayment($id)
     {
         $this->dispatch('open-modal-edit', id: $id);

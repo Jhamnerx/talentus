@@ -11,25 +11,34 @@ use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MovimientosExport;
+use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
     use WithPagination;
+    use WireUiActions;
 
     public $search = '';
     public $from = '';
     public $to = '';
-    public $tipo_filter = ''; // all, ingreso, egreso
-    public $destination_type = ''; // all, cash, bank
+    public $type_movement = ''; // all, INGRESO, EGRESO
+    public $destination_type = ''; // all, cash, bank, sin_destino
     public $cash_id = '';
     public $bank_account_id = '';
+
+    // Modal de reasignación
+    public $showReassignModal = false;
+    public $selectedMovement = null;
+    public $reassign_destination_type = ''; // 'cash' o 'bank'
+    public $reassign_cash_id = null;
+    public $reassign_bank_account_id = null;
 
     #[On('render')]
     public function render()
     {
         $query = GlobalPayment::query()
             ->withRelationsForReport()
-            ->latestPayments();
+            ->latest('created_at'); // Ordenar por fecha más reciente primero
 
         // Búsqueda por texto
         if (!empty($this->search)) {
@@ -45,16 +54,32 @@ class Index extends Component
         }
 
         // Filtro por tipo de movimiento
-        if ($this->tipo_filter === 'ingreso') {
-            $query->ingresos();
-        } elseif ($this->tipo_filter === 'egreso') {
-            $query->egresos();
+        if ($this->type_movement === 'INGRESO') {
+            $query->whereHas('payment', function ($q) {
+                $q->whereIn('paymentable_type', [
+                    'App\\Models\\Ventas',
+                    'App\\Models\\Recibos',
+                    'App\\Models\\RecibosPagosVarios'
+                ]);
+            });
+        } elseif ($this->type_movement === 'EGRESO') {
+            $query->whereHas('payment', function ($q) {
+                $q->whereNotIn('paymentable_type', [
+                    'App\\Models\\Ventas',
+                    'App\\Models\\Recibos',
+                    'App\\Models\\RecibosPagosVarios'
+                ])->orWhereNull('paymentable_type');
+            });
         }
 
         // Filtro por tipo de destino
-        if ($this->destination_type === 'cash') {
+        if ($this->destination_type === 'AppModelsCash' || $this->destination_type === 'cash') {
             $query->whereCashDestination();
-        } elseif ($this->destination_type === 'bank') {
+        } elseif ($this->destination_type === 'AppModelsBankAccount' || $this->destination_type === 'bank') {
+            $query->whereBankDestination();
+        } elseif ($this->destination_type === 'sin_destino') {
+            // Filtrar movimientos sin destino asignado
+            $query->whereNull('destination_id');
         }
 
         // Filtro por caja específica
@@ -79,7 +104,7 @@ class Index extends Component
         // Pasar filtros a la request para calculateResiduary
         request()->merge([
             'search' => $this->search,
-            'tipo_filter' => $this->tipo_filter,
+            'type_movement' => $this->type_movement,
             'destination_type' => $this->destination_type,
             'cash_id' => $this->cash_id,
             'bank_account_id' => $this->bank_account_id,
@@ -169,5 +194,95 @@ class Index extends Component
             ),
             'movimientos_' . date('Y-m-d_His') . '.xlsx'
         );
+    }
+
+    /**
+     * Abrir modal para reasignar destino de un movimiento huérfano
+     */
+    public function openReassignModal($movementId)
+    {
+        $this->selectedMovement = GlobalPayment::with('payment')->find($movementId);
+
+        if (!$this->selectedMovement) {
+            $this->notification()->error('Error', 'Movimiento no encontrado');
+            return;
+        }
+
+        $this->showReassignModal = true;
+        $this->reassign_destination_type = '';
+        $this->reassign_cash_id = null;
+        $this->reassign_bank_account_id = null;
+    }
+
+    /**
+     * Cerrar modal de reasignación
+     */
+    public function closeReassignModal()
+    {
+        $this->showReassignModal = false;
+        $this->selectedMovement = null;
+        $this->reassign_destination_type = '';
+        $this->reassign_cash_id = null;
+        $this->reassign_bank_account_id = null;
+    }
+
+    /**
+     * Confirmar reasignación de destino
+     */
+    public function confirmReassign()
+    {
+        // Validar que se haya seleccionado tipo de destino
+        if (empty($this->reassign_destination_type)) {
+            $this->notification()->error('Error', 'Debe seleccionar el tipo de destino');
+            return;
+        }
+
+        $destination = null;
+        $destinationType = null;
+
+        // Obtener el destino según el tipo seleccionado
+        if ($this->reassign_destination_type === 'cash') {
+            if (empty($this->reassign_cash_id)) {
+                $this->notification()->error('Error', 'Debe seleccionar una caja');
+                return;
+            }
+            $destination = Cash::find($this->reassign_cash_id);
+            $destinationType = 'App\\Models\\Cash';
+        } elseif ($this->reassign_destination_type === 'bank') {
+            if (empty($this->reassign_bank_account_id)) {
+                $this->notification()->error('Error', 'Debe seleccionar una cuenta bancaria');
+                return;
+            }
+            $destination = BankAccount::find($this->reassign_bank_account_id);
+            $destinationType = 'App\\Models\\BankAccount';
+        }
+
+        if (!$destination) {
+            $this->notification()->error('Error', 'Destino no encontrado o inactivo');
+            return;
+        }
+
+        try {
+            // Actualizar el GlobalPayment con el nuevo destino
+            $this->selectedMovement->update([
+                'destination_id' => $destination->id,
+                'destination_type' => $destinationType,
+            ]);
+
+            // Actualizar el saldo del destino si es caja
+            if ($destination instanceof Cash) {
+                if ($this->selectedMovement->type_movement === 'INGRESO') {
+                    $destination->increment('saldo_actual', $this->selectedMovement->payment->monto);
+                } else {
+                    $destination->decrement('saldo_actual', $this->selectedMovement->payment->monto);
+                }
+            }
+
+            $this->notification()->success('¡Éxito!', 'Movimiento reasignado correctamente');
+            $this->closeReassignModal();
+            $this->dispatch('render'); // Refrescar la lista
+        } catch (\Exception $e) {
+            $this->notification()->error('Error', 'Error al reasignar: ' . $e->getMessage());
+        }
     }
 }

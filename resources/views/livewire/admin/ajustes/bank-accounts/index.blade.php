@@ -9,25 +9,22 @@
     <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-4">
         <x-form.input placeholder="Buscar..." wire:model.live="search" />
 
-        <x-form.native.select wire:model.live="bank_filter">
-            <option value="">Todos los bancos</option>
+        <x-form.select wire:model.live="bank_filter" placeholder="Todos los bancos">
             @foreach ($banks as $bank)
-                <option value="{{ $bank->id }}">{{ $bank->description }}</option>
+                <x-select.option label="{{ $bank->description }}" value="{{ $bank->id }}" />
             @endforeach
-        </x-form.native.select>
+        </x-form.select>
 
-        <x-form.native.select wire:model.live="currency_filter">
-            <option value="">Todas las monedas</option>
+        <x-form.select wire:model.live="currency_filter" placeholder="Todas las monedas">
             @foreach ($currencies as $currency)
-                <option value="{{ $currency->id }}">{{ $currency->description }}</option>
+                <x-select.option label="{{ $currency->description }}" value="{{ $currency->id }}" />
             @endforeach
-        </x-form.native.select>
+        </x-form.select>
 
-        <x-form.native.select wire:model.live="status_filter">
-            <option value="">Todos los estados</option>
-            <option value="1">Activo</option>
-            <option value="0">Inactivo</option>
-        </x-form.native.select>
+        <x-form.select wire:model.live="status_filter" placeholder="Todos los estados">
+            <x-select.option label="Activo" value="1" />
+            <x-select.option label="Inactivo" value="0" />
+        </x-form.select>
     </div>
 
     <!-- Table -->
