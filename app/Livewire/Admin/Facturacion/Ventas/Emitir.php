@@ -18,6 +18,7 @@ use Livewire\Attributes\On;
 use App\Models\DetalleCobros;
 use App\Models\TipoComprobantes;
 use Livewire\Attributes\Reactive;
+use Livewire\Attributes\Computed;
 use App\Services\FactilizaService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -27,6 +28,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Helpers\PaymentDestinationHelper;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
+use App\Enums\EstadoFacturacion;
 
 
 class Emitir extends Component
@@ -44,8 +46,6 @@ class Emitir extends Component
 
 
     public Collection $detalle_cuotas;
-    public ?Collection $payment_destinations = null;
-    public ?Collection $payment_methods = null;
     public Collection $pagos_detalle;
 
     //PROPIEDADES UTILES
@@ -88,9 +88,34 @@ class Emitir extends Component
     //PROPIEDAD PARA VERIFICAR EMPRESA
     public $empresa_id;
 
-    //DETALLE DESDE COBRO
-    public $detalle_ids;
-    public $cobro_id;
+    // Contexto de Cobros (para auto-update y redirect)
+    public $cobro_id = null;
+    public $detalle_ids_array = [];
+    public $cobro_redirect_back = null;
+
+
+    /**
+     * Computed property para destinos de pago (Caja + Cuentas Bancarias)
+     */
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
+    }
+
+    /**
+     * Computed property para métodos de pago desde catálogo SUNAT
+     */
+    #[Computed]
+    public function paymentMethods()
+    {
+        return PaymentMethodType::where('active', true)
+            ->get()
+            ->map(fn($method) => [
+                'id' => $method->id,
+                'name' => $method->description,
+            ]);
+    }
 
     public function render()
     {
@@ -144,17 +169,6 @@ class Emitir extends Component
         $this->items = collect();
         $this->detalle_cuotas = collect();
 
-        // Cargar destinos de pago (Caja + Cuentas Bancarias)
-        $this->payment_destinations = PaymentDestinationHelper::getPaymentDestinations();
-
-        // Cargar métodos de pago desde catálogo
-        $this->payment_methods = PaymentMethodType::where('active', true)
-            ->get()
-            ->map(fn($method) => [
-                'id' => $method->id,
-                'name' => $method->description,
-            ]);
-
         // Inicializar con un pago vacío
         $this->pagos_detalle = collect([
             [
@@ -205,16 +219,30 @@ class Emitir extends Component
             $this->direccion = $this->cliente->direccion;
             $this->cliente_id = $cobro->clientes_id;
             $this->divisa = $cobro->divisa;
+
+            // Guardar contexto de cobros para auto-update en save()
+            $this->cobro_id = $cobro->id;
+            $this->cobro_redirect_back = session('cobro_redirect_back');
+
+            // Pre-seleccionar forma_pago desde sesión
+            $sessionFormaPago = session('cobro_forma_pago');
+            if ($sessionFormaPago) {
+                $this->forma_pago = $sessionFormaPago;
+                $this->showCredit = $sessionFormaPago === 'CREDITO';
+                session()->forget('cobro_forma_pago');
+            }
         }
 
         // Procesar items si no son nulos
         if ($detalle_ids) {
+            $this->detalle_ids_array = is_array($detalle_ids) ? $detalle_ids : [$detalle_ids];
             $this->procesarItems($detalle_ids);
         }
     }
 
     public function procesarItems($items)
     {
+
         $detalles = DetalleCobros::whereIn('id', $items)->get();
         foreach ($detalles as $detalle) {
             $cantidad = $this->calcularCantidad($detalle->cobro->periodo);
@@ -551,6 +579,7 @@ class Emitir extends Component
                         'monto' => $pago['monto'],
                         'fecha' => $this->fecha_emision,
                         'divisa' => $this->divisa,
+                        'cobros_id' => $this->cobro_id,
                         'user_id' => Auth::user()->id,
                         'empresa_id' => $this->empresa_id,
                     ]);
@@ -563,27 +592,78 @@ class Emitir extends Component
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
+
+            // AUTO-UPDATE DetalleCobros si viene del módulo de cobros
+            if ($this->cobro_id && !empty($this->detalle_ids_array)) {
+                $estadoFacturacion = $this->forma_pago === 'CONTADO'
+                    ? EstadoFacturacion::PAGADO
+                    : EstadoFacturacion::FACTURADO;
+
+                $updateData = [
+                    'estado_facturacion' => $estadoFacturacion,
+                    'venta_id' => $venta->id,
+                    'fecha_facturacion' => now(),
+                ];
+
+                if ($this->forma_pago === 'CONTADO') {
+                    $updateData['fecha_pago'] = now();
+                }
+
+                DetalleCobros::whereIn('id', $this->detalle_ids_array)
+                    ->update($updateData);
+
+                // Renovar fecha si auto_renovar está activo
+                $cobro = Cobros::find($this->cobro_id);
+                if ($cobro && $cobro->auto_renovar) {
+                    foreach (DetalleCobros::whereIn('id', $this->detalle_ids_array)->get() as $det) {
+                        $nuevaFecha = match ($cobro->periodo) {
+                            'MENSUAL' => $det->fecha->copy()->addMonth(),
+                            'BIMENSUAL' => $det->fecha->copy()->addMonths(2),
+                            'TRIMESTRAL' => $det->fecha->copy()->addMonths(3),
+                            'SEMESTRAL' => $det->fecha->copy()->addMonths(6),
+                            'ANUAL' => $det->fecha->copy()->addYear(),
+                            default => $det->fecha,
+                        };
+                        // Resetear estado para permitir facturar la siguiente mensualidad
+                        $det->update([
+                            'fecha' => $nuevaFecha,
+                            'estado_facturacion' => EstadoFacturacion::SIN_FACTURAR,
+                            'venta_id' => null,
+                            'recibo_id' => null,
+                            'fecha_facturacion' => null,
+                            'fecha_pago' => null,
+                        ]);
+                    }
+                }
+            }
+
             DB::commit();
+
+            // Determinar redirect destino
+            $redirectBack = $this->cobro_redirect_back ?: null;
+            session()->forget('cobro_redirect_back');
+
             if ($this->metodo_type != '03') {
                 $api = new ApiFacturacion();
 
                 $mensaje = $api->emitirInvoice($venta, $this->metodo_type, $this->tipo_operacion);
 
                 if ($mensaje['fe_codigo_error']) {
-
                     session()->flash('venta-registrada', $mensaje["fe_mensaje_error"] . ': Intenta enviar en un rato');
-
-                    $this->redirectRoute('admin.ventas.index');
                 } else {
-
                     session()->flash('venta-registrada', $mensaje['fe_mensaje_sunat']);
-
-                    $this->redirectRoute('admin.ventas.index');
                 }
-            } else {
 
+                if ($redirectBack) {
+                    return redirect($redirectBack);
+                }
+                $this->redirectRoute('admin.ventas.index');
+            } else {
                 session()->flash('venta-registrada', 'Nota de venta registrada');
 
+                if ($redirectBack) {
+                    return redirect($redirectBack);
+                }
                 $this->redirectRoute('admin.ventas.index');
             }
         } catch (\Throwable $th) {

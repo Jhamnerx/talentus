@@ -2,9 +2,10 @@
 
 namespace App\Livewire\Admin\Finanzas\CuentasPagar;
 
-use App\Models\AccountPayable;
+use App\Models\Compras;
 use App\Models\Proveedores;
-use App\Enums\PaymentStatus;
+use App\Models\Payments;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
@@ -17,62 +18,86 @@ class Index extends Component
     public $search = '';
     public $from = '';
     public $to = '';
-    public $estado_filter = '';
     public $proveedor_id = '';
-    public $con_mora = false;
 
     #[On('render')]
     public function render()
     {
-        $query = AccountPayable::with(['proveedor'])
-            ->where(function ($q) {
+        // Query base de Compras con pago_estado != 'PAID'
+        $compras = Compras::select(
+            'id',
+            'proveedor_id',
+            'fecha_emision',
+            'numero_documento',
+            'serie',
+            'correlativo',
+            'total',
+            'divisa',
+            'pago_estado'
+        )
+        ->where('pago_estado', '!=', 'PAID')
+        ->with('proveedor:id,razon_social,numero_documento');
+
+        // Aplicar filtros
+        if ($this->search) {
+            $compras->where(function($q) {
                 $q->where('numero_documento', 'like', '%' . $this->search . '%')
-                    ->orWhereHas('proveedor', function ($query) {
-                        $query->where('razon_social', 'like', '%' . $this->search . '%')
+                  ->orWhereHas('proveedor', function($query) {
+                      $query->where('razon_social', 'like', '%' . $this->search . '%')
                             ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
-                    });
+                  });
             });
-
-        // Filtro por estado
-        if ($this->estado_filter) {
-            $query->where('estado', $this->estado_filter);
         }
 
-        // Filtro por proveedor
         if ($this->proveedor_id) {
-            $query->where('proveedor_id', $this->proveedor_id);
+            $compras->where('proveedor_id', $this->proveedor_id);
         }
 
-        // Filtro por rango de fechas
-        if (!empty($this->from) && !empty($this->to)) {
-            $query->whereBetween('fecha_emision', [$this->from, $this->to]);
+        if ($this->from && $this->to) {
+            $compras->whereBetween('fecha_emision', [$this->from, $this->to]);
         }
 
-        // Filtro por cuentas con mora
-        if ($this->con_mora) {
-            $query->conMora();
-        }
+        $documentos = $compras->orderBy('fecha_emision', 'desc')->paginate(10);
 
-        $cuentas = $query->orderBy('fecha_emision', 'desc')->paginate(10);
+        // Calcular total pagado y pendiente por cada documento
+        $documentos->getCollection()->transform(function($doc) {
+            $totalPagado = Payments::where('paymentable_type', 'App\\Models\\Compras')
+                ->where('paymentable_id', $doc->id)
+                ->sum('monto');
 
-        // Transformar registros agregando cálculos adicionales
-        $cuentas->getCollection()->transform(function ($cuenta) {
-            $cuenta->dias_mora = $cuenta->dias_mora;
-            $cuenta->esta_vencida = $cuenta->esta_vencida;
-            $cuenta->total_pendiente_real = $cuenta->total_pendiente_real;
-            return $cuenta;
+            $doc->total_pagado = $totalPagado;
+            $doc->total_pendiente = max(0, $doc->total - $totalPagado);
+
+            return $doc;
         });
 
         $proveedores = Proveedores::orderBy('razon_social')->get();
 
-        // Calcular totales
-        $totales = [
-            'total_por_pagar' => $query->sum('saldo_pendiente'),
-            'total_vencido' => (clone $query)->conMora()->sum('saldo_pendiente'),
-            'total_pagado' => AccountPayable::sum('monto_pagado'),
-        ];
+        // Calcular totales globales
+        $totales = $this->calcularTotales();
 
-        return view('livewire.admin.finanzas.cuentas-pagar.index', compact('cuentas', 'totales'));
+        return view('livewire.admin.finanzas.cuentas-pagar.index', compact('documentos', 'totales', 'proveedores'));
+    }
+
+    protected function calcularTotales()
+    {
+        $comprasUnpaid = Compras::where('pago_estado', '!=', 'PAID')->get();
+
+        $totalPorPagar = 0;
+        $totalPagado = 0;
+
+        foreach ($comprasUnpaid as $compra) {
+            $pagado = Payments::where('paymentable_type', 'App\\Models\\Compras')
+                ->where('paymentable_id', $compra->id)
+                ->sum('monto');
+            $totalPagado += $pagado;
+            $totalPorPagar += max(0, $compra->total - $pagado);
+        }
+
+        return [
+            'total_por_pagar' => $totalPorPagar,
+            'total_pagado' => $totalPagado,
+        ];
     }
 
     public function filter($dias)
@@ -95,5 +120,16 @@ class Index extends Component
                 $this->to = '';
                 break;
         }
+    }
+
+    /**
+     * Abrir modal para registrar pago de una cuenta por pagar
+     */
+    public function openRegisterPayment($paymentable_id)
+    {
+        $this->dispatch(
+            'open-modal-register-payment-compras',
+            paymentable_id: $paymentable_id
+        );
     }
 }

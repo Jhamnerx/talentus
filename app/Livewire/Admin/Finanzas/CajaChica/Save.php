@@ -14,7 +14,8 @@ class Save extends Component
 
     public $cashId;
     public $saldo_inicial = 0;
-    public $moneda = 'PEN';
+    public $saldo_inicial_usd = 0;
+    public $reference_number;
     public $fecha_apertura;
     public $showModal = false;
 
@@ -22,15 +23,18 @@ class Save extends Component
     {
         return [
             'saldo_inicial' => 'required|numeric|min:0',
-            'moneda' => 'required|in:PEN,USD',
+            'saldo_inicial_usd' => 'required|numeric|min:0',
+            'reference_number' => 'nullable|string|max:10',
             'fecha_apertura' => 'required|date',
         ];
     }
 
     protected $messages = [
-        'saldo_inicial.required' => 'El saldo inicial es obligatorio',
-        'saldo_inicial.min' => 'El saldo inicial debe ser mayor o igual a 0',
-        'moneda.required' => 'La moneda es obligatoria',
+        'saldo_inicial.required' => 'El saldo inicial PEN es obligatorio',
+        'saldo_inicial.min' => 'El saldo inicial PEN debe ser mayor o igual a 0',
+        'saldo_inicial_usd.required' => 'El saldo inicial USD es obligatorio',
+        'saldo_inicial_usd.min' => 'El saldo inicial USD debe ser mayor o igual a 0',
+        'reference_number.max' => 'El número de referencia no puede exceder 10 caracteres',
         'fecha_apertura.required' => 'La fecha de apertura es obligatoria',
     ];
 
@@ -47,7 +51,7 @@ class Save extends Component
     #[On('create-cash')]
     public function create()
     {
-        $this->reset(['cashId', 'saldo_inicial', 'moneda']);
+        $this->reset(['cashId', 'saldo_inicial', 'saldo_inicial_usd', 'reference_number']);
         $this->fecha_apertura = now()->format('Y-m-d');
         $this->showModal = true;
     }
@@ -59,7 +63,8 @@ class Save extends Component
 
         $this->cashId = $cash->id;
         $this->saldo_inicial = $cash->saldo_inicial;
-        $this->moneda = $cash->moneda;
+        $this->saldo_inicial_usd = $cash->saldo_inicial_usd ?? 0;
+        $this->reference_number = $cash->reference_number;
         $this->fecha_apertura = $cash->fecha_apertura->format('Y-m-d');
 
         $this->showModal = true;
@@ -81,7 +86,10 @@ class Save extends Component
 
                 $cash->update([
                     'saldo_inicial' => $this->saldo_inicial,
-                    'moneda' => $this->moneda,
+                    'saldo_inicial_usd' => $this->saldo_inicial_usd,
+                    'saldo_actual' => $this->saldo_inicial,
+                    'saldo_actual_usd' => $this->saldo_inicial_usd,
+                    'reference_number' => $this->reference_number,
                     'fecha_apertura' => $this->fecha_apertura,
                 ]);
 
@@ -101,11 +109,14 @@ class Save extends Component
                     return;
                 }
 
-                // Crear caja general - user_id solo para tracking de quién la abrió
+                // Crear caja general multi-moneda - user_id solo para tracking de quién la abrió
                 $cash = Cash::create([
                     'saldo_inicial' => $this->saldo_inicial,
+                    'saldo_inicial_usd' => $this->saldo_inicial_usd,
                     'saldo_actual' => $this->saldo_inicial,
-                    'moneda' => $this->moneda,
+                    'saldo_actual_usd' => $this->saldo_inicial_usd,
+                    'reference_number' => $this->reference_number,
+                    'moneda' => 'PEN', // Moneda principal para reportes legacy
                     'fecha_apertura' => $this->fecha_apertura,
                     'estado' => 1,
                     'user_id' => Auth::user()->id, // Solo para tracking
@@ -117,7 +128,7 @@ class Save extends Component
             $this->notification()->success('¡Éxito!', $message);
             $this->showModal = false;
             $this->dispatch('render');
-            $this->reset(['cashId', 'saldo_inicial', 'moneda']);
+            $this->reset(['cashId', 'saldo_inicial', 'saldo_inicial_usd', 'reference_number']);
         } catch (\Exception $e) {
             $this->notification()->error('Error', 'Ocurrió un error al guardar la caja: ' . $e->getMessage());
         }
@@ -126,7 +137,7 @@ class Save extends Component
     public function closeModal()
     {
         $this->showModal = false;
-        $this->reset(['cashId', 'saldo_inicial', 'moneda']);
+        $this->reset(['cashId', 'saldo_inicial', 'saldo_inicial_usd', 'reference_number']);
         $this->resetValidation();
     }
 
@@ -181,9 +192,12 @@ class Save extends Component
             // Usar método cerrar() del modelo que calcula automáticamente
             $cash->cerrar();
 
+            $saldoPEN = number_format($cash->saldo_actual, 2);
+            $saldoUSD = number_format($cash->saldo_actual_usd, 2);
+
             $this->notification()->success(
                 '¡Caja cerrada!',
-                "Saldo final: {$cash->moneda} " . number_format($cash->saldo_actual, 2)
+                "Saldo final - PEN: S/ {$saldoPEN} | USD: $ {$saldoUSD}"
             );
             $this->dispatch('render');
         } catch (\Exception $e) {

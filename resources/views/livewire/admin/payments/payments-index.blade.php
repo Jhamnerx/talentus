@@ -182,6 +182,9 @@
                             <div class="font-semibold text-left">Documento</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Cobro/Vehículo</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-center">Acciones</div>
                         </th>
                     </tr>
@@ -232,6 +235,21 @@
                                     <div>{{ $payment->documento ?? '-' }}</div>
                                 @endif
                             </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3">
+                                @if ($payment->cobros)
+                                    <div class="flex flex-col gap-1">
+                                        <x-form.mini.badge flat positive label="Con Cobro" />
+                                        @if ($payment->cobros->vehiculo)
+                                            <div class="text-xs text-gray-600 dark:text-gray-400">
+                                                <span
+                                                    class="font-semibold">{{ $payment->cobros->vehiculo->placa }}</span>
+                                            </div>
+                                        @endif
+                                    </div>
+                                @else
+                                    <div class="text-xs text-gray-400">Sin cobro</div>
+                                @endif
+                            </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex justify-center items-center gap-1">
                                     @can('editar-payments')
@@ -251,7 +269,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7"
+                            <td colspan="8"
                                 class="px-2 first:pl-5 last:pr-5 py-8 text-center text-gray-500 dark:text-gray-400">
                                 No hay pagos registrados
                             </td>

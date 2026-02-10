@@ -219,16 +219,15 @@
             </thead>
             <tbody>
                 @php $totalIngresos = 0; @endphp
-                @foreach ($ingresos as $globalPayment)
+                @foreach ($ingresos as $payment)
                     @php
-                        $payment = $globalPayment->payment;
-                        $doc = $payment?->paymentable;
-                        $monto = $payment?->monto ?? 0;
+                        $doc = $payment->paymentable;
+                        $monto = $payment->monto ?? 0;
                         $totalIngresos += $monto;
-                        $tipo = $globalPayment->payment_type_description;
-                        $numero = $globalPayment->document_number;
-                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
-                        $cliente = $globalPayment->person_name;
+                        $tipo = $payment->payment_type_description;
+                        $numero = $payment->document_number;
+                        $fecha = $payment->fecha ?? $payment->created_at->format('d/m/Y');
+                        $cliente = $payment->person_name;
                     @endphp
                     <tr>
                         <td>{{ $tipo }}</td>
@@ -273,15 +272,14 @@
             </thead>
             <tbody>
                 @php $totalEgresos = 0; @endphp
-                @foreach ($egresos as $globalPayment)
+                @foreach ($egresos as $payment)
                     @php
-                        $payment = $globalPayment->payment;
-                        $monto = $payment?->monto ?? 0;
+                        $monto = $payment->monto ?? 0;
                         $totalEgresos += $monto;
-                        $tipo = $globalPayment->payment_type_description;
-                        $numero = $globalPayment->document_number;
-                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
-                        $proveedor = $globalPayment->person_name;
+                        $tipo = $payment->payment_type_description;
+                        $numero = $payment->document_number;
+                        $fecha = $payment->fecha ?? $payment->created_at->format('d/m/Y');
+                        $proveedor = $payment->person_name;
                     @endphp
                     <tr>
                         <td>{{ $tipo }}</td>

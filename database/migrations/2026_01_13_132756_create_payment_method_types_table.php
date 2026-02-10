@@ -13,11 +13,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment_method_types', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->string('id');
             $table->boolean('active')->default(true);
             $table->string('description');
             $table->unsignedBigInteger('empresa_id')->default(1);
-            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
+            $table->primary(['id', 'empresa_id']); // Clave compuesta
+            $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('cascade');
         });
 
         $metodos = [

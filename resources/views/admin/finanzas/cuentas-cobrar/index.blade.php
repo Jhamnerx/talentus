@@ -10,4 +10,8 @@
             @livewire('admin.finanzas.cuentas-cobrar.index')
         </div>
     </div>
+
+    @push('modals')
+        @livewire('admin.finanzas.cuentas-cobrar.register-payment')
+    @endpush
 </x-admin-layout>

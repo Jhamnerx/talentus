@@ -130,29 +130,90 @@ class Show extends Component
         );
     }
 
-    public function createBoleta(array $detalleIds)
+    /**
+     * Redirect inteligente: detecta tipo de documento y redirige al módulo correcto.
+     * Almacena forma_pago en sesión para pre-seleccionarlo en Emitir/Create.
+     */
+    public function facturarInteligente(int $detalleId, string $formaPago = 'CONTADO')
     {
-        return redirect()->route('admin.boleta.create', ['detalle_ids' => json_encode($detalleIds), 'cobro_id' => $this->cobro->id]);
-    }
-    public function createFactura(array $detalleIds)
-    {
-        return redirect()->route('admin.factura.create', ['detalle_ids' => json_encode($detalleIds), 'cobro_id' => $this->cobro->id]);
-    }
-    public function createRecibo(array $detalleIds)
-    {
-        return redirect()->route('admin.ventas.recibos.create', ['detalle_ids' => json_encode($detalleIds), 'cobro_id' => $this->cobro->id]);
+        $detalle = DetalleCobros::findOrFail($detalleId);
+        $cobro = $detalle->cobro;
+
+        // Normalizar: Emitir/Create usan CREDITO sin acento
+        $formaPagoNormalizada = $formaPago === 'CRÉDITO' ? 'CREDITO' : $formaPago;
+
+        // Guardar contexto en sesión para que Emitir/Create lo use
+        session([
+            'cobro_forma_pago' => $formaPagoNormalizada,
+            'cobro_redirect_back' => route('admin.cobros.show', $cobro->id),
+        ]);
+
+        $detalleIds = json_encode([$detalleId]);
+
+        // Determinar tipo de documento según configuración del cobro
+        if ($cobro->tipo_pago === 'RECIBO') {
+            return redirect()->route('admin.ventas.recibos.create', [
+                'detalle_ids' => $detalleIds,
+                'cobro_id' => $cobro->id,
+            ]);
+        }
+
+        // Factura o Boleta según tipo de documento del cliente
+        $tipoDocCliente = $cobro->clientes->tipo_documento_id ?? null;
+
+        if ($tipoDocCliente == 6) {
+            // RUC → Factura
+            return redirect()->route('admin.factura.create', [
+                'detalle_ids' => $detalleIds,
+                'cobro_id' => $cobro->id,
+            ]);
+        }
+
+        // DNI u otro → Boleta
+        return redirect()->route('admin.boleta.create', [
+            'detalle_ids' => $detalleIds,
+            'cobro_id' => $cobro->id,
+        ]);
     }
 
-    public function createBoletaGeneral()
+    /**
+     * Facturar múltiples detalles seleccionados (masivo)
+     */
+    public function facturarMasivo(string $formaPago = 'CONTADO')
     {
-        return redirect()->route('admin.boleta.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
-    }
-    public function createFacturaGeneral()
-    {
-        return redirect()->route('admin.factura.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
-    }
-    public function createReciboGeneral()
-    {
-        return redirect()->route('admin.ventas.recibos.create', ['detalle_ids' => json_encode($this->detalleIds), 'cobro_id' => $this->cobro->id]);
+        if (empty($this->detalleIds)) {
+            $this->dispatch('notify-toast', icon: 'warning', title: 'SELECCIÓN REQUERIDA', mensaje: 'Selecciona al menos un vehículo');
+            return;
+        }
+
+        $formaPagoNormalizada = $formaPago === 'CRÉDITO' ? 'CREDITO' : $formaPago;
+
+        session([
+            'cobro_forma_pago' => $formaPagoNormalizada,
+            'cobro_redirect_back' => route('admin.cobros.show', $this->cobro->id),
+        ]);
+
+        $detalleIds = json_encode($this->detalleIds);
+
+        if ($this->cobro->tipo_pago === 'RECIBO') {
+            return redirect()->route('admin.ventas.recibos.create', [
+                'detalle_ids' => $detalleIds,
+                'cobro_id' => $this->cobro->id,
+            ]);
+        }
+
+        $tipoDocCliente = $this->cobro->clientes->tipo_documento_id ?? null;
+
+        if ($tipoDocCliente == 6) {
+            return redirect()->route('admin.factura.create', [
+                'detalle_ids' => $detalleIds,
+                'cobro_id' => $this->cobro->id,
+            ]);
+        }
+
+        return redirect()->route('admin.boleta.create', [
+            'detalle_ids' => $detalleIds,
+            'cobro_id' => $this->cobro->id,
+        ]);
     }
 }

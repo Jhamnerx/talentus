@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\ExpensePayment;
-use App\Models\GlobalPayment;
 use App\Models\Cash;
 use App\Models\BankAccount;
 use Illuminate\Support\Facades\Log;
@@ -12,64 +11,10 @@ class ExpensePaymentObserver
 {
     /**
      * Handle the ExpensePayment "created" event.
+     * @deprecated Sistema deprecado - mantener por compatibilidad
      */
-    public function created(ExpensePayment $expensePayment): void
-    {
-        $this->createGlobalPayment($expensePayment);
-    }
+    public function created(ExpensePayment $expensePayment): void {}
 
-    /**
-     * Crea el movimiento financiero global
-     */
-    private function createGlobalPayment(ExpensePayment $expensePayment): void
-    {
-        try {
-            $destination = $this->getDestination($expensePayment);
-
-            if (!$destination) {
-                Log::warning('No se encontró destino para ExpensePayment', [
-                    'expense_payment_id' => $expensePayment->id,
-                    'expense_method_type_id' => $expensePayment->expense_method_type_id,
-                    'expense_id' => $expensePayment->expense_id,
-                ]);
-                return;
-            }
-
-            GlobalPayment::create([
-                'payment_id' => $expensePayment->id,
-                'payment_type' => ExpensePayment::class,
-                'destination_id' => $destination->id,
-                'destination_type' => get_class($destination),
-                'type_movement' => 'EGRESO',
-                'description' => $this->getDescription($expensePayment),
-            ]);
-
-            // Actualizar saldo si es Cash
-            if ($destination instanceof Cash && $destination->estado) {
-                $destination->decrement('saldo_actual', $expensePayment->payment);
-
-                Log::info('Saldo de caja decrementado por ExpensePayment', [
-                    'cash_id' => $destination->id,
-                    'expense_payment_id' => $expensePayment->id,
-                    'monto' => $expensePayment->payment,
-                    'nuevo_saldo' => $destination->fresh()->saldo_actual,
-                ]);
-            }
-
-            Log::info('GlobalPayment creado desde ExpensePayment', [
-                'expense_payment_id' => $expensePayment->id,
-                'destination' => get_class($destination),
-                'destination_id' => $destination->id,
-                'monto' => $expensePayment->payment,
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Error al crear GlobalPayment desde ExpensePayment', [
-                'expense_payment_id' => $expensePayment->id,
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-        }
-    }
 
     /**
      * Determina el destino del pago según el método
@@ -130,15 +75,12 @@ class ExpensePaymentObserver
      */
     public function updated(ExpensePayment $expensePayment): void
     {
-        // Si cambia el monto, actualizar GlobalPayment
+        // Método deprecado - ya no actualiza registros globales
         if ($expensePayment->isDirty('payment')) {
-            $globalPayment = $expensePayment->globalPayment;
-
-            if ($globalPayment) {
-                $globalPayment->update([
-                    'description' => $this->getDescription($expensePayment),
-                ]);
-            }
+            Log::info('ExpensePayment actualizado', [
+                'id' => $expensePayment->id,
+                'nuevo_monto' => $expensePayment->payment,
+            ]);
         }
     }
 
@@ -148,20 +90,17 @@ class ExpensePaymentObserver
     public function deleted(ExpensePayment $expensePayment): void
     {
         // Al eliminar el pago, revertir el saldo de caja si aplica
-        $globalPayment = $expensePayment->globalPayment;
+        $destination = $this->getDestination($expensePayment);
 
-        if ($globalPayment && $globalPayment->destination instanceof Cash) {
-            $cash = $globalPayment->destination;
-            if ($cash->estado) {
-                $cash->increment('saldo_actual', $expensePayment->payment);
+        if ($destination instanceof Cash && $destination->estado) {
+            $destination->increment('saldo_actual', $expensePayment->payment);
 
-                Log::info('Saldo de caja revertido por eliminación de ExpensePayment', [
-                    'cash_id' => $cash->id,
-                    'expense_payment_id' => $expensePayment->id,
-                    'monto_revertido' => $expensePayment->payment,
-                    'nuevo_saldo' => $cash->fresh()->saldo_actual,
-                ]);
-            }
+            Log::info('Saldo de caja revertido por eliminación de ExpensePayment', [
+                'cash_id' => $destination->id,
+                'expense_payment_id' => $expensePayment->id,
+                'monto_revertido' => $expensePayment->payment,
+                'nuevo_saldo' => $destination->fresh()->saldo_actual,
+            ]);
         }
     }
 }

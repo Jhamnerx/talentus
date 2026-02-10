@@ -3,7 +3,7 @@
 namespace App\Livewire\Admin\Finanzas\Transacciones;
 
 use App\Models\Cash;
-use App\Models\GlobalPayment;
+use App\Models\Payments;
 use App\Models\BankAccount;
 use App\Http\Resources\MovementCollection;
 use Livewire\Component;
@@ -27,23 +27,19 @@ class Index extends Component
     #[On('render')]
     public function render()
     {
-        $query = GlobalPayment::query()
-            ->withRelationsForReport()
-            ->latestPayments();
+        $query = Payments::query()
+            ->with(['paymentable', 'destination', 'user', 'bankAccount'])
+            ->latest('created_at');
 
         // Búsqueda por texto
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                $q->whereHas('payment.paymentable', function ($subQ) {
-                    $subQ->where('numero', 'like', '%' . $this->search . '%')
-                        ->orWhere('numero_comprobante', 'like', '%' . $this->search . '%')
-                        ->orWhereHas('cliente', function ($clienteQ) {
-                            $clienteQ->where('razon_social', 'like', '%' . $this->search . '%');
-                        })
-                        ->orWhereHas('proveedor', function ($provQ) {
-                            $provQ->where('nombre', 'like', '%' . $this->search . '%');
-                        });
-                });
+                $q->where('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('numero_operacion', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('paymentable', function ($subQ) {
+                        $subQ->where('numero', 'like', '%' . $this->search . '%')
+                            ->orWhere('numero_comprobante', 'like', '%' . $this->search . '%');
+                    });
             });
         }
 
@@ -56,9 +52,9 @@ class Index extends Component
 
         // Filtro por tipo de destino
         if ($this->destination_type === 'cash') {
-            $query->whereCashDestination();
+            $query->byDestinationType('App\\Models\\Cash');
         } elseif ($this->destination_type === 'bank') {
-            $query->whereBankDestination();
+            $query->byDestinationType('App\\Models\\BankAccount');
         }
 
         // Filtro por caja específica
@@ -68,8 +64,7 @@ class Index extends Component
 
         // Filtro por cuenta bancaria específica
         if ($this->bank_account_id) {
-            $query->byDestinationType(BankAccount::class)
-                ->where('destination_id', $this->bank_account_id);
+            $query->byBankAccount($this->bank_account_id);
         }
 
         // Filtro por rango de fechas
@@ -77,10 +72,10 @@ class Index extends Component
             $query->whereDateBetween($this->from, $this->to);
         }
 
-        // Usar MovementCollection para performance optimizado
+        // Usar paginación y transformar con MovementCollection
         $paginator = $query->paginate(15);
 
-        // Pasar filtros a la request para calculateResiduary
+        // Pasar filtros a la request
         request()->merge([
             'search' => $this->search,
             'tipo_filter' => $this->tipo_filter,
@@ -92,8 +87,15 @@ class Index extends Component
             'per_page' => 15,
         ]);
 
-        $movimientos = new MovementCollection($paginator);
-        $movimientos = $paginator->setCollection(collect($movimientos->toArray(request())));
+        // Transformar cada item del paginator con MovementCollection
+        $transformedItems = $paginator->getCollection()->map(function ($payment, $index) {
+            return $this->transformPaymentToMovement($payment, $index);
+        });
+
+        // Reemplazar los items originales con los transformados
+        $paginator->setCollection($transformedItems);
+
+        $movimientos = $paginator;
 
         // Calcular totales
         $totales = $this->calcularTotales($query);
@@ -118,10 +120,14 @@ class Index extends Component
         $egresos = 0;
 
         foreach ($allRecords as $record) {
-            $monto = $record->monto;
+            // Convertir USD a PEN usando tipo de cambio del registro
+            $monto = $record->divisa === 'USD'
+                ? $record->monto * ($record->tipo_cambio ?: 3.75)
+                : $record->monto;
+
             if ($record->type_movement === 'INGRESO') {
                 $ingresos += $monto;
-            } else {
+            } elseif ($record->type_movement === 'EGRESO') {
                 $egresos += $monto;
             }
         }
@@ -169,5 +175,61 @@ class Index extends Component
             ),
             'transacciones_' . date('Y-m-d_His') . '.xlsx'
         );
+    }
+
+    /**
+     * Transformar Payment a formato de movimiento compatible con la vista
+     */
+    private function transformPaymentToMovement($payment, $index)
+    {
+        // Obtener monto (convertir USD a PEN si es necesario)
+        $amount = $payment->divisa === 'USD'
+            ? $payment->monto * ($payment->tipo_cambio ?: 3.75)
+            : $payment->monto;
+
+        // Determinar input/output según tipo de movimiento
+        $input = $payment->type_movement === 'INGRESO'
+            ? number_format($payment->monto, 2, '.', '')
+            : '-';
+
+        $output = $payment->type_movement === 'EGRESO'
+            ? number_format($payment->monto, 2, '.', '')
+            : '-';
+
+        // Símbolo de moneda
+        $currencySymbol = $payment->divisa === 'USD' ? '$' : 'S/';
+
+        return [
+            'id' => $payment->id,
+            'index' => $index + 1,
+
+            // Fecha
+            'date_of_payment' => $payment->fecha ? \Carbon\Carbon::parse($payment->fecha)->format('Y-m-d H:i:s') : null,
+            'created_at' => $payment->created_at->format('d/m/Y H:i'),
+
+            // Tipo
+            'type_movement' => $payment->type_movement,
+            'instance_type' => $payment->payment_type_description,
+
+            // Documento
+            'document_number' => $payment->document_number,
+
+            // Persona
+            'person_name' => $payment->person_name,
+
+            // Destino
+            'destination_description' => $payment->destination_description,
+            'destination_name' => $payment->destination_description,
+
+            // Montos
+            'currency_type_id' => $currencySymbol,
+            'original_amount' => number_format($payment->monto, 2, '.', ''),
+            'amount_pen' => number_format($amount, 2, '.', ''),
+            'input' => $input,
+            'output' => $output,
+
+            // Raw payment para acceso directo
+            'payment' => $payment,
+        ];
     }
 }

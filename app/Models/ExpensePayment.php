@@ -65,14 +65,6 @@ class ExpensePayment extends Model
     }
 
     /**
-     * Movimiento financiero global relacionado
-     */
-    public function globalPayment(): MorphOne
-    {
-        return $this->morphOne(GlobalPayment::class, 'payment');
-    }
-
-    /**
      * Verifica si el pago usa tarjeta
      */
     public function usesCard(): bool

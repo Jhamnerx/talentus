@@ -140,7 +140,7 @@
 
     <!-- Tabla Simple -->
     @php
-        $movimientos = $caja->globalDestination()->with('payment.paymentable')->get();
+        $movimientos = $caja->globalDestination()->with('paymentable')->get();
     @endphp
     @if ($movimientos->count() > 0)
         <table>
@@ -154,15 +154,14 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($movimientos as $globalPayment)
+                @foreach ($movimientos as $payment)
                     @php
-                        $payment = $globalPayment->payment;
-                        $monto = $payment?->monto ?? 0;
-                        $tipo = $globalPayment->payment_type_description;
-                        $numero = $globalPayment->document_number;
-                        $fecha = $payment?->fecha ?? $globalPayment->created_at->format('d/m/Y');
-                        $persona = $globalPayment->person_name;
-                        $tipoMov = $globalPayment->type_movement;
+                        $paymentable = $payment->paymentable;
+                        $tipo = $payment->payment_type_description;
+                        $numero = $payment->document_number;
+                        $fecha = $payment->fecha ?? $payment->created_at->format('d/m/Y');
+                        $persona = $payment->person_name;
+                        $tipoMov = $payment->type_movement;
                     @endphp
                     <tr>
                         <td>{{ $tipo }} {{ $numero }}</td>

@@ -3,7 +3,7 @@
 namespace App\Livewire\Admin\Finanzas\Movimientos;
 
 use App\Models\Cash;
-use App\Models\GlobalPayment;
+use App\Models\Payments;
 use App\Models\BankAccount;
 use App\Http\Resources\MovementCollection;
 use Livewire\Component;
@@ -36,49 +36,32 @@ class Index extends Component
     #[On('render')]
     public function render()
     {
-        $query = GlobalPayment::query()
-            ->withRelationsForReport()
-            ->latest('created_at'); // Ordenar por fecha más reciente primero
+        $query = Payments::query()
+            ->with(['paymentable', 'destination', 'user', 'bankAccount'])
+            ->latest('created_at');
 
         // Búsqueda por texto
         if (!empty($this->search)) {
             $query->where(function ($q) {
-                // Buscar por descripción del GlobalPayment
                 $q->where('description', 'like', '%' . $this->search . '%')
-                    // O buscar en datos del payment relacionado
-                    ->orWhereHas('payment', function ($paymentQ) {
-                        $paymentQ->where('numero', 'like', '%' . $this->search . '%')
-                            ->orWhere('numero_operacion', 'like', '%' . $this->search . '%');
-                    });
+                    ->orWhere('numero', 'like', '%' . $this->search . '%')
+                    ->orWhere('numero_operacion', 'like', '%' . $this->search . '%');
             });
         }
 
         // Filtro por tipo de movimiento
         if ($this->type_movement === 'INGRESO') {
-            $query->whereHas('payment', function ($q) {
-                $q->whereIn('paymentable_type', [
-                    'App\\Models\\Ventas',
-                    'App\\Models\\Recibos',
-                    'App\\Models\\RecibosPagosVarios'
-                ]);
-            });
+            $query->ingresos();
         } elseif ($this->type_movement === 'EGRESO') {
-            $query->whereHas('payment', function ($q) {
-                $q->whereNotIn('paymentable_type', [
-                    'App\\Models\\Ventas',
-                    'App\\Models\\Recibos',
-                    'App\\Models\\RecibosPagosVarios'
-                ])->orWhereNull('paymentable_type');
-            });
+            $query->egresos();
         }
 
         // Filtro por tipo de destino
-        if ($this->destination_type === 'AppModelsCash' || $this->destination_type === 'cash') {
-            $query->whereCashDestination();
-        } elseif ($this->destination_type === 'AppModelsBankAccount' || $this->destination_type === 'bank') {
-            $query->whereBankDestination();
+        if ($this->destination_type === 'cash') {
+            $query->byDestinationType('App\\Models\\Cash');
+        } elseif ($this->destination_type === 'bank') {
+            $query->byDestinationType('App\\Models\\BankAccount');
         } elseif ($this->destination_type === 'sin_destino') {
-            // Filtrar movimientos sin destino asignado
             $query->whereNull('destination_id');
         }
 
@@ -89,8 +72,7 @@ class Index extends Component
 
         // Filtro por cuenta bancaria específica
         if ($this->bank_account_id) {
-            $query->byDestinationType(BankAccount::class)
-                ->where('destination_id', $this->bank_account_id);
+            $query->byBankAccount($this->bank_account_id);
         }
 
         // Filtro por rango de fechas
@@ -201,7 +183,7 @@ class Index extends Component
      */
     public function openReassignModal($movementId)
     {
-        $this->selectedMovement = GlobalPayment::with('payment')->find($movementId);
+        $this->selectedMovement = Payments::with('paymentable')->find($movementId);
 
         if (!$this->selectedMovement) {
             $this->notification()->error('Error', 'Movimiento no encontrado');
@@ -263,19 +245,28 @@ class Index extends Component
         }
 
         try {
-            // Actualizar el GlobalPayment con el nuevo destino
+            // Determinar el payment_destination_id según el tipo
+            $paymentDestinationId = null;
+            if ($this->reassign_destination_type === 'cash') {
+                $paymentDestinationId = 'cash'; // Valor especial para cajas
+            } elseif ($this->reassign_destination_type === 'bank') {
+                $paymentDestinationId = $destination->id; // ID de cuenta bancaria
+            }
+
+            // Actualizar el Payment con el nuevo destino
             $this->selectedMovement->update([
                 'destination_id' => $destination->id,
                 'destination_type' => $destinationType,
+                'payment_destination_id' => $paymentDestinationId, // ✅ CRÍTICO para PaymentsObserver
             ]);
 
-            // Actualizar el saldo del destino si es caja
+            // Actualizar el saldo del destino si es caja (multi-moneda)
             if ($destination instanceof Cash) {
-                if ($this->selectedMovement->type_movement === 'INGRESO') {
-                    $destination->increment('saldo_actual', $this->selectedMovement->payment->monto);
-                } else {
-                    $destination->decrement('saldo_actual', $this->selectedMovement->payment->monto);
-                }
+                $montoPen = $this->selectedMovement->divisa === 'PEN' ? $this->selectedMovement->monto : 0;
+                $montoUsd = $this->selectedMovement->divisa === 'USD' ? $this->selectedMovement->monto : 0;
+                $esIngreso = $this->selectedMovement->type_movement === 'INGRESO';
+
+                $destination->actualizarSaldoPorMoneda($montoPen, $montoUsd, $esIngreso);
             }
 
             $this->notification()->success('¡Éxito!', 'Movimiento reasignado correctamente');

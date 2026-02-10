@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources;
 
-use App\Models\GlobalPayment;
+use App\Models\Payments;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -16,7 +16,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
  * - calculateResiduary() para balance entre páginas
  * - Performance optimizado para +1000 registros
  * 
- * Basado en FactuPRO MovementCollection
+ * Colección optimizada usando Payments directamente
  */
 class MovementCollection extends ResourceCollection
 {
@@ -47,7 +47,7 @@ class MovementCollection extends ResourceCollection
         $this->calculateResiduary($request);
 
         // Transformar cada registro
-        return $this->collection->transform(function (GlobalPayment $row, $key) {
+        return $this->collection->transform(function (Payments $row, $key) {
             return $this->transformRow($row, $key);
         })->toArray();
     }
@@ -55,11 +55,11 @@ class MovementCollection extends ResourceCollection
     /**
      * Transformar un registro individual
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @param int $key
      * @return array
      */
-    protected function transformRow(GlobalPayment $row, int $key): array
+    protected function transformRow(Payments $row, int $key): array
     {
         $index = $key + 1;
 
@@ -131,10 +131,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Calcular monto en PEN (convertir si es USD)
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return float
      */
-    protected function calculateAmount(GlobalPayment $row): float
+    protected function calculateAmount(Payments $row): float
     {
         $amount = $row->monto;
 
@@ -152,22 +152,27 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener tipo de cambio del documento
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return float
      */
-    protected function getExchangeRate(GlobalPayment $row): float
+    protected function getExchangeRate(Payments $row): float
     {
-        // Intentar obtener del paymentable (Recibo, Venta, Compra)
+        // Leer directamente de Payments (más eficiente, evita N+1)
+        if (isset($row->tipo_cambio) && $row->tipo_cambio > 0) {
+            return (float) $row->tipo_cambio;
+        }
+
+        // Fallback: leer del paymentable si no tiene tipo_cambio
         if ($row->payment && $row->payment->paymentable) {
             $paymentable = $row->payment->paymentable;
 
-            // Buscar campo exchange_rate_sale o tipo_cambio
-            if (isset($paymentable->exchange_rate_sale)) {
-                return (float) $paymentable->exchange_rate_sale;
-            }
-
+            // Buscar campo tipo_cambio o exchange_rate_sale
             if (isset($paymentable->tipo_cambio)) {
                 return (float) $paymentable->tipo_cambio;
+            }
+
+            if (isset($paymentable->exchange_rate_sale)) {
+                return (float) $paymentable->exchange_rate_sale;
             }
         }
 
@@ -178,11 +183,11 @@ class MovementCollection extends ResourceCollection
     /**
      * Actualizar balance acumulado
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @param float $amount
      * @return void
      */
-    protected function updateBalance(GlobalPayment $row, float $amount): void
+    protected function updateBalance(Payments $row, float $amount): void
     {
         if ($row->type_movement === 'INGRESO') {
             self::$balance += $amount;
@@ -243,9 +248,9 @@ class MovementCollection extends ResourceCollection
      */
     protected function buildQueryWithFilters(Request $request)
     {
-        $query = GlobalPayment::query()
-            ->withRelationsForReport()
-            ->latestPayments();
+        $query = Payments::query()
+            ->with(['paymentable', 'destination', 'user'])
+            ->latest('created_at');
 
         // Aplicar filtros (los mismos del componente Livewire)
         if ($search = $request->input('search')) {
@@ -294,11 +299,11 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener input/output formateado
      *
-     * @param string $typeMovement
+     * @param string|null $typeMovement
      * @param float $amount
      * @return array
      */
-    protected function getInputOutput(string $typeMovement, float $amount): array
+    protected function getInputOutput(?string $typeMovement, float $amount): array
     {
         if ($typeMovement === 'INGRESO') {
             return [
@@ -307,19 +312,24 @@ class MovementCollection extends ResourceCollection
             ];
         }
 
-        return [
-            '-',
-            number_format($amount, 2, '.', '')
-        ];
+        if ($typeMovement === 'EGRESO') {
+            return [
+                '-',
+                number_format($amount, 2, '.', '')
+            ];
+        }
+
+        // Si type_movement es null o valor inesperado, retornar guiones
+        return ['-', '-'];
     }
 
     /**
      * Obtener fecha formateada
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getFormattedDateTime(GlobalPayment $row): string
+    protected function getFormattedDateTime(Payments $row): string
     {
         // Intentar obtener fecha del paymentable
         if ($row->payment && $row->payment->paymentable) {
@@ -341,10 +351,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener tipo de documento
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getDocumentType(GlobalPayment $row): string
+    protected function getDocumentType(Payments $row): string
     {
         if ($row->payment && $row->payment->paymentable) {
             $paymentable = $row->payment->paymentable;
@@ -366,10 +376,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener número completo del documento
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getNumberFull(GlobalPayment $row): string
+    protected function getNumberFull(Payments $row): string
     {
         if ($row->payment && $row->payment->paymentable) {
             $paymentable = $row->payment->paymentable;
@@ -391,10 +401,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener número de documento de la persona
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getPersonNumber(GlobalPayment $row): string
+    protected function getPersonNumber(Payments $row): string
     {
         if ($row->payment && $row->payment->paymentable) {
             $paymentable = $row->payment->paymentable;
@@ -416,10 +426,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener nombre completo del destino
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getDestinationName(GlobalPayment $row): string
+    protected function getDestinationName(Payments $row): string
     {
         if ($row->destination) {
             if (isset($row->destination->nombre)) {
@@ -437,10 +447,10 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener CCI de cuenta bancaria (si aplica)
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getDestinationCCI(GlobalPayment $row): string
+    protected function getDestinationCCI(Payments $row): string
     {
         if ($row->destination && class_basename($row->destination_type) === 'BankAccount') {
             return $row->destination->cci ?? '-';
@@ -452,13 +462,23 @@ class MovementCollection extends ResourceCollection
     /**
      * Obtener tipo de moneda
      *
-     * @param GlobalPayment $row
+     * @param Payments $row
      * @return string
      */
-    protected function getCurrencyType(GlobalPayment $row): string
+    protected function getCurrencyType(Payments $row): string
     {
-        if ($row->payment && $row->payment->paymentable) {
-            $paymentable = $row->payment->paymentable;
+        // Leer directamente de Payments (más eficiente, evita N+1)
+        if (isset($row->divisa) && $row->divisa) {
+            return strtoupper($row->divisa);
+        }
+
+        // Fallback: leer del paymentable si no tiene divisa
+        if ($row->paymentable) {
+            $paymentable = $row->paymentable;
+
+            if (isset($paymentable->divisa)) {
+                return strtoupper($paymentable->divisa);
+            }
 
             if (isset($paymentable->moneda)) {
                 return strtoupper($paymentable->moneda);

@@ -97,14 +97,32 @@ class PaymentDestinationHelper
     public static function getDestinationRecord($destinationId): array
     {
         if ($destinationId === 'cash') {
-            $cash = self::getCash();
+            // Consultar directamente la caja abierta
+            $cash = Cash::where('estado', true)->first();
+
+            if (!$cash) {
+                return [
+                    'destination_id' => null,
+                    'destination_type' => null,
+                ];
+            }
+
             return [
-                'destination_id' => $cash['cash_id'] ?? null,
+                'destination_id' => $cash->id,
                 'destination_type' => Cash::class,
             ];
         }
 
-        // Es una cuenta bancaria
+        // Es una cuenta bancaria - verificar que existe
+        $bankAccount = BankAccount::find($destinationId);
+
+        if (!$bankAccount) {
+            return [
+                'destination_id' => null,
+                'destination_type' => null,
+            ];
+        }
+
         return [
             'destination_id' => $destinationId,
             'destination_type' => BankAccount::class,

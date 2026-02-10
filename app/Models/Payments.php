@@ -44,6 +44,9 @@ class Payments extends Model
         'documento',
         'divisa',
         'monto',
+        'tipo_cambio',
+        'type_movement',
+        'description',
         'payment_method_id',
         'bank_account_id',
         'payment_destination_id',
@@ -101,6 +104,46 @@ class Payments extends Model
         );
     }
 
+    /**
+     * Accessor para type_movement
+     * Calcula automáticamente si es INGRESO o EGRESO basándose en paymentable_type
+     * cuando no está asignado (para registros antiguos)
+     */
+    protected function typeMovement(): Attribute
+    {
+        return new Attribute(
+            get: function ($value) {
+                // Si ya tiene valor asignado, retornarlo
+                if (!empty($value)) {
+                    return $value;
+                }
+
+                // Calcular dinámicamente basándose en paymentable_type
+                $paymentableType = $this->attributes['paymentable_type'] ?? null;
+
+                // Ingresos: Ventas, Recibos, Facturas
+                if (in_array($paymentableType, [
+                    'App\\Models\\Ventas',
+                    'App\\Models\\Recibos',
+                    'App\\Models\\Factura'
+                ])) {
+                    return 'INGRESO';
+                }
+
+                // Egresos: Compras, RecibosPagosVarios
+                if (in_array($paymentableType, [
+                    'App\\Models\\Compras',
+                    'App\\Models\\RecibosPagosVarios'
+                ])) {
+                    return 'EGRESO';
+                }
+
+                // Por defecto, si no se puede determinar
+                return $value;
+            }
+        );
+    }
+
 
     // public function setEmpresaIdAttribute($empresa)
     // {
@@ -138,19 +181,11 @@ class Payments extends Model
     }
 
     /**
-     * Relación con GlobalPayment
-     */
-    public function globalPayment()
-    {
-        return $this->morphOne(GlobalPayment::class, 'payment');
-    }
-
-    /**
      * Destino del pago (Cash o BankAccount) - relación polimórfica
      */
     public function destination()
     {
-        return $this->morphTo();
+        return $this->morphTo('payment_destination');
     }
 
     /**
@@ -186,5 +221,238 @@ class Payments extends Model
         ];
 
         return in_array($this->paymentable_type, $egresos);
+    }
+    /**
+     * Accessors para reportes financieros
+     */
+
+    /**
+     * Obtener descripción del destino
+     */
+    public function getDestinationDescriptionAttribute(): string
+    {
+        if (!$this->destination) {
+            return 'Sin destino';
+        }
+
+        if ($this->destination instanceof Cash) {
+            return 'CAJA: ' . ($this->destination->nombre ?? 'CAJA GENERAL');
+        }
+
+        if ($this->destination instanceof BankAccount) {
+            return 'BANCO: ' . $this->destination->nombre;
+        }
+
+        return 'Destino desconocido';
+    }
+
+    /**
+     * Obtener número de documento del paymentable
+     */
+    public function getDocumentNumberAttribute(): ?string
+    {
+        if (!$this->paymentable) {
+            return null;
+        }
+
+        // Ventas
+        if (isset($this->paymentable->serie_correlativo)) {
+            return $this->paymentable->serie_correlativo;
+        }
+
+        // Recibos
+        if (isset($this->paymentable->serie_numero)) {
+            return $this->paymentable->serie_numero;
+        }
+
+        // Compras
+        if (isset($this->paymentable->numero)) {
+            return $this->paymentable->numero;
+        }
+
+        return null;
+    }
+
+    /**
+     * Obtener nombre de la persona (cliente/proveedor)
+     */
+    public function getPersonNameAttribute(): ?string
+    {
+        if (!$this->paymentable) {
+            return null;
+        }
+
+        try {
+            // Recibos usa clientes() (plural)
+            if (method_exists($this->paymentable, 'clientes') && $this->paymentable->clientes) {
+                return $this->paymentable->clientes->nombre
+                    ?? $this->paymentable->clientes->razon_social
+                    ?? '-';
+            }
+
+            // Ventas/Compras usan cliente() o proveedor()
+            if (method_exists($this->paymentable, 'cliente') && $this->paymentable->cliente) {
+                return $this->paymentable->cliente->nombre
+                    ?? $this->paymentable->cliente->razon_social
+                    ?? '-';
+            }
+
+            if (method_exists($this->paymentable, 'proveedor') && $this->paymentable->proveedor) {
+                return $this->paymentable->proveedor->nombre
+                    ?? $this->paymentable->proveedor->razon_social
+                    ?? '-';
+            }
+
+            // Fallback
+            return $this->paymentable->nombre_completo ?? '-';
+        } catch (\Exception $e) {
+            return '-';
+        }
+    }
+
+    /**
+     * Obtener descripción del tipo de documento
+     */
+    public function getPaymentTypeDescriptionAttribute(): string
+    {
+        if (!$this->paymentable) {
+            return 'Pago sin documento';
+        }
+
+        $class = class_basename($this->paymentable);
+        $mapping = [
+            'Recibos' => 'Recibo',
+            'Factura' => 'Factura',
+            'Ventas' => 'Venta',
+            'RecibosPagosVarios' => 'Recibo Pago',
+            'Compras' => 'Compra',
+            'ExpensePayment' => 'Gasto',
+        ];
+
+        return $mapping[$class] ?? $class;
+    }
+
+    /**
+     * Obtener descripción del tipo de instancia (en mayúsculas)
+     */
+    public function getInstanceTypeDescriptionAttribute(): string
+    {
+        if (!$this->paymentable) {
+            return 'PAGO SIN DOCUMENTO';
+        }
+
+        $class = class_basename($this->paymentable);
+        $mapping = [
+            'Recibos' => 'RECIBO',
+            'Factura' => 'FACTURA',
+            'Ventas' => 'VENTA',
+            'RecibosPagosVarios' => 'RECIBO PAGO',
+            'Compras' => 'COMPRA',
+            'ExpensePayment' => 'GASTO',
+            'WorkOrder' => 'ORDEN DE TRABAJO',
+        ];
+
+        return $mapping[$class] ?? strtoupper($class);
+    }
+
+    /**
+     * Obtener moneda del documento
+     */
+    public function getMonedaAttribute(): string
+    {
+        // Primero intentar obtener del campo divisa del payment
+        if ($this->divisa) {
+            return $this->divisa;
+        }
+
+        // Si no, obtener del documento paymentable
+        if ($this->paymentable && isset($this->paymentable->divisa)) {
+            return $this->paymentable->divisa;
+        }
+
+        if ($this->paymentable && isset($this->paymentable->moneda)) {
+            return $this->paymentable->moneda;
+        }
+
+        return 'PEN'; // Por defecto
+    }
+
+    /**
+     * Obtener fecha formateada
+     */
+    public function getFechaFormateadaAttribute(): string
+    {
+        return $this->created_at?->format('d/m/Y H:i') ?? '-';
+    }
+
+    /**
+     * Query Scopes para filtros
+     */
+
+    public function scopeWhereDateBetween($query, $dateStart, $dateEnd)
+    {
+        return $query->whereBetween('fecha', [$dateStart, $dateEnd]);
+    }
+
+    public function scopeIngresos($query)
+    {
+        return $query->where('type_movement', 'INGRESO');
+    }
+
+    public function scopeEgresos($query)
+    {
+        return $query->where('type_movement', 'EGRESO');
+    }
+
+    public function scopeByDestinationType($query, $type)
+    {
+        return $query->where('destination_type', $type);
+    }
+
+    public function scopeByCash($query, $cashId)
+    {
+        return $query->where('destination_type', Cash::class)->where('destination_id', $cashId);
+    }
+
+    public function scopeByBankAccount($query, $bankAccountId)
+    {
+        return $query->where('destination_type', BankAccount::class)->where('destination_id', $bankAccountId);
+    }
+
+    /**
+     * Filtrar por empresa (útil para queries directas sin EmpresaScope)
+     */
+    public function scopeByEmpresa($query, $empresaId)
+    {
+        return $query->where('empresa_id', $empresaId);
+    }
+
+    /**
+     * Filtrar por usuario
+     */
+    public function scopeByUser($query, $userId)
+    {
+        return $query->where('user_id', $userId);
+    }
+
+    /**
+     * Scope para eager loading optimizado en reportes
+     */
+    public function scopeWithRelationsForReport($query)
+    {
+        return $query->with([
+            'destination',
+            'paymentable',
+            'user:id,name',
+            'bankAccount'
+        ]);
+    }
+
+    /**
+     * Scope para ordenar por fecha descendente
+     */
+    public function scopeLatestPayments($query)
+    {
+        return $query->orderBy('created_at', 'desc');
     }
 }

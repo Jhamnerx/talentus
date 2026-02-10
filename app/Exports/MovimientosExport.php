@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Models\GlobalPayment;
+use App\Models\Payments;
 use App\Models\BankAccount;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -44,9 +44,9 @@ class MovimientosExport implements FromView, ShouldAutoSize, WithTitle
 
     protected function buildRecords()
     {
-        $query = GlobalPayment::query()
-            ->withRelationsForReport()
-            ->latestPayments();
+        $query = Payments::query()
+            ->with(['paymentable', 'destination', 'user'])
+            ->latest('created_at');
 
         // Aplicar filtros (igual que TransaccionesExport)
         if (!empty($this->filters['search'])) {
@@ -71,9 +71,9 @@ class MovimientosExport implements FromView, ShouldAutoSize, WithTitle
         }
 
         if ($this->filters['destination_type'] === 'cash') {
-            $query->whereCashDestination();
+            $query->byDestinationType('App\\Models\\Cash');
         } elseif ($this->filters['destination_type'] === 'bank') {
-            $query->whereBankDestination();
+            $query->byDestinationType('App\\Models\\BankAccount');
         }
 
         if ($this->filters['cash_id']) {
@@ -81,8 +81,7 @@ class MovimientosExport implements FromView, ShouldAutoSize, WithTitle
         }
 
         if ($this->filters['bank_account_id']) {
-            $query->byDestinationType(BankAccount::class)
-                ->where('destination_id', $this->filters['bank_account_id']);
+            $query->byBankAccount($this->filters['bank_account_id']);
         }
 
         if (!empty($this->dateStart) && !empty($this->dateEnd)) {

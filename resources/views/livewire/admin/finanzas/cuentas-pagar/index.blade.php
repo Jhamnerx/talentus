@@ -3,17 +3,58 @@
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
         <div class="mb-4 sm:mb-0">
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Cuentas por Pagar ✨</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                Lista de compras con saldo pendiente de pago
+            </p>
         </div>
     </div>
 
-    <!-- Search -->
-    <div class="mb-4">
-        <x-form.input wire:model.live="search" placeholder="Buscar cuenta..." icon="magnifying-glass" />
+    <!-- Totals Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <!-- Total por Pagar Card -->
+        <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-700/50 rounded-lg p-4 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-red-600 dark:text-red-400">Total por Pagar</p>
+                    <p class="text-2xl font-bold text-red-900 dark:text-red-100 mt-1">
+                        S/ {{ number_format($totales['total_por_pagar'] ?? 0, 2) }}
+                    </p>
+                </div>
+                <div class="p-3 bg-red-200/50 dark:bg-red-700/30 rounded-full">
+                    <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Pagado Card -->
+        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border border-emerald-200 dark:border-emerald-700/50 rounded-lg p-4 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pagado (Parcial)</p>
+                    <p class="text-2xl font-bold text-emerald-900 dark:text-emerald-100 mt-1">
+                        S/ {{ number_format($totales['total_pagado'] ?? 0, 2) }}
+                    </p>
+                </div>
+                <div class="p-3 bg-emerald-200/50 dark:bg-emerald-700/30 rounded-full">
+                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Filters -->
-    <div class="sm:flex sm:justify-between sm:items-center mb-4">
-        <div class="flex items-center gap-2">
+    <div class="mb-4 space-y-3">
+        <!-- Search -->
+        <div>
+            <x-form.input wire:model.live="search" placeholder="Buscar por número o proveedor..." icon="magnifying-glass" />
+        </div>
+
+        <!-- Filters Row -->
+        <div class="flex flex-wrap items-center gap-2">
             <!-- Date filter -->
             <div class="relative inline-flex" x-data="{ open: false, selected: 4 }">
                 <button
@@ -94,15 +135,6 @@
                 </div>
             </div>
 
-            <!-- Estado filter -->
-            <x-form.select placeholder="Todos los Estados" wire:model.live="estado_filter">
-                <x-select.option label="Todos los Estados" value="" />
-                <x-select.option label="Pendiente" value="PENDIENTE" />
-                <x-select.option label="Parcial" value="PARCIAL" />
-                <x-select.option label="Pagado" value="PAGADO" />
-                <x-select.option label="Vencido" value="VENCIDO" />
-            </x-form.select>
-
             <!-- Proveedor filter -->
             <x-form.select placeholder="Todos los Proveedores" wire:model.live="proveedor_id"
                 option-description="numero_documento" :async-data="route('api.proveedores.index')" option-label="razon_social" option-value="id" />
@@ -126,9 +158,6 @@
                             <div class="font-semibold text-left">Emisión</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                            <div class="font-semibold text-left">Vencimiento</div>
-                        </th>
-                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-right">Total</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -147,45 +176,107 @@
                 </thead>
                 <tbody
                     class="text-sm divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
-                    @forelse($cuentas as $cuenta)
+                    @forelse($documentos as $doc)
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-gray-800 dark:text-gray-100">
-                                    {{ $cuenta->proveedor->nombre }}</div>
+                                    {{ $doc->proveedor->razon_social ?? 'N/A' }}
+                                </div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">
+                                    {{ $doc->proveedor->numero_documento ?? '' }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">{{ $cuenta->numero_documento }}</div>
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                                        Compra
+                                    </span>
+                                    <span class="text-gray-800 dark:text-gray-100">{{ $doc->numero_documento }}</span>
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $cuenta->fecha_emision->format('d/m/Y') }}</div>
+                                    {{ \Carbon\Carbon::parse($doc->fecha_emision)->format('d/m/Y') }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $cuenta->fecha_vencimiento->format('d/m/Y') }}</div>
+                                <div class="font-semibold text-right text-gray-900 dark:text-gray-100">
+                                    {{ $doc->divisa }} {{ number_format($doc->total, 2) }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-right text-gray-900 dark:text-gray-100">S/
-                                    {{ number_format($cuenta->monto_total, 2) }}</div>
+                                <div class="text-right text-emerald-600 dark:text-emerald-400">
+                                    {{ $doc->divisa }} {{ number_format($doc->total_pagado ?? 0, 2) }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-right text-emerald-600 dark:text-emerald-400">S/
-                                    {{ number_format($cuenta->monto_pagado, 2) }}</div>
-                            </td>
-                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="font-semibold text-right text-rose-600 dark:text-rose-400">S/
-                                    {{ number_format($cuenta->saldo_pendiente, 2) }}</div>
+                                <div class="font-semibold text-right text-red-600 dark:text-red-400">
+                                    {{ $doc->divisa }} {{ number_format($doc->total_pendiente ?? 0, 2) }}
+                                </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex justify-center">
-                                    <span
-                                        class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $cuenta->estado->statusColor() }}">
-                                        {{ $cuenta->estado->value }}
+                                    @php
+                                        $estadoColor = match($doc->pago_estado) {
+                                            'PAID' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
+                                            'PARTIAL' => 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+                                            'UNPAID' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
+                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+                                        };
+                                        $estadoLabel = match($doc->pago_estado) {
+                                            'PAID' => 'Pagado',
+                                            'PARTIAL' => 'Parcial',
+                                            'UNPAID' => 'Pendiente',
+                                            default => $doc->pago_estado
+                                        };
+                                    @endphp
+                                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $estadoColor }}">
+                                        {{ $estadoLabel }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center justify-center gap-2">
+                                    @if ($doc->pago_estado !== 'PAID')
+                                        <button wire:click="$dispatch('open-modal-register-payment-compras', { paymentable_id: {{ $doc->id }} })"
+                                            class="text-emerald-400 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-400"
+                                            title="Registrar Pago">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                        </button>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-10 text-center">
+                                <div class="text-gray-400 dark:text-gray-500">
+                                    <svg class="inline-block w-12 h-12 mb-2" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                                        </path>
+                                    </svg>
+                                    <p class="font-medium">No se encontraron compras con saldo pendiente</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-4">
+        {{ $documentos->links() }}
+    </div>
+</div>
                                     @if ($cuenta->estado->value !== 'PAGADO')
                                         <button wire:click="registrarPago({{ $cuenta->id }})"
                                             class="text-emerald-400 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-400"

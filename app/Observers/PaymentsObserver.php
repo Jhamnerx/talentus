@@ -6,7 +6,6 @@ use App\Models\Cash;
 use App\Models\Payments;
 use App\Models\BankAccount;
 use App\Models\ChangesModels;
-use App\Models\GlobalPayment;
 use App\Models\CashDocument;
 use App\Models\CashDocumentPayment;
 use App\Models\CashDocumentCredit;
@@ -31,6 +30,40 @@ class PaymentsObserver
 
         $payment->empresa_id = session('empresa');
         $payment->user_id = Auth::user()->id;
+        
+        // Calcular type_movement automáticamente si no está definido
+        if (empty($payment->type_movement)) {
+            $payment->type_movement = $this->getTypeMovement($payment);
+        }
+
+        // Calcular description automáticamente si no está definida
+        if (empty($payment->description)) {
+            $payment->description = $this->getDescription($payment);
+        }
+
+        // Obtener datos de moneda del documento paymentable
+        $currencyData = $this->getCurrencyDataFromPaymentable($payment);
+        if (empty($payment->divisa)) {
+            $payment->divisa = $currencyData['divisa'];
+        }
+        if (empty($payment->tipo_cambio) || $payment->tipo_cambio == 1) {
+            $payment->tipo_cambio = $currencyData['tipo_cambio'];
+        }
+
+        // ✅ CRÍTICO: Calcular payment_destination_type y payment_destination_id desde payment_destination_id original
+        // Solo se ejecuta si payment_destination_id contiene el valor original ('cash' o ID) pero no el tipo
+        if (!empty($payment->payment_destination_id) && empty($payment->payment_destination_type)) {
+            $destinationData = $this->getDestinationRecord($payment);
+            $payment->payment_destination_type = $destinationData['destination_type'];
+            $payment->payment_destination_id = $destinationData['destination_id'];
+            
+            Log::info('Destino asignado en creating()', [
+                'payment_numero' => $payment->numero,
+                'input_payment_destination_id' => $payment->payment_destination_id,
+                'payment_destination_type' => $payment->payment_destination_type,
+                'payment_destination_id' => $payment->payment_destination_id,
+            ]);
+        }
     }
 
     public function created(Payments $payment)
@@ -49,8 +82,8 @@ class PaymentsObserver
         // Refrescar el modelo para asegurar que tiene todos los datos
         $payment->refresh();
 
-        // Crear GlobalPayment automáticamente (Opción 1)
-        $this->createGlobalPayment($payment);
+        // Actualizar saldo de caja multi-moneda si el destino es Cash
+        $this->updateCashBalance($payment);
 
         // Crear CashDocument automáticamente si corresponde (como FactuPRO)
         $this->processCashDocument($payment);
@@ -84,66 +117,55 @@ class PaymentsObserver
     }
 
     /**
-     * Crear GlobalPayment automáticamente cuando se crea un Payment
-     * 
-     * IMPORTANTE: Siempre se crea el GlobalPayment, incluso si no hay destino.
-     * Esto permite rastrear todos los movimientos financieros aunque no haya
-     * caja abierta o cuenta bancaria activa.
-     * 
-     * destination_id puede ser NULL si:
-     * - Es pago en efectivo pero no hay caja abierta
-     * - Es pago bancario pero no hay cuenta activa
-     * - Es pago a crédito (no genera movimiento inmediato)
-     * 
-     * El sistema de reportes debe manejar estos casos y permitir
-     * reasignar movimientos "huérfanos" a cajas/cuentas después.
+     * Actualizar saldo de caja multi-moneda cuando se registra un pago
      * 
      * @param Payments $payment
      * @return void
      */
-    protected function createGlobalPayment(Payments $payment): void
+    protected function updateCashBalance(Payments $payment): void
     {
         try {
-            // Obtener destino usando payment_destination_id (como FactuPRO)
-            $destinationData = $this->getDestinationRecord($payment);
-
-            // Determinar el tipo de movimiento (INGRESO o EGRESO)
-            $typeMovement = $this->getTypeMovement($payment);
-
-            // Crear GlobalPayment con destination_type y destination_id
-            GlobalPayment::create([
-                'type_movement' => $typeMovement,
-                'date' => $payment->fecha,
-                'description' => $this->getDescription($payment),
-                'payment_id' => $payment->id,
-                'payment_type' => Payments::class,
-                'destination_id' => $destinationData['destination_id'],
-                'destination_type' => $destinationData['destination_type'],
-                'user_id' => $payment->user_id,
-                'empresa_id' => $payment->empresa_id,
-            ]);
-
-            // Actualizar el saldo de la caja SOLO si hay destino Y es una caja
-            if ($destination instanceof Cash) {
-                if ($typeMovement === 'INGRESO') {
-                    $destination->increment('saldo_actual', $payment->monto);
-                } else {
-                    $destination->decrement('saldo_actual', $payment->monto);
-                }
+            // Solo actualizar si el destino es una caja
+            if ($payment->payment_destination_type !== Cash::class || !$payment->payment_destination_id) {
+                return;
             }
 
-            // Log informativo si no hay destino
-            if (!$destination) {
-                Log::info('GlobalPayment creado sin destino específico', [
+            $cash = Cash::find($payment->payment_destination_id);
+            if (!$cash) {
+                Log::warning('Caja no encontrada para actualizar saldo', [
                     'payment_id' => $payment->id,
-                    'type_movement' => $typeMovement,
-                    'monto' => $payment->monto,
-                    'nota' => 'El movimiento está registrado pero no asignado a caja/banco. Puede reasignarse después.',
+                    'cash_id' => $payment->payment_destination_id,
                 ]);
+                return;
             }
+
+            // Determinar si es ingreso o egreso
+            $esIngreso = $payment->type_movement === 'INGRESO';
+
+            // Determinar montos por moneda
+            $montoPen = 0;
+            $montoUsd = 0;
+
+            if ($payment->divisa === 'PEN') {
+                $montoPen = (float) $payment->monto;
+            } elseif ($payment->divisa === 'USD') {
+                $montoUsd = (float) $payment->monto;
+            }
+
+            // Actualizar saldo usando el método del modelo Cash
+            $cash->actualizarSaldoPorMoneda($montoPen, $montoUsd, $esIngreso);
+
+            Log::info('Saldo de caja actualizado (multi-moneda)', [
+                'cash_id' => $cash->id,
+                'payment_id' => $payment->id,
+                'type_movement' => $payment->type_movement,
+                'divisa' => $payment->divisa,
+                'monto' => $payment->monto,
+                'saldo_pen' => $cash->fresh()->saldo_actual_pen,
+                'saldo_usd' => $cash->fresh()->saldo_actual_usd,
+            ]);
         } catch (\Exception $e) {
-            // Log el error pero NO fallar la creación del Payment
-            Log::error('Error al crear GlobalPayment automático', [
+            Log::error('Error al actualizar saldo de caja', [
                 'payment_id' => $payment->id,
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
@@ -181,6 +203,55 @@ class PaymentsObserver
         return [
             'destination_id' => null,
             'destination_type' => null,
+        ];
+    }
+
+    /**
+     * Obtener divisa, monto y tipo_cambio del paymentable (Ventas/Recibos/Compras)
+     * 
+     * Esto evita N+1 queries en reportes al tener estos valores directamente en Payments
+     * 
+     * @param Payments $payment
+     * @return array ['divisa' => string, 'monto' => float, 'tipo_cambio' => float]
+     */
+    protected function getCurrencyDataFromPaymentable(Payments $payment): array
+    {
+        $paymentable = $payment->paymentable;
+
+        // Valores por defecto
+        $defaults = [
+            'divisa' => 'PEN',
+            'monto' => $payment->monto ?? 0,
+            'tipo_cambio' => 1,
+        ];
+
+        if (!$paymentable) {
+            return $defaults;
+        }
+
+        // Leer divisa del documento (Ventas, Recibos, Compras tienen 'divisa')
+        $divisa = $defaults['divisa'];
+        if (isset($paymentable->divisa)) {
+            $divisa = strtoupper($paymentable->divisa);
+        } elseif (isset($paymentable->currency_type_id)) {
+            $divisa = strtoupper($paymentable->currency_type_id);
+        } elseif (isset($paymentable->moneda)) {
+            $divisa = strtoupper($paymentable->moneda);
+        }
+
+        // Leer tipo_cambio del documento
+        $tipoCambio = $defaults['tipo_cambio'];
+        if (isset($paymentable->tipo_cambio)) {
+            $tipoCambio = (float) $paymentable->tipo_cambio;
+        } elseif (isset($paymentable->exchange_rate_sale)) {
+            $tipoCambio = (float) $paymentable->exchange_rate_sale;
+        }
+
+        return [
+            'divisa' => $divisa,
+            'monto' => $payment->monto ?? 0,
+            'tipo_cambio' => $tipoCambio,
+        ];
     }
 
     /**
@@ -208,7 +279,7 @@ class PaymentsObserver
     }
 
     /**
-     * Generar descripción para el GlobalPayment
+     * Generar descripción para el Payment
      * 
      * @param Payments $payment
      * @return string
@@ -249,8 +320,17 @@ class PaymentsObserver
     }
 
     /**
-     * Procesar y crear CashDocument cuando corresponda
+     * Procesar y crear CashDocument cuando corresponda (Sistema de Reportes)
+     * 
      * Basado en el flujo de FactuPRO: CashController::cash_document()
+     * 
+     * CashDocument es la tabla que vincula documentos (Ventas, Recibos, Compras)
+     * con las cajas donde se registraron. Es ESENCIAL para:
+     * 
+     * - Reportes de caja por periodo
+     * - Historial de documentos por caja
+     * - Conciliación de ingresos/egresos
+     * - Auditoría de movimientos
      * 
      * Este método se ejecuta DESPUÉS de crear el Payment, por lo que el documento
      * ya está completamente guardado con todos sus pagos.

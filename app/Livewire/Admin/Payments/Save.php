@@ -9,8 +9,10 @@ use App\Models\Ventas;
 use App\Models\Recibos;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Computed;
 use WireUi\Traits\WireUiActions;
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Helpers\PaymentDestinationHelper;
 
 class Save extends Component
 {
@@ -39,8 +41,13 @@ class Save extends Component
     public $showBankAccountSelector = false;
     public $bankAccounts = [];
     public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
-    public $availableCashes = [];
     public $showDestinationSelector = true; // Siempre mostrar selector de destino
+
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
+    }
 
     public function render()
     {
@@ -220,16 +227,13 @@ class Save extends Component
         $this->documentos = $this->loadFacturas();
         $this->paymentable_type = Ventas::class;
 
-        // Cargar destinos disponibles
-        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
-        $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
-
         // Verificar si hay destinos disponibles
         $this->checkAvailableDestinations();
 
         // Auto-seleccionar caja si solo hay una
-        if (count($this->availableCashes) == 1 && count($this->bankAccounts) == 0) {
-            $this->payment_destination_id = 'cash';
+        $destinations = $this->paymentDestinations();
+        if ($destinations->count() == 1) {
+            $this->payment_destination_id = $destinations->first()['id'];
         }
     }
 
@@ -282,8 +286,7 @@ class Save extends Component
             'saldoPendiente',
             'showBankAccountSelector',
             'bankAccounts',
-            'payment_destination_id',
-            'availableCashes'
+            'payment_destination_id'
         ]);
         $this->resetValidation();
     }
@@ -331,6 +334,19 @@ class Save extends Component
         }
 
         try {
+            // Validar destino usando helper
+            $destinationRecord = PaymentDestinationHelper::getDestinationRecord($this->payment_destination_id);
+
+            if (!$destinationRecord['destination_id']) {
+                $this->notification()->error(
+                    'Error',
+                    'No hay destino válido seleccionado. Verifique que exista una caja abierta o cuenta bancaria activa.'
+                );
+                return;
+            }
+
+            // ✅ IMPORTANTE: Solo enviar payment_destination_id original ('cash' o ID de banco)
+            // El Observer lo resolverá automáticamente a payment_destination_type y payment_destination_id
             $payment = Payments::create([
                 'numero' => $this->numero,
                 'numero_operacion' => $this->numero_operacion,
@@ -340,8 +356,8 @@ class Save extends Component
                 'divisa' => $this->divisa,
                 'monto' => $this->monto,
                 'payment_method_id' => $this->payment_method_id,
-                'payment_destination_id' => $this->payment_destination_id, // ✅ Agregado
-                'bank_account_id' => $this->bank_account_id, // Mantener por compatibilidad
+                'payment_destination_id' => $this->payment_destination_id, // 'cash' o ID banco SIN resolver
+                'bank_account_id' => $this->bank_account_id,
                 'cobros_id' => $this->cobros_id,
                 'paymentable_type' => $this->paymentable_type,
                 'paymentable_id' => $this->paymentable_id,

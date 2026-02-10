@@ -270,14 +270,10 @@ class CajaChicaPdfController extends Controller
     {
         $this->authorize('ver-caja-chica');
 
-        // Obtener todos los GlobalPayments de esta caja
-        $globalPayments = \App\Models\GlobalPayment::where('destination_type', \App\Models\Cash::class)
+        $payments = \App\Models\Payments::where('destination_type', \App\Models\Cash::class)
             ->where('destination_id', $caja->id)
-            ->with('payment.paymentable') // Cargar Ventas/Recibos con divisa y tipo_cambio
+            ->with('paymentable')
             ->get();
-
-        // Obtener solo los pagos
-        $payments = $globalPayments->pluck('payment')->filter();
 
         // ✅ Usar FinanceTrait para calcular totales con conversión
         $totalPEN = $this->calculateTotalCurrencyType($payments, 'PEN');

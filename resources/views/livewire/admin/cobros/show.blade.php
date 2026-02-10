@@ -36,29 +36,37 @@
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                             <div class="text-sm text-blue-900 dark:text-blue-100">
-                                <p class="font-bold mb-2 text-base">Flujo recomendado:</p>
-                                <ol class="list-decimal list-inside space-y-1.5 text-blue-800 dark:text-blue-200">
-                                    <li class="font-medium">Crear Factura/Boleta/Recibo con los vehículos seleccionados
-                                    </li>
-                                    <li class="font-medium">Regresar aquí con las flechas del navegador (los vehículos
-                                        quedan seleccionados)</li>
-                                    <li class="font-medium">Click en "Pagar Todo" para registrar el pago y auto-renovar
-                                        fechas</li>
-                                </ol>
+                                <p class="font-bold mb-2 text-base">Emisión masiva:</p>
+                                <p class="text-blue-800 dark:text-blue-200">
+                                    Serás redirigido al módulo de emisión con los vehículos seleccionados. 
+                                    Al guardar, el estado se actualizará automáticamente y regresarás aquí.
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 gap-4">
-                        {{-- Paso 1: Crear Documento --}}
+                        {{-- Emitir Documento --}}
                         <div>
-                            <h4
-                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                                <span
-                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">1</span>
-                                Crear Documento
+                            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">1</span>
+                                Emitir Documento
                             </h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <x-form.button full="true" emerald wire:click="facturarMasivo('CONTADO')"
+                                    right-icon="currency-dollar" label="Emitir CONTADO" />
+                                <x-form.button full="true" amber wire:click="facturarMasivo('CRÉDITO')"
+                                    right-icon="document-text" label="Emitir CRÉDITO" />
+                            </div>
+                        </div>
+
+                        {{-- Opciones Avanzadas Masivas --}}
+                        <details class="group">
+                            <summary class="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 flex items-center gap-2">
+                                <span class="group-open:rotate-90 transition-transform">▶</span>
+                                Opciones Avanzadas (elegir tipo de documento)
+                            </summary>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-3">
                                 @if ($cobro->clientes->tipo_documento_id == 6)
                                     <x-form.button full="true" sky wire:click.prevent="createFacturaGeneral()"
                                         right-icon="document-text" label="Crear Factura" />
@@ -70,15 +78,13 @@
                                 <x-form.button full="true" slate wire:click.prevent="createReciboGeneral()"
                                     right-icon="document" label="Crear Recibo" />
                             </div>
-                        </div>
+                        </details>
 
-                        {{-- Paso 2: Registrar Pago --}}
+                        {{-- Registrar Pago (para documentos ya emitidos) --}}
                         <div>
-                            <h4
-                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                                <span
-                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">2</span>
-                                Registrar Pago (Documento ya debe existir)
+                            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">2</span>
+                                Pago Pendiente (si ya fue facturado a crédito)
                             </h4>
                             <x-form.button full="true" primary wire:click="openModalPaymentBulk()"
                                 right-icon="currency-dollar" label="Pagar Todo" />
@@ -185,32 +191,129 @@
 
                 @livewire('admin.cobros.suspend', ['detalle' => $item], key('suspend' . $item->id))
 
-                @if ($item->estado)
-                    @can('admin.payments.create')
-                        <div class="flex justify-center mb-4">
-                            <x-form.button wire:click.prevent="openModalPayment({{ $item->id }})"
-                                right-icon="exclamation-triangle" warning label=" Pagar - ${{ $item->plan }}" />
-                        </div>
-                    @endcan
-                @endif
-
+                {{-- ESTADO DE FACTURACIÓN --}}
                 <div class="border-t border-gray-200 dark:border-gray-700/60 pt-4 mt-4">
-                    <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Opciones de Facturación
-                    </h4>
-                    <div class="space-y-2">
-                        @if ($cobro->clientes->tipo_documento_id == 1)
-                            <x-form.button full="true" cyan
-                                wire:click.prevent="createBoleta([{{ $item->id }}])" right-icon="currency-dollar"
-                                label="Crear Boleta" />
-                        @endif
-                        @if ($cobro->clientes->tipo_documento_id == 6)
-                            <x-form.button full="true" sky
-                                wire:click.prevent="createFactura([{{ $item->id }}])"
-                                right-icon="currency-dollar" label="Crear Factura" />
-                        @endif
-                        <x-form.button full="true" slate wire:click.prevent="createRecibo([{{ $item->id }}])"
-                            right-icon="currency-dollar" label="Crear Recibo" />
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Estado de Facturación</h4>
+                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold {{ $item->estado_facturacion?->color() ?? 'bg-gray-100 text-gray-800' }}">
+                            {{ $item->estado_facturacion?->icon() ?? '📋' }}
+                            {{ $item->estado_facturacion?->label() ?? 'Sin Facturar' }}
+                        </span>
                     </div>
+
+                    {{-- MOSTRAR DOCUMENTO SI ESTÁ FACTURADO --}}
+                    @if($item->estado_facturacion && 
+                        ($item->estado_facturacion->value === 'FACTURADO' || $item->estado_facturacion->value === 'PAGADO'))
+                        <div class="bg-gray-50 dark:bg-gray-900/20 rounded-lg p-3 mb-3">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Documento</p>
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                        {{ $item->numero_documento ?? 'N/A' }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Fecha Facturación</p>
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                                        {{ $item->fecha_facturacion?->format('d/m/Y') ?? '-' }}
+                                    </p>
+                                </div>
+                            </div>
+                            @if($item->estado_facturacion->value === 'PAGADO' && $item->fecha_pago)
+                            <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Fecha de Pago</p>
+                                <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                                    {{ $item->fecha_pago->format('d/m/Y') }}
+                                </p>
+                            </div>
+                            @endif
+                        </div>
+                    @endif
+
+                    {{-- BOTONES INTELIGENTES SEGÚN ESTADO --}}
+                    @if ($item->estado)
+                        @php
+                            $estadoFacturacion = $item->estado_facturacion?->value ?? 'SIN_FACTURAR';
+                            $tipoDoc = $cobro->tipo_pago === 'RECIBO' ? 'Recibo' : ($cobro->clientes->tipo_documento_id == 6 ? 'Factura' : 'Boleta');
+                        @endphp
+
+                        @if($estadoFacturacion === 'SIN_FACTURAR')
+                            {{-- SIN FACTURAR: Redirect inteligente al módulo Emitir/Create --}}
+                            <div class="space-y-2">
+                                @can('admin.ventas.create')
+                                <button wire:click="facturarInteligente({{ $item->id }}, 'CONTADO')"
+                                    class="w-full px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                    <span>💰</span>
+                                    <span>Emitir {{ $tipoDoc }} (CONTADO)</span>
+                                </button>
+                                @endcan
+                                
+                                @can('admin.ventas.create')
+                                <button wire:click="facturarInteligente({{ $item->id }}, 'CRÉDITO')"
+                                    class="w-full px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                    <span>📄</span>
+                                    <span>Emitir {{ $tipoDoc }} (CRÉDITO)</span>
+                                </button>
+                                @endcan
+                            </div>
+
+                        @elseif($estadoFacturacion === 'FACTURADO')
+                            {{-- FACTURADO PERO NO PAGADO: Mostrar doc + Botón para registrar pago --}}
+                            @if($item->venta)
+                                <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 rounded-lg p-3 mb-2 text-center">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Documento emitido</p>
+                                    <p class="text-sm font-bold text-sky-700 dark:text-sky-300">{{ $item->venta->serie_numero }}</p>
+                                </div>
+                            @elseif($item->recibo)
+                                <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 rounded-lg p-3 mb-2 text-center">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Recibo emitido</p>
+                                    <p class="text-sm font-bold text-sky-700 dark:text-sky-300">{{ $item->recibo->serie_numero }}</p>
+                                </div>
+                            @endif
+                            @can('admin.payments.create')
+                            <div class="space-y-2">
+                                <button wire:click="openModalPayment({{ $item->id }})"
+                                    class="w-full px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                    <span>💳</span>
+                                    <span>Registrar Pago</span>
+                                </button>
+                                
+                                <p class="text-xs text-center text-gray-500 dark:text-gray-400">
+                                    También puedes registrar el pago desde <br>
+                                    <a href="{{ route('admin.finanzas.cuentas-cobrar.index') }}" class="text-blue-600 hover:underline">Cuentas por Cobrar</a>
+                                </p>
+                            </div>
+                            @endcan
+
+                        @else
+                            {{-- PAGADO: Mostrar información del documento --}}
+                            <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 text-center">
+                                <div class="text-3xl mb-2">✅</div>
+                                <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                                    Mensualidad Pagada
+                                </p>
+                                @if($item->venta)
+                                    <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">
+                                        {{ $item->venta->serie_numero }}
+                                    </p>
+                                @elseif($item->recibo)
+                                    <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">
+                                        {{ $item->recibo->serie_numero }}
+                                    </p>
+                                @endif
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                    Próximo vencimiento: {{ $item->fecha->format('d/m/Y') }}
+                                </p>
+                            </div>
+                        @endif
+                    @else
+                        {{-- VEHÍCULO SUSPENDIDO --}}
+                        <div class="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center">
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                Vehículo suspendido
+                            </p>
+                        </div>
+                    @endif
                 </div>
 
                 @if ($cobro->comentario)
@@ -291,4 +394,7 @@
             </div>
         </div>
     @endif
+
+    {{-- COMPONENTE FACTURAR Y COBRAR (desactivado - ahora usa redirect a Emitir/Create) --}}
+    {{-- @livewire('admin.cobros.facturar-y-cobrar') --}}
 </div>

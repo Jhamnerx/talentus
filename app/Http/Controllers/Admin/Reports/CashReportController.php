@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin\Reports;
 use App\Http\Controllers\Controller;
 use App\Traits\FinanceTrait; // Incluir el trait
 use App\Models\Cash;
-use App\Models\GlobalPayment;
 use App\Models\Payments;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -33,15 +32,11 @@ class CashReportController extends Controller
         $dateFrom = $request->input('date_from', now()->startOfMonth());
         $dateTo = $request->input('date_to', now()->endOfMonth());
 
-        // Obtener GlobalPayments de la caja
-        $globalPayments = GlobalPayment::where('destination_type', Cash::class)
+        $payments = Payments::where('destination_type', Cash::class)
             ->where('destination_id', $cashId)
-            ->whereBetween('date', [$dateFrom, $dateTo])
-            ->with('payment.paymentable') // Cargar Ventas/Recibos con divisa y tipo_cambio
+            ->whereBetween('fecha', [$dateFrom, $dateTo])
+            ->with('paymentable')
             ->get();
-
-        // Obtener solo los pagos
-        $payments = $globalPayments->pluck('payment')->filter();
 
         // Calcular totales en AMBAS monedas usando FinanceTrait
         $totalPEN = $this->calculateTotalCurrencyType($payments, 'PEN');
@@ -52,7 +47,7 @@ class CashReportController extends Controller
         $balanceUSD = $this->getBalanceByCash($cashId, 'USD');
 
         return view('admin.reports.cash', [
-            'globalPayments' => $globalPayments,
+            'payments' => $payments,
             'totalPEN' => $totalPEN,
             'totalUSD' => $totalUSD,
             'balancePEN' => $balancePEN,
@@ -71,7 +66,7 @@ class CashReportController extends Controller
         $currencyType = $request->input('currency_type', 'PEN'); // PEN o USD
 
         // Obtener ingresos
-        $incomePayments = GlobalPayment::where('destination_type', Cash::class)
+        $incomePayments = Payments::where('destination_type', Cash::class)
             ->where('destination_id', $cashId)
             ->where('type_movement', 'INGRESO')
             ->with('payment.paymentable')
@@ -80,7 +75,7 @@ class CashReportController extends Controller
             ->filter();
 
         // Obtener egresos
-        $expensePayments = GlobalPayment::where('destination_type', Cash::class)
+        $expensePayments = Payments::where('destination_type', Cash::class)
             ->where('destination_id', $cashId)
             ->where('type_movement', 'EGRESO')
             ->with('payment.paymentable')

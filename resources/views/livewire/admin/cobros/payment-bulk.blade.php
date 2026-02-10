@@ -33,131 +33,175 @@
 
             <div class="grid grid-cols-12 gap-6">
 
-                {{-- NUMERO --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                        for="numero">Número:
-                        <span class="text-rose-500">*</span></label>
-                    <div class="relative">
-                        <input type="text"
-                            class="w-full form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
-                            wire:model.live='numero' disabled>
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <svg class="w-4 h-4 fill-current text-slate-400 dark:text-gray-500 shrink-0 ml-3 mr-2"
-                                viewBox="0 0 16 16">
-                                <path
-                                    d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
-                            </svg>
+                {{-- MODO: CREAR vs ASOCIAR --}}
+                <div class="col-span-12 mb-4">
+                    <div class="flex items-center justify-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Modo:</label>
+                        <div class="flex gap-2">
+                            <x-form.button :primary="$paymentMode === 'create'" :flat="$paymentMode !== 'create'" label="Crear Nuevo Pago"
+                                wire:click="$set('paymentMode', 'create')" sm />
+                            <x-form.button :secondary="$paymentMode === 'associate'" :flat="$paymentMode !== 'associate'" label="Asociar Pago Existente"
+                                wire:click="$set('paymentMode', 'associate')" sm />
                         </div>
                     </div>
                 </div>
 
-                {{-- TIPO PAGO --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="tipo_pago">Tipo
-                        Pago: <span class="text-rose-500">*</span></label>
-                    <select id="tipo_pago" name="tipo_pago" wire:model.live="tipo_pago"
-                        class="w-full form-select dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
-                        <option value="FACTURA">Factura/Boleta</option>
-                        <option value="RECIBO">Recibo</option>
-                    </select>
-                    @error('tipo_pago')
-                        <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
+                @if ($paymentMode === 'associate')
+                    {{-- MODO ASOCIAR: Solo selector de pagos existentes --}}
+                    <div class="col-span-12">
+                        <x-form.select wire:model.defer="existing_payment_id" label="Selecciona el Pago a Asociar"
+                            placeholder="Busca un pago existente...">
+                            @if (count($existingPayments) > 0)
+                                @foreach ($existingPayments as $payment)
+                                    <x-select.option label="{{ $payment['label'] }}" value="{{ $payment['id'] }}" />
+                                @endforeach
+                            @else
+                                <x-select.option label="No hay pagos disponibles para asociar" value=""
+                                    disabled />
+                            @endif
+                        </x-form.select>
 
-                {{-- DOCUMENTO --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <x-form.select wire:model.live="paymentable_id" label="{{ $titulo_documento }}"
-                        placeholder="Selecciona">
-                        @foreach ($documentos as $documento)
-                            <x-select.option
-                                label="{{ $documento['text'] }} - {{ $documento['divisa'] }} {{ $documento['total'] }}"
-                                value="{{ $documento['id'] }}" />
-                        @endforeach
-                    </x-form.select>
-                </div>
-
-                {{-- METODO DE PAGO --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <x-form.select wire:model.live="payment_method_id" label="Método de pago" placeholder="Selecciona">
-                        @foreach ($paymentsMethods as $method)
-                            <x-select.option label="{{ $method->description }}" value="{{ $method->id }}" />
-                        @endforeach
-                    </x-form.select>
-                </div>
-
-                {{-- ✅ NUEVO: Destino del Pago --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
-                        placeholder="Seleccione destino">
-                        @if (count($availableCashes) > 0)
-                            <x-select.option label="💰 Caja" value="cash" />
-                        @endif
-                        @foreach ($bankAccounts as $account)
-                            <x-select.option label="🏦 {{ $account->description }} - {{ $account->currency_name }}"
-                                value="{{ $account->id }}" />
-                        @endforeach
-                    </x-form.select>
-                </div>
-
-                {{-- AUTO RENOVAR --}}
-                <div class="col-span-12">
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
-                        <div class="flex-1">
-                            <label for="auto_renovar"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                Renovar automáticamente las fechas
-                            </label>
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                Al guardar el pago, se actualizarán las fechas según el período configurado
+                        @if (count($existingPayments) === 0)
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                ℹ️ No hay pagos a CRÉDITO disponibles sin cobro asociado para este cliente.
                             </p>
-                        </div>
-                        <x-form.toggle wire:model.live="auto_renovar" id="auto_renovar" />
+                        @endif
                     </div>
-                </div>
+                @else
+                    {{-- MODO CREAR: Formulario completo normal --}}
 
-                {{-- MONTO --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="monto_total">
-                        Monto Total: <span class="text-rose-500">*</span>
-                    </label>
-                    <div class="relative">
-                        <input type="number" step="0.01" id="monto_total"
-                            class="w-full form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
-                            wire:model.live='monto_total'>
-                        <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                            <span class="text-slate-400 dark:text-gray-500 ml-3 mr-2">{{ $divisa }}</span>
+                    {{-- NUMERO --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                            for="numero">Número:
+                            <span class="text-rose-500">*</span></label>
+                        <div class="relative">
+                            <input type="text"
+                                class="w-full form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                                wire:model.live='numero' disabled>
+                            <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                <svg class="w-4 h-4 fill-current text-slate-400 dark:text-gray-500 shrink-0 ml-3 mr-2"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M11.7.3c-.4-.4-1-.4-1.4 0l-10 10c-.2.2-.3.4-.3.7v4c0 .6.4 1 1 1h4c.3 0 .5-.1.7-.3l10-10c.4-.4.4-1 0-1.4l-4-4zM4.6 14H2v-2.6l6-6L10.6 8l-6 6zM12 6.6L9.4 4 11 2.4 13.6 5 12 6.6z" />
+                                </svg>
+                            </div>
                         </div>
                     </div>
-                    @error('monto_total')
-                        <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
 
-                {{-- NUMERO OPERACION --}}
-                <div class="col-span-12 sm:col-span-6">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-                        for="numero_operacion">
-                        Número de Operación:
-                    </label>
-                    <input type="text" id="numero_operacion"
-                        class="w-full form-input focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
-                        wire:model.live='numero_operacion' placeholder="Ej: 0012345678">
-                    @error('numero_operacion')
-                        <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
-                    @enderror
-                </div>
+                    {{-- TIPO PAGO --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                            for="tipo_pago">Tipo
+                            Pago: <span class="text-rose-500">*</span></label>
+                        <select id="tipo_pago" name="tipo_pago" wire:model.live="tipo_pago"
+                            class="w-full form-select dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
+                            <option value="FACTURA">Factura/Boleta</option>
+                            <option value="RECIBO">Recibo</option>
+                        </select>
+                        @error('tipo_pago')
+                            <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
 
-                {{-- NOTA --}}
-                <div class="col-span-12 mb-2">
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="nota">
-                        Nota / Observación:
-                    </label>
-                    <textarea id="nota" rows="3"
-                        class="w-full form-textarea focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
-                        wire:model.live='nota' placeholder="Notas adicionales sobre este pago consolidado"></textarea>
-                </div>
+                    {{-- DOCUMENTO --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select wire:model.live="paymentable_id" label="{{ $titulo_documento }}"
+                            placeholder="Selecciona">
+                            @foreach ($documentos as $documento)
+                                <x-select.option
+                                    label="{{ $documento['text'] }} - {{ $documento['divisa'] }} {{ $documento['total'] }}"
+                                    value="{{ $documento['id'] }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- METODO DE PAGO --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select wire:model.live="payment_method_id" label="Método de pago"
+                            placeholder="Selecciona">
+                            @foreach ($paymentsMethods as $method)
+                                <x-select.option label="{{ $method->description }}" value="{{ $method->id }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- ✅ NUEVO: Destino del Pago --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
+                            placeholder="Seleccione destino">
+                            @if (count($availableCashes) > 0)
+                                <x-select.option label="💰 Caja" value="cash" />
+                            @endif
+                            @foreach ($bankAccounts as $account)
+                                <x-select.option
+                                    label="🏦 {{ $account->description }} - {{ $account->currency_name }}"
+                                    value="{{ $account->id }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- AUTO RENOVAR --}}
+                    <div class="col-span-12">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+                            <div class="flex-1">
+                                <label for="auto_renovar"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                    Renovar automáticamente las fechas
+                                </label>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    Al guardar el pago, se actualizarán las fechas según el período configurado
+                                </p>
+                            </div>
+                            <x-form.toggle wire:model.live="auto_renovar" id="auto_renovar" />
+                        </div>
+                    </div>
+
+                    {{-- MONTO --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                            for="monto_total">
+                            Monto Total: <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input type="number" step="0.01" id="monto_total"
+                                class="w-full form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                                wire:model.live='monto_total'>
+                            <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                <span class="text-slate-400 dark:text-gray-500 ml-3 mr-2">{{ $divisa }}</span>
+                            </div>
+                        </div>
+                        @error('monto_total')
+                            <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- NUMERO OPERACION --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
+                            for="numero_operacion">
+                            Número de Operación:
+                        </label>
+                        <input type="text" id="numero_operacion"
+                            class="w-full form-input focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                            wire:model.live='numero_operacion' placeholder="Ej: 0012345678">
+                        @error('numero_operacion')
+                            <p class="mt-2 text-pink-600 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- NOTA --}}
+                    <div class="col-span-12 mb-2">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1" for="nota">
+                            Nota / Observación:
+                        </label>
+                        <textarea id="nota" rows="3"
+                            class="w-full form-textarea focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                            wire:model.live='nota' placeholder="Notas adicionales sobre este pago consolidado"></textarea>
+                    </div>
+
+                @endif
+                {{-- Fin condicional MODO CREAR --}}
 
             </div>
         </div>

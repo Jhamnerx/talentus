@@ -29,6 +29,10 @@ class Cash extends Model
     protected $casts = [
         'saldo_inicial' => 'decimal:2',
         'saldo_actual' => 'decimal:2',
+        'saldo_inicial_pen' => 'decimal:2',
+        'saldo_inicial_usd' => 'decimal:2',
+        'saldo_actual_pen' => 'decimal:2',
+        'saldo_actual_usd' => 'decimal:2',
         'fecha_apertura' => 'date:Y-m-d',
         'fecha_cierre' => 'date:Y-m-d',
         'estado' => 'boolean',
@@ -123,14 +127,22 @@ class Cash extends Model
 
     public function globalDestination()
     {
-        return $this->morphMany(GlobalPayment::class, 'destination');
+        return $this->morphMany(Payments::class, 'destination');
     }
 
     // Métodos de negocio
-    public function aperturar(float $saldoInicial, string $nombre, ?string $descripcion = null)
+    public function aperturar(float $saldoInicialPen = 0, float $saldoInicialUsd = 0, string $nombre = 'CAJA GENERAL', ?string $descripcion = null)
     {
-        $this->saldo_inicial = $saldoInicial;
-        $this->saldo_actual = $saldoInicial;
+        // Saldos por moneda
+        $this->saldo_inicial_pen = $saldoInicialPen;
+        $this->saldo_inicial_usd = $saldoInicialUsd;
+        $this->saldo_actual_pen = $saldoInicialPen;
+        $this->saldo_actual_usd = $saldoInicialUsd;
+
+        // Mantener saldo_inicial para compatibilidad (solo PEN)
+        $this->saldo_inicial = $saldoInicialPen;
+        $this->saldo_actual = $saldoInicialPen;
+
         $this->nombre = $nombre;
         $this->descripcion = $descripcion;
         $this->fecha_apertura = now()->toDateString();
@@ -157,14 +169,14 @@ class Cash extends Model
         $ingresos = 0;
         $egresos = 0;
 
-        // Cargar los pagos desde global_payments usando la relación polimórfica
-        foreach ($this->globalDestination()->with('payment.paymentable')->get() as $globalPayment) {
-            $monto = $globalPayment->payment?->monto ?? 0;
+        // Cargar los pagos desde payments usando la relación polimórfica
+        foreach ($this->globalDestination()->with('paymentable')->get() as $payment) {
+            $monto = $payment->monto ?? 0;
 
             if (!$monto) continue;
 
             // Usar el accessor type_movement que ya determina INGRESO/EGRESO
-            if ($globalPayment->type_movement === 'INGRESO') {
+            if ($payment->type_movement === 'INGRESO') {
                 $ingresos += $monto;
             } else {
                 $egresos += $monto;
@@ -200,11 +212,11 @@ class Cash extends Model
         $ventasTotalPayments = 0;
         $otrosIngresos = 0;
 
-        foreach ($this->globalDestination()->with('payment.paymentable')->get() as $globalPayment) {
-            if ($globalPayment->type_movement !== 'INGRESO') continue;
+        foreach ($this->globalDestination()->with('paymentable')->get() as $payment) {
+            if ($payment->type_movement !== 'INGRESO') continue;
 
-            $monto = $globalPayment->payment?->monto ?? 0;
-            $paymentable = $globalPayment->payment?->paymentable;
+            $monto = $payment->monto ?? 0;
+            $paymentable = $payment->paymentable;
 
             if (!$paymentable || !$monto) continue;
 
@@ -271,5 +283,89 @@ class Cash extends Model
     public function scopeByStatus($query, bool $status)
     {
         return $query->where('estado', $status);
+    }
+    /**
+     * M\u00e9todos multi-moneda
+     */
+
+    /**
+     * Calcular totales separados por moneda (PEN y USD)
+     */
+    public function calcularTotalesPorMoneda(): array
+    {
+        $ingresosPen = 0;
+        $ingresosUsd = 0;
+        $egresosPen = 0;
+        $egresosUsd = 0;
+
+        // Cargar pagos desde la relaci\u00f3n polim\u00f3rfica (ahora apunta a Payments)
+        foreach ($this->globalDestination()->with('paymentable')->get() as $payment) {
+            $monto = $payment->monto ?? 0;
+            $divisa = strtoupper($payment->divisa ?? 'PEN');
+
+            if (!$monto) continue;
+
+            // Determinar si es INGRESO o EGRESO usando type_movement
+            $isIngreso = $payment->type_movement === 'INGRESO';
+
+            if ($divisa === 'USD') {
+                if ($isIngreso) {
+                    $ingresosUsd += $monto;
+                } else {
+                    $egresosUsd += $monto;
+                }
+            } else {
+                if ($isIngreso) {
+                    $ingresosPen += $monto;
+                } else {
+                    $egresosPen += $monto;
+                }
+            }
+        }
+
+        return [
+            'ingresos_pen' => round($ingresosPen, 2),
+            'ingresos_usd' => round($ingresosUsd, 2),
+            'egresos_pen' => round($egresosPen, 2),
+            'egresos_usd' => round($egresosUsd, 2),
+            'saldo_final_pen' => round($this->saldo_inicial_pen + $ingresosPen - $egresosPen, 2),
+            'saldo_final_usd' => round($this->saldo_inicial_usd + $ingresosUsd - $egresosUsd, 2),
+        ];
+    }
+
+    /**
+     * Actualizar saldo actual por moneda
+     */
+    public function actualizarSaldoPorMoneda(float $montoPen, float $montoUsd, bool $esIngreso = true): void
+    {
+        if ($esIngreso) {
+            $this->saldo_actual_pen += $montoPen;
+            $this->saldo_actual_usd += $montoUsd;
+        } else {
+            $this->saldo_actual_pen -= $montoPen;
+            $this->saldo_actual_usd -= $montoUsd;
+        }
+
+        // Mantener compatibilidad con saldo_actual (solo PEN)
+        $this->saldo_actual = $this->saldo_actual_pen;
+
+        $this->save();
+    }
+
+    /**
+     * Cerrar caja con c\u00e1lculo multi-moneda
+     */
+    public function cerrarMultiMoneda(): self
+    {
+        $totales = $this->calcularTotalesPorMoneda();
+
+        $this->fecha_cierre = now()->toDateString();
+        $this->saldo_actual_pen = $totales['saldo_final_pen'];
+        $this->saldo_actual_usd = $totales['saldo_final_usd'];
+        $this->saldo_actual = $totales['saldo_final_pen']; // Compatibilidad
+        $this->estado = 0;
+        $this->save();
+
+        return $this;
     }
 }

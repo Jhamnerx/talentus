@@ -1,18 +1,32 @@
 <div>
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300 dark:border-gray-600">
-        <!-- Add customer button -->
-        <a href="{{ route('admin.ventas.index') }}">
-            <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
-                    viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
-                </svg>
-                <span class="hidden xs:block ml-2">Atras</span>
-            </button>
-        </a>
+        <!-- Botón Atrás: detecta contexto cobros -->
+        @if ($cobro_redirect_back)
+            <a href="{{ $cobro_redirect_back }}">
+                <button class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Volver al Cobro</span>
+                </button>
+            </a>
+        @else
+            <a href="{{ route('admin.ventas.index') }}">
+                <button class="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
+                        viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1" />
+                    </svg>
+                    <span class="hidden xs:block ml-2">Atras</span>
+                </button>
+            </a>
+        @endif
         <div class="mt-2 md:mt-0">
             <h4 class="text-2xl font-bold leading-tight text-gray-800 dark:text-gray-200">EMITIR
                 {{ strtoupper($comprobante_slug == 'nota-venta' ? 'NOTA DE VENTA' : $comprobante_slug) }}</h4>
@@ -21,6 +35,25 @@
             </ul>
         </div>
     </div>
+
+    {{-- Banner de contexto de cobros --}}
+    @if ($cobro_id)
+        <div class="container px-10 mx-auto mb-4">
+            <div
+                class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 flex items-center gap-3">
+                <span class="text-2xl">📋</span>
+                <div>
+                    <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                        Emitiendo desde Módulo de Cobros
+                    </p>
+                    <p class="text-xs text-gray-600 dark:text-gray-400">
+                        Al guardar, el estado de facturación se actualizará automáticamente y regresarás al detalle del
+                        cobro.
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
     <!-- Code block ends -->
     <div class="p-2 shadow overflow-hidden sm:rounded-md">
         <div class="px-4 py-2 bg-slate-100 dark:bg-gray-700 sm:p-2">
@@ -142,8 +175,8 @@
 
                                 <x-slot name="afterOptions" class="p-2 flex justify-center"
                                     x-show="displayOptions.length === 0">
-                                    <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)" x-on:click="close"
-                                        primary flat full>
+                                    <x-form.button wire:click.prevent="OpenModalCliente(`${search}`)"
+                                        x-on:click="close" primary flat full>
                                         <span x-html="`Crear cliente <b>${search}</b>`"></span>
                                     </x-form.button>
                                 </x-slot>
@@ -432,7 +465,6 @@
                                 <div class="col-span-12 border-b border-cyan-600 dark:border-cyan-400 mt-4">
                                     <h4 class="font-semibold text-gray-800 dark:text-gray-200">PAGOS</h4>
                                 </div>
-                                {{ json_encode($payment_destinations) }}
 
                                 <div class="col-span-12 mt-2">
                                     <table class="min-w-full text-sm">
@@ -457,16 +489,16 @@
                                                     <td class="px-2 py-2">
                                                         <x-form.select
                                                             wire:model="pagos_detalle.{{ $index }}.metodo_pago_id"
-                                                            :options="$payment_methods
-                                                                ? $payment_methods->toArray()
+                                                            :options="$this->paymentMethods
+                                                                ? $this->paymentMethods->toArray()
                                                                 : []" option-label="name" option-value="id"
                                                             :clearable="false" />
                                                     </td>
                                                     <td class="px-2 py-2 relative z-10">
-                                                        @if ($payment_destinations && $payment_destinations->isNotEmpty())
+                                                        @if ($this->paymentDestinations && $this->paymentDestinations->isNotEmpty())
                                                             <x-form.select
                                                                 wire:model="pagos_detalle.{{ $index }}.payment_destination_id"
-                                                                :options="$payment_destinations->toArray()" option-label="description"
+                                                                :options="$this->paymentDestinations->toArray()" option-label="description"
                                                                 option-value="id" placeholder="Seleccione destino" />
                                                         @else
                                                             <span class="text-gray-500 text-xs">Sin destinos</span>

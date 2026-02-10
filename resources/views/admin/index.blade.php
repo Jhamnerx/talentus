@@ -58,7 +58,7 @@
 
         <!-- Alerta de Movimientos Sin Destino -->
         @php
-            $movimientosSinDestino = \App\Models\GlobalPayment::whereNull('destination_id')->count();
+            $movimientosSinDestino = \App\Models\Payments::whereNull('destination_id')->count();
         @endphp
         @if ($movimientosSinDestino > 0)
             <div class="mb-6">

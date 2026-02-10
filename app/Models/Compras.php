@@ -78,20 +78,6 @@ class Compras extends Model
     {
         return $this->morphMany(Payments::class, 'paymentable');
     }
-    /**
-     * Movimientos financieros globales (vía ExpensePayments)
-     */
-    public function globalPayments()
-    {
-        return $this->hasManyThrough(
-            GlobalPayment::class,
-            ExpensePayment::class,
-            'expense_id',      // FK en expense_payments
-            'payment_id',      // FK en global_payments
-            'id',              // PK en compras
-            'id'               // PK en expense_payments
-        );
-    }
 
     /**
      * Total pagado de esta compra

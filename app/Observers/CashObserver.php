@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Models\Cash;
-use App\Models\GlobalPayment;
 
 class CashObserver
 {
@@ -23,8 +22,9 @@ class CashObserver
     /**
      * Handle the Cash "created" event.
      * 
-     * Nota: NO se crea GlobalPayment aquí. El saldo inicial es solo para apertura.
-     * Los GlobalPayment se crean automáticamente desde PaymentsObserver cuando hay pagos reales.
+     * Nota: NO se crea ningún movimiento aquí. El saldo inicial es solo para apertura.
+     * Los movimientos (Payments) se registran automáticamente cuando hay pagos reales,
+     * y PaymentsObserver actualiza los saldos multi-moneda de la caja.
      *
      * @param  \App\Models\Cash  $cash
      * @return void

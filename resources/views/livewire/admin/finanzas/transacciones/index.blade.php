@@ -124,7 +124,7 @@
                                     {{ ($mov['type_movement'] ?? '') === 'INGRESO'
                                         ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-400/10 dark:text-emerald-400'
                                         : 'bg-rose-100 text-rose-800 dark:bg-rose-400/10 dark:text-rose-400' }}">
-                                    {{ $mov['instance_type'] ?? '-' }}
+                                    {{ $mov['type_movement'] ?? '-' }}
                                 </span>
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap">

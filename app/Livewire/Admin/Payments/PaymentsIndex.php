@@ -30,7 +30,7 @@ class PaymentsIndex extends Component
         $desde = $this->from;
         $hasta = $this->to;
 
-        $payments = Payments::with(['paymentMethod', 'cobros', 'paymentable', 'user'])
+        $payments = Payments::with(['paymentMethod', 'cobros.vehiculo', 'paymentable', 'user'])
             ->where(function ($query) {
                 $query->where('numero', 'like', '%' . $this->search . '%')
                     ->orWhere('numero_operacion', 'like', '%' . $this->search . '%')

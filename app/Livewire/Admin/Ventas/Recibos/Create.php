@@ -17,6 +17,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
 use App\Helpers\PaymentDestinationHelper;
+use App\Enums\EstadoFacturacion;
 
 class Create extends Component
 {
@@ -45,6 +46,7 @@ class Create extends Component
     public $detalle_ids;
     public $cobro_id;
     public $empresa_id;
+    public $cobro_redirect_back = null;
 
     public $tipo_cambio = 0.00;
 
@@ -102,6 +104,16 @@ class Create extends Component
             $this->cliente = Clientes::find($cobro->clientes_id);
             $this->clientes_id = $cobro->clientes_id;
             $this->divisa = $cobro->divisa;
+            $this->cobro_id = $cobro_id;
+            $this->cobro_redirect_back = session('cobro_redirect_back');
+
+            // Pre-seleccionar tipo_venta desde sesión
+            $sessionFormaPago = session('cobro_forma_pago');
+            if ($sessionFormaPago) {
+                $this->tipo_venta = $sessionFormaPago;
+                $this->showCredit = $sessionFormaPago === 'CREDITO';
+                session()->forget('cobro_forma_pago');
+            }
         }
 
         // Procesar items si no son nulos
@@ -342,6 +354,7 @@ class Create extends Component
                     'monto' => $pago['monto'],
                     'fecha' => $this->fecha_emision,
                     'divisa' => $this->divisa,
+                    'cobros_id' => $this->cobro_id,
                     'user_id' => Auth::user()->id,
                     'empresa_id' => session('empresa'),
                 ]);
@@ -355,7 +368,62 @@ class Create extends Component
         //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
         $recibo->getSerie->increment('correlativo');
 
-        session()->flash('recibo-registrado', 'El Recibo se registro con exito');
+        // AUTO-UPDATE DetalleCobros si viene del módulo de cobros
+        if ($this->cobro_id && !empty($this->detalle_ids)) {
+            $detalleIdsArray = is_array($this->detalle_ids) ? $this->detalle_ids : [$this->detalle_ids];
+
+            $estadoFacturacion = $this->tipo_venta === 'CONTADO'
+                ? EstadoFacturacion::PAGADO
+                : EstadoFacturacion::FACTURADO;
+
+            $updateData = [
+                'estado_facturacion' => $estadoFacturacion,
+                'recibo_id' => $recibo->id,
+                'fecha_facturacion' => now(),
+            ];
+
+            if ($this->tipo_venta === 'CONTADO') {
+                $updateData['fecha_pago'] = now();
+            }
+
+            DetalleCobros::whereIn('id', $detalleIdsArray)
+                ->update($updateData);
+
+            // Renovar fecha si auto_renovar está activo
+            $cobro = Cobros::find($this->cobro_id);
+            if ($cobro && $cobro->auto_renovar) {
+                foreach (DetalleCobros::whereIn('id', $detalleIdsArray)->get() as $det) {
+                    $nuevaFecha = match ($cobro->periodo) {
+                        'MENSUAL' => $det->fecha->copy()->addMonth(),
+                        'BIMENSUAL' => $det->fecha->copy()->addMonths(2),
+                        'TRIMESTRAL' => $det->fecha->copy()->addMonths(3),
+                        'SEMESTRAL' => $det->fecha->copy()->addMonths(6),
+                        'ANUAL' => $det->fecha->copy()->addYear(),
+                        default => $det->fecha,
+                    };
+                    // Resetear estado para permitir facturar la siguiente mensualidad
+                    $det->update([
+                        'fecha' => $nuevaFecha,
+                        'estado_facturacion' => EstadoFacturacion::SIN_FACTURAR,
+                        'venta_id' => null,
+                        'recibo_id' => null,
+                        'fecha_facturacion' => null,
+                        'fecha_pago' => null,
+                    ]);
+                }
+            }
+        }
+
+        session()->flash('recibo-registrado', 'El Recibo se registró con éxito');
+
+        // Redirect back al cobro si viene del módulo de cobros
+        $redirectBack = $this->cobro_redirect_back ?: null;
+        session()->forget('cobro_redirect_back');
+
+        if ($redirectBack) {
+            return redirect($redirectBack);
+        }
+
         $this->redirectRoute('admin.ventas.recibos.index');
     }
 

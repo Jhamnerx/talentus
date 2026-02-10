@@ -36,6 +36,11 @@ class Payment extends Component
     public $showBankAccountSelector = false;
     public $bankAccounts = [];
 
+    // Modo: crear nuevo o asociar existente
+    public $paymentMode = 'create'; // 'create' o 'associate'
+    public $existing_payment_id = null;
+    public $existingPayments = [];
+
     public function mount()
     {
         $this->paymentsMethods = PaymentMethodType::whereActive(true)->get();
@@ -101,6 +106,9 @@ class Payment extends Component
 
         // Verificar si hay cajas o cuentas disponibles
         $this->checkAvailableDestinations();
+
+        // Cargar pagos existentes disponibles
+        $this->loadExistingPayments($cliente);
     }
 
     /**
@@ -128,21 +136,117 @@ class Payment extends Component
         }
     }
 
+    /**
+     * Cargar pagos existentes del cliente que pueden asociarse
+     * MODIFICADO: Ahora acepta pagos de CONTADO y CRÉDITO
+     */
+    protected function loadExistingPayments($cliente)
+    {
+        if (!$cliente) return;
+
+        // Obtener TODOS los pagos del cliente que:
+        // - Estén asociados a Ventas/Recibos (sin importar forma_pago)
+        // - No tengan cobros_id asignado aún
+        $this->existingPayments = Payments::query()
+            ->where(function ($query) use ($cliente) {
+                // Ventas/Facturas del cliente (CONTADO o CRÉDITO)
+                $query->where('paymentable_type', 'App\\Models\\Ventas')
+                    ->whereIn('paymentable_id', \App\Models\Ventas::where('cliente_id', $cliente->id)->pluck('id'));
+            })
+            ->orWhere(function ($query) use ($cliente) {
+                // Recibos del cliente (CONTADO o CRÉDITO)
+                $query->where('paymentable_type', 'App\\Models\\Recibos')
+                    ->whereIn('paymentable_id', \App\Models\Recibos::where('clientes_id', $cliente->id)->pluck('id'));
+            })
+            ->whereNull('cobros_id') // Sin cobro asociado
+            ->with('paymentable')
+            ->latest()
+            ->get()
+            ->map(function ($payment) {
+                $docInfo = '';
+                if ($payment->paymentable_type === 'App\\Models\\Ventas') {
+                    $docInfo = $payment->paymentable->serie_correlativo ?? 'FAC';
+                } elseif ($payment->paymentable_type === 'App\\Models\\Recibos') {
+                    $docInfo = $payment->paymentable->serie_numero ?? 'REC';
+                }
+
+                return [
+                    'id' => $payment->id,
+                    'label' => "Pago #{$payment->numero} - {$docInfo} - {$payment->divisa} " . number_format($payment->monto, 2) . " ({$payment->fecha->format('d/m/Y')})",
+                    'numero' => $payment->numero,
+                    'monto' => $payment->monto,
+                    'divisa' => $payment->divisa,
+                    'documento' => $docInfo,
+                ];
+            })
+            ->toArray();
+    }
+
     public function updatedPaymentableId($paymentable_id)
     {
         if ($paymentable_id == null) {
             $this->divisaDoc = null;
-
             return;
         }
+
         if ($this->paymentable_type == 'App\Models\Ventas') {
             $documento = Ventas::where('id', $paymentable_id)->first();
             $this->divisaDoc = $documento->divisa;
+
+            // Validar que sea a CRÉDITO y esté UNPAID
+            if ($documento->forma_pago === 'CONTADO') {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'VENTA AL CONTADO',
+                    mensaje: 'Esta venta ya tiene pago registrado al contado. No se puede generar otro pago desde Cobros.'
+                );
+                $this->paymentable_id = null;
+                $this->divisaDoc = null;
+                return;
+            }
+
+            if ($documento->pago_estado === Ventas::PAID) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'warning',
+                    title: 'VENTA YA PAGADA',
+                    mensaje: 'Esta venta ya fue pagada completamente. No se puede generar otro pago.'
+                );
+                $this->paymentable_id = null;
+                $this->divisaDoc = null;
+                return;
+            }
         }
 
         if ($this->paymentable_type == 'App\Models\Recibos') {
             $documento = Recibos::where('id', $paymentable_id)->first();
             $this->divisaDoc = $documento->divisa;
+
+            // Validar que sea a CRÉDITO y esté UNPAID
+            if ($documento->tipo_venta === 'CONTADO') {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'RECIBO AL CONTADO',
+                    mensaje: 'Este recibo ya tiene pago registrado al contado. No se puede generar otro pago desde Cobros.'
+                );
+                $this->paymentable_id = null;
+                $this->divisaDoc = null;
+                return;
+            }
+
+            if ($documento->pago_estado === Recibos::PAID) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'warning',
+                    title: 'RECIBO YA PAGADO',
+                    mensaje: 'Este recibo ya fue pagado completamente. No se puede generar otro pago.'
+                );
+                $this->paymentable_id = null;
+                $this->divisaDoc = null;
+                return;
+            }
         }
     }
 
@@ -154,7 +258,44 @@ class Payment extends Component
 
     public function save()
     {
+        // Modo ASOCIAR: Solo actualizar cobros_id del pago existente
+        if ($this->paymentMode === 'associate') {
+            if (empty($this->existing_payment_id)) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'PAGO REQUERIDO',
+                    mensaje: 'Debes seleccionar un pago existente para asociar'
+                );
+                return;
+            }
 
+            try {
+                $payment = Payments::findOrFail($this->existing_payment_id);
+                $payment->update(['cobros_id' => $this->cobro->id]);
+
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'success',
+                    title: 'PAGO ASOCIADO',
+                    mensaje: "Pago #{$payment->numero} asociado al cobro correctamente"
+                );
+
+                $this->dispatch('update-cobros');
+                $this->closeModal();
+                return;
+            } catch (\Exception $e) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'error',
+                    title: 'ERROR',
+                    mensaje: 'Error al asociar el pago: ' . $e->getMessage()
+                );
+                return;
+            }
+        }
+
+        // Modo CREAR: Lógica original de creación de pago
         $request = new PaymentsRequest();
         $this->validate($request->rules(), $request->messages());
         $paymentController = new PaymentsController();
@@ -172,8 +313,8 @@ class Payment extends Component
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id,
-            'payment_destination_id' => $this->payment_destination_id, // ✅ Agregado
-            'bank_account_id' => $this->bank_account_id, // Mantener por compatibilidad
+            'payment_destination_id' => $this->payment_destination_id,
+            'bank_account_id' => $this->bank_account_id,
         ]);
 
         // Verificar automáticamente si el documento está completamente pagado

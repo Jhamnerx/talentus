@@ -227,19 +227,30 @@
                 <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
                     <div class="text-sm space-y-2">
                         <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Número:</span>
+                            <span class="font-medium">{{ $selectedMovement->numero }}</span>
+                        </div>
+                        <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">Fecha:</span>
-                            <span class="font-medium">{{ $selectedMovement->date }}</span>
+                            <span class="font-medium">{{ $selectedMovement->fecha ? \Carbon\Carbon::parse($selectedMovement->fecha)->format('d/m/Y') : $selectedMovement->created_at->format('d/m/Y') }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600 dark:text-gray-400">Tipo:</span>
+                            <span
+                                class="inline-flex px-2 py-1 rounded-full text-xs font-medium {{ $selectedMovement->type_movement === 'INGRESO' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800' }}">
+                                {{ $selectedMovement->type_movement }}
+                            </span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">Descripción:</span>
-                            <span class="font-medium">{{ $selectedMovement->description }}</span>
+                            <span class="font-medium text-right">{{ $selectedMovement->description }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="text-gray-600 dark:text-gray-400">Monto:</span>
                             <span
-                                class="font-bold text-lg {{ $selectedMovement->type_movement === 'INGRESO' ? 'text-green-600' : 'text-red-600' }}">
+                                class="font-bold text-lg {{ $selectedMovement->type_movement === 'INGRESO' ? 'text-emerald-600' : 'text-rose-600' }}">
                                 {{ $selectedMovement->type_movement === 'INGRESO' ? '+' : '-' }}
-                                S/ {{ number_format($selectedMovement->payment->monto ?? 0, 2) }}
+                                {{ $selectedMovement->divisa === 'USD' ? '$' : 'S/' }} {{ number_format($selectedMovement->monto, 2) }}
                             </span>
                         </div>
                     </div>

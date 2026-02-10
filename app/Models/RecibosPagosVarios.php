@@ -112,21 +112,6 @@ class RecibosPagosVarios extends Model
         return $this->morphMany(Payments::class, 'paymentable');
     }
 
-    /**
-     * Movimientos financieros globales (vía Payments)
-     */
-    public function globalPayments()
-    {
-        return $this->hasManyThrough(
-            GlobalPayment::class,
-            Payments::class,
-            'paymentable_id',  // FK en payments
-            'payment_id',      // FK en global_payments
-            'id',              // PK en recibos_pagos
-            'id'               // PK en payments
-        )->where('payments.paymentable_type', self::class);
-    }
-
     public static function createItems($recibo, $reciboItems)
     {
         foreach ($reciboItems as $reciboItem) {

@@ -84,17 +84,15 @@ trait FinanceTrait
      */
     public function getBalanceByCash(int $cashId, string $currencyTypeId = 'PEN'): float
     {
-        // Obtener todos los GlobalPayments de esta caja
-        $globalPayments = \App\Models\GlobalPayment::where('destination_type', Cash::class)
+        $payments = \App\Models\Payments::where('destination_type', Cash::class)
             ->where('destination_id', $cashId)
-            ->with('payment.paymentable') // Cargar documento relacionado
+            ->with('paymentable')
             ->get();
 
         $income = 0; // Ingresos
         $expense = 0; // Egresos
 
-        foreach ($globalPayments as $gp) {
-            $payment = $gp->payment;
+        foreach ($payments as $payment) {
 
             if (!$payment) {
                 continue;
@@ -116,7 +114,7 @@ trait FinanceTrait
             }
 
             // Sumar o restar según tipo de movimiento
-            if ($gp->type_movement === 'INGRESO') {
+            if ($payment->type_movement === 'INGRESO') {
                 $income += $convertedAmount;
             } else {
                 $expense += $convertedAmount;
@@ -137,17 +135,15 @@ trait FinanceTrait
      */
     public function getBalanceByBankAccount(int $bankAccountId, string $currencyTypeId = 'PEN'): float
     {
-        // Obtener todos los GlobalPayments de esta cuenta bancaria
-        $globalPayments = \App\Models\GlobalPayment::where('destination_type', BankAccount::class)
+        $payments = \App\Models\Payments::where('destination_type', BankAccount::class)
             ->where('destination_id', $bankAccountId)
-            ->with('payment.paymentable')
+            ->with('paymentable')
             ->get();
 
         $income = 0;
         $expense = 0;
 
-        foreach ($globalPayments as $gp) {
-            $payment = $gp->payment;
+        foreach ($payments as $payment) {
 
             if (!$payment) {
                 continue;
@@ -167,7 +163,7 @@ trait FinanceTrait
                 $convertedAmount = $amount;
             }
 
-            if ($gp->type_movement === 'INGRESO') {
+            if ($payment->type_movement === 'INGRESO') {
                 $income += $convertedAmount;
             } else {
                 $expense += $convertedAmount;
@@ -189,7 +185,7 @@ trait FinanceTrait
     {
         return [
             'cash' => Cash::where('estado', true)->get(),
-            'banks' => BankAccount::where('estado', true)->get(),
+            'banks' => BankAccount::where('status', true)->get(),
         ];
     }
 

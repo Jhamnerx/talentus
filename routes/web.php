@@ -162,6 +162,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
     });
 
+    // Dashboard de Mensualidades
+    Route::get('cobros/mensualidades/dashboard', \App\Livewire\Admin\Cobros\Mensualidades::class)
+        ->name('admin.cobros.mensualidades.dashboard');
+
     // Mensajes de Contacto Web
     Route::get('mensajes-contacto', function () {
         return view('admin.contactos.index');

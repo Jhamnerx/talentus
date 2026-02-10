@@ -6,7 +6,7 @@ use App\Models\Cash;
 use App\Models\Ventas;
 use App\Models\Compras;
 use Livewire\Component;
-use App\Models\GlobalPayment;
+use App\Models\Payments;
 
 class Index extends Component
 {
@@ -22,22 +22,19 @@ class Index extends Component
 
     public function render()
     {
-        // Saldo total en cajas abiertas
-        $saldoTotalCajas = Cash::abierta()->sum('saldo_actual');
+        // Saldo total en cajas abiertas (multi-moneda)
+        $cajasAbiertas = Cash::abierta()->get();
+        $saldoTotalCajasPen = $cajasAbiertas->sum('saldo_actual_pen');
+        $saldoTotalCajasUsd = $cajasAbiertas->sum('saldo_actual_usd');
+        $saldoTotalCajas = $saldoTotalCajasPen; // Compatibilidad, mostrar PEN por defecto
 
-        // Movimientos en el período seleccionado usando GlobalPayment
-        // Como type_movement y monto son accessors, debemos cargar todos y filtrar en memoria
-        $movimientos = GlobalPayment::with(['payment.paymentable'])
+        // Movimientos en el período seleccionado usando Payments directamente
+        $movimientos = Payments::with(['paymentable'])
             ->whereBetween('created_at', [$this->from . ' 00:00:00', $this->to . ' 23:59:59'])
             ->get();
 
-        $ingresos = $movimientos->filter(function ($gp) {
-            return $gp->type_movement === 'INGRESO';
-        })->sum('monto');
-
-        $egresos = $movimientos->filter(function ($gp) {
-            return $gp->type_movement === 'EGRESO';
-        })->sum('monto');
+        $ingresos = $movimientos->where('type_movement', 'INGRESO')->sum('monto');
+        $egresos = $movimientos->where('type_movement', 'EGRESO')->sum('monto');
 
         $balance = $ingresos - $egresos;
 
@@ -82,6 +79,8 @@ class Index extends Component
 
         return view('livewire.admin.finanzas.balance.index', compact(
             'saldoTotalCajas',
+            'saldoTotalCajasPen',
+            'saldoTotalCajasUsd',
             'ingresos',
             'egresos',
             'balance',

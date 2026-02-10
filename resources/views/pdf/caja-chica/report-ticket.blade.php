@@ -162,17 +162,16 @@
 
     <!-- Documentos -->
     @php
-        $movimientos = $caja->globalDestination()->with('payment.paymentable')->get();
+        $movimientos = $caja->globalDestination()->with('paymentable')->get();
     @endphp
     @if ($movimientos->count() > 0)
-        @foreach ($movimientos as $globalPayment)
+        @foreach ($movimientos as $payment)
             @php
-                $payment = $globalPayment->payment;
-                $monto = $payment?->monto ?? 0;
-                $tipo = $globalPayment->payment_type_description;
-                $numero = $globalPayment->document_number;
-                $persona = $globalPayment->person_name;
-                $tipoMov = $globalPayment->type_movement;
+                $paymentable = $payment->paymentable;
+                $tipo = $payment->payment_type_description;
+                $numero = $payment->document_number;
+                $persona = $payment->person_name;
+                $tipoMov = $payment->type_movement;
             @endphp
             <div class="doc-item">
                 <div class="doc-header">

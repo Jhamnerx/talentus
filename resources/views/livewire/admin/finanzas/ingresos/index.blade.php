@@ -157,49 +157,41 @@
                     class="text-sm divide-y divide-gray-200 dark:divide-gray-700 border-b border-gray-200 dark:border-gray-700">
                     @forelse($ingresos as $ingreso)
                         @php
-                            $payment = $ingreso->payment;
-                            $paymentable = $payment?->paymentable;
-                            $tipoDoc = $paymentable ? class_basename($paymentable::class) : 'Desconocido';
-                            $cliente = null;
-
-                            if ($paymentable) {
-                                if (method_exists($paymentable, 'clientes')) {
-                                    $cliente = $paymentable->clientes;
-                                } elseif (method_exists($paymentable, 'cliente')) {
-                                    $cliente = $paymentable->cliente;
-                                }
-                            }
+                            // $ingreso YA ES un Payment, no necesita ->payment
+                            $paymentable = $ingreso->paymentable;
+                            $tipoDoc = $ingreso->payment_type_description;
+                            $currencySymbol = $ingreso->divisa === 'USD' ? '$' : 'S/';
                         @endphp
                         <tr class="hover:bg-gray-50 dark:hover:bg-gray-900/30">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-medium text-gray-800 dark:text-gray-100">
-                                    {{ $paymentable?->numero ?? ($paymentable?->numero_comprobante ?? '-') }}
+                                    {{ $ingreso->numero ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <span class=\"inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                    {{ $tipoDoc === 'Recibos' ? 'bg-blue-100 text-blue-800 dark:bg-blue-400/10 dark:text-blue-400' : 'bg-purple-100 text-purple-800 dark:bg-purple-400/10 dark:text-purple-400' }}\">
-                                    {{ $tipoDoc === 'Recibos' ? 'Recibo' : ($tipoDoc === 'Ventas' ? 'Venta' : $tipoDoc) }}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                    {{ str_contains($tipoDoc, 'Recibo') ? 'bg-blue-100 text-blue-800 dark:bg-blue-400/10 dark:text-blue-400' : 'bg-purple-100 text-purple-800 dark:bg-purple-400/10 dark:text-purple-400' }}">
+                                    {{ $tipoDoc }}
                                 </span>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $ingreso->created_at->format('d/m/Y') }}
+                                    {{ $ingreso->fecha ? \Carbon\Carbon::parse($ingreso->fecha)->format('d/m/Y') : $ingreso->created_at->format('d/m/Y') }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $cliente?->razon_social ?? ($cliente?->nombre ?? '-') }}
+                                    {{ $ingreso->person_name }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $cliente?->numero_documento ?? '-' }}
+                                    {{ $ingreso->document_number ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-gray-800 dark:text-gray-100">
-                                    {{ $payment?->paymentMethod?->description ?? '-' }}
+                                    {{ $ingreso->paymentMethod?->description ?? '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -209,7 +201,7 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-right text-emerald-600 dark:text-emerald-400">
-                                    {{ $payment?->divisa ?? 'PEN' }} {{ number_format($payment?->monto ?? 0, 2) }}
+                                    {{ $currencySymbol }} {{ number_format($ingreso->monto, 2) }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
