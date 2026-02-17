@@ -15,6 +15,8 @@ use App\Models\DetalleCobros;
 use App\Models\PaymentMethodType;
 use App\Http\Requests\PaymentsRequest;
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Helpers\PaymentDestinationHelper;
+use Livewire\Attributes\Computed;
 
 
 class Payment extends Component
@@ -31,8 +33,7 @@ class Payment extends Component
     public Cobros $cobro;
 
     public $numero, $payment_method_id = 1, $bank_account_id, $nota, $monto, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
-    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
-    public $availableCashes = [];
+    public $payment_destination_id; // Destino: formato "tipo|id"
     public $showBankAccountSelector = false;
     public $bankAccounts = [];
 
@@ -44,10 +45,13 @@ class Payment extends Component
     public function mount()
     {
         $this->paymentsMethods = PaymentMethodType::whereActive(true)->get();
-
-        // Cargar destinos disponibles
-        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
         $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
+    }
+
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
     }
 
     public function render()
@@ -301,6 +305,19 @@ class Payment extends Component
         $paymentController = new PaymentsController();
         $this->numero = $paymentController->setNextSequenceNumber();
 
+        // Parsear destination_type y destination_id desde formato "tipo|id"
+        $destinationRecord = PaymentDestinationHelper::parseDestination($this->payment_destination_id);
+
+        if (!$destinationRecord || !$destinationRecord['destination_id']) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Destino de pago inválido'
+            );
+            return;
+        }
+
         $payment = Payments::create([
             'numero' => $this->numero,
             'numero_operacion' => $this->numero_operacion,
@@ -313,7 +330,8 @@ class Payment extends Component
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id,
-            'payment_destination_id' => $this->payment_destination_id,
+            'destination_type' => $destinationRecord['destination_type'],
+            'destination_id' => $destinationRecord['destination_id'],
             'bank_account_id' => $this->bank_account_id,
         ]);
 

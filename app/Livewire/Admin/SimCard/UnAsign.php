@@ -2,14 +2,18 @@
 
 namespace App\Livewire\Admin\SimCard;
 
+use App\Models\CambiosLineas;
 use App\Models\Lineas;
 use App\Models\SimCard;
-use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
-use App\Models\CambiosLineas;
+use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 
 class UnAsign extends Component
 {
+    use WireUiActions;
+
     public SimCard $sim_card;
     public $openUnAsign = false;
 
@@ -40,14 +44,16 @@ class UnAsign extends Component
                 'sim_card_id' => $this->sim_card->id,
                 'old_numero' => $this->sim_card->lineas_id,
                 'new_numero' => null,
-                'user_id' => auth()->user()->id,
+                'user_id' => Auth::user()->id,
             ]);
 
             $linea = Lineas::findOrFail($this->sim_card->lineas_id);
 
             if ($linea) {
-                $linea->old_sim_card = $this->sim_card->sim_card;
-                $linea->save();
+                // Guardar en tabla old_sim_cards usando la relación
+                $linea->old_sim_cards()->create([
+                    'old_sim_card' => $this->sim_card->sim_card,
+                ]);
             }
 
 
@@ -61,11 +67,9 @@ class UnAsign extends Component
 
     public function afterAction()
     {
-        $this->dispatch(
-            'notify-toast',
-            icon: 'error',
-            title: 'SE ELIMINO EL NUMERO',
-            mensaje: 'El sim card fisico se encuentra sin numero'
+        $this->notification()->error(
+            'Número eliminado',
+            'El SIM card físico se encuentra sin número asignado'
         );
 
         $this->closeModal();

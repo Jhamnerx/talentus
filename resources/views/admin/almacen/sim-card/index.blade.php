@@ -9,5 +9,6 @@
     @livewire('admin.sim-card.edit')
     @livewire('admin.sim-card.asign-linea')
     @livewire('admin.sim-card.ver-cambios')
+    @livewire('admin.sim-card.cambiar-numero')
 
 </x-admin-layout>

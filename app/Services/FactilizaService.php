@@ -86,6 +86,13 @@ class FactilizaService
                     $userMessage = 'El número consultado no es válido';
                 } elseif ($statusCode === 401 || $statusCode === 403) {
                     $userMessage = 'Error de autenticación con el servicio';
+                } elseif ($statusCode === 405) {
+                    // Extraer mensaje específico del body si existe
+                    if (isset($errorData['message'])) {
+                        $userMessage = $errorData['message'];
+                    } else {
+                        $userMessage = 'El servicio de consulta no está disponible';
+                    }
                 } elseif ($statusCode >= 500) {
                     $userMessage = 'El servicio no está disponible temporalmente';
                 }
@@ -175,6 +182,13 @@ class FactilizaService
                     $userMessage = 'Los datos enviados no son válidos';
                 } elseif ($statusCode === 401 || $statusCode === 403) {
                     $userMessage = 'Error de autenticación con el servicio';
+                } elseif ($statusCode === 405) {
+                    // Extraer mensaje específico del body si existe
+                    if (isset($errorData['message'])) {
+                        $userMessage = $errorData['message'];
+                    } else {
+                        $userMessage = 'El servicio de consulta no está disponible';
+                    }
                 } elseif ($statusCode >= 500) {
                     $userMessage = 'El servicio no está disponible temporalmente';
                 }

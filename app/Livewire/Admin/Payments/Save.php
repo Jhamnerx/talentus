@@ -40,7 +40,7 @@ class Save extends Component
     public $saldoPendiente = 0;
     public $showBankAccountSelector = false;
     public $bankAccounts = [];
-    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
+    public $payment_destination_id; // Destino: formato "tipo|id"
     public $showDestinationSelector = true; // Siempre mostrar selector de destino
 
     #[Computed]
@@ -63,11 +63,13 @@ class Save extends Component
 
         $paymentMethod = PaymentMethodType::find($payment_method_id);
 
-        // Si es efectivo (is_cash = 1), sugerir caja
+        // Si es efectivo (is_cash = 1), auto-seleccionar caja si solo hay una
         if ($paymentMethod && $paymentMethod->is_cash == 1) {
-            // Auto-seleccionar caja si solo hay una
-            if (count($this->availableCashes) == 1) {
-                $this->payment_destination_id = 'cash';
+            $destinations = $this->paymentDestinations();
+            $cashes = $destinations->where('type', 'cash');
+
+            if ($cashes->count() === 1) {
+                $this->payment_destination_id = $cashes->first()['id'];
             }
         }
         // Si es bancario, el usuario debe seleccionar la cuenta manualmente
@@ -334,8 +336,8 @@ class Save extends Component
         }
 
         try {
-            // Validar destino usando helper
-            $destinationRecord = PaymentDestinationHelper::getDestinationRecord($this->payment_destination_id);
+            // Parsear destination_type y destination_id desde formato "tipo|id"
+            $destinationRecord = PaymentDestinationHelper::parseDestination($this->payment_destination_id);
 
             if (!$destinationRecord['destination_id']) {
                 $this->notification()->error(
@@ -345,8 +347,7 @@ class Save extends Component
                 return;
             }
 
-            // ✅ IMPORTANTE: Solo enviar payment_destination_id original ('cash' o ID de banco)
-            // El Observer lo resolverá automáticamente a payment_destination_type y payment_destination_id
+            // Crear pago con destination_type y destination_id directos
             $payment = Payments::create([
                 'numero' => $this->numero,
                 'numero_operacion' => $this->numero_operacion,
@@ -356,7 +357,8 @@ class Save extends Component
                 'divisa' => $this->divisa,
                 'monto' => $this->monto,
                 'payment_method_id' => $this->payment_method_id,
-                'payment_destination_id' => $this->payment_destination_id, // 'cash' o ID banco SIN resolver
+                'destination_type' => $destinationRecord['destination_type'],
+                'destination_id' => $destinationRecord['destination_id'],
                 'bank_account_id' => $this->bank_account_id,
                 'cobros_id' => $this->cobros_id,
                 'paymentable_type' => $this->paymentable_type,

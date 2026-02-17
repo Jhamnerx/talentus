@@ -5,13 +5,15 @@ namespace App\Livewire\Admin\Finanzas\Movimientos;
 use App\Models\Cash;
 use App\Models\Payments;
 use App\Models\BankAccount;
-use App\Http\Resources\MovementCollection;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MovimientosExport;
+use App\Livewire\Admin\Cobros\Payment;
 use WireUi\Traits\WireUiActions;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 class Index extends Component
 {
@@ -26,18 +28,23 @@ class Index extends Component
     public $cash_id = '';
     public $bank_account_id = '';
 
-    // Modal de reasignación
-    public $showReassignModal = false;
-    public $selectedMovement = null;
-    public $reassign_destination_type = ''; // 'cash' o 'bank'
-    public $reassign_cash_id = null;
-    public $reassign_bank_account_id = null;
+    // Nuevo selector de periodo
+    public $period_type = 'month'; // month, month_range, date, date_range
+    public $month = '';
+    public $month_start = '';
+    public $month_end = '';
+    public $ultima_apertura_caja = false;
 
     #[On('render')]
     public function render()
     {
         $query = Payments::query()
-            ->with(['paymentable', 'destination', 'user', 'bankAccount'])
+            ->with([
+                'paymentable',
+                'destination',
+                'user',
+                'bankAccount',
+            ])
             ->latest('created_at');
 
         // Búsqueda por texto
@@ -80,30 +87,25 @@ class Index extends Component
             $query->whereDateBetween($this->from, $this->to);
         }
 
-        // Usar MovementCollection para cálculos optimizados con calculateResiduary
-        $paginator = $query->paginate(15);
+        // Obtener todos los movimientos (sin paginación para calcular saldo acumulado correctamente)
+        $allMovements = $query->get();
 
-        // Pasar filtros a la request para calculateResiduary
-        request()->merge([
-            'search' => $this->search,
-            'type_movement' => $this->type_movement,
-            'destination_type' => $this->destination_type,
-            'cash_id' => $this->cash_id,
-            'bank_account_id' => $this->bank_account_id,
-            'from' => $this->from,
-            'to' => $this->to,
-            'per_page' => 15,
-        ]);
+        // Procesar movimientos incluyendo saldos iniciales y saldo acumulado
+        $processedMovements = $this->processMovements($allMovements);
 
-        // MovementCollection procesa y calcula saldos acumulados
-        $movementCollection = new MovementCollection($paginator);
-        $processedData = $movementCollection->toArray(request());
-
-        // Mantener paginación pero con datos procesados
-        $movimientos = $paginator->setCollection(collect($processedData));
+        // Ahora sí paginar los resultados procesados
+        $currentPage = \Illuminate\Pagination\Paginator::resolveCurrentPage();
+        $perPage = 50;
+        $movimientos = new \Illuminate\Pagination\LengthAwarePaginator(
+            $processedMovements->forPage($currentPage, $perPage),
+            $processedMovements->count(),
+            $perPage,
+            $currentPage,
+            ['path' => request()->url()]
+        );
 
         // Calcular totales
-        $totales = $this->calcularTotales($query);
+        $totales = $this->calcularTotalesFromProcessed($processedMovements);
 
         $cajas = Cash::all();
         $cuentasBancarias = BankAccount::where('status', true)->get();
@@ -162,118 +164,456 @@ class Index extends Component
         }
     }
 
+    public function mount()
+    {
+        // Inicializar con mes actual por defecto
+        $this->month = Carbon::now()->format('Y-m');
+        $this->setPeriodDates();
+    }
+
+    public function updatedPeriodType()
+    {
+        $this->resetPage();
+        $this->setPeriodDates();
+    }
+
+    public function updatedMonth()
+    {
+        $this->resetPage();
+        $this->setPeriodDates();
+    }
+
+    public function updatedMonthStart()
+    {
+        $this->resetPage();
+        $this->setPeriodDates();
+    }
+
+    public function updatedMonthEnd()
+    {
+        $this->resetPage();
+        $this->setPeriodDates();
+    }
+
+    public function updatedFrom()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedTo()
+    {
+        $this->resetPage();
+    }
+
+    private function setPeriodDates()
+    {
+        switch ($this->period_type) {
+            case 'month':
+                if ($this->month) {
+                    $date = Carbon::parse($this->month . '-01');
+                    $this->from = $date->startOfMonth()->format('Y-m-d');
+                    $this->to = $date->copy()->endOfMonth()->format('Y-m-d');
+                }
+                break;
+
+            case 'month_range':
+                if ($this->month_start && $this->month_end) {
+                    $dateStart = Carbon::parse($this->month_start . '-01');
+                    $dateEnd = Carbon::parse($this->month_end . '-01');
+                    $this->from = $dateStart->startOfMonth()->format('Y-m-d');
+                    $this->to = $dateEnd->endOfMonth()->format('Y-m-d');
+                }
+                break;
+
+            case 'date':
+                // El usuario ingresa directamente en $from
+                if ($this->from) {
+                    $this->to = $this->from;
+                }
+                break;
+
+            case 'date_range':
+                // El usuario ingresa directamente en $from y $to
+                break;
+        }
+    }
+
+    /**
+     * Procesar movimientos incluyendo saldos iniciales de cajas y calcular saldo acumulado
+     */
+    private function processMovements($payments)
+    {
+        $result = collect();
+        $saldoAcumulado = 0;
+
+        // 1. Si hay filtro por caja específica, agregar saldo inicial
+        if ($this->cash_id) {
+            $cash = Cash::find($this->cash_id);
+
+            if ($cash) {
+                // Saldo inicial PEN
+                if ($cash->saldo_inicial > 0) {
+                    $saldoAcumulado += $cash->saldo_inicial;
+                    $result->push([
+                        'index' => $result->count() + 1,
+                        'date_time' => $cash->fecha_apertura->format('d-m-Y h:i A'),
+                        'person_name' => '-',
+                        'person_document' => '',
+                        'document_type' => 'Saldo inicial - ' . $cash->nombre,
+                        'document_number' => '',
+                        'detalle' => '',
+                        'moneda' => 'PEN',
+                        'tipo' => 'INGRESO',
+                        'ingresos' => $cash->saldo_inicial,
+                        'gastos' => 0,
+                        'saldo' => $saldoAcumulado,
+                    ]);
+                }
+
+                // Saldo inicial USD (si existe)
+                if (isset($cash->saldo_inicial_usd) && $cash->saldo_inicial_usd > 0) {
+                    $result->push([
+                        'index' => $result->count() + 1,
+                        'date_time' => $cash->fecha_apertura->format('d-m-Y h:i A'),
+                        'person_name' => '-',
+                        'person_document' => '',
+                        'document_type' => 'Saldo inicial USD - ' . $cash->nombre,
+                        'document_number' => '',
+                        'detalle' => '',
+                        'moneda' => 'USD',
+                        'tipo' => 'INGRESO',
+                        'ingresos' => $cash->saldo_inicial_usd,
+                        'gastos' => 0,
+                        'saldo' => $cash->saldo_inicial_usd,
+                    ]);
+                }
+            }
+        }
+
+        // 2. Procesar cada pago y calcular saldo acumulado
+        foreach ($payments as $payment) {
+            $paymentable = $payment->paymentable;
+
+            $personName = '-';
+            $personDocument = '';
+            $documentType = $payment->description ?? 'Pago';
+            $documentNumber = $payment->numero ?? '';
+            $detalle = '';
+            $tipo = $payment->type_movement === 'INGRESO' ? 'CPE' : 'EGRESO';
+
+            // Extraer información según el tipo de documento
+            if ($paymentable) {
+                $modelClass = get_class($paymentable);
+
+                switch ($modelClass) {
+                    case 'App\\Models\\Recibos':
+                        $cliente = $paymentable->clientes;
+                        $personName = $cliente->razon_social ?? '';
+                        $personDocument = $cliente->numero_documento ?? '';
+                        $documentType = 'RECIBO';
+                        // Usar serie_numero ya concatenado o construirlo
+                        $documentNumber = $paymentable->serie_numero ?? (($paymentable->serie ?? '') . '-' . ($paymentable->numero ?? ''));
+                        break;
+
+                    case 'App\\Models\\Ventas':
+                        $venta = $paymentable;
+                        $cliente = $venta->cliente;
+                        $personName = $cliente->nombre_completo ?? $cliente->razon_social ?? '';
+                        $personDocument = $cliente->numero_documento ?? '';
+
+                        // Obtener tipo de comprobante desde la relación
+                        $tipoComprobante = $venta->tipoComprobante;
+                        $documentType = $tipoComprobante ? strtoupper($tipoComprobante->descripcion ?? $tipoComprobante->name ?? 'VENTA') : 'VENTA';
+
+                        // Usar serie_correlativo ya concatenado o construirlo
+                        $documentNumber = $venta->serie_correlativo ?? (($venta->serie ?? '') . '-' . ($venta->correlativo ?? ''));
+                        break;
+
+                    case 'App\\Models\\ExpensePayment':
+                        $expense = $paymentable->expense ?? null;
+                        $supplier = $expense->supplier ?? null;
+                        $personName = $supplier->name ?? 'Proveedor';
+                        $documentType = 'GASTO';
+                        $documentNumber = 'EXP-' . str_pad($paymentable->id, 6, '0', STR_PAD_LEFT);
+                        $detalle = $expense->expense_reason->name ?? '';
+                        break;
+
+                    case 'App\\Models\\Compras':
+                        $compra = $paymentable;
+                        $proveedor = $compra->proveedor;
+                        $personName = $proveedor->razon_social ?? $proveedor->nombre ?? '';
+                        $personDocument = $proveedor->numero_documento ?? '';
+
+                        // Tipo de comprobante desde la relación
+                        $tipoComprobante = $compra->tipoComprobante;
+                        $documentType = $tipoComprobante->name ?? 'Compra';
+                        $documentNumber = $compra->numero_comprobante ?? (($compra->serie ?? '') . '-' . ($compra->correlativo ?? ''));
+                        $detalle = $tipoComprobante->descripcion ?? '';
+                        break;
+                }
+            }
+
+            // Calcular saldo acumulado
+            $monto = $payment->monto;
+            $ingresos = 0;
+            $gastos = 0;
+
+            if ($payment->type_movement === 'INGRESO') {
+                $saldoAcumulado += $monto;
+                $ingresos = $monto;
+            } else {
+                $saldoAcumulado -= $monto;
+                $gastos = $monto;
+            }
+
+            $result->push([
+                'index' => $result->count() + 1,
+                'date_time' => $payment->created_at->format('d-m-Y h:i A'),
+                'person_name' => $personName,
+                'person_document' => $personDocument,
+                'document_type' => $documentType,
+                'document_number' => $documentNumber,
+                'detalle' => $detalle,
+                'moneda' => $payment->divisa ?? 'PEN',
+                'tipo' => $tipo,
+                'ingresos' => $ingresos,
+                'gastos' => $gastos,
+                'saldo' => $saldoAcumulado,
+                'payment_id' => $payment->id,
+                'destination_id' => $payment->destination_id,
+            ]);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calcular totales desde movimientos procesados
+     */
+    private function calcularTotalesFromProcessed($processedMovements)
+    {
+        $totalIngresos = 0;
+        $totalGastos = 0;
+
+        foreach ($processedMovements as $mov) {
+            $totalIngresos += $mov['ingresos'] ?? 0;
+            $totalGastos += $mov['gastos'] ?? 0;
+        }
+
+        return [
+            'ingresos' => $totalIngresos,
+            'gastos' => $totalGastos,
+            'saldo' => $totalIngresos - $totalGastos,
+        ];
+    }
+
     public function export()
     {
-        return Excel::download(
-            new MovimientosExport(
-                $this->from,
-                $this->to,
-                $this->tipo_filter,
-                $this->destination_type,
-                $this->cash_id,
-                $this->bank_account_id,
-                $this->search
-            ),
-            'movimientos_' . date('Y-m-d_His') . '.xlsx'
-        );
+        // Obtener los movimientos procesados sin paginación
+        $allMovements = $this->getAllMovementsForExport();
+
+        // Calcular totales de todos los movimientos
+        $totales = $this->calcularTotalesFromProcessed($allMovements);
+
+        // Preparar filtros para el export
+        $filters = [
+            'period_type' => $this->period_type,
+            'month' => $this->month,
+            'month_start' => $this->month_start,
+            'month_end' => $this->month_end,
+            'from' => $this->from,
+            'to' => $this->to,
+            'cash_id' => $this->cash_id,
+            'type_movement' => $this->type_movement,
+            'search' => $this->search,
+        ];
+
+        $filename = 'movimientos_' . now()->format('YmdHis') . '.xlsx';
+
+        return (new \App\Exports\MovimientosExport($allMovements, $totales, $filters))
+            ->download($filename);
     }
 
-    /**
-     * Abrir modal para reasignar destino de un movimiento huérfano
-     */
-    public function openReassignModal($movementId)
+    protected function getAllMovementsForExport()
     {
-        $this->selectedMovement = Payments::with('paymentable')->find($movementId);
+        // Usar la misma lógica que processMovements() pero sin paginación
+        $query = Payments::query()
+            ->with([
+                'paymentable',
+                'destination',
+            ])
+            ->oldest('created_at')
+            ->oldest('id');
 
-        if (!$this->selectedMovement) {
-            $this->notification()->error('Error', 'Movimiento no encontrado');
-            return;
+        // Aplicar filtros de fecha
+        if ($this->from && $this->to) {
+            $query->whereDateBetween($this->from, $this->to);
         }
 
-        $this->showReassignModal = true;
-        $this->reassign_destination_type = '';
-        $this->reassign_cash_id = null;
-        $this->reassign_bank_account_id = null;
-    }
-
-    /**
-     * Cerrar modal de reasignación
-     */
-    public function closeReassignModal()
-    {
-        $this->showReassignModal = false;
-        $this->selectedMovement = null;
-        $this->reassign_destination_type = '';
-        $this->reassign_cash_id = null;
-        $this->reassign_bank_account_id = null;
-    }
-
-    /**
-     * Confirmar reasignación de destino
-     */
-    public function confirmReassign()
-    {
-        // Validar que se haya seleccionado tipo de destino
-        if (empty($this->reassign_destination_type)) {
-            $this->notification()->error('Error', 'Debe seleccionar el tipo de destino');
-            return;
+        // Filtro por tipo de movimiento
+        if ($this->type_movement) {
+            $query->where('type_movement', $this->type_movement);
         }
 
-        $destination = null;
-        $destinationType = null;
+        // Filtro por destino (caja)
+        if ($this->cash_id) {
+            $query->where('destination_id', $this->cash_id)
+                ->where('destination_type', Cash::class);
+        }
 
-        // Obtener el destino según el tipo seleccionado
-        if ($this->reassign_destination_type === 'cash') {
-            if (empty($this->reassign_cash_id)) {
-                $this->notification()->error('Error', 'Debe seleccionar una caja');
-                return;
+        // Filtro por búsqueda
+        if ($this->search) {
+            $query->where(function ($q) {
+                $q->whereHas('paymentable', function ($subQuery) {
+                    $subQuery->where('numero', 'like', "%{$this->search}%")
+                        ->orWhere('numero_comprobante', 'like', "%{$this->search}%");
+                });
+            });
+        }
+
+        $payments = $query->get();
+
+        // Obtener saldos iniciales si hay filtro por caja
+        $saldos = [];
+        if ($this->cash_id) {
+            $cash = Cash::find($this->cash_id);
+            if ($cash) {
+                if ($cash->saldo_inicial_pen > 0) {
+                    $saldos[] = [
+                        'is_saldo_inicial' => true,
+                        'index' => 0,
+                        'date_time' => $this->from,
+                        'person_name' => '*** SALDO INICIAL PEN ***',
+                        'person_document' => '',
+                        'document_type' => '',
+                        'document_number' => '',
+                        'detalle' => 'Apertura de Caja - ' . $cash->nombre,
+                        'moneda' => 'PEN',
+                        'tipo' => '',
+                        'ingresos' => 0,
+                        'gastos' => 0,
+                        'saldo' => $cash->saldo_inicial_pen,
+                        'payment_id' => null,
+                        'destination_id' => $cash->id,
+                    ];
+                }
+                if ($cash->saldo_inicial_usd > 0) {
+                    $saldos[] = [
+                        'is_saldo_inicial' => true,
+                        'index' => 0,
+                        'date_time' => $this->from,
+                        'person_name' => '*** SALDO INICIAL USD ***',
+                        'person_document' => '',
+                        'document_type' => '',
+                        'document_number' => '',
+                        'detalle' => 'Apertura de Caja - ' . $cash->nombre,
+                        'moneda' => 'USD',
+                        'tipo' => '',
+                        'ingresos' => 0,
+                        'gastos' => 0,
+                        'saldo' => $cash->saldo_inicial_usd,
+                        'payment_id' => null,
+                        'destination_id' => $cash->id,
+                    ];
+                }
             }
-            $destination = Cash::find($this->reassign_cash_id);
-            $destinationType = 'App\\Models\\Cash';
-        } elseif ($this->reassign_destination_type === 'bank') {
-            if (empty($this->reassign_bank_account_id)) {
-                $this->notification()->error('Error', 'Debe seleccionar una cuenta bancaria');
-                return;
-            }
-            $destination = BankAccount::find($this->reassign_bank_account_id);
-            $destinationType = 'App\\Models\\BankAccount';
         }
 
-        if (!$destination) {
-            $this->notification()->error('Error', 'Destino no encontrado o inactivo');
-            return;
-        }
+        // Procesar pagos (misma lógica que processMovements())
+        $saldoAcumulado = $this->cash_id ? ($saldos[0]['saldo'] ?? 0) : 0;
 
-        try {
-            // Determinar el payment_destination_id según el tipo
-            $paymentDestinationId = null;
-            if ($this->reassign_destination_type === 'cash') {
-                $paymentDestinationId = 'cash'; // Valor especial para cajas
-            } elseif ($this->reassign_destination_type === 'bank') {
-                $paymentDestinationId = $destination->id; // ID de cuenta bancaria
+        foreach ($payments as $index => $payment) {
+            $paymentable = $payment->paymentable;
+
+            // Obtener información del cliente/proveedor
+            $personName = '';
+            $personDocument = '';
+            $detalle = '';
+            $documentType = '';
+            $documentNumber = '';
+
+            // (Aquí va la misma lógica que en processMovements() para extraer datos)
+            if ($paymentable) {
+                $detalle = $payment->detalle ?? $payment->description ?? '';
+                $modelClass = get_class($paymentable);
+
+                switch ($modelClass) {
+                    case 'App\\Models\\Ventas':
+                        $venta = $paymentable;
+                        $cliente = $venta->cliente;
+                        $personName = $cliente->nombre_completo ?? $cliente->razon_social ?? '';
+                        $personDocument = $cliente->numero_documento ?? '';
+
+                        // Obtener tipo de comprobante desde la relación
+                        $tipoComprobante = $venta->tipoComprobante;
+                        $documentType = $tipoComprobante ? strtoupper($tipoComprobante->descripcion ?? $tipoComprobante->name ?? 'VENTA') : 'VENTA';
+
+                        // Usar serie_correlativo ya concatenado o construirlo
+                        $documentNumber = $venta->serie_correlativo ?? (($venta->serie ?? '') . '-' . ($venta->correlativo ?? ''));
+                        break;
+
+                    case 'App\\Models\\ExpensePayment':
+                        $expense = $paymentable->expense ?? null;
+                        $supplier = $expense->supplier ?? null;
+                        $personName = $supplier->name ?? 'Proveedor';
+                        $documentType = 'GASTO';
+                        $documentNumber = 'EXP-' . str_pad($paymentable->id, 6, '0', STR_PAD_LEFT);
+                        $detalle = $expense->expense_reason->name ?? '';
+                        break;
+
+                    case 'App\\Models\\Compras':
+                        $compra = $paymentable;
+                        $proveedor = $compra->proveedor;
+                        $personName = $proveedor->razon_social ?? $proveedor->nombre ?? '';
+                        $personDocument = $proveedor->numero_documento ?? '';
+
+                        $tipoComprobante = $compra->tipoComprobante;
+                        $documentType = $tipoComprobante ? strtoupper($tipoComprobante->descripcion ?? $tipoComprobante->name ?? 'COMPRA') : 'COMPRA';
+                        $documentNumber = $compra->numero_comprobante ?? (($compra->serie ?? '') . '-' . ($compra->correlativo ?? ''));
+                        $detalle = $detalle ?: ($tipoComprobante->descripcion ?? '');
+                        break;
+
+                    case 'App\\Models\\Recibos':
+                        $cliente = $paymentable->clientes;
+                        $personName = $cliente->razon_social ?? '';
+                        $personDocument = $cliente->numero_documento ?? '';
+                        $documentType = 'RECIBO';
+                        $documentNumber = $paymentable->serie_numero ?? (($paymentable->serie ?? '') . '-' . ($paymentable->numero ?? ''));
+                        break;
+                }
             }
 
-            // Actualizar el Payment con el nuevo destino
-            $this->selectedMovement->update([
-                'destination_id' => $destination->id,
-                'destination_type' => $destinationType,
-                'payment_destination_id' => $paymentDestinationId, // ✅ CRÍTICO para PaymentsObserver
-            ]);
+            // Calcular saldo acumulado
+            $monto = $payment->monto;
+            $ingresos = 0;
+            $gastos = 0;
 
-            // Actualizar el saldo del destino si es caja (multi-moneda)
-            if ($destination instanceof Cash) {
-                $montoPen = $this->selectedMovement->divisa === 'PEN' ? $this->selectedMovement->monto : 0;
-                $montoUsd = $this->selectedMovement->divisa === 'USD' ? $this->selectedMovement->monto : 0;
-                $esIngreso = $this->selectedMovement->type_movement === 'INGRESO';
-
-                $destination->actualizarSaldoPorMoneda($montoPen, $montoUsd, $esIngreso);
+            if ($payment->type_movement === 'INGRESO') {
+                $saldoAcumulado += $monto;
+                $ingresos = $monto;
+            } else {
+                $saldoAcumulado -= $monto;
+                $gastos = $monto;
             }
 
-            $this->notification()->success('¡Éxito!', 'Movimiento reasignado correctamente');
-            $this->closeReassignModal();
-            $this->dispatch('render'); // Refrescar la lista
-        } catch (\Exception $e) {
-            $this->notification()->error('Error', 'Error al reasignar: ' . $e->getMessage());
+            $saldos[] = [
+                'index' => $index + 1,
+                'date_time' => $payment->created_at->format('d-m-Y h:i A'),
+                'person_name' => $personName,
+                'person_document' => $personDocument,
+                'document_type' => $documentType,
+                'document_number' => $documentNumber,
+                'detalle' => $detalle,
+                'moneda' => $payment->moneda ?? 'PEN',
+                'tipo' => $payment->type_movement,
+                'ingresos' => $ingresos,
+                'gastos' => $gastos,
+                'saldo' => $saldoAcumulado,
+                'payment_id' => $payment->id,
+                'destination_id' => $payment->destination_id,
+            ];
         }
+
+        return collect($saldos);
     }
 }

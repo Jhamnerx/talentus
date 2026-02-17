@@ -125,6 +125,71 @@ class HomeController extends Controller
 
 
 
+    /**
+     * Obtiene datos de notificaciones de cobro para gr\u00e1ficos del dashboard
+     * 
+     * @return object
+     */
+    public function getDataNotificacionesCobro()
+    {
+        $notificaciones = \App\Models\NotificacionCobro::query()
+            ->selectRaw('DATE(fecha_vencimiento) as fecha, COUNT(*) as total, estado')
+            ->whereBetween('fecha_vencimiento', [
+                Carbon::now()->startOfMonth(),
+                Carbon::now()->addMonth()->endOfMonth()
+            ])
+            ->groupBy('fecha', 'estado')
+            ->orderBy('fecha')
+            ->get();
+
+        $estadisticas = [
+            'pendientes' => \App\Models\NotificacionCobro::pendientes()->count(),
+            'vencidos' => \App\Models\NotificacionCobro::vencidos()->count(),
+            'hoy' => \App\Models\NotificacionCobro::whereDate('fecha_vencimiento', Carbon::today())->count(),
+            'proximos_7_dias' => \App\Models\NotificacionCobro::porVencer(7)->count(),
+            'monto_pendiente' => \App\Models\NotificacionCobro::pendientes()->sum('monto'),
+        ];
+
+        $topClientes = \App\Models\NotificacionCobro::query()
+            ->select('cliente_id')
+            ->selectRaw('COUNT(*) as total_notificaciones')
+            ->selectRaw('SUM(monto) as monto_total')
+            ->with('cliente:id,razon_social')
+            ->where('estado', 'PENDIENTE')
+            ->groupBy('cliente_id')
+            ->orderByDesc('monto_total')
+            ->limit(10)
+            ->get();
+
+        $porEstado = \App\Models\NotificacionCobro::query()
+            ->selectRaw('estado, COUNT(*) as total')
+            ->groupBy('estado')
+            ->get();
+
+        return (object) [
+            'notificaciones_por_fecha' => $notificaciones,
+            'estadisticas' => $estadisticas,
+            'top_clientes' => $topClientes,
+            'por_estado' => $porEstado,
+        ];
+    }
+
+    /**
+     * Obtiene notificaciones de cobro vencidas hoy para alertas del dashboard
+     * 
+     * @return \Illuminate\Support\Collection
+     */
+    public function getNotificacionesVencidasHoy()
+    {
+        return \App\Models\NotificacionCobro::query()
+            ->with(['cliente:id,razon_social', 'vehiculo:id,placa', 'detalleCobro'])
+            ->whereDate('fecha_vencimiento', Carbon::today())
+            ->where('estado', 'PENDIENTE')
+            ->orderBy('monto', 'desc')
+            ->limit(5)
+            ->get();
+    }
+
     public function getDataFeed()
     {
 

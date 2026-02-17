@@ -8,5 +8,6 @@
     @livewire('admin.lineas.edit')
     @livewire('admin.gerencia.reportes.modales.reporte-lineas')
     @livewire('admin.sim-card.asign-linea')
+    @livewire('admin.lineas.cambiar-chip')
 
 </x-admin-layout>

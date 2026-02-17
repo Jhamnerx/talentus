@@ -28,13 +28,13 @@ class VehiculosRequest extends FormRequest
 
         $rules = [
             'placa' => 'required|unique:vehiculos',
-            "marca" => 'nullable',
-            "modelo" => 'nullable',
-            "tipo" => 'nullable',
-            "year" => 'nullable',
-            "color" => 'nullable',
-            "motor" => 'nullable',
-            "serie" => 'nullable',
+            "marca" => 'required',
+            "modelo" => 'required',
+            "tipo" => 'required',
+            "year" => 'required',
+            "color" => 'required',
+            "motor" => 'required',
+            "serie" => 'required',
             "clientes_id"  => "required",
             "dispositivos_id" =>
             'nullable|unique:vehiculos',

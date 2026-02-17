@@ -2,8 +2,8 @@
 
 namespace App\Exports;
 
-use App\Models\Payments;
-use App\Models\BankAccount;
+use App\Models\GlobalPayment;
+use App\Models\Cash;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -14,99 +14,65 @@ class MovimientosExport implements FromView, ShouldAutoSize, WithTitle
 {
     use Exportable;
 
-    protected $records;
-    protected $company;
-    protected $dateStart;
-    protected $dateEnd;
+    protected $movements;
+    protected $totales;
     protected $filters;
+    protected $periodDescription;
 
-    public function __construct(
-        $from = null,
-        $to = null,
-        $tipo = null,
-        $destinationType = null,
-        $cashId = null,
-        $bankAccountId = null,
-        $search = ''
-    ) {
-        $this->dateStart = $from;
-        $this->dateEnd = $to;
-        $this->filters = [
-            'tipo' => $tipo,
-            'destination_type' => $destinationType,
-            'cash_id' => $cashId,
-            'bank_account_id' => $bankAccountId,
-            'search' => $search,
-        ];
-
-        $this->buildRecords();
+    public function __construct($movements, $totales, $filters = [])
+    {
+        $this->movements = $movements;
+        $this->totales = $totales;
+        $this->filters = $filters;
+        $this->buildPeriodDescription();
     }
 
-    protected function buildRecords()
+    protected function buildPeriodDescription()
     {
-        $query = Payments::query()
-            ->with(['paymentable', 'destination', 'user'])
-            ->latest('created_at');
+        $periodType = $this->filters['period_type'] ?? 'month';
+        $from = $this->filters['from'] ?? '';
+        $to = $this->filters['to'] ?? '';
 
-        // Aplicar filtros (igual que TransaccionesExport)
-        if (!empty($this->filters['search'])) {
-            $query->where(function ($q) {
-                $q->whereHas('payment.paymentable', function ($subQ) {
-                    $subQ->where('numero', 'like', '%' . $this->filters['search'] . '%')
-                        ->orWhere('numero_comprobante', 'like', '%' . $this->filters['search'] . '%')
-                        ->orWhereHas('cliente', function ($clienteQ) {
-                            $clienteQ->where('razon_social', 'like', '%' . $this->filters['search'] . '%');
-                        })
-                        ->orWhereHas('proveedor', function ($provQ) {
-                            $provQ->where('nombre', 'like', '%' . $this->filters['search'] . '%');
-                        });
-                });
-            });
+        switch ($periodType) {
+            case 'month':
+                $month = $this->filters['month'] ?? now()->format('Y-m');
+                $this->periodDescription = "Mes: " . \Carbon\Carbon::parse($month . '-01')->locale('es')->isoFormat('MMMM YYYY');
+                break;
+            case 'month_range':
+                $monthStart = $this->filters['month_start'] ?? '';
+                $monthEnd = $this->filters['month_end'] ?? '';
+                $this->periodDescription = "Entre: " .
+                    \Carbon\Carbon::parse($monthStart . '-01')->locale('es')->isoFormat('MMM YYYY') .
+                    " - " .
+                    \Carbon\Carbon::parse($monthEnd . '-01')->locale('es')->isoFormat('MMM YYYY');
+                break;
+            case 'date':
+                $this->periodDescription = "Fecha: " . \Carbon\Carbon::parse($from)->format('d/m/Y');
+                break;
+            case 'date_range':
+                $this->periodDescription = "Entre: " .
+                    \Carbon\Carbon::parse($from)->format('d/m/Y') .
+                    " - " .
+                    \Carbon\Carbon::parse($to)->format('d/m/Y');
+                break;
         }
-
-        if ($this->filters['tipo'] === 'ingreso') {
-            $query->ingresos();
-        } elseif ($this->filters['tipo'] === 'egreso') {
-            $query->egresos();
-        }
-
-        if ($this->filters['destination_type'] === 'cash') {
-            $query->byDestinationType('App\\Models\\Cash');
-        } elseif ($this->filters['destination_type'] === 'bank') {
-            $query->byDestinationType('App\\Models\\BankAccount');
-        }
-
-        if ($this->filters['cash_id']) {
-            $query->byCash($this->filters['cash_id']);
-        }
-
-        if ($this->filters['bank_account_id']) {
-            $query->byBankAccount($this->filters['bank_account_id']);
-        }
-
-        if (!empty($this->dateStart) && !empty($this->dateEnd)) {
-            $query->whereDateBetween($this->dateStart, $this->dateEnd);
-        }
-
-        $this->records = $query->get();
     }
 
     public function title(): string
     {
-        return substr('Movimientos de Caja', 0, 30);
+        return substr('Movimientos', 0, 30);
     }
 
     public function view(): View
     {
-        // Obtener empresa actual
-        $this->company = \App\Models\Empresa::find(session('empresa'));
+        $company = \App\Models\Empresa::find(session('empresa'));
 
         return view('exports.movimientos', [
-            'records' => $this->records,
-            'company' => $this->company,
-            'dateStart' => $this->dateStart,
-            'dateEnd' => $this->dateEnd,
+            'movements' => $this->movements,
+            'totales' => $this->totales,
+            'company' => $company,
             'filters' => $this->filters,
+            'periodDescription' => $this->periodDescription,
         ]);
     }
 }

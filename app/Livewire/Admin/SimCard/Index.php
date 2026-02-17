@@ -137,4 +137,9 @@ class Index extends Component
     {
         $this->dispatch('open-modal-edit', sim_card: $sim_card);
     }
+
+    public function openModalCambiarNumero(SimCard $sim_card)
+    {
+        $this->dispatch('open-modal-cambiar-numero', sim_card: $sim_card);
+    }
 }

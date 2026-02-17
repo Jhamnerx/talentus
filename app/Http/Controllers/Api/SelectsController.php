@@ -21,7 +21,6 @@ use Illuminate\Http\Request;
 use App\Models\TipoDocumento;
 use App\Models\MotivoTraslado;
 use App\Models\TipoAfectacion;
-use App\Models\MotivosTraslado;
 use App\Models\TipoComprobantes;
 use App\Models\PaymentMethodType;
 use App\Models\ModelosDispositivo;
@@ -152,6 +151,16 @@ class SelectsController extends Controller
                 fn(Builder $query) => $query
                     ->where('razon_social', 'like', "%{$request->search}%")
                     ->orWhere('numero_documento', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->tipo_comprobante == "01" ? true : false,
+                fn(Builder $query) => $query
+                    ->where('tipo_documento_id', '6') // Solo RUC para facturas
+            )
+            ->when(
+                $request->tipo_comprobante == "02" ? true : false,
+                fn(Builder $query) => $query
+                    ->where('tipo_documento_id', '1') // Solo DNI para notas de venta
             )
             ->when(
                 $request->exists('selected'),
@@ -1228,5 +1237,55 @@ class SelectsController extends Controller
                 fn($collection) => $collection->take(3)
             )
             ->values();
+    }
+
+    /**
+     * Obtener líneas disponibles (sin asignar a sim card)
+     * GET /api/lineas/disponibles?search=...&selected[]=...
+     */
+    public function lineasDisponibles(Request $request): Collection
+    {
+        return Lineas::query()
+            ->select('id', 'numero', 'operador')
+            ->whereNull('deleted_at')
+            ->whereDoesntHave('sim_card') // Sin sim card asignado
+            ->orderBy('numero')
+            ->when(
+                $request->search,
+                fn(Builder $query) => $query
+                    ->where('numero', 'like', "%{$request->search}%")
+                    ->orWhere('operador', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn(Builder $query) => $query->orWhereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->limit(30)
+            )
+            ->get();
+    }
+
+    /**
+     * Obtener sim cards disponibles (sin línea asignada)
+     * GET /api/simcards/disponibles?search=...&selected[]=...
+     */
+    public function simCardsDisponibles(Request $request): Collection
+    {
+        return SimCard::query()
+            ->select('id', 'sim_card', 'operador')
+            ->whereNull('deleted_at')
+            ->whereNull('lineas_id') // Sin línea asignada
+            ->orderBy('sim_card')
+            ->when(
+                $request->search,
+                fn(Builder $query) => $query
+                    ->where('sim_card', 'like', "%{$request->search}%")
+                    ->orWhere('operador', 'like', "%{$request->search}%")
+            )
+            ->when(
+                $request->exists('selected'),
+                fn(Builder $query) => $query->orWhereIn('id', $request->input('selected', [])),
+                fn(Builder $query) => $query->limit(30)
+            )
+            ->get();
     }
 }

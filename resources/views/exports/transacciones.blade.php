@@ -1,144 +1,75 @@
-<!DOCTYPE html>
-<html>
+<table>
+    <!-- Encabezados de columnas -->
+    <tr>
+        <th>Fecha</th>
+        <th>Adquiriente</th>
+        <th>Documento</th>
+        <th>Detalle</th>
+        <th>Moneda</th>
+        <th>Destino</th>
+        <th>Ingresos</th>
+        <th>Gastos</th>
+        <th>Saldo</th>
+    </tr>
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Reporte de Transacciones</title>
-</head>
-
-<body>
-    <table>
-        <!-- Header con info de empresa -->
+    <!-- Datos -->
+    @foreach ($movimientos as $mov)
         <tr>
-            <td colspan="11" style="text-align: center; font-weight: bold; font-size: 16px;">
-                {{ $company->razon_social ?? 'EMPRESA' }}
+            <td>{{ $mov['date_time'] ?? '-' }}</td>
+            <td>{{ $mov['person_name'] ?? '-' }}
+                @if (!empty($mov['person_document']))
+                    {{ $mov['person_document'] }}
+                @endif
             </td>
-        </tr>
-        <tr>
-            <td colspan="11" style="text-align: center;">
-                RUC: {{ $company->ruc ?? '-' }}
+            <td>{{ $mov['document_type'] ?? '-' }}
+                @if (!empty($mov['document_number']))
+                    {{ $mov['document_number'] }}
+                @endif
             </td>
+            <td>{{ $mov['detalle'] ?? '-' }}</td>
+            <td>{{ $mov['moneda'] ?? 'PEN' }}</td>
+            <td>{{ $mov['destination'] ?? '-' }}</td>
+            <td>{{ isset($mov['ingresos']) && $mov['ingresos'] > 0 ? number_format($mov['ingresos'], 2) : '-' }}</td>
+            <td>{{ isset($mov['gastos']) && $mov['gastos'] > 0 ? number_format($mov['gastos'], 2) : '-' }}</td>
+            <td>{{ number_format($mov['saldo'] ?? 0, 2) }}</td>
         </tr>
-        <tr>
-            <td colspan="11" style="text-align: center; font-weight: bold; font-size: 14px;">
-                REPORTE DE TRANSACCIONES
-            </td>
-        </tr>
-        @if ($dateStart && $dateEnd)
-            <tr>
-                <td colspan="11" style="text-align: center;">
-                    Desde: {{ \Carbon\Carbon::parse($dateStart)->format('d/m/Y') }}
-                    - Hasta: {{ \Carbon\Carbon::parse($dateEnd)->format('d/m/Y') }}
-                </td>
-            </tr>
-        @endif
-        <tr>
-            <td colspan="11"></td>
-        </tr>
+    @endforeach
 
-        <!-- Encabezados de columnas -->
-        <tr style="font-weight: bold; background-color: #f3f4f6;">
-            <td>#</td>
-            <td>Fecha</td>
-            <td>Tipo</td>
-            <td>Documento</td>
-            <td>Persona</td>
-            <td>N° Documento</td>
-            <td>Método Pago</td>
-            <td>Destino</td>
-            <td>Moneda</td>
-            <td>Ingreso</td>
-            <td>Egreso</td>
-            <td>Saldo</td>
-        </tr>
-
-        <!-- Datos -->
-        @php
-            $index = 1;
-            $balance = 0;
-            $totalIngresos = 0;
-            $totalEgresos = 0;
-        @endphp
-
-        @foreach ($records as $record)
-            @php
-                $monto = $record->monto;
-                $isIngreso = $record->type_movement === 'INGRESO';
-
-                if ($isIngreso) {
-                    $balance += $monto;
-                    $totalIngresos += $monto;
-                } else {
-                    $balance -= $monto;
-                    $totalEgresos += $monto;
-                }
-
-                // Obtener persona
-                $persona = $record->person_name;
-                $numeroDocumento = '';
-                if ($record->payment && $record->payment->paymentable) {
-                    $paymentable = $record->payment->paymentable;
-                    if ($paymentable->cliente) {
-                        $numeroDocumento = $paymentable->cliente->numero_documento ?? '';
-                    } elseif ($paymentable->proveedor) {
-                        $numeroDocumento = $paymentable->proveedor->numero_documento ?? '';
-                    }
-                }
-            @endphp
-            <tr>
-                <td>{{ $index++ }}</td>
-                <td>{{ $record->created_at->format('d/m/Y H:i') }}</td>
-                <td>{{ $record->instance_type_description }}</td>
-                <td>{{ $record->document_number }}</td>
-                <td>{{ $persona }}</td>
-                <td>{{ $numeroDocumento }}</td>
-                <td>{{ $record->payment?->payment_method?->nombre ?? '-' }}</td>
-                <td>{{ $record->destination_description }}</td>
-                <td>{{ $record->moneda }}</td>
-                <td>{{ $isIngreso ? number_format($monto, 2) : '-' }}</td>
-                <td>{{ !$isIngreso ? number_format($monto, 2) : '-' }}</td>
-                <td>{{ number_format($balance, 2) }}</td>
-            </tr>
-        @endforeach
-
-        <!-- Footer con totales -->
-        <tr>
-            <td colspan="12"></td>
-        </tr>
-        <tr style="font-weight: bold; background-color: #f3f4f6;">
-            <td colspan="9" style="text-align: right;">TOTALES:</td>
-            <td>{{ number_format($totalIngresos, 2) }}</td>
-            <td>{{ number_format($totalEgresos, 2) }}</td>
-            <td>{{ number_format($balance, 2) }}</td>
-        </tr>
-
-        <!-- Info de filtros aplicados -->
-        <tr>
-            <td colspan="12"></td>
-        </tr>
-        @if (!empty($filters['tipo']) || !empty($filters['destination_type']) || !empty($filters['search']))
-            <tr>
-                <td colspan="12" style="font-size: 10px; color: #666;">
-                    <strong>Filtros aplicados:</strong>
-                    @if (!empty($filters['tipo']))
-                        Tipo: {{ ucfirst($filters['tipo']) }} |
-                    @endif
-                    @if (!empty($filters['destination_type']))
-                        Destino: {{ $filters['destination_type'] === 'cash' ? 'Caja' : 'Banco' }} |
-                    @endif
-                    @if (!empty($filters['search']))
-                        Búsqueda: {{ $filters['search'] }}
-                    @endif
-                </td>
-            </tr>
-        @endif
-
-        <tr>
-            <td colspan="12" style="font-size: 10px; color: #999; text-align: right;">
-                Generado: {{ now()->format('d/m/Y H:i:s') }}
-            </td>
-        </tr>
-    </table>
-</body>
-
-</html>
+    <!-- Totales por moneda -->
+    <tr>
+        <td colspan="6">INGRESOS PEN:</td>
+        <td>{{ number_format($totales['ingresos_pen'] ?? 0, 2) }}</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td colspan="6">INGRESOS USD:</td>
+        <td>{{ number_format($totales['ingresos_usd'] ?? 0, 2) }}</td>
+        <td>-</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td colspan="6">EGRESOS PEN:</td>
+        <td>-</td>
+        <td>{{ number_format($totales['gastos_pen'] ?? 0, 2) }}</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td colspan="6">EGRESOS USD:</td>
+        <td>-</td>
+        <td>{{ number_format($totales['gastos_usd'] ?? 0, 2) }}</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td colspan="6">SALDO PEN:</td>
+        <td>-</td>
+        <td>-</td>
+        <td>{{ number_format($totales['saldo_pen'] ?? 0, 2) }}</td>
+    </tr>
+    <tr>
+        <td colspan="6">SALDO USD:</td>
+        <td>-</td>
+        <td>-</td>
+        <td>{{ number_format($totales['saldo_usd'] ?? 0, 2) }}</td>
+    </tr>
+</table>

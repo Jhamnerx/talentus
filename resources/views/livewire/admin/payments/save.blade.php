@@ -39,9 +39,8 @@
         <!-- ✅ Destino del Pago (Caja o Cuenta Bancaria) - Patrón PaymentDestinationHelper -->
         <div class="col-span-12 md:col-span-6">
             @if ($this->paymentDestinations && $this->paymentDestinations->isNotEmpty())
-                <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
-                    :options="$this->paymentDestinations->toArray()" option-label="description" option-value="id"
-                    placeholder="Seleccione destino" />
+                <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id" :options="$this->paymentDestinations->toArray()"
+                    option-label="description" option-value="id" placeholder="Seleccione destino" />
                 <p class="text-xs text-gray-500 mt-1">
                     Seleccione si el dinero va a Caja o a una Cuenta Bancaria específica
                 </p>

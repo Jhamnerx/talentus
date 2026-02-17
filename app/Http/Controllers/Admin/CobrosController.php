@@ -11,7 +11,7 @@ class CobrosController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:admin.cobros.index', ['only' => ['index']]);
+        $this->middleware('permission:admin.cobros.index', ['only' => ['index', 'notificaciones']]);
         $this->middleware('permission:admin.cobros.create', ['only' => ['create']]);
         $this->middleware('permission:admin.cobros.edit', ['only' => ['edit']]);
     }
@@ -38,5 +38,13 @@ class CobrosController extends Controller
     public function edit(Cobros $cobro)
     {
         return view('admin.cobros.edit', compact('cobro'));
+    }
+
+    /**
+     * Muestra el dashboard de notificaciones de cobro
+     */
+    public function notificaciones()
+    {
+        return view('admin.cobros.notificaciones');
     }
 }

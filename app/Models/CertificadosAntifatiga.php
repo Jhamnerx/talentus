@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use App\Scopes\EmpresaScope;
+use App\Models\Ciudades;
+use App\Models\Dispositivos;
+use App\Models\Vehiculos;
 use App\Scopes\EliminadoScope;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Scopes\EmpresaScope;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CertificadosAntifatiga extends Model
 {

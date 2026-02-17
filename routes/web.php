@@ -1,64 +1,59 @@
 <?php
 
-use App\Models\WorkOrder;
-use Maatwebsite\Excel\Row;
-use App\Models\Dispositivos;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Storage;
-use App\Http\Controllers\Admin\GpsController;
-use App\Http\Controllers\Admin\RolController;
-use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\ActasController;
-use App\Http\Controllers\Admin\GuiasController;
-use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\Api\SelectsController;
-use App\Http\Controllers\Admin\CobrosController;
-use App\Http\Controllers\Admin\FlotasController;
-use App\Http\Controllers\Admin\LineasController;
 use App\Http\Controllers\Admin\AjustesController;
-use App\Http\Controllers\Admin\ComprasController;
-use App\Http\Controllers\Admin\MensajeController;
-use App\Http\Controllers\Admin\RecibosController;
-use App\Http\Controllers\Admin\SimCardController;
-use App\Http\Controllers\Admin\ClientesController;
-use App\Http\Controllers\Admin\PaymentsController;
-use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
 use App\Http\Controllers\Admin\CategoriaController;
+use App\Http\Controllers\Admin\CertificadosGpsController;
+use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
+use App\Http\Controllers\Admin\ClientesController;
+use App\Http\Controllers\Admin\CobrosController;
+use App\Http\Controllers\Admin\ComprasController;
 use App\Http\Controllers\Admin\ContactosController;
 use App\Http\Controllers\Admin\ContratosController;
-use App\Http\Controllers\Admin\ProductosController;
-use App\Http\Controllers\Admin\ReportesGerenciales;
-use App\Http\Controllers\Admin\VehiculosController;
-use App\Http\Controllers\Admin\WorkOrderController;
+use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
+use App\Http\Controllers\Admin\Finanzas\FinanzasController;
+use App\Http\Controllers\Admin\FlotasController;
+use App\Http\Controllers\Admin\GpsController;
+use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\LineasController;
+use App\Http\Controllers\Admin\MantenimientoController;
+use App\Http\Controllers\Admin\MensajeController;
+use App\Http\Controllers\Admin\NotificacionesController;
+use App\Http\Controllers\Admin\PaymentsController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
+use App\Http\Controllers\Admin\PDF\CajaChicaPdfController;
+use App\Http\Controllers\Admin\PDF\CertificadoAntifatigaPdfController;
+use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
+use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
+use App\Http\Controllers\Admin\PDF\ContratoPdfController;
+use App\Http\Controllers\Admin\PDF\FacturaPdfController;
+use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
+use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
+use App\Http\Controllers\Admin\PDF\ReciboPdfController;
+use App\Http\Controllers\Admin\PDF\TareaPdfController;
+use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
 use App\Http\Controllers\Admin\PresupuestoController;
+use App\Http\Controllers\Admin\ProductosController;
 use App\Http\Controllers\Admin\ProveedoresController;
+use App\Http\Controllers\Admin\RecibosController;
+use App\Http\Controllers\Admin\RecibosPagosVariosController;
+use App\Http\Controllers\Admin\ReportesController;
+use App\Http\Controllers\Admin\ReportesGerenciales;
+use App\Http\Controllers\Admin\RolController;
+use App\Http\Controllers\Admin\ServicioTecnicoController;
+use App\Http\Controllers\Admin\SimCardController;
 use App\Http\Controllers\Admin\SolicitudesController;
 use App\Http\Controllers\Admin\UserProfileController;
-use App\Http\Controllers\Admin\PDF\TareaPdfController;
-use App\Http\Controllers\Admin\MantenimientoController;
-use App\Http\Controllers\Admin\PDF\ReciboPdfController;
-use App\Http\Controllers\Admin\NotificacionesController;
-use App\Http\Controllers\Admin\PDF\FacturaPdfController;
+use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\VehiculosController;
 use App\Http\Controllers\Admin\VentasFacturasController;
-use App\Http\Controllers\Admin\CertificadosGpsController;
-use App\Http\Controllers\Admin\PDF\ContratoPdfController;
-use App\Http\Controllers\Admin\ServicioTecnicoController;
-use App\Http\Controllers\Admin\PDF\WorkOrderPdfController;
+use App\Http\Controllers\Admin\WorkOrderController;
+use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\CertificadosAntifatigaController;
-use App\Http\Controllers\Admin\PDF\ReciboPagoPdfController;
-use App\Http\Controllers\Admin\PDF\CertificadoPdfController;
-use App\Http\Controllers\Admin\PDF\PresupuestoPdfController;
-use App\Http\Controllers\Admin\RecibosPagosVariosController;
-use App\Http\Controllers\Admin\Almacen\GuiaRemisionController;
-use App\Http\Controllers\Admin\CertificadosVelocimetrosController;
-use App\Http\Controllers\Admin\Facturacion\ComprobantesController;
-use App\Http\Controllers\Admin\PDF\CertificadoAntifatigaPdfController;
-use App\Http\Controllers\Admin\PDF\CertificadoVelocimetroPdfController;
-use App\Http\Controllers\Admin\Finanzas\FinanzasController;
-use App\Http\Controllers\Admin\PDF\CajaChicaPdfController;
+use App\Models\WorkOrder;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
@@ -69,7 +64,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(FinanzasController::class)->prefix('finanzas')->name('finanzas.')->group(function () {
         Route::get('caja-chica', 'cajaChica')->name('caja-chica.index');
         Route::get('movimientos', 'movimientos')->name('movimientos.index');
-        Route::get('ingresos', 'ingresos')->name('ingresos.index');
         Route::get('transacciones', 'transacciones')->name('transacciones.index');
         Route::get('cuentas-cobrar', 'cuentasCobrar')->name('cuentas-cobrar.index');
         Route::get('cuentas-pagar', 'cuentasPagar')->name('cuentas-pagar.index');
@@ -158,13 +152,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(CobrosController::class)->group(function () {
         Route::get('cobros/crear', 'create')->name('admin.cobros.create');
         Route::get('cobros', 'index')->name('admin.cobros.index');
+        Route::get('cobros/notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
         Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
         Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
     });
-
-    // Dashboard de Mensualidades
-    Route::get('cobros/mensualidades/dashboard', \App\Livewire\Admin\Cobros\Mensualidades::class)
-        ->name('admin.cobros.mensualidades.dashboard');
 
     // Mensajes de Contacto Web
     Route::get('mensajes-contacto', function () {
@@ -427,9 +418,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('api/unidades', 'codesProductosGre')->name('api.unidades.index');
         Route::get('api/detracciones', 'codigosDetracciones')->name('api.detracciones.index');
         Route::get('api/metodos-pago', 'metodosPago')->name('api.metodos.pago.index');
-    });
 
-    // Rutas de UtilesController eliminadas - tipo_cambio ahora se consulta con FactilizaService
+        Route::get('/lineas/disponibles', [SelectsController::class, 'lineasDisponibles'])->name('api.lineas.disponibles');
+        Route::get('/simcards/disponibles', [SelectsController::class, 'simCardsDisponibles'])->name('api.simcards.disponibles');
+    });
 
     // ÓRDENES DE TRABAJO (WORK ORDERS)
     Route::prefix('work-orders')->name('admin.work-orders.')->middleware(['auth'])->group(function () {

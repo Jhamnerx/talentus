@@ -21,13 +21,13 @@
                     <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
                 </button>
 
-                <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
+                {{-- <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
                     <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
                     <span class="hidden xs:block ml-2">Registro Rapido</span>
-                </button>
+                </button> --}}
             @endcan
 
         </div>
@@ -177,7 +177,6 @@
                         <x-form.button wire:click="openModalImport()" label="Importar" info sm icon="arrow-up-tray" />
                     @endcan
 
-                    <x-form.button wire:click="getDevicesWox()" label="Plataforma" info sm icon="briefcase" />
                 </div>
             </div>
         </div>

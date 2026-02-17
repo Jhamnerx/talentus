@@ -35,8 +35,8 @@ return [
     ],
 
     'gpswox' => [
-        'base_uri' => 'https://plataforma.talentustechnology.com',
-        'api_hash' => env('GPSWOX_API_HASH'),
+        'base_uri' => env('GPSWOX_BASE_URI', ''),
+        'api_hash' => env('GPSWOX_API_HASH', ''),
     ],
 
 ];

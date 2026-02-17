@@ -7,12 +7,19 @@
                 Lista de compras con saldo pendiente de pago
             </p>
         </div>
+
+        <!-- Botón para recalcular estados -->
+        <div>
+            <x-form.button wire:click="recalcularEstados" primary icon="arrow-path" label="Actualizar Estados"
+                class="w-full sm:w-auto" />
+        </div>
     </div>
 
     <!-- Totals Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <!-- Total por Pagar Card -->
-        <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-700/50 rounded-lg p-4 shadow-sm">
+        <div
+            class="bg-linear-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border border-red-200 dark:border-red-700/50 rounded-lg p-4 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-red-600 dark:text-red-400">Total por Pagar</p>
@@ -21,15 +28,19 @@
                     </p>
                 </div>
                 <div class="p-3 bg-red-200/50 dark:bg-red-700/30 rounded-full">
-                    <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                        </path>
                     </svg>
                 </div>
             </div>
         </div>
 
         <!-- Total Pagado Card -->
-        <div class="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border border-emerald-200 dark:border-emerald-700/50 rounded-lg p-4 shadow-sm">
+        <div
+            class="bg-linear-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 border border-emerald-200 dark:border-emerald-700/50 rounded-lg p-4 shadow-sm">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-emerald-600 dark:text-emerald-400">Total Pagado (Parcial)</p>
@@ -38,8 +49,10 @@
                     </p>
                 </div>
                 <div class="p-3 bg-emerald-200/50 dark:bg-emerald-700/30 rounded-full">
-                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    <svg class="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                 </div>
             </div>
@@ -50,7 +63,8 @@
     <div class="mb-4 space-y-3">
         <!-- Search -->
         <div>
-            <x-form.input wire:model.live="search" placeholder="Buscar por número o proveedor..." icon="magnifying-glass" />
+            <x-form.input wire:model.live="search" placeholder="Buscar por número o proveedor..."
+                icon="magnifying-glass" />
         </div>
 
         <!-- Filters Row -->
@@ -58,7 +72,7 @@
             <!-- Date filter -->
             <div class="relative inline-flex" x-data="{ open: false, selected: 4 }">
                 <button
-                    class="btn justify-between min-w-[120px] bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
+                    class="btn justify-between min-w-30 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
                     <span class="flex items-center">
@@ -188,7 +202,8 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center gap-2">
-                                    <span class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                                    <span
+                                        class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
                                         Compra
                                     </span>
                                     <span class="text-gray-800 dark:text-gray-100">{{ $doc->numero_documento }}</span>
@@ -217,20 +232,24 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex justify-center">
                                     @php
-                                        $estadoColor = match($doc->pago_estado) {
-                                            'PAID' => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
-                                            'PARTIAL' => 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
+                                        $estadoColor = match ($doc->pago_estado) {
+                                            'PAID'
+                                                => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
+                                            'PARTIAL'
+                                                => 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400',
                                             'UNPAID' => 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400',
-                                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400'
+                                            default
+                                                => 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400',
                                         };
-                                        $estadoLabel = match($doc->pago_estado) {
+                                        $estadoLabel = match ($doc->pago_estado) {
                                             'PAID' => 'Pagado',
                                             'PARTIAL' => 'Parcial',
                                             'UNPAID' => 'Pendiente',
-                                            default => $doc->pago_estado
+                                            default => $doc->pago_estado,
                                         };
                                     @endphp
-                                    <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $estadoColor }}">
+                                    <span
+                                        class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {{ $estadoColor }}">
                                         {{ $estadoLabel }}
                                     </span>
                                 </div>
@@ -238,7 +257,8 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="flex items-center justify-center gap-2">
                                     @if ($doc->pago_estado !== 'PAID')
-                                        <button wire:click="$dispatch('open-modal-register-payment-compras', { paymentable_id: {{ $doc->id }} })"
+                                        <button
+                                            wire:click="$dispatch('open-modal-register-payment-compras', { paymentable_id: {{ $doc->id }} })"
                                             class="text-emerald-400 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-400"
                                             title="Registrar Pago">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
@@ -276,44 +296,7 @@
     <div class="mt-4">
         {{ $documentos->links() }}
     </div>
-</div>
-                                    @if ($cuenta->estado->value !== 'PAGADO')
-                                        <button wire:click="registrarPago({{ $cuenta->id }})"
-                                            class="text-emerald-400 hover:text-emerald-600 dark:text-emerald-500 dark:hover:text-emerald-400"
-                                            title="Registrar Pago">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
-                                                </path>
-                                            </svg>
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-10 text-center">
-                                <div class="text-gray-400 dark:text-gray-500">
-                                    <svg class="inline-block w-12 h-12 mb-2" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
-                                        </path>
-                                    </svg>
-                                    <p class="font-medium">No se encontraron cuentas por pagar</p>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
 
-    <!-- Pagination -->
-    <div class="mt-4">
-        {{ $cuentas->links() }}
-    </div>
+    <!-- Modal de pagos -->
+    @livewire('admin.compras.register-payment')
 </div>

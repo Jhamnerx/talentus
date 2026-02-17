@@ -11,7 +11,6 @@ class FinanzasController extends Controller
     {
         $this->middleware('permission:finanzas-caja-chica', ['only' => ['cajaChica']]);
         $this->middleware('permission:finanzas-movimientos', ['only' => ['movimientos']]);
-        $this->middleware('permission:finanzas-ingresos', ['only' => ['ingresos']]);
         $this->middleware('permission:finanzas-transacciones', ['only' => ['transacciones']]);
         $this->middleware('permission:finanzas-cuentas-cobrar', ['only' => ['cuentasCobrar']]);
         $this->middleware('permission:finanzas-cuentas-pagar', ['only' => ['cuentasPagar']]);
@@ -26,11 +25,6 @@ class FinanzasController extends Controller
     public function movimientos()
     {
         return view('admin.finanzas.movimientos.index');
-    }
-
-    public function ingresos()
-    {
-        return view('admin.finanzas.ingresos.index');
     }
 
     public function transacciones()

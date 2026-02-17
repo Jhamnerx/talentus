@@ -22,9 +22,7 @@ class Index extends Component
     {
         $query = Cash::with(['user'])
             ->withCount([
-                'globalDestination as movimientos_count' => function ($q) {
-                    // Contar todos los movimientos
-                }
+                'globalDestination as movimientos_count' => function ($q) {}
             ])
             ->where(function ($q) {
                 if ($this->search) {
@@ -168,11 +166,5 @@ class Index extends Component
         } catch (\Exception $e) {
             $this->notification()->error('Error', 'Ocurrió un error al cerrar la caja: ' . $e->getMessage());
         }
-    }
-
-    public function verReporteIngreso($id)
-    {
-        // Generar reporte PDF de ingresos y egresos
-        return redirect()->route('finanzas.caja-chica.ingresos-egresos', $id);
     }
 }

@@ -15,9 +15,6 @@
     @livewire('admin.lineas.save', [], key('lineas-save'))
     @livewire('admin.dispositivos.save', [], key('dispositivos-save'))
     @livewire('admin.clientes.save', [], key('clientes-save'))
-    @livewire('admin.vehiculos.get-devices-wox', [], key('devices-wox'))
-    @livewire('admin.vehiculos.get-info-device-wox', [], key('devices-info-wox'))
-
 
     <script>
         document.addEventListener('livewire:init', function() {

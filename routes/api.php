@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\SelectsController;
 use App\Http\Controllers\Api\WorkOrderController;
 use App\Http\Controllers\Api\ConsultasApiController;
 use App\Http\Controllers\Api\ContactoApiController;

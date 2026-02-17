@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Enums\CobroEstado;
 use App\Enums\EstadoFacturacion;
+use App\Observers\DetalleCobroObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Carbon\Carbon;
 
+#[ObservedBy(DetalleCobroObserver::class)]
 class DetalleCobros extends Model
 {
     use HasFactory;
@@ -35,22 +38,30 @@ class DetalleCobros extends Model
 
     public function vehiculo()
     {
-        return $this->belongsTo(Vehiculos::class);
+        return $this->belongsTo(\App\Models\Vehiculos::class);
     }
 
     public function cobro()
     {
-        return $this->belongsTo(Cobros::class, 'cobros_id')->withTrashed();
+        return $this->belongsTo(\App\Models\Cobros::class, 'cobros_id')->withTrashed();
     }
 
     public function venta()
     {
-        return $this->belongsTo(Ventas::class);
+        return $this->belongsTo(\App\Models\Ventas::class);
     }
 
     public function recibo()
     {
-        return $this->belongsTo(Recibos::class);
+        return $this->belongsTo(\App\Models\Recibos::class);
+    }
+
+    /**
+     * Notificaciones de cobro generadas para este detalle
+     */
+    public function notificaciones()
+    {
+        return $this->hasMany(\App\Models\NotificacionCobro::class, 'detalle_cobro_id');
     }
 
     /**

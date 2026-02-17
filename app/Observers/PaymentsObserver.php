@@ -30,7 +30,7 @@ class PaymentsObserver
 
         $payment->empresa_id = session('empresa');
         $payment->user_id = Auth::user()->id;
-        
+
         // Calcular type_movement automáticamente si no está definido
         if (empty($payment->type_movement)) {
             $payment->type_movement = $this->getTypeMovement($payment);
@@ -48,21 +48,6 @@ class PaymentsObserver
         }
         if (empty($payment->tipo_cambio) || $payment->tipo_cambio == 1) {
             $payment->tipo_cambio = $currencyData['tipo_cambio'];
-        }
-
-        // ✅ CRÍTICO: Calcular payment_destination_type y payment_destination_id desde payment_destination_id original
-        // Solo se ejecuta si payment_destination_id contiene el valor original ('cash' o ID) pero no el tipo
-        if (!empty($payment->payment_destination_id) && empty($payment->payment_destination_type)) {
-            $destinationData = $this->getDestinationRecord($payment);
-            $payment->payment_destination_type = $destinationData['destination_type'];
-            $payment->payment_destination_id = $destinationData['destination_id'];
-            
-            Log::info('Destino asignado en creating()', [
-                'payment_numero' => $payment->numero,
-                'input_payment_destination_id' => $payment->payment_destination_id,
-                'payment_destination_type' => $payment->payment_destination_type,
-                'payment_destination_id' => $payment->payment_destination_id,
-            ]);
         }
     }
 
@@ -84,6 +69,9 @@ class PaymentsObserver
 
         // Actualizar saldo de caja multi-moneda si el destino es Cash
         $this->updateCashBalance($payment);
+
+        // Actualizar saldo de cuenta bancaria si el destino es BankAccount
+        $this->updateBankAccountBalance($payment);
 
         // Crear CashDocument automáticamente si corresponde (como FactuPRO)
         $this->processCashDocument($payment);
@@ -126,15 +114,15 @@ class PaymentsObserver
     {
         try {
             // Solo actualizar si el destino es una caja
-            if ($payment->payment_destination_type !== Cash::class || !$payment->payment_destination_id) {
+            if ($payment->destination_type !== Cash::class || !$payment->destination_id) {
                 return;
             }
 
-            $cash = Cash::find($payment->payment_destination_id);
+            $cash = Cash::find($payment->destination_id);
             if (!$cash) {
                 Log::warning('Caja no encontrada para actualizar saldo', [
                     'payment_id' => $payment->id,
-                    'cash_id' => $payment->payment_destination_id,
+                    'cash_id' => $payment->destination_id,
                 ]);
                 return;
             }
@@ -174,37 +162,65 @@ class PaymentsObserver
     }
 
     /**
-     * Obtener destination_id y destination_type desde payment_destination_id
-     * Igual que FactuPRO: modules/Finance/Traits/FinanceTrait.php getDestinationRecord()
+     * Actualizar saldo de cuenta bancaria cuando se registra un pago
      * 
      * @param Payments $payment
-     * @return array ['destination_id' => int|null, 'destination_type' => string|null]
+     * @return void
      */
-    protected function getDestinationRecord(Payments $payment): array
+    protected function updateBankAccountBalance(Payments $payment): void
     {
-        // Si payment_destination_id es 'cash' → es Caja
-        if ($payment->payment_destination_id === 'cash') {
-            $cash = Cash::where('estado', true)->first();
-            return [
-                'destination_id' => $cash?->id,
-                'destination_type' => Cash::class,
-            ];
-        }
+        try {
+            // Solo actualizar si el destino es una cuenta bancaria
+            if ($payment->destination_type !== BankAccount::class || !$payment->destination_id) {
+                return;
+            }
 
-        // Si es un número → es BankAccount
-        if ($payment->payment_destination_id) {
-            return [
-                'destination_id' => $payment->payment_destination_id,
-                'destination_type' => BankAccount::class,
-            ];
-        }
+            $bankAccount = BankAccount::find($payment->destination_id);
+            if (!$bankAccount) {
+                Log::warning('Cuenta bancaria no encontrada para actualizar saldo', [
+                    'payment_id' => $payment->id,
+                    'bank_account_id' => $payment->destination_id,
+                ]);
+                return;
+            }
 
-        // Sin destino especificado
-        return [
-            'destination_id' => null,
-            'destination_type' => null,
-        ];
+            // Determinar si es ingreso o egreso
+            $esIngreso = $payment->type_movement === 'INGRESO';
+
+            // Calcular nuevo saldo
+            $saldoActual = (float) $bankAccount->initial_balance;
+            $monto = (float) $payment->monto;
+
+            if ($esIngreso) {
+                $nuevoSaldo = $saldoActual + $monto;
+            } else {
+                $nuevoSaldo = $saldoActual - $monto;
+            }
+
+            // Actualizar saldo de la cuenta bancaria
+            $bankAccount->update([
+                'initial_balance' => $nuevoSaldo,
+            ]);
+
+            Log::info('Saldo de cuenta bancaria actualizado', [
+                'bank_account_id' => $bankAccount->id,
+                'payment_id' => $payment->id,
+                'type_movement' => $payment->type_movement,
+                'divisa' => $payment->divisa,
+                'monto' => $payment->monto,
+                'saldo_anterior' => $saldoActual,
+                'saldo_nuevo' => $nuevoSaldo,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar saldo de cuenta bancaria', [
+                'payment_id' => $payment->id,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+        }
     }
+
+
 
     /**
      * Obtener divisa, monto y tipo_cambio del paymentable (Ventas/Recibos/Compras)
@@ -354,14 +370,20 @@ class PaymentsObserver
                 return; // Tipo de documento no soportado
             }
 
-            // Buscar caja abierta del usuario
-            $cash = Cash::where([
-                ['user_id', $payment->user_id],
-                ['estado', true], // Caja abierta
-            ])->first();
+            // Usar el destino del pago si es una caja
+            $cash = null;
+
+            if ($payment->destination_type === Cash::class && $payment->destination_id) {
+                $cash = Cash::find($payment->destination_id);
+            }
+
+            // Si no hay destino de caja en el pago, buscar cualquier caja abierta del sistema
+            if (!$cash) {
+                $cash = Cash::where('estado', true)->first();
+            }
 
             if (!$cash) {
-                return; // No hay caja abierta, no creamos relación
+                return; // No hay caja disponible
             }
 
             // Verificar si ya existe el CashDocument para este documento

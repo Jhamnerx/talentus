@@ -1,0 +1,149 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Models\DetalleCobros;
+use App\Models\NotificacionCobro;
+use Carbon\Carbon;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
+/**
+ * Job que genera notificaciones de cobro diariamente
+ * 
+ * Se ejecuta automáticamente para detectar DetalleCobros que están
+ * próximos a su fecha de facturación y crea NotificacionCobro para
+ * cada uno de ellos.
+ * 
+ * Configurar en app/Console/Kernel.php:
+ * $schedule->job(new GenerarNotificacionesCobro)->daily();
+ */
+class GenerarNotificacionesCobro implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /**
+     * Días de anticipación para generar notificación
+     * Por defecto 7 días antes del vencimiento
+     */
+    protected int $diasAnticipacion;
+
+    /**
+     * Create a new job instance.
+     */
+    public function __construct(int $diasAnticipacion = 7)
+    {
+        $this->diasAnticipacion = $diasAnticipacion;
+    }
+
+    /**
+     * Execute the job.
+     */
+    public function handle(): void
+    {
+        $fechaLimite = Carbon::now()->addDays($this->diasAnticipacion);
+
+        Log::info('Iniciando generación de notificaciones de cobro', [
+            'fecha_limite' => $fechaLimite->format('Y-m-d'),
+            'dias_anticipacion' => $this->diasAnticipacion
+        ]);
+
+        // Obtener detalles de cobro que están próximos a vencer
+        // Campo "fecha" representa la fecha de vencimiento del cobro
+        $detallesProximos = DetalleCobros::with(['cobro', 'vehiculo', 'cobro.clientes'])
+            ->where('estado', 1) // Activo
+            ->where('estado_detalle', 'ACTIVO')
+            ->where('estado_facturacion', 'SIN_FACTURAR')
+            ->whereBetween('fecha', [
+                Carbon::now()->format('Y-m-d'),
+                $fechaLimite->format('Y-m-d')
+            ])
+            // No generar si ya existe una notificación pendiente
+            ->whereDoesntHave('notificaciones', function ($query) {
+                $query->whereIn('estado', ['PENDIENTE', 'FACTURADO']);
+            })
+            ->get();
+
+        $notificacionesCreadas = 0;
+        $errores = 0;
+
+        foreach ($detallesProximos as $detalle) {
+            try {
+                $this->crearNotificacion($detalle);
+                $notificacionesCreadas++;
+            } catch (\Exception $e) {
+                $errores++;
+                Log::error('Error al crear notificación de cobro', [
+                    'detalle_cobro_id' => $detalle->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        Log::info('Generación de notificaciones completada', [
+            'notificaciones_creadas' => $notificacionesCreadas,
+            'errores' => $errores,
+            'total_procesados' => $detallesProximos->count()
+        ]);
+    }
+
+    /**
+     * Crea una notificación de cobro para un DetalleCobro
+     */
+    protected function crearNotificacion(DetalleCobros $detalle): void
+    {
+        $cobro = $detalle->cobro;
+        $cliente = $cobro->clientes;
+
+        // Calcular descripción
+        $descripcion = $this->generarDescripcion($detalle, $cobro);
+
+        NotificacionCobro::create([
+            'empresa_id' => $cliente->empresa_id,
+            'detalle_cobro_id' => $detalle->id,
+            'cobro_id' => $cobro->id,
+            'cliente_id' => $cliente->id,
+            'vehiculo_id' => $detalle->vehiculo_id,
+            'fecha_vencimiento' => $detalle->fecha,
+            'monto' => $detalle->monto_unidad ?? $cobro->monto_unidad,
+            'moneda' => $cobro->moneda ?? 'PEN',
+            'descripcion' => $descripcion,
+            'estado' => 'PENDIENTE',
+        ]);
+
+        Log::info('Notificación de cobro creada', [
+            'detalle_cobro_id' => $detalle->id,
+            'cliente' => $cliente->razon_social,
+            'vehiculo' => $detalle->vehiculo?->placa,
+            'fecha_vencimiento' => $detalle->fecha,
+            'monto' => $detalle->monto_unidad ?? $cobro->monto_unidad
+        ]);
+    }
+
+    /**
+     * Genera descripción automática para la notificación
+     */
+    protected function generarDescripcion(DetalleCobros $detalle, $cobro): string
+    {
+        $placa = $detalle->vehiculo?->placa ?? 'Sin vehículo';
+        $servicio = $cobro->producto?->nombre ?? $cobro->comentario ?? 'Servicio';
+        $periodo = strtolower($cobro->periodo ?? 'mensual');
+
+        return "Cobro {$periodo} - {$servicio} - Vehículo: {$placa}";
+    }
+
+    /**
+     * Manejo de fallo del job
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('Fallo al generar notificaciones de cobro', [
+            'exception' => $exception->getMessage(),
+            'trace' => $exception->getTraceAsString()
+        ]);
+    }
+}

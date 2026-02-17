@@ -39,6 +39,18 @@ return Application::configure(basePath: dirname(__DIR__))
         //$schedule->job(new checkMantenimientoVehiculos)->daily();
         $schedule->job(new CheckBirthdayContacts)->dailyAt('07:50');
         $schedule->command('telescope:prune')->daily();
+
+        // Generar notificaciones de cobro diariamente a las 8:00 AM
+        $schedule->job(new \App\Jobs\GenerarNotificacionesCobro(7))
+            ->dailyAt('08:00')
+            ->name('generar-notificaciones-cobro')
+            ->withoutOverlapping()
+            ->onSuccess(function () {
+                info('✅ Notificaciones de cobro generadas exitosamente');
+            })
+            ->onFailure(function () {
+                \Illuminate\Support\Facades\Log::error('❌ Error al generar notificaciones de cobro');
+            });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

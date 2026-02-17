@@ -15,6 +15,8 @@ use App\Models\PaymentMethodType;
 use App\Http\Requests\PaymentsRequest;
 use App\Http\Controllers\Admin\PaymentsController;
 use Illuminate\Support\Collection;
+use App\Helpers\PaymentDestinationHelper;
+use Livewire\Attributes\Computed;
 
 class PaymentBulk extends Component
 {
@@ -31,8 +33,7 @@ class PaymentBulk extends Component
     public Cobros $cobro;
 
     public $numero, $payment_method_id = 1, $nota, $monto = 0, $paymentable_type, $paymentable_id, $numero_operacion, $divisaDoc, $divisa;
-    public $payment_destination_id; // Destino: 'cash' o ID de cuenta bancaria
-    public $availableCashes = [];
+    public $payment_destination_id; // Destino: formato "tipo|id"
     public $bankAccounts = [];
     public $auto_renovar = true;
 
@@ -45,10 +46,13 @@ class PaymentBulk extends Component
     {
         $this->paymentsMethods = PaymentMethodType::whereActive(true)->orderByDescription()->get();
         $this->detalles = collect();
-
-        // Cargar destinos disponibles
-        $this->availableCashes = \App\Models\Cash::where('estado', true)->get();
         $this->bankAccounts = \App\Models\BankAccount::where('status', true)->get();
+    }
+
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
     }
 
     public function render()
@@ -258,6 +262,19 @@ class PaymentBulk extends Component
         $paymentController = new PaymentsController();
         $this->numero = $paymentController->setNextSequenceNumber();
 
+        // Parsear destination_type y destination_id desde formato "tipo|id"
+        $destinationRecord = PaymentDestinationHelper::parseDestination($this->payment_destination_id);
+
+        if (!$destinationRecord || !$destinationRecord['destination_id']) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: 'Destino de pago inválido'
+            );
+            return;
+        }
+
         // Crear el pago
         $payment = Payments::create([
             'numero' => $this->numero,
@@ -271,7 +288,8 @@ class PaymentBulk extends Component
             'paymentable_id' => $this->paymentable_id,
             'cobros_id' => $this->cobro->id,
             'payment_method_id' => $this->payment_method_id,
-            'payment_destination_id' => $this->payment_destination_id,
+            'destination_type' => $destinationRecord['destination_type'],
+            'destination_id' => $destinationRecord['destination_id'],
         ]);
 
         // Actualizar documento si se marca como pagado

@@ -362,7 +362,7 @@
 
 
                     <!-- Finanzas -->
-                    @canany(['ver-caja-chica', 'ver-movimientos', 'ver-transacciones', 'ver-ingresos', 'ver-cuentas-cobrar', 'ver-cuentas-pagar', 'ver-pagos', 'ver-balance'])
+                    @canany(['ver-caja-chica', 'ver-movimientos', 'ver-transacciones', 'ver-cuentas-cobrar', 'ver-cuentas-pagar', 'ver-pagos', 'ver-balance'])
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
                             x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros']) ? 1 : 0 }} }">
 
@@ -424,17 +424,6 @@
                                         </li>
                                     @endcan
 
-                                    @can('ver-ingresos')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.ingresos.index')) {{ 'text-violet-500!' }} @endif"
-                                                href="{{ route('finanzas.ingresos.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Ingresos
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endcan
-
                                     @can('ver-cuentas-cobrar')
                                         <li class="mb-1 last:mb-0">
                                             <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('finanzas.cuentas-cobrar.index')) {{ 'text-violet-500!' }} @endif"
@@ -485,6 +474,25 @@
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
+                                                </span>
+                                            </a>
+                                        </li>
+                                        
+                                        {{-- Notificaciones de Cobro con Badge --}}
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.notificaciones')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.cobros.notificaciones') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 flex items-center gap-2">
+                                                    🔔 Notificaciones
+                                                    @php
+                                                        $pendientesCount = \App\Models\NotificacionCobro::pendientes()->count();
+                                                    @endphp
+                                                    @if($pendientesCount > 0)
+                                                        <span class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full">
+                                                            {{ $pendientesCount }}
+                                                        </span>
+                                                    @endif
                                                 </span>
                                             </a>
                                         </li>
@@ -567,7 +575,7 @@
                                         <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.compras.create')) {{ 'text-violet-500!' }} @endif"
                                             href="{{ route('admin.compras.create') }}">
                                             <span
-                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Facturas
+                                                class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Registrar compra
                                             </span>
                                         </a>
                                     </li>

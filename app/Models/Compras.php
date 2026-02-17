@@ -32,10 +32,16 @@ class Compras extends Model
     protected $casts = [
         'id' => 'integer',
         'fecha_emision' => 'date:Y-m-d',
+        'fecha_vencimiento' => 'date:Y-m-d',
         'sub_total' => 'decimal:2',
         'igv' => 'decimal:2',
         'total' => 'decimal:2',
+        'total_percepcion' => 'decimal:2',
         'user_id' => 'integer',
+        'numero_cuotas' => 'integer',
+        'cuotas' => 'array',
+        'percepcion' => 'array',
+        'guias' => 'array',
     ];
 
     public function detalle(): HasMany
@@ -80,11 +86,11 @@ class Compras extends Model
     }
 
     /**
-     * Total pagado de esta compra
+     * Total pagado de esta compra (desde tabla unificada payments)
      */
     public function getTotalPagadoAttribute(): float
     {
-        return (float) $this->expensePayments()->sum('payment');
+        return (float) $this->payments()->sum('monto');
     }
 
     /**

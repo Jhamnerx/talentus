@@ -89,7 +89,7 @@ class Emitir extends Component
 
         //$this->detalle_cuotas = collect();
         //  CONSULTAR TIPO CAMBIO
-        $util = new UtilesController;
+
         // $this->tipo_cambio = $util->tipoCambio();
         $this->plantilla = plantilla::first();
 

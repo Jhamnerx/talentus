@@ -2,81 +2,106 @@
 
 namespace App\Livewire\Admin\Cobros;
 
-use Livewire\Component;
 use App\Models\Cobros;
 use App\Models\DetalleCobros;
-use Livewire\WithPagination;
 use Carbon\Carbon;
+use Livewire\Attributes\Url;
+use Livewire\Component;
+use Livewire\WithoutUrlPagination;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
+
     public $search;
     public $estado;
     public $filtroFecha;
+    public $filtroVencimiento;
+    public $clienteId;
     public $perPage = 15;
 
     protected $listeners = [
         'render'
     ];
-    protected $queryString = [
-        'search' => ['except' => ''],
-        'estado' => ['except' => ''],
-        'status' => ['except' => ''],
-        'filtroFecha' => ['except' => ''],
-        'perPage' => ['except' => 15]
-
-    ];
 
     public function render()
     {
         $hoy = Carbon::now();
-        $fechaLimiteProximos = $hoy->copy()->addDays(7);
+        $fechaLimiteProximos7 = $hoy->copy()->addDays(7);
+        $fechaFinMes = $hoy->copy()->endOfMonth();
+        $fechaProximoMes = $hoy->copy()->addMonth();
 
-        $cobros = Cobros::query()
-            ->with(['clientes.contactos', 'detalle.vehiculo'])
+        // Obtener detalles con sus relaciones
+        $detalles = DetalleCobros::query()
+            ->with(['vehiculo.cliente', 'cobro.clientes.contactos'])
+            // Filtro por cliente específico
+            ->when($this->clienteId, function ($query) {
+                $query->whereHas('cobro.clientes', function ($cliente) {
+                    $cliente->where('id', $this->clienteId);
+                });
+            })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->whereHas('clientes', function ($clienteQuery) {
-                        $clienteQuery->where('razon_social', 'like', '%' . $this->search . '%')
+                    // Búsqueda por cliente
+                    $q->whereHas('cobro.clientes', function ($cliente) {
+                        $cliente->where('razon_social', 'like', '%' . $this->search . '%')
                             ->orWhereHas('contactos', function ($contacto) {
                                 $contacto->where('nombre', 'like', '%' . $this->search . '%');
                             });
-                    })->orWhereHas('detalle', function ($detalleQuery) {
-                        $detalleQuery->whereHas('vehiculo', function ($vehiculo) {
+                    })
+                        // Búsqueda por placa
+                        ->orWhereHas('vehiculo', function ($vehiculo) {
                             $vehiculo->where('placa', 'like', '%' . $this->search . '%');
+                        })
+                        // Búsqueda por tipo de pago o periodo
+                        ->orWhereHas('cobro', function ($cobro) {
+                            $cobro->where('tipo_pago', 'like', '%' . $this->search . '%')
+                                ->orWhere('periodo', 'like', '%' . $this->search . '%');
                         });
-                    })->orWhere('tipo_pago', 'like', '%' . $this->search . '%')
-                        ->orWhere('periodo', 'like', '%' . $this->search . '%')
-                        ->orWhere('monto_unidad', 'like', '%' . $this->search . '%');
                 });
             })
-            ->when($this->filtroFecha === 'por_vencer', function ($query) use ($hoy, $fechaLimiteProximos) {
-                $query->whereHas('detalle', function ($detalleQuery) use ($hoy, $fechaLimiteProximos) {
-                    $detalleQuery->where('estado', 1)
-                        ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaLimiteProximos->format('Y-m-d')]);
-                });
-            })
-            ->when($this->filtroFecha === 'vencidos', function ($query) use ($hoy) {
-                $query->whereHas('detalle', function ($detalleQuery) use ($hoy) {
-                    $detalleQuery->where('estado', 1)
-                        ->where('fecha', '<=', $hoy->format('Y-m-d'));
-                });
-            })
-            ->when($this->filtroFecha === 'proximo_mes', function ($query) use ($hoy) {
-                $fechaLimite = $hoy->copy()->addMonth();
-                $query->whereHas('detalle', function ($detalleQuery) use ($hoy, $fechaLimite) {
-                    $detalleQuery->where('estado', 1)
-                        ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaLimite->format('Y-m-d')]);
-                });
-            })
-            ->when($this->estado, function ($query) {
+            // Filtro por estado del detalle
+            ->when($this->estado !== null, function ($query) {
                 $query->where('estado', $this->estado);
             })
-            ->orderBy('id', 'desc')
+            // FILTROS DE REGISTROS (cobros creados)
+            ->when($this->filtroFecha === 'registrados_7dias', function ($query) use ($hoy) {
+                $query->whereHas('cobro', function ($cobro) use ($hoy) {
+                    $cobro->whereBetween('created_at', [$hoy->copy()->subDays(7), $hoy]);
+                });
+            })
+            ->when($this->filtroFecha === 'registrados_mes', function ($query) use ($hoy) {
+                $query->whereHas('cobro', function ($cobro) use ($hoy) {
+                    $cobro->whereBetween('created_at', [$hoy->copy()->startOfMonth(), $hoy]);
+                });
+            })
+            // FILTROS DE VENCIMIENTO (detalles que vencen)
+            ->when($this->filtroVencimiento === 'vencen_7dias', function ($query) use ($hoy, $fechaLimiteProximos7) {
+                $query->where('estado', 1)
+                    ->where('estado_detalle', 'ACTIVO')
+                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaLimiteProximos7->format('Y-m-d')]);
+            })
+            ->when($this->filtroVencimiento === 'vencen_fin_mes', function ($query) use ($hoy, $fechaFinMes) {
+                $query->where('estado', 1)
+                    ->where('estado_detalle', 'ACTIVO')
+                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaFinMes->format('Y-m-d')]);
+            })
+            ->when($this->filtroVencimiento === 'vencen_proximo_mes', function ($query) use ($hoy, $fechaProximoMes) {
+                $query->where('estado', 1)
+                    ->where('estado_detalle', 'ACTIVO')
+                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaProximoMes->format('Y-m-d')]);
+            })
+            ->when($this->filtroVencimiento === 'vencidos', function ($query) use ($hoy) {
+                $query->where('estado', 1)
+                    ->where('estado_detalle', 'ACTIVO')
+                    ->where('fecha', '<', $hoy->format('Y-m-d'));
+            })
+            // Ordenar por fecha de vencimiento
+            ->orderBy('fecha', 'asc')
             ->paginate($this->perPage);
 
-        return view('livewire.admin.cobros.index', compact('cobros'));
+        return view('livewire.admin.cobros.index', compact('detalles'));
     }
 
     public function setEstado($estado = null)
@@ -97,6 +122,23 @@ class Index extends Component
     public function setFiltroFecha($filtro = null)
     {
         $this->filtroFecha = $filtro;
+        $this->resetPage();
+    }
+
+    public function setFiltroVencimiento($filtro = null)
+    {
+        $this->filtroVencimiento = $filtro;
+        $this->resetPage();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'estado', 'filtroFecha', 'filtroVencimiento', 'clienteId']);
+        $this->resetPage();
+    }
+
+    public function updatingClienteId()
+    {
         $this->resetPage();
     }
 

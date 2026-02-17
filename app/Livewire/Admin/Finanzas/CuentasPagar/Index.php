@@ -20,6 +20,52 @@ class Index extends Component
     public $to = '';
     public $proveedor_id = '';
 
+    public function mount()
+    {
+        // Recalcular estados al cargar el componente
+        $this->recalcularEstados();
+    }
+
+    /**
+     * Recalcula el estado de pago de todas las compras basándose en los pagos reales
+     */
+    public function recalcularEstados()
+    {
+        $compras = Compras::all();
+        $actualizadas = 0;
+
+        foreach ($compras as $compra) {
+            $totalPagado = Payments::where('paymentable_type', 'App\\Models\\Compras')
+                ->where('paymentable_id', $compra->id)
+                ->sum('monto');
+
+            $estadoAnterior = $compra->pago_estado;
+            $estadoNuevo = null;
+
+            if ($totalPagado >= $compra->total) {
+                $estadoNuevo = 'PAID';
+            } elseif ($totalPagado > 0) {
+                $estadoNuevo = 'PARCIAL';
+            } else {
+                $estadoNuevo = 'PENDIENTE';
+            }
+
+            if ($estadoAnterior !== $estadoNuevo) {
+                $compra->update(['pago_estado' => $estadoNuevo]);
+                $actualizadas++;
+            }
+        }
+
+        if ($actualizadas > 0) {
+            $this->notification()->success(
+                'Estados actualizados',
+                "Se actualizaron {$actualizadas} compras"
+            );
+        }
+
+        $this->dispatch('render');
+    }
+
     #[On('render')]
     public function render()
     {
@@ -28,24 +74,26 @@ class Index extends Component
             'id',
             'proveedor_id',
             'fecha_emision',
-            'numero_documento',
             'serie',
             'correlativo',
+            'serie_correlativo',
             'total',
             'divisa',
             'pago_estado'
         )
-        ->where('pago_estado', '!=', 'PAID')
-        ->with('proveedor:id,razon_social,numero_documento');
+            ->where('pago_estado', '!=', 'PAID')
+            ->with('proveedor:id,razon_social,numero_documento');
 
         // Aplicar filtros
         if ($this->search) {
-            $compras->where(function($q) {
-                $q->where('numero_documento', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('proveedor', function($query) {
-                      $query->where('razon_social', 'like', '%' . $this->search . '%')
+            $compras->where(function ($q) {
+                $q->where('serie_correlativo', 'like', '%' . $this->search . '%')
+                    ->orWhere('serie', 'like', '%' . $this->search . '%')
+                    ->orWhere('correlativo', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('proveedor', function ($query) {
+                        $query->where('razon_social', 'like', '%' . $this->search . '%')
                             ->orWhere('numero_documento', 'like', '%' . $this->search . '%');
-                  });
+                    });
             });
         }
 
@@ -60,7 +108,7 @@ class Index extends Component
         $documentos = $compras->orderBy('fecha_emision', 'desc')->paginate(10);
 
         // Calcular total pagado y pendiente por cada documento
-        $documentos->getCollection()->transform(function($doc) {
+        $documentos->getCollection()->transform(function ($doc) {
             $totalPagado = Payments::where('paymentable_type', 'App\\Models\\Compras')
                 ->where('paymentable_id', $doc->id)
                 ->sum('monto');

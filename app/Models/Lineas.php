@@ -105,6 +105,69 @@ class Lineas extends Model
         return Carbon::now();
     }
 
+    /**
+     * Obtener días transcurridos desde la suspensión
+     */
+    public function getDiasSuspendidoAttribute()
+    {
+        if (!$this->fecha_suspencion) {
+            return null;
+        }
+
+        return (int) abs(Carbon::now()->diffInDays($this->fecha_suspencion, false));
+    }
+
+    /**
+     * Verificar si aún puede reactivarse sin costo
+     */
+    public function getPuedeReactivarseAttribute()
+    {
+        if (!$this->fecha_suspencion || !$this->date_to_suspend) {
+            return false;
+        }
+
+        return Carbon::now()->lte($this->date_to_suspend);
+    }
+
+    /**
+     * Días restantes para reactivación gratuita
+     */
+    public function getDiasRestantesReactivacionAttribute()
+    {
+        if (!$this->date_to_suspend) {
+            return null;
+        }
+
+        $dias = Carbon::now()->diffInDays($this->date_to_suspend, false);
+        return (int) ($dias >= 0 ? $dias : 0);
+    }
+
+    /**
+     * Estado de suspensión legible
+     */
+    public function getEstadoSuspencionTextoAttribute()
+    {
+        if ($this->estado != 2) {
+            return null;
+        }
+
+        $diasRestantes = $this->dias_restantes_reactivacion;
+
+        if ($diasRestantes === null) {
+            return 'Suspendida';
+        }
+
+        if ($diasRestantes > 30) {
+            return 'Suspendida - Reactivable';
+        } elseif ($diasRestantes > 7) {
+            return 'Suspendida - ' . round($diasRestantes) . ' días para baja';
+        } elseif ($diasRestantes > 0) {
+            return '⚠️ Suspendida - ' . round($diasRestantes) . ' días críticos';
+        } else {
+            return '❌ Baja definitiva';
+        }
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withoutGlobalScope(EmpresaScope::class);

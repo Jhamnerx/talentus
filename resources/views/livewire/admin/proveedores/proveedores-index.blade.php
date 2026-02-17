@@ -4,7 +4,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Proveedores ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Proveedores ✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -12,11 +12,12 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar proveedores" />
+                <input wire:model.live="search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                    type="search" placeholder="Buscar proveedores" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -49,41 +50,42 @@
             <!-- Delete button -->
             <div class="table-items-action hidden">
                 <div class="flex items-center">
-                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap"><span
-                            class="table-items-count"></span> items selected</div>
+                    <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
+                        <span class="table-items-count"></span> items selected</div>
                     <button
-                        class="btn bg-white border-slate-200 hover:border-slate-300 text-rose-500 hover:text-rose-600">Delete</button>
+                        class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-rose-500 hover:text-rose-600">Delete</button>
                 </div>
             </div>
 
             <!-- Dropdown -->
             <div class="relative float-right" x-data="{ open: false, selected: 4 }">
                 <button wire:ignore
-                    class="btn justify-between min-w-44 bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600"
+                    class="btn justify-between min-w-44 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                     aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
                     :aria-expanded="open">
                     <span class="flex items-center">
-                        <svg class="w-4 h-4 fill-current text-slate-500 shrink-0 mr-2" viewBox="0 0 16 16">
+                        <svg class="w-4 h-4 fill-current text-gray-500 dark:text-gray-400 shrink-0 mr-2"
+                            viewBox="0 0 16 16">
                             <path
                                 d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
                         </svg>
                         <span x-text="$refs.options.children[selected].children[1].innerHTML"></span>
                     </span>
-                    <svg class="shrink-0 ml-1 fill-current text-slate-400" width="11" height="7"
-                        viewBox="0 0 11 7">
+                    <svg class="shrink-0 ml-1 fill-current text-gray-400 dark:text-gray-500" width="11"
+                        height="7" viewBox="0 0 11 7">
                         <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
                     </svg>
                 </button>
-                <div class="z-10 absolute top-full right-0 w-full bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1"
+                <div class="z-10 absolute top-full right-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded shadow-lg overflow-hidden mt-1"
                     @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
                     x-transition:enter="transition ease-out duration-100 transform"
                     x-transition:enter-start="opacity-0 -translate-y-2"
                     x-transition:enter-end="opacity-100 translate-y-0"
                     x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0" x-cloak>
-                    <div class="font-medium text-sm text-slate-600" x-ref="options">
+                    <div class="font-medium text-sm text-gray-600 dark:text-gray-300" x-ref="options">
                         <button wire:click="filter(1)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 0 && 'text-indigo-500'" @click="selected = 0;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -94,7 +96,7 @@
                             <span>Hoy</span>
                         </button>
                         <button wire:click="filter(7)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 1 && 'text-indigo-500'" @click="selected = 1;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -105,7 +107,7 @@
                             <span>Ultimos 7 días</span>
                         </button>
                         <button wire:click="filter(30)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 2 && 'text-indigo-500'" @click="selected = 2;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -116,7 +118,7 @@
                             <span>Ultimo Mes</span>
                         </button>
                         <button wire:click="filter(12)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 3 && 'text-indigo-500'" @click="selected = 3;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -127,7 +129,7 @@
                             <span>Ultimos 12 Meses</span>
                         </button>
                         <button wire:click="filter(0)" tabindex="0"
-                            class="flex items-center w-full hover:bg-slate-50 py-1 px-3 cursor-pointer"
+                            class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/50 py-1 px-3 cursor-pointer"
                             :class="selected === 4 && 'text-indigo-500'" @click="selected = 4;open = false"
                             @focus="open = true" @focusout="open = false">
                             <svg class="shrink-0 mr-2 fill-current text-indigo-500"
@@ -148,7 +150,7 @@
                 <div class="relative inline-flex">
                     <a href="{{ route('admin.export.proveedores') }}">
                         <button
-                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white btn border-slate-200 hover:border-slate-300">
+                            class="btn bg-emerald-600 hover:bg-emerald-700 text-white border-emerald-600 hover:border-emerald-700">
                             <svg class="w-6 h-6 fill-current" viewBox="0 0 32 32">
                                 <path
                                     d="M16 20c.3 0 .5-.1.7-.3l5.7-5.7-1.4-1.4-4 4V8h-2v8.6l-4-4L9.6 14l5.7 5.7c.2.2.4.3.7.3zM9 22h14v2H9z" />
@@ -163,7 +165,7 @@
             @can('importar-proveedor')
                 <div class="relative inline-flex">
                     <button wire:click="openModalImport()" aria-controls="basic-modal"
-                        class="btn bg-blue-600 hover:bg-blue-700 text-white btn border-slate-200 hover:border-slate-300">
+                        class="btn bg-sky-600 hover:bg-sky-700 text-white border-sky-600 hover:border-sky-700">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 icon icon-tabler icon-tabler-upload"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -181,20 +183,20 @@
     </div>
 
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+    <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl mb-8">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total proveedores <span
-                    class="text-slate-400 font-medium">{{ $proveedores->total() }}</span>
+            <h2 class="font-semibold text-gray-800 dark:text-gray-100">Total proveedores <span
+                    class="text-gray-400 dark:text-gray-500 font-medium">{{ $proveedores->total() }}</span>
             </h2>
         </header>
         <div>
 
             <!-- Table -->
             <div class="overflow-x-auto">
-                <table class="table-auto w-full">
+                <table class="table-auto w-full dark:text-gray-300">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -237,7 +239,7 @@
                     </thead>
 
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-gray-100 dark:divide-gray-700/60">
                         <!-- Row -->
                         @if ($proveedores->count())
                             @foreach ($proveedores as $proveedor)
@@ -254,7 +256,8 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
                                         <div class="flex items-center">
 
-                                            <div class="font-medium text-slate-800">{{ $proveedor->razon_social }}
+                                            <div class="font-medium text-gray-800 dark:text-gray-100">
+                                                {{ $proveedor->razon_social }}
                                             </div>
                                         </div>
                                     </td>
@@ -268,11 +271,13 @@
                                         <div class="text-center">{{ $proveedor->telefono }}</div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-left font-medium text-sky-500">{{ $proveedor->web_site }}
+                                        <div class="text-left font-medium text-sky-600 dark:text-sky-400">
+                                            {{ $proveedor->web_site }}
                                         </div>
                                     </td>
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                        <div class="text-left font-medium text-emerald-500">{{ $proveedor->direccion }}
+                                        <div class="text-left font-medium text-emerald-500 dark:text-emerald-400">
+                                            {{ $proveedor->direccion }}
                                         </div>
                                     </td>
                                     @can('cambiar.estado-proveedor')
@@ -292,7 +297,7 @@
 
                                             @can('editar-proveedor')
                                                 <button wire:click.prevent="openModalEdit({{ $proveedor->id }})"
-                                                    class="text-slate-400 hover:text-slate-500 rounded-full">
+                                                    class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400 rounded-full">
                                                     <span class="sr-only">Editar</span>
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <path
@@ -319,7 +324,7 @@
                             @endforeach
                         @else
                             <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                <div class="text-center">No hay Registros</div>
+                                <div class="text-center text-gray-500 dark:text-gray-400">No hay Registros</div>
                             </td>
                         @endif
 

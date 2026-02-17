@@ -11,5 +11,6 @@
     @livewire('admin.vehiculos.reportes.delete')
     @livewire('admin.vehiculos.reportes.show-detalle')
     @livewire('admin.vehiculos.reportes.recordatorio')
+    @livewire('admin.vehiculos.reportes.estado-transmision')
 
 </x-admin-layout>

@@ -570,11 +570,19 @@ class Emitir extends Component
                 }
 
                 foreach ($this->pagos_detalle as $pago) {
+                    // Parsear destination_type y destination_id desde formato "tipo|id"
+                    $destinationRecord = PaymentDestinationHelper::parseDestination($pago['payment_destination_id']);
+
+                    if (!$destinationRecord || !$destinationRecord['destination_id']) {
+                        throw new \Exception("Destino de pago inválido para monto {$pago['monto']}");
+                    }
+
                     Payments::create([
                         'paymentable_type' => Ventas::class,
                         'paymentable_id' => $venta->id,
                         'payment_method_id' => $pago['metodo_pago_id'],
-                        'payment_destination_id' => $pago['payment_destination_id'],
+                        'destination_type' => $destinationRecord['destination_type'],
+                        'destination_id' => $destinationRecord['destination_id'],
                         'numero_operacion' => $pago['referencia'] ?? null,
                         'monto' => $pago['monto'],
                         'fecha' => $this->fecha_emision,

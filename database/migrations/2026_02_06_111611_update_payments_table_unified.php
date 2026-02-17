@@ -30,13 +30,7 @@ return new class extends Migration
             if (!Schema::hasColumn('payments', 'bank_account_id')) {
                 $table->foreignId('bank_account_id')->nullable()->after('payment_method_id')
                     ->constrained('bank_accounts')->onDelete('set null')
-                    ->comment('Cuenta bancaria si el método de pago es bancario');
-            }
-
-            // ========== DESTINO SELECTOR (antes en add_payment_destination_id) ==========
-            if (!Schema::hasColumn('payments', 'payment_destination_id')) {
-                $table->string('payment_destination_id')->nullable()->after('bank_account_id')
-                    ->comment('ID del destino seleccionado: "cash" o ID de cuenta bancaria');
+                    ->comment('Cuenta bancaria si el método de pago es bancario (legacy, usar destination_id)');
             }
 
             // ========== TIPO DE CAMBIO ==========
@@ -78,7 +72,6 @@ return new class extends Migration
             if (Schema::hasColumn('payments', 'description')) $columnsToRemove[] = 'description';
             if (Schema::hasColumn('payments', 'type_movement')) $columnsToRemove[] = 'type_movement';
             if (Schema::hasColumn('payments', 'tipo_cambio')) $columnsToRemove[] = 'tipo_cambio';
-            if (Schema::hasColumn('payments', 'payment_destination_id')) $columnsToRemove[] = 'payment_destination_id';
             if (Schema::hasColumn('payments', 'bank_account_id')) $columnsToRemove[] = 'bank_account_id';
             if (Schema::hasColumn('payments', 'destination_id')) $columnsToRemove[] = 'destination_id';
             if (Schema::hasColumn('payments', 'destination_type')) $columnsToRemove[] = 'destination_type';

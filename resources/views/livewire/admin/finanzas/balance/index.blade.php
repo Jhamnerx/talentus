@@ -5,87 +5,31 @@
             <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Balance Financiero ✨</h1>
             <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Resumen de la situación financiera</p>
         </div>
+    </div>
 
-        <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-            <!-- Date filter dropdown -->
-            <div class="relative inline-flex" x-data="{ open: false, selected: 30 }">
-                <button
-                    class="btn justify-between min-w-37.5 bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-100"
-                    aria-label="Select date range" aria-haspopup="true" @click.prevent="open = !open"
-                    :aria-expanded="open">
-                    <span class="flex items-center">
-                        <svg class="shrink-0 mr-2 fill-current text-gray-500" width="16" height="16"
-                            viewBox="0 0 16 16">
-                            <path d="M5 4a1 1 0 0 0 0 2h6a1 1 0 1 0 0-2H5Z" />
-                            <path
-                                d="M4 0a4 4 0 0 0-4 4v8a4 4 0 0 0 4 4h8a4 4 0 0 0 4-4V4a4 4 0 0 0-4-4H4ZM2 4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V4Z" />
-                        </svg>
-                        <span
-                            x-text="{
-                            1: 'Hoy',
-                            7: 'Últimos 7 días',
-                            30: 'Este Mes',
-                            90: 'Último Trimestre'
-                        }[selected]"></span>
-                    </span>
-                    <svg class="shrink-0 ml-1 fill-current text-gray-400" width="11" height="7"
-                        viewBox="0 0 11 7">
-                        <path d="M5.4 6.8L0 1.4 1.4 0l4 4 4-4 1.4 1.4z" />
-                    </svg>
-                </button>
-                <div class="z-10 absolute top-full left-0 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700/60 py-1.5 rounded-lg shadow-lg overflow-hidden mt-1"
-                    @click.outside="open = false" @keydown.escape.window="open = false" x-show="open"
-                    x-transition:enter="transition ease-out duration-100 transform"
-                    x-transition:enter-start="opacity-0 -translate-y-2"
-                    x-transition:enter-end="opacity-100 translate-y-0"
-                    x-transition:leave="transition ease-out duration-100" x-transition:leave-start="opacity-100"
-                    x-transition:leave-end="opacity-0" x-cloak>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 1 && 'text-violet-500'"
-                        @click="selected = 1; open = false; $wire.filter(1)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 1 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Hoy</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 7 && 'text-violet-500'"
-                        @click="selected = 7; open = false; $wire.filter(7)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 7 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Últimos 7 días</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 30 && 'text-violet-500'"
-                        @click="selected = 30; open = false; $wire.filter(30)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 30 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Este Mes</span>
-                    </button>
-                    <button
-                        class="flex items-center w-full hover:bg-gray-50 dark:hover:bg-gray-700/20 py-1 px-3 cursor-pointer"
-                        :class="selected === 90 && 'text-violet-500'"
-                        @click="selected = 90; open = false; $wire.filter(90)">
-                        <svg class="shrink-0 mr-2 fill-current text-violet-500" :class="selected !== 90 && 'invisible'"
-                            width="12" height="9" viewBox="0 0 12 9">
-                            <path
-                                d="M10.28.28L3.989 6.575 1.695 4.28A1 1 0 00.28 5.695l3 3a1 1 0 001.414 0l7-7A1 1 0 0010.28.28z" />
-                        </svg>
-                        <span>Último Trimestre</span>
-                    </button>
+    <!-- Filtros de fecha personalizados -->
+    <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 p-4 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <x-form.datetime.picker label="Desde:" wire:model.live="from" without-time parse-format="YYYY-MM-DD"
+                    display-format="DD-MM-YYYY" />
+            </div>
+            <div>
+                <x-form.datetime.picker label="Hasta:" wire:model.live="to" without-time parse-format="YYYY-MM-DD"
+                    display-format="DD-MM-YYYY" />
+            </div>
+            <div class="flex items-end">
+                <div class="grid grid-cols-3 gap-2 w-full">
+                    <x-form.button label="Hoy" wire:click="filter(1)" sm flat primary />
+                    <x-form.button label="7 días" wire:click="filter(7)" sm flat secondary />
+                    <x-form.button label="3 Meses" wire:click="filter(90)" sm flat warning />
+                    <x-form.button label="Mes Pasado" wire:click="filter('last_month')" sm flat info />
+                    <x-form.button label="Este Mes" wire:click="filter(30)" sm flat positive />
                 </div>
             </div>
+        </div>
+        <div class="mt-2 text-center text-xs text-gray-500 dark:text-gray-400">
+            Mostrando datos desde {{ date('d/m/Y', strtotime($from)) }} hasta {{ date('d/m/Y', strtotime($to)) }}
         </div>
     </div>
 
@@ -167,7 +111,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                            Por Cobrar
+                            Por Cobrar (Total)
                         </dt>
                         <dd class="flex items-baseline">
                             <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -201,7 +145,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 dark:text-gray-400 truncate">
-                            Por Pagar
+                            Por Pagar (Total)
                         </dt>
                         <dd class="flex items-baseline">
                             <div class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
@@ -213,6 +157,112 @@
                                 {{ $cuentasPorPagarVencidas }} vencida(s)
                             </dd>
                         @endif
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Métricas del Período Seleccionado -->
+    <div class="mb-4">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+            📊 Análisis del Período Seleccionado
+        </h3>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 mb-8">
+        <!-- Facturado y Pagado -->
+        <div
+            class="bg-linear-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 shadow-sm rounded-lg border border-emerald-200 dark:border-emerald-700/50 p-5">
+            <div class="flex items-center">
+                <div class="shrink-0">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-200 dark:bg-emerald-700/30">
+                        <svg class="w-6 h-6 text-emerald-700 dark:text-emerald-400" fill="none"
+                            stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-emerald-700 dark:text-emerald-300 truncate">
+                            ✅ Facturado y Pagado
+                        </dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-emerald-900 dark:text-emerald-100">
+                                S/ {{ number_format($facturadoYPagado, 2) }}
+                            </div>
+                        </dd>
+                        <dd class="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
+                            {{ $documentosPagados }} documento(s) pagado(s)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Facturado Pendiente -->
+        <div
+            class="bg-linear-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 shadow-sm rounded-lg border border-blue-200 dark:border-blue-700/50 p-5">
+            <div class="flex items-center">
+                <div class="shrink-0">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-200 dark:bg-blue-700/30">
+                        <svg class="w-6 h-6 text-blue-700 dark:text-blue-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-blue-700 dark:text-blue-300 truncate">
+                            📄 Facturado Pendiente
+                        </dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-blue-900 dark:text-blue-100">
+                                S/ {{ number_format($facturadoPendiente, 2) }}
+                            </div>
+                        </dd>
+                        <dd class="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                            {{ $documentosPendientes }} por cobrar
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pendiente de Facturar -->
+        <div
+            class="bg-linear-to-br from-amber-50 to-amber-100 dark:from-amber-900/20 dark:to-amber-800/20 shadow-sm rounded-lg border border-amber-200 dark:border-amber-700/50 p-5">
+            <div class="flex items-center">
+                <div class="shrink-0">
+                    <div
+                        class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-200 dark:bg-amber-700/30">
+                        <svg class="w-6 h-6 text-amber-700 dark:text-amber-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-amber-700 dark:text-amber-300 truncate">
+                            ⏳ Pendiente de Facturar
+                        </dt>
+                        <dd class="flex items-baseline">
+                            <div class="text-2xl font-semibold text-amber-900 dark:text-amber-100">
+                                S/ {{ number_format($pendienteFacturar, 2) }}
+                            </div>
+                        </dd>
+                        <dd class="mt-1 text-xs text-amber-600 dark:text-amber-400">
+                            {{ $detallesSinFacturarCount }} cobro(s) por facturar
+                        </dd>
                     </dl>
                 </div>
             </div>

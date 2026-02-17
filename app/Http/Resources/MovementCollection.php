@@ -46,7 +46,22 @@ class MovementCollection extends ResourceCollection
         // Calcular saldo residual de páginas anteriores
         $this->calculateResiduary($request);
 
-        // Transformar cada registro
+        // IMPORTANTE: Los registros vienen DESC (más reciente primero)
+        // Necesitamos calcular el balance total ANTES de transformar
+        $totalBalance = self::$residuary;
+        foreach ($this->collection as $row) {
+            $amount = $this->calculateAmount($row);
+            if ($row->type_movement === 'INGRESO') {
+                $totalBalance += $amount;
+            } else {
+                $totalBalance -= $amount;
+            }
+        }
+
+        // Ahora establecer el balance inicial al total
+        self::$balance = $totalBalance;
+
+        // Transformar cada registro (yendo hacia atrás en el tiempo)
         return $this->collection->transform(function (Payments $row, $key) {
             return $this->transformRow($row, $key);
         })->toArray();
@@ -66,7 +81,10 @@ class MovementCollection extends ResourceCollection
         // Obtener monto y convertir si es necesario
         $amount = $this->calculateAmount($row);
 
-        // Actualizar balance acumulado
+        // Guardar el balance ACTUAL (antes de revertir el movimiento)
+        $currentBalance = self::$balance;
+
+        // Luego revertir el movimiento para el siguiente registro (más antiguo)
         $this->updateBalance($row, $amount);
 
         // Determinar input/output
@@ -111,8 +129,8 @@ class MovementCollection extends ResourceCollection
             'payment' => $amount, // Monto del pago para vista de movimientos
             'input' => $input,
             'output' => $output,
-            'balance' => number_format(self::$balance, 2, '.', ''),
-            'residuary' => self::$balance, // Balance acumulado
+            'balance' => number_format($currentBalance, 2, '.', ''),
+            'residuary' => $currentBalance, // Balance acumulado
 
             // Tipo de movimiento
             'type_movement' => $row->type_movement,
@@ -187,12 +205,24 @@ class MovementCollection extends ResourceCollection
      * @param float $amount
      * @return void
      */
+    /**
+     * Actualizar balance acumulado
+     * 
+     * IMPORTANTE: Como los registros vienen DESC (más reciente primero),
+     * vamos RETROCEDIENDO en el tiempo, por lo que debemos REVERTIR
+     * el efecto del movimiento actual para obtener el balance anterior.
+     *
+     * @param Payments $row
+     * @param float $amount
+     * @return void
+     */
     protected function updateBalance(Payments $row, float $amount): void
     {
+        // Revertir el movimiento (vamos hacia atrás en el tiempo)
         if ($row->type_movement === 'INGRESO') {
-            self::$balance += $amount;
+            self::$balance -= $amount; // El balance anterior era menor
         } else {
-            self::$balance -= $amount;
+            self::$balance += $amount; // El balance anterior era mayor
         }
     }
 

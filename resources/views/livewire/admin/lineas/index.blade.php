@@ -3,7 +3,7 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">LINEAS MOVILES✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold">LINEAS MOVILES✨</h1>
         </div>
 
         <!-- Right: Actions -->
@@ -166,21 +166,21 @@
 
     </div>
     <!-- Table -->
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+    <div class="bg-white dark:bg-slate-800 shadow-lg rounded-sm border border-slate-200 dark:border-slate-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total lineas <span
-                    class="text-slate-400 font-medium">{{ $lineas->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-slate-100">Total lineas <span
+                    class="text-slate-400 dark:text-slate-500 font-medium">{{ $lineas->total() }}</span>
             </h2>
 
         </header>
-        <div>
+        <div class="min-h-[70vh]">
             <!-- Table -->
             <div class="overflow-x-auto min-h-screen">
 
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-900/20 border-t border-b border-slate-200 dark:border-slate-700">
                         <tr>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                 <div class="flex items-center">
@@ -217,11 +217,11 @@
                         </tr>
                     </thead>
                     <!-- Table body -->
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-slate-700">
                         <!-- Row -->
 
                         @foreach ($lineas as $linea)
-                            <tr class="{{ $linea->baja ? 'bg-rose-100' : '' }}">
+                            <tr class="{{ $linea->baja ? 'bg-rose-100 dark:bg-rose-900/20' : '' }}">
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="flex items-center">
                                         <label class="inline-flex">
@@ -248,77 +248,170 @@
                                             </svg>
                                         </div>
                                         @if (!empty($linea->numero))
-                                            <div class="font-medium text-slate-800">#{{ $linea->numero }}</div>
+                                            <div class="font-medium text-slate-800 dark:text-slate-100">
+                                                #{{ $linea->numero }}</div>
                                         @else
-                                            <div class="font-medium text-slate-800"></div>
+                                            <div class="font-medium text-slate-800 dark:text-slate-100"></div>
                                         @endif
                                     </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
-                                    <div class="text-left">{{ $linea->operador }}</div>
+                                    <div class="text-left text-slate-800 dark:text-slate-100">{{ $linea->operador }}
+                                    </div>
 
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if (!empty($linea->sim_card))
-                                        <div class="text-left font-medium text-slate-800">
+                                        <div class="text-left font-medium text-slate-800 dark:text-slate-100">
                                             {{ $linea->sim_card->sim_card }}</div>
                                     @else
-                                        <div class="text-left font-medium text-red-300">SIN ASIGNAR</div>
+                                        <div class="text-left font-medium text-red-400 dark:text-red-500">SIN ASIGNAR
+                                        </div>
                                     @endif
 
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left font-medium text-slate-800">
+                                    <div class="text-left font-medium text-slate-800 dark:text-slate-100">
 
                                     </div>
                                     @if (!empty($linea->sim_card))
-                                        <div class="text-left font-medium text-slate-800">
+                                        <div class="text-left font-medium text-slate-800 dark:text-slate-100">
                                             @if (!empty($linea->sim_card->vehiculos))
                                                 {{ $linea->sim_card->vehiculos->cliente->razon_social }}
                                             @endif
                                         </div>
                                     @else
-                                        <div class="text-left font-medium text-red-300"></div>
+                                        <div class="text-left font-medium text-red-400 dark:text-red-500"></div>
                                     @endif
 
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left font-medium text-slate-800">
+                                    <div class="text-left font-medium text-slate-800 dark:text-slate-100">
 
                                     </div>
                                     @if (!empty($linea->sim_card))
-                                        <div class="text-left font-medium text-slate-800">
+                                        <div class="text-left font-medium text-slate-800 dark:text-slate-100">
                                             @if (!empty($linea->sim_card->vehiculos))
                                                 {{ $linea->sim_card->vehiculos->placa }}
                                             @endif
                                         </div>
                                     @else
-                                        <div class="text-left font-medium text-red-300"></div>
+                                        <div class="text-left font-medium text-red-400 dark:text-red-500"></div>
                                     @endif
 
 
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if ($linea->baja)
-                                        <div class="font-medium text-red-600">
-                                            BAJA DEFINITIVA
+                                        <div
+                                            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-100 dark:bg-rose-900/30 border border-rose-300 dark:border-rose-700">
+                                            <svg class="w-4 h-4 text-rose-600 dark:text-rose-400" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd"
+                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                    clip-rule="evenodd" />
+                                            </svg>
+                                            <span class="text-sm font-semibold text-rose-700 dark:text-rose-300">BAJA
+                                                DEFINITIVA</span>
                                         </div>
                                     @else
                                         @if ($linea->estado->name == 'SUSPENDIDA')
-                                            <div class="font-medium text-red-500">
-                                                Suspendido <br>
+                                            <div class="space-y-1.5">
+                                                <!-- Estado principal -->
+                                                @if ($linea->puede_reactivarse)
+                                                    <div
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-100 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700">
+                                                        <svg class="w-4 h-4 text-amber-600 dark:text-amber-400"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        <span
+                                                            class="text-sm font-semibold text-amber-700 dark:text-amber-300">✅
+                                                            Suspendida - Reactivable</span>
+                                                    </div>
+                                                @elseif($linea->dias_restantes_reactivacion <= 7 && $linea->dias_restantes_reactivacion > 0)
+                                                    <div
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700">
+                                                        <svg class="w-4 h-4 text-orange-600 dark:text-orange-400 animate-pulse"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        <span
+                                                            class="text-sm font-bold text-orange-700 dark:text-orange-300">⚠️
+                                                            {{ round($linea->dias_restantes_reactivacion) }} días
+                                                            críticos</span>
+                                                    </div>
+                                                @else
+                                                    <div
+                                                        class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-100 dark:bg-rose-900/30 border border-rose-300 dark:border-rose-700">
+                                                        <svg class="w-4 h-4 text-rose-600 dark:text-rose-400"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        <span
+                                                            class="text-sm font-semibold text-rose-700 dark:text-rose-300">❌
+                                                            Suspensión vencida</span>
+                                                    </div>
+                                                @endif
 
-                                                {{ $linea->fecha_suspencion->format('d-m-Y') }} -
-                                                {{ $linea->date_to_suspend->format('d-m-Y') }}
+                                                <!-- Información adicional -->
+                                                <div class="text-xs text-slate-600 dark:text-slate-400 space-y-0.5">
+                                                    <div class="flex items-center gap-1.5">
+                                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        <span>Suspendida
+                                                            {{ $linea->fecha_suspencion->diffForHumans() }}</span>
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5">
+                                                        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path fill-rule="evenodd"
+                                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                                                                clip-rule="evenodd" />
+                                                        </svg>
+                                                        <span><strong>{{ round($linea->dias_suspendido) }}</strong>
+                                                            días
+                                                            suspendida</span>
+                                                    </div>
+                                                    @if ($linea->puede_reactivarse)
+                                                        <div
+                                                            class="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                                                            <svg class="w-3 h-3" fill="currentColor"
+                                                                viewBox="0 0 20 20">
+                                                                <path fill-rule="evenodd"
+                                                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                                    clip-rule="evenodd" />
+                                                            </svg>
+                                                            <span><strong>{{ round($linea->dias_restantes_reactivacion) }}</strong>
+                                                                días para reactivar</span>
+                                                        </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                         @else
-                                            <div class="font-medium text-emerald-500">
-                                                {{ $linea->estado->name }}
+                                            <div
+                                                class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 border border-emerald-300 dark:border-emerald-700">
+                                                <svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd"
+                                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                                        clip-rule="evenodd" />
+                                                </svg>
+                                                <span
+                                                    class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">{{ $linea->estado->name }}</span>
                                             </div>
                                         @endif
                                     @endif
@@ -398,9 +491,11 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="relative inline-flex" x-data="{ open: false }">
                                         <div class="relative inline-block h-full text-left">
-                                            <button class="text-slate-400 hover:text-slate-500 rounded-full"
-                                                :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true"
-                                                @click.prevent="open = !open" :aria-expanded="open">
+                                            <button
+                                                class="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-400 rounded-full"
+                                                :class="{ 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300': open }"
+                                                aria-haspopup="true" @click.prevent="open = !open"
+                                                :aria-expanded="open">
                                                 <span class="sr-only">Menu</span>
                                                 <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                     <circle cx="16" cy="16" r="2" />
@@ -408,7 +503,7 @@
                                                     <circle cx="22" cy="16" r="2" />
                                                 </svg>
                                             </button>
-                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white border border-slate-200 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black ring-opacity-5 divide-y divide-gray-100 focus:outline-none"
+                                            <div class="origin-top-right  z-10 absolute transform  -translate-x-3/4  top-full left-0 min-w-36 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-1.5 rounded shadow-lg overflow-hidden mt-1  ring-1 ring-black dark:ring-slate-700 ring-opacity-5 divide-y divide-gray-100 dark:divide-slate-700 focus:outline-none"
                                                 @click.outside="open = false" @keydown.escape.window="open = false"
                                                 x-show="open"
                                                 x-transition:enter="transition ease-out duration-200 transform"
@@ -422,7 +517,7 @@
                                                     @if ($linea->fecha_suspencion)
                                                         <li>
                                                             <a href="javascript: void(0)"
-                                                                class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-300 dark:text-gray-600 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="true" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -440,7 +535,7 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="activar({{ $linea->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                    class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     disabled="false" id="headlessui-menu-item-33"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg"
@@ -460,7 +555,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="suspender({{ $linea->id }})"
-                                                                class="text-gray-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 disabled group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="true" id="headlessui-menu-item-28"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -477,7 +572,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="activar({{ $linea->id }})"
-                                                                class="text-gray-300 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-300 dark:text-gray-600 cursor-not-allowed group flex items-center px-4 py-2 text-sm font-normal"
                                                                 disabled="false" id="headlessui-menu-item-33"
                                                                 role="menuitem" tabindex="-1">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -496,7 +591,7 @@
                                                         <li>
                                                             <a href="javascript: void(0)"
                                                                 wire:click.prevent="asignToPlaca({{ $linea->id }})"
-                                                                class="text-gray-700  group flex items-center px-4 py-2 text-sm font-normal"
+                                                                class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                 id="headlessui-menu-item-33" role="menuitem"
                                                                 tabindex="-1">
                                                                 <svg class="h-5 w-5  mr-3 text-gray-400 group-hover:text-green-500"
@@ -530,11 +625,27 @@
                                                                 Asignar a placa
                                                             </a>
                                                         </li>
+                                                        <li>
+                                                            <a href="javascript: void(0)"
+                                                                wire:click.prevent="openModalCambiarChip({{ $linea->id }})"
+                                                                class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-green-500"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                                                                </svg>
+                                                                Cambiar chip
+                                                            </a>
+                                                        </li>
                                                     @endif
                                                     <li>
                                                         <a href="javascript: void(0)"
                                                             wire:click.prevent="openModalEdit({{ $linea->id }})"
-                                                            class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                            class="text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                             disabled="false" id="headlessui-menu-item-27"
                                                             role="menuitem" tabindex="-1">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -548,6 +659,24 @@
 
                                                         </a>
                                                     </li>
+                                                    @if ($linea->sim_card)
+                                                        <li>
+                                                            <button
+                                                                wire:click.prevent="$dispatch('open-modal-ver-cambios-linea', { lineaId: {{ $linea->id }} })"
+                                                                class="w-full text-gray-700 dark:text-gray-200 hover:bg-slate-50 dark:hover:bg-slate-700 group flex items-center px-4 py-2 text-sm font-normal"
+                                                                role="menuitem" tabindex="-1">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="w-5 h-5 mr-3 text-gray-400 group-hover:text-purple-500"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round"
+                                                                        stroke-linejoin="round" stroke-width="2"
+                                                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                                </svg>
+                                                                Ver Cambios
+                                                            </button>
+                                                        </li>
+                                                    @endif
 
                                                 </ul>
 
@@ -566,7 +695,7 @@
                             <tr>
                                 <td colspan="9"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
+                                    <div class="text-center text-slate-500 dark:text-slate-400">No hay Registros</div>
                                 </td>
                             </tr>
                         @endif
@@ -583,6 +712,9 @@
         {{ $lineas->links() }}
 
     </div>
+
+    <!-- Modales -->
+    @livewire('admin.lineas.ver-cambios')
 </div>
 
 @push('scripts')

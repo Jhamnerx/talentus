@@ -35,6 +35,8 @@ class PaymentDestinationHelper
     /**
      * Obtener cuentas bancarias formateadas
      * 
+     * ID format: "App\Models\BankAccount|{id}" para enviar directamente tipo + id
+     * 
      * @return Collection
      */
     private static function getBankAccounts(): Collection
@@ -49,10 +51,10 @@ class PaymentDestinationHelper
                     $descripcion = $row->description ?? $row->number ?? 'Cuenta';
 
                     return [
-                        'id' => $row->id,
+                        'id' => BankAccount::class . '|' . $row->id, // Formato: tipo|id
                         'type' => 'bank',
-                        'cash_id' => null,
-                        'bank_account_id' => $row->id,
+                        'destination_type' => BankAccount::class,
+                        'destination_id' => $row->id,
                         'description' => "{$banco} - {$moneda} - {$descripcion}",
                     ];
                 });
@@ -66,19 +68,21 @@ class PaymentDestinationHelper
      * Obtener caja abierta general del negocio (no por usuario)
      * En Talentus la caja es compartida por todos los usuarios
      * 
+     * ID format: "App\Models\Cash|{id}" para enviar directamente tipo + id
+     * 
      * @return array|null
      */
     private static function getCash(): ?array
     {
-        // Buscar cualquier caja abierta (no filtrar por usuario)
+        // Buscar cualquier caja abierta del sistema (no filtrar por usuario)
         $cash = Cash::where('estado', true)->first();
 
         if ($cash) {
             return [
-                'id' => 'cash',
+                'id' => Cash::class . '|' . $cash->id, // Formato: tipo|id
                 'type' => 'cash',
-                'cash_id' => $cash->id,
-                'bank_account_id' => null,
+                'destination_type' => Cash::class,
+                'destination_id' => $cash->id,
                 'description' => $cash->reference_number
                     ? "CAJA GENERAL - {$cash->reference_number}"
                     : "CAJA GENERAL",
@@ -89,43 +93,35 @@ class PaymentDestinationHelper
     }
 
     /**
-     * Obtener destino por ID
+     * Parsear valor del selector formato "destination_type|destination_id"
+     * Ejemplo: "App\Models\Cash|1" o "App\Models\BankAccount|5"
      * 
-     * @param string|int $destinationId
-     * @return array
+     * @param string|null $destinationValue
+     * @return array ['destination_type' => string, 'destination_id' => int]
      */
-    public static function getDestinationRecord($destinationId): array
+    public static function parseDestination(?string $destinationValue): array
     {
-        if ($destinationId === 'cash') {
-            // Consultar directamente la caja abierta
-            $cash = Cash::where('estado', true)->first();
-
-            if (!$cash) {
-                return [
-                    'destination_id' => null,
-                    'destination_type' => null,
-                ];
-            }
-
+        if (empty($destinationValue)) {
             return [
-                'destination_id' => $cash->id,
-                'destination_type' => Cash::class,
-            ];
-        }
-
-        // Es una cuenta bancaria - verificar que existe
-        $bankAccount = BankAccount::find($destinationId);
-
-        if (!$bankAccount) {
-            return [
-                'destination_id' => null,
                 'destination_type' => null,
+                'destination_id' => null,
             ];
         }
 
+        // Parsear formato "tipo|id"
+        $parts = explode('|', $destinationValue, 2);
+
+        if (count($parts) === 2 && class_exists($parts[0]) && is_numeric($parts[1])) {
+            return [
+                'destination_type' => $parts[0],
+                'destination_id' => (int) $parts[1],
+            ];
+        }
+
+        // Formato inválido
         return [
-            'destination_id' => $destinationId,
-            'destination_type' => BankAccount::class,
+            'destination_type' => null,
+            'destination_id' => null,
         ];
     }
 }

@@ -52,6 +52,7 @@
                             label="Selecciona un Proveedor:" wire:model.live="proveedor_id" :clearable="false"
                             placeholder="Escriba el nombre o número de documento del proveedor" :async-data="[
                                 'api' => route('api.proveedores.index'),
+                                'params' => ['tipo_comprobante' => $tipo_comprobante_id],
                             ]"
                             option-label="razon_social" option-value="id" option-description="numero_documento">
 
@@ -82,12 +83,136 @@
                         <x-form.input label="Tipo Cambio sunat.:" wire:model.live="tipo_cambio" placeholder="3.741" />
                     </div>
 
+                    {{-- FORMA DE PAGO --}}
+                    <div class="col-span-12 md:col-span-6">
+                        <x-form.select label="Forma de Pago:" id="forma_pago" name="forma_pago" :options="[['name' => 'CONTADO', 'id' => 'CONTADO'], ['name' => 'CREDITO', 'id' => 'CREDITO']]"
+                            option-label="name" option-value="id" wire:model.live="forma_pago" :clearable="false" />
+                    </div>
+
+                    {{-- FECHA VENCIMIENTO --}}
+                    <div class="col-span-12 md:col-span-6">
+                        <x-form.datetime.picker label="Fecha Vencimiento:" id="fecha_vencimiento"
+                            name="fecha_vencimiento" wire:model.live="fecha_vencimiento" :min="now()"
+                            :max="now()->addYears(2)" without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                            :clearable="false" />
+                    </div>
 
                     <div class="col-span-12">
                         <x-form.textarea label="Comentario:" id="comentario" name="comentario"
                             wire:model.live="comentario" placeholder="Escribe tu comentario" />
                     </div>
 
+                    <div class="col-span-12">
+                        <x-form.textarea label="Observación:" id="observacion" name="observacion"
+                            wire:model.live="observacion" placeholder="Observaciones detalladas" rows="3" />
+                    </div>
+
+                </div>
+
+                {{-- SECCIÓN DE CUOTAS (Solo visible cuando es CREDITO) --}}
+                <div class="col-span-12 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md m-3 p-4"
+                    x-show="$wire.showCredit" style="display: none;">
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+                        Sistema de Cuotas - Pago a Crédito
+                    </h3>
+
+                    <div class="grid grid-cols-12 gap-4 mb-4">
+                        <div class="col-span-12 md:col-span-4">
+                            <x-form.number label="Número de Cuotas:" wire:model.live="numero_cuotas" min="1"
+                                max="36" placeholder="0" />
+                        </div>
+
+                        <div class="col-span-12 md:col-span-4">
+                            <x-form.number label="Días entre Cuotas:" wire:model.live="vence_cuotas" min="1"
+                                max="365" placeholder="30" />
+                        </div>
+
+                        <div class="col-span-12 md:col-span-4 flex items-end">
+                            <x-form.button primary label="Calcular Cuotas" wire:click="calcularCuotas(numero_cuotas)"
+                                class="w-full" />
+                        </div>
+                    </div>
+
+                    {{-- TABLA DE CUOTAS --}}
+                    @if ($detalle_cuotas->count() > 0)
+                        <div class="overflow-x-auto mt-4">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead class="bg-gray-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th
+                                            class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            #
+                                        </th>
+                                        <th
+                                            class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Días
+                                        </th>
+                                        <th
+                                            class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Fecha Vencimiento
+                                        </th>
+                                        <th
+                                            class="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Día
+                                        </th>
+                                        <th
+                                            class="px-3 py-2 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                            Importe ({{ $divisa }})
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    @foreach ($detalle_cuotas as $index => $cuota)
+                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                                            <td
+                                                class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                                {{ $cuota['n_cuota'] }}
+                                            </td>
+                                            <td
+                                                class="px-3 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
+                                                {{ $cuota['dias'] }}
+                                            </td>
+                                            <td class="px-3 py-2 whitespace-nowrap text-sm">
+                                                <x-form.datetime.picker
+                                                    wire:model.live="detalle_cuotas.{{ $index }}.fecha"
+                                                    without-time parse-format="YYYY-MM-DD" display-format="DD-MM-YYYY"
+                                                    :clearable="false" :min="$fecha_emision" />
+                                            </td>
+                                            <td
+                                                class="px-3 py-2 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                                {{ $cuota['dia_semana'] }}
+                                            </td>
+                                            <td class="px-3 py-2 whitespace-nowrap text-sm text-right">
+                                                <x-form.currency
+                                                    wire:model.live="detalle_cuotas.{{ $index }}.importe"
+                                                    thousands="," decimal="." precision="2" />
+                                            </td>
+                                        </tr>
+                                    @endforeach
+
+                                    <tr class="bg-gray-100 dark:bg-gray-800 font-semibold">
+                                        <td colspan="4"
+                                            class="px-3 py-2 text-right text-sm text-gray-900 dark:text-gray-100">
+                                            TOTAL CUOTAS:
+                                        </td>
+                                        <td class="px-3 py-2 text-right text-sm text-gray-900 dark:text-gray-100">
+                                            {{ $divisa }} {{ number_format($total_cuotas, 2) }}
+                                        </td>
+                                    </tr>
+
+                                    @if (abs($total_cuotas - $total) > 0.01)
+                                        <tr class="bg-red-50 dark:bg-red-900/20">
+                                            <td colspan="5"
+                                                class="px-3 py-2 text-center text-sm text-red-600 dark:text-red-400">
+                                                ⚠️ Diferencia: {{ $divisa }}
+                                                {{ number_format(abs($total_cuotas - $total), 2) }}
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="col-span-12 mt-10 pt-4 bg-white shadow-lg rounded-lg px-3">
@@ -311,6 +436,64 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    {{-- SECCIÓN DE MÉTODOS DE PAGO --}}
+                    <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">Métodos de Pago</h3>
+                            <x-form.button wire:click="addPayment" icon="plus" primary xs label="Agregar Pago" />
+                        </div>
+
+                        @if ($pagos_detalle->count() > 0)
+                            <div class="space-y-3">
+                                @foreach ($pagos_detalle as $index => $pago)
+                                    <div class="grid grid-cols-12 gap-2 items-end bg-gray-50 dark:bg-gray-800 p-3 rounded-lg"
+                                        wire:key="pago-{{ $index }}">
+                                        {{-- Método de Pago --}}
+                                        <div class="col-span-12 sm:col-span-3">
+                                            <x-form.select label="Método:"
+                                                wire:model="pagos_detalle.{{ $index }}.metodo_pago_id"
+                                                :options="$this->paymentMethods" option-label="descripcion" option-value="id"
+                                                placeholder="Seleccione" />
+                                        </div>
+
+                                        {{-- Destino --}}
+                                        <div class="col-span-12 sm:col-span-3">
+                                            <x-form.select label="Destino:"
+                                                wire:model="pagos_detalle.{{ $index }}.payment_destination_id"
+                                                :options="$this->paymentDestinations" option-label="description" option-value="id"
+                                                placeholder="Seleccione" />
+                                        </div>
+
+                                        {{-- Monto --}}
+                                        <div class="col-span-12 sm:col-span-2">
+                                            <x-form.currency label="Monto:"
+                                                wire:model="pagos_detalle.{{ $index }}.monto"
+                                                prefix="{{ $divisa == 'PEN' ? 'S/' : '$' }}" thousands=","
+                                                decimal="." precision="2" />
+                                        </div>
+
+                                        {{-- Referencia --}}
+                                        <div class="col-span-12 sm:col-span-3">
+                                            <x-form.input label="Referencia:"
+                                                wire:model="pagos_detalle.{{ $index }}.referencia"
+                                                placeholder="Nro. operación, cheque, etc." />
+                                        </div>
+
+                                        {{-- Botón Eliminar --}}
+                                        <div class="col-span-12 sm:col-span-1">
+                                            <x-form.button wire:click="removePayment({{ $index }})"
+                                                icon="trash" negative xs flat />
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">
+                                No se han agregado métodos de pago. Los pagos se registrarán como pendientes.
+                            </div>
+                        @endif
                     </div>
 
                     <div

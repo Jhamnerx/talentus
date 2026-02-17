@@ -23,17 +23,6 @@
                 </button>
             </form>
 
-            <!-- Reporte General del Día -->
-            <a href="{{ route('finanzas.caja-chica.reporte-general', ['fecha' => date('Y-m-d')]) }}" target="_blank"
-                class="btn bg-blue-500 text-white hover:bg-blue-600">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                    <path
-                        d="M14 0H2C.9 0 0 .9 0 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V2c0-1.1-.9-2-2-2zM2 14V2h12v12H2z" />
-                    <path d="M4 4h8v2H4zM4 8h8v2H4zM4 12h5v2H4z" />
-                </svg>
-                <span class="ml-2">Reporte del Día</span>
-            </a>
-
             @can('crear-caja-chica')
                 <button wire:click='create'
                     class="btn bg-gray-900 text-gray-100 hover:bg-gray-800 dark:bg-gray-100 dark:text-gray-800 cursor-pointer hover:dark:bg-gray-200">
@@ -230,214 +219,28 @@
                                 {{ $caja->user->name }}
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="flex items-center justify-center gap-1">
-                                    {{-- Dropdown Custom: Reporte --}}
-                                    <div class="relative" x-data="{ open: false }">
-                                        <button @click="open = !open" type="button"
-                                            class="btn btn-sm bg-indigo-500 hover:bg-indigo-600 text-white">
-                                            <svg class="w-3 h-3 fill-current" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M14 2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 12V4h8v8H6z" />
-                                            </svg>
-                                            <span class="ml-1">Reporte</span>
-                                            <svg class="w-3 h-3 fill-current ml-1" viewBox="0 0 12 12">
-                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                            </svg>
-                                        </button>
-                                        <div x-show="open" @click.away="open = false"
-                                            class="absolute right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
-                                            style="display: none;" x-transition>
-                                            <div class="py-1">
-                                                <a href="{{ route('finanzas.caja-chica.reporte-a4', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    PDF A4
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-ticket', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                                    </svg>
-                                                    PDF Ticket 80mm
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-ticket', [$caja->id, '58']) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                                    </svg>
-                                                    PDF Ticket 58mm
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-ticket-resumen', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    PDF Ticket Resumen
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-simple-a4', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    Simple A4
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-excel', $caja->id) }}"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                    </svg>
-                                                    Excel
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.reporte-operaciones', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                                                    </svg>
-                                                    Resumen Operaciones
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- Dropdown Custom: Reporte Efectivo --}}
-                                    <div class="relative" x-data="{ open: false }">
-                                        <button @click="open = !open" type="button"
-                                            class="btn btn-sm bg-emerald-500 hover:bg-emerald-600 text-white">
-                                            <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20">
-                                                <path
-                                                    d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" />
-                                            </svg>
-                                            <span class="ml-1">Efectivo</span>
-                                            <svg class="w-3 h-3 fill-current ml-1" viewBox="0 0 12 12">
-                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                            </svg>
-                                        </button>
-                                        <div x-show="open" @click.away="open = false"
-                                            class="absolute right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
-                                            style="display: none;" x-transition>
-                                            <div class="py-1">
-                                                <a href="{{ route('finanzas.caja-chica.efectivo-excel', $caja->id) }}"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                    </svg>
-                                                    Excel
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.ingresos-egresos', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
-                                                    </svg>
-                                                    Ingresos y egresos
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.pagos-asociados', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                    </svg>
-                                                    Pagos asociados
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- Dropdown Custom: Reporte Productos --}}
-                                    <div class="relative" x-data="{ open: false }">
-                                        <button @click="open = !open" type="button"
-                                            class="btn btn-sm bg-slate-500 hover:bg-slate-600 text-white">
-                                            <svg class="w-3 h-3 fill-current" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M7 0L5.268 2H2a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2h-3.268L9 0H7zM2 4h12v10H2V4z" />
-                                            </svg>
-                                            <span class="ml-1">Productos</span>
-                                            <svg class="w-3 h-3 fill-current ml-1" viewBox="0 0 12 12">
-                                                <path d="M5.9 11.4L.5 6l1.4-1.4 4 4 4-4L11.3 6z" />
-                                            </svg>
-                                        </button>
-                                        <div x-show="open" @click.away="open = false"
-                                            class="absolute right-0 mt-1 w-56 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50"
-                                            style="display: none;" x-transition>
-                                            <div class="py-1">
-                                                <a href="{{ route('finanzas.caja-chica.productos-pdf', $caja->id) }}"
-                                                    target="_blank"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                                    </svg>
-                                                    Punto de venta - PDF
-                                                </a>
-                                                <a href="{{ route('finanzas.caja-chica.productos-excel', $caja->id) }}"
-                                                    class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor"
-                                                        viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                                                    </svg>
-                                                    Punto de venta - Excel
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {{-- Botón R. Ingreso --}}
-                                    <button type="button" wire:click="verReporteIngreso({{ $caja->id }})"
-                                        class="btn btn-sm bg-teal-500 hover:bg-teal-600 text-white">
-                                        <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20">
+                                <div class="flex items-center justify-center gap-2">
+                                    {{-- Botón PDF A4 --}}
+                                    <a href="{{ route('finanzas.caja-chica.reporte-a4', $caja->id) }}" target="_blank"
+                                        class="btn btn-sm bg-indigo-500 hover:bg-indigo-600 text-white"
+                                        title="Reporte PDF A4">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                                             <path
-                                                d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-                                            <path fill-rule="evenodd"
-                                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z"
-                                                clip-rule="evenodd" />
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
-                                        <span class="ml-1">R. Ingreso</span>
-                                    </button>
+                                        <span class="ml-1">PDF</span>
+                                    </a>
+
+                                    {{-- Botón Excel --}}
+                                    <a href="{{ route('finanzas.caja-chica.reporte-excel', $caja->id) }}"
+                                        class="btn btn-sm bg-emerald-500 hover:bg-emerald-600 text-white"
+                                        title="Reporte Excel">
+                                        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                                            <path
+                                                d="M3 10h18M3 14h18m-9-4v8m-7 0h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        <span class="ml-1">Excel</span>
+                                    </a>
                                 </div>
 
                                 {{-- Botones de Acción según Estado --}}

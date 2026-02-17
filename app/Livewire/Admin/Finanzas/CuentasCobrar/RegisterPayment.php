@@ -172,8 +172,8 @@ class RegisterPayment extends Component
         ], $request->messages());
 
         try {
-            // Validar destino usando helper
-            $destinationRecord = PaymentDestinationHelper::getDestinationRecord($this->payment_destination_id);
+            // Parsear destination_type y destination_id desde formato "tipo|id"
+            $destinationRecord = PaymentDestinationHelper::parseDestination($this->payment_destination_id);
 
             if (!$destinationRecord['destination_id']) {
                 $this->notification()->error(
@@ -183,12 +183,10 @@ class RegisterPayment extends Component
                 return;
             }
 
-            // Crear pago
+            // Crear pago con destination_type y destination_id directos
             $paymentController = new PaymentsController();
             $numero = $paymentController->setNextSequenceNumber();
 
-            // ✅ IMPORTANTE: Solo enviar payment_destination_id original ('cash' o ID de banco)
-            // El Observer lo resolverá automáticamente a payment_destination_type y payment_destination_id
             $payment = Payments::create([
                 'numero' => $numero,
                 'fecha' => $this->fecha,
@@ -199,7 +197,8 @@ class RegisterPayment extends Component
                 'nota' => $this->nota,
                 'paymentable_type' => $this->paymentable_type,
                 'paymentable_id' => $this->paymentable_id,
-                'payment_destination_id' => $this->payment_destination_id, // 'cash' o ID banco SIN resolver
+                'destination_type' => $destinationRecord['destination_type'],
+                'destination_id' => $destinationRecord['destination_id'],
                 'type_movement' => 'INGRESO',
                 'user_id' => Auth::user()->id,
             ]);

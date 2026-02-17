@@ -1,364 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
-    <title>Reporte Caja Chica - CAJA GENERAL</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="application/pdf; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Reporte POS - {{ $data['cash_user_name'] }}
+        - {{ $data['cash_date_opening'] }} {{ $data['cash_time_opening'] }}
+    </title>
+    <style>
         body {
-            font-family: 'Arial', sans-serif;
-            padding: 20px;
-            color: #333;
-            font-size: 11px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #4F46E5;
-            padding-bottom: 10px;
-        }
-
-        .header h1 {
-            color: #4F46E5;
-            font-size: 20px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            margin: 3px 0;
-            color: #666;
-            font-size: 10px;
-        }
-
-        .info-box {
-            background: #F3F4F6;
-            border: 1px solid #D1D5DB;
-            border-radius: 5px;
-            padding: 12px;
-            margin-bottom: 15px;
-        }
-
-        .info-grid {
-            width: 100%;
-        }
-
-        .info-grid table {
-            width: 100%;
-            border: none;
-            margin-bottom: 0;
-        }
-
-        .info-grid td {
-            border: none;
-            padding: 4px 0;
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #374151;
-            padding: 4px 10px 4px 0;
-            width: 25%;
-        }
-
-        .info-value {
-            color: #1F2937;
-            padding: 4px 0;
-        }
-
-        .status {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 10px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .status-open {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .status-closed {
-            background: #E5E7EB;
-            color: #374151;
+            font-family: sans-serif;
+            font-size: 12px;
         }
 
         table {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 15px;
+            border-spacing: 0;
+            border: 1px solid black;
         }
 
-        table thead {
-            background: #4F46E5;
+        .celda {
+            text-align: center;
+            padding: 5px;
+            border: 0.1px solid black;
+        }
+
+        th {
+            padding: 5px;
+            text-align: center;
+            border: 0.1px solid #0088cc;
+        }
+
+        .title {
+            font-weight: bold;
+            padding: 5px;
+            font-size: 20px !important;
+            text-decoration: underline;
+        }
+
+        p>strong {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        thead tr th {
+            font-weight: bold;
+            background: #0088cc;
             color: white;
-        }
-
-        table th {
-            padding: 8px 5px;
-            text-align: left;
-            font-size: 10px;
-            font-weight: 600;
-            border: 1px solid #3730A3;
-        }
-
-        table td {
-            padding: 6px 5px;
-            text-align: left;
-            border: 1px solid #D1D5DB;
-            font-size: 10px;
-        }
-
-        table tbody tr:nth-child(even) {
-            background: #F9FAFB;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .text-center {
             text-align: center;
         }
 
-        .tipo-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 9px;
-            font-weight: 600;
-        }
-
-        .tipo-ingreso {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .tipo-egreso {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
-        .totales {
-            background: #EEF2FF;
-            border: 2px solid #4F46E5;
-            border-radius: 5px;
-            padding: 12px;
-            margin-top: 15px;
-        }
-
-        .totales-table {
-            width: 100%;
-        }
-
-        .totales-table table {
-            width: 100%;
-            border: none;
-            margin-bottom: 0;
-        }
-
-        .totales-table td {
-            border: none;
-            padding: 5px 0;
-        }
-
-        .totales-label {
-            font-weight: 600;
-            color: #374151;
-            padding: 5px 10px 5px 0;
-            width: 70%;
-        }
-
-        .totales-value {
-            color: #1F2937;
-            text-align: right;
-            padding: 5px 0;
-            font-weight: 600;
-        }
-
-        .totales-final td {
-            font-size: 13px;
-            padding-top: 8px;
-            border-top: 2px solid #4F46E5;
-        }
-
-        .footer {
-            margin-top: 20px;
-            text-align: center;
-            color: #6B7280;
-            font-size: 9px;
-            border-top: 1px solid #E5E7EB;
-            padding-top: 10px;
-        }
-
-        .moneda {
-            font-weight: 600;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 30px;
-            color: #9CA3AF;
-            font-style: italic;
+        .width-custom {
+            width: 50%
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <div class="header">
-        <h1>REPORTE DE CAJA CHICA</h1>
-        <p><strong>{{ config('app.name') }}</strong></p>
-        <p>{{ now()->format('d/m/Y H:i') }}</p>
+    <div>
+        <p align="center" class="title">
+            <strong>Reporte Caja Chica</strong>
+        </p>
     </div>
-
-    <!-- Información de la Caja -->
-    <div class="info-box">
-        <div class="info-grid">
-            <table>
-                <tr>
-                    <td class="info-label">Caja:</td>
-                    <td class="info-value"><strong>CAJA GENERAL</strong></td>
-                </tr>
-                <tr>
-                    <td class="info-label">Usuario:</td>
-                    <td class="info-value">{{ $caja->user->name ?? 'N/A' }}</td>
-                </tr>
-                <tr>
-                    <td class="info-label">Fecha Apertura:</td>
-                    <td class="info-value">{{ $caja->fecha_apertura?->format('d/m/Y H:i') ?? 'N/A' }}</td>
-                </tr>
-                @if (!$caja->estado)
-                    <tr>
-                        <td class="info-label">Fecha Cierre:</td>
-                        <td class="info-value">{{ $caja->fecha_cierre?->format('d/m/Y H:i') ?? 'N/A' }}</td>
-                    </tr>
-                @endif
-                <tr>
-                    <td class="info-label">Estado:</td>
-                    <td class="info-value">
-                        <span class="status {{ $caja->estado ? 'status-open' : 'status-closed' }}">
-                            {{ $caja->estado ? 'ABIERTA' : 'CERRADA' }}
-                        </span>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="info-label">Saldo Inicial:</td>
-                    <td class="info-value"><span class="moneda">S/ {{ number_format($caja->saldo_inicial, 2) }}</span>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- Tabla de Documentos -->
-    @php
-        // Obtener documentos desde cash_documents (como FactuPRO)
-        $cashDocuments = $caja
-            ->cashDocuments()
-            ->with(['recibo.payments.paymentMethod', 'recibo.cliente', 'venta.payments.paymentMethod', 'venta.cliente'])
-            ->get();
-
-        // Convertir a estructura compatible con el reporte
-        $movimientos = collect();
-
-        foreach ($cashDocuments as $cashDoc) {
-            $documento = $cashDoc->recibo ?? $cashDoc->venta;
-
-            if (!$documento) {
-                continue;
-            }
-
-            foreach ($documento->payments as $payment) {
-                $movimientos->push(
-                    (object) [
-                        'type_movement' => 'INGRESO',
-                        'date_time' => $payment->created_at->format('d/m/Y H:i'),
-                        'document_type' => $documento instanceof \App\Models\Recibos ? 'Recibo' : 'Factura',
-                        'document_number' => $documento->numero ?? '-',
-                        'person_name' => $documento->cliente->nombre_comercial ?? '-',
-                        'payment_method' => $payment->paymentMethod->descripcion ?? '-',
-                        'monto' => $payment->monto,
-                    ],
-                );
-            }
-        }
-    @endphp
-    @if ($movimientos->count() > 0)
+    <div style="margin-top:20px; margin-bottom:20px;">
         <table>
-            <thead>
-                <tr>
-                    <th style="width: 15%;">Documento</th>
-                    <th style="width: 12%;">Fecha</th>
-                    <th style="width: 30%;">Cliente</th>
-                    <th style="width: 18%;">Método Pago</th>
-                    <th class="text-right" style="width: 15%;">Monto</th>
-                    <th style="width: 10%;">Tipo</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($movimientos as $movimiento)
-                    <tr>
-                        <td>{{ $movimiento->document_type }}<br><small>{{ $movimiento->document_number }}</small></td>
-                        <td>{{ $movimiento->date_time }}</td>
-                        <td>{{ $movimiento->person_name }}</td>
-                        <td>{{ $movimiento->payment_method }}</td>
-                        <td class="text-right">
-                            <strong class="moneda">S/ {{ number_format($movimiento->monto, 2) }}</strong>
-                        </td>
-                        <td class="text-center">
-                            <span class="tipo-badge tipo-ingreso">Ingreso</span>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+            <tr>
+                <td class="td-custom width-custom">
+                    <p>
+                        <strong>Empresa: </strong>{{ $data['company_name'] }}
+                    </p>
+                </td>
+                <td class="td-custom">
+                    <p>
+                        <strong>Fecha reporte: </strong>{{ date('Y-m-d') }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-custom">
+                    <p>
+                        <strong>Ruc: </strong>{{ $data['company_number'] }}
+                    </p>
+                </td>
+                <td class="width-custom">
+                    <p>
+                        <strong>Establecimiento: </strong>{{ $data['establishment_address'] ?? '-' }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-custom">
+                    <p>
+                        <strong>Vendedor: </strong>{{ $data['cash_user_name'] }}
+                    </p>
+                </td>
+                <td class="td-custom">
+                    <p>
+                        <strong>Fecha y hora apertura: </strong>{{ $data['cash_date_opening'] }}
+                        {{ $data['cash_time_opening'] }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-custom">
+                    <p>
+                        <strong>Estado de caja: </strong>{{ $data['cash_state'] ? 'Aperturada' : 'Cerrada' }}
+                    </p>
+                </td>
+                @if (!$data['cash_state'])
+                    <td class="td-custom">
+                        <p>
+                            <strong>Fecha y hora cierre: </strong>{{ $data['cash_date_closed'] }}
+                            {{ $data['cash_time_closed'] }}
+                        </p>
+                    </td>
+                @else
+                    <td class="td-custom">
+                        <p>
+                            <strong>Fecha y hora cierre: </strong>-
+                        </p>
+                    </td>
+                @endif
+            </tr>
+            <tr>
+                <td class="td-custom">
+                    <p>
+                        <strong>Saldo inicial: </strong>S/ {{ $data['cash_beginning_balance'] }}
+                    </p>
+                </td>
+                <td class="td-custom">
+                    <p>
+                        <strong>Saldo final: </strong>S/ {{ $data['cash_final_balance'] }}
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td class="td-custom">
+                    <p>
+                        <strong>Ingreso: </strong>S/ {{ $data['cash_income'] }}
+                    </p>
+                </td>
+                <td class="td-custom">
+                    <p>
+                        <strong>Egreso: </strong>S/ {{ $data['cash_egress'] }}
+                    </p>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-custom" colspan="2">
+                    <p>
+                        <strong>Total caja en Efectivo: </strong>S/ {{ $data['total_cash_payment_method_type_01'] }}
+                    </p>
+                </td>
+            </tr>
         </table>
+    </div>
+
+    @if ($data['cash_documents_total'] > 0)
+        <div class="">
+            <div class=" ">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tipo de Transacción</th>
+                            <th>Tipo Documento</th>
+                            <th class="celda">Documento</th>
+                            <th>Fecha Emisión</th>
+                            <th>Cliente/Proveedor</th>
+                            <th>N° Doc.</th>
+                            <th>Total</th>
+                            <th>Total Pagado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($data['all_documents'] as $key => $value)
+                            <tr>
+                                <td class="celda">{{ $loop->iteration }}</td>
+                                <td class="celda">{{ $value['type_transaction'] }}</td>
+                                <td class="celda">{{ $value['document_type_description'] }}</td>
+                                <td class="celda">{{ $value['number'] }}</td>
+                                <td class="celda">{{ $value['date_of_issue'] }}</td>
+                                <td class="celda">{{ $value['customer_name'] }}</td>
+                                <td class="celda">{{ $value['customer_number'] }}</td>
+                                <td class="celda">{{ $value['currency_type_id'] }} {{ $value['total_string'] }}</td>
+                                <td class="celda">{{ $value['currency_type_id'] }} {{ $value['total_payments'] }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     @else
-        <div class="empty-state">
-            <p>No se encontraron movimientos registrados en esta caja</p>
+        <div class="callout callout-info">
+            <p>No se encontraron registros.</p>
         </div>
     @endif
 
-    <!-- Totales -->
-    <div class="totales">
-        <div class="totales-table">
-            <table>
-                <tr>
-                    <td class="totales-label">Saldo Inicial:</td>
-                    <td class="totales-value">S/ {{ number_format($caja->saldo_inicial, 2) }}</td>
-                </tr>
-                <tr>
-                    <td class="totales-label">Total Ingresos:</td>
-                    <td class="totales-value" style="color: #065F46;">+ S/ {{ number_format($totales['ingresos'], 2) }}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="totales-label">Total Egresos:</td>
-                    <td class="totales-value" style="color: #991B1B;">- S/ {{ number_format($totales['egresos'], 2) }}
-                    </td>
-                </tr>
-                <tr class="totales-final">
-                    <td class="totales-label">SALDO FINAL:</td>
-                    <td class="totales-value" style="color: #4F46E5; font-size: 14px;">
-                        S/ {{ number_format($totales['saldo_final'], 2) }}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-        <p>Documento generado automáticamente por {{ config('app.name') }}</p>
-        <p>Fecha de impresión: {{ now()->format('d/m/Y H:i:s') }}</p>
-    </div>
 </body>
 
 </html>

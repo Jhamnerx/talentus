@@ -49,12 +49,11 @@ class Payments extends Model
         'description',
         'payment_method_id',
         'bank_account_id',
-        'payment_destination_id',
         'cobros_id',
         'paymentable_type',
         'paymentable_id',
-        'destination_type',
-        'destination_id',
+        'destination_type', // Relación polimórfica: 'App\Models\Cash' o 'App\Models\BankAccount'
+        'destination_id', // ID del destino polimórfico
         'user_id',
         'empresa_id',
     ];
@@ -185,7 +184,7 @@ class Payments extends Model
      */
     public function destination()
     {
-        return $this->morphTo('payment_destination');
+        return $this->morphTo();
     }
 
     /**
