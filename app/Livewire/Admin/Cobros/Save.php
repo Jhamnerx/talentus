@@ -5,32 +5,30 @@ namespace App\Livewire\Admin\Cobros;
 use Carbon\Carbon;
 use App\Models\Cobros;
 use Livewire\Component;
-use App\Models\Clientes;
 use App\Models\Vehiculos;
-use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
 use App\Http\Requests\CobrosRequest;
 
 class Save extends Component
 {
-
-
-    public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
-    public $fecha_inicio, $fecha_vencimiento,  $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
-
+    public $clientes_id, $comentario;
     public $nota;
-
     public $vehiculo_selected;
-
     public Collection $items;
-
     public $producto_id;
+    public $divisa = 'PEN';
+
+    // Valores por defecto para cada vehículo que se agregue
+    public $default_periodo = 'MENSUAL';
+    public $default_plan = 30;
+    public $default_fecha_inicio;
+    public $default_fecha_vencimiento;
 
     public function mount()
     {
         $this->items = collect();
-        $this->fecha_inicio = Carbon::now()->format('Y-m-d');
-        $this->fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
+        $this->default_fecha_inicio = Carbon::now()->format('Y-m-d');
+        $this->default_fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
     }
 
     public function render()
@@ -38,23 +36,23 @@ class Save extends Component
         return view('livewire.admin.cobros.save');
     }
 
-    public function updatedPeriodo($periodo)
+    public function updatedDefaultPeriodo($periodo)
     {
         switch ($periodo) {
             case 'MENSUAL':
-                $this->fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
                 break;
             case 'BIMENSUAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(2)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(2)->format('Y-m-d');
                 break;
             case 'TRIMESTRAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(3)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(3)->format('Y-m-d');
                 break;
             case 'SEMESTRAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(6)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(6)->format('Y-m-d');
                 break;
             case 'ANUAL':
-                $this->fecha_vencimiento = Carbon::now()->addYear(1)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addYear(1)->format('Y-m-d');
                 break;
         }
     }
@@ -68,42 +66,26 @@ class Save extends Component
     public function save()
     {
         $requestCobros = new CobrosRequest();
-
         $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
-
-        $this->cantidad_unidades = $this->items->count();
-
 
         try {
             $cobro = Cobros::create([
                 'clientes_id' => $datos["clientes_id"],
                 'comentario' => $datos["comentario"],
-                'periodo' => $datos["periodo"],
-                'monto_unidad' => $datos["monto_unidad"],
                 'divisa' => $datos["divisa"],
-                'fecha_vencimiento' => $datos["fecha_vencimiento"],
-                'tipo_pago' => $datos["tipo_pago"],
-                'fecha_inicio' => $datos["fecha_inicio"],
                 'nota' => $datos["nota"],
-                'observacion' => $datos["observacion"],
                 'producto_id' => $datos["producto_id"],
             ]);
 
             Cobros::createItems($cobro, $datos["items"], 'create');
 
-            // $this->dispatch(
-            //     'notify-toast',
-            //     icon: 'success',
-            //     title: 'COBRO REGISTRADO',
-            //     mensaje: 'Se registro con existo el cobro',
-            // );
-            session()->flash('cobro-registrado', 'Se registro con exito el cobro');
+            session()->flash('cobro-registrado', 'Se registró con éxito el cobro');
             $this->redirectRoute('admin.cobros.index');
         } catch (\Throwable $th) {
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR AL ACTUALIZAR',
+                title: 'ERROR AL GUARDAR',
                 mensaje: $th->getMessage(),
             );
         }
@@ -130,27 +112,27 @@ class Save extends Component
     public function addVehiculo(Vehiculos $vehiculo)
     {
         if (array_key_exists($vehiculo->placa, $this->items->all())) {
-
             $this->dispatch(
                 'notify-toast',
                 icon: 'error',
-                title: 'ERROR EL AÑADIR',
-                mensaje: 'El vehiculo ' . $vehiculo->placa . ' ya esta agregado',
+                title: 'ERROR AL AÑADIR',
+                mensaje: 'El vehículo ' . $vehiculo->placa . ' ya está agregado',
             );
         } else {
-
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
-                title: 'VEHICULO AÑADIDO',
+                title: 'VEHÍCULO AÑADIDO',
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
                 'placa' => $vehiculo->placa,
-                'plan' => 30,
-                'fecha' => $this->fecha_vencimiento,
+                'plan' => $this->default_plan,
+                'periodo' => $this->default_periodo,
+                'fecha_inicio' => $this->default_fecha_inicio,
+                'fecha_vencimiento' => $this->default_fecha_vencimiento,
                 'estado' => 1,
             ];
         }

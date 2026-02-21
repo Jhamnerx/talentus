@@ -23,6 +23,8 @@ class EditModal extends Component
 
     public $precio_unitario = 0.00;
     public $afecto_icbper = false;
+    public $es_servicio_cobro = false;
+    public $es_dispositivo = false;
     public $file;
 
     public $file_name;
@@ -35,9 +37,22 @@ class EditModal extends Component
         $this->plantilla = plantilla::first();
     }
 
+    public function yaExisteServicioCobro($productoActualId = null)
+    {
+        $query = Productos::where('empresa_id', session('empresa'))
+            ->where('es_servicio_cobro', true);
+
+        if ($productoActualId) {
+            $query->where('id', '!=', $productoActualId);
+        }
+
+        return $query->exists();
+    }
+
     public function render()
     {
-        return view('livewire.admin.productos.edit-modal');
+        $yaExisteServicioCobro = $this->yaExisteServicioCobro($this->producto->id ?? null);
+        return view('livewire.admin.productos.edit-modal', compact('yaExisteServicioCobro'));
     }
 
     public function updatedCategoriaId($value)
@@ -80,6 +95,8 @@ class EditModal extends Component
         $this->divisa = $producto->divisa;
         $this->tipo = $producto->tipo;
         $this->afecto_icbper = $producto->afecto_icbper;
+        $this->es_servicio_cobro = $producto->es_servicio_cobro;
+        $this->es_dispositivo = $producto->es_dispositivo;
         $this->stock = $producto->stock;
         $this->valor_unitario = $producto->valor_unitario;
         $this->modelo_id = $producto->modelo_id;
@@ -186,7 +203,7 @@ class EditModal extends Component
     }
     public function resetProps()
     {
-        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper');
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'divisa', 'tipo', 'afecto_icbper', 'es_servicio_cobro', 'es_dispositivo');
     }
     public function updatedPrecioUnitario($value)
     {

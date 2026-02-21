@@ -29,6 +29,8 @@ class DetalleCobros extends Model
         'fecha_facturado' => 'date:Y-m-d',
         'fecha_facturacion' => 'date:Y-m-d',
         'fecha_pago' => 'date:Y-m-d',
+        'fecha_inicio' => 'date:Y-m-d',
+        'fecha_vencimiento' => 'date:Y-m-d',
         'estado' => 'boolean',
         'estado_detalle' => CobroEstado::class,
         'estado_facturacion' => EstadoFacturacion::class,

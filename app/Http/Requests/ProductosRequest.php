@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Productos;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -35,13 +36,28 @@ class ProductosRequest extends FormRequest
             'divisa' => 'required',
             'tipo' => 'required',
             'modelo_id' => [
-                'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->where(
-                    fn ($query) =>
+                'required_if:es_dispositivo,true',
+                Rule::unique('productos', 'modelo_id')->where(
+                    fn($query) =>
                     $query->where('empresa_id', session('empresa'))
                         ->whereNotNull('modelo_id')
                 )
+            ],
+            'es_servicio_cobro' => [
+                'boolean',
+                function ($attribute, $value, $fail) {
+                    if ($value == true || $value == '1') {
+                        $exists = Productos::where('empresa_id', session('empresa'))
+                            ->where('es_servicio_cobro', true)
+                            ->exists();
 
-            ]
+                        if ($exists) {
+                            $fail('Ya existe un servicio marcado como servicio de cobro. Solo puede haber uno.');
+                        }
+                    }
+                }
+            ],
+            'es_dispositivo' => 'boolean',
         ];
 
         if ($producto) {
@@ -57,9 +73,26 @@ class ProductosRequest extends FormRequest
                 'divisa' => 'required',
                 'tipo' => 'required',
                 'modelo_id' => [
-                    'required_if:categoria_id,1', Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn ($query) => $query->where('empresa_id', session('empresa'))
+                    'required_if:es_dispositivo,true',
+                    Rule::unique('productos', 'modelo_id')->ignore($producto->id)->where(fn($query) => $query->where('empresa_id', session('empresa'))
                         ->whereNotNull('modelo_id'))
-                ]
+                ],
+                'es_servicio_cobro' => [
+                    'boolean',
+                    function ($attribute, $value, $fail) use ($producto) {
+                        if ($value == true || $value == '1') {
+                            $exists = Productos::where('empresa_id', session('empresa'))
+                                ->where('es_servicio_cobro', true)
+                                ->where('id', '!=', $producto->id)
+                                ->exists();
+
+                            if ($exists) {
+                                $fail('Ya existe un servicio marcado como servicio de cobro. Solo puede haber uno.');
+                            }
+                        }
+                    }
+                ],
+                'es_dispositivo' => 'boolean',
             ];
         }
 
@@ -71,7 +104,7 @@ class ProductosRequest extends FormRequest
         return [
             'categoria_id.required' => 'El campo categoría es obligatorio',
             'tipo.required' => 'El campo tipo es obligatorio',
-            'modelo_id.required_if' => 'El campo modelo es obligatorio si la categoría es "Dispositivos"',
+            'modelo_id.required_if' => 'El campo modelo es obligatorio si es un dispositivo',
             'modelo_id.unique' => 'Solo un producto debe ser vinculado a un modelo',
         ];
     }

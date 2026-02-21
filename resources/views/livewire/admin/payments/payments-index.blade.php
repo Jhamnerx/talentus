@@ -238,7 +238,7 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3">
                                 @if ($payment->cobros)
                                     <div class="flex flex-col gap-1">
-                                        <x-form.mini.badge flat positive label="Con Cobro" />
+                                        <x-form.badge flat positive label="Con Cobro" />
                                         @if ($payment->cobros->vehiculo)
                                             <div class="text-xs text-gray-600 dark:text-gray-400">
                                                 <span

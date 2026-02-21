@@ -5,7 +5,6 @@ namespace App\Livewire\Admin\Cobros;
 use App\Models\Cobros;
 use App\Models\DetalleCobros;
 use Carbon\Carbon;
-use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
@@ -35,6 +34,10 @@ class Index extends Component
         // Obtener detalles con sus relaciones
         $detalles = DetalleCobros::query()
             ->with(['vehiculo.cliente', 'cobro.clientes.contactos'])
+            // Excluir detalles de cobros eliminados
+            ->whereHas('cobro', function ($query) {
+                $query->whereNull('deleted_at');
+            })
             // Filtro por cliente específico
             ->when($this->clienteId, function ($query) {
                 $query->whereHas('cobro.clientes', function ($cliente) {
@@ -79,22 +82,22 @@ class Index extends Component
             // FILTROS DE VENCIMIENTO (detalles que vencen)
             ->when($this->filtroVencimiento === 'vencen_7dias', function ($query) use ($hoy, $fechaLimiteProximos7) {
                 $query->where('estado', 1)
-                    ->where('estado_detalle', 'ACTIVO')
+
                     ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaLimiteProximos7->format('Y-m-d')]);
             })
             ->when($this->filtroVencimiento === 'vencen_fin_mes', function ($query) use ($hoy, $fechaFinMes) {
                 $query->where('estado', 1)
-                    ->where('estado_detalle', 'ACTIVO')
+
                     ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaFinMes->format('Y-m-d')]);
             })
             ->when($this->filtroVencimiento === 'vencen_proximo_mes', function ($query) use ($hoy, $fechaProximoMes) {
                 $query->where('estado', 1)
-                    ->where('estado_detalle', 'ACTIVO')
+
                     ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaProximoMes->format('Y-m-d')]);
             })
             ->when($this->filtroVencimiento === 'vencidos', function ($query) use ($hoy) {
                 $query->where('estado', 1)
-                    ->where('estado_detalle', 'ACTIVO')
+
                     ->where('fecha', '<', $hoy->format('Y-m-d'));
             })
             // Ordenar por fecha de vencimiento

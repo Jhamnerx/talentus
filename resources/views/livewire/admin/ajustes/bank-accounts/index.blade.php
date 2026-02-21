@@ -64,9 +64,9 @@
                             <td class="px-4 py-3 text-center">
                                 <button wire:click="toggleStatus({{ $account->id }})" type="button">
                                     @if ($account->status)
-                                        <x-form.mini.badge positive label="Activo" />
+                                        <x-form.badge positive label="Activo" />
                                     @else
-                                        <x-form.mini.badge negative label="Inactivo" />
+                                        <x-form.badge negative label="Inactivo" />
                                     @endif
                                 </button>
                             </td>

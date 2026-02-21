@@ -213,10 +213,10 @@
                 @if ($formaPago || $estadoPago)
                     <div class="flex gap-2 text-xs">
                         @if ($formaPago)
-                            <x-form.mini.badge flat info label="Forma: {{ $formaPago }}" />
+                            <x-form.badge flat info label="Forma: {{ $formaPago }}" />
                         @endif
                         @if ($estadoPago)
-                            <x-form.mini.badge flat info label="Estado: {{ ucfirst($estadoPago) }}" />
+                            <x-form.badge flat info label="Estado: {{ ucfirst($estadoPago) }}" />
                         @endif
                     </div>
                 @endif
@@ -422,14 +422,14 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
                                         @if ($compra->forma_pago == 'CREDITO')
-                                            <x-form.mini.badge flat warning label="CRÉDITO" />
+                                            <x-form.badge flat warning label="CRÉDITO" />
                                             @if ($compra->numero_cuotas > 0)
                                                 <span class="ml-1 text-xs text-gray-500 dark:text-gray-400">
                                                     ({{ $compra->numero_cuotas }} cuotas)
                                                 </span>
                                             @endif
                                         @else
-                                            <x-form.mini.badge flat positive label="CONTADO" />
+                                            <x-form.badge flat positive label="CONTADO" />
                                         @endif
                                     </div>
                                 </td>
@@ -454,7 +454,7 @@
                                 {{-- ESTADO DE PAGO --}}
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @if ($compra->estado == 'ANULADO')
-                                        <x-form.mini.badge flat negative label="ANULADO" />
+                                        <x-form.badge flat negative label="ANULADO" />
                                     @else
                                         @php
                                             $totalPagado = $compra->total_pagado;
@@ -465,9 +465,9 @@
 
                                         <div class="space-y-1">
                                             @if ($compra->isPaid())
-                                                <x-form.mini.badge flat positive label="PAGADO" />
+                                                <x-form.badge flat positive label="PAGADO" />
                                             @elseif($totalPagado > 0)
-                                                <x-form.mini.badge flat warning label="PARCIAL" />
+                                                <x-form.badge flat warning label="PARCIAL" />
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">
                                                     Pagado:
                                                     {{ $compra->divisa == 'PEN' ? 'S/ ' : '$' }}{{ number_format($totalPagado, 2) }}
@@ -477,7 +477,7 @@
                                                     {{ $compra->divisa == 'PEN' ? 'S/ ' : '$' }}{{ number_format($saldo, 2) }}
                                                 </div>
                                             @else
-                                                <x-form.mini.badge flat negative label="PENDIENTE" />
+                                                <x-form.badge flat negative label="PENDIENTE" />
                                                 <div class="text-xs text-gray-500 dark:text-gray-400">
                                                     Debe:
                                                     {{ $compra->divisa == 'PEN' ? 'S/ ' : '$' }}{{ number_format($compra->total, 2) }}

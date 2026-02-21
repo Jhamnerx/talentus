@@ -22,6 +22,8 @@ class CreateModal extends Component
 
     public $precio_unitario = 0.00;
     public $afecto_icbper = false;
+    public $es_servicio_cobro = false;
+    public $es_dispositivo = false;
     public $file;
 
     public $modelo_id = null;
@@ -32,16 +34,29 @@ class CreateModal extends Component
         $this->plantilla = plantilla::first();
     }
 
+    public function yaExisteServicioCobro()
+    {
+        return Productos::where('empresa_id', session('empresa'))
+            ->where('es_servicio_cobro', true)
+            ->exists();
+    }
+
     public function render()
     {
-        return view('livewire.admin.productos.create-modal');
+        $yaExisteServicioCobro = $this->yaExisteServicioCobro();
+        return view('livewire.admin.productos.create-modal', compact('yaExisteServicioCobro'));
     }
 
     #[On(['open-modal-create', 'add-producto-modal'])]
-    public function openModal($producto = null)
+    public function openModal($producto = null, $tipo = null)
     {
         $this->modalCreate = true;
         $this->descripcion = $producto;
+
+        // Establecer el tipo según el contexto (productos o servicios)
+        if ($tipo) {
+            $this->tipo = $tipo;
+        }
     }
     public function closeModal()
     {
@@ -146,7 +161,7 @@ class CreateModal extends Component
 
     public function resetProps()
     {
-        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper');
+        $this->reset('descripcion', 'categoria_id', 'codigo', 'unit_code', 'stock', 'valor_unitario', 'ventas', 'divisa', 'tipo', 'afecto_icbper', 'es_servicio_cobro', 'es_dispositivo');
     }
     public function updatedPrecioUnitario($value)
     {

@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::controller(ProductosController::class)->group(function () {
         Route::get('productos', 'index')->name('admin.almacen.productos.index');
+        Route::get('servicios', 'servicios')->name('admin.almacen.servicios.index');
     });
 
 

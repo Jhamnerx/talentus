@@ -482,10 +482,15 @@
 
                                     <!-- Vencimiento -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if ($detalle->estado == 1 && $diasRestantes >= 0)
+                                        @if ($detalle->estado == 1)
                                             <div class="font-medium {{ $textColor }}">
-                                                {{ $detalle->fecha->format('d-m-Y') }}
+                                                {{ \Carbon\Carbon::parse($detalle->fecha)->format('d/m/Y') }}
                                             </div>
+                                            @if ($diasRestantes < 0)
+                                                <div class="text-xs {{ $textColor }} font-bold mt-1">
+                                                    {{ $diasTexto }}
+                                                </div>
+                                            @endif
                                         @else
                                             <span class="text-gray-400 dark:text-gray-500 text-sm">-</span>
                                         @endif

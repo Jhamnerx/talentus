@@ -5,13 +5,16 @@
 
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Productos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">
+                {{ $tipo ? ($tipo === 'producto' ? 'Productos' : 'Servicios') : 'Productos' }} ✨
+            </h1>
         </div>
 
         <!-- Right: Actions -->
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
-            <x-search-form placeholder="Buscar productos" />
+            <x-search-form
+                placeholder="{{ $tipo ? ($tipo === 'producto' ? 'Buscar productos' : 'Buscar servicios') : 'Buscar productos' }}" />
             <!-- Add customer button -->
             @can('crear-producto')
                 <button wire:click.prevent="openModalCreate"
@@ -20,7 +23,9 @@
                         <path
                             d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
                     </svg>
-                    <span class="hidden xs:block ml-2">Añadir Producto</span>
+                    <span class="hidden xs:block ml-2">
+                        {{ $tipo ? ($tipo === 'producto' ? 'Añadir Producto' : 'Añadir Servicio') : 'Añadir Producto' }}
+                    </span>
                 </button>
             @endcan
 
@@ -33,37 +38,37 @@
         <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
 
             <!-- Filter by categoria -->
-            <select wire:model.live="categoriaFilter"
-                class="form-select dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                <option value="">Todas las categorías</option>
+            <x-form.select wire:model.live="categoriaFilter" placeholder="Todas las categorías">
+                <x-select.option value="" label="Todas las categorías" />
                 @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
+                    <x-select.option value="{{ $categoria->id }}" label="{{ $categoria->nombre }}" />
                 @endforeach
-            </select>
+            </x-form.select>
 
             <!-- Filter by tipo -->
-            <select wire:model.live="tipoFilter"
-                class="form-select dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                <option value="">Todos los tipos</option>
-                <option value="producto">Producto</option>
-                <option value="servicio">Servicio</option>
-            </select>
+            @if (!$tipo)
+                <x-form.select wire:model.live="tipoFilter" placeholder="Todos los tipos">
+                    <x-select.option value="" label="Todos los tipos" />
+                    <x-select.option value="producto" label="Producto" />
+                    <x-select.option value="servicio" label="Servicio" />
+                </x-form.select>
+            @endif
 
             <!-- Filter by status -->
-            <select wire:model.live="estadoFilter"
-                class="form-select dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                <option value="">Todos los estados</option>
-                <option value="1">Activo</option>
-                <option value="0">Desactivado</option>
-            </select>
+            <x-form.select wire:model.live="estadoFilter" placeholder="Todos los estados">
+                <x-select.option value="" label="Todos los estados" />
+                <x-select.option value="1" label="Activo" />
+                <x-select.option value="0" label="Desactivado" />
+            </x-form.select>
         </div>
     </div>
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800 dark:text-gray-100">Total Productos <span
-                    class="text-slate-400 dark:text-gray-400 font-medium">{{ $productos->total() }}</span>
+            <h2 class="font-semibold text-slate-800 dark:text-gray-100">
+                Total {{ $tipo ? ($tipo === 'producto' ? 'Productos' : 'Servicios') : 'Productos' }}
+                <span class="text-slate-400 dark:text-gray-400 font-medium">{{ $productos->total() }}</span>
             </h2>
         </header>
         <div>

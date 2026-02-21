@@ -14,7 +14,7 @@
         </a>
         <!-- Left: Title -->
         <div class="mb-4 sm:mb-0">
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold">Modelos Dispositivos ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-slate-800 dark:text-gray-100 font-bold">Modelos Dispositivos ✨</h1>
 
         </div>
 
@@ -23,11 +23,12 @@
             <!-- Search form -->
             <form class="relative">
                 <label for="action-search" class="sr-only">Buscar</label>
-                <input wire:model.live="search" class="form-input pl-9 focus:border-slate-300" type="search"
-                    placeholder="Buscar Modelo Dispositivo" />
+                <input wire:model.live="search"
+                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100 dark:placeholder-gray-400"
+                    type="search" placeholder="Buscar Modelo Dispositivo" />
 
                 <button class="absolute inset-0 right-auto group" type="submit" aria-label="Search">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 group-hover:text-slate-500 ml-3 mr-2"
+                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 group-hover:text-slate-500 dark:group-hover:text-gray-400 ml-3 mr-2"
                         viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
                         <path
                             d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
@@ -57,7 +58,7 @@
 
             <div class="relative inline-flex">
                 <button
-                    class="btn bg-white border-slate-200 hover:border-slate-300 text-slate-500 hover:text-slate-600">
+                    class="btn bg-white dark:bg-gray-800 border-slate-200 dark:border-gray-700 hover:border-slate-300 dark:hover:border-gray-600 text-slate-500 dark:text-gray-400 hover:text-slate-600 dark:hover:text-gray-300">
                     <span class="sr-only">Filter</span><wbr>
                     <svg class="w-4 h-4 fill-current" viewBox="0 0 16 16">
                         <path
@@ -69,9 +70,10 @@
 
     </div>
 
-    <div class="bg-white shadow-lg rounded-sm border border-slate-200">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-700">
         <header class="px-5 py-4">
-            <h2 class="font-semibold text-slate-800">Total dispositivos <span class="text-slate-400 font-medium">
+            <h2 class="font-semibold text-slate-800 dark:text-gray-100">Total dispositivos <span
+                    class="text-slate-400 dark:text-gray-400 font-medium">
                 </span>
             </h2>
 
@@ -81,7 +83,7 @@
 
                 <table class="table-auto w-full">
                     <thead
-                        class="text-xs font-semibold uppercase text-slate-500 bg-slate-50 border-t border-b border-slate-200">
+                        class="text-xs font-semibold uppercase text-slate-500 dark:text-gray-400 bg-slate-50 dark:bg-gray-900/50 border-t border-b border-slate-200 dark:border-gray-700">
                         <tr>
 
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -98,7 +100,7 @@
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="text-sm divide-y divide-slate-200">
+                    <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
                         <!-- Row -->
 
                         @foreach ($modelos as $modelo)
@@ -107,7 +109,7 @@
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div
-                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 rounded-full mr-2 sm:mr-3">
+                                            class="w-10 h-10 shrink-0 flex items-center justify-center bg-slate-100 dark:bg-gray-700 rounded-full mr-2 sm:mr-3">
 
                                             @if ($modelo->image)
                                                 <img class="ml-1" src="{{ Storage::url($modelo->image->url) }}.webp"
@@ -116,21 +118,23 @@
                                             @endif
 
                                         </div>
-                                        <div class="font-medium text-slate-800">{{ $modelo->modelo }}</div>
+                                        <div class="font-medium text-slate-800 dark:text-gray-200">{{ $modelo->modelo }}
+                                        </div>
                                     </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $modelo->marca }}</div>
+                                    <div class="text-left text-slate-800 dark:text-gray-200">{{ $modelo->marca }}</div>
                                 </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="text-left">{{ $modelo->certificado }}</div>
+                                    <div class="text-left text-slate-800 dark:text-gray-200">{{ $modelo->certificado }}
+                                    </div>
                                 </td>
 
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="space-x-1">
                                         <button wire:click.prevent="showModal({{ $modelo->id }})"
-                                            class="text-slate-400 hover:text-slate-500 rounded-full">
+                                            class="text-slate-400 dark:text-gray-500 hover:text-slate-500 dark:hover:text-gray-400 rounded-full">
                                             <span class="sr-only">Editar</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                 <path
@@ -138,7 +142,7 @@
                                             </svg>
                                         </button>
                                         <button wire:click.prevent='openModalDelete({{ $modelo->id }})'
-                                            class="text-rose-500 hover:text-rose-600 rounded-full">
+                                            class="text-rose-500 dark:text-rose-400 hover:text-rose-600 dark:hover:text-rose-300 rounded-full">
                                             <span class="sr-only">Eliminar</span>
                                             <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                 <path d="M13 15h2v6h-2zM17 15h2v6h-2z" />
@@ -155,7 +159,7 @@
                             <tr>
                                 <td colspan="4"
                                     class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap col-span-full">
-                                    <div class="text-center">No hay Registros</div>
+                                    <div class="text-center text-slate-500 dark:text-gray-400">No hay Registros</div>
                                 </td>
                             </tr>
                         @endif

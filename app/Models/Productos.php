@@ -43,6 +43,8 @@ class Productos extends Model
         'user_id' => 'integer',
         'ventas' => 'integer',
         'afecto_icbper' => 'boolean',
+        'es_servicio_cobro' => 'boolean',
+        'es_dispositivo' => 'boolean',
     ];
 
     // Scope local de activo

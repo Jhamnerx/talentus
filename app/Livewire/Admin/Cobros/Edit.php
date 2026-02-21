@@ -7,38 +7,37 @@ use App\Models\Cobros;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Vehiculos;
-use Livewire\Attributes\On;
 use Illuminate\Support\Collection;
 use App\Http\Requests\CobrosRequest;
-use Symfony\Component\Mailer\Transport\Dsn;
 
 class Edit extends Component
 {
-    public $clientes_id, $comentario, $periodo = 'MENSUAL', $monto_unidad = 30;
-    public $fecha_inicio, $fecha_vencimiento, $cantidad_unidades, $tipo_pago = 'RECIBO', $observacion, $divisa = 'PEN';
+    public $clientes_id, $comentario;
     public $nota;
-
     public $vehiculo_selected;
-
     public Collection $items;
-
     public Cobros $cobro;
     public $producto_id;
+    public $divisa = 'PEN';
+
+    // Valores por defecto para nuevos vehículos
+    public $default_periodo = 'MENSUAL';
+    public $default_plan = 30;
+    public $default_fecha_inicio;
+    public $default_fecha_vencimiento;
 
     public function mount(Cobros $cobro)
     {
-        $this->fecha_vencimiento = $this->cobro->fecha_vencimiento->format('Y-m-d');
-        $this->fecha_inicio = $this->cobro->fecha_inicio ? $this->cobro->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d');
-        $this->periodo = $this->cobro->periodo;
-        $this->tipo_pago = $this->cobro->tipo_pago;
-        $this->divisa = $this->cobro->divisa;
-        $this->monto_unidad = $this->cobro->monto_unidad;
-        $this->nota = $this->cobro->nota;
-        $this->clientes_id = $this->cobro->clientes_id;
-        $this->observacion = $this->cobro->observacion;
-        $this->comentario = $this->cobro->comentario;
         $this->cobro = $cobro;
+        $this->clientes_id = $cobro->clientes_id;
+        $this->comentario = $cobro->comentario;
+        $this->divisa = $cobro->divisa;
+        $this->nota = $cobro->nota;
         $this->producto_id = $cobro->producto_id;
+
+        // Valores por defecto para nuevos vehículos
+        $this->default_fecha_inicio = Carbon::now()->format('Y-m-d');
+        $this->default_fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
 
         // Inicializar la colección de items con verificación de vehículo
         $this->items = collect();
@@ -48,7 +47,9 @@ class Edit extends Component
                     'vehiculo_id' => $detalle->vehiculo_id,
                     'placa' => $detalle->vehiculo->placa,
                     'plan' => $detalle->plan,
-                    'fecha' => $detalle->fecha->format('Y-m-d'),
+                    'periodo' => $detalle->periodo ?? 'MENSUAL',
+                    'fecha_inicio' => $detalle->fecha_inicio ? $detalle->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
+                    'fecha_vencimiento' => $detalle->fecha_vencimiento ? $detalle->fecha_vencimiento->format('Y-m-d') : Carbon::now()->addDays(30)->format('Y-m-d'),
                     'estado' => $detalle->estado,
                 ];
             }
@@ -120,12 +121,13 @@ class Edit extends Component
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
-            // Asegurarse de que todos los campos necesarios estén presentes
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
                 'placa' => $vehiculo->placa,
-                'plan' => $this->monto_unidad ?? 30,
-                'fecha' => $this->fecha_vencimiento ?? Carbon::now()->addDay(30)->format('Y-m-d'),
+                'plan' => $this->default_plan,
+                'periodo' => $this->default_periodo,
+                'fecha_inicio' => $this->default_fecha_inicio,
+                'fecha_vencimiento' => $this->default_fecha_vencimiento,
                 'estado' => 1,
             ];
 
@@ -160,23 +162,23 @@ class Edit extends Component
         }
     }
 
-    public function updatedPeriodo($periodo)
+    public function updatedDefaultPeriodo($periodo)
     {
         switch ($periodo) {
             case 'MENSUAL':
-                $this->fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
                 break;
             case 'BIMENSUAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(2)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(2)->format('Y-m-d');
                 break;
             case 'TRIMESTRAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(3)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(3)->format('Y-m-d');
                 break;
             case 'SEMESTRAL':
-                $this->fecha_vencimiento = Carbon::now()->addMonth(6)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addMonth(6)->format('Y-m-d');
                 break;
             case 'ANUAL':
-                $this->fecha_vencimiento = Carbon::now()->addYear(1)->format('Y-m-d');
+                $this->default_fecha_vencimiento = Carbon::now()->addYear(1)->format('Y-m-d');
                 break;
         }
     }
@@ -186,20 +188,12 @@ class Edit extends Component
         $requestCobros = new CobrosRequest();
         $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
 
-        $this->cantidad_unidades = $this->items->count();
-
         try {
             $this->cobro->update([
                 'clientes_id' => $datos["clientes_id"],
                 'comentario' => $datos["comentario"],
-                'periodo' => $datos["periodo"],
-                'monto_unidad' => $datos["monto_unidad"],
                 'divisa' => $datos["divisa"],
-                'fecha_vencimiento' => $datos["fecha_vencimiento"],
-                'tipo_pago' => $datos["tipo_pago"],
-                'fecha_inicio' => $datos["fecha_inicio"],
                 'nota' => $datos["nota"],
-                'observacion' => $datos["observacion"],
                 'producto_id' => $datos["producto_id"],
             ]);
 

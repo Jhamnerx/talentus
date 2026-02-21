@@ -83,7 +83,7 @@
                                                 {{ $message->sender->name }}
                                             </span>
                                             @if ($message->is_internal)
-                                                <x-form.mini.badge label="Interno" warning />
+                                                <x-form.badge label="Interno" warning />
                                             @endif
                                         </div>
                                         <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">

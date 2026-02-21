@@ -24,26 +24,19 @@ class CobrosRequest extends FormRequest
      */
     public function rules()
     {
-
         $rules = [
             'clientes_id' => 'required',
             'producto_id' => 'required',
-
             "comentario" => 'nullable',
-            "periodo" => 'required',
-            "monto_unidad" => 'required',
             "divisa" => 'required',
-            "fecha_vencimiento" => 'required|date',
-            "fecha_inicio" => 'required|date',
-            "cantidad_unidades" => 'nullable',
-            "tipo_pago" => 'required',
             "nota" => 'nullable',
-            "observacion" => 'nullable',
 
             'items' => 'array|between:1,100',
             'items.*.plan' => 'required|decimal:0,4',
             'items.*.placa' => 'required',
-            'items.*.fecha' => 'required|date',
+            'items.*.periodo' => 'required|in:MENSUAL,BIMENSUAL,TRIMESTRAL,SEMESTRAL,ANUAL',
+            'items.*.fecha_inicio' => 'required|date',
+            'items.*.fecha_vencimiento' => 'nullable|date',
             'items.*.vehiculo_id' => 'required',
             'items.*.estado' => 'boolean',
         ];
@@ -53,24 +46,21 @@ class CobrosRequest extends FormRequest
 
     public function messages()
     {
-
         $messages = [
-
             'clientes_id.required' => 'Selecciona un cliente',
             'producto_id.required' => 'Selecciona un producto',
-            'periodo.required' => 'Selecciona un periodo',
             'divisa.required' => 'Selecciona una divisa',
-            'monto_unidad.required' => 'Ingresa un monto',
-            'fecha_vencimiento.required' => 'Ingresa la fecha de vencimiento',
-            'fecha_vencimiento.date' => 'El formato debe ser de fecha',
-            'tipo_pago.required' => 'Selecciona el tipo de pago',
 
-            'items.*.plan.required' => 'Ingresa un plan valido',
-            'items.*.plan.integer' => 'No puedes ingresar letras aqui',
-            'items.array' => 'Ingresa como minimo un vehiculo',
-            'items.between' => 'Ingresa como minimo un vehiculo'
+            'items.array' => 'Ingresa como mínimo un vehículo',
+            'items.between' => 'Ingresa como mínimo un vehículo',
+            'items.*.plan.required' => 'Ingresa un plan válido',
+            'items.*.plan.decimal' => 'El plan debe ser un número decimal válido',
+            'items.*.periodo.required' => 'Selecciona un periodo para cada vehículo',
+            'items.*.periodo.in' => 'El periodo debe ser MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL o ANUAL',
+            'items.*.fecha_inicio.required' => 'Ingresa la fecha de inicio para cada vehículo',
+            'items.*.fecha_inicio.date' => 'La fecha de inicio debe ser una fecha válida',
+            'items.*.fecha_vencimiento.date' => 'La fecha de vencimiento debe ser una fecha válida',
         ];
-
 
         return $messages;
     }

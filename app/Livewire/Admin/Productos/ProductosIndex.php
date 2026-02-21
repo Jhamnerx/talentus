@@ -8,7 +8,6 @@ use App\Models\Productos;
 use Livewire\Attributes\On;
 use Livewire\WithPagination;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ProductosIndex extends Component
 {
@@ -18,11 +17,15 @@ class ProductosIndex extends Component
     public $estadoFilter = '';
     public $categoriaFilter = '';
     public $tipoFilter = '';
+    public $tipo = null; // Tipo fijo desde la vista (producto/servicio)
 
     public function render()
     {
         $productos = Productos::query()
             ->with('image', 'categoria', 'unit')
+            ->when($this->tipo, function ($query) {
+                $query->where('tipo', $this->tipo);
+            })
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('codigo', 'like', '%' . $this->search . '%')
@@ -53,7 +56,7 @@ class ProductosIndex extends Component
 
     public function openModalCreate()
     {
-        $this->dispatch('open-modal-create');
+        $this->dispatch('open-modal-create', tipo: $this->tipo);
     }
 
     public function openModalEdit(Productos $producto)
