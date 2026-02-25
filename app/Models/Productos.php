@@ -31,6 +31,7 @@ class Productos extends Model
             ->logOnlyDirty();
         // Chain fluent methods for configuration options
     }
+
     protected $table = 'productos';
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -64,12 +65,22 @@ class Productos extends Model
         });
     }
 
+    /**
+     * Obtener el único producto/servicio marcado como servicio de cobro
+     * para facturación de mensualidades
+     * 
+     * @return self|null
+     */
+    public static function getServicioCobro(): ?self
+    {
+        return static::where('es_servicio_cobro', true)->first();
+    }
+
     // GLOBAL SCOPE EMPRESA
     protected static function booted()
     {
         static::addGlobalScope(new EmpresaScope);
     }
-
 
     //Relacion uno a muchos inversa
 

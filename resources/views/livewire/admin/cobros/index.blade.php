@@ -1,6 +1,5 @@
 <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
 
-    <!-- Page header con filtros mejorados -->
     <div class="mb-8">
         <!-- Título y botón limpiar filtros -->
         <div class="sm:flex sm:justify-between sm:items-center mb-5">
@@ -347,6 +346,9 @@
                                     <div class="font-semibold text-left">Plan</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Suscripción</div>
+                                </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Vencimiento</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -354,12 +356,6 @@
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Estado</div>
-                                </th>
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Periodo</div>
-                                </th>
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Tipo</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                     <div class="font-semibold text-left">Acciones</div>
@@ -378,9 +374,25 @@
                                     $showClienteHeader = $currentCliente !== $clienteNombre;
                                     $currentCliente = $clienteNombre;
 
-                                    // Calcular días restantes desde el inicio del día actual
+                                    // Datos de suscripción del vehículo (laravelcm/subscriptions)
+                                    $subscription = $detalle->vehiculo?->planSubscriptions->first();
+                                    $subActiva = $subscription && $subscription->active();
+                                    $subEndsAt = $subscription?->ends_at;
+                                    // Plan: prioridad suscripción > detalle
+                                    $subPlan = $subscription?->plan;
+                                    $planNombre = $subPlan
+                                        ? (is_array($subPlan->name)
+                                            ? $subPlan->name['es'] ?? ($subPlan->name['en'] ?? 'Plan')
+                                            : $subPlan->name)
+                                        : $detalle->plan_nombre;
+                                    $planMonto = $subPlan
+                                        ? (float) ($subPlan->price ?? $detalle->monto_calculado)
+                                        : $detalle->monto_calculado;
+                                    // Fecha de referencia: suscripción si existe, sino detalle->fecha
                                     $hoy = \Carbon\Carbon::now()->startOfDay();
-                                    $fechaVencimiento = \Carbon\Carbon::parse($detalle->fecha)->startOfDay();
+                                    $fechaVencimiento = $subEndsAt
+                                        ? \Carbon\Carbon::parse($subEndsAt)->startOfDay()
+                                        : \Carbon\Carbon::parse($detalle->fecha)->startOfDay();
                                     $diasRestantes = $hoy->diffInDays($fechaVencimiento, false);
 
                                     // Determinar texto descriptivo para días restantes
@@ -421,7 +433,7 @@
                                 @if ($showClienteHeader)
                                     <tr
                                         class="bg-indigo-100 dark:bg-indigo-900/40 border-t-2 border-indigo-200 dark:border-indigo-700">
-                                        <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-2">
+                                        <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-2">
                                             <div class="flex items-center gap-2">
                                                 <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -476,15 +488,45 @@
                                     <!-- Plan -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         <div class="font-medium text-gray-900 dark:text-gray-100">
-                                            S/. {{ number_format($detalle->plan, 2) }}
+                                            S/. {{ number_format($planMonto, 2) }}
                                         </div>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            {{ $planNombre }}
+                                        </div>
+                                    </td>
+
+                                    <!-- Suscripción (laravelcm/subscriptions) -->
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        @if ($subscription && $subEndsAt)
+                                            <div
+                                                class="text-xs {{ $subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400' }} mb-1">
+                                                {{ $subActiva ? '✅' : '❌' }}
+                                                {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
+                                            </div>
+                                        @else
+                                            @if ($detalle->vehiculo)
+                                                <button wire:click="abrirModalSync({{ $detalle->id }})"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="abrirModalSync({{ $detalle->id }})"
+                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 dark:hover:bg-indigo-900/60 transition-colors">
+                                                    <span wire:loading.remove
+                                                        wire:target="abrirModalSync({{ $detalle->id }})">🔄
+                                                        Sincronizar</span>
+                                                    <span wire:loading
+                                                        wire:target="abrirModalSync({{ $detalle->id }})">⏳
+                                                        Cargando...</span>
+                                                </button>
+                                            @else
+                                                <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
+                                            @endif
+                                        @endif
                                     </td>
 
                                     <!-- Vencimiento -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         @if ($detalle->estado == 1)
                                             <div class="font-medium {{ $textColor }}">
-                                                {{ \Carbon\Carbon::parse($detalle->fecha)->format('d/m/Y') }}
+                                                {{ $fechaVencimiento->format('d/m/Y') }}
                                             </div>
                                             @if ($diasRestantes < 0)
                                                 <div class="text-xs {{ $textColor }} font-bold mt-1">
@@ -515,20 +557,6 @@
                                         </span>
                                     </td>
 
-                                    <!-- Periodo -->
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-sm text-gray-700 dark:text-gray-300">
-                                            {{ $detalle->cobro->periodo }}
-                                        </div>
-                                    </td>
-
-                                    <!-- Tipo -->
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="text-sm text-gray-700 dark:text-gray-300">
-                                            {{ $detalle->cobro->tipo_pago }}
-                                        </div>
-                                    </td>
-
                                     <!-- Acciones -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center gap-2">
@@ -541,6 +569,16 @@
                                                     <path stroke-linecap="round" stroke-linejoin="round"
                                                         stroke-width="2"
                                                         d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                </svg>
+                                            </a>
+
+                                            <a href="{{ route('admin.cobros.edit', $detalle->cobro) }}"
+                                                class="text-gray-400 hover:text-blue-500" title="Editar cobro">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                                 </svg>
                                             </a>
 
@@ -562,7 +600,7 @@
 
                             @if ($detalles->count() < 1)
                                 <tr>
-                                    <td colspan="9" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
+                                    <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
                                         <div class="text-gray-500 dark:text-gray-400">No hay registros</div>
                                     </td>
                                 </tr>
@@ -579,4 +617,8 @@
         </div>
 
     </div>
+
+    {{-- Modal: Sincronizar suscripción --}}
+    @livewire('admin.cobros.modal-sync-suscripcion')
+
 </div>

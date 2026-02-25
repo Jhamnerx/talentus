@@ -371,14 +371,14 @@
 
                     <!-- Finanzas -->
                     @canany(['ver-caja-chica', 'ver-movimientos', 'ver-transacciones', 'ver-cuentas-cobrar', 'ver-cuentas-pagar', 'ver-pagos', 'ver-balance'])
-                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
-                            x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros']) ? 1 : 0 }} }">
+                        <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes'])) {{ 'from-violet-500/12 dark:from-violet-500/24 to-violet-500/4' }} @endif"
+                            x-data="{ open: {{ in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes']) ? 1 : 0 }} }">
 
                             <a class="block text-gray-800 dark:text-gray-100 truncate transition @if (!in_array(Request::segment(1), [''])) {{ 'hover:text-gray-900 dark:hover:text-white' }} @endif"
                                 href="#0" @click.prevent="open = !open; sidebarExpanded = true">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
+                                        <svg class="shrink-0 h-6 w-6 @if (in_array(Request::segment(1), ['finanzas', 'pagos', 'cobros', 'planes'])) {{ 'text-violet-500' }}@else{{ 'text-gray-400 dark:text-gray-500' }} @endif" xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                             <rect x="2" y="4" width="20" height="16" rx="2" stroke-width="2"/>
                                             <line x1="2" y1="9" x2="22" y2="9" stroke-width="2"/>
@@ -501,6 +501,16 @@
                                                             {{ $pendientesCount }}
                                                         </span>
                                                     @endif
+                                                </span>
+                                            </a>
+                                        </li>
+                                        
+                                        {{-- Planes de Servicio --}}
+                                        <li class="mb-1 last:mb-0">
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.planes.index')) {{ 'text-violet-500!' }} @endif"
+                                                href="{{ route('admin.planes.index') }}">
+                                                <span
+                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">💳 Planes
                                                 </span>
                                             </a>
                                         </li>

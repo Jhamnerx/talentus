@@ -8,10 +8,11 @@ use Carbon\Carbon;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
+use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
-    use WithPagination, WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination, WireUiActions;
 
     public $search;
     public $estado;
@@ -33,7 +34,7 @@ class Index extends Component
 
         // Obtener detalles con sus relaciones
         $detalles = DetalleCobros::query()
-            ->with(['vehiculo.cliente', 'cobro.clientes.contactos'])
+            ->with(['vehiculo.cliente', 'vehiculo.planSubscriptions.plan', 'cobro.clientes.contactos', 'plan'])
             // Excluir detalles de cobros eliminados
             ->whereHas('cobro', function ($query) {
                 $query->whereNull('deleted_at');
@@ -100,7 +101,6 @@ class Index extends Component
 
                     ->where('fecha', '<', $hoy->format('Y-m-d'));
             })
-            // Ordenar por fecha de vencimiento
             ->orderBy('fecha', 'asc')
             ->paginate($this->perPage);
 
@@ -156,8 +156,16 @@ class Index extends Component
         $detalleCobros->save();
     }
 
-    public function createInvoice(Cobros $cobro)
+    public function createInvoice(Cobros $cobro): void
     {
         $this->dispatch('open-modal-create-invoice', cobro: $cobro);
+    }
+
+    /**
+     * Despacha el evento para que ModalSyncSuscripcion abra el modal.
+     */
+    public function abrirModalSync(int $detalleId): void
+    {
+        $this->dispatch('abrir-modal-sync', detalleId: $detalleId);
     }
 }

@@ -3,10 +3,12 @@
 namespace App\Livewire\Admin\Cobros;
 
 use Carbon\Carbon;
+use App\Models\Plan;
 use App\Models\Cobros;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Vehiculos;
+use App\Models\Productos;
 use Illuminate\Support\Collection;
 use App\Http\Requests\CobrosRequest;
 
@@ -19,10 +21,11 @@ class Edit extends Component
     public Cobros $cobro;
     public $producto_id;
     public $divisa = 'PEN';
+    public Collection $planes;
 
     // Valores por defecto para nuevos vehículos
     public $default_periodo = 'MENSUAL';
-    public $default_plan = 30;
+    public $default_plan_id = null;
     public $default_fecha_inicio;
     public $default_fecha_vencimiento;
 
@@ -39,20 +42,50 @@ class Edit extends Component
         $this->default_fecha_inicio = Carbon::now()->format('Y-m-d');
         $this->default_fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
 
-        // Inicializar la colección de items con verificación de vehículo
+        $this->planes = collect();
+        $this->loadPlanes();
+
+        // Obtener automáticamente el producto de servicio de cobro
+        $productoServicio = Productos::getServicioCobro();
+
+        if (!$productoServicio && !$this->producto_id) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'PRODUCTO NO CONFIGURADO',
+                mensaje: 'No se encontró un producto marcado como "Servicio de Cobro". Por favor, configura un producto en el módulo de Productos.'
+            );
+        }
+
+        $this->producto_id = $productoServicio?->id ?? $this->producto_id;
+
+        // Inicializar la colección de items con verificación de vehículo  
         $this->items = collect();
         foreach ($this->cobro->detalle as $detalle) {
             if ($detalle->vehiculo) {
                 $this->items[$detalle->vehiculo->placa] = [
-                    'vehiculo_id' => $detalle->vehiculo_id,
-                    'placa' => $detalle->vehiculo->placa,
-                    'plan' => $detalle->plan,
-                    'periodo' => $detalle->periodo ?? 'MENSUAL',
-                    'fecha_inicio' => $detalle->fecha_inicio ? $detalle->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
+                    'vehiculo_id'       => $detalle->vehiculo_id,
+                    'placa'             => $detalle->vehiculo->placa,
+                    'plan_id'           => $detalle->plan_id,
+                    'monto'             => $detalle->monto_calculado,
+                    'periodo'           => $detalle->periodo ?? 'MENSUAL',
+                    'fecha_inicio'      => $detalle->fecha_inicio ? $detalle->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
                     'fecha_vencimiento' => $detalle->fecha_vencimiento ? $detalle->fecha_vencimiento->format('Y-m-d') : Carbon::now()->addDays(30)->format('Y-m-d'),
-                    'estado' => $detalle->estado,
+                    'estado'            => $detalle->estado,
                 ];
             }
+        }
+    }
+
+    public function loadPlanes()
+    {
+        $this->planes = Plan::where('is_active', true)
+            ->orderBy('sort_order')
+            ->get();
+
+        // Seleccionar el primer plan por defecto si existe
+        if ($this->planes->isNotEmpty() && !$this->default_plan_id) {
+            $this->default_plan_id = $this->planes->first()->id;
         }
     }
 
@@ -94,6 +127,58 @@ class Edit extends Component
         $this->vehiculo_selected = '';
     }
 
+    /**
+     * Calcula la fecha de vencimiento según fecha de inicio y periodo
+     */
+    protected function calcularFechaVencimiento(string $fechaInicio, string $periodo): string
+    {
+        return match ($periodo) {
+            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonth()->format('Y-m-d'),
+            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonths(2)->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonths(3)->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonths(6)->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaInicio)->addYear()->format('Y-m-d'),
+            default      => Carbon::parse($fechaInicio)->addMonth()->format('Y-m-d'),
+        };
+    }
+
+    /**
+     * Recalcular precio y fecha de vencimiento cuando cambia el plan o periodo
+     */
+    public function updatedItems($value, $key)
+    {
+        $parts = explode('.', $key);
+        if (count($parts) === 2) {
+            $placa = $parts[0];
+            $campo = $parts[1];
+
+            if (in_array($campo, ['plan_id', 'periodo']) && $this->items->has($placa)) {
+                $item    = $this->items->get($placa);
+                $planId  = $item['plan_id'] ?? null;
+                $periodo = $item['periodo'] ?? 'MENSUAL';
+                $plan    = $planId ? Plan::find($planId) : null;
+
+                $multiplicador = match ($periodo) {
+                    'BIMENSUAL'  => 2,
+                    'TRIMESTRAL' => 3,
+                    'SEMESTRAL'  => 6,
+                    'ANUAL'      => 12,
+                    default      => 1,
+                };
+
+                $updates = ['monto' => ($plan?->price ?? 0) * $multiplicador];
+
+                // Al cambiar el periodo, recalcular también la fecha de vencimiento
+                if ($campo === 'periodo') {
+                    $fechaInicio = $item['fecha_inicio'] ?? Carbon::now()->format('Y-m-d');
+                    $updates['fecha_vencimiento'] = $this->calcularFechaVencimiento($fechaInicio, $periodo);
+                }
+
+                $this->items->put($placa, array_merge($item, $updates));
+            }
+        }
+    }
+
     public function addVehiculo(Vehiculos $vehiculo)
     {
         if (!$vehiculo || !$vehiculo->placa) {
@@ -114,6 +199,22 @@ class Edit extends Component
                 mensaje: 'El vehículo ' . $vehiculo->placa . ' ya está agregado',
             );
         } else {
+            // Validar que el vehículo no tenga un detalle de cobro activo en OTRO cobro distinto
+            $yaRegistrado = \App\Models\DetalleCobros::where('vehiculos_id', $vehiculo->id)
+                ->where('estado', 1)
+                ->whereHas('cobro', fn($q) => $q->whereNull('deleted_at')->where('id', '!=', $this->cobro->id))
+                ->exists();
+
+            if ($yaRegistrado) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'warning',
+                    title: 'VEHÍCULO YA REGISTRADO',
+                    mensaje: 'El vehículo ' . $vehiculo->placa . ' ya tiene un cobro recurrente activo en otro contrato. No se permiten duplicados.',
+                );
+                return;
+            }
+
             $this->dispatch(
                 'notify-toast',
                 icon: 'success',
@@ -121,10 +222,13 @@ class Edit extends Component
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
+            $monto = Plan::find($this->default_plan_id)?->price ?? 0;
+
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
                 'placa' => $vehiculo->placa,
-                'plan' => $this->default_plan,
+                'plan_id' => $this->default_plan_id,
+                'monto' => $monto,
                 'periodo' => $this->default_periodo,
                 'fecha_inicio' => $this->default_fecha_inicio,
                 'fecha_vencimiento' => $this->default_fecha_vencimiento,
@@ -162,39 +266,24 @@ class Edit extends Component
         }
     }
 
-    public function updatedDefaultPeriodo($periodo)
-    {
-        switch ($periodo) {
-            case 'MENSUAL':
-                $this->default_fecha_vencimiento = Carbon::now()->addDay(30)->format('Y-m-d');
-                break;
-            case 'BIMENSUAL':
-                $this->default_fecha_vencimiento = Carbon::now()->addMonth(2)->format('Y-m-d');
-                break;
-            case 'TRIMESTRAL':
-                $this->default_fecha_vencimiento = Carbon::now()->addMonth(3)->format('Y-m-d');
-                break;
-            case 'SEMESTRAL':
-                $this->default_fecha_vencimiento = Carbon::now()->addMonth(6)->format('Y-m-d');
-                break;
-            case 'ANUAL':
-                $this->default_fecha_vencimiento = Carbon::now()->addYear(1)->format('Y-m-d');
-                break;
-        }
-    }
-
     public function save()
     {
         $requestCobros = new CobrosRequest();
         $datos = $this->validate($requestCobros->rules(), $requestCobros->messages());
 
         try {
+            // Asegurar que tenemos el producto de servicio
+            $productoServicio = Productos::getServicioCobro();
+            if (!$productoServicio) {
+                throw new \Exception('No se encontró un producto marcado como servicio de cobro');
+            }
+
             $this->cobro->update([
                 'clientes_id' => $datos["clientes_id"],
                 'comentario' => $datos["comentario"],
                 'divisa' => $datos["divisa"],
                 'nota' => $datos["nota"],
-                'producto_id' => $datos["producto_id"],
+                'producto_id' => $productoServicio->id,
             ]);
 
             $this->cobro->detalle()->delete();

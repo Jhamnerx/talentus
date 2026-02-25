@@ -216,4 +216,167 @@ class Show extends Component
             'cobro_id' => $this->cobro->id,
         ]);
     }
+
+    /**
+     * Renovar período individual de un detalle
+     * Actualiza las fechas del mismo registro para el siguiente período
+     */
+    public function renovarPeriodoDetalle(int $detalleId)
+    {
+        try {
+            $detalle = DetalleCobros::findOrFail($detalleId);
+
+            // Validar que el detalle actual esté pagado (tiene venta_id o recibo_id)
+            if (!$detalle->venta_id && !$detalle->recibo_id) {
+                $this->dispatch(
+                    'notify-toast',
+                    icon: 'warning',
+                    title: 'PAGO PENDIENTE',
+                    mensaje: 'Debe completar el pago del período actual antes de renovar'
+                );
+                return;
+            }
+
+            // Calcular nuevas fechas basadas en la fecha de vencimiento actual
+            $nuevaFechaInicio = $detalle->fecha_vencimiento->copy()->addDay();
+            $nuevaFechaVencimiento = $this->calcularFechaVencimiento(
+                $nuevaFechaInicio,
+                $detalle->periodo
+            );
+
+            // ACTUALIZAR el detalle existente con las nuevas fechas
+            $detalle->update([
+                'fecha_inicio'       => $nuevaFechaInicio,
+                'fecha_vencimiento'  => $nuevaFechaVencimiento,
+                'fecha'              => $nuevaFechaVencimiento,
+                'venta_id'           => null,
+                'recibo_id'          => null,
+                'fecha_facturado'    => null,
+                'fecha_facturacion'  => null,
+                'fecha_pago'         => null,
+            ]);
+
+            // Si el vehículo tiene subscription, renovarla
+            $vehiculo = $detalle->vehiculo;
+            if ($vehiculo && method_exists($vehiculo, 'planSubscription')) {
+                $subscription = $vehiculo->planSubscription('servicio-gps');
+                if ($subscription && $subscription->active()) {
+                    $subscription->renew(); // Actualiza ends_at y resetea usage
+                }
+            }
+
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'PERÍODO RENOVADO',
+                mensaje: "Nuevo período: " . $nuevaFechaInicio->format('d/m/Y') . " - " . $nuevaFechaVencimiento->format('d/m/Y')
+            );
+
+            $this->dispatch('update-cobros');
+        } catch (\Throwable $th) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'error',
+                title: 'ERROR',
+                mensaje: $th->getMessage()
+            );
+        }
+    }
+
+    /**
+     * Renovar período de múltiples detalles seleccionados
+     */
+    public function renovarPeriodoMasivo()
+    {
+        if (empty($this->detalleIds)) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'SELECCIÓN REQUERIDA',
+                mensaje: 'Debes seleccionar al menos un vehículo para renovar'
+            );
+            return;
+        }
+
+        $renovados = 0;
+        $errores = 0;
+
+        foreach ($this->detalleIds as $detalleId) {
+            try {
+                $detalle = DetalleCobros::find($detalleId);
+
+                // Validar que esté pagado (tiene venta_id o recibo_id)
+                if (!$detalle || (!$detalle->venta_id && !$detalle->recibo_id)) {
+                    $errores++;
+                    continue;
+                }
+
+                // Calcular nuevas fechas
+                $nuevaFechaInicio = $detalle->fecha_vencimiento->copy()->addDay();
+                $nuevaFechaVencimiento = $this->calcularFechaVencimiento(
+                    $nuevaFechaInicio,
+                    $detalle->periodo
+                );
+
+                // ACTUALIZAR el detalle existente
+                $detalle->update([
+                    'fecha_inicio'      => $nuevaFechaInicio,
+                    'fecha_vencimiento' => $nuevaFechaVencimiento,
+                    'fecha'             => $nuevaFechaVencimiento,
+                    'venta_id'          => null,
+                    'recibo_id'         => null,
+                    'fecha_facturado'   => null,
+                    'fecha_facturacion' => null,
+                    'fecha_pago'        => null,
+                ]);
+
+                // Renovar subscription si existe
+                $vehiculo = $detalle->vehiculo;
+                if ($vehiculo && method_exists($vehiculo, 'planSubscription')) {
+                    $subscription = $vehiculo->planSubscription('servicio-gps');
+                    if ($subscription && $subscription->active()) {
+                        $subscription->renew();
+                    }
+                }
+
+                $renovados++;
+            } catch (\Throwable $th) {
+                $errores++;
+            }
+        }
+
+        if ($renovados > 0) {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'success',
+                title: 'RENOVACIÓN MASIVA',
+                mensaje: "Se renovaron {$renovados} período(s). Errores: {$errores}"
+            );
+        } else {
+            $this->dispatch(
+                'notify-toast',
+                icon: 'warning',
+                title: 'SIN RENOVACIONES',
+                mensaje: 'No se pudo renovar ningún período. Verifica que estén pagados.'
+            );
+        }
+
+        $this->detalleIds = [];
+        $this->dispatch('update-cobros');
+    }
+
+    /**
+     * Calcular fecha de vencimiento según período
+     */
+    private function calcularFechaVencimiento($fechaInicio, $periodo)
+    {
+        return match ($periodo) {
+            'MENSUAL' => $fechaInicio->copy()->addMonth(),
+            'BIMENSUAL' => $fechaInicio->copy()->addMonths(2),
+            'TRIMESTRAL' => $fechaInicio->copy()->addMonths(3),
+            'SEMESTRAL' => $fechaInicio->copy()->addMonths(6),
+            'ANUAL' => $fechaInicio->copy()->addYear(),
+            default => $fechaInicio->copy()->addMonth(),
+        };
+    }
 }

@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\MantenimientoController;
 use App\Http\Controllers\Admin\MensajeController;
 use App\Http\Controllers\Admin\NotificacionesController;
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Http\Controllers\Admin\PlanesController;
 use App\Http\Controllers\Admin\PDF\ActaPdfController;
 use App\Http\Controllers\Admin\PDF\CajaChicaPdfController;
 use App\Http\Controllers\Admin\PDF\CertificadoAntifatigaPdfController;
@@ -156,6 +157,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('cobros/notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
         Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
         Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
+    });
+
+    // PLANES DE SERVICIO
+    Route::controller(PlanesController::class)->group(function () {
+        Route::get('planes', 'index')->name('admin.planes.index');
     });
 
     // Mensajes de Contacto Web

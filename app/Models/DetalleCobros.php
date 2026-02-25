@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\CobroEstado;
-use App\Enums\EstadoFacturacion;
 use App\Observers\DetalleCobroObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,8 +22,7 @@ class DetalleCobros extends Model
         'vehiculos_id' => 'integer',
         'venta_id' => 'integer',
         'recibo_id' => 'integer',
-        'cantidad_unidades' => 'integer',
-        'monto_unidad' => 'decimal:2',
+        'plan_id' => 'integer',
         'fecha' => 'date:Y-m-d',
         'fecha_facturado' => 'date:Y-m-d',
         'fecha_facturacion' => 'date:Y-m-d',
@@ -33,7 +31,6 @@ class DetalleCobros extends Model
         'fecha_vencimiento' => 'date:Y-m-d',
         'estado' => 'boolean',
         'estado_detalle' => CobroEstado::class,
-        'estado_facturacion' => EstadoFacturacion::class,
     ];
 
 
@@ -56,6 +53,11 @@ class DetalleCobros extends Model
     public function recibo()
     {
         return $this->belongsTo(\App\Models\Recibos::class);
+    }
+
+    public function plan()
+    {
+        return $this->belongsTo(\App\Models\Plan::class);
     }
 
     /**
@@ -88,26 +90,91 @@ class DetalleCobros extends Model
         return null;
     }
 
+    /**
+     * Obtener el nombre del plan con lógica de fallback
+     * 
+     * Sistema NUEVO: plan_id tiene valor, campo 'plan' = NULL → usar relación
+     * Sistema LEGACY: plan_id = NULL, campo 'plan' tiene texto → usar campo legacy
+     * 
+     * @return string
+     */
+    public function getPlanNombreAttribute(): string
+    {
+        // Sistema NUEVO: Si plan_id está presente → usar relación con tabla plans
+        if ($this->plan_id && $this->plan) {
+            return $this->plan->name ?? 'Plan #' . $this->plan_id;
+        }
 
-    // Scopes para estado_facturacion
+        // Sistema LEGACY: Si campo 'plan' tiene texto (no numérico) → usar legacy
+        if (!empty($this->attributes['plan']) && !is_numeric($this->attributes['plan'])) {
+            return $this->attributes['plan'];
+        }
+
+        return 'Sin plan';
+    }
+
+    /**
+     * Obtener el monto calculado con lógica de fallback
+     *
+     * Sistema NUEVO:  plan_id presente → price del plan × multiplicador de período
+     * Sistema LEGACY: campo 'plan' numérico → usar ese valor directamente
+     *
+     * @return float
+     */
+    public function getMontoCalculadoAttribute(): float
+    {
+        // Sistema NUEVO: calcular desde la relación con plans
+        if ($this->plan_id && $this->plan) {
+            $precioUnitario = (float) ($this->plan->price ?? 0);
+
+            $multiplicador = 1;
+            if ($this->cobro && $this->cobro->periodo) {
+                $multiplicador = match ($this->cobro->periodo) {
+                    'BIMENSUAL'  => 2,
+                    'TRIMESTRAL' => 3,
+                    'SEMESTRAL'  => 6,
+                    'ANUAL'      => 12,
+                    default      => 1,
+                };
+            }
+
+            return $precioUnitario * $multiplicador;
+        }
+
+        // Sistema LEGACY: si campo 'plan' era numérico (guardaba el monto)
+        if (!empty($this->attributes['plan']) && is_numeric($this->attributes['plan'])) {
+            return (float) $this->attributes['plan'];
+        }
+
+        return 0.0;
+    }
+
+
+    // Scopes para facturación
     public function scopeSinFacturar($query)
     {
-        return $query->where('estado_facturacion', EstadoFacturacion::SIN_FACTURAR);
+        return $query->whereNull('venta_id')->whereNull('recibo_id');
     }
 
     public function scopeFacturado($query)
     {
-        return $query->where('estado_facturacion', EstadoFacturacion::FACTURADO);
+        return $query->where(function ($q) {
+            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
+        });
     }
 
     public function scopePagado($query)
     {
-        return $query->where('estado_facturacion', EstadoFacturacion::PAGADO);
+        return $query->where(function ($q) {
+            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
+        });
     }
 
     public function scopeFacturadosPendientesPago($query)
     {
-        return $query->where('estado_facturacion', EstadoFacturacion::FACTURADO)
+        return $query->where(function ($q) {
+            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
+        })
             ->where('estado', 1)
             ->where('estado_detalle', CobroEstado::ACTIVO);
     }

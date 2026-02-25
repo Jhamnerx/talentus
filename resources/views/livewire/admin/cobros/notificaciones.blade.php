@@ -258,23 +258,21 @@
 
                             <!-- Acciones -->
                             <td class="px-4 py-3 whitespace-nowrap text-center">
-                                <div class="flex items-center justify-center gap-2">
-                                    @if ($notificacion->estado === 'PENDIENTE')
-                                        <button wire:click="redirectToFacturar({{ $notificacion->id }})"
-                                            class="btn btn-sm bg-blue-500 hover:bg-blue-600 text-white">
-                                            📝 Facturar
-                                        </button>
-                                        <button wire:click="cancelar({{ $notificacion->id }})"
-                                            class="btn btn-sm bg-red-500 hover:bg-red-600 text-white">
-                                            ❌
-                                        </button>
-                                    @else
-                                        <a href="{{ route('admin.cobros.show', $notificacion->cobro_id) }}"
-                                            class="btn btn-sm bg-gray-500 hover:bg-gray-600 text-white">
-                                            👁️ Ver
-                                        </a>
-                                    @endif
-                                </div>
+                                @if ($notificacion->estado === 'PENDIENTE')
+                                    <x-form.dropdown>
+                                        <x-dropdown.item icon="currency-dollar" label="Registrar pago"
+                                            wire:click.prevent="abrirModalPago({{ $notificacion->id }})" />
+                                        <x-dropdown.item icon="document-text" label="Emitir documento"
+                                            wire:click.prevent="redirectToFacturar({{ $notificacion->id }})" />
+                                        <x-dropdown.item icon="x-circle" label="Cancelar"
+                                            wire:click.prevent="cancelar({{ $notificacion->id }})" />
+                                    </x-form.dropdown>
+                                @else
+                                    <a href="{{ route('admin.cobros.show', $notificacion->cobro_id) }}"
+                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition">
+                                        👁️ Ver
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @empty
@@ -301,4 +299,179 @@
             </div>
         @endif
     </div>
+
+    {{-- Modal: Registrar Pago Directo (mismo patron que payment.blade.php) --}}
+    <x-form.modal.card title="REGISTRAR PAGO" wire:model.live="modalPago" max-width="2xl" blur>
+
+        <form autocomplete="off">
+            <div class="px-4 py-4 grid grid-cols-12 gap-4">
+
+                {{-- Modo: Crear vs Asociar --}}
+                <div class="col-span-12">
+                    <div class="flex items-center justify-center gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Modo:</span>
+                        <x-form.button :primary="$pago_mode === 'create'" :flat="$pago_mode !== 'create'" label="Nuevo Pago"
+                            wire:click="$set('pago_mode', 'create')" sm />
+                        <x-form.button :secondary="$pago_mode === 'associate'" :flat="$pago_mode !== 'associate'" label="Asociar Existente"
+                            wire:click="$set('pago_mode', 'associate')" sm />
+                    </div>
+                </div>
+
+                @if ($pago_mode === 'associate')
+
+                    {{-- Selector de pago existente --}}
+                    <div class="col-span-12">
+                        <x-form.select wire:model.defer="pago_existing_id" label="Selecciona el Pago a Asociar"
+                            placeholder="Busca un pago existente...">
+                            @forelse ($pago_existing_list as $ep)
+                                <x-select.option label="{{ $ep['label'] }}" value="{{ $ep['id'] }}" />
+                            @empty
+                                <x-select.option label="No hay pagos disponibles para asociar" value=""
+                                    disabled />
+                            @endforelse
+                        </x-form.select>
+                        @if (count($pago_existing_list) === 0)
+                            <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                No hay pagos sin cobro asociado disponibles para este cliente.
+                            </p>
+                        @endif
+                    </div>
+                @else
+                    {{-- Número (auto-generado, solo lectura) --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Número: <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="text" wire:model.live="pago_numero" disabled
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
+                    </div>
+
+                    {{-- Tipo de pago --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Tipo Pago: <span class="text-rose-500">*</span>
+                        </label>
+                        <select wire:model.live="pago_tipo_pago"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                            <option value="FACTURA">FACTURA</option>
+                            <option value="RECIBO">RECIBO</option>
+                        </select>
+                    </div>
+
+                    {{-- Documento asociado (factura/boleta o recibo) --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select wire:model.live="pago_paymentable_id" label="{{ $pago_titulo_doc }}"
+                            placeholder="Selecciona">
+                            @foreach ($pago_documentos as $doc)
+                                <x-select.option label="{{ $doc['text'] }}" value="{{ $doc['id'] }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- Método de pago --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select wire:model.live="pago_payment_method_id" label="Método de pago"
+                            placeholder="Selecciona">
+                            @foreach ($paymentsMethods as $metodo)
+                                <x-select.option label="{{ $metodo['description'] }}" value="{{ $metodo['id'] }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- Destino del pago (caja / banco) --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <x-form.select label="Destino del Pago" wire:model.defer="pago_payment_destination_id"
+                            placeholder="Seleccione destino">
+                            @foreach ($this->paymentDestinations as $dest)
+                                <x-select.option label="{{ $dest['description'] }}" value="{{ $dest['id'] }}" />
+                            @endforeach
+                        </x-form.select>
+                    </div>
+
+                    {{-- Cuenta bancaria (solo si metodo es deposito) --}}
+                    @if ($pago_showBankAccountSelector)
+                        <div class="col-span-12 sm:col-span-6">
+                            <x-form.select label="Cuenta Bancaria" wire:model.defer="pago_bank_account_id"
+                                placeholder="Seleccione cuenta">
+                                @foreach ($bankAccounts as $account)
+                                    <x-select.option label="{{ $account->description ?? $account->number }}"
+                                        value="{{ $account->id }}" />
+                                @endforeach
+                            </x-form.select>
+                        </div>
+                    @endif
+
+                    {{-- Divisa --}}
+                    <div class="col-span-6 sm:col-span-3">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Divisa:</label>
+                        <select wire:model.live="pago_divisa"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
+                            <option value="PEN">PEN (Soles)</option>
+                            <option value="USD">USD (Dólares)</option>
+                        </select>
+                    </div>
+
+                    {{-- Monto --}}
+                    <div class="col-span-6 sm:col-span-3">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Monto: <span class="text-rose-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <input wire:model.live="pago_monto" type="number" step="0.01" min="0"
+                                class="form-input w-full pl-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                                placeholder="0.00" />
+                            <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
+                                <span class="text-sm text-gray-500 dark:text-gray-400 font-medium px-3">S/</span>
+                            </div>
+                        </div>
+                        @error('pago_monto')
+                            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Fecha --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Fecha: <span class="text-rose-500">*</span>
+                        </label>
+                        <input type="date" wire:model.live="pago_fecha"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
+                        @error('pago_fecha')
+                            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    {{-- Número de operación --}}
+                    <div class="col-span-12 sm:col-span-6">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                            Número de operación:
+                        </label>
+                        <input type="text" wire:model.live="pago_numero_operacion"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                            placeholder="45474001" />
+                    </div>
+
+                    {{-- Nota --}}
+                    <div class="col-span-12">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nota:</label>
+                        <textarea wire:model.live="pago_nota" rows="3"
+                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                            placeholder="Observaciones opcionales..."></textarea>
+                    </div>
+
+                @endif {{-- fin modo crear --}}
+
+            </div>
+        </form>
+
+        <x-slot name="footer">
+            <div class="flex justify-end gap-x-4">
+                <x-form.button flat label="Cerrar" wire:click="cerrarModalPago" />
+                <x-form.button primary label="Guardar" wire:click="confirmarPago" wire:loading.attr="disabled"
+                    wire:target="confirmarPago" />
+            </div>
+        </x-slot>
+
+    </x-form.modal.card>
+
 </div>

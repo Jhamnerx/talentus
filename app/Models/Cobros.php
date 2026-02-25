@@ -131,11 +131,27 @@ class Cobros extends Model
         foreach ($cobroItems as $cobroItem) {
 
             $cobroItem['cobros_id'] = $cobro->id;
-            // if ($type == 'create') {
-            //     $cobroItem['estado'] = 1;
-            // } else {
-            //     $cobroItem['estado'] = 0;
-            // }
+
+            // Si existe plan_id, calcular monto_unidad y cantidad_unidades
+            if (isset($cobroItem['plan_id'])) {
+                $plan = \App\Models\Plan::find($cobroItem['plan_id']);
+
+                if ($plan) {
+                    // Sistema NUEVO: No llenar campo 'plan' legacy cuando se usa plan_id
+                    // El accessor getMontoCalculadoAttribute() calcula el monto desde la relación
+                    $cobroItem['plan'] = null;
+                }
+            }
+
+            // COMPATIBILIDAD: Asegurar que el campo 'fecha' tenga valor si aún es requerido en DB
+            // El model DetalleCobros usa fecha_inicio como principal
+            if (!isset($cobroItem['fecha'])) {
+                $cobroItem['fecha'] = $cobroItem['fecha_inicio'] ?? now()->format('Y-m-d');
+            }
+
+            // Remover campos que no son de la tabla
+            unset($cobroItem['placa']);
+            unset($cobroItem['monto']);
 
             $cobro->detalle()->create($cobroItem);
         }

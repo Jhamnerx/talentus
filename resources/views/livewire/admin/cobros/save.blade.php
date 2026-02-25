@@ -19,18 +19,6 @@
                         wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
                 </div>
 
-                {{-- Valores por defecto para nuevos vehículos --}}
-                <div class="col-span-12 sm:col-span-6 mb-2">
-                    <x-form.select label="Periodo por defecto:" wire:model.live='default_periodo'
-                        placeholder="Periodo para nuevos vehículos" :options="[
-                            ['name' => 'MENSUAL', 'id' => 'MENSUAL'],
-                            ['name' => 'BIMENSUAL', 'id' => 'BIMENSUAL'],
-                            ['name' => 'TRIMESTRAL', 'id' => 'TRIMESTRAL'],
-                            ['name' => 'SEMESTRAL', 'id' => 'SEMESTRAL'],
-                            ['name' => 'ANUAL', 'id' => 'ANUAL'],
-                        ]" option-label="name"
-                        option-value="id" />
-                </div>
             </div>
             <div class="col-span-12">
 
@@ -53,7 +41,9 @@
                             class="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-100 sm:text-3xl sm:truncate">
                             Lista de Vehiculos
                         </h2>
-
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            📦 Producto: <span class="font-semibold">Servicio de Cobro</span> (automático)
+                        </p>
                     </div>
 
                     <div class="mt-1 col-span-12 sm:col-span-6">
@@ -64,23 +54,9 @@
                         </div>
                     </div>
 
-                    <div class="mt-10 col-span-12 sm:col-span-2">
-                        <x-form.button label="Agregar" wire:click.prevent="agregarVehiculo" icon="plus" />
-                    </div>
-
-                    <div class="mt-1 col-span-12 sm:col-span-4">
-                        <x-form.select label="Producto asociado:" autocomplete="off" :clearable="false"
-                            wire:model.live="producto_id" id="producto_id" name="producto_id"
-                            placeholder="Seleccionar producto o servicio" :async-data="[
-                                'api' => route('api.productos.index'),
-                                'params' => ['local_id' => session('local_id')],
-                            ]" option-label="descripcion"
-                            option-value="id" option-description="option_description" :template="[
-                                'name' => 'user-option',
-                                'config' => ['src' => 'imagen'],
-                            ]"
-                            :always-fetch="true">
-                        </x-form.select>
+                    <div class="mt-10 col-span-12 sm:col-span-6">
+                        <x-form.button full="true" label="Agregar Vehículo" wire:click.prevent="agregarVehiculo"
+                            icon="plus" />
                     </div>
                 </div>
 
@@ -96,6 +72,12 @@
                                 class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">PLACA</span>
                         </p>
                     </div>
+                    <div class="flex-auto xl:w-32 text-center">
+                        <p class="leading-none">
+                            <span
+                                class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">PLAN</span>
+                        </p>
+                    </div>
                     <div class="flex-auto xl:w-28 text-center">
                         <p class="leading-none">
                             <span
@@ -105,7 +87,7 @@
                     <div class="flex-auto xl:w-24 text-center">
                         <p class="leading-none">
                             <span
-                                class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">PLAN</span>
+                                class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">MONTO</span>
                         </p>
                     </div>
                     <div class="flex-auto xl:w-32 text-center">
@@ -154,6 +136,24 @@
                                     </p>
                                 </div>
 
+                                <div class="flex-auto xl:w-32 text-center">
+                                    <select wire:model.live="items.{{ $placa }}.plan_id"
+                                        class="form-select w-full text-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
+                                        <option value="">Seleccionar...</option>
+                                        @foreach ($planes as $plan)
+                                            <option value="{{ $plan->id }}">
+                                                {{ $plan->name }} - {{ $divisa }}
+                                                {{ number_format($plan->price, 2) }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @if ($errors->has('items.' . $placa . '.plan_id'))
+                                        <p class="mt-1 text-pink-600 text-xs">
+                                            {{ $errors->first('items.' . $placa . '.plan_id') }}
+                                        </p>
+                                    @endif
+                                </div>
+
                                 <div class="flex-auto xl:w-28 text-center">
                                     <select wire:model.live="items.{{ $placa }}.periodo"
                                         class="form-select w-full text-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
@@ -171,14 +171,10 @@
                                 </div>
 
                                 <div class="flex-auto xl:w-24 text-center">
-                                    <input wire:model.live="items.{{ $placa }}.plan"
-                                        class="form-input w-full text-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-                                        type="number" step="0.01" min="0">
-                                    @if ($errors->has('items.' . $placa . '.plan'))
-                                        <p class="mt-1 text-pink-600 text-xs">
-                                            {{ $errors->first('items.' . $placa . '.plan') }}
-                                        </p>
-                                    @endif
+                                    <div
+                                        class="px-2 py-2 bg-gray-100 dark:bg-gray-700 rounded text-gray-800 dark:text-gray-200 font-semibold text-sm">
+                                        {{ $divisa }} {{ number_format($vehiculo['monto'] ?? 0, 2) }}
+                                    </div>
                                 </div>
 
                                 <div class="flex-auto xl:w-32 text-center">

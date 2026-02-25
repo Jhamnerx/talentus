@@ -24,6 +24,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/telescope": "^5.9",
         "laravel/tinker": "^2.9",
+        "laravelcm/laravel-subscriptions": "^1.7",
         "league/flysystem-ziparchive": "^3.24",
         "livewire/livewire": "^3.4",
         "luecano/numero-a-letras": "3.0",

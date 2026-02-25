@@ -26,13 +26,13 @@ class CobrosRequest extends FormRequest
     {
         $rules = [
             'clientes_id' => 'required',
-            'producto_id' => 'required',
             "comentario" => 'nullable',
             "divisa" => 'required',
             "nota" => 'nullable',
 
             'items' => 'array|between:1,100',
-            'items.*.plan' => 'required|decimal:0,4',
+            'items.*.plan_id' => 'required|exists:plans,id',
+            'items.*.monto' => 'required|decimal:0,4',
             'items.*.placa' => 'required',
             'items.*.periodo' => 'required|in:MENSUAL,BIMENSUAL,TRIMESTRAL,SEMESTRAL,ANUAL',
             'items.*.fecha_inicio' => 'required|date',
@@ -48,13 +48,14 @@ class CobrosRequest extends FormRequest
     {
         $messages = [
             'clientes_id.required' => 'Selecciona un cliente',
-            'producto_id.required' => 'Selecciona un producto',
             'divisa.required' => 'Selecciona una divisa',
 
             'items.array' => 'Ingresa como mínimo un vehículo',
             'items.between' => 'Ingresa como mínimo un vehículo',
-            'items.*.plan.required' => 'Ingresa un plan válido',
-            'items.*.plan.decimal' => 'El plan debe ser un número decimal válido',
+            'items.*.plan_id.required' => 'Selecciona un plan para cada vehículo',
+            'items.*.plan_id.exists' => 'El plan seleccionado no es válido',
+            'items.*.monto.required' => 'El monto es requerido',
+            'items.*.monto.decimal' => 'El monto debe ser un número decimal válido',
             'items.*.periodo.required' => 'Selecciona un periodo para cada vehículo',
             'items.*.periodo.in' => 'El periodo debe ser MENSUAL, BIMENSUAL, TRIMESTRAL, SEMESTRAL o ANUAL',
             'items.*.fecha_inicio.required' => 'Ingresa la fecha de inicio para cada vehículo',

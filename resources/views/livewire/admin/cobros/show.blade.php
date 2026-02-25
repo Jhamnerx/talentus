@@ -12,7 +12,7 @@
         @if ($detalleIds && count($detalleIds) > 0)
             <div class="col-span-full mb-6">
                 <div
-                    class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl shadow-xs p-6 border-2 border-indigo-200 dark:border-indigo-700/60">
+                    class="bg-linear-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl shadow-xs p-6 border-2 border-indigo-200 dark:border-indigo-700/60">
                     <div class="flex items-center justify-between mb-4">
                         <div>
                             <h3 class="text-lg font-semibold text-indigo-900 dark:text-indigo-100">Acciones Masivas</h3>
@@ -30,7 +30,7 @@
                     <div
                         class="mb-4 p-4 bg-blue-50 dark:bg-blue-950/50 rounded-lg border-2 border-blue-300 dark:border-blue-600/50">
                         <div class="flex items-start gap-3">
-                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" fill="none"
+                            <svg class="w-6 h-6 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" fill="none"
                                 stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -38,7 +38,7 @@
                             <div class="text-sm text-blue-900 dark:text-blue-100">
                                 <p class="font-bold mb-2 text-base">Emisión masiva:</p>
                                 <p class="text-blue-800 dark:text-blue-200">
-                                    Serás redirigido al módulo de emisión con los vehículos seleccionados. 
+                                    Serás redirigido al módulo de emisión con los vehículos seleccionados.
                                     Al guardar, el estado se actualizará automáticamente y regresarás aquí.
                                 </p>
                             </div>
@@ -48,8 +48,10 @@
                     <div class="grid grid-cols-1 gap-4">
                         {{-- Emitir Documento --}}
                         <div>
-                            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">1</span>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span
+                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">1</span>
                                 Emitir Documento
                             </h4>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -62,7 +64,8 @@
 
                         {{-- Opciones Avanzadas Masivas --}}
                         <details class="group">
-                            <summary class="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 flex items-center gap-2">
+                            <summary
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 cursor-pointer hover:text-blue-600 flex items-center gap-2">
                                 <span class="group-open:rotate-90 transition-transform">▶</span>
                                 Opciones Avanzadas (elegir tipo de documento)
                             </summary>
@@ -82,8 +85,10 @@
 
                         {{-- Registrar Pago (para documentos ya emitidos) --}}
                         <div>
-                            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
-                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">2</span>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span
+                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">2</span>
                                 Pago Pendiente (si ya fue facturado a crédito)
                             </h4>
                             <x-form.button full="true" primary wire:click="openModalPaymentBulk()"
@@ -107,6 +112,26 @@
                                 <x-form.button full="true" positive wire:click="activarSeleccionados()"
                                     right-icon="check-circle" label="Activar" />
                             </div>
+                        </div>
+
+                        {{-- Renovar Períodos --}}
+                        <div>
+                            <h4
+                                class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                                <span
+                                    class="flex items-center justify-center w-6 h-6 rounded-full bg-indigo-600 text-white text-xs font-bold">3</span>
+                                Renovar Períodos Pagados
+                            </h4>
+                            <div
+                                class="bg-blue-50 dark:bg-blue-950/40 border-2 border-blue-300 dark:border-blue-600/50 rounded-lg p-3 mb-2">
+                                <p class="text-xs text-blue-900 dark:text-blue-200">
+                                    <span class="font-bold">ℹ️ Renovación:</span> Actualiza las fechas del registro
+                                    existente para el siguiente período.
+                                    Solo disponible para vehículos con pago completado.
+                                </p>
+                            </div>
+                            <x-form.button full="true" secondary wire:click="renovarPeriodoMasivo()"
+                                right-icon="arrow-path" label="Renovar Períodos Seleccionados" />
                         </div>
                     </div>
                 </div>
@@ -168,8 +193,8 @@
                         <div class="flex items-center gap-2">
                             <span
                                 class="text-sm font-semibold {{ $colorClase }}">{{ $item->fecha->format('d-m-Y') }}</span>
-                            <x-form.button wire:click.prevent="refreshFecha({{ $item->id }})" icon="arrow-path" xs
-                                primary />
+                            <x-form.button wire:click.prevent="refreshFecha({{ $item->id }})" icon="arrow-path"
+                                xs primary />
                         </div>
                     </div>
                     <div class="flex justify-between items-center py-2">
@@ -179,8 +204,13 @@
                     </div>
                     <div class="flex justify-between items-center py-2">
                         <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Plan</span>
+                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                            {{ $item->plan_nombre }}</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Monto</span>
                         <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">S/.
-                            {{ $item->plan }}</span>
+                            {{ number_format($item->monto_calculado, 2) }}</span>
                     </div>
                     <div class="flex justify-between items-center py-2">
                         <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo Pago</span>
@@ -191,124 +221,82 @@
 
                 @livewire('admin.cobros.suspend', ['detalle' => $item], key('suspend' . $item->id))
 
-                {{-- ESTADO DE FACTURACIÓN --}}
+                {{-- ESTADO DE PAGO Y ACCIONES --}}
                 <div class="border-t border-gray-200 dark:border-gray-700/60 pt-4 mt-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300">Estado de Facturación</h4>
-                        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold {{ $item->estado_facturacion?->color() ?? 'bg-gray-100 text-gray-800' }}">
-                            {{ $item->estado_facturacion?->icon() ?? '📋' }}
-                            {{ $item->estado_facturacion?->label() ?? 'Sin Facturar' }}
-                        </span>
-                    </div>
+                    @php
+                        $estaPagado = $item->venta_id || $item->recibo_id;
+                        $tipoDoc =
+                            $cobro->tipo_pago === 'RECIBO'
+                                ? 'Recibo'
+                                : ($cobro->clientes->tipo_documento_id == 6
+                                    ? 'Factura'
+                                    : 'Boleta');
+                    @endphp
 
-                    {{-- MOSTRAR DOCUMENTO SI ESTÁ FACTURADO --}}
-                    @if($item->estado_facturacion && 
-                        ($item->estado_facturacion->value === 'FACTURADO' || $item->estado_facturacion->value === 'PAGADO'))
-                        <div class="bg-gray-50 dark:bg-gray-900/20 rounded-lg p-3 mb-3">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Documento</p>
-                                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ $item->numero_documento ?? 'N/A' }}
-                                    </p>
-                                </div>
-                                <div>
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Fecha Facturación</p>
-                                    <p class="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                                        {{ $item->fecha_facturacion?->format('d/m/Y') ?? '-' }}
-                                    </p>
-                                </div>
-                            </div>
-                            @if($item->estado_facturacion->value === 'PAGADO' && $item->fecha_pago)
-                            <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Fecha de Pago</p>
-                                <p class="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                                    {{ $item->fecha_pago->format('d/m/Y') }}
-                                </p>
-                            </div>
-                            @endif
-                        </div>
-                    @endif
-
-                    {{-- BOTONES INTELIGENTES SEGÚN ESTADO --}}
                     @if ($item->estado)
-                        @php
-                            $estadoFacturacion = $item->estado_facturacion?->value ?? 'SIN_FACTURAR';
-                            $tipoDoc = $cobro->tipo_pago === 'RECIBO' ? 'Recibo' : ($cobro->clientes->tipo_documento_id == 6 ? 'Factura' : 'Boleta');
-                        @endphp
-
-                        @if($estadoFacturacion === 'SIN_FACTURAR')
-                            {{-- SIN FACTURAR: Redirect inteligente al módulo Emitir/Create --}}
+                        @if (!$estaPagado)
+                            {{-- SIN FACTURAR: Botones para emitir documento --}}
+                            <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Emitir Documento
+                            </h4>
                             <div class="space-y-2">
                                 @can('admin.ventas.create')
-                                <button wire:click="facturarInteligente({{ $item->id }}, 'CONTADO')"
-                                    class="w-full px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-                                    <span>💰</span>
-                                    <span>Emitir {{ $tipoDoc }} (CONTADO)</span>
-                                </button>
+                                    <button wire:click="facturarInteligente({{ $item->id }}, 'CONTADO')"
+                                        class="w-full px-4 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                        <span>💰</span>
+                                        <span>Emitir {{ $tipoDoc }} (CONTADO)</span>
+                                    </button>
                                 @endcan
-                                
+
                                 @can('admin.ventas.create')
-                                <button wire:click="facturarInteligente({{ $item->id }}, 'CRÉDITO')"
-                                    class="w-full px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-                                    <span>📄</span>
-                                    <span>Emitir {{ $tipoDoc }} (CRÉDITO)</span>
-                                </button>
+                                    <button wire:click="facturarInteligente({{ $item->id }}, 'CRÉDITO')"
+                                        class="w-full px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                        <span>📄</span>
+                                        <span>Emitir {{ $tipoDoc }} (CRÉDITO)</span>
+                                    </button>
                                 @endcan
                             </div>
-
-                        @elseif($estadoFacturacion === 'FACTURADO')
-                            {{-- FACTURADO PERO NO PAGADO: Mostrar doc + Botón para registrar pago --}}
-                            @if($item->venta)
-                                <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 rounded-lg p-3 mb-2 text-center">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Documento emitido</p>
-                                    <p class="text-sm font-bold text-sky-700 dark:text-sky-300">{{ $item->venta->serie_numero }}</p>
-                                </div>
-                            @elseif($item->recibo)
-                                <div class="bg-sky-50 dark:bg-sky-900/20 border border-sky-200 dark:border-sky-700 rounded-lg p-3 mb-2 text-center">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400">Recibo emitido</p>
-                                    <p class="text-sm font-bold text-sky-700 dark:text-sky-300">{{ $item->recibo->serie_numero }}</p>
-                                </div>
-                            @endif
-                            @can('admin.payments.create')
-                            <div class="space-y-2">
-                                <button wire:click="openModalPayment({{ $item->id }})"
-                                    class="w-full px-4 py-2.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-                                    <span>💳</span>
-                                    <span>Registrar Pago</span>
-                                </button>
-                                
-                                <p class="text-xs text-center text-gray-500 dark:text-gray-400">
-                                    También puedes registrar el pago desde <br>
-                                    <a href="{{ route('admin.finanzas.cuentas-cobrar.index') }}" class="text-blue-600 hover:underline">Cuentas por Cobrar</a>
-                                </p>
-                            </div>
-                            @endcan
-
                         @else
-                            {{-- PAGADO: Mostrar información del documento --}}
-                            <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 text-center">
+                            {{-- PAGADO: Mostrar documento y botón renovar --}}
+                            <div
+                                class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 text-center mb-3">
                                 <div class="text-3xl mb-2">✅</div>
                                 <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-                                    Mensualidad Pagada
+                                    Período Pagado
                                 </p>
-                                @if($item->venta)
+                                @if ($item->venta)
                                     <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">
-                                        {{ $item->venta->serie_numero }}
+                                        Documento: {{ $item->venta->serie_numero }}
                                     </p>
                                 @elseif($item->recibo)
                                     <p class="text-xs font-medium text-emerald-600 dark:text-emerald-400 mt-1">
-                                        {{ $item->recibo->serie_numero }}
+                                        Recibo: {{ $item->recibo->serie_numero }}
                                     </p>
                                 @endif
-                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
-                                    Próximo vencimiento: {{ $item->fecha->format('d/m/Y') }}
+                                @if ($item->fecha_pago)
+                                    <p class="text-xs text-emerald-600 dark:text-emerald-400 mt-1">
+                                        Pagado: {{ $item->fecha_pago->format('d/m/Y') }}
+                                    </p>
+                                @endif
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-2">
+                                    Vence:
+                                    {{ $item->fecha_vencimiento?->format('d/m/Y') ?? $item->fecha->format('d/m/Y') }}
                                 </p>
                             </div>
+
+                            {{-- Botón para renovar período --}}
+                            <button wire:click="renovarPeriodoDetalle({{ $item->id }})"
+                                class="w-full px-4 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
+                                <span>🔄</span>
+                                <span>Renovar para Siguiente Período</span>
+                            </button>
+                            <p class="text-[10px] text-center text-gray-500 dark:text-gray-400 mt-1">
+                                Actualiza las fechas para el próximo período
+                            </p>
                         @endif
                     @else
                         {{-- VEHÍCULO SUSPENDIDO --}}
-                        <div class="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center">
+                        <div
+                            class="bg-gray-50 dark:bg-gray-900/20 border border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center">
                             <p class="text-sm text-gray-600 dark:text-gray-400">
                                 Vehículo suspendido
                             </p>
