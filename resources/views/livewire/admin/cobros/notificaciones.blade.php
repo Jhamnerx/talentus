@@ -10,15 +10,7 @@
                     Cobros próximos a facturar generados automáticamente
                 </p>
             </div>
-            <div>
-                <button wire:click="clearFilters" class="btn bg-red-500 hover:bg-red-600 text-white">
-                    <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
-                    </svg>
-                    <span class="ml-2">Limpiar</span>
-                </button>
-            </div>
+
         </div>
 
         <!-- Tarjetas de estadísticas -->
@@ -89,57 +81,70 @@
             </div>
         </div>
 
-        <!-- Filtros -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <!-- Filtros compactos -->
+        <div class="flex flex-wrap items-center gap-2">
 
             <!-- Búsqueda -->
-            <div class="relative">
-                <label for="search" class="sr-only">Buscar</label>
-                <input wire:model.live.debounce='search' id="search"
-                    class="form-input pl-9 focus:border-slate-300 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100 w-full"
-                    type="search" placeholder="Buscar cliente, placa..." />
-                <button class="absolute inset-0 right-auto group" type="submit">
-                    <svg class="w-4 h-4 shrink-0 fill-current text-slate-400 dark:text-gray-500 ml-3 mr-2"
-                        viewBox="0 0 16 16">
-                        <path
-                            d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
-                        <path
-                            d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
-                    </svg>
-                </button>
+            <div class="relative flex-1 min-w-[160px]">
+                <input wire:model.live.debounce="search" type="search"
+                    class="form-input pl-8 py-1.5 text-sm w-full dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
+                    placeholder="Cliente, placa..." />
+                <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400 pointer-events-none fill-current"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M7 14c-3.86 0-7-3.14-7-7s3.14-7 7-7 7 3.14 7 7-3.14 7-7 7zM7 2C4.243 2 2 4.243 2 7s2.243 5 5 5 5-2.243 5-5-2.243-5-5-5z" />
+                    <path
+                        d="M15.707 14.293L13.314 11.9a8.019 8.019 0 01-1.414 1.414l2.393 2.393a.997.997 0 001.414 0 .999.999 0 000-1.414z" />
+                </svg>
             </div>
+
+            <!-- Cliente -->
+            <select wire:model.live="clienteId"
+                class="form-select py-1.5 text-sm flex-1 min-w-[150px] dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
+                <option value="">Todos los clientes</option>
+                @foreach ($this->clientes as $cliente)
+                    <option value="{{ $cliente->id }}">{{ $cliente->razon_social }}</option>
+                @endforeach
+            </select>
 
             <!-- Estado -->
-            <div>
-                <select wire:model.live="estado" class="form-select w-full">
-                    <option value="">Todos los estados</option>
-                    <option value="PENDIENTE">⏳ Pendiente</option>
-                    <option value="FACTURADO">📄 Facturado</option>
-                    <option value="PAGADO">✅ Pagado</option>
-                    <option value="CANCELADO">❌ Cancelado</option>
-                </select>
-            </div>
+            <select wire:model.live="estado"
+                class="form-select py-1.5 text-sm w-36 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
+                <option value="">Todos</option>
+                <option value="PENDIENTE">⏳ Pendiente</option>
+                <option value="FACTURADO">📄 Facturado</option>
+                <option value="PAGADO">✅ Pagado</option>
+                <option value="CANCELADO">❌ Cancelado</option>
+            </select>
 
             <!-- Vencimiento -->
-            <div>
-                <select wire:model.live="filtroVencimiento" class="form-select w-full">
-                    <option value="">Todos los vencimientos</option>
-                    <option value="vencidos">🔴 Vencidos</option>
-                    <option value="hoy">📅 Hoy</option>
-                    <option value="7dias">🟡 Próximos 7 días</option>
-                    <option value="15dias">🟢 Próximos 15 días</option>
-                </select>
-            </div>
+            <select wire:model.live="filtroVencimiento"
+                class="form-select py-1.5 text-sm w-40 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
+                <option value="">Todo vencimiento</option>
+                <option value="vencidos">🔴 Vencidos</option>
+                <option value="hoy">📅 Hoy</option>
+                <option value="7dias">🟡 7 días</option>
+                <option value="15dias">🟢 15 días</option>
+            </select>
 
             <!-- Per Page -->
-            <div>
-                <select wire:model.live="perPage" class="form-select w-full">
-                    <option value="10">10 registros</option>
-                    <option value="15">15 registros</option>
-                    <option value="25">25 registros</option>
-                    <option value="50">50 registros</option>
-                </select>
-            </div>
+            <select wire:model.live="perPage"
+                class="form-select py-1.5 text-sm w-20 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+
+            <!-- Limpiar -->
+            <button wire:click="clearFilters"
+                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition whitespace-nowrap">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
+                    <path
+                        d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
+                </svg>
+                Limpiar
+            </button>
 
         </div>
     </div>
@@ -264,6 +269,8 @@
                                             wire:click.prevent="abrirModalPago({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="document-text" label="Emitir documento"
                                             wire:click.prevent="redirectToFacturar({{ $notificacion->id }})" />
+                                        <x-dropdown.item icon="refresh" label="Actualizar fecha"
+                                            wire:click.prevent="refreshFecha({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="x-circle" label="Cancelar"
                                             wire:click.prevent="cancelar({{ $notificacion->id }})" />
                                     </x-form.dropdown>

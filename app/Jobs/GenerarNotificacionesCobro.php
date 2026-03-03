@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\DetalleCobros;
 use App\Models\NotificacionCobro;
+use App\Models\Vehiculos;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -52,17 +53,21 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'dias_anticipacion' => $this->diasAnticipacion
         ]);
 
-        // Obtener detalles de cobro que están próximos a vencer
-        // Campo "fecha" representa la fecha de vencimiento del cobro
-        $detallesProximos = DetalleCobros::with(['cobro', 'vehiculo', 'cobro.clientes'])
-            ->where('estado', 1) // Activo
-            ->where('estado_detalle', 'ACTIVO')
-            ->where('estado_facturacion', 'SIN_FACTURAR')
-            ->whereBetween('fecha', [
-                Carbon::now()->format('Y-m-d'),
-                $fechaLimite->format('Y-m-d')
-            ])
-            // No generar si ya existe una notificación pendiente
+        // Buscar DetalleCobros activos cuya suscripción del vehículo vence dentro del período
+        $detallesProximos = DetalleCobros::with([
+            'cobro',
+            'cobro.clientes',
+            'vehiculo.planSubscriptions',
+        ])
+            ->where('estado', 1)
+            ->whereHas('vehiculo.planSubscriptions', function ($q) use ($fechaLimite) {
+                $q->whereNull('canceled_at')
+                    ->whereBetween('ends_at', [
+                        Carbon::now()->startOfDay(),
+                        $fechaLimite->endOfDay(),
+                    ]);
+            })
+            // No generar si ya existe una notificación pendiente o facturada
             ->whereDoesntHave('notificaciones', function ($query) {
                 $query->whereIn('estado', ['PENDIENTE', 'FACTURADO']);
             })
@@ -102,25 +107,36 @@ class GenerarNotificacionesCobro implements ShouldQueue
         // Calcular descripción
         $descripcion = $this->generarDescripcion($detalle, $cobro);
 
+        // Tomar ends_at de la suscripción activa del vehículo; fallback a detalle->fecha
+        $subscription    = $detalle->vehiculo
+            ?->planSubscriptions
+            ->whereNull('canceled_at')
+            ->sortBy('ends_at')
+            ->first();
+        $fechaVencimiento = $subscription?->ends_at
+            ? Carbon::parse($subscription->ends_at)
+            : Carbon::parse($detalle->fecha);
+
         NotificacionCobro::create([
-            'empresa_id' => $cliente->empresa_id,
+            'empresa_id'       => $cliente->empresa_id,
             'detalle_cobro_id' => $detalle->id,
-            'cobro_id' => $cobro->id,
-            'cliente_id' => $cliente->id,
-            'vehiculo_id' => $detalle->vehiculo_id,
-            'fecha_vencimiento' => $detalle->fecha,
-            'monto' => $detalle->monto_unidad ?? $cobro->monto_unidad,
-            'moneda' => $cobro->moneda ?? 'PEN',
-            'descripcion' => $descripcion,
-            'estado' => 'PENDIENTE',
+            'cobro_id'         => $cobro->id,
+            'cliente_id'       => $cliente->id,
+            'vehiculo_id'      => $detalle->vehiculo_id,
+            'fecha_vencimiento' => $fechaVencimiento,
+            'monto'            => $detalle->monto_unidad ?? $cobro->monto_unidad,
+            'moneda'           => $cobro->moneda ?? 'PEN',
+            'descripcion'      => $descripcion,
+            'estado'           => 'PENDIENTE',
         ]);
 
         Log::info('Notificación de cobro creada', [
-            'detalle_cobro_id' => $detalle->id,
-            'cliente' => $cliente->razon_social,
-            'vehiculo' => $detalle->vehiculo?->placa,
-            'fecha_vencimiento' => $detalle->fecha,
-            'monto' => $detalle->monto_unidad ?? $cobro->monto_unidad
+            'detalle_cobro_id'  => $detalle->id,
+            'cliente'           => $cliente->razon_social,
+            'vehiculo'          => $detalle->vehiculo?->placa,
+            'fecha_vencimiento' => $fechaVencimiento->format('Y-m-d'),
+            'subscription_id'   => $subscription?->id,
+            'monto'             => $detalle->monto_unidad ?? $cobro->monto_unidad,
         ]);
     }
 

@@ -8,8 +8,10 @@ use App\Models\Cobros;
 use App\Models\Ventas;
 use App\Models\Recibos;
 use Livewire\Component;
+use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\BankAccount;
+use App\Models\DetalleCobros;
 use App\Models\NotificacionCobro;
 use App\Models\PaymentMethodType;
 use App\Helpers\PaymentDestinationHelper;
@@ -39,6 +41,7 @@ class Notificaciones extends Component
     public string $search = '';
     public string $estado = 'PENDIENTE';
     public $filtroVencimiento = null;
+    public $clienteId = null;
     public int $perPage = 15;
 
     // Estado del modal de pago
@@ -75,6 +78,7 @@ class Notificaciones extends Component
         'search'            => ['except' => ''],
         'estado'            => ['except' => 'PENDIENTE'],
         'filtroVencimiento' => ['except' => ''],
+        'clienteId'         => ['except' => ''],
         'perPage'           => ['except' => 15],
     ];
 
@@ -84,6 +88,15 @@ class Notificaciones extends Component
     {
         $this->paymentsMethods = PaymentMethodType::whereActive(true)->get()->toArray();
         $this->bankAccounts    = BankAccount::where('status', true)->get();
+    }
+
+    // Computed: clientes con notificaciones (para filtro)
+    #[Computed]
+    public function clientes()
+    {
+        return Clientes::whereIn('id', NotificacionCobro::distinct()->pluck('cliente_id')->filter())
+            ->orderBy('razon_social')
+            ->get(['id', 'razon_social', 'numero_documento']);
     }
 
     // Computed: destinos de pago
@@ -106,6 +119,7 @@ class Notificaciones extends Component
                 });
             })
             ->when($this->estado, fn($q) => $q->where('estado', $this->estado))
+            ->when($this->clienteId, fn($q) => $q->where('cliente_id', $this->clienteId))
             ->when($this->filtroVencimiento === 'vencidos', fn($q) => $q->vencidos())
             ->when($this->filtroVencimiento === 'hoy',     fn($q) => $q->whereDate('fecha_vencimiento', now()))
             ->when($this->filtroVencimiento === '7dias',   fn($q) => $q->porVencer(7))
@@ -550,7 +564,40 @@ class Notificaciones extends Component
 
     public function clearFilters(): void
     {
-        $this->reset(['search', 'estado', 'filtroVencimiento']);
+        $this->reset(['search', 'estado', 'filtroVencimiento', 'clienteId']);
         $this->resetPage();
+    }
+
+    /**
+     * Avanzar la fecha del detalle cobro al siguiente período
+     */
+    public function refreshFecha(int $notificacionId): void
+    {
+        $notificacion = NotificacionCobro::with('detalleCobro.cobro')->findOrFail($notificacionId);
+        $detalle      = $notificacion->detalleCobro;
+
+        if (!$detalle) {
+            $this->notification()->error('Esta notificación no tiene un detalle de cobro asociado.');
+            return;
+        }
+
+        $periodo = $detalle->cobro->periodo;
+
+        $nuevaFecha = match ($periodo) {
+            'MENSUAL'    => $detalle->fecha->copy()->addMonth(),
+            'BIMENSUAL'  => $detalle->fecha->copy()->addMonths(2),
+            'TRIMESTRAL' => $detalle->fecha->copy()->addMonths(3),
+            'SEMESTRAL'  => $detalle->fecha->copy()->addMonths(6),
+            'ANUAL'      => $detalle->fecha->copy()->addYear(),
+            default      => $detalle->fecha,
+        };
+
+        $detalle->update(['fecha' => $nuevaFecha]);
+
+        $this->notification()->success(
+            title: 'Fecha Actualizada',
+            description: 'La fecha del vehículo fue avanzada al siguiente período.'
+        );
+        $this->dispatch('render');
     }
 }

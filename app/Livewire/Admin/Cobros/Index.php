@@ -75,26 +75,43 @@ class Index extends Component
                     $cobro->whereBetween('created_at', [$hoy->copy()->startOfMonth(), $hoy]);
                 });
             })
-            // FILTROS DE VENCIMIENTO (detalles que vencen)
+            // FILTROS DE VENCIMIENTO (por ends_at de la suscripción del vehículo)
             ->when($this->filtroVencimiento === 'vencen_7dias', function ($query) use ($hoy, $fechaLimiteProximos7) {
                 $query->where('estado', 1)
-
-                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaLimiteProximos7->format('Y-m-d')]);
+                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaLimiteProximos7) {
+                        $q->whereNull('canceled_at')
+                            ->whereBetween('ends_at', [
+                                $hoy->copy()->startOfDay(),
+                                $fechaLimiteProximos7->copy()->endOfDay(),
+                            ]);
+                    });
             })
             ->when($this->filtroVencimiento === 'vencen_fin_mes', function ($query) use ($hoy, $fechaFinMes) {
                 $query->where('estado', 1)
-
-                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaFinMes->format('Y-m-d')]);
+                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaFinMes) {
+                        $q->whereNull('canceled_at')
+                            ->whereBetween('ends_at', [
+                                $hoy->copy()->startOfDay(),
+                                $fechaFinMes->copy()->endOfDay(),
+                            ]);
+                    });
             })
             ->when($this->filtroVencimiento === 'vencen_proximo_mes', function ($query) use ($hoy, $fechaProximoMes) {
                 $query->where('estado', 1)
-
-                    ->whereBetween('fecha', [$hoy->format('Y-m-d'), $fechaProximoMes->format('Y-m-d')]);
+                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy, $fechaProximoMes) {
+                        $q->whereNull('canceled_at')
+                            ->whereBetween('ends_at', [
+                                $hoy->copy()->startOfDay(),
+                                $fechaProximoMes->copy()->endOfDay(),
+                            ]);
+                    });
             })
             ->when($this->filtroVencimiento === 'vencidos', function ($query) use ($hoy) {
                 $query->where('estado', 1)
-
-                    ->where('fecha', '<', $hoy->format('Y-m-d'));
+                    ->whereHas('vehiculo.planSubscriptions', function ($q) use ($hoy) {
+                        $q->whereNull('canceled_at')
+                            ->where('ends_at', '<', $hoy->copy()->startOfDay());
+                    });
             })
             ->orderBy('fecha', 'asc')
             ->paginate($this->perPage);
