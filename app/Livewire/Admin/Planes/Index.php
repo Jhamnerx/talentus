@@ -38,7 +38,7 @@ class Index extends Component
         ]);
     }
 
-    #[On('plan-saved')]
+    #[On(['plan-saved', 'feature-added'])]
     public function refreshTable()
     {
         $this->resetPage();

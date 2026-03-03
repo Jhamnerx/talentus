@@ -57,6 +57,9 @@ final class Tabla extends PowerGridComponent
             ->add('categoria_nombre', fn($producto) => $producto->categoria->nombre)
             ->add('vu', fn($producto) => $producto->divisa == 'USD' ? '$ ' . $producto->valor_unitario : 'S/ ' . $producto->valor_unitario)
             ->add('stock_descripcion', fn($producto) => $producto->tipo == 'producto' ? $producto->stock . ' ' . $producto->unit->name : 'servicio')
+            ->add('servicio_cobro', fn($producto) => $producto->es_servicio_cobro
+                ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300 ring-1 ring-inset ring-emerald-500/30">&#128179; Facturación</span>'
+                : '<span class="text-gray-300 dark:text-gray-600 text-xs">&mdash;</span>')
             ->add('estado')
             ->add('estado_label', fn($entry) => $entry->estado ? 'Activa' : 'Desactivada')
             ->add('created_at');
@@ -91,6 +94,8 @@ final class Tabla extends PowerGridComponent
                 ->title('Stock')
                 ->field('stock_descripcion'),
 
+            Column::make('COBROS', 'servicio_cobro')
+                ->contentClasses('text-center'),
 
         ];
 

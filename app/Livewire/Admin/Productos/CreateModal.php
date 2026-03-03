@@ -43,8 +43,7 @@ class CreateModal extends Component
 
     public function render()
     {
-        $yaExisteServicioCobro = $this->yaExisteServicioCobro();
-        return view('livewire.admin.productos.create-modal', compact('yaExisteServicioCobro'));
+        return view('livewire.admin.productos.create-modal');
     }
 
     #[On(['open-modal-create', 'add-producto-modal'])]

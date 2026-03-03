@@ -57,11 +57,6 @@ class Index extends Component
                         // Búsqueda por placa
                         ->orWhereHas('vehiculo', function ($vehiculo) {
                             $vehiculo->where('placa', 'like', '%' . $this->search . '%');
-                        })
-                        // Búsqueda por tipo de pago o periodo
-                        ->orWhereHas('cobro', function ($cobro) {
-                            $cobro->where('tipo_pago', 'like', '%' . $this->search . '%')
-                                ->orWhere('periodo', 'like', '%' . $this->search . '%');
                         });
                 });
             })

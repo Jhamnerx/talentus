@@ -1,730 +1,277 @@
-# Talentus - Instrucciones para Agentes de IA
+# GitHub Copilot Instructions — Talentus
 
-## Arquitectura del Sistema
+## Descripción del proyecto
+**Talentus** es un sistema de gestión empresarial (ERP) orientado a empresas de GPS/rastreo vehicular en Perú. Incluye módulos de facturación electrónica (SUNAT), CRM, flota vehicular, órdenes de trabajo, soporte técnico, finanzas y más.
 
-Sistema de gestión empresarial especializado en facturación electrónica peruana (SUNAT), control vehicular, GPS, mantenimiento y certificaciones. Construido con **Laravel 12** + **Livewire 3** + **PowerGrid 6** + **Jetstream** + **TailwindCSS**.
+---
 
-### Stack Principal
+## Stack tecnológico
 
-- **Backend**: Laravel 12 (PHP 8.2+), multi-empresa con scopes globales
-- **Frontend**: Livewire 3 (sin Alpine.js directo), WireUI, PowerGrid para tablas
-- **Base de datos**: MySQL con soft deletes y activity logs (Spatie)
-- **Colas**: Redis + Horizon para jobs asíncronos
-- **Auth**: Jetstream + Sanctum + Spatie Permissions
+| Capa | Tecnología |
+|------|-----------|
+| Backend | PHP 8.3 · Laravel 12 |
+| Base de datos | MySQL |
+| Frontend | TALL Stack: Tailwind CSS 4 · Alpine.js · Livewire 3 |
+| UI Components | WireUI (wireui/wireui) |
+| Data tables | PowerGrid 6 (power-components/livewire-powergrid) |
+| Auth | Laravel Jetstream 5 + Fortify + Sanctum |
+| Permisos | Spatie Laravel Permission 6 |
+| Auditoría | Spatie Laravel Activity Log 4 |
+| Real-time | Pusher + Laravel Echo |
+| PDF | DomPDF (barryvdh/laravel-dompdf) |
+| Excel | Maatwebsite/Excel 3 |
+| Facturación | Greenter (dev-master) — SUNAT Perú |
+| Firebase | kreait/laravel-firebase 6 |
+| WhatsApp | netflie/whatsapp-cloud-api 2 |
+| Backup | Spatie Laravel Backup 9 |
+| Monitoreo | Laravel Telescope 5 |
+| Suscripciones | laravelcm/laravel-subscriptions 1 |
+| Hashids | vinkla/hashids |
+| Enums | bensampo/laravel-enum 6 |
 
-## Estructura del Proyecto
+---
+
+## Estructura de directorios
 
 ```
 app/
-├── Actions/Fortify|Jetstream/    # Acciones de autenticación personalizadas
-├── Enums/                         # Enums nativos PHP 8.2 con métodos color() y statusColor()
-├── Livewire/                      # Componentes full-stack por módulo
-│   ├── Admin/                     # Panel administrativo (principal)
-│   ├── App/                       # Módulo interno de solicitudes/consultas
-│   └── Cliente/                   # Portal de cliente
-├── Models/                        # Eloquent con Observers, Scopes, LogsActivity
-├── Http/Controllers/Admin/        # Controladores REST + PDFs
-├── PowerGridThemes/               # TalentusTheme.php (tema personalizado)
-└── Scopes/                        # EmpresaScope, ActiveScope, EliminadoScope
-
+  Actions/          # Acciones de Jetstream/Fortify
+  Enums/            # Enums tipados con bensampo/laravel-enum
+  Exports/          # Clases de exportación Excel
+  Helpers/          # Helpers globales
+  Http/
+    Controllers/
+      Admin/        # Controladores del panel de administración
+        Almacen/    # Gestión de almacén y guías de remisión
+        Facturacion/# Comprobantes electrónicos SUNAT
+        Finanzas/   # Módulo financiero
+        PDF/        # Controladores de generación PDF
+      Api/          # Endpoints de API
+  Imports/          # Clases de importación Excel
+  Jobs/             # Jobs para colas
+  Livewire/
+    Admin/          # Componentes Livewire del panel
+      Ajustes/      # Configuración de empresa/sistema
+      Categorias/
+      Certificados/ # Certificados GPS/velocímetro/antifatiga
+      Clientes/
+      Cobros/
+      Compras/
+      Dispositivos/ # Gestión de dispositivos GPS
+      Facturacion/  # Emisión de comprobantes SUNAT
+      Finanzas/     # Caja, pagos, egresos
+      Gerencia/     # Reportes gerenciales
+      GuiasRemision/
+      Lineas/       # Líneas de teléfono / SIM
+      Notificaciones/
+      PaymentMethods/
+      Payments/
+      Planes/       # Planes de suscripción
+      Productos/
+      Proveedores/
+      Reportes/
+      Reviews/
+      SimCard/
+      Solicitudes/
+      Tecnico/      # Servicio técnico
+      Tickets/      # Sistema de tickets
+      Usuarios/
+      Vehiculos/
+      Ventas/
+      WorkOrders/
+  Models/           # Modelos Eloquent
+  Observers/        # Observers de modelos
+  Policies/         # Políticas de autorización
+  Rules/            # Reglas de validación personalizadas
+  Scopes/           # Query scopes globales
+  Services/         # Servicios de integración externa
+    FactilizaService.php   # API de facturación Factiliza
+    GpsWoxService.php      # API de GPS Wox
+  Traits/           # Traits reutilizables
+resources/
+  views/
+    admin/          # Vistas del panel (Blade)
+    livewire/       # Vistas de componentes Livewire
+    pdf/            # Plantillas PDF (DomPDF)
+    components/     # Componentes Blade
 routes/
-├── web.php         # Rutas administrativas (principal)
-├── facturacion.php   # Visualización de PDFs/XML/CDR de SUNAT
-
-
-resources/views/
-├── livewire/         # Vistas Blade de componentes Livewire
-└── components/       # Componentes Blade reutilizables (x-cards, x-menu-slide)
+  web.php           # Rutas web (protegidas por auth:sanctum + verified)
+  api.php           # Rutas API
+  facturacion.php   # Rutas del módulo de facturación
 ```
 
-## Convenciones de Código
+---
 
-### Livewire Components
+## Módulos principales
 
-- **Ubicación**: `app/Livewire/{Módulo}/{Entidad}/{Acción}.php`
-- **Nombres**: PascalCase descriptivo: `Save.php`, `Create.php`, `Edit.php`, `Tabla.php`
-- **PowerGrid**: Usar `PowerGridComponent` para tablas con `Tabla.php` como nombre estándar
-    ```php
-    final class Tabla extends PowerGridComponent {
-        public string $tableName = 'TablaProductos';
-        public bool $showFilters = true;
-    }
-    ```
-- **Livewire estándar**: Extender `Component` para formularios y modales
-- **Propiedades públicas**: Usar para binding bidireccional con Wire:model
+### 1. GPS & Flota
+- Modelos: `Vehiculos`, `Dispositivos`, `Gps`, `SimCard`, `Flotas`, `DeviceHistory`
+- Livewire: `Admin/Vehiculos/`, `Admin/Dispositivos/`, `Admin/SimCard/`, `Admin/Lineas/`
+- Integración externa: `GpsWoxService` (jhamnerx/gpswox-api)
 
-### Modelos Eloquent
+### 2. Facturación Electrónica (SUNAT — Perú)
+- Modelos: `Comprobantes`, `Ventas`, `VentasDetalle`, `NotaCredito`, `NotaDebito`, `EnvioResumen`, `Series`, `TipoComprobantes`, `TipoAfectacion`, `CodigosDetracciones`
+- Livewire: `Admin/Facturacion/`, `Admin/Ventas/`, `Admin/GuiasRemision/`
+- Biblioteca: **Greenter** para firma XML y comunicación con SUNAT
+- Servicio de envío: `FactilizaService`
 
-- **Traits obligatorios**: `LogsActivity` (Spatie) en modelos críticos
-- **Global Scopes**: `EmpresaScope` ya aplicado en modelos multi-empresa
-- **Observers**: Usar `#[ObservedBy(Observer::class)]` para lógica automática
-- **Soft Deletes**: Activado en mayoría de modelos
-- **Casts**: Definir enums como `'status' => VentasStatus::class`
+### 3. CRM
+- Modelos: `Clientes`, `Contacto`, `Contactos`, `Proveedores`
+- Livewire: `Admin/Clientes/`, `Admin/Proveedores/`
 
-### Enums
+### 4. Compras
+- Modelos: `Compras`, `ComprasDetalle`
+- Livewire: `Admin/Compras/`
 
-Patrón consistente con métodos auxiliares:
+### 5. Finanzas / Caja
+- Modelos: `Cash`, `CashDocument`, `CashDocumentCredit`, `CashDocumentPayment`, `Cobros`, `DetalleCobros`, `Payments`, `ExpensePayment`, `ExpenseMethodType`, `PaymentMethodType`, `Anticipos`
+- Livewire: `Admin/Finanzas/`, `Admin/Cobros/`, `Admin/Payments/`, `Admin/PaymentMethods/`
+- Traits: `CashHelperTrait`, `FinanceTrait`
 
+### 6. Órdenes de Trabajo (Work Orders)
+- Modelos: `WorkOrder`, `WorkOrderType`, `WorkOrderChecklist`, `WorkOrderPhoto`, `WorkOrderSignature`, `WorkOrderAccessory`
+- Livewire: `Admin/WorkOrders/`
+
+### 7. Tickets / Soporte
+- Modelos: `Ticket`, `TicketMessage`, `TicketAttachment`, `TicketCategory`, `TicketEvent`, `TicketSequence`
+- Livewire: `Admin/Tickets/`
+
+### 8. Servicio Técnico
+- Modelos: `ServicioTecnico`, `Mantenimiento`
+- Livewire: `Admin/Tecnico/`
+
+### 9. Certificados
+- Modelos: `Certificados`, `CertificadosAntifatiga`, `CertificadosVelocimetros`
+- Livewire: `Admin/Certificados/`
+
+### 10. Contratos & Presupuestos
+- Modelos: `Contratos`, `DetalleContratos`, `Cotizaciones`, `CotizacionesDetalle`, `Presupuestos`, `DetallePresupuestos`
+
+### 11. Suscripciones & Planes
+- Modelos: `Plan`, `Subscription`
+- Livewire: `Admin/Planes/`
+
+### 12. Configuración de Empresa
+- Modelos: `Empresa`, `Ajustes`
+- Livewire: `Admin/Ajustes/`
+
+---
+
+## Convenciones de código
+
+### General
+- Idioma de código: **español** para nombres de clases de negocio, métodos, variables y rutas. Comentarios en español.
+- Seguir PSR-12 para formato PHP.
+- Usar `strict_types=1` en clases nuevas.
+
+### Modelos
+- Usar `$guarded = ['id', 'created_at', 'updated_at']` en la mayoría de modelos (ver `Ventas`, `Team`). Solo usar `$fillable` cuando se documente explícitamente.
+- Definir siempre `$casts` para booleanos, fechas y enums.
+- Usar **Hashids** para exponer IDs en URLs (nunca IDs numéricos directos).
+- Usar `SoftDeletes` en modelos que requieran papelera de reciclaje.
+- Registrar observers via el atributo PHP `#[ObservedBy(MiObserver::class)]` en la clase del modelo (patrón real del proyecto):
+  ```php
+  #[ObservedBy(VentasObserver::class)]
+  class Ventas extends Model { ... }
+  ```
+- Los observers auto-asignan `empresa_id` y `user_id` en el evento `creating` — no repetir esta lógica en controllers/Livewire.
+
+### Multi-tenancy (EmpresaScope)
+Todo modelo con datos por empresa aplica `EmpresaScope` en `booted()` — filtra automáticamente por `session('empresa')`:
 ```php
-enum VentasStatus: string {
-    case COMPLETADO = "COMPLETADO";
-    case BORRADOR = "BORRADOR";
-
-    public function color(): string { /* clase CSS */ }
-    public function statusColor(): string { /* clase badge */ }
+protected static function booted(): void
+{
+    static::addGlobalScope(new EmpresaScope);
 }
 ```
+Usar `->withoutGlobalScope(EmpresaScope::class)` cuando se necesiten consultas cruzadas entre empresas.
+
+### Livewire 3
+- Usar `#[Lazy]` para carga diferida de componentes pesados.
+- Usar `#[Validate]` o `$rules` para validación en tiempo real.
+- Preferir eventos de Livewire (`$dispatch`) sobre redirecciones cuando sea posible.
+- Usar **WireUI** para formularios, modales, notificaciones y selectores.
+- Usar **PowerGrid** para tablas con búsqueda, filtros y paginación. Convención: clase `Tabla` dentro de la carpeta del feature (ej. `app/Livewire/Admin/Productos/Tabla.php`) extendiendo `PowerGridComponent` con `datasource()`, `fields()` y `columns()`.
+- Los listeners de Echo siguen el patrón: `'echo:{canal},{Evento}' => 'metodo'`.
+
+### Controladores
+- Controladores delgados: lógica de negocio en modelos, acciones o servicios.
+- Solo existir si hay lógica de renderizado de vistas o descargas (PDF, Excel).
+- Primarios bajo `App\Http\Controllers\Admin\`.
+
+### Autorización
+- Usar **Spatie Permission** (roles y permisos).
+- Verificar con `$this->authorize()` en controladores o `Gate::allows()` en Livewire.
+- Definir políticas en `app/Policies/`.
 
 ### Rutas
+- Todas las rutas del panel bajo middleware `['auth:sanctum', 'verified']`.
+- Nombrar rutas en snake_case con prefijo del módulo: `admin.clientes.index`.
+- Rutas de facturación separadas en `routes/facturacion.php`.
 
-- **Admin**: Prefijo implícito `/admin`, usar `name('admin.{módulo}.{acción}')`
-- **Facturación**: Rutas públicas para visualizar documentos electrónicos con route model binding
-- **Middleware**: `auth:sanctum` + `verified` para rutas protegidas
+### PDF
+- Usar `barryvdh/laravel-dompdf`.
+- Plantillas en `resources/views/pdf/`.
+- Controladores PDF en `App\Http\Controllers\Admin\PDF\`.
 
-## Integraciones Clave
+### Excel
+- Exportaciones en `app/Exports/`, importaciones en `app/Imports/`.
+- Implementar `WithHeadings` y `WithStyles` en exportaciones.
 
-### SUNAT (Facturación Electrónica Peruana)
+### Facturación SUNAT
+- Toda comunicación con SUNAT usa la librería **Greenter**.
+- Los XMLs firmados se almacenan en storage.
+- Manejar correctamente los tipos de comprobante: Factura (01), Boleta (03), NC (07), ND (08), Guía (09).
+- Validar IGV (18%) y detracción cuando aplique.
 
-- **Librería**: Greenter (lite, report, xml, xmldsig, htmltopdf)
-- **Tipos de comprobante**: Factura, Boleta, Nota Crédito/Débito, Guía Remisión
-- **Archivos**: XML, PDF, CDR (respuesta SUNAT) en `storage/app/sunat/`
-- **Referencia**: `SUNAT.yml` lista tipos de documento, unidades y motivos de traslado
+### Notificaciones
+- Usar Laravel Notifications para email/base de datos.
+- Usar Firebase Cloud Messaging (kreait/laravel-firebase) para push móvil.
+- WhatsApp via `netflie/whatsapp-cloud-api` para notificaciones de cobros y alertas.
 
-### Librerías Especializadas
+### Testing
+- PHPUnit 11 con tests en `tests/Feature/` y `tests/Unit/`.
+- Usar factories para datos de prueba.
+- Evitar llamadas reales a APIs externas (SUNAT, GPS, WhatsApp) en tests; usar mocks.
 
-- **PDFs**: dompdf + barryvdh/laravel-dompdf
-- **Excel**: maatwebsite/excel para importar/exportar
-- **QR/Barcode**: simplesoftwareio/simple-qrcode
-- **Números a texto**: luecano/numero-a-letras (para montos en español)
-- **WhatsApp**: netflie/whatsapp-cloud-api
-- **Intervention Image**: Procesamiento de imágenes
+---
 
-## Workflows de Desarrollo
-
-### Comandos Esenciales
+## Workflows de desarrollo
 
 ```bash
-# Colas (OBLIGATORIO en desarrollo para jobs de email/facturación)
+# Frontend
+npm run dev          # Vite dev server (Tailwind v4 + hot reload)
+npm run build        # Build para producción
+
+# Colas (múltiples queues nombradas)
 php artisan queue:work
-php artisan horizon  # Preferir en producción
+php artisan queue:work --queue=mail
+php artisan queue:work --queue=database
+php artisan queue:work --queue=broadcast
 
-# Assets
-npm run dev          # Vite en modo watch
-npm run build        # Build de producción
-
-# Base de datos
-php artisan migrate
-php artisan db:seed  # Ejecutar seeders específicos
+# Permisos storage (Linux/servidor)
+sudo chmod -Rf 0777 bootstrap/cache/ storage/
 ```
 
-### Testing
-
-- **Framework**: PHPUnit 11
-- **Ubicación**: `tests/Feature/` y `tests/Unit/`
-- **Ejecutar**: `php artisan test`
-
-### Debugging
-
-- **Laravel Debugbar**: Activado en dev (`barryvdh/laravel-debugbar`)
-- **Telescope**: Ruta `/telescope` (requiere auth)
-- **Logs**: `storage/logs/laravel.log` y Horizon dashboard
-
-## Patrones Específicos
-
-### Multi-empresa (Crucial)
-
-- **Todos** los modelos principales usan `EmpresaScope`
-- **SIEMPRE** incluir `empresa_id` en formularios y queries directas
-- Filtro automático por empresa del usuario autenticado
-
-### Activity Logs
-
-Modelos con `LogsActivity` registran automáticamente cambios:
-
-```php
-protected static $recordEvents = ['deleted', 'created', 'updated'];
-```
-
-### Generación de PDFs
-
-Controladores en `app/Http/Controllers/Admin/PDF/`:
-
-- Patrón: `{Entidad}PdfController.php`
-- Usar dompdf con vistas en `resources/views/admin/pdf/`
-
-### Consultas Externas (APIs)
-
-- **UtilesController**: Métodos para consultar DNI/RUC en SUNAT/RENIEC
-- Usar en Livewire con `updatedNumeroDocumento()` para autocompletar datos
-
-## Módulo de Órdenes de Trabajo (Work Orders)
-
-Sistema robusto de gestión de órdenes técnicas con evidencia legal, firma digital y trazabilidad completa. **Diferente del módulo de Tareas existente**, diseñado para ser auditable y defendible ante reclamos.
-
-### Arquitectura de Tablas
-
-1. **work_order_types**: Tipos configurables de órdenes (instalación, retiro, mantenimiento, etc.)
-    - Flags: `requiere_imei`, `requiere_sim`, `requiere_accesorios`, `requiere_checklist`
-2. **work_orders**: Órdenes de trabajo principales con estados (pendiente, en_proceso, finalizado, cancelado)
-    - Campo `bloqueado` impide edición después del cierre
-    - Código autoincremental: `OT-000001`
-3. **device_history**: Historial completo de instalación/retiro de IMEIs y SIMs por vehículo
-    - **NUNCA sobrescribe**, siempre agrega registros
-4. **checklist_templates**: Catálogo dinámico de ítems (vehículo, tablero, luces, accesorios, etc.)
-5. **work_order_checklists**: Ejecución de checklist con fases `before`/`after`
-    - Resultado: `ok`, `observado`, `no_aplica`
-6. **work_order_photos**: Evidencias fotográficas con geolocalización
-    - Guardadas como archivos PNG/JPG en `storage/private`
-7. **work_order_signatures**: Firmas digitales (recepción/conformidad) con hash SHA256
-    - Metadata: IP, User-Agent, GPS, nombre firmante
-8. **work_order_accessories**: Accesorios instalados/retirados con precios
-
-### Enums Clave
-
-```php
-// WorkOrderStatus
-pendiente, en_proceso, finalizado, cancelado
-
-// ChecklistResultado
-ok, observado, no_aplica
-
-// ChecklistCategoria
-vehiculo, tablero, luces, accesorios, motor, neumaticos, documentos, otros
-```
-
-### Flujo de Trabajo
-
-1. **Creación**: Asignar técnico, vehículo, tipo de orden
-2. **Inicio**: `$workOrder->iniciar()` - Cambia estado, registra fecha
-3. **Checklist BEFORE**: Técnico completa inspección antes del trabajo
-4. **Trabajo**: Registra dispositivos, accesorios, fotos
-5. **Checklist AFTER**: Inspección post-trabajo
-6. **Firma Conformidad**: Cliente/conductor firma (requerida)
-7. **Finalizar**: `$workOrder->finalizar()` - Valida firma
-8. **Cerrar**: `$workOrder->cerrar()` - Bloquea edición permanentemente
-
-### Reglas de Negocio Críticas
-
-- No editar órdenes con `bloqueado = true`
-- Device History es **append-only**, nunca DELETE/UPDATE
-- Firmas guardadas como archivos PNG con hash SHA256
-- Fotos con metadata GPS del técnico
-- Usar `Storage::disk('private')` para firmas/fotos sensibles
-- Validar firma de conformidad antes de finalizar
-
-### Componentes Livewire
-
-- `Admin\WorkOrders\Create`: Modal de creación
-- `Admin\WorkOrders\Tabla`: Listado con filtros
-- `Admin\WorkOrders\Show`: Detalle completo con timeline
-- Patrón: Similar a módulo de Tareas pero con validaciones estrictas
-
-### Seeders
-
-```bash
-php artisan db:seed --class=WorkOrderTypeSeeder
-php artisan db:seed --class=ChecklistTemplateSeeder
-```
-
-### Diferencias con Módulo "Tareas"
-
-| Aspecto    | Tareas                              | Work Orders                         |
-| ---------- | ----------------------------------- | ----------------------------------- |
-| Propósito  | Notificaciones/asignaciones simples | Órdenes técnicas auditables         |
-| Checklist  | No tiene                            | Dinámico BEFORE/AFTER               |
-| Firmas     | No tiene                            | Digital con hash y metadata         |
-| Evidencias | Campo texto `imagen_url`            | Tabla completa con GPS              |
-| Historial  | No preserva cambios                 | Historial inmutable de dispositivos |
-| Bloqueo    | Soft delete                         | Campo `bloqueado` + estado          |
-
-## Idioma
-
-- **Localización**: Español (es) es el idioma principal
-- **Traducciones**: `lang/es.json` + `lang/es/` para validaciones Laravel
-- **Zona horaria**: America/Lima (Perú)
-
-## WireUI Components (Aliases)
-
-**IMPORTANTE**: Todos los componentes de WireUI en esta aplicación usan el prefijo `form.` en sus alias. Siempre usar estos alias configurados:
-
-### Componentes de Formulario
-
-**usar siempre para filtros y demas formularios**
-
-- `<x-form.input>` - Input de texto
-- `<x-form.textarea>` - Área de texto
-- `<x-form.select>` - Select con `<x-select.option>`
-- `<x-form.native.select>` - Select nativo HTML
-- `<x-form.checkbox>` - Checkbox
-- `<x-form.radio>` - Radio button
-- `<x-form.toggle>` - Switch/toggle
-- `<x-form.password>` - Input de contraseña
-- `<x-form.maskable>` - Input con máscara
-- `<x-form.number>` - Input numérico
-- `<x-form.currency>` - Input de moneda
-- `<x-form.phone>` - Input de teléfono
-- `<x-form.color.picker>` - Selector de color
-- `<x-form.datetime.picker>` - Date/time picker
-- `<x-form.time.picker>` - Time picker
-- `<x-form.time.selector>` - Time selector
-
-### Componentes de UI
-
-- `<x-form.button>` - Botón (flat, primary, secondary, negative, positive, warning)
-- `<x-form.mini.button>` - Botón mini
-- `<x-form.link>` - Enlace estilizado
-- `<x-form.card>` - Card/tarjeta
-- `<x-form.modal>` - Modal simple
-- `<x-form.modal.card>` - Modal con card integrado (preferido para formularios)
-- `<x-form.dropdown>` - Dropdown menu
-- `<x-form.dialog>` - Diálogo de confirmación
-- `<x-form.badge>` - Badge
-- `<x-form.mini.badge>` - Badge mini
-- `<x-form.avatar>` - Avatar de usuario
-- `<x-form.icon>` - Icono
-- `<x-form.alert>` - Alerta
-- `<x-form.errors>` - Errores de validación
-- `<x-form.notifications>` - Sistema de notificaciones
-
-### Ejemplos de Uso
-
-```blade
-{{-- Modal con formulario --}}
-<x-form.modal.card title="Crear Usuario" wire:model="showModal" blur max-width="2xl">
-    <x-form.input label="Nombre" wire:model="name" />
-    <x-form.select label="Estado" wire:model="status">
-        <x-select.option label="Activo" value="1" />
-        <x-select.option label="Inactivo" value="0" />
-    </x-form.select>
-
-    <x-slot name="footer">
-        <x-form.button flat label="Cancelar" wire:click="closeModal" />
-        <x-form.button primary label="Guardar" wire:click="save" />
-    </x-slot>
-</x-form.modal.card>
-
-{{-- Notificaciones desde Livewire --}}
-$this->notification()->success('Registro guardado correctamente');
-```
-
-### Reglas de Uso
-
-- **NUNCA** usar componentes HTML nativos (`<select>`, `<input>`, `<button>`) cuando exista alternativa de WireUI
-- **SIEMPRE** usar el prefijo `form.` en los componentes: `<x-form.button>` NO `<x-button>`
-- Para modales con formularios, preferir `<x-form.modal.card>` sobre `<x-form.modal>` + `<x-form.card>`
-- Usar trait `WireUiActions` en componentes Livewire para acceder a `$this->notification()`
-
-## Notas Importantes
-
-- **NO usar Alpine.js** directamente; Livewire 3 maneja reactividad
-- **TailwindCSS**: Configuración personalizada en `tailwind.config.js` con presets de WireUI y PowerGrid
-- **Vite**: Configurado para múltiples entry points (app.css/js + cliente.css/js)
-- **Storage**: Usar `Storage::disk('public')` y link simbólico ya creado
-- **HashIDs**: Vinkla/hashids para ofuscar IDs en URLs públicas
-- **Redis**: Obligatorio para colas y broadcasting (Pusher configurado)
-
-## Recursos
-
-- Documentación PowerGrid: https://livewire-powergrid.com
-- WireUI: https://livewire-wireui.com
-- Greenter (SUNAT): https://github.com/thegreenter/greenter
-
-===
-
-<laravel-boost-guidelines>
-=== foundation rules ===
-
-# Laravel Boost Guidelines
-
-The Laravel Boost guidelines are specifically curated by Laravel maintainers for this application. These guidelines should be followed closely to enhance the user's satisfaction building Laravel applications.
-
-## Foundational Context
-
-This application is a Laravel application and its main Laravel ecosystems package & versions are below. You are an expert with them all. Ensure you abide by these specific packages & versions.
-
-- php - 8.3.15
-- laravel/fortify (FORTIFY) - v1
-- laravel/framework (LARAVEL) - v12
-- laravel/prompts (PROMPTS) - v0
-- laravel/sanctum (SANCTUM) - v4
-- laravel/telescope (TELESCOPE) - v5
-- livewire/livewire (LIVEWIRE) - v3
-- laravel/mcp (MCP) - v0
-- laravel/sail (SAIL) - v1
-- phpunit/phpunit (PHPUNIT) - v11
-- tailwindcss (TAILWINDCSS) - v4
-- eslint (ESLINT) - v7
-- laravel-echo (ECHO) - v1
-
-## Conventions
-
-- You must follow all existing code conventions used in this application. When creating or editing a file, check sibling files for the correct structure, approach, and naming.
-- Use descriptive names for variables and methods. For example, `isRegisteredForDiscounts`, not `discount()`.
-- Check for existing components to reuse before writing a new one.
-
-## Verification Scripts
-
-- Do not create verification scripts or tinker when tests cover that functionality and prove it works. Unit and feature tests are more important.
-
-## Application Structure & Architecture
-
-- Stick to existing directory structure; don't create new base folders without approval.
-- Do not change the application's dependencies without approval.
-
-## Frontend Bundling
-
-- If the user doesn't see a frontend change reflected in the UI, it could mean they need to run `npm run build`, `npm run dev`, or `composer run dev`. Ask them.
-
-## Replies
-
-- Be concise in your explanations - focus on what's important rather than explaining obvious details.
-
-## Documentation Files
-
-- You must only create documentation files if explicitly requested by the user.
-
-=== boost rules ===
-
-## Laravel Boost
-
-- Laravel Boost is an MCP server that comes with powerful tools designed specifically for this application. Use them.
-
-## Artisan
-
-- Use the `list-artisan-commands` tool when you need to call an Artisan command to double-check the available parameters.
-
-## URLs
-
-- Whenever you share a project URL with the user, you should use the `get-absolute-url` tool to ensure you're using the correct scheme, domain/IP, and port.
-
-## Tinker / Debugging
-
-- You should use the `tinker` tool when you need to execute PHP to debug code or query Eloquent models directly.
-- Use the `database-query` tool when you only need to read from the database.
-
-## Reading Browser Logs With the `browser-logs` Tool
-
-- You can read browser logs, errors, and exceptions using the `browser-logs` tool from Boost.
-- Only recent browser logs will be useful - ignore old logs.
-
-## Searching Documentation (Critically Important)
-
-- Boost comes with a powerful `search-docs` tool you should use before any other approaches when dealing with Laravel or Laravel ecosystem packages. This tool automatically passes a list of installed packages and their versions to the remote Boost API, so it returns only version-specific documentation for the user's circumstance. You should pass an array of packages to filter on if you know you need docs for particular packages.
-- The `search-docs` tool is perfect for all Laravel-related packages, including Laravel, Inertia, Livewire, Filament, Tailwind, Pest, Nova, Nightwatch, etc.
-- You must use this tool to search for Laravel ecosystem documentation before falling back to other approaches.
-- Search the documentation before making code changes to ensure we are taking the correct approach.
-- Use multiple, broad, simple, topic-based queries to start. For example: `['rate limiting', 'routing rate limiting', 'routing']`.
-- Do not add package names to queries; package information is already shared. For example, use `test resource table`, not `filament 4 test resource table`.
-
-### Available Search Syntax
-
-- You can and should pass multiple queries at once. The most relevant results will be returned first.
-
-1. Simple Word Searches with auto-stemming - query=authentication - finds 'authenticate' and 'auth'.
-2. Multiple Words (AND Logic) - query=rate limit - finds knowledge containing both "rate" AND "limit".
-3. Quoted Phrases (Exact Position) - query="infinite scroll" - words must be adjacent and in that order.
-4. Mixed Queries - query=middleware "rate limit" - "middleware" AND exact phrase "rate limit".
-5. Multiple Queries - queries=["authentication", "middleware"] - ANY of these terms.
-
-=== php rules ===
-
-## PHP
-
-- Always use curly braces for control structures, even if it has one line.
-
-### Constructors
-
-- Use PHP 8 constructor property promotion in `__construct()`.
-    - <code-snippet>public function \_\_construct(public GitHub $github) { }</code-snippet>
-- Do not allow empty `__construct()` methods with zero parameters unless the constructor is private.
-
-### Type Declarations
-
-- Always use explicit return type declarations for methods and functions.
-- Use appropriate PHP type hints for method parameters.
-
-<code-snippet name="Explicit Return Types and Method Params" lang="php">
-protected function isAccessible(User $user, ?string $path = null): bool
-{
-    ...
-}
-</code-snippet>
-
-## Comments
-
-- Prefer PHPDoc blocks over inline comments. Never use comments within the code itself unless there is something very complex going on.
-
-## PHPDoc Blocks
-
-- Add useful array shape type definitions for arrays when appropriate.
-
-## Enums
-
-- Typically, keys in an Enum should be TitleCase. For example: `FavoritePerson`, `BestLake`, `Monthly`.
-
-=== herd rules ===
-
-## Laravel Herd
-
-- The application is served by Laravel Herd and will be available at: `https?://[kebab-case-project-dir].test`. Use the `get-absolute-url` tool to generate URLs for the user to ensure valid URLs.
-- You must not run any commands to make the site available via HTTP(S). It is always available through Laravel Herd.
-
-=== tests rules ===
-
-## Test Enforcement
-
-- Every change must be programmatically tested. Write a new test or update an existing test, then run the affected tests to make sure they pass.
-- Run the minimum number of tests needed to ensure code quality and speed. Use `php artisan test --compact` with a specific filename or filter.
-
-=== laravel/core rules ===
-
-## Do Things the Laravel Way
-
-- Use `php artisan make:` commands to create new files (i.e. migrations, controllers, models, etc.). You can list available Artisan commands using the `list-artisan-commands` tool.
-- If you're creating a generic PHP class, use `php artisan make:class`.
-- Pass `--no-interaction` to all Artisan commands to ensure they work without user input. You should also pass the correct `--options` to ensure correct behavior.
-
-### Database
-
-- Always use proper Eloquent relationship methods with return type hints. Prefer relationship methods over raw queries or manual joins.
-- Use Eloquent models and relationships before suggesting raw database queries.
-- Avoid `DB::`; prefer `Model::query()`. Generate code that leverages Laravel's ORM capabilities rather than bypassing them.
-- Generate code that prevents N+1 query problems by using eager loading.
-- Use Laravel's query builder for very complex database operations.
-
-### Model Creation
-
-- When creating new models, create useful factories and seeders for them too. Ask the user if they need any other things, using `list-artisan-commands` to check the available options to `php artisan make:model`.
-
-### APIs & Eloquent Resources
-
-- For APIs, default to using Eloquent API Resources and API versioning unless existing API routes do not, then you should follow existing application convention.
-
-### Controllers & Validation
-
-- Always create Form Request classes for validation rather than inline validation in controllers. Include both validation rules and custom error messages.
-- Check sibling Form Requests to see if the application uses array or string based validation rules.
-
-### Queues
-
-- Use queued jobs for time-consuming operations with the `ShouldQueue` interface.
-
-### Authentication & Authorization
-
-- Use Laravel's built-in authentication and authorization features (gates, policies, Sanctum, etc.).
-
-### URL Generation
-
-- When generating links to other pages, prefer named routes and the `route()` function.
-
-### Configuration
-
-- Use environment variables only in configuration files - never use the `env()` function directly outside of config files. Always use `config('app.name')`, not `env('APP_NAME')`.
-
-### Testing
-
-- When creating models for tests, use the factories for the models. Check if the factory has custom states that can be used before manually setting up the model.
-- Faker: Use methods such as `$this->faker->word()` or `fake()->randomDigit()`. Follow existing conventions whether to use `$this->faker` or `fake()`.
-- When creating tests, make use of `php artisan make:test [options] {name}` to create a feature test, and pass `--unit` to create a unit test. Most tests should be feature tests.
-
-### Vite Error
-
-- If you receive an "Illuminate\Foundation\ViteException: Unable to locate file in Vite manifest" error, you can run `npm run build` or ask the user to run `npm run dev` or `composer run dev`.
-
-=== laravel/v12 rules ===
-
-## Laravel 12
-
-- Use the `search-docs` tool to get version-specific documentation.
-- This project upgraded from Laravel 10 without migrating to the new streamlined Laravel file structure.
-- This is **perfectly fine** and recommended by Laravel. Follow the existing structure from Laravel 10. We do not need to migrate to the new Laravel structure unless the user explicitly requests it.
-
-### Laravel 10 Structure
-
-- Middleware typically lives in `app/Http/Middleware/` and service providers in `app/Providers/`.
-- There is no `bootstrap/app.php` application configuration in a Laravel 10 structure:
-    - Middleware registration happens in `app/Http/Kernel.php`
-    - Exception handling is in `app/Exceptions/Handler.php`
-    - Console commands and schedule register in `app/Console/Kernel.php`
-    - Rate limits likely exist in `RouteServiceProvider` or `app/Http/Kernel.php`
-
-### Database
-
-- When modifying a column, the migration must include all of the attributes that were previously defined on the column. Otherwise, they will be dropped and lost.
-- Laravel 12 allows limiting eagerly loaded records natively, without external packages: `$query->latest()->limit(10);`.
-
-### Models
-
-- Casts can and likely should be set in a `casts()` method on a model rather than the `$casts` property. Follow existing conventions from other models.
-
-=== livewire/core rules ===
-
-## Livewire
-
-- Use the `search-docs` tool to find exact version-specific documentation for how to write Livewire and Livewire tests.
-- Use the `php artisan make:livewire [Posts\CreatePost]` Artisan command to create new components.
-- State should live on the server, with the UI reflecting it.
-- All Livewire requests hit the Laravel backend; they're like regular HTTP requests. Always validate form data and run authorization checks in Livewire actions.
-
-## Livewire Best Practices
-
-- Livewire components require a single root element.
-- Use `wire:loading` and `wire:dirty` for delightful loading states.
-- Add `wire:key` in loops:
-
-    ```blade
-    @foreach ($items as $item)
-        <div wire:key="item-{{ $item->id }}">
-            {{ $item->name }}
-        </div>
-    @endforeach
-    ```
-
-- Prefer lifecycle hooks like `mount()`, `updatedFoo()` for initialization and reactive side effects:
-
-<code-snippet name="Lifecycle Hook Examples" lang="php">
-    public function mount(User $user) { $this->user = $user; }
-    public function updatedSearch() { $this->resetPage(); }
-</code-snippet>
-
-## Testing Livewire
-
-<code-snippet name="Example Livewire Component Test" lang="php">
-    Livewire::test(Counter::class)
-        ->assertSet('count', 0)
-        ->call('increment')
-        ->assertSet('count', 1)
-        ->assertSee(1)
-        ->assertStatus(200);
-</code-snippet>
-
-<code-snippet name="Testing Livewire Component Exists on Page" lang="php">
-    $this->get('/posts/create')
-    ->assertSeeLivewire(CreatePost::class);
-</code-snippet>
-
-=== livewire/v3 rules ===
-
-## Livewire 3
-
-### Key Changes From Livewire 2
-
-- These things changed in Livewire 3, but may not have been updated in this application. Verify this application's setup to ensure you conform with application conventions.
-    - Use `wire:model.live` for real-time updates, `wire:model` is now deferred by default.
-    - Components now use the `App\Livewire` namespace (not `App\Http\Livewire`).
-    - Use `$this->dispatch()` to dispatch events (not `emit` or `dispatchBrowserEvent`).
-    - Use the `components.layouts.app` view as the typical layout path (not `layouts.app`).
-
-### New Directives
-
-- `wire:show`, `wire:transition`, `wire:cloak`, `wire:offline`, `wire:target` are available for use. Use the documentation to find usage examples.
-
-### Alpine
-
-- Alpine is now included with Livewire; don't manually include Alpine.js.
-- Plugins included with Alpine: persist, intersect, collapse, and focus.
-
-### Lifecycle Hooks
-
-- You can listen for `livewire:init` to hook into Livewire initialization, and `fail.status === 419` for the page expiring:
-
-<code-snippet name="Livewire Init Hook Example" lang="js">
-document.addEventListener('livewire:init', function () {
-    Livewire.hook('request', ({ fail }) => {
-        if (fail && fail.status === 419) {
-            alert('Your session expired');
-        }
-    });
-
-    Livewire.hook('message.failed', (message, component) => {
-        console.error(message);
-    });
-
-});
-</code-snippet>
-
-=== phpunit/core rules ===
-
-## PHPUnit
-
-- This application uses PHPUnit for testing. All tests must be written as PHPUnit classes. Use `php artisan make:test --phpunit {name}` to create a new test.
-- If you see a test using "Pest", convert it to PHPUnit.
-- Every time a test has been updated, run that singular test.
-- When the tests relating to your feature are passing, ask the user if they would like to also run the entire test suite to make sure everything is still passing.
-- Tests should test all of the happy paths, failure paths, and weird paths.
-- You must not remove any tests or test files from the tests directory without approval. These are not temporary or helper files; these are core to the application.
-
-### Running Tests
-
-- Run the minimal number of tests, using an appropriate filter, before finalizing.
-- To run all tests: `php artisan test --compact`.
-- To run all tests in a file: `php artisan test --compact tests/Feature/ExampleTest.php`.
-- To filter on a particular test name: `php artisan test --compact --filter=testName` (recommended after making a change to a related file).
-
-=== tailwindcss/core rules ===
-
-## Tailwind CSS
-
-- Use Tailwind CSS classes to style HTML; check and use existing Tailwind conventions within the project before writing your own.
-- Offer to extract repeated patterns into components that match the project's conventions (i.e. Blade, JSX, Vue, etc.).
-- Think through class placement, order, priority, and defaults. Remove redundant classes, add classes to parent or child carefully to limit repetition, and group elements logically.
-- You can use the `search-docs` tool to get exact examples from the official documentation when needed.
-
-### Spacing
-
-- When listing items, use gap utilities for spacing; don't use margins.
-
-<code-snippet name="Valid Flex Gap Spacing Example" lang="html">
-    <div class="flex gap-8">
-        <div>Superior</div>
-        <div>Michigan</div>
-        <div>Erie</div>
-    </div>
-</code-snippet>
-
-### Dark Mode
-
-- If existing pages and components support dark mode, new pages and components must support dark mode in a similar way, typically using `dark:`.
-
-=== tailwindcss/v4 rules ===
-
-## Tailwind CSS 4
-
-- Always use Tailwind CSS v4; do not use the deprecated utilities.
-- `corePlugins` is not supported in Tailwind v4.
-- In Tailwind v4, configuration is CSS-first using the `@theme` directive — no separate `tailwind.config.js` file is needed.
-
-<code-snippet name="Extending Theme in CSS" lang="css">
-@theme {
-  --color-brand: oklch(0.72 0.11 178);
-}
-</code-snippet>
-
-- In Tailwind v4, you import Tailwind using a regular CSS `@import` statement, not using the `@tailwind` directives used in v3:
-
-<code-snippet name="Tailwind v4 Import Tailwind Diff" lang="diff">
-   - @tailwind base;
-   - @tailwind components;
-   - @tailwind utilities;
-   + @import "tailwindcss";
-</code-snippet>
-
-### Replaced Utilities
-
-- Tailwind v4 removed deprecated utilities. Do not use the deprecated option; use the replacement.
-- Opacity values are still numeric.
-
-| Deprecated | Replacement |
-|------------+--------------|
-| bg-opacity-_ | bg-black/_ |
-| text-opacity-_ | text-black/_ |
-| border-opacity-_ | border-black/_ |
-| divide-opacity-_ | divide-black/_ |
-| ring-opacity-_ | ring-black/_ |
-| placeholder-opacity-_ | placeholder-black/_ |
-| flex-shrink-_ | shrink-_ |
-| flex-grow-_ | grow-_ |
-| overflow-ellipsis | text-ellipsis |
-| decoration-slice | box-decoration-slice |
-| decoration-clone | box-decoration-clone |
-</laravel-boost-guidelines>
+## Helpers globales (`app/helpers.php`)
+- `tipo_cambio($fecha, 'venta'|'compra')` — obtiene el tipo de cambio PEN/USD consultando `FactilizaService` con caché de 6 horas.
+
+---
+
+## Variables de entorno relevantes
+- `APP_URL`, `APP_ENV`, `APP_DEBUG`
+- `DB_*` — conexión MySQL
+- `BROADCAST_DRIVER=pusher`, `PUSHER_*`
+- `FIREBASE_*` — credenciales Firebase
+- `FACTILIZA_*` — API de facturación
+- `GPSWOX_*` — API GPS Wox
+- `WHATSAPP_TOKEN`, `WHATSAPP_PHONE_NUMBER_ID`
+- `HASHIDS_SALT`, `HASHIDS_LENGTH`
+
+---
+
+## Notas importantes
+- El sistema opera bajo legislación **peruana**; los comprobantes siguen el formato UBL 2.1 exigido por SUNAT.
+- Las fechas usan zona horaria `America/Lima`.
+- Moneda principal: **PEN (Soles)**; soporte secundario para USD con tipo de cambio (`TipoCambio`).
+- Los dispositivos GPS se sincronizan con la plataforma Wox; no modificar la lógica de `DeviceHistory` sin revisar el observer correspondiente.

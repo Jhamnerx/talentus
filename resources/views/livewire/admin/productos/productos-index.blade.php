@@ -97,6 +97,9 @@
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">STOCK</div>
                             </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">COBROS</div>
+                            </th>
                             @can('cambiar.estado-producto')
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">ESTADO</div>
@@ -141,6 +144,16 @@
                                     <div class="text-left text-slate-800 dark:text-gray-100">
                                         {{ $producto->tipo == 'producto' ? $producto->stock . ' ' . $producto->unit->name : 'servicio' }}
                                     </div>
+                                </td>
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @if ($producto->es_servicio_cobro)
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-300 ring-1 ring-inset ring-emerald-500/30">
+                                            💳 Facturación
+                                        </span>
+                                    @else
+                                        <span class="text-gray-300 dark:text-gray-600 text-xs">&mdash;</span>
+                                    @endif
                                 </td>
                                 @can('cambiar.estado-producto')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

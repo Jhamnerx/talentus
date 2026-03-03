@@ -126,19 +126,21 @@
                         </x-form.select>
                     </div>
 
-                    {{-- ✅ NUEVO: Destino del Pago --}}
+                    {{-- ✅ Destino del Pago (Caja o Cuenta Bancaria) - Patrón PaymentDestinationHelper --}}
                     <div class="col-span-12 sm:col-span-6">
-                        <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
-                            placeholder="Seleccione destino">
-                            @if (count($availableCashes) > 0)
-                                <x-select.option label="💰 Caja" value="cash" />
-                            @endif
-                            @foreach ($bankAccounts as $account)
-                                <x-select.option
-                                    label="🏦 {{ $account->description }} - {{ $account->currency_name }}"
-                                    value="{{ $account->id }}" />
-                            @endforeach
-                        </x-form.select>
+                        @if ($this->paymentDestinations && $this->paymentDestinations->isNotEmpty())
+                            <x-form.select label="Destino del Pago" wire:model.defer="payment_destination_id"
+                                :options="$this->paymentDestinations->toArray()" option-label="description" option-value="id"
+                                placeholder="Seleccione destino" />
+                            <p class="text-xs text-gray-500 mt-1">
+                                Seleccione si el dinero va a Caja o a una Cuenta Bancaria específica
+                            </p>
+                        @else
+                            <x-form.input label="Destino del Pago" value="Sin destinos disponibles" readonly disabled />
+                            <p class="text-xs text-red-500 mt-1">
+                                ⚠️ No hay cajas abiertas ni cuentas bancarias activas
+                            </p>
+                        @endif
                     </div>
 
                     {{-- AUTO RENOVAR --}}

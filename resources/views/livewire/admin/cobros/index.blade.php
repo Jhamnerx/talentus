@@ -7,13 +7,15 @@
                 <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">Cobros Recurrentes 💰</h1>
             </div>
             <div class="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                <button wire:click="clearFilters" class="btn bg-red-500 hover:bg-red-600 text-white">
-                    <svg class="w-4 h-4 fill-current shrink-0 " viewBox="0 0 16 16">
-                        <path
-                            d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
-                    </svg>
-                    <span class="ml-2">Limpiar</span>
-                </button>
+                @if ($estado !== null || $filtroFecha || $filtroVencimiento || $clienteId || $search)
+                    <button wire:click="clearFilters" class="btn bg-red-500 hover:bg-red-600 text-white">
+                        <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 16 16">
+                            <path
+                                d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
+                        </svg>
+                        <span class="ml-2">Limpiar</span>
+                    </button>
+                @endif
                 @can('admin.cobros.create')
                     <a href="{{ route('admin.cobros.create') }}">
                         <button
@@ -349,9 +351,6 @@
                                     <div class="font-semibold text-left">Suscripción</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Vencimiento</div>
-                                </th>
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Días Rest.</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -519,22 +518,6 @@
                                             @else
                                                 <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
                                             @endif
-                                        @endif
-                                    </td>
-
-                                    <!-- Vencimiento -->
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        @if ($detalle->estado == 1)
-                                            <div class="font-medium {{ $textColor }}">
-                                                {{ $fechaVencimiento->format('d/m/Y') }}
-                                            </div>
-                                            @if ($diasRestantes < 0)
-                                                <div class="text-xs {{ $textColor }} font-bold mt-1">
-                                                    {{ $diasTexto }}
-                                                </div>
-                                            @endif
-                                        @else
-                                            <span class="text-gray-400 dark:text-gray-500 text-sm">-</span>
                                         @endif
                                     </td>
 

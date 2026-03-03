@@ -136,7 +136,7 @@ class Save extends Component
             );
         } else {
             // Validar que el vehículo no tenga ya un detalle de cobro activo
-            $yaRegistrado = \App\Models\DetalleCobros::where('vehiculos_id', $vehiculo->id)
+            $yaRegistrado = \App\Models\DetalleCobros::where('vehiculo_id', $vehiculo->id)
                 ->where('estado', 1)
                 ->whereHas('cobro', fn($q) => $q->whereNull('deleted_at'))
                 ->exists();

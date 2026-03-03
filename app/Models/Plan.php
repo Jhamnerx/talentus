@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Scopes\EmpresaScope;
+use App\Observers\PlanObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravelcm\Subscriptions\Models\Plan as BasePlan;
 
+#[ObservedBy(PlanObserver::class)]
 class Plan extends BasePlan
 {
     protected $fillable = [

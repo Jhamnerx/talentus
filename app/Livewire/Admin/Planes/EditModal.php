@@ -5,15 +5,18 @@ namespace App\Livewire\Admin\Planes;
 use App\Models\Plan;
 use App\Models\Productos;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 use Livewire\Attributes\On;
 
 class EditModal extends Component
 {
+    use WireUiActions;
+
     public $modalEdit = false;
     public ?Plan $plan = null;
 
     // Campos del plan
-    public $name_es, $name_en, $slug, $description_es, $description_en;
+    public $name, $slug, $description;
     public $is_active;
     public $price, $signup_fee, $currency;
     public $trial_period, $trial_interval;
@@ -22,16 +25,13 @@ class EditModal extends Component
     public $prorate_day, $prorate_period, $prorate_extend_due;
     public $active_subscribers_limit;
     public $sort_order;
-    public $producto_id;
 
     // Catálogos
-    public $productos = [];
     public $intervals = [];
     public $currencies = ['PEN', 'USD'];
 
     public function mount()
     {
-        $this->loadProductos();
         $this->intervals = [
             'day' => 'Día(s)',
             'week' => 'Semana(s)',
@@ -50,14 +50,11 @@ class EditModal extends Component
     {
         $this->resetValidation();
         $this->plan = $plan;
-        $this->loadProductos();
 
         // Cargar datos del plan
-        $this->name_es = $plan->name['es'] ?? '';
-        $this->name_en = $plan->name['en'] ?? '';
+        $this->name = is_array($plan->name) ? ($plan->name['es'] ?? $plan->name['en'] ?? '') : ($plan->name ?? '');
         $this->slug = $plan->slug;
-        $this->description_es = $plan->description['es'] ?? '';
-        $this->description_en = $plan->description['en'] ?? '';
+        $this->description = is_array($plan->description) ? ($plan->description['es'] ?? $plan->description['en'] ?? '') : ($plan->description ?? '');
         $this->is_active = $plan->is_active;
         $this->price = $plan->price;
         $this->signup_fee = $plan->signup_fee;
@@ -73,7 +70,6 @@ class EditModal extends Component
         $this->prorate_extend_due = $plan->prorate_extend_due;
         $this->active_subscribers_limit = $plan->active_subscribers_limit;
         $this->sort_order = $plan->sort_order;
-        $this->producto_id = $plan->producto_id;
 
         $this->modalEdit = true;
     }
@@ -84,17 +80,8 @@ class EditModal extends Component
         $this->resetProp();
     }
 
-    public function loadProductos()
+    public function updatedName($value)
     {
-        $this->productos = Productos::where('tipo', 'servicio')
-            ->where('es_servicio_cobro', true)
-            ->where('estado', true)
-            ->get();
-    }
-
-    public function updatedNameEs($value)
-    {
-        // Actualizar slug solo si está vacío
         if (empty($this->slug)) {
             $this->slug = \Illuminate\Support\Str::slug($value);
         }
@@ -103,11 +90,8 @@ class EditModal extends Component
     public function update()
     {
         $validated = $this->validate([
-            'name_es' => 'required|string|max:255',
-            'name_en' => 'nullable|string|max:255',
-            'slug' => 'required|string|unique:plans,slug,' . $this->plan->id,
-            'description_es' => 'nullable|string',
-            'description_en' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
             'signup_fee' => 'nullable|numeric|min:0',
@@ -123,29 +107,19 @@ class EditModal extends Component
             'prorate_extend_due' => 'nullable|integer|min:0',
             'active_subscribers_limit' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer|min:0',
-            'producto_id' => 'nullable|exists:productos,id',
         ], [
-            'name_es.required' => 'El nombre en español es obligatorio',
-            'slug.required' => 'El slug es obligatorio',
-            'slug.unique' => 'Este slug ya está en uso',
+            'name.required' => 'El nombre es obligatorio',
             'price.required' => 'El precio es obligatorio',
             'price.min' => 'El precio debe ser mayor o igual a 0',
             'invoice_period.required' => 'El periodo de facturación es obligatorio',
             'invoice_period.min' => 'El periodo debe ser al menos 1',
-            'producto_id.exists' => 'El producto seleccionado no existe',
         ]);
 
         try {
             $this->plan->update([
-                'name' => [
-                    'es' => $this->name_es,
-                    'en' => $this->name_en ?? $this->name_es,
-                ],
+                'name' => $this->name,
                 'slug' => $this->slug,
-                'description' => [
-                    'es' => $this->description_es,
-                    'en' => $this->description_en ?? $this->description_es,
-                ],
+                'description' => $this->description,
                 'is_active' => $this->is_active,
                 'price' => $this->price,
                 'signup_fee' => $this->signup_fee ?? 0,
@@ -161,13 +135,13 @@ class EditModal extends Component
                 'prorate_extend_due' => $this->prorate_extend_due,
                 'active_subscribers_limit' => $this->active_subscribers_limit,
                 'sort_order' => $this->sort_order ?? 0,
-                'producto_id' => $this->producto_id,
+                'producto_id' => Productos::where('es_servicio_cobro', true)->value('id'),
             ]);
 
             $this->closeModal();
             $this->notification()->success(
                 title: 'PLAN ACTUALIZADO',
-                description: 'El plan ' . $this->plan->name['es'] . ' fue actualizado correctamente'
+                description: 'El plan ' . $this->plan->name . ' fue actualizado correctamente'
             );
             $this->dispatch('plan-saved');
             $this->resetProp();
@@ -182,11 +156,9 @@ class EditModal extends Component
     public function resetProp()
     {
         $this->reset([
-            'name_es',
-            'name_en',
+            'name',
             'slug',
-            'description_es',
-            'description_en',
+            'description',
             'is_active',
             'price',
             'signup_fee',
@@ -202,7 +174,6 @@ class EditModal extends Component
             'prorate_extend_due',
             'active_subscribers_limit',
             'sort_order',
-            'producto_id',
             'plan'
         ]);
     }

@@ -2,10 +2,6 @@
 
     <!-- Table -->
     @livewire('admin.cobros.index')
-    {{-- delete --}}
-    @livewire('admin.cobros.delete')
-
-    @livewire('admin.cobros.create-invoice')
 
     @if (session('store'))
         <script>

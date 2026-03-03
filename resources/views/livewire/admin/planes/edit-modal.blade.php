@@ -1,6 +1,7 @@
 <div>
-    <x-form.modal.card title="Editar Plan: {{ $plan?->name['es'] ?? 'Plan' }}" wire:model.live="modalEdit" width="6xl"
-        align="center">
+    <x-form.modal.card
+        title="Editar Plan: {{ is_array($plan?->name) ? $plan->name['es'] ?? 'Plan' : $plan?->name ?? 'Plan' }}"
+        wire:model.live="modalEdit" width="6xl" align="center">
         <div class="space-y-6">
 
             <!-- Información Básica -->
@@ -8,20 +9,12 @@
                 <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">📋 Información Básica</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="md:col-span-2">
-                        <x-form.input label="Nombre (Español) *" wire:model.live="name_es" placeholder="Ej: Plan Pro" />
+                        <x-form.input label="Nombre *" wire:model.live="name" placeholder="Ej: Plan Pro" />
                     </div>
-                    <x-form.input label="Nombre (Inglés)" wire:model.live="name_en" placeholder="Ej: Pro Plan" />
-                    <x-form.input label="Slug *" wire:model.live="slug" placeholder="plan-pro" />
-                    <x-form.textarea label="Descripción (Español)" wire:model.live="description_es"
-                        placeholder="Descripción del plan" rows="2" />
-                    <x-form.textarea label="Descripción (Inglés)" wire:model.live="description_en"
-                        placeholder="Plan description" rows="2" />
-                    <x-form.select label="Producto Asociado" wire:model.live="producto_id"
-                        placeholder="Seleccionar producto">
-                        @foreach ($productos as $producto)
-                            <x-select.option label="{{ $producto->descripcion }}" value="{{ $producto->id }}" />
-                        @endforeach
-                    </x-form.select>
+                    <div class="md:col-span-2">
+                        <x-form.textarea label="Descripción" wire:model.live="description"
+                            placeholder="Descripción del plan" rows="2" />
+                    </div>
                     <div class="flex items-center">
                         <x-form.toggle label="Plan Activo" wire:model.live="is_active" />
                     </div>

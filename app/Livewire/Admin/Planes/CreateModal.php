@@ -6,13 +6,16 @@ use App\Models\Plan;
 use App\Models\Productos;
 use Livewire\Component;
 use Livewire\Attributes\On;
+use WireUi\Traits\WireUiActions;
 
 class CreateModal extends Component
 {
+    use WireUiActions;
+
     public $modalCreate = false;
 
     // Campos del plan
-    public $name_es, $name_en, $slug, $description_es, $description_en;
+    public $name, $slug, $description;
     public $is_active = true;
     public $price = 0, $signup_fee = 0, $currency = 'PEN';
     public $trial_period = 0, $trial_interval = 'day';
@@ -21,16 +24,13 @@ class CreateModal extends Component
     public $prorate_day, $prorate_period, $prorate_extend_due;
     public $active_subscribers_limit;
     public $sort_order = 0;
-    public $producto_id;
 
     // Catálogos
-    public $productos = [];
     public $intervals = [];
     public $currencies = ['PEN', 'USD'];
 
     public function mount()
     {
-        $this->loadProductos();
         $this->intervals = [
             'day' => 'Día(s)',
             'week' => 'Semana(s)',
@@ -49,7 +49,6 @@ class CreateModal extends Component
     {
         $this->resetValidation();
         $this->resetProp();
-        $this->loadProductos();
         $this->modalCreate = true;
     }
 
@@ -59,28 +58,16 @@ class CreateModal extends Component
         $this->resetProp();
     }
 
-    public function loadProductos()
+    public function updatedName($value)
     {
-        $this->productos = Productos::where('tipo', 'servicio')
-            ->where('es_servicio_cobro', true)
-            ->where('estado', true)
-            ->get();
-    }
-
-    public function updatedNameEs($value)
-    {
-        // Generar slug automáticamente desde el nombre en español
         $this->slug = \Illuminate\Support\Str::slug($value);
     }
 
     public function save()
     {
         $validated = $this->validate([
-            'name_es' => 'required|string|max:255',
-            'name_en' => 'nullable|string|max:255',
-            'slug' => 'required|string|unique:plans,slug',
-            'description_es' => 'nullable|string',
-            'description_en' => 'nullable|string',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
             'signup_fee' => 'nullable|numeric|min:0',
@@ -96,29 +83,19 @@ class CreateModal extends Component
             'prorate_extend_due' => 'nullable|integer|min:0',
             'active_subscribers_limit' => 'nullable|integer|min:0',
             'sort_order' => 'nullable|integer|min:0',
-            'producto_id' => 'nullable|exists:productos,id',
         ], [
-            'name_es.required' => 'El nombre en español es obligatorio',
-            'slug.required' => 'El slug es obligatorio',
-            'slug.unique' => 'Este slug ya está en uso',
+            'name.required' => 'El nombre es obligatorio',
             'price.required' => 'El precio es obligatorio',
             'price.min' => 'El precio debe ser mayor o igual a 0',
             'invoice_period.required' => 'El periodo de facturación es obligatorio',
             'invoice_period.min' => 'El periodo debe ser al menos 1',
-            'producto_id.exists' => 'El producto seleccionado no existe',
         ]);
 
         try {
             $plan = Plan::create([
-                'name' => [
-                    'es' => $this->name_es,
-                    'en' => $this->name_en ?? $this->name_es,
-                ],
+                'name' => $this->name,
                 'slug' => $this->slug,
-                'description' => [
-                    'es' => $this->description_es,
-                    'en' => $this->description_en ?? $this->description_es,
-                ],
+                'description' => $this->description,
                 'is_active' => $this->is_active,
                 'price' => $this->price,
                 'signup_fee' => $this->signup_fee ?? 0,
@@ -134,13 +111,13 @@ class CreateModal extends Component
                 'prorate_extend_due' => $this->prorate_extend_due,
                 'active_subscribers_limit' => $this->active_subscribers_limit,
                 'sort_order' => $this->sort_order ?? 0,
-                'producto_id' => $this->producto_id,
+                'producto_id' => Productos::where('es_servicio_cobro', true)->value('id'),
             ]);
 
             $this->closeModal();
             $this->notification()->success(
                 title: 'PLAN CREADO',
-                description: 'El plan ' . $plan->name['es'] . ' fue creado correctamente'
+                description: 'El plan ' . $plan->name . ' fue creado correctamente'
             );
             $this->dispatch('plan-saved');
             $this->resetProp();
@@ -155,11 +132,9 @@ class CreateModal extends Component
     public function resetProp()
     {
         $this->reset([
-            'name_es',
-            'name_en',
+            'name',
             'slug',
-            'description_es',
-            'description_en',
+            'description',
             'is_active',
             'price',
             'signup_fee',
@@ -175,7 +150,6 @@ class CreateModal extends Component
             'prorate_extend_due',
             'active_subscribers_limit',
             'sort_order',
-            'producto_id'
         ]);
         $this->is_active = true;
         $this->price = 0;

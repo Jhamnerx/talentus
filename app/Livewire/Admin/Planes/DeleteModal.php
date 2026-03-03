@@ -4,10 +4,13 @@ namespace App\Livewire\Admin\Planes;
 
 use App\Models\Plan;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 use Livewire\Attributes\On;
 
 class DeleteModal extends Component
 {
+    use WireUiActions;
+
     public $modalDelete = false;
     public ?Plan $plan = null;
 

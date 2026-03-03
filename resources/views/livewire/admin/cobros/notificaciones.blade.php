@@ -24,7 +24,7 @@
         <!-- Tarjetas de estadísticas -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <!-- Pendientes -->
-            <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-5">
+            <div class="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-blue-100 text-sm font-medium">Pendientes</p>
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Vencidos -->
-            <div class="bg-gradient-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-5">
+            <div class="bg-linear-to-br from-red-500 to-red-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-red-100 text-sm font-medium">Vencidos</p>
@@ -56,7 +56,7 @@
             </div>
 
             <!-- Para Hoy -->
-            <div class="bg-gradient-to-br from-amber-500 to-amber-600 rounded-lg shadow-lg p-5">
+            <div class="bg-linear-to-br from-amber-500 to-amber-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-amber-100 text-sm font-medium">Para Hoy</p>
@@ -72,7 +72,7 @@
             </div>
 
             <!-- Monto Total -->
-            <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-lg p-5">
+            <div class="bg-linear-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-emerald-100 text-sm font-medium">Monto Pendiente</p>
