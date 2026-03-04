@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
 use App\Helpers\PaymentDestinationHelper;
 use App\Models\NotificacionCobro;
+use Livewire\Attributes\Computed;
 
 class Create extends Component
 {
@@ -36,8 +37,6 @@ class Create extends Component
     public $product_selected_id;
 
     public Collection $detalle_cuotas;
-    public Collection $payment_destinations;
-    public ?Collection $payment_methods = null;
     public Collection $pagos_detalle;
 
 
@@ -66,17 +65,6 @@ class Create extends Component
             $this->tipo_cambio = 3.80;
         }
 
-        // Cargar destinos de pago (Caja + Cuentas Bancarias)
-        $this->payment_destinations = PaymentDestinationHelper::getPaymentDestinations();
-
-        // Cargar métodos de pago desde catálogo
-        $this->payment_methods = PaymentMethodType::where('active', true)
-            ->get()
-            ->map(fn($method) => [
-                'id' => $method->id,
-                'name' => $method->description,
-            ]);
-
         // Inicializar pagos_detalle con un pago por defecto
         $this->pagos_detalle = collect([[
             'metodo_pago_id' => '009',
@@ -98,7 +86,9 @@ class Create extends Component
 
         // Asignar cliente y contexto
         if ($notificacion_ids) {
-            $ids       = is_array($notificacion_ids) ? $notificacion_ids : $notificacion_ids;
+            $ids = is_array($notificacion_ids)
+                ? $notificacion_ids
+                : (json_decode($notificacion_ids, true) ?? []);
             $firstNotif = NotificacionCobro::with(['cobro', 'cliente'])->find(
                 is_array($ids) ? $ids[0] : $ids
             );
@@ -125,9 +115,25 @@ class Create extends Component
         }
     }
 
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
+    }
+
+    #[Computed]
+    public function paymentMethods()
+    {
+        return PaymentMethodType::where('active', true)
+            ->get()
+            ->map(fn($method) => [
+                'id' => $method->id,
+                'name' => $method->description,
+            ]);
+    }
+
     public function render()
     {
-
         return view('livewire.admin.ventas.recibos.create');
     }
 
@@ -165,14 +171,14 @@ class Create extends Component
         }
     }
     /**
-     * Procesa items desde NotificacionCobro (nuevo flujo preferido).
-     * Para recibos: el monto ya no lleva IGV, valor_unitario = monto total.
+     * Procesa items desde NotificacionCobro.
+     * Para recibos: sin IGV, valor_unitario = monto total (exonerado).
      */
     public function procesarItemsDesdeNotificaciones(array $notificacionIds): void
     {
         $notificaciones = NotificacionCobro::with([
             'detalleCobro.planModel',
-            'cobro.producto',
+            'cobro.producto.unit',
             'vehiculo',
         ])->whereIn('id', $notificacionIds)->get();
 
@@ -187,6 +193,7 @@ class Create extends Component
 
             $montoTotal = (float) $notificacion->monto;
 
+            // Construir descripción con periodo (igual que Emitir.php)
             $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
             $periodoTexto = match (strtoupper((string) $periodo)) {
                 'BIMENSUAL'  => '2 meses',
@@ -203,7 +210,7 @@ class Create extends Component
             $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
 
             $this->items->push([
-                'producto_id' => $producto->id,
+                'producto_id' => $cobro->producto_id,
                 'producto'    => $producto->descripcion,
                 'descripcion' => $descripcion,
                 'cantidad'    => 1,

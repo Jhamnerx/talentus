@@ -121,7 +121,7 @@
         </header>
         <div>
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">>
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full dark:text-gray-300">
                     <thead
                         class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">

@@ -1,7 +1,7 @@
-<div class="overflow-x-auto min-h-screen">>
+<div class="overflow-x-auto">
     <table class="w-full">
         <!-- Table header -->
-        <thead class="text-xs font-semibold uppercase text-white bg-slate-800  border-t border-b border-slate-200">
+        <thead class="text-xs font-semibold uppercase text-white bg-slate-700 dark:bg-gray-900 border-t border-b border-slate-200 dark:border-gray-600">
             <tr>
                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <div class="font-semibold text-left">Artículo o Servicio</div>
@@ -26,10 +26,10 @@
             </tr>
         </thead>
         <!-- Table body -->
-        <tbody class="text-sm divide-y divide-slate-200 listaItems">
+        <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-600 listaItems">
 
-            <!-- Row -->
-            <tr class="main bg-sky-100">
+            {{-- FILA DE NUEVO ÍTEM (edición) --}}
+            <tr class="main bg-cyan-50 dark:bg-cyan-900/20 border-l-4 border-cyan-400 dark:border-cyan-500">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                     <x-form.textarea required wire:model.live="selected.producto" />
@@ -75,10 +75,10 @@
                     Debes añadir al menos 1 item
                 </p>
             </tr>
-            {{-- fila para añadir --}}
+            {{-- filas de ítems ya añadidos --}}
             @if ($items->count() > 0)
             @foreach ($items->all() as $clave => $item)
-            <tr wire:key="item-{{ $clave }}">
+            <tr wire:key="item-{{ $clave }}" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                     <x-form.textarea required wire:model.live="items.{{ $clave }}.producto" />
@@ -93,7 +93,7 @@
                         placeholder="Cantidad" />
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-800 dark:text-gray-200">
                         {{ $items[$clave]['precio'] }}
                     </div>
 
@@ -104,7 +104,7 @@
                     @endif
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                    <div class="font-normal text-center">
+                    <div class="font-normal text-center text-gray-800 dark:text-gray-200">
                         {{ $items[$clave]['total'] }}
                     </div>
 

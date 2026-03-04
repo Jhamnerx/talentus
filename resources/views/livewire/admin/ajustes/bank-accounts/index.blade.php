@@ -29,7 +29,7 @@
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60">
-        <div class="overflow-x-auto min-h-screen">>
+        <div class="overflow-x-auto min-h-screen">
             <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20">
                     <tr>

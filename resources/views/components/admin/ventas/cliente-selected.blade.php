@@ -1,4 +1,4 @@
-<div class="col-span-12 bg-white shadow-lg rounded-sm border border-slate-200">
+<div class="col-span-12 bg-white dark:bg-gray-800 shadow-lg rounded-sm border border-slate-200 dark:border-gray-600">
     <div class="flex flex-col h-full">
         <!-- Card top -->
         <div class="grow p-5">
@@ -7,28 +7,26 @@
                 <header>
                     <div class="flex mb-2">
                         <a class="relative inline-flex items-start mr-5" href="#0">
-
                             <img class="rounded-full" src="{{ asset('images/user-64-10.jpg') }}" width="64"
                                 height="64" alt="User 01" />
                         </a>
                         <div class="mt-1 pr-1">
-                            <a class="inline-flex text-slate-800 hover:text-slate-900" href="#0">
+                            <a class="inline-flex text-slate-800 dark:text-slate-100 hover:text-slate-900 dark:hover:text-white" href="#0">
                                 <h2 class="text-xl leading-snug justify-center font-semibold">
                                     {{ $cliente->razon_social }}</h2>
                             </a>
-                            <div class="flex items-center"><span
-                                    class="text-sm font-medium text-slate-400 -mt-0.5 mr-1">-&gt;</span>
-                                <span>{{ $cliente->direccion }}</span>
+                            <div class="flex items-center">
+                                <span class="text-sm font-medium text-slate-400 dark:text-slate-500 -mt-0.5 mr-1">-&gt;</span>
+                                <span class="text-sm text-slate-600 dark:text-slate-300">{{ $cliente->direccion }}</span>
                             </div>
                         </div>
                     </div>
                 </header>
                 <div class="relative inline-flex shrink-0">
                     <button wire:click.prevent="unselectCliente" type="button"
-                        class="text-slate-400 hover:text-slate-500 rounded-full"
-                        :class="{ 'bg-slate-100 text-slate-500': open }" aria-haspopup="true">
+                        class="text-slate-400 hover:text-slate-500 dark:text-slate-500 dark:hover:text-slate-300 rounded-full"
+                        :class="{ 'bg-slate-100 dark:bg-gray-700 text-slate-500': open }" aria-haspopup="true">
                         <span class="sr-only">close</span>
-
                         <svg class="w-5 h-5 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                             <g fill="none" class="nc-icon-wrapper">
                                 <path
@@ -40,7 +38,7 @@
                 </div>
             </div>
             <!-- Bio -->
-            <div class="mt-2">
+            <div class="mt-2 text-slate-600 dark:text-slate-300">
                 <div class="text-sm">DNI/RUC: {{ $cliente->numero_documento }}</div>
                 <div class="text-sm">TELEFONO: {{ $cliente->telefono }}</div>
                 <div class="text-sm">E-MAIL: {{ $cliente->email }}</div>

@@ -1,7 +1,7 @@
 <x-form.modal.card title="LISTA DE DISPOSITIVOS DEL TECNICO" wire:model.defer="openModal" max-width="4xl" align="center">
     <div class="grid grid-cols-1">
         <!-- Table -->
-        <div class="overflow-x-auto min-h-screen">>
+        <div class="overflow-x-auto min-h-screen">
 
             <table class="table-auto w-full">
                 <!-- Table header -->

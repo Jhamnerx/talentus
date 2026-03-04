@@ -106,20 +106,20 @@ class ModalSyncSuscripcion extends Component
         $subscription = $vehiculo->planSubscription('gps-tracking');
 
         if ($subscription) {
+            // Cambiar plan (respeta lógica del paquete para billing frequency)
+            $subscription->changePlan($plan);
+            // Ajustar fechas manualmente al rango del cobro
             $subscription->forceFill([
-                'plan_id'     => $plan->getKey(),
                 'starts_at'   => $startsAt,
                 'ends_at'     => $endsAt,
                 'canceled_at' => null,
             ])->save();
         } else {
-            $subscription = $vehiculo->planSubscriptions()->create([
-                'name'      => 'GPS Tracking',
-                'slug'      => 'gps-tracking',
-                'plan_id'   => $plan->getKey(),
-                'starts_at' => $startsAt,
-                'ends_at'   => $endsAt,
-            ]);
+            // Crear nueva suscripción con el método oficial del paquete
+            $subscription = $vehiculo->newPlanSubscription('gps-tracking', $plan, $startsAt);
+            $subscription->forceFill([
+                'ends_at' => $endsAt,
+            ])->save();
         }
 
         // Actualizar el detalle con plan, fechas y monto del plan

@@ -155,7 +155,7 @@
         <div>
 
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">>
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full">
                     <!-- Table header -->
                     <thead

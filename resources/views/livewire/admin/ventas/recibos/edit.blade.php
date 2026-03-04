@@ -112,7 +112,7 @@
                     @if ($tipo_venta === 'CONTADO')
                         <div class="col-span-12 mt-4">
                             <h3 class="text-lg font-semibold mb-3">Métodos de Pago</h3>
-                            <div class="overflow-x-auto min-h-screen">>
+                            <div class="overflow-x-auto min-h-screen">
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>

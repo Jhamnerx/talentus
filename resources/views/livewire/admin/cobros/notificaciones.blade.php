@@ -99,10 +99,10 @@
         </div>
 
         <!-- Filtros compactos -->
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="grid grid-cols-12 gap-2 items-center">
 
             <!-- Búsqueda -->
-            <div class="relative flex-1 min-w-40">
+            <div class="col-span-12 sm:col-span-4 relative">
                 <input wire:model.live.debounce="search" type="search"
                     class="form-input pl-8 py-1.5 text-sm w-full dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
                     placeholder="Cliente, placa..." />
@@ -116,52 +116,56 @@
             </div>
 
             <!-- Cliente -->
-            <select wire:model.live="clienteId"
-                class="form-select py-1.5 text-sm flex-1 min-w-[150px] dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
-                <option value="">Todos los clientes</option>
-                @foreach ($this->clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->razon_social }}</option>
-                @endforeach
-            </select>
+            <div class="col-span-12 sm:col-span-3">
+                <x-form.select wire:model.live="clienteId" placeholder="Todos los clientes" sm>
+                    <x-select.option label="Todos los clientes" value="" />
+                    @foreach ($this->clientes as $cliente)
+                        <x-select.option label="{{ $cliente->razon_social }}" value="{{ $cliente->id }}" />
+                    @endforeach
+                </x-form.select>
+            </div>
 
             <!-- Estado -->
-            <select wire:model.live="estado"
-                class="form-select py-1.5 text-sm w-36 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
-                <option value="">Todos</option>
-                <option value="PENDIENTE">⏳ Pendiente</option>
-                <option value="FACTURADO">📄 Facturado</option>
-                <option value="PAGADO">✅ Pagado</option>
-                <option value="CANCELADO">❌ Cancelado</option>
-            </select>
+            <div class="col-span-6 sm:col-span-2">
+                <x-form.select wire:model.live="estado" placeholder="Estado" sm>
+                    <x-select.option label="Todos" value="" />
+                    <x-select.option label="⏳ Pendiente" value="PENDIENTE" />
+                    <x-select.option label="📄 Facturado" value="FACTURADO" />
+                    <x-select.option label="✅ Pagado" value="PAGADO" />
+                    <x-select.option label="❌ Cancelado" value="CANCELADO" />
+                </x-form.select>
+            </div>
 
             <!-- Vencimiento -->
-            <select wire:model.live="filtroVencimiento"
-                class="form-select py-1.5 text-sm w-40 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
-                <option value="">Todo vencimiento</option>
-                <option value="vencidos">🔴 Vencidos</option>
-                <option value="hoy">📅 Hoy</option>
-                <option value="7dias">🟡 7 días</option>
-                <option value="15dias">🟢 15 días</option>
-            </select>
+            <div class="col-span-6 sm:col-span-2">
+                <x-form.select wire:model.live="filtroVencimiento" placeholder="Vencimiento" sm>
+                    <x-select.option label="Todo" value="" />
+                    <x-select.option label="🔴 Vencidos" value="vencidos" />
+                    <x-select.option label="📅 Hoy" value="hoy" />
+                    <x-select.option label="🟡 7 días" value="7dias" />
+                    <x-select.option label="🟢 15 días" value="15dias" />
+                </x-form.select>
+            </div>
 
-            <!-- Per Page -->
-            <select wire:model.live="perPage"
-                class="form-select py-1.5 text-sm w-20 dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100">
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-            </select>
+            <!-- Per Page + Limpiar -->
+            <div class="col-span-12 sm:col-span-1 flex items-center gap-2">
+                <x-form.select wire:model.live="perPage" sm :clearable="false">
+                    <x-select.option label="10" value="10" />
+                    <x-select.option label="15" value="15" />
+                    <x-select.option label="25" value="25" />
+                    <x-select.option label="50" value="50" />
+                </x-form.select>
 
-            <!-- Limpiar -->
-            <button wire:click="clearFilters"
-                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300 transition whitespace-nowrap">
-                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
-                    <path
-                        d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
-                </svg>
-                Limpiar
-            </button>
+                @if ($search || $clienteId || $estado || $filtroVencimiento)
+                    <button wire:click="clearFilters" title="Limpiar filtros"
+                        class="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 transition">
+                        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
+                            <path
+                                d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
+                        </svg>
+                    </button>
+                @endif
+            </div>
 
         </div>
     </div>
@@ -217,15 +221,17 @@
                                 <div class="text-sm font-medium text-gray-900 dark:text-gray-100">
                                     {{ $notificacion->fecha_vencimiento->format('d/m/Y') }}
                                 </div>
-                                <div class="text-xs text-gray-500 dark:text-gray-400">
-                                    @if ($notificacion->fecha_vencimiento->isToday())
-                                        Hoy
-                                    @elseif($notificacion->fecha_vencimiento->isPast())
-                                        🔴 Vencido hace {{ $notificacion->fecha_vencimiento->diffForHumans() }}
-                                    @else
-                                        Vence {{ $notificacion->fecha_vencimiento->diffForHumans() }}
-                                    @endif
-                                </div>
+                                @if (in_array($notificacion->estado, ['PENDIENTE', 'FACTURADO']))
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                                        @if ($notificacion->fecha_vencimiento->isToday())
+                                            Hoy
+                                        @elseif($notificacion->fecha_vencimiento->isPast())
+                                            🔴 Vencido hace {{ $notificacion->fecha_vencimiento->diffForHumans() }}
+                                        @else
+                                            Vence {{ $notificacion->fecha_vencimiento->diffForHumans() }}
+                                        @endif
+                                    </div>
+                                @endif
                             </td>
 
                             <!-- Cliente -->
@@ -264,14 +270,16 @@
                             <!-- Documento -->
                             <td class="px-4 py-3 whitespace-nowrap">
                                 @if ($notificacion->venta)
-                                    <a href="{{ route('admin.ventas.show', $notificacion->venta) }}"
+                                    <a target="_blank"
+                                        href="{{ route('facturacion.ver.pdf', $notificacion->venta) }}"
                                         class="text-blue-600 dark:text-blue-400 hover:underline text-xs">
-                                        Venta #{{ $notificacion->venta->id }}
+                                        Venta
+                                        #{{ $notificacion->venta->serie_correlativo ?? $notificacion->venta->id }}
                                     </a>
                                 @elseif($notificacion->recibo)
-                                    <a href="{{ route('admin.recibos.show', $notificacion->recibo) }}"
+                                    <a target="_blank" href="{{ route('admin.pdf.recibo', $notificacion->recibo) }}"
                                         class="text-blue-600 dark:text-blue-400 hover:underline text-xs">
-                                        Recibo #{{ $notificacion->recibo->id }}
+                                        Recibo #{{ $notificacion->recibo->serie_numero ?? $notificacion->recibo->id }}
                                     </a>
                                 @else
                                     <span class="text-gray-400 text-xs">Sin documento</span>
@@ -286,16 +294,72 @@
                                             wire:click.prevent="abrirModalPago({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="document-text" label="Emitir documento"
                                             wire:click.prevent="redirectToFacturar({{ $notificacion->id }})" />
-                                        <x-dropdown.item icon="arrow-path" label="Actualizar fecha"
-                                            wire:click.prevent="refreshFecha({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="x-circle" label="Cancelar"
                                             wire:click.prevent="cancelar({{ $notificacion->id }})" />
                                     </x-form.dropdown>
+                                @elseif($notificacion->estado === 'FACTURADO')
+                                    {{-- Documento emitido, pendiente de pago --}}
+                                    @if ($notificacion->venta)
+                                        <a target="_blank"
+                                            href="{{ route('facturacion.ver.pdf', $notificacion->venta) }}"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition">
+                                            📄 Ver documento
+                                        </a>
+                                    @elseif($notificacion->recibo)
+                                        <a target="_blank"
+                                            href="{{ route('admin.pdf.recibo', $notificacion->recibo) }}"
+                                            class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-blue-500 hover:bg-blue-600 text-white transition">
+                                            📄 Ver documento
+                                        </a>
+                                    @endif
+                                @elseif($notificacion->estado === 'PAGADO')
+                                    {{-- Mostrar datos del pago como tooltip flotante --}}
+                                    @php
+                                        $paymentable = $notificacion->venta ?? $notificacion->recibo;
+                                        $payment = $paymentable?->payments->first();
+                                    @endphp
+                                    @if ($payment)
+                                        <div class="relative inline-flex justify-center" x-data="{ open: false }"
+                                            @mouseenter="open = true" @mouseleave="open = false">
+                                            <button
+                                                class="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/60 transition">
+                                                ✅ Ver pago
+                                            </button>
+                                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-20"
+                                                x-show="open" x-transition:enter="transition ease-out duration-150"
+                                                x-transition:enter-start="opacity-0 translate-y-1"
+                                                x-transition:enter-end="opacity-100 translate-y-0"
+                                                x-transition:leave="transition ease-out duration-100"
+                                                x-transition:leave-start="opacity-100"
+                                                x-transition:leave-end="opacity-0" x-cloak>
+                                                <div
+                                                    class="min-w-40 p-3 rounded-xl bg-white dark:bg-gray-800 shadow-2xl border border-gray-200 dark:border-gray-700 text-left space-y-1.5">
+                                                    <div
+                                                        class="text-xs font-semibold text-gray-800 dark:text-gray-100">
+                                                        {{ $payment->paymentMethod->description ?? 'Pago' }}
+                                                    </div>
+                                                    <div
+                                                        class="text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                                                        {{ $payment->divisa }} {{ number_format($payment->monto, 2) }}
+                                                    </div>
+                                                    @if ($payment->fecha)
+                                                        <div class="text-xs text-gray-400 dark:text-gray-500">
+                                                            {{ \Carbon\Carbon::parse($payment->fecha)->format('d/m/Y') }}
+                                                        </div>
+                                                    @endif
+                                                    @if ($payment->numero_operacion)
+                                                        <div class="text-xs text-gray-400 dark:text-gray-500">
+                                                            Op: {{ $payment->numero_operacion }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-400">Pagado</span>
+                                    @endif
                                 @else
-                                    <a href="{{ route('admin.cobros.show', $notificacion->cobro_id) }}"
-                                        class="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium rounded-lg bg-gray-500 hover:bg-gray-600 text-white transition">
-                                        👁️ Ver
-                                    </a>
+                                    <span class="text-xs text-gray-400">—</span>
                                 @endif
                             </td>
                         </tr>

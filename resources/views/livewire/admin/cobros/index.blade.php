@@ -333,7 +333,7 @@
                 </h2>
             </header>
             <div>
-                <div class="overflow-x-auto min-h-screen">>
+                <div class="overflow-x-auto min-h-screen">
                     <table class="table-auto w-full dark:text-gray-300">
                         <thead
                             class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
@@ -532,6 +532,16 @@
                                                 {{ $subActiva ? '✅' : '❌' }}
                                                 {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
                                             </div>
+                                            <button wire:click="abrirModalSync({{ $detalle->id }})"
+                                                wire:loading.attr="disabled"
+                                                wire:target="abrirModalSync({{ $detalle->id }})"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:hover:bg-amber-900/60 transition-colors">
+                                                <span wire:loading.remove
+                                                    wire:target="abrirModalSync({{ $detalle->id }})">🔀
+                                                    Cambiar plan</span>
+                                                <span wire:loading wire:target="abrirModalSync({{ $detalle->id }})">⏳
+                                                    Cargando...</span>
+                                            </button>
                                         @else
                                             @if ($detalle->vehiculo)
                                                 <button wire:click="abrirModalSync({{ $detalle->id }})"

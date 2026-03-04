@@ -111,21 +111,19 @@ class DetalleCobroObserver
         $subscription = $vehiculo->planSubscription('gps-tracking');
 
         if ($subscription) {
-            // Actualizar suscripción existente
+            // Cambiar plan y ajustar fechas manualmente
+            $subscription->changePlan($plan);
             $subscription->forceFill([
-                'plan_id'     => $plan->getKey(),
                 'starts_at'   => $startsAt,
                 'ends_at'     => $endsAt,
                 'canceled_at' => null,
             ])->save();
         } else {
-            // Crear nueva suscripción a través de la relación morphMany del vehículo
-            $vehiculo->planSubscriptions()->create([
-                'name'      => 'GPS Tracking',
-                'plan_id'   => $plan->getKey(),
-                'starts_at' => $startsAt,
-                'ends_at'   => $endsAt,
-            ]);
+            // Crear nueva suscripción usando el método oficial del paquete
+            $subscription = $vehiculo->newPlanSubscription('gps-tracking', $plan, $startsAt);
+            $subscription->forceFill([
+                'ends_at' => $endsAt,
+            ])->save();
         }
     }
 
@@ -153,22 +151,5 @@ class DetalleCobroObserver
             'ends_at'     => $nuevaFecha,
             'canceled_at' => null,
         ])->save();
-    }
-
-    /**
-     * Calcula la próxima fecha de facturación según el período del cobro.
-     */
-    private function calcularProximaFecha(Carbon $fechaActual, string $periodo): Carbon
-    {
-        return match ($periodo) {
-            'DIARIO'     => $fechaActual->copy()->addDay(),
-            'SEMANAL'    => $fechaActual->copy()->addWeek(),
-            'QUINCENAL'  => $fechaActual->copy()->addDays(15),
-            'BIMESTRAL'  => $fechaActual->copy()->addMonths(2),
-            'TRIMESTRAL' => $fechaActual->copy()->addMonths(3),
-            'SEMESTRAL'  => $fechaActual->copy()->addMonths(6),
-            'ANUAL'      => $fechaActual->copy()->addYear(),
-            default      => $fechaActual->copy()->addMonth(),  // MENSUAL y cualquier otro
-        };
     }
 }

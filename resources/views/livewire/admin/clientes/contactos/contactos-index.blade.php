@@ -81,7 +81,7 @@
         </header>
         <div x-data="handleSelect">
             <!-- Table -->
-            <div class="overflow-x-auto min-h-screen">>
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full dark:text-gray-300">
                     <!-- Table header -->
                     <thead

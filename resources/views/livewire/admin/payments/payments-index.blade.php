@@ -157,7 +157,7 @@
                     class="text-gray-400 dark:text-gray-500 font-medium">{{ $payments->total() }}</span>
             </h2>
         </header>
-        <div class="overflow-x-auto min-h-screen">>
+        <div class="overflow-x-auto min-h-screen">
             <table class="table-auto w-full dark:text-gray-300">
                 <!-- Table header -->
                 <thead

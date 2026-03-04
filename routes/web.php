@@ -154,7 +154,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::controller(CobrosController::class)->group(function () {
         Route::get('cobros/crear', 'create')->name('admin.cobros.create');
         Route::get('cobros', 'index')->name('admin.cobros.index');
-        Route::get('cobros/notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
+        Route::get('cobros-notificaciones', 'notificaciones')->name('admin.cobros.notificaciones');
         Route::get('cobros/{cobro}', 'show')->name('admin.cobros.show');
         Route::get('cobros/{cobro}/editar', 'edit')->name('admin.cobros.edit');
     });

@@ -11,7 +11,6 @@ use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\BankAccount;
-use App\Models\DetalleCobros;
 use App\Models\NotificacionCobro;
 use App\Models\PaymentMethodType;
 use App\Helpers\PaymentDestinationHelper;
@@ -39,10 +38,10 @@ class Notificaciones extends Component
 
     // Filtros de tabla
     public string $search = '';
-    public string $estado = 'PENDIENTE';
+    public string $estado = '';
     public $filtroVencimiento = null;
     public $clienteId = null;
-    public int $perPage = 15;
+    public string $perPage = '10';
 
     // Estado del modal de pago
     public bool $modalPago = false;
@@ -74,14 +73,6 @@ class Notificaciones extends Component
     public array $paymentsMethods = [];
     public $bankAccounts = [];
 
-    protected $queryString = [
-        'search'            => ['except' => ''],
-        'estado'            => ['except' => 'PENDIENTE'],
-        'filtroVencimiento' => ['except' => ''],
-        'clienteId'         => ['except' => ''],
-        'perPage'           => ['except' => 15],
-    ];
-
     protected $listeners = ['render'];
 
     public function mount(): void
@@ -110,7 +101,7 @@ class Notificaciones extends Component
     public function render()
     {
         $notificaciones = NotificacionCobro::query()
-            ->with(['detalleCobro.vehiculo', 'cobro.clientes', 'venta', 'recibo'])
+            ->with(['detalleCobro.vehiculo', 'cobro.clientes', 'venta.payments.paymentMethod', 'recibo.payments.paymentMethod'])
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->whereHas('cobro.clientes', fn($c) => $c->where('razon_social', 'like', '%' . $this->search . '%'))
@@ -534,11 +525,12 @@ class Notificaciones extends Component
     public function cancelar(int $notificacionId): void
     {
         $this->dialog()->confirm([
-            'title'       => 'Cancelar notificacion?',
-            'description' => 'Esta accion no se puede deshacer',
+            'title'       => 'Cancelar notificación de cobro',
+            'description' => 'Esta acción no se puede deshacer.',
             'icon'        => 'warning',
             'accept'      => [
-                'label'  => 'Si, cancelar',
+                'label'  => 'Sí, cancelar',
+                'color'  => 'negative',
                 'method' => 'confirmarCancelacion',
                 'params' => $notificacionId,
             ],
@@ -563,38 +555,5 @@ class Notificaciones extends Component
     {
         $this->reset(['search', 'estado', 'filtroVencimiento', 'clienteId']);
         $this->resetPage();
-    }
-
-    /**
-     * Avanzar la fecha del detalle cobro al siguiente período
-     */
-    public function refreshFecha(int $notificacionId): void
-    {
-        $notificacion = NotificacionCobro::with('detalleCobro.cobro')->findOrFail($notificacionId);
-        $detalle      = $notificacion->detalleCobro;
-
-        if (!$detalle) {
-            $this->notification()->error('Esta notificación no tiene un detalle de cobro asociado.');
-            return;
-        }
-
-        $periodo = $detalle->cobro->periodo;
-
-        $nuevaFecha = match ($periodo) {
-            'MENSUAL'    => $detalle->fecha->copy()->addMonth(),
-            'BIMENSUAL'  => $detalle->fecha->copy()->addMonths(2),
-            'TRIMESTRAL' => $detalle->fecha->copy()->addMonths(3),
-            'SEMESTRAL'  => $detalle->fecha->copy()->addMonths(6),
-            'ANUAL'      => $detalle->fecha->copy()->addYear(),
-            default      => $detalle->fecha,
-        };
-
-        $detalle->update(['fecha' => $nuevaFecha]);
-
-        $this->notification()->success(
-            title: 'Fecha Actualizada',
-            description: 'La fecha del vehículo fue avanzada al siguiente período.'
-        );
-        $this->dispatch('render');
     }
 }
