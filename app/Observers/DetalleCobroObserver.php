@@ -110,6 +110,9 @@ class DetalleCobroObserver
 
         $subscription = $vehiculo->planSubscription('gps-tracking');
 
+        // Periodo real del cobro (MENSUAL, TRIMESTRAL, ANUAL, etc.)
+        $periodo = $detalleCobro->periodo ?? 'MENSUAL';
+
         if ($subscription) {
             // Cambiar plan y ajustar fechas manualmente
             $subscription->changePlan($plan);
@@ -117,12 +120,14 @@ class DetalleCobroObserver
                 'starts_at'   => $startsAt,
                 'ends_at'     => $endsAt,
                 'canceled_at' => null,
+                'periodo'     => $periodo,
             ])->save();
         } else {
             // Crear nueva suscripción usando el método oficial del paquete
             $subscription = $vehiculo->newPlanSubscription('gps-tracking', $plan, $startsAt);
             $subscription->forceFill([
                 'ends_at' => $endsAt,
+                'periodo' => $periodo,
             ])->save();
         }
     }

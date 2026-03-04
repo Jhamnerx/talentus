@@ -42,7 +42,7 @@ class Edit extends Component
 
         // Valores por defecto para nuevos vehículos
         $this->default_fecha_inicio = Carbon::now()->format('Y-m-d');
-        $this->default_fecha_vencimiento = Carbon::now()->addDays(30)->format('Y-m-d');
+        $this->default_fecha_vencimiento = Carbon::now()->addMonth()->format('Y-m-d');
 
         $this->planes = collect();
         $this->loadPlanes();
@@ -180,6 +180,28 @@ class Edit extends Component
         $this->recalcularMontos();
     }
 
+    /**
+     * Recalcular fecha de vencimiento default cuando cambia la fecha de inicio.
+     */
+    public function updatedDefaultFechaInicio(): void
+    {
+        $this->default_fecha_vencimiento = $this->calcularFechaVencimiento(
+            $this->default_fecha_inicio,
+            $this->default_periodo
+        );
+    }
+
+    /**
+     * Recalcular fecha de vencimiento default cuando cambia el periodo.
+     */
+    public function updatedDefaultPeriodo(): void
+    {
+        $this->default_fecha_vencimiento = $this->calcularFechaVencimiento(
+            $this->default_fecha_inicio,
+            $this->default_periodo
+        );
+    }
+
     public function render()
     {
         return view('livewire.admin.cobros.edit');
@@ -224,12 +246,12 @@ class Edit extends Component
     protected function calcularFechaVencimiento(string $fechaInicio, string $periodo): string
     {
         return match ($periodo) {
-            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonth()->format('Y-m-d'),
-            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonths(2)->format('Y-m-d'),
-            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonths(3)->format('Y-m-d'),
-            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonths(6)->format('Y-m-d'),
-            'ANUAL'      => Carbon::parse($fechaInicio)->addYear()->format('Y-m-d'),
-            default      => Carbon::parse($fechaInicio)->addMonth()->format('Y-m-d'),
+            'MENSUAL'    => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
+            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->format('Y-m-d'),
+            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
         };
     }
 
@@ -315,7 +337,7 @@ class Edit extends Component
                 'monto' => $monto,
                 'periodo' => $this->default_periodo,
                 'fecha_inicio' => $this->default_fecha_inicio,
-                'fecha_vencimiento' => $this->default_fecha_vencimiento,
+                'fecha_vencimiento' => $this->calcularFechaVencimiento($this->default_fecha_inicio, $this->default_periodo),
                 'estado' => 1,
             ];
 

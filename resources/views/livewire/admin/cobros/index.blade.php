@@ -283,7 +283,8 @@
                 <!-- Select Cliente con API -->
                 <div>
                     <x-form.select label="Cliente" wire:model.live="clienteId" placeholder="Seleccionar cliente..."
-                        :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id" :clearable="true" />
+                        :async-data="route('api.clientes.index')" option-label="razon_social" option-value="id" :clearable="true"
+                        option-description="numero_documento" />
                 </div>
 
                 <!-- Búsqueda general -->

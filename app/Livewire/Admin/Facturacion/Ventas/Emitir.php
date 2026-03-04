@@ -613,12 +613,15 @@ class Emitir extends Component
 
                     if ($det && $cobro) {
                         $nuevoInicio = $notif->fecha_vencimiento->copy();
-                        $nuevoFin    = match (strtoupper($cobro->periodo ?? 'MENSUAL')) {
-                            'BIMENSUAL'  => $nuevoInicio->copy()->addMonths(2),
-                            'TRIMESTRAL' => $nuevoInicio->copy()->addMonths(3),
-                            'SEMESTRAL'  => $nuevoInicio->copy()->addMonths(6),
-                            'ANUAL'      => $nuevoInicio->copy()->addYear(),
-                            default      => $nuevoInicio->copy()->addMonth(),
+                        // Usar periodo del DetalleCobro (fuente correcta) con NoOverflow
+                        // para que 30-ene + 1 mes = 28-feb (no 02-mar)
+                        $periodoDetalle = strtoupper($det->periodo ?? 'MENSUAL');
+                        $nuevoFin = match ($periodoDetalle) {
+                            'BIMENSUAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(2),
+                            'TRIMESTRAL' => $nuevoInicio->copy()->addMonthsNoOverflow(3),
+                            'SEMESTRAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(6),
+                            'ANUAL'      => $nuevoInicio->copy()->addYearNoOverflow(),
+                            default      => $nuevoInicio->copy()->addMonthNoOverflow(),
                         };
                         // Actualiza fecha_inicio y fecha_vencimiento;
                         // el observer sincroniza la suscripción del vehículo

@@ -113,7 +113,15 @@ class Index extends Component
                             ->where('ends_at', '<', $hoy->copy()->startOfDay());
                     });
             })
-            ->orderBy('fecha', 'asc')
+            // Ordenar por cliente (via cobro.clientes_id) para mantener agrupación visual,
+            // luego por fecha_vencimiento dentro de cada cliente
+            ->orderByRaw('(
+                SELECT co.clientes_id
+                FROM cobros co
+                WHERE co.id = detalles_cobros.cobros_id
+                LIMIT 1
+            ) ASC')
+            ->orderBy('detalles_cobros.fecha_vencimiento', 'asc')
             ->paginate($this->perPage);
 
         return view('livewire.admin.cobros.index', compact('detalles'));

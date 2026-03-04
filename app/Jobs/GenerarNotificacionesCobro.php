@@ -53,19 +53,17 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'dias_anticipacion' => $this->diasAnticipacion
         ]);
 
-        // Buscar DetalleCobros activos cuya suscripción del vehículo vence dentro del período
+        // Buscar DetalleCobros activos cuya suscripción del vehículo vence dentro del límite.
+        // Incluye ya vencidos (sin límite inferior) para no perder cobros rezagados.
         $detallesProximos = DetalleCobros::with([
             'cobro',
             'cobro.clientes',
             'vehiculo.planSubscriptions',
         ])
             ->where('estado', 1)
-            ->whereHas('vehiculo.planSubscriptions', function ($q) use ($fechaLimite) {
-                $q->whereNull('canceled_at')
-                    ->whereBetween('ends_at', [
-                        Carbon::now()->startOfDay(),
-                        $fechaLimite->endOfDay(),
-                    ]);
+            ->whereHas('vehiculo.planSubscriptions', function ($sub) use ($fechaLimite) {
+                $sub->whereNull('canceled_at')
+                    ->where('ends_at', '<=', $fechaLimite->endOfDay());
             })
             // No generar si ya existe una notificación pendiente o facturada
             ->whereDoesntHave('notificaciones', function ($query) {
@@ -107,15 +105,22 @@ class GenerarNotificacionesCobro implements ShouldQueue
         // Calcular descripción
         $descripcion = $this->generarDescripcion($detalle, $cobro);
 
-        // Tomar ends_at de la suscripción activa del vehículo; fallback a detalle->fecha
-        $subscription    = $detalle->vehiculo
+        // Tomar ends_at de la suscripción activa del vehículo (fuente única de verdad)
+        $subscription = $detalle->vehiculo
             ?->planSubscriptions
             ->whereNull('canceled_at')
             ->sortBy('ends_at')
             ->first();
-        $fechaVencimiento = $subscription?->ends_at
-            ? Carbon::parse($subscription->ends_at)
-            : Carbon::parse($detalle->fecha);
+
+        if (!$subscription) {
+            Log::warning('DetalleCobro sin suscripción activa, omitido', [
+                'detalle_cobro_id' => $detalle->id,
+                'vehiculo_id'      => $detalle->vehiculo_id,
+            ]);
+            return;
+        }
+
+        $fechaVencimiento = Carbon::parse($subscription->ends_at);
 
         NotificacionCobro::create([
             'empresa_id'        => $cliente->empresa_id,

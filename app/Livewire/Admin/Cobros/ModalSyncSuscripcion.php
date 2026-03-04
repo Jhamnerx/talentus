@@ -46,9 +46,11 @@ class ModalSyncSuscripcion extends Component
         $this->startsAt = $detalle->fecha_inicio
             ? Carbon::parse($detalle->fecha_inicio)->format('Y-m-d')
             : Carbon::parse($detalle->fecha)->format('Y-m-d');
-        $this->endsAt = $detalle->fecha
-            ? Carbon::parse($detalle->fecha)->format('Y-m-d')
-            : Carbon::now()->format('Y-m-d');
+
+        // Usar fecha_vencimiento como ends_at; si no existe, calcular desde startsAt + periodo
+        $this->endsAt = $detalle->fecha_vencimiento
+            ? Carbon::parse($detalle->fecha_vencimiento)->format('Y-m-d')
+            : $this->calcularFechaVencimiento($this->startsAt, $detalle->periodo ?? 'MENSUAL');
 
         // Cargar planes activos filtrados por empresa
         $empresaId = $detalle->cobro?->empresa_id ?? $detalle->vehiculo->empresa_id ?? null;
@@ -72,6 +74,17 @@ class ModalSyncSuscripcion extends Component
     public function cerrar(): void
     {
         $this->reset(['open', 'detalleId', 'planId', 'endsAt', 'startsAt', 'planes', 'detalle']);
+    }
+
+    protected function calcularFechaVencimiento(string $fechaInicio, string $periodo): string
+    {
+        return match ($periodo) {
+            'BIMENSUAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(2)->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaInicio)->addMonthsNoOverflow(3)->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaInicio)->addMonthsNoOverflow(6)->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaInicio)->addYearNoOverflow()->format('Y-m-d'),
+            default      => Carbon::parse($fechaInicio)->addMonthNoOverflow()->format('Y-m-d'),
+        };
     }
 
     public function confirmar(): void
@@ -105,6 +118,9 @@ class ModalSyncSuscripcion extends Component
 
         $subscription = $vehiculo->planSubscription('gps-tracking');
 
+        // Periodo desde el detalle (MENSUAL, TRIMESTRAL, ANUAL, etc.)
+        $periodo = $detalle->periodo ?? 'MENSUAL';
+
         if ($subscription) {
             // Cambiar plan (respeta lógica del paquete para billing frequency)
             $subscription->changePlan($plan);
@@ -113,12 +129,14 @@ class ModalSyncSuscripcion extends Component
                 'starts_at'   => $startsAt,
                 'ends_at'     => $endsAt,
                 'canceled_at' => null,
+                'periodo'     => $periodo,
             ])->save();
         } else {
             // Crear nueva suscripción con el método oficial del paquete
             $subscription = $vehiculo->newPlanSubscription('gps-tracking', $plan, $startsAt);
             $subscription->forceFill([
                 'ends_at' => $endsAt,
+                'periodo' => $periodo,
             ])->save();
         }
 

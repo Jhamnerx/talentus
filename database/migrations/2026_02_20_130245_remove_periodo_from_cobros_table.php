@@ -20,6 +20,9 @@ return new class extends Migration
                 'cantidad_unidades',
                 'observacion',
             ]);
+        });
+
+        Schema::table('detalles_cobros', function (Blueprint $table) {
             $table->date('fecha')->nullable()->change();
         });
     }
