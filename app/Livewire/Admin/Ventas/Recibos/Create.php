@@ -11,13 +11,12 @@ use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\plantilla;
 use App\Models\Productos;
-use App\Models\DetalleCobros;
 use App\Models\PaymentMethodType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
 use App\Helpers\PaymentDestinationHelper;
-use App\Enums\EstadoFacturacion;
+use App\Models\NotificacionCobro;
 
 class Create extends Component
 {
@@ -43,14 +42,14 @@ class Create extends Component
 
 
     //DETALLE DESDE COBRO
-    public $detalle_ids;
     public $cobro_id;
     public $empresa_id;
+    public $notificacion_ids_array = [];
     public $cobro_redirect_back = null;
 
     public $tipo_cambio = 0.00;
 
-    public function mount($detalle_ids = null, $cobro_id = null)
+    public function mount($notificacion_ids = null)
     {
         $this->setSerieMount();
 
@@ -97,28 +96,32 @@ class Create extends Component
         $this->empresa_id = plantilla::first()->empresa->id;
 
 
-        // Asignar cliente_id
-        $cobro = Cobros::find($cobro_id);
+        // Asignar cliente y contexto
+        if ($notificacion_ids) {
+            $ids       = is_array($notificacion_ids) ? $notificacion_ids : $notificacion_ids;
+            $firstNotif = NotificacionCobro::with(['cobro', 'cliente'])->find(
+                is_array($ids) ? $ids[0] : $ids
+            );
 
-        if ($cobro) {
-            $this->cliente = Clientes::find($cobro->clientes_id);
-            $this->clientes_id = $cobro->clientes_id;
-            $this->divisa = $cobro->divisa;
-            $this->cobro_id = $cobro_id;
-            $this->cobro_redirect_back = session('cobro_redirect_back');
+            if ($firstNotif) {
+                $cobro = $firstNotif->cobro;
+                $this->cliente   = $firstNotif->cliente;
+                $this->clientes_id = $firstNotif->cliente_id;
+                $this->divisa    = $firstNotif->moneda ?? $cobro->divisa ?? 'PEN';
+                $this->cobro_id  = $firstNotif->cobro_id;
+                $this->cobro_redirect_back = session('cobro_redirect_back');
 
-            // Pre-seleccionar tipo_venta desde sesión
-            $sessionFormaPago = session('cobro_forma_pago');
-            if ($sessionFormaPago) {
-                $this->tipo_venta = $sessionFormaPago;
-                $this->showCredit = $sessionFormaPago === 'CREDITO';
-                session()->forget('cobro_forma_pago');
+                $sessionFormaPago = session('cobro_forma_pago');
+                if ($sessionFormaPago) {
+                    $this->tipo_venta = $sessionFormaPago;
+                    $this->showCredit = $sessionFormaPago === 'CREDITO';
+                    session()->forget('cobro_forma_pago');
+                }
             }
-        }
 
-        // Procesar items si no son nulos
-        if ($detalle_ids) {
-            $this->procesarItems($detalle_ids);
+            $this->notificacion_ids_array = is_array($ids) ? $ids : [$ids];
+
+            $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
     }
 
@@ -161,44 +164,55 @@ class Create extends Component
             $this->reset('numero');
         }
     }
-    public function procesarItems($items)
+    /**
+     * Procesa items desde NotificacionCobro (nuevo flujo preferido).
+     * Para recibos: el monto ya no lleva IGV, valor_unitario = monto total.
+     */
+    public function procesarItemsDesdeNotificaciones(array $notificacionIds): void
     {
-        $this->detalle_ids = $items;
-        $detalles = DetalleCobros::whereIn('id', $items)->get();
+        $notificaciones = NotificacionCobro::with([
+            'detalleCobro.planModel',
+            'cobro.producto',
+            'vehiculo',
+        ])->whereIn('id', $notificacionIds)->get();
 
-        $detalles->each(function ($item) {
-            $cantidad = $this->calcularCantidad($item->cobro->periodo);
-            $valor_unitario = $item->plan;
+        $servicioCobro = Productos::getServicioCobro();
+        $servicioDescripcion = $servicioCobro?->descripcion ?? '';
+
+        foreach ($notificaciones as $notificacion) {
+            $detalle  = $notificacion->detalleCobro;
+            $cobro    = $notificacion->cobro;
+            $vehiculo = $notificacion->vehiculo;
+            $producto = $cobro->producto;
+
+            $montoTotal = (float) $notificacion->monto;
+
+            $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
+            $periodoTexto = match (strtoupper((string) $periodo)) {
+                'BIMENSUAL'  => '2 meses',
+                'TRIMESTRAL' => '3 meses',
+                'SEMESTRAL'  => '6 meses',
+                'ANUAL'      => '12 meses',
+                default      => '1 mes',
+            };
+
+            $planNombre  = $detalle?->planModel?->name ?? $producto?->descripcion ?? 'Servicio GPS';
+            $placa       = $vehiculo?->placa ?? 'S/P';
+            $fechaInicio = $detalle?->fecha_inicio?->format('d/m/Y') ?? '';
+            $fechaVence  = $notificacion->fecha_vencimiento?->format('d/m/Y') ?? '';
+            $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
 
             $this->items->push([
-                'producto_id' => $item->cobro->producto->id,
-                'producto' => $item->cobro->producto->descripcion,
-                'descripcion' => $item->cobro->descripcion . " DE LA PLACA: " . $item->vehiculo->placa . ' HASTA LA FECHA ' . $item->fecha->format('d-m-Y'),
-                'cantidad' => $cantidad,
-                'precio' => $valor_unitario,
-                'total' => round((floatval($cantidad) * floatval($valor_unitario)), 2),
+                'producto_id' => $producto->id,
+                'producto'    => $producto->descripcion,
+                'descripcion' => $descripcion,
+                'cantidad'    => 1,
+                'precio'      => $montoTotal,
+                'total'       => $montoTotal,
             ]);
-        });
+        }
 
         $this->reCalTotal();
-    }
-
-    public function calcularCantidad($periodo)
-    {
-        switch ($periodo) {
-            case 'MENSUAL':
-                return 1;
-            case 'BIMENSUAL':
-                return 2;
-            case 'TRIMESTRAL':
-                return 3;
-            case 'SEMESTRAL':
-                return 6;
-            case 'ANUAL':
-                return 12;
-            default:
-                return 1;
-        }
     }
 
     function addProducto()
@@ -376,50 +390,46 @@ class Create extends Component
         //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
         $recibo->getSerie->increment('correlativo');
 
-        // AUTO-UPDATE DetalleCobros si viene del módulo de cobros
-        if ($this->cobro_id && !empty($this->detalle_ids)) {
-            $detalleIdsArray = is_array($this->detalle_ids) ? $this->detalle_ids : [$this->detalle_ids];
+        // AUTO-UPDATE desde flujo de notificaciones
+        if (!empty($this->notificacion_ids_array)) {
+            $notificaciones = NotificacionCobro::with(['detalleCobro', 'cobro'])
+                ->whereIn('id', $this->notificacion_ids_array)->get();
 
-            $estadoFacturacion = $this->tipo_venta === 'CONTADO'
-                ? EstadoFacturacion::PAGADO
-                : EstadoFacturacion::FACTURADO;
+            // Renovar período de cada detalle individualmente (si auto_renovar)
+            // El DetalleCobroObserver sincronizará la suscripción automáticamente
+            foreach ($notificaciones as $notif) {
+                $det   = $notif->detalleCobro;
+                $cobro = $notif->cobro;
 
-            $updateData = [
-                'estado_facturacion' => $estadoFacturacion,
-                'recibo_id' => $recibo->id,
-                'fecha_facturacion' => now(),
-            ];
-
-            if ($this->tipo_venta === 'CONTADO') {
-                $updateData['fecha_pago'] = now();
-            }
-
-            DetalleCobros::whereIn('id', $detalleIdsArray)
-                ->update($updateData);
-
-            // Renovar fecha si auto_renovar está activo
-            $cobro = Cobros::find($this->cobro_id);
-            if ($cobro && $cobro->auto_renovar) {
-                foreach (DetalleCobros::whereIn('id', $detalleIdsArray)->get() as $det) {
-                    $nuevaFecha = match ($cobro->periodo) {
-                        'MENSUAL' => $det->fecha->copy()->addMonth(),
-                        'BIMENSUAL' => $det->fecha->copy()->addMonths(2),
-                        'TRIMESTRAL' => $det->fecha->copy()->addMonths(3),
-                        'SEMESTRAL' => $det->fecha->copy()->addMonths(6),
-                        'ANUAL' => $det->fecha->copy()->addYear(),
-                        default => $det->fecha,
+                if ($det && $cobro) {
+                    $nuevoInicio = $notif->fecha_vencimiento->copy();
+                    $nuevoFin    = match (strtoupper($cobro->periodo ?? 'MENSUAL')) {
+                        'BIMENSUAL'  => $nuevoInicio->copy()->addMonths(2),
+                        'TRIMESTRAL' => $nuevoInicio->copy()->addMonths(3),
+                        'SEMESTRAL'  => $nuevoInicio->copy()->addMonths(6),
+                        'ANUAL'      => $nuevoInicio->copy()->addYear(),
+                        default      => $nuevoInicio->copy()->addMonth(),
                     };
-                    // Resetear estado para permitir facturar la siguiente mensualidad
+                    // Actualiza fecha_inicio y fecha_vencimiento;
+                    // el observer sincroniza la suscripción del vehículo
                     $det->update([
-                        'fecha' => $nuevaFecha,
-                        'estado_facturacion' => EstadoFacturacion::SIN_FACTURAR,
-                        'venta_id' => null,
-                        'recibo_id' => null,
-                        'fecha_facturacion' => null,
-                        'fecha_pago' => null,
+                        'fecha_inicio'      => $nuevoInicio,
+                        'fecha_vencimiento' => $nuevoFin,
                     ]);
                 }
             }
+
+            // Actualizar estado de NotificacionCobro
+            $estadoNotif = $this->tipo_venta === 'CONTADO' ? 'PAGADO' : 'FACTURADO';
+            $notifData = [
+                'estado'            => $estadoNotif,
+                'recibo_id'         => $recibo->id,
+                'fecha_facturacion' => now(),
+            ];
+            if ($this->tipo_venta === 'CONTADO') {
+                $notifData['fecha_pago'] = now();
+            }
+            NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update($notifData);
         }
 
         session()->flash('recibo-registrado', 'El Recibo se registró con éxito');

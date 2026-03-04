@@ -308,7 +308,7 @@ class Save extends Component
             }
         }
     }
-    
+
     public function eliminarVehiculo($key)
     {
         unset($this->items[$key]);

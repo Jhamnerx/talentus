@@ -495,14 +495,13 @@ class Notificaciones extends Component
     // Facturar (Emitir documento)
     public function redirectToFacturar(int $notificacionId): mixed
     {
-        $notificacion = NotificacionCobro::with(['detalleCobro', 'cobro.clientes'])->find($notificacionId);
+        $notificacion = NotificacionCobro::with(['cobro.clientes'])->find($notificacionId);
 
         if (!$notificacion) {
             $this->notification()->error('Notificacion no encontrada');
             return null;
         }
 
-        $detalle = $notificacion->detalleCobro;
         $cobro   = $notificacion->cobro;
         $cliente = $cobro->clientes;
 
@@ -512,25 +511,22 @@ class Notificaciones extends Component
             'notificacion_cobro_id' => $notificacionId,
         ]);
 
-        $detalleIds = json_encode([$detalle->id]);
+        $notificacionIds = json_encode([$notificacionId]);
 
         if ($cobro->tipo_pago === 'RECIBO') {
             return redirect()->route('admin.ventas.recibos.create', [
-                'detalle_ids' => $detalleIds,
-                'cobro_id'    => $cobro->id,
+                'notificacion_ids' => $notificacionIds,
             ]);
         }
 
         if (($cliente->tipo_documento_id ?? null) == 6) {
             return redirect()->route('admin.factura.create', [
-                'detalle_ids' => $detalleIds,
-                'cobro_id'    => $cobro->id,
+                'notificacion_ids' => $notificacionIds,
             ]);
         }
 
         return redirect()->route('admin.boleta.create', [
-            'detalle_ids' => $detalleIds,
-            'cobro_id'    => $cobro->id,
+            'notificacion_ids' => $notificacionIds,
         ]);
     }
 

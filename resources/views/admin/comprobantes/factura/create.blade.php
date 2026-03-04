@@ -2,8 +2,7 @@
 
     @livewire('admin.facturacion.ventas.emitir', [
         'comprobante_slug' => Request::segment(2),
-        'detalle_ids' => $detalle_ids,
-        'cobro_id' => $cobro_id,
+        'notificacion_ids' => $notificacion_ids,
     ])
 
     @livewire('admin.productos.create-modal')

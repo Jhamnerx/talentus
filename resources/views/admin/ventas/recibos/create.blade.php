@@ -1,8 +1,7 @@
 <x-admin-layout ruta="ventas-recibos">
 
     @livewire('admin.ventas.recibos.create', [
-        'detalle_ids' => $detalle_ids,
-        'cobro_id' => $cobro_id,
+        'notificacion_ids' => $notificacion_ids,
     ])
 
     @livewire('admin.clientes.save')

@@ -2,32 +2,27 @@
 
 namespace App\Livewire\Admin\Facturacion\Ventas;
 
-use Carbon\Carbon;
-use App\Models\Cobros;
-use App\Models\Series;
-use App\Models\Ventas;
-use Livewire\Component;
-use App\Models\Clientes;
-use App\Models\Payments;
-use App\Models\plantilla;
-use App\Models\Productos;
-use App\Models\MetodoPago;
-use App\Models\PaymentMethodType;
-use Livewire\Attributes\On;
-use App\Models\DetalleCobros;
-use App\Models\TipoComprobantes;
-use Livewire\Attributes\Reactive;
-use Livewire\Attributes\Computed;
-use App\Services\FactilizaService;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
-use App\Models\CodigosDetracciones;
-use App\Http\Requests\VentasRequest;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 use App\Helpers\PaymentDestinationHelper;
 use App\Http\Controllers\Admin\Facturacion\Api\ApiFacturacion;
-use App\Enums\EstadoFacturacion;
+use App\Http\Requests\VentasRequest;
+use App\Models\Clientes;
+use App\Models\CodigosDetracciones;
+use App\Models\NotificacionCobro;
+use App\Models\PaymentMethodType;
+use App\Models\Payments;
+use App\Models\plantilla;
+use App\Models\Series;
+use App\Models\TipoComprobantes;
+use App\Models\Ventas;
+use App\Models\Productos;
+use App\Services\FactilizaService;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
+use Livewire\Component;
 
 
 class Emitir extends Component
@@ -89,7 +84,7 @@ class Emitir extends Component
 
     // Contexto de Cobros (para auto-update y redirect)
     public $cobro_id = null;
-    public $detalle_ids_array = [];
+    public $notificacion_ids_array = [];
     public $cobro_redirect_back = null;
 
 
@@ -152,7 +147,7 @@ class Emitir extends Component
         }
     }
 
-    public function mount($detalle_ids = null, $cobro_id = null)
+    public function mount($notificacion_ids = null)
     {
         //DEFINIR EL TIPO DE COMPROBANTE
         $this->tipo_comprobante_id = TipoComprobantes::where('slug', $this->comprobante_slug)->first()->codigo;
@@ -210,106 +205,111 @@ class Emitir extends Component
 
         $this->empresa_id = plantilla::first()->empresa->id;
 
-        // Asignar cliente_id
-        $cobro = Cobros::find($cobro_id);
+        // Asignar cliente y contexto desde NotificacionCobro
+        if ($notificacion_ids) {
+            $ids = is_array($notificacion_ids) ? $notificacion_ids : $notificacion_ids;
+            $firstNotif = NotificacionCobro::with(['cobro.clientes', 'cliente'])->find(
+                is_array($ids) ? $ids[0] : $ids
+            );
 
-        if ($cobro) {
-            $this->cliente = Clientes::find($cobro->clientes_id);
-            $this->direccion = $this->cliente->direccion;
-            $this->cliente_id = $cobro->clientes_id;
-            $this->divisa = $cobro->divisa;
+            if ($firstNotif) {
+                $cobro = $firstNotif->cobro;
+                $this->cliente    = $firstNotif->cliente;
+                $this->direccion  = $this->cliente->direccion ?? '';
+                $this->cliente_id = $firstNotif->cliente_id;
+                $this->divisa     = $firstNotif->moneda ?? $cobro->divisa ?? 'PEN';
+                $this->simbolo    = $this->divisa === 'USD' ? '$' : 'S/. ';
+                $this->cobro_id   = $firstNotif->cobro_id;
+                $this->cobro_redirect_back = session('cobro_redirect_back');
 
-            // Guardar contexto de cobros para auto-update en save()
-            $this->cobro_id = $cobro->id;
-            $this->cobro_redirect_back = session('cobro_redirect_back');
-
-            // Pre-seleccionar forma_pago desde sesión
-            $sessionFormaPago = session('cobro_forma_pago');
-            if ($sessionFormaPago) {
-                $this->forma_pago = $sessionFormaPago;
-                $this->showCredit = $sessionFormaPago === 'CREDITO';
-                session()->forget('cobro_forma_pago');
+                $sessionFormaPago = session('cobro_forma_pago');
+                if ($sessionFormaPago) {
+                    $this->forma_pago = $sessionFormaPago;
+                    $this->showCredit = $sessionFormaPago === 'CREDITO';
+                    session()->forget('cobro_forma_pago');
+                }
             }
-        }
 
-        // Procesar items si no son nulos
-        if ($detalle_ids) {
-            $this->detalle_ids_array = is_array($detalle_ids) ? $detalle_ids : [$detalle_ids];
-            $this->procesarItems($detalle_ids);
+            $this->notificacion_ids_array = is_array($ids) ? $ids : [$ids];
+
+            $this->procesarItemsDesdeNotificaciones($this->notificacion_ids_array);
         }
     }
 
-    public function procesarItems($items)
+    /**
+     * Procesa items desde NotificacionCobro (nuevo flujo preferido).
+     * El monto ya incluye totales por periodo, divisa y ajuste IGV/RECIBO.
+     */
+    public function procesarItemsDesdeNotificaciones(array $notificacionIds): void
     {
-        $detalles = DetalleCobros::whereIn('id', $items)->get();
+        $notificaciones = NotificacionCobro::with([
+            'detalleCobro.planModel',
+            'cobro.producto.unit',
+            'vehiculo',
+        ])->whereIn('id', $notificacionIds)->get();
 
-        foreach ($detalles as $detalle) {
-            $cantidad = $this->calcularCantidad($detalle->cobro->periodo);
-            $igv = $this->calcularIgvProducto($detalle->plan, $cantidad, 10);
+        $servicioCobro = Productos::getServicioCobro();
+        $servicioDescripcion = $servicioCobro?->descripcion ?? '';
+
+        foreach ($notificaciones as $notificacion) {
+            $detalle  = $notificacion->detalleCobro;
+            $cobro    = $notificacion->cobro;
+            $vehiculo = $notificacion->vehiculo;
+            $producto = $cobro->producto;
+
+            $montoTotal = (float) $notificacion->monto;
+            $esFactura  = ($cobro->tipo_pago ?? 'FACTURA') !== 'RECIBO';
+
+            // Extraer valor_unitario del total (cantidad = 1 siempre)
+            if ($esFactura) {
+                $tasaIgv         = (float) $this->plantilla->igv; // 0.18
+                $valorUnitario   = round($montoTotal / (1 + $tasaIgv), 4);
+                $igvProducto     = round($montoTotal - $valorUnitario, 4);
+                $codigoAfectacion = '10';
+                $porcentajeIgv   = 18;
+            } else {
+                $valorUnitario   = $montoTotal;
+                $igvProducto     = 0.00;
+                $codigoAfectacion = '20';
+                $porcentajeIgv   = 0;
+            }
+
+            // Construir descripción con periodo
+            $periodo = $detalle?->periodo ?? $cobro->periodo ?? 'MENSUAL';
+            $periodoTexto = match (strtoupper((string) $periodo)) {
+                'BIMENSUAL'  => '2 meses',
+                'TRIMESTRAL' => '3 meses',
+                'SEMESTRAL'  => '6 meses',
+                'ANUAL'      => '12 meses',
+                default      => '1 mes',
+            };
+
+            $planNombre  = $detalle?->planModel?->name ?? $producto?->descripcion ?? 'Servicio GPS';
+            $placa       = $vehiculo?->placa ?? 'S/P';
+            $fechaInicio = $detalle?->fecha_inicio?->format('d/m/Y') ?? '';
+            $fechaVence  = $notificacion->fecha_vencimiento?->format('d/m/Y') ?? '';
+            $descripcion = trim("{$servicioDescripcion} {$planNombre} - periodo {$periodoTexto} placa {$placa} inicio {$fechaInicio} - fin {$fechaVence}");
+
             $this->addProducto([
-                'producto_id' => $detalle->cobro->producto_id,
-                'codigo' => $detalle->cobro->producto->codigo,
-                'cantidad' => $cantidad,
-                'unit' => $detalle->cobro->producto->unit_code,
-                'unit_name' => $detalle->cobro->producto->unit->descripcion,
-                'descripcion' => $detalle->cobro->producto->descripcion . " DE LA PLACA: " . $detalle->vehiculo->placa . ' HASTA LA FECHA ' . $detalle->fecha->format('d-m-Y'),
-                'valor_unitario' => round(floatval($detalle->plan), 4),
-                'precio_unitario' => round(floatval($this->calcularPrecioUnitario($detalle->plan, 10)), 4),
-                'igv' => $igv,
-                'porcentaje_igv' => 18,
-                'icbper' => 0.00,
-                'total_icbper' => 0.00,
-                'sub_total' => round(floatval($detalle->plan), 4) * $cantidad,
-                'total' => round(floatval($detalle->plan) * $cantidad + $igv, 4),
-                'codigo_afectacion' => 10,
-                'afecto_icbper' => false,
-                'tipo' => $detalle->cobro->producto->tipo,
+                'producto_id'       => $cobro->producto_id,
+                'codigo'            => $producto->codigo,
+                'cantidad'          => 1,
+                'unit'              => $producto->unit_code,
+                'unit_name'         => $producto->unit->descripcion,
+                'descripcion'       => $descripcion,
+                'valor_unitario'    => $valorUnitario,
+                'precio_unitario'   => round($valorUnitario * (1 + (float) $this->plantilla->igv), 4),
+                'igv'               => $igvProducto,
+                'porcentaje_igv'    => $porcentajeIgv,
+                'icbper'            => 0.00,
+                'total_icbper'      => 0.00,
+                'sub_total'         => $valorUnitario,
+                'total'             => $montoTotal,
+                'codigo_afectacion' => $codigoAfectacion,
+                'afecto_icbper'     => false,
+                'tipo'              => $producto->tipo,
             ]);
         }
-    }
-
-
-    public function calcularCantidad($periodo)
-    {
-        switch ($periodo) {
-            case 'MENSUAL':
-                return 1;
-            case 'BIMENSUAL':
-                return 2;
-            case 'TRIMESTRAL':
-                return 3;
-            case 'SEMESTRAL':
-                return 6;
-            case 'ANUAL':
-                return 12;
-            default:
-                return 1;
-        }
-    }
-
-    public function calcularPrecioUnitario($valor_unitario, $tipo_afectacion)
-    {
-        if ($tipo_afectacion == "10") {
-            return ($valor_unitario * $this->plantilla->igv) + $valor_unitario;
-        } else {
-            return $valor_unitario;
-        }
-    }
-
-    public function calcularIgvProducto($valor_unitario, $cantidad, $tipo_afectacion)
-    {
-        $igv = 0.00;
-        if ($tipo_afectacion == 10) {
-
-            $sub_total = ($valor_unitario * floatval($cantidad));
-            $igv = round($sub_total * $this->plantilla->igv, 4);
-        } else {
-
-            $sub_total = ($valor_unitario * floatval($cantidad));
-            $igv = 0.00;
-        }
-
-        return $igv;
     }
 
     public function updatedClienteId($value)
@@ -600,48 +600,46 @@ class Emitir extends Component
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA
             $venta->getSerie->increment('correlativo');
 
-            // AUTO-UPDATE DetalleCobros si viene del módulo de cobros
-            if ($this->cobro_id && !empty($this->detalle_ids_array)) {
-                $estadoFacturacion = $this->forma_pago === 'CONTADO'
-                    ? EstadoFacturacion::PAGADO
-                    : EstadoFacturacion::FACTURADO;
+            // AUTO-UPDATE desde flujo de notificaciones
+            if (!empty($this->notificacion_ids_array)) {
+                $notificaciones = NotificacionCobro::with(['detalleCobro', 'cobro'])
+                    ->whereIn('id', $this->notificacion_ids_array)->get();
 
-                $updateData = [
-                    'estado_facturacion' => $estadoFacturacion,
-                    'venta_id' => $venta->id,
-                    'fecha_facturacion' => now(),
-                ];
+                // Renovar período de cada detalle individualmente (si auto_renovar)
+                // El DetalleCobroObserver sincronizará la suscripción automáticamente
+                foreach ($notificaciones as $notif) {
+                    $det   = $notif->detalleCobro;
+                    $cobro = $notif->cobro;
 
-                if ($this->forma_pago === 'CONTADO') {
-                    $updateData['fecha_pago'] = now();
-                }
-
-                DetalleCobros::whereIn('id', $this->detalle_ids_array)
-                    ->update($updateData);
-
-                // Renovar fecha si auto_renovar está activo
-                $cobro = Cobros::find($this->cobro_id);
-                if ($cobro && $cobro->auto_renovar) {
-                    foreach (DetalleCobros::whereIn('id', $this->detalle_ids_array)->get() as $det) {
-                        $nuevaFecha = match ($cobro->periodo) {
-                            'MENSUAL' => $det->fecha->copy()->addMonth(),
-                            'BIMENSUAL' => $det->fecha->copy()->addMonths(2),
-                            'TRIMESTRAL' => $det->fecha->copy()->addMonths(3),
-                            'SEMESTRAL' => $det->fecha->copy()->addMonths(6),
-                            'ANUAL' => $det->fecha->copy()->addYear(),
-                            default => $det->fecha,
+                    if ($det && $cobro) {
+                        $nuevoInicio = $notif->fecha_vencimiento->copy();
+                        $nuevoFin    = match (strtoupper($cobro->periodo ?? 'MENSUAL')) {
+                            'BIMENSUAL'  => $nuevoInicio->copy()->addMonths(2),
+                            'TRIMESTRAL' => $nuevoInicio->copy()->addMonths(3),
+                            'SEMESTRAL'  => $nuevoInicio->copy()->addMonths(6),
+                            'ANUAL'      => $nuevoInicio->copy()->addYear(),
+                            default      => $nuevoInicio->copy()->addMonth(),
                         };
-                        // Resetear estado para permitir facturar la siguiente mensualidad
+                        // Actualiza fecha_inicio y fecha_vencimiento;
+                        // el observer sincroniza la suscripción del vehículo
                         $det->update([
-                            'fecha' => $nuevaFecha,
-                            'estado_facturacion' => EstadoFacturacion::SIN_FACTURAR,
-                            'venta_id' => null,
-                            'recibo_id' => null,
-                            'fecha_facturacion' => null,
-                            'fecha_pago' => null,
+                            'fecha_inicio'      => $nuevoInicio,
+                            'fecha_vencimiento' => $nuevoFin,
                         ]);
                     }
                 }
+
+                // Actualizar estado de NotificacionCobro
+                $estadoNotif = $this->forma_pago === 'CONTADO' ? 'PAGADO' : 'FACTURADO';
+                $notifData = [
+                    'estado'            => $estadoNotif,
+                    'venta_id'          => $venta->id,
+                    'fecha_facturacion' => now(),
+                ];
+                if ($this->forma_pago === 'CONTADO') {
+                    $notifData['fecha_pago'] = now();
+                }
+                NotificacionCobro::whereIn('id', $this->notificacion_ids_array)->update($notifData);
             }
 
             DB::commit();
@@ -764,16 +762,20 @@ class Emitir extends Component
     //CALCULAR IGV DESDE EL SUB TOTAL - FALTA POR TRAER EL PROCENTAJE DEL IUMPUESTO DE LA DB
     public function calcularIgv()
     {
+        // Sumar el IGV ya calculado por ítem para evitar diferencias de redondeo
+        // cuando el monto viene pre-calculado (flujo NotificacionCobro)
+        $igv = round(
+            $this->items
+                ->where('codigo_afectacion', '10')
+                ->sum(fn($item) => floatval($item['igv'])),
+            4
+        );
+
         if ($this->igv_anticipos > 0) {
-
-            $igv = (floatval($this->op_gravadas) *  $this->plantilla->igv);
-            return round($igv, 4);
-        } else {
-
-            $igv = floatval($this->op_gravadas) *  $this->plantilla->igv;
-
-            return round($igv, 4);
+            return round($igv - $this->igv_anticipos, 4);
         }
+
+        return $igv;
     }
 
     //CALCULAR TOTALES DE LOS TIPOS DE AFECTACIONES
