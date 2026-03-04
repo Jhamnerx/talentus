@@ -238,7 +238,7 @@
                     </div>
                     {{-- LISTA DE PRODUCTOS --}}
 
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto min-h-screen">>
                         <table class="w-full">
                             <!-- Table header -->
                             <thead

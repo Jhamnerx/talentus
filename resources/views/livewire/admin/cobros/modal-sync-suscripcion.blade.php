@@ -47,8 +47,8 @@
             @enderror
         </div>
 
-        {{-- Fechas --}}
-        <div class="grid grid-cols-2 gap-4 mb-4">
+        {{-- Fechas + botón avanzar período --}}
+        <div class="grid grid-cols-2 gap-4 mb-2">
             <div>
                 <x-form.input type="date" label="Fecha inicio" wire:model.live="startsAt" />
                 @error('startsAt')
@@ -63,9 +63,8 @@
             </div>
         </div>
 
-        <p class="text-xs text-gray-500 dark:text-gray-400">
-            La fecha de vencimiento se toma de la próxima facturación del cobro.
-            Puede ajustarla manualmente si lo necesita.
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">
+            Las fechas se toman del detalle de cobro. Ajústalas manualmente si es necesario.
         </p>
     @endif
 

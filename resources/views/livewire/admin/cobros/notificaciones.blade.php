@@ -14,7 +14,7 @@
         </div>
 
         <!-- Tarjetas de estadísticas -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
             <!-- Pendientes -->
             <div class="bg-linear-to-br from-blue-500 to-blue-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
@@ -63,13 +63,30 @@
                 </div>
             </div>
 
-            <!-- Monto Total -->
+            <!-- Monto Pendiente PEN -->
             <div class="bg-linear-to-br from-emerald-500 to-emerald-600 rounded-lg shadow-lg p-5">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-emerald-100 text-sm font-medium">Monto Pendiente</p>
-                        <p class="text-white text-2xl font-bold mt-1">S/
-                            {{ number_format($stats['monto_pendiente'], 2) }}</p>
+                        <p class="text-emerald-100 text-sm font-medium">Pendiente (S/.)</p>
+                        <p class="text-white text-2xl font-bold mt-1">S/.
+                            {{ number_format($stats['monto_pendiente_pen'], 2) }}</p>
+                    </div>
+                    <div class="bg-white/20 rounded-full p-3">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Monto Pendiente USD -->
+            <div class="bg-linear-to-br from-teal-500 to-teal-600 rounded-lg shadow-lg p-5">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-teal-100 text-sm font-medium">Pendiente (USD)</p>
+                        <p class="text-white text-2xl font-bold mt-1">USD
+                            {{ number_format($stats['monto_pendiente_usd'], 2) }}</p>
                     </div>
                     <div class="bg-white/20 rounded-full p-3">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -85,7 +102,7 @@
         <div class="flex flex-wrap items-center gap-2">
 
             <!-- Búsqueda -->
-            <div class="relative flex-1 min-w-[160px]">
+            <div class="relative flex-1 min-w-40">
                 <input wire:model.live.debounce="search" type="search"
                     class="form-input pl-8 py-1.5 text-sm w-full dark:bg-gray-800 dark:border-gray-700/60 dark:text-gray-100"
                     placeholder="Cliente, placa..." />
@@ -151,7 +168,7 @@
 
     <!-- Tabla de notificaciones -->
     <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto min-h-screen">
             <table class="table-auto w-full dark:text-gray-300">
                 <thead
                     class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-b border-gray-200 dark:border-gray-700/60">
@@ -269,7 +286,7 @@
                                             wire:click.prevent="abrirModalPago({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="document-text" label="Emitir documento"
                                             wire:click.prevent="redirectToFacturar({{ $notificacion->id }})" />
-                                        <x-dropdown.item icon="refresh" label="Actualizar fecha"
+                                        <x-dropdown.item icon="arrow-path" label="Actualizar fecha"
                                             wire:click.prevent="refreshFecha({{ $notificacion->id }})" />
                                         <x-dropdown.item icon="x-circle" label="Cancelar"
                                             wire:click.prevent="cancelar({{ $notificacion->id }})" />

@@ -132,7 +132,8 @@ class Notificaciones extends Component
             'pendientes'      => NotificacionCobro::pendientes()->count(),
             'vencidos'        => NotificacionCobro::vencidos()->count(),
             'hoy'             => NotificacionCobro::pendientes()->whereDate('fecha_vencimiento', now())->count(),
-            'monto_pendiente' => NotificacionCobro::pendientes()->sum('monto'),
+            'monto_pendiente_pen' => NotificacionCobro::pendientes()->where('moneda', 'PEN')->sum('monto'),
+            'monto_pendiente_usd' => NotificacionCobro::pendientes()->where('moneda', 'USD')->sum('monto'),
         ];
 
         return view('livewire.admin.cobros.notificaciones', compact('notificaciones', 'stats'));

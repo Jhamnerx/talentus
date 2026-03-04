@@ -1,4 +1,4 @@
-<div class="overflow-x-auto">
+<div class="overflow-x-auto min-h-screen">>
     <table class="w-full">
         <!-- Table header -->
         <thead class="text-xs font-semibold uppercase text-white bg-slate-800  border-t border-b border-slate-200">

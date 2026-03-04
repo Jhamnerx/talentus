@@ -2,7 +2,7 @@
     <div
         class="my-4 container px-10 mx-auto flex flex-col md:flex-row items-start md:items-center justify-between pb-4 border-b border-gray-300 dark:border-gray-600">
         <!-- Botón Atrás: detecta contexto cobros -->
-        @if($cobro_redirect_back)
+        @if ($cobro_redirect_back)
             <a href="{{ $cobro_redirect_back }}">
                 <button class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-back w-5 h-5"
@@ -48,16 +48,18 @@
     </div>
 
     {{-- Banner de contexto de cobros --}}
-    @if($cobro_id)
+    @if ($cobro_id)
         <div class="container px-10 mx-auto mb-4">
-            <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 flex items-center gap-3">
+            <div
+                class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700 rounded-lg p-4 flex items-center gap-3">
                 <span class="text-2xl">📋</span>
                 <div>
                     <p class="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
                         Emitiendo desde Módulo de Cobros
                     </p>
                     <p class="text-xs text-gray-600 dark:text-gray-400">
-                        Al guardar, el estado de facturación se actualizará automáticamente y regresarás al detalle del cobro.
+                        Al guardar, el estado de facturación se actualizará automáticamente y regresarás al detalle del
+                        cobro.
                     </p>
                 </div>
             </div>
@@ -159,17 +161,21 @@
                     @if ($tipo_venta === 'CONTADO')
                         <div class="col-span-12 mt-4">
                             <h3 class="text-lg font-semibold mb-3">Métodos de Pago</h3>
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-auto min-h-screen">>
                                 <table class="min-w-full divide-y divide-gray-200">
                                     <thead class="bg-gray-50">
                                         <tr>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                            <th
+                                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Método de pago</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                            <th
+                                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Destino</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                            <th
+                                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Referencia</th>
-                                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
+                                            <th
+                                                class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">
                                                 Monto</th>
                                             <th class="px-4 py-2"></th>
                                         </tr>

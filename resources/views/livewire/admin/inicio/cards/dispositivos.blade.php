@@ -5,7 +5,7 @@
     <div class="p-3">
 
         <!-- Table -->
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto min-h-screen">>
             <table class="table-auto w-full">
                 <!-- Table header -->
                 <thead class="text-xs uppercase text-slate-400 bg-slate-50 rounded-sm">

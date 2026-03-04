@@ -42,8 +42,8 @@
                         display-format="DD/MM/YYYY" parse-format="YYYY-MM-DD" />
                 </div>
                 <div class="lg:col-span-2">
-                    <x-form.datetime.picker wire:model.live="to" label="Hasta" without-time
-                        display-format="DD/MM/YYYY" parse-format="YYYY-MM-DD" />
+                    <x-form.datetime.picker wire:model.live="to" label="Hasta" without-time display-format="DD/MM/YYYY"
+                        parse-format="YYYY-MM-DD" />
                 </div>
             @endif
         </div>
@@ -84,12 +84,10 @@
                 </div>
             @elseif ($destination_type === 'bank')
                 <div class="lg:col-span-2">
-                    <x-form.select wire:model.live="bank_account_id" label="Cuenta bancaria"
-                        placeholder="Seleccione">
+                    <x-form.select wire:model.live="bank_account_id" label="Cuenta bancaria" placeholder="Seleccione">
                         <x-select.option label="Todas" value="" />
                         @foreach ($cuentasBancarias as $cuenta)
-                            <x-select.option
-                                label="{{ $cuenta->bank->name ?? 'Banco' }} - {{ $cuenta->description }}"
+                            <x-select.option label="{{ $cuenta->bank->name ?? 'Banco' }} - {{ $cuenta->description }}"
                                 value="{{ $cuenta->id }}" />
                         @endforeach
                     </x-form.select>
@@ -99,7 +97,8 @@
             <div class="flex items-end">
                 <button wire:click="export" class="btn bg-emerald-600 text-white hover:bg-emerald-700 w-full">
                     <svg class="fill-current shrink-0 w-4 h-4" viewBox="0 0 16 16">
-                        <path d="M9 13H1c-.6 0-1-.4-1-1V4c0-.6.4-1 1-1h6v2H2v6h7v-2h2v3c0 .6-.4 1-1 1zM16 9l-5-5v3H7v4h4v3l5-5z" />
+                        <path
+                            d="M9 13H1c-.6 0-1-.4-1-1V4c0-.6.4-1 1-1h6v2H2v6h7v-2h2v3c0 .6-.4 1-1 1zM16 9l-5-5v3H7v4h4v3l5-5z" />
                     </svg>
                     <span class="ml-2">Excel</span>
                 </button>
@@ -131,7 +130,7 @@
                 <span class="text-gray-400 dark:text-gray-500 font-medium">{{ $movimientos->total() }}</span>
             </h2>
         </header>
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto min-h-screen">>
             <table class="table-auto w-full">
                 <thead
                     class="text-xs uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-200 dark:border-gray-700/60">

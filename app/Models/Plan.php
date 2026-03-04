@@ -34,12 +34,14 @@ class Plan extends BasePlan
         'prorate_extend_due',
         'active_subscribers_limit',
         'sort_order',
+        'default',
     ];
 
     protected $casts = [
         'name' => 'json',
         'description' => 'json',
         'is_active' => 'boolean',
+        'default' => 'boolean',
         'price' => 'decimal:2',
         'signup_fee' => 'decimal:2',
         'trial_period' => 'integer',

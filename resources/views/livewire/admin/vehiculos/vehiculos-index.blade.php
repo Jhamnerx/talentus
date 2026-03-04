@@ -203,7 +203,7 @@
         <div>
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">
                 <table class="table-auto w-full dark:text-gray-300">
                     <!-- Table header -->
                     <thead
@@ -228,6 +228,9 @@
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Dispositivos</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-center">Suscripción</div>
                             </th>
 
                             @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos'])
@@ -550,6 +553,114 @@
                                         @endif
                                     </div>
                                 </td>
+
+                                {{-- Columna Suscripción --}}
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap text-center">
+                                    @php
+                                        $subActiva = $vehiculo->planSubscriptions
+                                            ->whereNull('canceled_at')
+                                            ->filter(fn($s) => \Carbon\Carbon::parse($s->ends_at)->isFuture())
+                                            ->sortByDesc('ends_at')
+                                            ->first();
+                                        $subVencida = !$subActiva && $vehiculo->planSubscriptions->isNotEmpty();
+                                    @endphp
+
+                                    @if ($subActiva)
+                                        @php
+                                            $dias = (int) \Carbon\Carbon::now()
+                                                ->startOfDay()
+                                                ->diffInDays(
+                                                    \Carbon\Carbon::parse($subActiva->ends_at)->startOfDay(),
+                                                    false,
+                                                );
+                                            if ($dias < 0) {
+                                                $diasTexto =
+                                                    abs($dias) . ' día' . (abs($dias) != 1 ? 's' : '') . ' atrasado';
+                                                $ringColor = 'group-hover:ring-red-400';
+                                                $bgColor = 'bg-red-100 dark:bg-red-900/40';
+                                                $textColor = 'text-red-600 dark:text-red-400';
+                                            } elseif ($dias == 0) {
+                                                $diasTexto = 'Hoy';
+                                                $ringColor = 'group-hover:ring-orange-400';
+                                                $bgColor = 'bg-orange-100 dark:bg-orange-900/40';
+                                                $textColor = 'text-orange-600 dark:text-orange-400';
+                                            } elseif ($dias == 1) {
+                                                $diasTexto = 'Mañana';
+                                                $ringColor = 'group-hover:ring-orange-400';
+                                                $bgColor = 'bg-orange-100 dark:bg-orange-900/40';
+                                                $textColor = 'text-orange-600 dark:text-orange-400';
+                                            } elseif ($dias <= 7) {
+                                                $diasTexto = $dias . ' días';
+                                                $ringColor = 'group-hover:ring-amber-400';
+                                                $bgColor = 'bg-amber-100 dark:bg-amber-900/40';
+                                                $textColor = 'text-amber-600 dark:text-amber-400';
+                                            } elseif ($dias <= 15) {
+                                                $diasTexto = $dias . ' días';
+                                                $ringColor = 'group-hover:ring-yellow-400';
+                                                $bgColor = 'bg-yellow-100 dark:bg-yellow-900/40';
+                                                $textColor = 'text-yellow-600 dark:text-yellow-400';
+                                            } else {
+                                                $diasTexto = $dias . ' días';
+                                                $ringColor = 'group-hover:ring-emerald-400';
+                                                $bgColor = 'bg-emerald-100 dark:bg-emerald-900/40';
+                                                $textColor = 'text-emerald-600 dark:text-emerald-400';
+                                            }
+                                        @endphp
+                                        <button wire:click="abrirModalSuscripcion({{ $vehiculo->id }})"
+                                            title="Activa — vence {{ \Carbon\Carbon::parse($subActiva->ends_at)->format('d/m/Y') }}"
+                                            class="inline-flex flex-col items-center gap-0.5 group">
+                                            <span
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-full {{ $bgColor }} group-hover:ring-2 {{ $ringColor }} transition">
+                                                <svg class="w-4 h-4 {{ $textColor }}" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </span>
+                                            <span class="text-xs font-medium {{ $textColor }}">
+                                                {{ $diasTexto }}
+                                            </span>
+                                        </button>
+                                    @elseif ($subVencida)
+                                        <button wire:click="abrirModalSuscripcion({{ $vehiculo->id }})"
+                                            title="Suscripción vencida"
+                                            class="inline-flex flex-col items-center gap-0.5 group">
+                                            <span
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-full
+                                                bg-red-100 dark:bg-red-900/40
+                                                group-hover:ring-2 group-hover:ring-red-400 transition">
+                                                <svg class="w-4 h-4 text-red-600 dark:text-red-400" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </span>
+                                            <span
+                                                class="text-xs font-medium text-red-600 dark:text-red-400">Vencida</span>
+                                        </button>
+                                    @else
+                                        <button wire:click="abrirModalSuscripcion({{ $vehiculo->id }})"
+                                            title="Sin suscripción"
+                                            class="inline-flex flex-col items-center gap-0.5 group">
+                                            <span
+                                                class="inline-flex items-center justify-center w-8 h-8 rounded-full
+                                                bg-gray-100 dark:bg-gray-700
+                                                group-hover:ring-2 group-hover:ring-gray-400 transition">
+                                                <svg class="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none"
+                                                    viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                                </svg>
+                                            </span>
+                                            <span class="text-xs font-medium text-gray-400 dark:text-gray-500">Sin
+                                                plan</span>
+                                        </button>
+                                    @endif
+                                </td>
+
                                 @canany(['eliminar-vehiculos-vehiculo', 'editar-vehiculos-vehiculos',
                                     'show-vehiculos-vehiculos'])
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
@@ -728,5 +839,7 @@
             {{ $vehiculos->links() }}
         </div>
     </div>
+
+    <livewire:admin.vehiculos.modal-ver-suscripcion />
 
 </div>

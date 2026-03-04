@@ -41,7 +41,7 @@
         </div>
 
     </div>
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto min-h-screen">>
         <table class="table-auto w-full">
             <!-- Table header -->
             <thead

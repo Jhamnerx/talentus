@@ -209,8 +209,9 @@
                     </div>
                     <div class="flex justify-between items-center py-2">
                         <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Monto</span>
-                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">S/.
-                            {{ number_format($item->monto_calculado, 2) }}</span>
+                        <span class="text-sm font-semibold text-gray-800 dark:text-gray-100">
+                            {{ $cobro->divisa === 'USD' ? 'USD' : 'S/.' }}
+                            {{ number_format($item->monto_efectivo, 2) }}</span>
                     </div>
                     <div class="flex justify-between items-center py-2">
                         <span class="text-sm font-medium text-gray-600 dark:text-gray-400">Tipo Pago</span>

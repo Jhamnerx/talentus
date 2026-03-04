@@ -36,6 +36,7 @@ class VehiculosIndex extends Component
         $hasta = $this->to;
 
         $vehiculos = Vehiculos::query()
+            ->with(['planSubscriptions'])
             ->when($this->clientes_id, function ($query) {
                 $query->where('clientes_id', $this->clientes_id);
             })
@@ -163,6 +164,11 @@ class VehiculosIndex extends Component
     public function createMantenimiento(Vehiculos $vehiculo)
     {
         $this->dispatch('open-modal-save-mantenimiento', from: 'vehiculos-index', vehiculo: $vehiculo);
+    }
+
+    public function abrirModalSuscripcion(Vehiculos $vehiculo): void
+    {
+        $this->dispatch('abrir-modal-suscripcion', vehiculoId: $vehiculo->id);
     }
 
     public function openModalAddVehiculo()

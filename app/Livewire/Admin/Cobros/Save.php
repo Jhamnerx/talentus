@@ -19,6 +19,7 @@ class Save extends Component
     public Collection $items;
     public $producto_id;
     public $divisa = 'PEN';
+    public $tipo_pago = 'FACTURA';
     public Collection $planes;
 
     // Valores por defecto para cada vehículo que se agregue
@@ -56,10 +57,99 @@ class Save extends Component
             ->orderBy('sort_order')
             ->get();
 
-        // Seleccionar el primer plan por defecto si existe
+        // Priorizar el plan marcado como default, si no existe tomar el primero
         if ($this->planes->isNotEmpty() && !$this->default_plan_id) {
-            $this->default_plan_id = $this->planes->first()->id;
+            $planDefault = $this->planes->firstWhere('default', true) ?? $this->planes->first();
+            $this->default_plan_id = $planDefault->id;
         }
+    }
+
+    /**
+     * Convierte un precio desde la moneda del plan hacia la divisa seleccionada.
+     * tipo_cambio() retorna cuántos PEN equivalen a 1 USD (ej: 3.5).
+     */
+    protected function convertirMontoDivisa(float $precio, string $planCurrency = 'PEN'): float
+    {
+        if ($planCurrency === $this->divisa) {
+            return $precio;
+        }
+
+        // Buscar tipo de cambio: hoy → ayer → anteayer (cubre fines de semana/feriados)
+        $tc = tipo_cambio()
+            ?? tipo_cambio(now()->subDay()->format('Y-m-d'))
+            ?? tipo_cambio(now()->subDays(2)->format('Y-m-d'));
+
+        if (!$tc) {
+            return $precio; // no se pudo obtener, devolver sin convertir
+        }
+
+        if ($planCurrency === 'PEN' && $this->divisa === 'USD') {
+            return round($precio / $tc, 2);
+        }
+
+        if ($planCurrency === 'USD' && $this->divisa === 'PEN') {
+            return round($precio * $tc, 2);
+        }
+
+        return $precio;
+    }
+
+    /**
+     * Aplica descuento de IGV si el tipo de comprobante es RECIBO.
+     * Los precios en planes incluyen IGV 18%; los recibos no lo llevan.
+     * Ejemplo: S/. 35.00 (con IGV) → S/. 29.66 (sin IGV)
+     */
+    protected function calcularMontoEfectivo(float $montoBase): float
+    {
+        if ($this->tipo_pago === 'RECIBO' && $montoBase > 0) {
+            return round($montoBase / 1.18, 2);
+        }
+        return $montoBase;
+    }
+
+    /**
+     * Pipeline completo: precio del plan → conversión de divisa → multiplicador de período → IGV.
+     */
+    protected function calcularMontoItem(?Plan $plan, string $periodo): float
+    {
+        if (!$plan) {
+            return 0;
+        }
+
+        $multiplicador = match ($periodo) {
+            'BIMENSUAL'  => 2,
+            'TRIMESTRAL' => 3,
+            'SEMESTRAL'  => 6,
+            'ANUAL'      => 12,
+            default      => 1,
+        };
+
+        $precio = $this->convertirMontoDivisa((float) $plan->price, $plan->currency ?? 'PEN');
+
+        return $this->calcularMontoEfectivo($precio * $multiplicador);
+    }
+
+    /**
+     * Recalcular todos los montos al cambiar divisa o tipo de comprobante.
+     */
+    protected function recalcularMontos(): void
+    {
+        foreach ($this->items as $placa => $item) {
+            $plan = isset($item['plan_id']) ? Plan::find($item['plan_id']) : null;
+            $this->items->put($placa, array_merge($item, [
+                'monto' => $this->calcularMontoItem($plan, $item['periodo'] ?? 'MENSUAL'),
+            ]));
+        }
+    }
+
+    public function updatedDivisa(): void
+    {
+        $this->recalcularMontos();
+    }
+
+    public function updatedTipoPago(): void
+    {
+        $this->recalcularMontos();
     }
 
     public function render()
@@ -90,6 +180,7 @@ class Save extends Component
                 'comentario' => $datos["comentario"],
                 'divisa' => $datos["divisa"],
                 'nota' => $datos["nota"],
+                'tipo_pago' => $datos["tipo_pago"],
                 'producto_id' => $productoServicio->id,
             ]);
 
@@ -158,7 +249,8 @@ class Save extends Component
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
-            $monto = Plan::find($this->default_plan_id)?->price ?? 0;
+            $plan  = Plan::find($this->default_plan_id);
+            $monto = $this->calcularMontoItem($plan, $this->default_periodo);
 
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
@@ -204,15 +296,7 @@ class Save extends Component
                 $periodo = $item['periodo'] ?? 'MENSUAL';
                 $plan    = $planId ? Plan::find($planId) : null;
 
-                $multiplicador = match ($periodo) {
-                    'BIMENSUAL'  => 2,
-                    'TRIMESTRAL' => 3,
-                    'SEMESTRAL'  => 6,
-                    'ANUAL'      => 12,
-                    default      => 1,
-                };
-
-                $updates = ['monto' => ($plan?->price ?? 0) * $multiplicador];
+                $updates = ['monto' => $this->calcularMontoItem($plan, $periodo)];
 
                 // Al cambiar el periodo, recalcular también la fecha de vencimiento
                 if ($campo === 'periodo') {
@@ -224,6 +308,7 @@ class Save extends Component
             }
         }
     }
+    
     public function eliminarVehiculo($key)
     {
         unset($this->items[$key]);

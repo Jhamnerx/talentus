@@ -21,6 +21,7 @@ class Edit extends Component
     public Cobros $cobro;
     public $producto_id;
     public $divisa = 'PEN';
+    public $tipo_pago = 'FACTURA';
     public Collection $planes;
 
     // Valores por defecto para nuevos vehículos
@@ -35,6 +36,7 @@ class Edit extends Component
         $this->clientes_id = $cobro->clientes_id;
         $this->comentario = $cobro->comentario;
         $this->divisa = $cobro->divisa;
+        $this->tipo_pago = $cobro->tipo_pago ?? 'FACTURA';
         $this->nota = $cobro->nota;
         $this->producto_id = $cobro->producto_id;
 
@@ -67,7 +69,7 @@ class Edit extends Component
                     'vehiculo_id'       => $detalle->vehiculo_id,
                     'placa'             => $detalle->vehiculo->placa,
                     'plan_id'           => $detalle->plan_id,
-                    'monto'             => $detalle->monto_calculado,
+                    'monto'             => $detalle->monto_efectivo,
                     'periodo'           => $detalle->periodo ?? 'MENSUAL',
                     'fecha_inicio'      => $detalle->fecha_inicio ? $detalle->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
                     'fecha_vencimiento' => $detalle->fecha_vencimiento ? $detalle->fecha_vencimiento->format('Y-m-d') : Carbon::now()->addDays(30)->format('Y-m-d'),
@@ -83,10 +85,99 @@ class Edit extends Component
             ->orderBy('sort_order')
             ->get();
 
-        // Seleccionar el primer plan por defecto si existe
+        // Priorizar el plan marcado como default, si no existe tomar el primero
         if ($this->planes->isNotEmpty() && !$this->default_plan_id) {
-            $this->default_plan_id = $this->planes->first()->id;
+            $planDefault = $this->planes->firstWhere('default', true) ?? $this->planes->first();
+            $this->default_plan_id = $planDefault->id;
         }
+    }
+
+    /**
+     * Convierte un precio desde la moneda del plan hacia la divisa seleccionada.
+     * tipo_cambio() retorna cuántos PEN equivalen a 1 USD (ej: 3.5).
+     */
+    protected function convertirMontoDivisa(float $precio, string $planCurrency = 'PEN'): float
+    {
+        if ($planCurrency === $this->divisa) {
+            return $precio;
+        }
+
+        // Buscar tipo de cambio: hoy → ayer → anteayer (cubre fines de semana/feriados)
+        $tc = tipo_cambio()
+            ?? tipo_cambio(now()->subDay()->format('Y-m-d'))
+            ?? tipo_cambio(now()->subDays(2)->format('Y-m-d'));
+
+        if (!$tc) {
+            return $precio; // no se pudo obtener, devolver sin convertir
+        }
+
+        if ($planCurrency === 'PEN' && $this->divisa === 'USD') {
+            return round($precio / $tc, 2);
+        }
+
+        if ($planCurrency === 'USD' && $this->divisa === 'PEN') {
+            return round($precio * $tc, 2);
+        }
+
+        return $precio;
+    }
+
+    /**
+     * Aplica descuento de IGV si el tipo de comprobante es RECIBO.
+     * Los precios en planes incluyen IGV 18%; los recibos de honorarios no lo llevan.
+     * Ejemplo: S/. 35.00 (con IGV) → S/. 29.66 (sin IGV)
+     */
+    protected function calcularMontoEfectivo(float $montoBase): float
+    {
+        if ($this->tipo_pago === 'RECIBO' && $montoBase > 0) {
+            return round($montoBase / 1.18, 2);
+        }
+        return $montoBase;
+    }
+
+    /**
+     * Pipeline completo: precio del plan → conversión de divisa → multiplicador de período → IGV.
+     */
+    protected function calcularMontoItem(?Plan $plan, string $periodo): float
+    {
+        if (!$plan) {
+            return 0;
+        }
+
+        $multiplicador = match ($periodo) {
+            'BIMENSUAL'  => 2,
+            'TRIMESTRAL' => 3,
+            'SEMESTRAL'  => 6,
+            'ANUAL'      => 12,
+            default      => 1,
+        };
+
+        $precio = $this->convertirMontoDivisa((float) $plan->price, $plan->currency ?? 'PEN');
+
+        return $this->calcularMontoEfectivo($precio * $multiplicador);
+    }
+
+    /**
+     * Recalcular todos los montos al cambiar divisa o tipo de comprobante.
+     */
+    protected function recalcularMontos(): void
+    {
+        foreach ($this->items as $placa => $item) {
+            $plan = isset($item['plan_id']) ? Plan::find($item['plan_id']) : null;
+            $this->items->put($placa, array_merge($item, [
+                'monto' => $this->calcularMontoItem($plan, $item['periodo'] ?? 'MENSUAL'),
+            ]));
+        }
+    }
+
+    public function updatedDivisa(): void
+    {
+        $this->recalcularMontos();
+    }
+
+    public function updatedTipoPago(): void
+    {
+        $this->recalcularMontos();
     }
 
     public function render()
@@ -158,15 +249,7 @@ class Edit extends Component
                 $periodo = $item['periodo'] ?? 'MENSUAL';
                 $plan    = $planId ? Plan::find($planId) : null;
 
-                $multiplicador = match ($periodo) {
-                    'BIMENSUAL'  => 2,
-                    'TRIMESTRAL' => 3,
-                    'SEMESTRAL'  => 6,
-                    'ANUAL'      => 12,
-                    default      => 1,
-                };
-
-                $updates = ['monto' => ($plan?->price ?? 0) * $multiplicador];
+                $updates = ['monto' => $this->calcularMontoItem($plan, $periodo)];
 
                 // Al cambiar el periodo, recalcular también la fecha de vencimiento
                 if ($campo === 'periodo') {
@@ -222,7 +305,8 @@ class Edit extends Component
                 mensaje: 'Añadiste ' . $vehiculo->placa,
             );
 
-            $monto = Plan::find($this->default_plan_id)?->price ?? 0;
+            $plan  = Plan::find($this->default_plan_id);
+            $monto = $this->calcularMontoItem($plan, $this->default_periodo);
 
             $this->items[$vehiculo->placa] = [
                 'vehiculo_id' => $vehiculo->id,
@@ -283,6 +367,7 @@ class Edit extends Component
                 'comentario' => $datos["comentario"],
                 'divisa' => $datos["divisa"],
                 'nota' => $datos["nota"],
+                'tipo_pago' => $datos["tipo_pago"],
                 'producto_id' => $productoServicio->id,
             ]);
 

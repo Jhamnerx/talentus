@@ -242,7 +242,7 @@
                     </div>
                     {{-- LISTA DE PRODUCTOS --}}
 
-                    <div class="overflow-x-auto">
+                    <div class="overflow-x-auto min-h-screen">>
                         <table class="w-full dark:text-gray-300">
                             <!-- Table header -->
                             <thead

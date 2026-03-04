@@ -29,6 +29,7 @@ class CobrosRequest extends FormRequest
             "comentario" => 'nullable',
             "divisa" => 'required',
             "nota" => 'nullable',
+            "tipo_pago" => 'required|in:FACTURA,RECIBO',
 
             'items' => 'array|between:1,100',
             'items.*.plan_id' => 'required|exists:plans,id',
@@ -49,6 +50,8 @@ class CobrosRequest extends FormRequest
         $messages = [
             'clientes_id.required' => 'Selecciona un cliente',
             'divisa.required' => 'Selecciona una divisa',
+            'tipo_pago.required' => 'Selecciona el tipo de comprobante',
+            'tipo_pago.in'       => 'El tipo de comprobante debe ser FACTURA o RECIBO',
 
             'items.array' => 'Ingresa como mínimo un vehículo',
             'items.between' => 'Ingresa como mínimo un vehículo',

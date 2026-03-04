@@ -16,8 +16,7 @@
                 <!-- Tipo de Periodo -->
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor"
-                            viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
@@ -129,7 +128,7 @@
 
     <!-- Table -->
     <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg border border-gray-200 dark:border-gray-700/60 relative">
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto min-h-screen">>
             <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <!-- Table header -->
                 <thead
@@ -167,7 +166,8 @@
                 <!-- Table body -->
                 <tbody class="text-sm divide-y divide-gray-200 dark:divide-gray-700">
                     @forelse($movimientos as $movimiento)
-                        <tr class="{{ isset($movimiento['is_saldo_inicial']) && $movimiento['is_saldo_inicial'] ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-700/20' }}">
+                        <tr
+                            class="{{ isset($movimiento['is_saldo_inicial']) && $movimiento['is_saldo_inicial'] ? 'bg-blue-50 dark:bg-blue-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-700/20' }}">
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left text-gray-600 dark:text-gray-300">
                                     {{ $movimiento['date_time'] ? \Carbon\Carbon::parse($movimiento['date_time'])->format('d/m/Y H:i') : '-' }}
@@ -176,16 +176,17 @@
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left font-medium text-gray-800 dark:text-gray-100">
                                     {{ $movimiento['person_name'] ?: '-' }}
-                                    @if(!empty($movimiento['person_document']))
+                                    @if (!empty($movimiento['person_document']))
                                         <div class="text-xs text-gray-500">{{ $movimiento['person_document'] }}</div>
                                     @endif
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-left">
-                                    @if(!empty($movimiento['document_type']))
-                                        <span class="font-medium text-gray-700 dark:text-gray-300">{{ $movimiento['document_type'] }}</span>
-                                        @if(!empty($movimiento['document_number']))
+                                    @if (!empty($movimiento['document_type']))
+                                        <span
+                                            class="font-medium text-gray-700 dark:text-gray-300">{{ $movimiento['document_type'] }}</span>
+                                        @if (!empty($movimiento['document_number']))
                                             <span class="text-gray-500"> - {{ $movimiento['document_number'] }}</span>
                                         @endif
                                     @else
@@ -200,15 +201,17 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-center">
-                                    <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $movimiento['moneda'] === 'PEN' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' }}">
+                                    <span
+                                        class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $movimiento['moneda'] === 'PEN' ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400' : 'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400' }}">
                                         {{ $movimiento['moneda'] }}
                                     </span>
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="text-center">
-                                    @if(!empty($movimiento['tipo']))
-                                        <span class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5 {{ $movimiento['tipo'] === 'INGRESO' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' }}">
+                                    @if (!empty($movimiento['tipo']))
+                                        <span
+                                            class="inline-flex font-medium rounded-full text-center px-2.5 py-0.5 {{ $movimiento['tipo'] === 'INGRESO' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400' }}">
                                             {{ $movimiento['tipo'] }}
                                         </span>
                                     @else
@@ -217,12 +220,14 @@
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-right font-medium {{ $movimiento['ingresos'] > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400' }}">
+                                <div
+                                    class="text-right font-medium {{ $movimiento['ingresos'] > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-400' }}">
                                     {{ $movimiento['ingresos'] > 0 ? number_format($movimiento['ingresos'], 2) : '-' }}
                                 </div>
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                <div class="text-right font-medium {{ $movimiento['gastos'] > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-400' }}">
+                                <div
+                                    class="text-right font-medium {{ $movimiento['gastos'] > 0 ? 'text-red-600 dark:text-red-400' : 'text-gray-400' }}">
                                     {{ $movimiento['gastos'] > 0 ? number_format($movimiento['gastos'], 2) : '-' }}
                                 </div>
                             </td>
@@ -249,9 +254,11 @@
                     @endforelse
 
                     <!-- Totales Row -->
-                    @if($movimientos->count() > 0)
-                        <tr class="bg-gray-100 dark:bg-gray-800/60 font-bold border-t-2 border-gray-300 dark:border-gray-600">
-                            <td colspan="6" class="px-2 first:pl-5 last:pr-5 py-3 text-right uppercase text-sm text-gray-700 dark:text-gray-200">
+                    @if ($movimientos->count() > 0)
+                        <tr
+                            class="bg-gray-100 dark:bg-gray-800/60 font-bold border-t-2 border-gray-300 dark:border-gray-600">
+                            <td colspan="6"
+                                class="px-2 first:pl-5 last:pr-5 py-3 text-right uppercase text-sm text-gray-700 dark:text-gray-200">
                                 TOTALES:
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

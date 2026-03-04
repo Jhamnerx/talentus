@@ -14,13 +14,13 @@ return new class extends Migration
         Schema::table('cobros', function (Blueprint $table) {
             $table->dropColumn([
                 'periodo',
-                'tipo_pago',
                 'fecha_vencimiento',
                 'fecha_inicio',
                 'monto_unidad',
                 'cantidad_unidades',
                 'observacion',
             ]);
+            $table->date('fecha')->nullable()->change();
         });
     }
 
@@ -31,7 +31,6 @@ return new class extends Migration
     {
         Schema::table('cobros', function (Blueprint $table) {
             $table->string('periodo')->default('MENSUAL')->after('comentario');
-            $table->string('tipo_pago')->default('RECIBO')->after('divisa');
             $table->date('fecha_vencimiento')->nullable()->after('tipo_pago');
             $table->date('fecha_inicio')->nullable()->after('tipo_pago');
             $table->decimal('monto_unidad', 10, 2)->default(30)->after('divisa');

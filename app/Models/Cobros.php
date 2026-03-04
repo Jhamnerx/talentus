@@ -143,10 +143,9 @@ class Cobros extends Model
                 }
             }
 
-            // COMPATIBILIDAD: Asegurar que el campo 'fecha' tenga valor si aún es requerido en DB
-            // El model DetalleCobros usa fecha_inicio como principal
-            if (!isset($cobroItem['fecha'])) {
-                $cobroItem['fecha'] = $cobroItem['fecha_inicio'] ?? now()->format('Y-m-d');
+            // Guardar el monto convertido (ya incluye tipo de cambio + descuento RECIBO)
+            if (isset($cobroItem['monto']) && $cobroItem['monto'] > 0) {
+                $cobroItem['monto_unidad'] = $cobroItem['monto'];
             }
 
             // Remover campos que no son de la tabla

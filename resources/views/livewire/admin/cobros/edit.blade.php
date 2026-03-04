@@ -19,6 +19,18 @@
                         wire:model.live="divisa" :clearable="false" icon='currency-dollar' />
                 </div>
 
+                <div class="col-span-12 sm:col-span-6 mb-2">
+                    <x-form.select label="Tipo de Comprobante:" wire:model.live="tipo_pago" :clearable="false"
+                        icon="document-text" :options="[
+                            ['label' => 'Factura / Boleta (con IGV)', 'value' => 'FACTURA'],
+                            ['label' => 'Recibo', 'value' => 'RECIBO'],
+                        ]" option-label="label" option-value="value"
+                        hint="Factura/Boleta aplica IGV 18%. Recibo no incluye IGV." />
+                    @error('tipo_pago')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
             </div>
             <div class="col-span-12">
 
@@ -144,7 +156,7 @@
                                             <option value="">Seleccionar...</option>
                                             @foreach ($planes as $plan)
                                                 <option value="{{ $plan->id }}">
-                                                    {{ $plan->name }} - {{ $divisa }}
+                                                    {{ $plan->name }} - {{ $plan->currency ?? 'PEN' }}
                                                     {{ number_format($plan->price, 2) }}
                                                 </option>
                                             @endforeach

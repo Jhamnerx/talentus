@@ -333,7 +333,7 @@
                 </h2>
             </header>
             <div>
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto min-h-screen">>
                     <table class="table-auto w-full dark:text-gray-300">
                         <thead
                             class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
@@ -346,6 +346,9 @@
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Plan</div>
+                                </th>
+                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    <div class="font-semibold text-left">Periodo</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Suscripción</div>
@@ -384,9 +387,7 @@
                                             ? $subPlan->name['es'] ?? ($subPlan->name['en'] ?? 'Plan')
                                             : $subPlan->name)
                                         : $detalle->plan_nombre;
-                                    $planMonto = $subPlan
-                                        ? (float) ($subPlan->price ?? $detalle->monto_calculado)
-                                        : $detalle->monto_calculado;
+                                    // $planMonto no se usa en la vista — el monto real se muestra via $detalle->monto_efectivo
                                     // Fecha de referencia: suscripción si existe, sino detalle->fecha
                                     $hoy = \Carbon\Carbon::now()->startOfDay();
                                     $fechaVencimiento = $subEndsAt
@@ -486,12 +487,41 @@
 
                                     <!-- Plan -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="font-medium text-gray-900 dark:text-gray-100">
-                                            S/. {{ number_format($planMonto, 2) }}
+                                        <div
+                                            class="flex items-center gap-1.5 font-medium text-gray-900 dark:text-gray-100">
+                                            {{ $detalle->cobro->divisa === 'USD' ? 'USD' : 'S/.' }}
+                                            {{ number_format($detalle->monto_efectivo, 2) }}
+                                            @if ($detalle->cobro->tipo_pago === 'FACTURA')
+                                                {{-- Factura: monto incluye IGV 18% --}}
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 text-blue-500 dark:text-blue-400 shrink-0"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                    stroke-width="1.8" title="Factura — incluye IGV 18%">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            @else
+                                                {{-- Recibo: monto sin IGV --}}
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    class="w-4 h-4 text-gray-400 dark:text-gray-500 shrink-0"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                    stroke-width="1.8" title="Recibo — precio sin IGV">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                </svg>
+                                            @endif
                                         </div>
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
                                             {{ $planNombre }}
                                         </div>
+                                    </td>
+
+                                    <!-- Periodo -->
+                                    <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+                                            {{ $detalle->periodo ?? '—' }}
+                                        </span>
                                     </td>
 
                                     <!-- Suscripción (laravelcm/subscriptions) -->

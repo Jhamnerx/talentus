@@ -41,11 +41,13 @@ class ModalSyncSuscripcion extends Component
         $this->detalleId = $detalleId;
         $this->detalle   = $detalle;
         $this->planId    = $detalle->plan_id;
-        $this->endsAt    = $detalle->fecha
-            ? Carbon::parse($detalle->fecha)->format('Y-m-d')
-            : Carbon::now()->format('Y-m-d');
-        $this->startsAt  = $detalle->fecha_inicio
+
+        // Fechas del detalle de cobro
+        $this->startsAt = $detalle->fecha_inicio
             ? Carbon::parse($detalle->fecha_inicio)->format('Y-m-d')
+            : Carbon::parse($detalle->fecha)->format('Y-m-d');
+        $this->endsAt = $detalle->fecha
+            ? Carbon::parse($detalle->fecha)->format('Y-m-d')
             : Carbon::now()->format('Y-m-d');
 
         // Cargar planes activos filtrados por empresa

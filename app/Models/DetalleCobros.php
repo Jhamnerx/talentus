@@ -61,6 +61,16 @@ class DetalleCobros extends Model
     }
 
     /**
+     * Alias sin conflicto de nombre de columna.
+     * Usar este método cuando se necesite la relación Eloquent con Plan,
+     * ya que la columna legacy 'plan' en la tabla oculta la relación magic.
+     */
+    public function planModel()
+    {
+        return $this->belongsTo(\App\Models\Plan::class, 'plan_id');
+    }
+
+    /**
      * Notificaciones de cobro generadas para este detalle
      */
     public function notificaciones()
@@ -100,9 +110,14 @@ class DetalleCobros extends Model
      */
     public function getPlanNombreAttribute(): string
     {
-        // Sistema NUEVO: Si plan_id está presente → usar relación con tabla plans
-        if ($this->plan_id && $this->plan) {
-            return $this->plan->name ?? 'Plan #' . $this->plan_id;
+        // Sistema NUEVO: Si plan_id está presente → usar relación planModel (sin conflicto de columna)
+        if ($this->plan_id) {
+            $plan = $this->relationLoaded('planModel')
+                ? $this->getRelation('planModel')
+                : $this->planModel()->first();
+            if ($plan) {
+                return $plan->name ?? 'Plan #' . $this->plan_id;
+            }
         }
 
         // Sistema LEGACY: Si campo 'plan' tiene texto (no numérico) → usar legacy
@@ -114,31 +129,44 @@ class DetalleCobros extends Model
     }
 
     /**
-     * Obtener el monto calculado con lógica de fallback
+     * Monto bruto (con IGV incluido), SOLO USO INTERNO.
+     * Las vistas deben usar monto_efectivo, que ya incluye la conversión de divisa y el ajuste RECIBO.
      *
-     * Sistema NUEVO:  plan_id presente → price del plan × multiplicador de período
+     * Sistema NUEVO:  monto_unidad guardado → lo retorna directamente
+     * Sistema NUEVO:  plan_id sin monto_unidad → price del plan × multiplicador de período
      * Sistema LEGACY: campo 'plan' numérico → usar ese valor directamente
      *
+     * @internal Usar monto_efectivo en vistas y reportes
      * @return float
      */
     public function getMontoCalculadoAttribute(): float
     {
-        // Sistema NUEVO: calcular desde la relación con plans
-        if ($this->plan_id && $this->plan) {
-            $precioUnitario = (float) ($this->plan->price ?? 0);
+        // Prioridad 1: monto_unidad guardado (incluye conversión de divisa y ajuste RECIBO)
+        // Se guarda al crear/editar el cobro con el importe ya calculado para la divisa del cobro
+        if (!empty($this->attributes['monto_unidad']) && (float) $this->attributes['monto_unidad'] > 0) {
+            return (float) $this->attributes['monto_unidad'];
+        }
 
-            $multiplicador = 1;
-            if ($this->cobro && $this->cobro->periodo) {
-                $multiplicador = match ($this->cobro->periodo) {
+        // Prioridad 2 (fallback): calcular desde la relación con plans (precio base en PEN)
+        // Se usa planModel() para evitar el conflicto con la columna legacy 'plan'
+        if ($this->plan_id) {
+            $plan = $this->relationLoaded('planModel')
+                ? $this->getRelation('planModel')
+                : $this->planModel()->first();
+
+            if ($plan) {
+                $precioUnitario = (float) ($plan->price ?? 0);
+
+                $multiplicador = match ($this->periodo ?? 'MENSUAL') {
                     'BIMENSUAL'  => 2,
                     'TRIMESTRAL' => 3,
                     'SEMESTRAL'  => 6,
                     'ANUAL'      => 12,
                     default      => 1,
                 };
-            }
 
-            return $precioUnitario * $multiplicador;
+                return $precioUnitario * $multiplicador;
+            }
         }
 
         // Sistema LEGACY: si campo 'plan' era numérico (guardaba el monto)
@@ -149,8 +177,32 @@ class DetalleCobros extends Model
         return 0.0;
     }
 
+    /**
+     * Monto efectivo a cobrar al cliente.
+     *
+     * Si monto_unidad ya está guardado, ya contiene el ajuste de divisa y RECIBO.
+     * Si viene del fallback de plan (precio en PEN), aplicar descuento RECIBO si corresponde.
+     */
+    public function getMontoEfectivoAttribute(): float
+    {
+        // Si monto_unidad está guardado, ya es el importe final (conversión + RECIBO incluidos)
+        if (!empty($this->attributes['monto_unidad']) && (float) $this->attributes['monto_unidad'] > 0) {
+            return (float) $this->attributes['monto_unidad'];
+        }
 
-    // Scopes para facturación
+        // Fallback: calcular desde plan y aplicar RECIBO si corresponde
+        $monto = $this->monto_calculado;
+
+        if (
+            $monto > 0
+            && $this->cobro
+            && $this->cobro->tipo_pago === 'RECIBO'
+        ) {
+            return round($monto / 1.18, 2);
+        }
+
+        return $monto;
+    }
     public function scopeSinFacturar($query)
     {
         return $query->whereNull('venta_id')->whereNull('recibo_id');

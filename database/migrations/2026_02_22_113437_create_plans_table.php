@@ -32,6 +32,7 @@ return new class extends Migration
             $table->unsignedTinyInteger('prorate_extend_due')->nullable();
             $table->unsignedSmallInteger('active_subscribers_limit')->nullable();
             $table->unsignedSmallInteger('sort_order')->default(0);
+            $table->boolean('default')->default(false);
 
             // Campos personalizados para Talentus
             $table->foreignId('producto_id')->nullable()->constrained('productos')->onDelete('set null');

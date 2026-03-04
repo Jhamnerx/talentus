@@ -118,16 +118,17 @@ class GenerarNotificacionesCobro implements ShouldQueue
             : Carbon::parse($detalle->fecha);
 
         NotificacionCobro::create([
-            'empresa_id'       => $cliente->empresa_id,
-            'detalle_cobro_id' => $detalle->id,
-            'cobro_id'         => $cobro->id,
-            'cliente_id'       => $cliente->id,
-            'vehiculo_id'      => $detalle->vehiculo_id,
+            'empresa_id'        => $cliente->empresa_id,
+            'detalle_cobro_id'  => $detalle->id,
+            'cobro_id'          => $cobro->id,
+            'cliente_id'        => $cliente->id,
+            'vehiculo_id'       => $detalle->vehiculo_id,
             'fecha_vencimiento' => $fechaVencimiento,
-            'monto'            => $detalle->monto_unidad ?? $cobro->monto_unidad,
-            'moneda'           => $cobro->moneda ?? 'PEN',
-            'descripcion'      => $descripcion,
-            'estado'           => 'PENDIENTE',
+            // monto_efectivo descuenta IGV cuando el cobro es tipo RECIBO
+            'monto'             => $detalle->monto_efectivo ?: 0,
+            'moneda'            => $cobro->moneda ?? $cobro->divisa ?? 'PEN',
+            'descripcion'       => $descripcion,
+            'estado'            => 'PENDIENTE',
         ]);
 
         Log::info('Notificación de cobro creada', [
@@ -136,7 +137,8 @@ class GenerarNotificacionesCobro implements ShouldQueue
             'vehiculo'          => $detalle->vehiculo?->placa,
             'fecha_vencimiento' => $fechaVencimiento->format('Y-m-d'),
             'subscription_id'   => $subscription?->id,
-            'monto'             => $detalle->monto_unidad ?? $cobro->monto_unidad,
+            'monto_efectivo'    => $detalle->monto_efectivo,
+            'tipo_pago'         => $cobro->tipo_pago,
         ]);
     }
 

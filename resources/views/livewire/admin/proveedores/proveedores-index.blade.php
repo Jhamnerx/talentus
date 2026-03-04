@@ -51,7 +51,8 @@
             <div class="table-items-action hidden">
                 <div class="flex items-center">
                     <div class="hidden xl:block text-sm italic mr-2 whitespace-nowrap text-gray-500 dark:text-gray-400">
-                        <span class="table-items-count"></span> items selected</div>
+                        <span class="table-items-count"></span> items selected
+                    </div>
                     <button
                         class="btn bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700/60 hover:border-gray-300 dark:hover:border-gray-600 text-rose-500 hover:text-rose-600">Delete</button>
                 </div>
@@ -192,7 +193,7 @@
         <div>
 
             <!-- Table -->
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto min-h-screen">>
                 <table class="table-auto w-full dark:text-gray-300">
                     <!-- Table header -->
                     <thead

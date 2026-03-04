@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use App\Models\Cobros;
 use App\Models\Series;
 use App\Models\Ventas;
-use App\Models\Empresa;
 use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Payments;
@@ -242,8 +241,8 @@ class Emitir extends Component
 
     public function procesarItems($items)
     {
-
         $detalles = DetalleCobros::whereIn('id', $items)->get();
+
         foreach ($detalles as $detalle) {
             $cantidad = $this->calcularCantidad($detalle->cobro->periodo);
             $igv = $this->calcularIgvProducto($detalle->plan, $cantidad, 10);
