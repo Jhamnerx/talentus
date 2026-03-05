@@ -1,8 +1,8 @@
 <div class="col-span-12 md:col-span-6 xl:col-span-5">
-    <div class="bg-white rounded shadow-lg overflow-auto w-full max-h-full">
-        <div class="px-5 py-3 border-b border-slate-200">
+    <div class="bg-white dark:bg-gray-800 rounded shadow-lg overflow-auto w-full max-h-full">
+        <div class="px-5 py-3 border-b border-slate-200 dark:border-gray-700">
             <div class="flex justify-between items-center">
-                <div class="font-semibold text-slate-800 uppercase">CERTIFICADO FORMATO PEM</div>
+                <div class="font-semibold text-slate-800 dark:text-gray-100 uppercase">CERTIFICADO FORMATO PEM</div>
             </div>
         </div>
 
@@ -11,7 +11,7 @@
                 placeholder="Pega el certificado" />
         </div>
         <!-- Modal footer -->
-        <div class="px-5 py-4 border-t border-slate-200">
+        <div class="px-5 py-4 border-t border-slate-200 dark:border-gray-700">
             <div class="flex flex-wrap justify-end space-x-2">
 
                 <x-form.button @click="files = null" wire:click='uploadCertificado' spinner="uploadCertificado"

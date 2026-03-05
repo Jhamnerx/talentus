@@ -67,6 +67,7 @@ class CreateModal extends Component
     {
         $validated = $this->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:plans,slug',
             'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
@@ -85,6 +86,8 @@ class CreateModal extends Component
             'sort_order' => 'nullable|integer|min:0',
         ], [
             'name.required' => 'El nombre es obligatorio',
+            'slug.required' => 'El slug es obligatorio',
+            'slug.unique' => 'Ya existe un plan con ese nombre/slug. Usa un nombre diferente.',
             'price.required' => 'El precio es obligatorio',
             'price.min' => 'El precio debe ser mayor o igual a 0',
             'invoice_period.required' => 'El periodo de facturación es obligatorio',

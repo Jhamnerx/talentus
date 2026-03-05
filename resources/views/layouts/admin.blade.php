@@ -75,9 +75,10 @@
 
 
 
+
+    @livewireScripts
     @stack('modals')
     @stack('scripts')
-    @livewireScripts
 </body>
 
 <script>

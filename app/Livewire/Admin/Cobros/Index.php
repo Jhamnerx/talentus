@@ -113,14 +113,15 @@ class Index extends Component
                             ->where('ends_at', '<', $hoy->copy()->startOfDay());
                     });
             })
-            // Ordenar por cliente (via cobro.clientes_id) para mantener agrupación visual,
-            // luego por fecha_vencimiento dentro de cada cliente
+            // Ordenar por cliente → cobro → fecha_vencimiento para mantener agrupación visual
+            // sin que el mismo cobro aparezca en filas no contiguas
             ->orderByRaw('(
                 SELECT co.clientes_id
                 FROM cobros co
                 WHERE co.id = detalles_cobros.cobros_id
                 LIMIT 1
             ) ASC')
+            ->orderBy('detalles_cobros.cobros_id', 'asc')
             ->orderBy('detalles_cobros.fecha_vencimiento', 'asc')
             ->paginate($this->perPage);
 
@@ -179,13 +180,5 @@ class Index extends Component
     public function createInvoice(Cobros $cobro): void
     {
         $this->dispatch('open-modal-create-invoice', cobro: $cobro);
-    }
-
-    /**
-     * Despacha el evento para que ModalSyncSuscripcion abra el modal.
-     */
-    public function abrirModalSync(int $detalleId): void
-    {
-        $this->dispatch('abrir-modal-sync', detalleId: $detalleId);
     }
 }

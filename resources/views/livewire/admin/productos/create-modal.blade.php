@@ -56,13 +56,13 @@
         <div class="col-span-12 md:col-span-3">
 
             <x-form.currency id="valor_unitario" name="valor_unitario" label="Valor unitario:" placeholder="9.99"
-                icon="currency-dollar" precision="4" wire:model.blur="valor_unitario" />
+                icon="currency-dollar" precision="4" wire:model.live.blur="valor_unitario" />
         </div>
 
         <div class="col-span-12 md:col-span-3">
 
             <x-form.currency id="precio_unitario" name="precio_unitario" label="Precio unitario:" placeholder="9.99"
-                icon="currency-dollar" precision="4" wire:model.blur="precio_unitario" />
+                icon="currency-dollar" precision="4" wire:model.live.blur="precio_unitario" />
         </div>
 
         <div class="col-span-12">

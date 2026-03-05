@@ -32,6 +32,7 @@ class RecibosIndex extends Component
             ->orWhere('divisa', 'like', '%' . $this->search . '%')
             ->orWhere('total', 'like', '%' . $this->search . '%')
             ->with('clientes')
+            ->withSum('payments', 'monto')
             ->orderBy('id', 'desc')
             ->paginate(15);
 
@@ -62,6 +63,7 @@ class RecibosIndex extends Component
                 ->orWhere('total', 'like', '%' . $this->search . '%')
                 ->estado($this->status)
                 ->with('clientes')
+                ->withSum('payments', 'monto')
                 ->orderBy('id', 'desc')
                 ->paginate(15);;
         }
@@ -83,6 +85,11 @@ class RecibosIndex extends Component
     public function updatingSearch()
     {
         $this->resetPage();
+    }
+
+    public function abrirModalPagos(int $id): void
+    {
+        $this->dispatch('abrir-pagos-modal', id: $id, type: 'Recibos');
     }
 
     public function markPaid(Recibos $recibo)

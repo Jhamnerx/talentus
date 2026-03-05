@@ -2,17 +2,17 @@
 
     <!-- Table -->
 
-    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full mx-auto">
+    <div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
         <!-- Page header -->
         <div class="mb-8">
 
             <!-- Title -->
-            <h1 class="text-2xl md:text-3xl text-slate-800 font-bold"> Plantilla ✨</h1>
+            <h1 class="text-2xl md:text-3xl text-gray-800 dark:text-gray-100 font-bold">plantilla ✨</h1>
 
         </div>
 
-        <div class="bg-white shadow-lg rounded-sm mb-8">
+        <div class="bg-white dark:bg-gray-800 shadow-xs rounded-xl mb-8">
             <div class="flex flex-col md:flex-row md:-mr-px">
 
                 <!-- Sidebar -->
@@ -27,7 +27,8 @@
                         </div>
 
                         <!-- Header -->
-                        <header class="text-center bg-slate-50 pb-6 border-b border-slate-200">
+                        <header
+                            class="text-center bg-slate-50 dark:bg-gray-800 pb-6 border-b border-slate-200 dark:border-gray-700">
                             <div class="px-4 sm:px-6 lg:px-8 w-full">
                                 <div class="max-w-3xl mx-auto">
 
@@ -42,7 +43,7 @@
 
                                     <!-- Company name and info -->
                                     <div class="mb-4">
-                                        <h2 class="text-2xl text-slate-800 font-bold mb-2">
+                                        <h2 class="text-2xl text-slate-800 dark:text-gray-100 font-bold mb-2">
                                             {{ $plantilla->razon_social }}
                                         </h2>
 
@@ -56,7 +57,7 @@
                                                     d="M8 8.992a2 2 0 1 1-.002-3.998A2 2 0 0 1 8 8.992Zm-.7 6.694c-.1-.1-4.2-3.696-4.2-3.796C1.7 10.69 1 8.892 1 6.994 1 3.097 4.1 0 8 0s7 3.097 7 6.994c0 1.898-.7 3.697-2.1 4.996-.1.1-4.1 3.696-4.2 3.796-.4.3-1 .3-1.4-.1Zm-2.7-4.995L8 13.688l3.4-2.997c1-1 1.6-2.198 1.6-3.597 0-2.798-2.2-4.996-5-4.996S3 4.196 3 6.994c0 1.399.6 2.698 1.6 3.697 0-.1 0-.1 0 0Z" />
                                             </svg>
                                             <span
-                                                class="text-sm font-medium whitespace-nowrap text-slate-500 ml-2">{{ $plantilla->direccion['departamento'] }},
+                                                class="text-sm font-medium whitespace-nowrap text-slate-500 dark:text-gray-400 ml-2">{{ $plantilla->direccion['departamento'] }},
                                                 PERÚ</span>
                                         </div>
                                         <div class="flex items-center">
@@ -75,7 +76,7 @@
                         </header>
 
                         <!-- Page content -->
-                        <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-slate-50">
+                        <div class="px-4 sm:px-6 lg:px-8 py-8 w-full bg-slate-50 dark:bg-gray-900">
 
 
 
@@ -83,7 +84,7 @@
 
 
                             {{-- FORMULARIOS DE IMAGENES --}}
-                            <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+                            <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white dark:bg-gray-800 px-3 mb-2">
 
                                 @livewire('admin.ajustes.plantilla.images.documentos', ['plantilla' => $plantilla], key('doc' . $plantilla->id))
                                 @livewire('admin.ajustes.plantilla.images.contrato', ['plantilla' => $plantilla], key('contrato' . $plantilla->id))
@@ -91,7 +92,7 @@
                                 @livewire('admin.ajustes.plantilla.images.fav-icon', ['plantilla' => $plantilla], key('fav-icon' . $plantilla->id))
                             </div>
 
-                            <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white px-3 mb-2">
+                            <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 bg-white dark:bg-gray-800 px-3 mb-2">
 
                                 @livewire('admin.ajustes.plantilla.images.banner', ['plantilla' => $plantilla], key('banner' . $plantilla->id))
                                 @livewire('admin.ajustes.plantilla.images.firma', ['plantilla' => $plantilla], key('firma' . $plantilla->id))

@@ -164,7 +164,7 @@
             <div class="col-span-12 md:col-start-5 md:col-span-4">
 
                 <x-form.currency id="valor_unitario" name="valor_unitario"
-                    prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.blur="selected.valor_unitario"
+                    prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live.blur="selected.valor_unitario"
                     precision="4" />
 
             </div>
@@ -231,7 +231,7 @@
 
 
             <x-form.currency id="total" name="total" precision="4" placeholer="0.00"
-                prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.blur="selected.total" />
+                prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}" wire:model.live.blur="selected.total" />
 
 
         </div>

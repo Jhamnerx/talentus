@@ -33,16 +33,8 @@
 
             </div>
             <div class="col-span-12">
-
-                <label
-                    class="flex text-sm not-italic items-center font-medium text-gray-800 dark:text-gray-200 whitespace-nowrap justify-between">
-                    <div>Nota
-                    </div>
-
-                </label>
-                <textarea wire:model.live="nota"
-                    class="form-input w-full px-4 py-3 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700" name="nota"
-                    id="" cols="30" rows="5" placeholder="Ingresar nota (opcional)"></textarea>
+                <x-form.textarea label="Nota" wire:model.live="nota" rows="5"
+                    placeholder="Ingresar nota (opcional)" />
             </div>
 
 
@@ -78,6 +70,12 @@
                 class="col-span-12 mt-10 pt-4 border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg rounded-lg px-3 mb-5">
 
                 <div class="flex -mx-1 border-b border-gray-200 dark:border-gray-700 px-2 py-2 ">
+                    <div class="flex-none px-2 w-16 text-center">
+                        <p class="leading-none">
+                            <span
+                                class="block uppercase tracking-wide text-sm font-bold text-gray-800 dark:text-gray-200">ACTIVO</span>
+                        </p>
+                    </div>
                     <div class="flex-auto px-2 xl:w-24 text-center">
                         <p class="leading-none">
                             <span
@@ -140,7 +138,18 @@
                     @if ($items->count() >= 1)
                         @foreach ($items->all() as $placa => $vehiculo)
                             <div wire:key="item-{{ $placa }}"
-                                class="flex -mx-1 px-2 py-4 border-b border-gray-200 dark:border-gray-700 box-border items-center gap-2">
+                                class="flex -mx-1 px-2 py-4 border-b border-gray-200 dark:border-gray-700 box-border items-center gap-2 {{ isset($vehiculo['estado']) && $vehiculo['estado'] == 0 ? 'bg-red-50 dark:bg-red-900/20' : 'bg-white dark:bg-gray-800' }}">
+
+                                <div class="flex-none w-16 text-center">
+                                    <label class="inline-flex flex-col items-center gap-1 cursor-pointer">
+                                        <input type="checkbox" wire:model.live="items.{{ $placa }}.estado"
+                                            class="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500 cursor-pointer" />
+                                        <span
+                                            class="text-xs {{ isset($vehiculo['estado']) && $vehiculo['estado'] == 0 ? 'text-red-500 font-semibold' : 'text-green-600 font-semibold' }}">
+                                            {{ isset($vehiculo['estado']) && $vehiculo['estado'] == 0 ? 'Inactivo' : 'Activo' }}
+                                        </span>
+                                    </label>
+                                </div>
 
                                 <div class="flex-auto px-1 xl:w-24 text-center">
                                     <p class="text-gray-800 dark:text-gray-200 xs:text-base font-semibold">
@@ -149,37 +158,33 @@
                                 </div>
 
                                 <div class="flex-auto xl:w-32 text-center">
-                                    <select wire:model.live="items.{{ $placa }}.plan_id"
-                                        class="form-select w-full text-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-                                        <option value="">Seleccionar...</option>
-                                        @foreach ($planes as $plan)
-                                            <option value="{{ $plan->id }}">
-                                                {{ $plan->name }} - {{ $plan->currency ?? 'PEN' }}
-                                                {{ number_format($plan->price, 2) }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @if ($errors->has('items.' . $placa . '.plan_id'))
-                                        <p class="mt-1 text-pink-600 text-xs">
-                                            {{ $errors->first('items.' . $placa . '.plan_id') }}
-                                        </p>
-                                    @endif
+                                    <x-form.select wire:model.live="items.{{ $placa }}.plan_id" :options="$planes
+                                        ->map(
+                                            fn($p) => [
+                                                'id' => $p->id,
+                                                'name' =>
+                                                    $p->name .
+                                                    ' - ' .
+                                                    ($p->currency ?? 'PEN') .
+                                                    ' ' .
+                                                    number_format($p->price, 2),
+                                            ],
+                                        )
+                                        ->values()"
+                                        option-label="name" option-value="id" placeholder="Seleccionar..."
+                                        :clearable="false" />
                                 </div>
 
                                 <div class="flex-auto xl:w-28 text-center">
-                                    <select wire:model.live="items.{{ $placa }}.periodo"
-                                        class="form-select w-full text-sm dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600">
-                                        <option value="MENSUAL">MENSUAL</option>
-                                        <option value="BIMENSUAL">BIMENSUAL</option>
-                                        <option value="TRIMESTRAL">TRIMESTRAL</option>
-                                        <option value="SEMESTRAL">SEMESTRAL</option>
-                                        <option value="ANUAL">ANUAL</option>
-                                    </select>
-                                    @if ($errors->has('items.' . $placa . '.periodo'))
-                                        <p class="mt-1 text-pink-600 text-xs">
-                                            {{ $errors->first('items.' . $placa . '.periodo') }}
-                                        </p>
-                                    @endif
+                                    <x-form.select wire:model.live="items.{{ $placa }}.periodo"
+                                        :options="[
+                                            ['value' => 'MENSUAL', 'label' => 'MENSUAL'],
+                                            ['value' => 'BIMENSUAL', 'label' => 'BIMENSUAL'],
+                                            ['value' => 'TRIMESTRAL', 'label' => 'TRIMESTRAL'],
+                                            ['value' => 'SEMESTRAL', 'label' => 'SEMESTRAL'],
+                                            ['value' => 'ANUAL', 'label' => 'ANUAL'],
+                                        ]" option-label="label" option-value="value"
+                                        :clearable="false" />
                                 </div>
 
                                 <div class="flex-auto xl:w-24 text-center">

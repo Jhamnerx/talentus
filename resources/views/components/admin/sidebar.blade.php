@@ -478,7 +478,7 @@
 
                                     @can('admin.cobros.index')
                                         <li class="mb-1 last:mb-0">
-                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.index')) {{ 'text-violet-500!' }} @endif"
+                                            <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate  @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ 'text-violet-500!' }} @endif"
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Cobros
@@ -1077,14 +1077,13 @@
 
                     <!-- administracion -->
                     @canany(['admin.solicitudes.index', 'admin.reportes.index', 'admin.usuarios.index',
-                        'admin.cobros.index', 'admin.payments.index', 'admin.settings.ciudades.index',
+                        'admin.payments.index', 'admin.settings.ciudades.index',
                         'admin.settings.roles.index', 'admin.settings.plantilla.index'])
                         <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 @if (in_array(Request::segment(1), [
                                 'solicitudes',
                                 'reviews',
                                 'gerencia',
                                 'usuarios',
-                                'cobros',
                                 'payments',
                                 'recibos-pagos',
                                 'ajustes',
@@ -1094,7 +1093,6 @@
                                 'reviews',
                                 'gerencia',
                                 'usuarios',
-                                'cobros',
                                 'payments',
                                 'recibos-pagos',
                                 'ajustes',
@@ -1108,7 +1106,7 @@
 
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
-                                        <x-admin.iconos.admin :active="in_array(Request::segment(1), ['solicitudes', 'reviews', 'gerencia', 'usuarios', 'cobros', 'payments', 'recibos-pagos', 'ajustes'])">
+                                        <x-admin.iconos.admin :active="in_array(Request::segment(1), ['solicitudes', 'reviews', 'gerencia', 'usuarios', 'recibos-pagos', 'ajustes'])">
                                         </x-admin.iconos.admin>
 
                                         <span
@@ -1182,21 +1180,6 @@
                                                 <span
                                                     class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">Usuarios
                                                 </span>
-                                            </a>
-                                        </li>
-                                    @endcan
-
-                                    @can('admin.cobros.index')
-                                        <li class="mb-1 last:mb-0">
-                                            <a class="block
-                                                text-gray-800 dark:text-gray-100
-                                                hover:text-gray-900 dark:hover:text-white
-                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit', 'admin.cobros.show')) {{ 'text-violet-500!' }} @endif
-                                                transition truncate"
-                                                href="{{ route('admin.cobros.index') }}">
-                                                <span
-                                                    class="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200">
-                                                    Registro de Cobros</span>
                                             </a>
                                         </li>
                                     @endcan

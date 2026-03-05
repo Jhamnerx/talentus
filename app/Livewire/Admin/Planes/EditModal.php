@@ -91,6 +91,7 @@ class EditModal extends Component
     {
         $validated = $this->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'required|string|max:255|unique:plans,slug,' . $this->plan->id,
             'description' => 'nullable|string',
             'is_active' => 'required|boolean',
             'price' => 'required|numeric|min:0',
@@ -109,6 +110,8 @@ class EditModal extends Component
             'sort_order' => 'nullable|integer|min:0',
         ], [
             'name.required' => 'El nombre es obligatorio',
+            'slug.required' => 'El slug es obligatorio',
+            'slug.unique' => 'Ya existe un plan con ese nombre/slug. Usa un nombre diferente.',
             'price.required' => 'El precio es obligatorio',
             'price.min' => 'El precio debe ser mayor o igual a 0',
             'invoice_period.required' => 'El periodo de facturación es obligatorio',
@@ -138,13 +141,13 @@ class EditModal extends Component
                 'producto_id' => Productos::where('es_servicio_cobro', true)->value('id'),
             ]);
 
+            $planName = $this->plan->name;
             $this->closeModal();
             $this->notification()->success(
                 title: 'PLAN ACTUALIZADO',
-                description: 'El plan ' . $this->plan->name . ' fue actualizado correctamente'
+                description: 'El plan ' . $planName . ' fue actualizado correctamente'
             );
             $this->dispatch('plan-saved');
-            $this->resetProp();
         } catch (\Throwable $th) {
             $this->notification()->error(
                 title: 'ERROR',

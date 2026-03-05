@@ -157,71 +157,50 @@ class NotificacionCobro extends Model
         }
 
         $this->save();
-
-        // Actualizar DetalleCobro
-        if ($this->detalleCobro) {
-            $this->detalleCobro->estado_facturacion = 'FACTURADO';
-            if ($tipo === 'venta') {
-                $this->detalleCobro->venta_id = $documentoId;
-            } else {
-                $this->detalleCobro->recibo_id = $documentoId;
-            }
-            $this->detalleCobro->save();
-        }
     }
 
     /**
-     * Marca la notificación como pagada
+     * Marca la notificación como pagada y renueva el período del DetalleCobro.
+     *
+     * Mismo cálculo que Emitir.php: fecha_vencimiento de la notif es el nuevo
+     * inicio, y se avanza con NoOverflow para evitar desbordamientos de mes
+     * (ej: 30-ene + 1 mes = 28-feb, no 02-mar).
+     * El DetalleCobroObserver se dispara sobre fecha_vencimiento y sincroniza
+     * la suscripción del vehículo automáticamente.
      */
     public function marcarComoPagado(): void
     {
-        $this->estado = 'PAGADO';
+        $this->estado    = 'PAGADO';
         $this->fecha_pago = now();
         $this->save();
 
-        // Actualizar DetalleCobro
-        if ($this->detalleCobro) {
-            $this->detalleCobro->estado_facturacion = 'PAGADO';
-            $this->detalleCobro->fecha_pago = now();
+        $det   = $this->detalleCobro;
+        $cobro = $this->cobro;
 
-            // Calcular próxima fecha según período del cobro
-            if ($this->cobro) {
-                $fechaActual = $this->fecha_vencimiento;
+        if ($det && $cobro) {
+            // El nuevo inicio es la fecha de vencimiento de esta notificación
+            $nuevoInicio = $this->fecha_vencimiento->copy();
 
-                switch ($this->cobro->periodo) {
-                    case 'DIARIO':
-                        $nuevaFecha = $fechaActual->addDay();
-                        break;
-                    case 'SEMANAL':
-                        $nuevaFecha = $fechaActual->addWeek();
-                        break;
-                    case 'QUINCENAL':
-                        $nuevaFecha = $fechaActual->addDays(15);
-                        break;
-                    case 'MENSUAL':
-                        $nuevaFecha = $fechaActual->addMonth();
-                        break;
-                    case 'BIMESTRAL':
-                        $nuevaFecha = $fechaActual->addMonths(2);
-                        break;
-                    case 'TRIMESTRAL':
-                        $nuevaFecha = $fechaActual->addMonths(3);
-                        break;
-                    case 'SEMESTRAL':
-                        $nuevaFecha = $fechaActual->addMonths(6);
-                        break;
-                    case 'ANUAL':
-                        $nuevaFecha = $fechaActual->addYear();
-                        break;
-                    default:
-                        $nuevaFecha = $fechaActual->addMonth();
-                }
+            // Período: fuente correcta es el DetalleCobro (no el Cobro)
+            $periodo = strtoupper($det->periodo ?? $cobro->periodo ?? 'MENSUAL');
 
-                $this->detalleCobro->fecha = $nuevaFecha;
-                $this->detalleCobro->fecha_facturacion = $nuevaFecha;
-            }
+            $nuevoFin = match ($periodo) {
+                'DIARIO'     => $nuevoInicio->copy()->addDay(),
+                'SEMANAL'    => $nuevoInicio->copy()->addWeek(),
+                'QUINCENAL'  => $nuevoInicio->copy()->addDays(15),
+                'BIMENSUAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(2),
+                'TRIMESTRAL' => $nuevoInicio->copy()->addMonthsNoOverflow(3),
+                'SEMESTRAL'  => $nuevoInicio->copy()->addMonthsNoOverflow(6),
+                'ANUAL'      => $nuevoInicio->copy()->addYearNoOverflow(),
+                default      => $nuevoInicio->copy()->addMonthNoOverflow(), // MENSUAL
+            };
 
-            $this->detalleCobro->save();
+            // Actualiza fecha_inicio y fecha_vencimiento;
+            // el DetalleCobroObserver sincroniza la suscripción del vehículo
+            $det->update([
+                'fecha_inicio'      => $nuevoInicio,
+                'fecha_vencimiento' => $nuevoFin,
+            ]);
         }
     }
 

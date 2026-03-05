@@ -39,7 +39,7 @@
 
 
                     <div class="col-span-12 md:col-span-3">
-                        <x-form.input label="Serie Doc.:" wire:model.blur="serie" placeholder="F001" />
+                        <x-form.input label="Serie Doc.:" wire:model.live.blur="serie" placeholder="F001" />
                     </div>
 
                     <div class="col-span-12 md:col-span-3">
@@ -304,7 +304,7 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 min-w-36 lg:min-w-0">
                                         <x-form.currency id="precio" name="precio"
                                             prefix="{{ $divisa == 'PEN' ? 'S/ ' : '$' }}"
-                                            wire:model.blur="selected.precio" precision="6" />
+                                            wire:model.live.blur="selected.precio" precision="6" />
                                         @if ($errors->has('selected.precio'))
                                             <p class="mt-2 text-pink-600 text-sm">
                                                 {{ $errors->first('selected.precio') }}

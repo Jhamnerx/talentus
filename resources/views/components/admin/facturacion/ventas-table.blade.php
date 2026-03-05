@@ -29,6 +29,12 @@
                             <div class="font-semibold text-left">TOTAL</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">IGV</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">SALDO</div>
+                        </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">ESTADO</div>
                         </th>
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -183,6 +189,19 @@
 
                                 {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ $venta->total }}
 
+                            </div>
+                        </td>
+                        {{-- IGV --}}
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-medium text-slate-600 dark:text-slate-300">
+                                {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ number_format($venta->igv, 2) }}
+                            </div>
+                        </td>
+                        {{-- Saldo pendiente --}}
+                        <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            @php $saldo = round($venta->total - ($venta->payments_sum_monto ?? 0), 2); @endphp
+                            <div class="font-medium {{ $saldo > 0 ? 'text-orange-500' : 'text-emerald-500' }}">
+                                {{ $venta->divisa == 'PEN' ? 'S/ ' : '$' }} {{ number_format($saldo, 2) }}
                             </div>
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -947,7 +966,7 @@
                                     @endif
                                     @endif
 
-                                    <x-dropdown.header label="Estado de pago">
+                                    {{-- <x-dropdown.header label="Estado de pago">
                                         @if ($venta->pago_estado == 'PAID')
                                         <x-dropdown.item disabled="true" icon="check-circle"
                                             label="Marcar como Pagada" />
@@ -960,6 +979,11 @@
 
                                         <x-dropdown.item disabled icon="x-mark" label="Marcar como No Pagada" />
                                         @endif
+                                    </x-dropdown.header> --}}
+
+                                    <x-dropdown.header label="Pagos">
+                                        <x-dropdown.item wire:click.prevent='abrirModalPagos({{ $venta->id }})'
+                                            icon="banknotes" label="Ver Pagos" />
                                     </x-dropdown.header>
                                 </x-form.dropdown>
                             </div>

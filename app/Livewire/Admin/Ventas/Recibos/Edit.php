@@ -7,12 +7,12 @@ use Livewire\Component;
 use App\Models\Clientes;
 use App\Models\Payments;
 use App\Models\Productos;
-use App\Models\PaymentMethods;
 use App\Models\PaymentMethodType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RecibosRequest;
 use App\Helpers\PaymentDestinationHelper;
+use Livewire\Attributes\Computed;
 
 class Edit extends Component
 {
@@ -32,23 +32,27 @@ class Edit extends Component
     public $simbolo = "S/. ";
     public $cliente;
     public $product_selected_id;
-    public Collection $payment_destinations;
-    public ?Collection $payment_methods = null;
     public Collection $pagos_detalle;
 
-    public function mount()
+    #[Computed]
+    public function paymentMethods()
     {
-        // Cargar destinos de pago (Caja + Cuentas Bancarias)
-        $this->payment_destinations = PaymentDestinationHelper::getPaymentDestinations();
-
-        // Cargar métodos de pago desde catálogo
-        $this->payment_methods = PaymentMethodType::where('active', true)
+        return PaymentMethodType::where('active', true)
             ->get()
             ->map(fn($method) => [
                 'id' => $method->id,
                 'name' => $method->description,
             ]);
+    }
 
+    #[Computed]
+    public function paymentDestinations()
+    {
+        return PaymentDestinationHelper::getPaymentDestinations();
+    }
+
+    public function mount()
+    {
         $this->clientes_id = $this->recibo->clientes_id;
         $this->serie = $this->recibo->serie;
         $this->numero = $this->recibo->numero;
@@ -67,11 +71,10 @@ class Edit extends Component
         $this->items = collect($this->recibo->detalles->toArray());
 
         $this->selected = collect([
-            'producto_id' => "",
+            'producto_id' => null,
             'producto' => "",
             'descripcion' => "",
-            'cantidad' => 1,
-            'total' => "",
+            'cantidad' => "1",
             'precio' => 0.00
         ]);
 
@@ -87,7 +90,9 @@ class Edit extends Component
             $this->pagos_detalle = $existingPayments->map(function ($payment) {
                 return [
                     'metodo_pago_id' => $payment->payment_method_id,
-                    'payment_destination_id' => $payment->payment_destination_id,
+                    'payment_destination_id' => ($payment->destination_type && $payment->destination_id)
+                        ? $payment->destination_type . '|' . $payment->destination_id
+                        : '',
                     'referencia' => $payment->numero_operacion,
                     'monto' => $payment->monto,
                 ];
@@ -254,19 +259,26 @@ class Edit extends Component
                 // Eliminar pagos anteriores
                 $this->recibo->payments()->delete();
 
-                // Validar que la suma de pagos coincida con el total
-                $total_pagos = $this->pagos_detalle->sum('monto');
-                if (round($total_pagos, 2) != round($this->total, 2)) {
-                    throw new \Exception("La suma de pagos (" . round($total_pagos, 2) . ") no coincide con el total (" . round($this->total, 2) . ")");
+                // Validar que cada pago con monto tenga destino seleccionado
+                foreach ($this->pagos_detalle as $i => $pago) {
+                    if (!empty($pago['monto']) && floatval($pago['monto']) > 0) {
+                        $destino = PaymentDestinationHelper::parseDestination($pago['payment_destination_id'] ?? null);
+                        if (!$destino || !$destino['destination_id']) {
+                            throw new \Exception('El pago #' . ($i + 1) . ' no tiene un destino de pago seleccionado.');
+                        }
+                    }
                 }
 
-                foreach ($this->pagos_detalle as $pago) {
-                    // Parsear destination_type y destination_id desde formato "tipo|id"
-                    $destinationRecord = PaymentDestinationHelper::parseDestination($pago['payment_destination_id']);
+                $total_pagos = 0;
 
-                    if (!$destinationRecord || !$destinationRecord['destination_id']) {
-                        throw new \Exception("Destino de pago inválido para monto {$pago['monto']}");
+                foreach ($this->pagos_detalle as $pago) {
+                    // Omitir pagos sin monto
+                    if (empty($pago['monto']) || floatval($pago['monto']) <= 0) {
+                        continue;
                     }
+
+                    // Parsear destination_type y destination_id desde formato "tipo|id"
+                    $destinationRecord = PaymentDestinationHelper::parseDestination($pago['payment_destination_id'] ?? null);
 
                     Payments::create([
                         'paymentable_type' => Recibos::class,
@@ -281,11 +293,15 @@ class Edit extends Component
                         'user_id' => Auth::user()->id,
                         'empresa_id' => session('empresa'),
                     ]);
+
+                    $total_pagos += floatval($pago['monto']);
                 }
 
-                // Actualizar pago_estado del recibo a PAID
-                $this->recibo->pago_estado = 'PAID';
-                $this->recibo->save();
+                // Solo marcar PAID si los pagos cubren el total completo
+                if (round($total_pagos, 2) >= round($this->total, 2)) {
+                    $this->recibo->pago_estado = 'PAID';
+                    $this->recibo->save();
+                }
             }
 
             session()->flash('recibo-actualizo', 'El Recibo se actualizo con exito');

@@ -20,13 +20,10 @@ class DetalleCobros extends Model
     protected $casts = [
         'cobros_id' => 'integer',
         'vehiculos_id' => 'integer',
-        'venta_id' => 'integer',
-        'recibo_id' => 'integer',
         'plan_id' => 'integer',
         'fecha' => 'date:Y-m-d',
         'fecha_facturado' => 'date:Y-m-d',
         'fecha_facturacion' => 'date:Y-m-d',
-        'fecha_pago' => 'date:Y-m-d',
         'fecha_inicio' => 'date:Y-m-d',
         'fecha_vencimiento' => 'date:Y-m-d',
         'estado' => 'boolean',
@@ -222,42 +219,9 @@ class DetalleCobros extends Model
         });
     }
 
-    public function scopeFacturadosPendientesPago($query)
-    {
-        return $query->where(function ($q) {
-            $q->whereNotNull('venta_id')->orWhereNotNull('recibo_id');
-        })
-            ->where('estado', 1)
-            ->where('estado_detalle', CobroEstado::ACTIVO);
-    }
     // Atributo personalizado para obtener los detalles vencidos
     public function scopeVencidos($query)
     {
         return $query->where('fecha', '<', Carbon::now());
-    }
-
-    public function scopeActivos($query)
-    {
-        return $query->where('estado_detalle', CobroEstado::ACTIVO);
-    }
-
-    public function scopeSuspendidos($query)
-    {
-        return $query->where('estado_detalle', CobroEstado::SUSPENDIDO);
-    }
-
-    public function scopePendientesPago($query)
-    {
-        return $query->where('estado', 1)
-            ->where('estado_detalle', CobroEstado::ACTIVO)
-            ->whereNull('factura_id');
-    }
-
-    public function scopePorVencer($query, $dias = 7)
-    {
-        $hoy = Carbon::now();
-        return $query->where('estado', 1)
-            ->where('estado_detalle', CobroEstado::ACTIVO)
-            ->whereBetween('fecha', [$hoy->format('Y-m-d'), $hoy->copy()->addDays($dias)->format('Y-m-d')]);
     }
 }

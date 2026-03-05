@@ -1,18 +1,18 @@
 <div class="col-span-12 sm:col-span-6 lg:col-span-4 xl:col-span-3">
-    <div class="bg-white rounded shadow-lg overflow-auto w-full max-h-full"
+    <div class="bg-white dark:bg-gray-800 rounded shadow-lg overflow-auto w-full max-h-full"
         @keydown.escape.window="modalOpen = false, files = null">
-        <div class="px-5 py-3 border-b border-slate-200">
+        <div class="px-5 py-3 border-b border-slate-200 dark:border-gray-700">
             <div class="flex justify-between items-center">
-                <div class="font-semibold text-slate-800 uppercase">IMAGEN LOGO</div>
+                <div class="font-semibold text-slate-800 dark:text-gray-100 uppercase">IMAGEN LOGO</div>
             </div>
         </div>
         <!-- content -->
         @if ($plantilla->logo)
-            <div class="px-4 py-5 bg-white sm:p-6">
+            <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6">
                 <img src="{{ asset('storage/' . $plantilla->logo) }}" alt="">
             </div>
         @else
-            <div class="px-4 py-5 bg-white sm:p-6" x-data="{ file: @entangle('logo').live, files: null }">
+            <div class="px-4 py-5 bg-white dark:bg-gray-800 sm:p-6" x-data="{ file: @entangle('logo').live, files: null }">
                 @if ($logo)
                     <div class="px-5 py-2 border-b ">
                         <div class="flex justify-between items-center">
@@ -46,7 +46,7 @@
                 @endif
 
 
-                <div class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 border-dashed rounded-md"
+                <div class="mt-1 relative flex justify-center px-6 pt-5 pb-6 border-2 cursor-pointer border-gray-300 dark:border-gray-600 border-dashed rounded-md"
                     x-on:dragover="$el.classList.add('border-emerald-400')"
                     x-on:dragleave="$el.classList.remove('border-emerald-400')">
                     <input wire:model.live="logo" type="file"
@@ -57,15 +57,15 @@
                         @if ($logo)
                             <img src="{{ $logo->temporaryUrl() }}">
                         @endif
-                        <div x-show="!file" class="flex text-sm text-gray-600">
+                        <div x-show="!file" class="flex text-sm text-gray-600 dark:text-gray-400">
                             <label for="file"
-                                class="relative cursor-pointer z-60 bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                class="relative cursor-pointer z-60 bg-white dark:bg-gray-800 rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                 <span>Subir Archivo</span>
 
                             </label>
                             <p class="pl-1">o arrastra y suelta</p>
                         </div>
-                        <p class="text-xs text-gray-500">ARCHIVOS ACEPTADOS PNG, JPG 10MB</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">ARCHIVOS ACEPTADOS PNG, JPG 10MB</p>
                     </div>
 
 
@@ -82,7 +82,7 @@
             </p>
         @enderror
         <!-- Modal footer -->
-        <div class="px-5 py-4 border-t border-slate-200">
+        <div class="px-5 py-4 border-t border-slate-200 dark:border-gray-700">
             <div class="flex flex-wrap justify-end space-x-2">
                 @can('admin.settings.plantilla.images.edit')
 

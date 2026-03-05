@@ -89,7 +89,32 @@ class PaymentsObserver
 
     public function deleted(Payments $payment)
     {
-        //
+        // Revertir saldo de caja si el destino era una caja
+        $this->reverseCashBalance($payment);
+
+        // Revertir saldo de cuenta bancaria si el destino era una cuenta bancaria
+        $this->reverseBankAccountBalance($payment);
+
+        // Eliminar registros de CashDocumentPayment asociados
+        $cashDocumentPayments = CashDocumentPayment::where('payment_id', $payment->id)->get();
+        foreach ($cashDocumentPayments as $cdp) {
+            $cashDocumentId = $cdp->cash_document_id;
+            $cdp->delete();
+
+            // Si el CashDocument ya no tiene más pagos, eliminarlo también
+            $remainingPayments = CashDocumentPayment::where('cash_document_id', $cashDocumentId)->count();
+            if ($remainingPayments === 0) {
+                CashDocument::find($cashDocumentId)?->delete();
+            }
+        }
+
+        Log::info('Payment eliminado: saldos revertidos y CashDocuments limpiados', [
+            'payment_id' => $payment->id,
+            'destination_type' => $payment->destination_type,
+            'destination_id' => $payment->destination_id,
+            'monto' => $payment->monto,
+            'type_movement' => $payment->type_movement,
+        ]);
     }
 
 
@@ -101,7 +126,8 @@ class PaymentsObserver
 
     public function forceDeleted(Payments $payment)
     {
-        //
+        // Misma lógica que deleted para borrado permanente
+        $this->deleted($payment);
     }
 
     /**
@@ -221,6 +247,86 @@ class PaymentsObserver
     }
 
 
+
+    /**
+     * Revertir saldo de caja al eliminar un pago (operación inversa a updateCashBalance)
+     */
+    protected function reverseCashBalance(Payments $payment): void
+    {
+        try {
+            if ($payment->destination_type !== Cash::class || !$payment->destination_id) {
+                return;
+            }
+
+            $cash = Cash::find($payment->destination_id);
+            if (!$cash) {
+                return;
+            }
+
+            // Invertir: si era INGRESO, revertir con EGRESO (y viceversa)
+            $eraIngreso = $payment->type_movement === 'INGRESO';
+
+            $montoPen = $payment->divisa === 'PEN' ? (float) $payment->monto : 0;
+            $montoUsd = $payment->divisa === 'USD' ? (float) $payment->monto : 0;
+
+            // Pasar esIngreso=false si era ingreso (para restar) y true si era egreso (para sumar)
+            $cash->actualizarSaldoPorMoneda($montoPen, $montoUsd, !$eraIngreso);
+
+            Log::info('Saldo de caja revertido al eliminar payment', [
+                'cash_id' => $cash->id,
+                'payment_id' => $payment->id,
+                'monto' => $payment->monto,
+                'divisa' => $payment->divisa,
+                'type_movement_original' => $payment->type_movement,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al revertir saldo de caja', [
+                'payment_id' => $payment->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Revertir saldo de cuenta bancaria al eliminar un pago (operación inversa a updateBankAccountBalance)
+     */
+    protected function reverseBankAccountBalance(Payments $payment): void
+    {
+        try {
+            if ($payment->destination_type !== BankAccount::class || !$payment->destination_id) {
+                return;
+            }
+
+            $bankAccount = BankAccount::find($payment->destination_id);
+            if (!$bankAccount) {
+                return;
+            }
+
+            $eraIngreso = $payment->type_movement === 'INGRESO';
+            $saldoActual = (float) $bankAccount->initial_balance;
+            $monto = (float) $payment->monto;
+
+            // Invertir: si era ingreso se resta, si era egreso se suma
+            $nuevoSaldo = $eraIngreso
+                ? $saldoActual - $monto
+                : $saldoActual + $monto;
+
+            $bankAccount->update(['initial_balance' => $nuevoSaldo]);
+
+            Log::info('Saldo de cuenta bancaria revertido al eliminar payment', [
+                'bank_account_id' => $bankAccount->id,
+                'payment_id' => $payment->id,
+                'monto' => $payment->monto,
+                'saldo_anterior' => $saldoActual,
+                'saldo_nuevo' => $nuevoSaldo,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error al revertir saldo de cuenta bancaria', [
+                'payment_id' => $payment->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
+    }
 
     /**
      * Obtener divisa, monto y tipo_cambio del paymentable (Ventas/Recibos/Compras)

@@ -961,7 +961,7 @@
                                             <a class="block
                                                 {{ $empresa->nombre == 'talentus' ? 'text-slate-400' : 'text-yellow-700' }}
                                                 {{ $empresa->nombre == 'talentus' ? 'hover:text-slate-200' : 'hover:text-orange-600' }}
-                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit', 'admin.cobros.show')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
+                                                @if (Route::is('admin.cobros.index', 'admin.cobros.create', 'admin.cobros.edit')) {{ $empresa->nombre == 'talentus' ? '!text-blue-800' : '!text-red-600' }} @endif
                                                 transition duration-150 truncate"
                                                 href="{{ route('admin.cobros.index') }}">
                                                 <span

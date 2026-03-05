@@ -562,19 +562,25 @@ class Emitir extends Component
 
             //CREAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE
             if ($this->forma_pago === 'CONTADO') {
-                // Validar que la suma de pagos coincida con el total
-                $total_pagos = $this->pagos_detalle->sum('monto');
-                if (round($total_pagos, 2) != round($this->total, 2)) {
-                    throw new \Exception("La suma de pagos (" . round($total_pagos, 2) . ") no coincide con el total (" . round($this->total, 2) . ")");
+                // Validar que cada pago con monto tenga destino seleccionado
+                foreach ($this->pagos_detalle as $i => $pago) {
+                    if (!empty($pago['monto']) && floatval($pago['monto']) > 0) {
+                        $destino = PaymentDestinationHelper::parseDestination($pago['payment_destination_id'] ?? null);
+                        if (!$destino || !$destino['destination_id']) {
+                            throw new \Exception('El pago #' . ($i + 1) . ' no tiene un destino de pago seleccionado.');
+                        }
+                    }
                 }
 
-                foreach ($this->pagos_detalle as $pago) {
-                    // Parsear destination_type y destination_id desde formato "tipo|id"
-                    $destinationRecord = PaymentDestinationHelper::parseDestination($pago['payment_destination_id']);
+                $total_pagos = 0;
 
-                    if (!$destinationRecord || !$destinationRecord['destination_id']) {
-                        throw new \Exception("Destino de pago inválido para monto {$pago['monto']}");
+                foreach ($this->pagos_detalle as $pago) {
+                    // Omitir pagos sin monto
+                    if (empty($pago['monto']) || floatval($pago['monto']) <= 0) {
+                        continue;
                     }
+
+                    $destinationRecord = PaymentDestinationHelper::parseDestination($pago['payment_destination_id'] ?? null);
 
                     Payments::create([
                         'paymentable_type' => Ventas::class,
@@ -590,11 +596,15 @@ class Emitir extends Component
                         'user_id' => Auth::user()->id,
                         'empresa_id' => $this->empresa_id,
                     ]);
+
+                    $total_pagos += floatval($pago['monto']);
                 }
 
-                // Actualizar pago_estado de la venta a PAID
-                $venta->pago_estado = 'PAID';
-                $venta->save();
+                // Solo marcar PAID si los pagos cubren el total completo
+                if (round($total_pagos, 2) >= round($this->total, 2)) {
+                    $venta->pago_estado = 'PAID';
+                    $venta->save();
+                }
             }
 
             //ACTUALIZAR CORRELATIVO DE SERIE UTILIZADA

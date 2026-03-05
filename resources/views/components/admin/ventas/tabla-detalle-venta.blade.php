@@ -76,6 +76,7 @@
                 </p>
             </tr>
             {{-- filas de ítems ya añadidos --}}
+            {{ json_encode($items) }}
             @if ($items->count() > 0)
             @foreach ($items->all() as $clave => $item)
             <tr wire:key="item-{{ $clave }}" class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">

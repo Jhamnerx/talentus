@@ -61,21 +61,47 @@ class Edit extends Component
 
         $this->producto_id = $productoServicio?->id ?? $this->producto_id;
 
-        // Inicializar la colección de items con verificación de vehículo  
+        // Inicializar la colección de items con verificación de vehículo
         $this->items = collect();
         foreach ($this->cobro->detalle as $detalle) {
-            if ($detalle->vehiculo) {
-                $this->items[$detalle->vehiculo->placa] = [
-                    'vehiculo_id'       => $detalle->vehiculo_id,
-                    'placa'             => $detalle->vehiculo->placa,
-                    'plan_id'           => $detalle->plan_id,
-                    'monto'             => $detalle->monto_efectivo,
-                    'periodo'           => $detalle->periodo ?? 'MENSUAL',
-                    'fecha_inicio'      => $detalle->fecha_inicio ? $detalle->fecha_inicio->format('Y-m-d') : Carbon::now()->format('Y-m-d'),
-                    'fecha_vencimiento' => $detalle->fecha_vencimiento ? $detalle->fecha_vencimiento->format('Y-m-d') : Carbon::now()->addDays(30)->format('Y-m-d'),
-                    'estado'            => $detalle->estado,
-                ];
+            if (!$detalle->vehiculo) {
+                continue;
             }
+
+            $periodo = $detalle->periodo ?? 'MENSUAL';
+
+            // Para registros legacy: fecha_vencimiento=NULL, fecha=la fecha de vencimiento real.
+            // Detectar si el vehículo tiene suscripción activa.
+            $tieneSub = $detalle->vehiculo->planSubscription('gps-tracking') !== null;
+
+            if ($detalle->fecha_vencimiento) {
+                // Ya tiene fecha_vencimiento (fue sincronizado previamente)
+                $fechaVenc  = $detalle->fecha_vencimiento->format('Y-m-d');
+                $fechaInicio = $detalle->fecha_inicio
+                    ? $detalle->fecha_inicio->format('Y-m-d')
+                    : $this->calcularFechaInicio($fechaVenc, $periodo);
+            } elseif (!$tieneSub && $detalle->fecha) {
+                // Legacy sin suscripción: usar campo fecha como vencimiento y calcular inicio
+                $fechaVenc   = Carbon::parse($detalle->fecha)->format('Y-m-d');
+                $fechaInicio = $detalle->fecha_inicio
+                    ? $detalle->fecha_inicio->format('Y-m-d')
+                    : $this->calcularFechaInicio($fechaVenc, $periodo);
+            } else {
+                // Fallback: fechas desde hoy
+                $fechaInicio = Carbon::now()->format('Y-m-d');
+                $fechaVenc   = $this->calcularFechaVencimiento($fechaInicio, $periodo);
+            }
+
+            $this->items[$detalle->vehiculo->placa] = [
+                'vehiculo_id'       => $detalle->vehiculo_id,
+                'placa'             => $detalle->vehiculo->placa,
+                'plan_id'           => $detalle->plan_id,
+                'monto'             => $detalle->monto_efectivo,
+                'periodo'           => $periodo,
+                'fecha_inicio'      => $fechaInicio,
+                'fecha_vencimiento' => $fechaVenc,
+                'estado'            => $detalle->estado,
+            ];
         }
     }
 
@@ -238,6 +264,20 @@ class Edit extends Component
 
         $this->addVehiculo($vehiculo);
         $this->vehiculo_selected = '';
+    }
+
+    /**
+     * Calcula la fecha de inicio a partir de la fecha de vencimiento y el periodo (inverso de calcularFechaVencimiento).
+     */
+    protected function calcularFechaInicio(string $fechaVencimiento, string $periodo): string
+    {
+        return match ($periodo) {
+            'BIMENSUAL'  => Carbon::parse($fechaVencimiento)->subMonthsNoOverflow(2)->format('Y-m-d'),
+            'TRIMESTRAL' => Carbon::parse($fechaVencimiento)->subMonthsNoOverflow(3)->format('Y-m-d'),
+            'SEMESTRAL'  => Carbon::parse($fechaVencimiento)->subMonthsNoOverflow(6)->format('Y-m-d'),
+            'ANUAL'      => Carbon::parse($fechaVencimiento)->subYearNoOverflow()->format('Y-m-d'),
+            default      => Carbon::parse($fechaVencimiento)->subMonthNoOverflow()->format('Y-m-d'),
+        };
     }
 
     /**

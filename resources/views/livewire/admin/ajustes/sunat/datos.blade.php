@@ -1,9 +1,9 @@
-<div class="col-span-12 mx-3 rounded bg-white overflow-hidden shadow-2xl">
+<div class="col-span-12 mx-3 rounded bg-white dark:bg-gray-800/60 overflow-hidden shadow-2xl">
     <div class="grid grid-cols-12 gap-4 mt-4 pt-4 pb-4 px-3 mb-2">
 
         <div class="max-w-3xl col-span-12">
 
-            <h3 class="text-base leading-snug text-slate-800 font-bold mb-6">DATOS SUNAT
+            <h3 class="text-base leading-snug text-slate-800 dark:text-gray-100 font-bold mb-6">DATOS SUNAT
             </h3>
 
         </div>
@@ -24,9 +24,9 @@
             <x-form.password label="CLAVE CERTIFICADO CDT:" wire:model.live='sunat.clave_certificado_cdt' />
         </div>
 
-        <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
+        <div class="px-4 py-3 col-span-12 bg-white dark:bg-gray-800/60 text-right sm:px-6">
             @can('admin.settings.plantilla.sunat.edit')
-            <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive label="GUARDAR" />
+                <x-form.button wire:click="saveSunat" spinner="saveSunat" loading-delay="short" positive label="GUARDAR" />
             @endcan
 
         </div>
@@ -37,7 +37,7 @@
 
         <div class="max-w-3xl col-span-12">
 
-            <h3 class="text-base leading-snug text-slate-800 font-bold mb-6">DATOS API SUNAT
+            <h3 class="text-base leading-snug text-slate-800 dark:text-gray-100 font-bold mb-6">DATOS API SUNAT
             </h3>
 
         </div>
@@ -54,10 +54,10 @@
         </div>
 
 
-        <div class="px-4 py-3 col-span-12 bg-white text-right sm:px-6">
+        <div class="px-4 py-3 col-span-12 bg-white dark:bg-gray-800/60 text-right sm:px-6">
             @can('admin.settings.plantilla.sunat.edit')
-            <x-form.button wire:click="saveApiSunat" spinner="saveApiSunat" loading-delay="short" positive
-                label="GUARDAR" />
+                <x-form.button wire:click="saveApiSunat" spinner="saveApiSunat" loading-delay="short" positive
+                    label="GUARDAR" />
             @endcan
 
         </div>

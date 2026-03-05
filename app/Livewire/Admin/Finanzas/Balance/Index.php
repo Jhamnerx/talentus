@@ -9,7 +9,6 @@ use App\Models\Recibos;
 use Livewire\Component;
 use App\Models\Payments;
 use App\Models\DetalleCobros;
-use App\Enums\EstadoFacturacion;
 use App\Enums\CobroEstado;
 
 class Index extends Component
@@ -79,7 +78,7 @@ class Index extends Component
 
         // ========== PENDIENTE DE FACTURAR ==========
         // DetalleCobros sin facturar cuya fecha_facturacion está dentro del rango
-        $detallesSinFacturar = DetalleCobros::where('estado_facturacion', EstadoFacturacion::SIN_FACTURAR)
+        $detallesSinFacturar = DetalleCobros::sinFacturar()
             ->where('estado_detalle', CobroEstado::ACTIVO)
             ->where('estado', 1)
             ->whereBetween('fecha_facturacion', [$this->from, $this->to])

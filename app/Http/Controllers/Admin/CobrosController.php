@@ -28,13 +28,6 @@ class CobrosController extends Controller
         return view('admin.cobros.create');
     }
 
-
-    public function show(Cobros $cobro)
-    {
-        return view('admin.cobros.show', compact('cobro'));
-    }
-
-
     public function edit(Cobros $cobro)
     {
         return view('admin.cobros.edit', compact('cobro'));

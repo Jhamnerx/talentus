@@ -55,7 +55,7 @@ class Notificaciones extends Component
     public $pago_paymentable_type   = null;
     public $pago_paymentable_id     = null;
     public array $pago_documentos   = [];
-    public int $pago_payment_method_id = 1;
+    public $pago_payment_method_id = 1;
     public $pago_payment_destination_id = null;
     public bool $pago_showBankAccountSelector = false;
     public $pago_bank_account_id    = null;
@@ -126,8 +126,8 @@ class Notificaciones extends Component
             'monto_pendiente_pen' => NotificacionCobro::pendientes()->where('moneda', 'PEN')->sum('monto'),
             'monto_pendiente_usd' => NotificacionCobro::pendientes()->where('moneda', 'USD')->sum('monto'),
         ];
-
-        return view('livewire.admin.cobros.notificaciones', compact('notificaciones', 'stats'));
+        $paymentMethods = PaymentMethodType::whereActive(true)->get();
+        return view('livewire.admin.cobros.notificaciones', compact('notificaciones', 'stats', 'paymentMethods'));
     }
 
     // Modal de pago - apertura
@@ -273,6 +273,14 @@ class Notificaciones extends Component
 
                 $payment = Payments::findOrFail($this->pago_existing_id);
                 $payment->update(['cobros_id' => $notificacion->cobro_id]);
+
+                // Vincular documento (venta/recibo) a la notificacion
+                if ($payment->paymentable_type === Ventas::class) {
+                    $notificacion->venta_id = $payment->paymentable_id;
+                } elseif ($payment->paymentable_type === Recibos::class) {
+                    $notificacion->recibo_id = $payment->paymentable_id;
+                }
+
                 $notificacion->marcarComoPagado();
 
                 $this->notification()->success(
@@ -327,6 +335,15 @@ class Notificaciones extends Component
                     $payment->paymentable->pago_estado = 'PAID';
                     $payment->paymentable->estado      = 'COMPLETADO';
                     $payment->paymentable->save();
+                }
+            }
+
+            // Vincular documento (venta/recibo) a la notificacion
+            if ($this->pago_paymentable_id) {
+                if ($this->pago_paymentable_type === Ventas::class) {
+                    $notificacion->venta_id = $this->pago_paymentable_id;
+                } elseif ($this->pago_paymentable_type === Recibos::class) {
+                    $notificacion->recibo_id = $this->pago_paymentable_id;
                 }
             }
 
@@ -435,12 +452,13 @@ class Notificaciones extends Component
 
         $this->pago_existing_list = Payments::query()
             ->where(function ($q) use ($cliente) {
-                $q->where('paymentable_type', 'App\\Models\\Ventas')
-                    ->whereIn('paymentable_id', Ventas::where('cliente_id', $cliente->id)->pluck('id'));
-            })
-            ->orWhere(function ($q) use ($cliente) {
-                $q->where('paymentable_type', 'App\\Models\\Recibos')
-                    ->whereIn('paymentable_id', Recibos::where('clientes_id', $cliente->id)->pluck('id'));
+                $q->where(function ($inner) use ($cliente) {
+                    $inner->where('paymentable_type', 'App\\Models\\Ventas')
+                        ->whereIn('paymentable_id', Ventas::where('cliente_id', $cliente->id)->pluck('id'));
+                })->orWhere(function ($inner) use ($cliente) {
+                    $inner->where('paymentable_type', 'App\\Models\\Recibos')
+                        ->whereIn('paymentable_id', Recibos::where('clientes_id', $cliente->id)->pluck('id'));
+                });
             })
             ->whereNull('cobros_id')
             ->with('paymentable')

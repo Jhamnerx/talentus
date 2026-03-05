@@ -115,7 +115,7 @@
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
                         @forelse($productos as $producto)
-                            <tr>
+                            <tr wire:key='client-{{ $producto->id }}'>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left font-medium text-slate-800 dark:text-gray-100">
                                         {{ $producto->codigo }}</div>
@@ -182,7 +182,7 @@
                                                 </button>
                                             @endcan
                                             @can('eliminar-producto')
-                                                <button wire:click="openModalDelete({{ $producto->id }})"
+                                                <button wire:click.prevent='openModalDelete({{ $producto->id }})'
                                                     class="text-rose-500 hover:text-rose-600 cursor-pointer">
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <path

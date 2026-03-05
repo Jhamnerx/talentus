@@ -158,7 +158,7 @@
 
                 @if ($search || $clienteId || $estado || $filtroVencimiento)
                     <button wire:click="clearFilters" title="Limpiar filtros"
-                        class="flex-shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 transition">
+                        class="shrink-0 inline-flex items-center justify-center w-8 h-8 rounded-lg bg-rose-100 hover:bg-rose-200 dark:bg-rose-900/40 dark:hover:bg-rose-900/60 text-rose-600 dark:text-rose-400 transition">
                         <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 16 16">
                             <path
                                 d="M5.414 4L4 5.414 6.586 8 4 10.586 5.414 12 8 9.414 10.586 12 12 10.586 9.414 8 12 5.414 10.586 4 8 6.586z" />
@@ -400,7 +400,7 @@
                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Modo:</span>
                         <x-form.button :primary="$pago_mode === 'create'" :flat="$pago_mode !== 'create'" label="Nuevo Pago"
                             wire:click="$set('pago_mode', 'create')" sm />
-                        <x-form.button :secondary="$pago_mode === 'associate'" :flat="$pago_mode !== 'associate'" label="Asociar Existente"
+                        <x-form.button :primary="$pago_mode === 'associate'" :flat="$pago_mode !== 'associate'" label="Asociar Existente"
                             wire:click="$set('pago_mode', 'associate')" sm />
                     </div>
                 </div>
@@ -436,14 +436,11 @@
 
                     {{-- Tipo de pago --}}
                     <div class="col-span-12 sm:col-span-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Tipo Pago: <span class="text-rose-500">*</span>
-                        </label>
-                        <select wire:model.live="pago_tipo_pago"
-                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
-                            <option value="FACTURA">FACTURA</option>
-                            <option value="RECIBO">RECIBO</option>
-                        </select>
+                        <x-form.select wire:model.live="pago_tipo_pago" label="Tipo Pago" :options="[
+                            ['value' => 'FACTURA', 'label' => 'FACTURA'],
+                            ['value' => 'RECIBO', 'label' => 'RECIBO'],
+                        ]"
+                            option-value="value" option-label="label" :clearable="false" />
                     </div>
 
                     {{-- Documento asociado (factura/boleta o recibo) --}}
@@ -458,12 +455,9 @@
 
                     {{-- Método de pago --}}
                     <div class="col-span-12 sm:col-span-6">
-                        <x-form.select wire:model.live="pago_payment_method_id" label="Método de pago"
-                            placeholder="Selecciona">
-                            @foreach ($paymentsMethods as $metodo)
-                                <x-select.option label="{{ $metodo['description'] }}" value="{{ $metodo['id'] }}" />
-                            @endforeach
-                        </x-form.select>
+                        <x-form.select label="Método de Pago" wire:model.live="pago_payment_method_id"
+                            placeholder="Seleccione un método" :options="$paymentMethods" option-label="description"
+                            option-value="id" />
                     </div>
 
                     {{-- Destino del pago (caja / banco) --}}
@@ -491,60 +485,35 @@
 
                     {{-- Divisa --}}
                     <div class="col-span-6 sm:col-span-3">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Divisa:</label>
-                        <select wire:model.live="pago_divisa"
-                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100">
-                            <option value="PEN">PEN (Soles)</option>
-                            <option value="USD">USD (Dólares)</option>
-                        </select>
+                        <x-form.select wire:model.live="pago_divisa" label="Divisa" :options="[
+                            ['value' => 'PEN', 'label' => 'PEN (Soles)'],
+                            ['value' => 'USD', 'label' => 'USD (Dólares)'],
+                        ]"
+                            option-value="value" option-label="label" :clearable="false" />
                     </div>
 
                     {{-- Monto --}}
                     <div class="col-span-6 sm:col-span-3">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Monto: <span class="text-rose-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input wire:model.live="pago_monto" type="number" step="0.01" min="0"
-                                class="form-input w-full pl-10 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                                placeholder="0.00" />
-                            <div class="absolute inset-0 right-auto flex items-center pointer-events-none">
-                                <span class="text-sm text-gray-500 dark:text-gray-400 font-medium px-3">S/</span>
-                            </div>
-                        </div>
-                        @error('pago_monto')
-                            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                        @enderror
+                        <x-form.currency label="Monto" wire:model.defer="pago_monto" thousands=","
+                            decimal="." />
                     </div>
 
                     {{-- Fecha --}}
                     <div class="col-span-12 sm:col-span-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Fecha: <span class="text-rose-500">*</span>
-                        </label>
-                        <input type="date" wire:model.live="pago_fecha"
-                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100" />
-                        @error('pago_fecha')
-                            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                        @enderror
+                        <x-form.datetime.picker label="Fecha" wire:model.defer="pago_fecha" without-time
+                            parse-format="YYYY-MM-DD" />
                     </div>
 
                     {{-- Número de operación --}}
                     <div class="col-span-12 sm:col-span-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            Número de operación:
-                        </label>
-                        <input type="text" wire:model.live="pago_numero_operacion"
-                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+                        <x-form.input label="Número de operación" wire:model.defer="pago_numero_operacion"
                             placeholder="45474001" />
                     </div>
 
                     {{-- Nota --}}
                     <div class="col-span-12">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nota:</label>
-                        <textarea wire:model.live="pago_nota" rows="3"
-                            class="form-input w-full dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
-                            placeholder="Observaciones opcionales..."></textarea>
+                        <x-form.textarea label="Nota" wire:model.defer="pago_nota"
+                            placeholder="Observaciones opcionales..." rows="3" />
                     </div>
 
                 @endif {{-- fin modo crear --}}

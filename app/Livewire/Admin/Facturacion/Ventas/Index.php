@@ -40,6 +40,7 @@ class Index extends Component
             ->orwhereDate('fecha_emision', $this->validateDate($this->search) ? Carbon::createFromFormat('d-m-Y', $this->search)->format('Y-m-d') : '')
             ->orderby('id', 'desc')
             ->with('cliente')
+            ->withSum('payments', 'monto')
             ->paginate(10);;;
 
         return view('livewire.admin.facturacion.ventas.index', compact('ventas'));
@@ -56,6 +57,11 @@ class Index extends Component
     {
 
         $this->emit('openModalDelete', $venta);
+    }
+
+    public function abrirModalPagos(int $id): void
+    {
+        $this->dispatch('abrir-pagos-modal', id: $id, type: 'Ventas');
     }
 
     public function emitFactura()

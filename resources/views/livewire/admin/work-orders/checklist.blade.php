@@ -116,7 +116,7 @@
                                 {{-- Observaciones (Si está marcado como OBSERVADO) --}}
                                 @if (isset($resultados[$item['id']]) && $resultados[$item['id']] === 'observado')
                                     <div class="mt-3">
-                                        <x-form.textarea wire:model.blur="observaciones.{{ $item['id'] }}"
+                                        <x-form.textarea wire:model.live.blur="observaciones.{{ $item['id'] }}"
                                             placeholder="Describe la observación..." rows="2" class="w-full" />
                                     </div>
                                 @endif

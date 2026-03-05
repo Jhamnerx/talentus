@@ -132,6 +132,9 @@
                                 <div class="font-semibold text-left">Total</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="font-semibold text-left">Saldo</div>
+                            </th>
+                            <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-left">Estado Pago</div>
                             </th>
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -216,6 +219,18 @@
 
                                     </div>
                                 </td>
+                                {{-- Saldo = total - pagos registrados --}}
+                                <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                    @php $saldo = round($recibo->total - ($recibo->payments_sum_monto ?? 0), 2); @endphp
+                                    <div
+                                        class="font-medium {{ $saldo > 0 ? 'text-orange-500' : 'text-emerald-500' }}">
+                                        @if ($recibo->divisa == 'PEN')
+                                            S/. {{ number_format($saldo, 2) }}
+                                        @else
+                                            ${{ number_format($saldo, 2) }}
+                                        @endif
+                                    </div>
+                                </td>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     @switch($recibo->pago_estado)
                                         @case('UNPAID')
@@ -293,6 +308,22 @@
                                                 x-transition:leave-end="opacity-0" x-cloak>
 
                                                 <ul>
+                                                    {{-- Ver Pagos --}}
+                                                    <li>
+                                                        <a href="javascript: void(0)" @click.prevent="open = false"
+                                                            wire:click="abrirModalPagos({{ $recibo->id }})"
+                                                            class="text-gray-700 dark:text-gray-200 group flex items-center px-4 py-2 text-sm font-normal hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                            role="menuitem" tabindex="-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor"
+                                                                class="h-5 w-5 mr-3 text-gray-400 group-hover:text-indigo-500">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" />
+                                                            </svg>
+                                                            Ver Pagos
+                                                        </a>
+                                                    </li>
                                                     @can('editar-recibos')
                                                         <li>
                                                             <a href="{{ route('admin.ventas.recibos.edit', $recibo) }}"
@@ -363,7 +394,7 @@
                                                         </li>
                                                     @endcan
 
-                                                    @can('estados-recibos')
+                                                    {{-- @can('estados-recibos')
                                                         @if ($recibo->pago_estado == 'PAID')
                                                             <li>
                                                                 <a href="javascript: void(0)"
@@ -433,7 +464,7 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                    @endcan
+                                                    @endcan --}}
 
 
                                                 </ul>
@@ -468,5 +499,8 @@
         {{ $recibos->links() }}
 
     </div>
+
+    {{-- Modal de gestión de pagos --}}
+    <livewire:admin.shared.pagos-modal />
 
 </div>

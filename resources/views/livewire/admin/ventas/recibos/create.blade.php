@@ -233,7 +233,7 @@
                                                 </td>
                                                 <td class="px-2 py-2">
                                                     <x-form.currency
-                                                        wire:model="pagos_detalle.{{ $index }}.monto"
+                                                        wire:model.live="pagos_detalle.{{ $index }}.monto"
                                                         prefix="{{ $simbolo }}" precision="2" thousands=","
                                                         decimal="." />
                                                 </td>

@@ -36,10 +36,6 @@ class DetalleCobroObserver
             $fechaNueva = $detalleCobro->fecha_facturacion;
 
             if ($fechaOriginal !== $fechaNueva && Carbon::parse($fechaNueva)->isFuture()) {
-                $detalleCobro->estado_facturacion = 'SIN_FACTURAR';
-                $detalleCobro->venta_id = null;
-                $detalleCobro->recibo_id = null;
-                $detalleCobro->fecha_pago = null;
 
                 activity()
                     ->performedOn($detalleCobro)
@@ -66,11 +62,8 @@ class DetalleCobroObserver
             $this->sincronizarSuscripcion($detalleCobro);
         }
 
-        // Si se acaba de marcar como PAGADO → renovar ends_at de la suscripción
-        if (
-            $detalleCobro->wasChanged('estado_facturacion') &&
-            $detalleCobro->estado_facturacion === 'PAGADO'
-        ) {
+        // Si cambió fecha_facturacion → renovar ends_at de la suscripción (nuevo período pagado)
+        if ($detalleCobro->wasChanged('fecha_facturacion')) {
             $this->renovarSuscripcion($detalleCobro);
         }
     }

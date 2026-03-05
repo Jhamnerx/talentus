@@ -340,9 +340,6 @@
                             class="text-xs font-semibold uppercase text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-900/20 border-t border-b border-gray-100 dark:border-gray-700/60">
                             <tr>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                    <div class="font-semibold text-left">Cliente</div>
-                                </th>
-                                <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="font-semibold text-left">Vehículo</div>
                                 </th>
                                 <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
@@ -369,13 +366,16 @@
                         <tbody class="text-sm">
                             @php
                                 $currentCliente = null;
+                                $currentCobroId = null;
                             @endphp
 
                             @foreach ($detalles as $detalle)
                                 @php
                                     $clienteNombre = $detalle->cobro->clientes->razon_social;
                                     $showClienteHeader = $currentCliente !== $clienteNombre;
+                                    $showCobroHeader = $currentCobroId !== $detalle->cobros_id;
                                     $currentCliente = $clienteNombre;
+                                    $currentCobroId = $detalle->cobros_id;
 
                                     // Datos de suscripción del vehículo (laravelcm/subscriptions)
                                     $subscription = $detalle->vehiculo?->planSubscriptions->first();
@@ -434,7 +434,7 @@
                                 @if ($showClienteHeader)
                                     <tr
                                         class="bg-indigo-100 dark:bg-indigo-900/40 border-t-2 border-indigo-200 dark:border-indigo-700">
-                                        <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-2">
+                                        <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-2">
                                             <div class="flex items-center gap-2">
                                                 <svg class="w-5 h-5 text-indigo-600 dark:text-indigo-400"
                                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -455,20 +455,88 @@
                                     </tr>
                                 @endif
 
+                                @if ($showCobroHeader || $showClienteHeader)
+                                    @php
+                                        $cobro = $detalle->cobro;
+                                        $cobroMoneda = $cobro->divisa === 'USD' ? 'USD' : 'S/.';
+                                        $cobroMonto = $detalle->monto_efectivo ?? 0;
+                                        $cobroInicio = $detalle->fecha_inicio
+                                            ? \Carbon\Carbon::parse($detalle->fecha_inicio)->format('d/m/Y')
+                                            : ($cobro->created_at
+                                                ? $cobro->created_at->format('d/m/Y')
+                                                : '—');
+                                        $cobroVcto = $detalle->fecha_vencimiento
+                                            ? \Carbon\Carbon::parse($detalle->fecha_vencimiento)->format('d/m/Y')
+                                            : '—';
+                                        $cobroPeriodo = $detalle->periodo ?? '—';
+                                        $cobroTipoPago = $cobro->tipo_pago ?? '—';
+                                    @endphp
+                                    <tr
+                                        class="bg-blue-50 dark:bg-blue-900/20 border-t border-blue-200 dark:border-blue-800">
+                                        <td colspan="7" class="px-5 py-1.5">
+                                            <div class="flex items-center justify-between gap-3 flex-wrap">
+
+                                                {{-- Info cobro --}}
+                                                <div class="flex items-center gap-2 flex-wrap text-xs">
+                                                    <span
+                                                        class="inline-flex items-center gap-1 font-bold text-blue-700 dark:text-blue-300">
+                                                        🔵 Cobro #{{ $cobro->id }}
+                                                    </span>
+                                                    <span class="text-blue-500 dark:text-blue-400">·</span>
+                                                    @if ($cobroTipoPago === 'FACTURA')
+                                                        <span
+                                                            class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 font-semibold">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3"
+                                                                fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                            </svg>
+                                                            FACTURA
+                                                        </span>
+                                                    @else
+                                                        <span
+                                                            class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 font-semibold">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3"
+                                                                fill="none" viewBox="0 0 24 24"
+                                                                stroke="currentColor" stroke-width="2">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                                            </svg>
+                                                            RECIBO
+                                                        </span>
+                                                    @endif
+                                                    @if (!empty($cobro->comentario))
+                                                        <span class="text-blue-500 dark:text-blue-400">·</span>
+                                                        <span
+                                                            class="italic text-gray-500 dark:text-gray-400 truncate max-w-xs"
+                                                            title="{{ $cobro->comentario }}">
+                                                            {{ Str::limit($cobro->comentario, 60) }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+
+                                                {{-- Botones rápidos --}}
+                                                <div class="flex items-center gap-2 shrink-0">
+                                                    <a href="{{ route('admin.cobros.edit', $cobro) }}"
+                                                        class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/50 dark:hover:bg-blue-900/70 dark:text-blue-300 transition-colors">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3"
+                                                            fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                                                            stroke-width="2">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                                        </svg>
+                                                        Editar cobro
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+
                                 <tr class="border-b border-gray-200 dark:border-gray-700/60 hover:bg-gray-100 dark:hover:bg-gray-700/30 {{ $bgColor }}"
                                     wire:key='detalle-{{ $detalle->id }}'>
-
-                                    <!-- Cliente -->
-                                    <td class="px-2 first:pl-5 last:pr-5 py-3">
-                                        <div class="font-medium text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $detalle->cobro->clientes->razon_social }}
-                                        </div>
-                                        @if ($detalle->cobro->clientes->contactos->isNotEmpty())
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                {{ $detalle->cobro->clientes->contactos->first()->nombre }}
-                                            </div>
-                                        @endif
-                                    </td>
 
                                     <!-- Vehículo -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3">
@@ -529,36 +597,19 @@
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                         @if ($subscription && $subEndsAt)
                                             <div
-                                                class="text-xs {{ $subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400' }} mb-1">
+                                                class="text-xs {{ $subActiva ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400' }}">
                                                 {{ $subActiva ? '✅' : '❌' }}
                                                 {{ \Carbon\Carbon::parse($subEndsAt)->format('d/m/Y') }}
                                             </div>
-                                            <button wire:click="abrirModalSync({{ $detalle->id }})"
-                                                wire:loading.attr="disabled"
-                                                wire:target="abrirModalSync({{ $detalle->id }})"
-                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:hover:bg-amber-900/60 transition-colors">
-                                                <span wire:loading.remove
-                                                    wire:target="abrirModalSync({{ $detalle->id }})">🔀
-                                                    Cambiar plan</span>
-                                                <span wire:loading wire:target="abrirModalSync({{ $detalle->id }})">⏳
-                                                    Cargando...</span>
-                                            </button>
+                                        @elseif ($detalle->vehiculo)
+                                            {{-- Sin suscripción: indicar que hay que editar el cobro --}}
+                                            <a href="{{ route('admin.cobros.edit', $detalle->cobro) }}"
+                                                class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:hover:bg-amber-900/60 transition-colors"
+                                                title="Este detalle no tiene suscripción. Edita el cobro para actualizar las fechas.">
+                                                Sin suscripción — Editar
+                                            </a>
                                         @else
-                                            @if ($detalle->vehiculo)
-                                                <button wire:click="abrirModalSync({{ $detalle->id }})"
-                                                    wire:loading.attr="disabled"
-                                                    wire:target="abrirModalSync({{ $detalle->id }})"
-                                                    class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300 dark:hover:bg-indigo-900/60 transition-colors">
-                                                    <span wire:loading.remove
-                                                        wire:target="abrirModalSync({{ $detalle->id }})">🔄
-                                                        Sincronizar</span>
-                                                    <span wire:loading
-                                                        wire:target="abrirModalSync({{ $detalle->id }})">⏳
-                                                        Cargando...</span>
-                                                </button>
-                                            @else
-                                                <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
-                                            @endif
+                                            <span class="text-xs text-gray-400 dark:text-gray-500">—</span>
                                         @endif
                                     </td>
 
@@ -584,18 +635,6 @@
                                     <!-- Acciones -->
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap w-px">
                                         <div class="flex items-center gap-2">
-                                            <a href="{{ route('admin.cobros.show', $detalle->cobro) }}"
-                                                class="text-gray-400 hover:text-violet-500" title="Ver cobro">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                    viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="2"
-                                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                </svg>
-                                            </a>
-
                                             <a href="{{ route('admin.cobros.edit', $detalle->cobro) }}"
                                                 class="text-gray-400 hover:text-blue-500" title="Editar cobro">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -624,7 +663,7 @@
 
                             @if ($detalles->count() < 1)
                                 <tr>
-                                    <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
+                                    <td colspan="7" class="px-2 first:pl-5 last:pr-5 py-8 text-center">
                                         <div class="text-gray-500 dark:text-gray-400">No hay registros</div>
                                     </td>
                                 </tr>
@@ -641,8 +680,5 @@
         </div>
 
     </div>
-
-    {{-- Modal: Sincronizar suscripción --}}
-    @livewire('admin.cobros.modal-sync-suscripcion')
 
 </div>

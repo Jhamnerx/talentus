@@ -43,6 +43,7 @@ class Index extends Component
     {
         $this->resetPage();
         $this->dispatch('$refresh');
+        $this->render();
     }
 
     // ============ MODAL CREATE ============
