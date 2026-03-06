@@ -3,11 +3,8 @@
 namespace App\Livewire\Admin\Payments;
 
 use App\Models\Payments;
-use App\Exports\PaymentsExport;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Livewire\Attributes\On;
-use Maatwebsite\Excel\Facades\Excel;
 
 class PaymentsIndex extends Component
 {

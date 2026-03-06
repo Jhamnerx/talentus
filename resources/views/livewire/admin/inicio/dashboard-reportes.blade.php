@@ -104,29 +104,32 @@
                     <h4 class="text-sm font-semibold text-slate-500 uppercase mb-3 flex items-center justify-between">
                         Facturas pagadas (mes)
                         <span class="bg-emerald-100 text-emerald-700 text-xs px-2 py-0.5 rounded-full">
-                            {{ $facturasPagadasMes->count() }} · S/
-                            {{ number_format($facturasPagadasMes->sum('total'), 2) }}
+                            {{ $countFacturasMes }} docs · S/ {{ number_format($totalFacturasMes, 2) }}
                         </span>
                     </h4>
                     <div class="space-y-2 mb-3">
                         @forelse($metodosFacturasMes as $metodo)
-                            <div
-                                class="flex items-center justify-between bg-slate-50 dark:bg-slate-700 rounded-lg px-3 py-2">
-                                <span class="text-sm text-slate-600 dark:text-slate-300">
-                                    {{ $metodo->paymentMethod->description ?? '(sin método)' }}
-                                </span>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-xs text-slate-400">{{ $metodo->cantidad }} pago(s)</span>
-                                    <span class="text-sm font-semibold text-slate-800 dark:text-white">S/
-                                        {{ number_format($metodo->total, 2) }}</span>
+                            <div class="bg-slate-50 dark:bg-slate-700 rounded-lg px-3 py-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                        {{ $metodo->paymentMethod->description ?? '(sin método)' }}
+                                    </span>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-slate-400">{{ $metodo->cantidad }} pago(s)</span>
+                                        <span class="text-sm font-semibold text-slate-800 dark:text-white">S/
+                                            {{ number_format($metodo->total, 2) }}</span>
+                                    </div>
                                 </div>
+                                @if ($metodo->destination)
+                                    <p class="text-xs text-slate-400 mt-0.5">
+                                        → {{ $metodo->destination_description }}
+                                    </p>
+                                @endif
                             </div>
                         @empty
                             <p class="text-sm text-slate-400">Sin registros de pago este mes.</p>
                         @endforelse
                     </div>
-                    <div class="text-xs text-slate-400">Semana: {{ $facturasPagadasSemana->count() }} factura(s) · S/
-                        {{ number_format($facturasPagadasSemana->sum('total'), 2) }}</div>
                 </div>
 
                 {{-- Recibos --}}
@@ -134,148 +137,125 @@
                     <h4 class="text-sm font-semibold text-slate-500 uppercase mb-3 flex items-center justify-between">
                         Recibos pagados (mes)
                         <span class="bg-violet-100 text-violet-700 text-xs px-2 py-0.5 rounded-full">
-                            {{ $recibosPagadosMes->count() }} · S/
-                            {{ number_format($recibosPagadosMes->sum('total'), 2) }}
+                            {{ $countRecibosMes }} docs · S/ {{ number_format($totalRecibosMes, 2) }}
                         </span>
                     </h4>
                     <div class="space-y-2 mb-3">
                         @forelse($metodosRecibosMes as $metodo)
-                            <div
-                                class="flex items-center justify-between bg-slate-50 dark:bg-slate-700 rounded-lg px-3 py-2">
-                                <span class="text-sm text-slate-600 dark:text-slate-300">
-                                    {{ $metodo->paymentMethod->description ?? '(sin método)' }}
-                                </span>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-xs text-slate-400">{{ $metodo->cantidad }} pago(s)</span>
-                                    <span class="text-sm font-semibold text-slate-800 dark:text-white">S/
-                                        {{ number_format($metodo->total, 2) }}</span>
+                            <div class="bg-slate-50 dark:bg-slate-700 rounded-lg px-3 py-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm font-medium text-slate-700 dark:text-slate-200">
+                                        {{ $metodo->paymentMethod->description ?? '(sin método)' }}
+                                    </span>
+                                    <div class="flex items-center gap-3">
+                                        <span class="text-xs text-slate-400">{{ $metodo->cantidad }} pago(s)</span>
+                                        <span class="text-sm font-semibold text-slate-800 dark:text-white">S/
+                                            {{ number_format($metodo->total, 2) }}</span>
+                                    </div>
                                 </div>
+                                @if ($metodo->destination)
+                                    <p class="text-xs text-slate-400 mt-0.5">
+                                        → {{ $metodo->destination_description }}
+                                    </p>
+                                @endif
                             </div>
                         @empty
                             <p class="text-sm text-slate-400">Sin registros de pago este mes.</p>
                         @endforelse
                     </div>
-                    <div class="text-xs text-slate-400">Semana: {{ $recibosPagadosSemana->count() }} recibo(s) · S/
-                        {{ number_format($recibosPagadosSemana->sum('total'), 2) }}</div>
                 </div>
 
             </div>
         </div>
     </div>
 
-    {{-- ── 6. Por Cobrar + Días de Vencimiento ─────────────────────────── --}}
+    {{-- ── 6. Por Cobrar ─────────────────────────────────────────────────── --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
         {{-- Facturas por cobrar --}}
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
                 <h3 class="font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
-                    🔴 Facturas por cobrar
+                    🔴 Ventas por cobrar
+                    <span class="text-xs font-normal text-slate-400">sin NC · sin baja</span>
                 </h3>
-                <span class="text-xs bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">
-                    {{ $facturasPorCobrar->count() }} · S/ {{ number_format($facturasPorCobrar->sum('total'), 2) }}
-                </span>
             </div>
-            <div class="overflow-x-auto max-h-72">
-                <table class="w-full text-xs">
-                    <thead class="bg-slate-50 dark:bg-slate-700 sticky top-0">
-                        <tr>
-                            <th class="text-left px-3 py-2 text-slate-500">Comprobante</th>
-                            <th class="text-left px-3 py-2 text-slate-500">Cliente</th>
-                            <th class="text-right px-3 py-2 text-slate-500">Total</th>
-                            <th class="text-center px-3 py-2 text-slate-500">Vence</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-                        @forelse($facturasPorCobrar as $venta)
-                            @php
-                                $dias = $venta->dias_vencimiento;
-                                $badge =
-                                    $dias < 0
-                                        ? 'bg-rose-100 text-rose-700'
-                                        : ($dias <= 7
-                                            ? 'bg-amber-100 text-amber-700'
-                                            : 'bg-slate-100 text-slate-600');
-                                $label =
-                                    $dias < 0
-                                        ? 'Vencido ' . abs($dias) . 'd'
-                                        : ($dias === 0
-                                            ? 'Vence hoy'
-                                            : 'En ' . $dias . 'd');
-                            @endphp
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-3 py-2 font-medium text-slate-700 dark:text-slate-200">
-                                    {{ $venta->serie_correlativo ?? $venta->serie . '-' . $venta->correlativo }}
-                                </td>
-                                <td class="px-3 py-2 text-slate-500 max-w-[120px] truncate">
-                                    {{ $venta->cliente->razon_social ?? '—' }}
-                                </td>
-                                <td class="px-3 py-2 text-right font-semibold text-slate-800 dark:text-white">
-                                    {{ $venta->divisa === 'USD' ? '$' : 'S/' }} {{ number_format($venta->total, 2) }}
-                                </td>
-                                <td class="px-3 py-2 text-center">
-                                    <span
-                                        class="inline-flex px-1.5 py-0.5 rounded text-xs font-medium {{ $badge }}">
-                                        {{ $label }}
-                                    </span>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-3 py-4 text-center text-slate-400">Sin facturas pendientes.
-                                </td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="p-4 space-y-3">
+                @php
+                    $fPen = $facturasPorCobrar['PEN'] ?? null;
+                    $fUsd = $facturasPorCobrar['USD'] ?? null;
+                @endphp
+
+                {{-- PEN --}}
+                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="text-xs font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300">PEN</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ $fPen ? number_format($fPen->cantidad) : 0 }} doc.
+                        </span>
+                    </div>
+                    <span class="text-lg font-bold text-slate-800 dark:text-white">
+                        S/ {{ number_format($fPen ? $fPen->monto_total : 0, 2) }}
+                    </span>
+                </div>
+
+                {{-- USD --}}
+                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">USD</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ $fUsd ? number_format($fUsd->cantidad) : 0 }} doc.
+                        </span>
+                    </div>
+                    <span class="text-lg font-bold text-slate-800 dark:text-white">
+                        $ {{ number_format($fUsd ? $fUsd->monto_total : 0, 2) }}
+                    </span>
+                </div>
             </div>
         </div>
 
         {{-- Recibos por cobrar --}}
         <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-200 dark:border-slate-700">
-            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
+            <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-700">
                 <h3 class="font-semibold text-slate-700 dark:text-slate-200 flex items-center gap-2">
                     🟡 Recibos por cobrar
                 </h3>
-                <span class="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">
-                    {{ $recibosPorCobrar->count() }} · S/ {{ number_format($recibosPorCobrar->sum('total'), 2) }}
-                </span>
             </div>
-            <div class="overflow-x-auto max-h-72">
-                <table class="w-full text-xs">
-                    <thead class="bg-slate-50 dark:bg-slate-700 sticky top-0">
-                        <tr>
-                            <th class="text-left px-3 py-2 text-slate-500">Serie/N°</th>
-                            <th class="text-left px-3 py-2 text-slate-500">Cliente</th>
-                            <th class="text-right px-3 py-2 text-slate-500">Total</th>
-                            <th class="text-center px-3 py-2 text-slate-500">Emisión</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-                        @forelse($recibosPorCobrar as $recibo)
-                            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
-                                <td class="px-3 py-2 font-medium text-slate-700 dark:text-slate-200">
-                                    {{ $recibo->serie }}-{{ $recibo->numero }}
-                                </td>
-                                <td class="px-3 py-2 text-slate-500 max-w-[120px] truncate">
-                                    {{ $recibo->cliente->razon_social ?? '—' }}
-                                </td>
-                                <td class="px-3 py-2 text-right font-semibold text-slate-800 dark:text-white">
-                                    {{ $recibo->divisa === 'USD' ? '$' : 'S/' }}
-                                    {{ number_format($recibo->total, 2) }}
-                                </td>
-                                <td class="px-3 py-2 text-center text-slate-400">
-                                    {{ $recibo->fecha_emision ? $recibo->fecha_emision->format('d/m/Y') : '—' }}
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="4" class="px-3 py-4 text-center text-slate-400">Sin recibos
-                                    pendientes.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            <div class="p-4 space-y-3">
+                @php
+                    $rPen = $recibosPorCobrar['PEN'] ?? null;
+                    $rUsd = $recibosPorCobrar['USD'] ?? null;
+                @endphp
+
+                {{-- PEN --}}
+                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="text-xs font-bold px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-600 text-slate-600 dark:text-slate-300">PEN</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ $rPen ? number_format($rPen->cantidad) : 0 }} doc.
+                        </span>
+                    </div>
+                    <span class="text-lg font-bold text-slate-800 dark:text-white">
+                        S/ {{ number_format($rPen ? $rPen->monto_total : 0, 2) }}
+                    </span>
+                </div>
+
+                {{-- USD --}}
+                <div class="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/40 rounded-lg">
+                    <div class="flex items-center gap-2">
+                        <span
+                            class="text-xs font-bold px-2 py-0.5 rounded bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400">USD</span>
+                        <span class="text-sm text-slate-500 dark:text-slate-400">
+                            {{ $rUsd ? number_format($rUsd->cantidad) : 0 }} doc.
+                        </span>
+                    </div>
+                    <span class="text-lg font-bold text-slate-800 dark:text-white">
+                        $ {{ number_format($rUsd ? $rUsd->monto_total : 0, 2) }}
+                    </span>
+                </div>
             </div>
         </div>
 

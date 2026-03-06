@@ -8,8 +8,6 @@ use App\Models\Compras;
 use App\Models\Recibos;
 use Livewire\Component;
 use App\Models\Payments;
-use App\Models\DetalleCobros;
-use App\Enums\CobroEstado;
 
 class Index extends Component
 {
@@ -25,131 +23,103 @@ class Index extends Component
 
     public function render()
     {
-        // Saldo total en cajas abiertas (multi-moneda)
-        $cajasAbiertas = Cash::abierta()->get();
+        // ── Cajas abiertas ──────────────────────────────────────────────────
+        $cajasAbiertas      = Cash::abierta()->get();
         $saldoTotalCajasPen = $cajasAbiertas->sum('saldo_actual_pen');
         $saldoTotalCajasUsd = $cajasAbiertas->sum('saldo_actual_usd');
-        $saldoTotalCajas = $saldoTotalCajasPen; // Compatibilidad, mostrar PEN por defecto
 
-        // Movimientos en el período seleccionado usando Payments directamente
-        $movimientos = Payments::with(['paymentable'])
-            ->whereBetween('created_at', [$this->from . ' 00:00:00', $this->to . ' 23:59:59'])
-            ->get();
+        // ── Movimientos del período (campo fecha del pago) ──────────────────
+        $movimientos = Payments::whereBetween('fecha', [$this->from, $this->to])->get();
+        $ingresosPen = $movimientos->where('type_movement', 'INGRESO')->where('divisa', 'PEN')->sum('monto');
+        $ingresosUsd = $movimientos->where('type_movement', 'INGRESO')->where('divisa', 'USD')->sum('monto');
+        $egresosPen  = $movimientos->where('type_movement', 'EGRESO')->where('divisa', 'PEN')->sum('monto');
+        $egresosUsd  = $movimientos->where('type_movement', 'EGRESO')->where('divisa', 'USD')->sum('monto');
+        $balancePen  = $ingresosPen - $egresosPen;
+        $balanceUsd  = $ingresosUsd - $egresosUsd;
 
-        $ingresos = $movimientos->where('type_movement', 'INGRESO')->sum('monto');
-        $egresos = $movimientos->where('type_movement', 'EGRESO')->sum('monto');
-
-        $balance = $ingresos - $egresos;
-
-        // ========== FACTURADO Y PAGADO (en el período) ==========
-        // Documentos completamente pagados dentro del rango de fechas
+        // ── Facturado y pagado en el período ────────────────────────────────
         $ventasPagadas = Ventas::where('pago_estado', 'PAID')
             ->whereBetween('fecha_emision', [$this->from, $this->to])
             ->get();
-
         $recibosPagados = Recibos::where('pago_estado', 'PAID')
             ->whereBetween('fecha_emision', [$this->from, $this->to])
             ->get();
+        $facturadoYPagadoPen = $ventasPagadas->where('divisa', 'PEN')->sum('total')
+            + $recibosPagados->where('divisa', 'PEN')->sum('total');
+        $facturadoYPagadoUsd = $ventasPagadas->where('divisa', 'USD')->sum('total')
+            + $recibosPagados->where('divisa', 'USD')->sum('total');
+        $documentosPagados   = $ventasPagadas->count() + $recibosPagados->count();
 
-        $facturadoYPagado = $ventasPagadas->sum('total') + $recibosPagados->sum('total');
-        $documentosPagados = $ventasPagadas->count() + $recibosPagados->count();
+        // Closure reutilizable: saldo pendiente real de un documento
+        $saldo = fn($doc) => max(0, $doc->total - $doc->payments->sum('monto'));
 
-        // ========== FACTURADO PENDIENTE DE COBRO ==========
-        // Ventas y Recibos sin pagar completamente (dentro del rango de fechas de emisión)
-        $ventasPendientes = Ventas::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+        // ── Facturado pendiente en el período ───────────────────────────────
+        // Ventas: excluye las con NC (comprobantes) y las comunicadas de baja (id_baja)
+        $ventasPendientes = Ventas::where('pago_estado', 'UNPAID')
+            ->whereNull('id_baja')
+            ->whereDoesntHave('notaCredito')
             ->whereBetween('fecha_emision', [$this->from, $this->to])
             ->with('payments')
             ->get();
-
-        $recibosPendientes = Recibos::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+        $recibosPendientes = Recibos::where('pago_estado', 'UNPAID')
             ->whereBetween('fecha_emision', [$this->from, $this->to])
             ->with('payments')
             ->get();
+        $facturadoPendientePen = $ventasPendientes->where('divisa', 'PEN')->sum($saldo)
+            + $recibosPendientes->where('divisa', 'PEN')->sum($saldo);
+        $facturadoPendienteUsd = $ventasPendientes->where('divisa', 'USD')->sum($saldo)
+            + $recibosPendientes->where('divisa', 'USD')->sum($saldo);
+        $documentosPendientes  = $ventasPendientes->count() + $recibosPendientes->count();
 
-        $facturadoPendiente = $ventasPendientes->sum(function ($venta) {
-            $pagado = $venta->payments->sum('monto');
-            return max(0, $venta->total - $pagado);
-        }) + $recibosPendientes->sum(function ($recibo) {
-            $pagado = $recibo->payments->sum('monto');
-            return max(0, $recibo->total - $pagado);
-        });
-
-        $documentosPendientes = $ventasPendientes->count() + $recibosPendientes->count();
-
-        // ========== PENDIENTE DE FACTURAR ==========
-        // DetalleCobros sin facturar cuya fecha_facturacion está dentro del rango
-        $detallesSinFacturar = DetalleCobros::sinFacturar()
-            ->where('estado_detalle', CobroEstado::ACTIVO)
-            ->where('estado', 1)
-            ->whereBetween('fecha_facturacion', [$this->from, $this->to])
-            ->with('cobro.clientes', 'vehiculo')
-            ->get();
-
-        $pendienteFacturar = $detallesSinFacturar->sum('plan');
-        $detallesSinFacturarCount = $detallesSinFacturar->count();
-
-        // ========== CUENTAS POR COBRAR (TOTAL) ==========
-        // TODO lo que está pendiente de cobrar sin filtro de fechas
-        $todasVentasPendientes = Ventas::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+        // ── Cuentas por cobrar — total sin filtro de fechas ─────────────────
+        $todasVentasPendientes = Ventas::where('pago_estado', 'UNPAID')
+            ->whereNull('id_baja')
+            ->whereDoesntHave('notaCredito')
             ->with('payments')
             ->get();
-
-        $todosRecibosPendientes = Recibos::whereIn('pago_estado', ['UNPAID', 'PARTIAL'])
+        $todosRecibosPendientes = Recibos::where('pago_estado', 'UNPAID')
             ->with('payments')
             ->get();
+        $totalPorCobrarPen = $todasVentasPendientes->where('divisa', 'PEN')->sum($saldo)
+            + $todosRecibosPendientes->where('divisa', 'PEN')->sum($saldo);
+        $totalPorCobrarUsd = $todasVentasPendientes->where('divisa', 'USD')->sum($saldo)
+            + $todosRecibosPendientes->where('divisa', 'USD')->sum($saldo);
+        $cuentasVencidas = $todasVentasPendientes->filter(fn($v) => $v->fecha_vencimiento?->isPast())->count()
+            + $todosRecibosPendientes->filter(fn($r) => $r->fecha_vencimiento?->isPast())->count();
 
-        $totalPorCobrar = $todasVentasPendientes->sum(function ($venta) {
-            $pagado = $venta->payments->sum('monto');
-            return max(0, $venta->total - $pagado);
-        }) + $todosRecibosPendientes->sum(function ($recibo) {
-            $pagado = $recibo->payments->sum('monto');
-            return max(0, $recibo->total - $pagado);
-        });
+        // ── Cuentas por pagar — total sin filtro de fechas ──────────────────
+        $comprasPendientes       = Compras::where('pago_estado', 'UNPAID')->with('payments')->get();
+        $totalPorPagarPen        = $comprasPendientes->where('divisa', 'PEN')->sum($saldo);
+        $totalPorPagarUsd        = $comprasPendientes->where('divisa', 'USD')->sum($saldo);
+        $cuentasPorPagarVencidas = $comprasPendientes->filter(fn($c) => $c->fecha_vencimiento?->isPast())->count();
 
-        $cuentasVencidas = $todasVentasPendientes->filter(function ($venta) {
-            return $venta->fecha_vencimiento && $venta->fecha_vencimiento->isPast();
-        })->count() + $todosRecibosPendientes->filter(function ($recibo) {
-            return $recibo->fecha_vencimiento && $recibo->fecha_vencimiento->isPast();
-        })->count();
-
-        // ========== CUENTAS POR PAGAR (TOTAL) ==========
-        // Todas las compras pendientes sin filtro de fechas
-        $comprasPendientes = Compras::whereIn('pago_estado', ['PENDIENTE', 'PARCIAL'])
-            ->with('payments')
-            ->get();
-
-        $totalPorPagar = $comprasPendientes->sum(function ($compra) {
-            $pagado = $compra->payments->sum('monto');
-            return max(0, $compra->total - $pagado);
-        });
-
-        $cuentasPorPagarVencidas = $comprasPendientes->filter(function ($compra) {
-            return $compra->fecha_vencimiento && $compra->fecha_vencimiento->isPast();
-        })->count();
-
-        // ========== LIQUIDEZ NETA ==========
-        // Fórmula: Dinero disponible en cajas + Dinero que me deben - Dinero que debo
-        // Representa el capital real disponible si se cobrara todo y se pagara todo
-        $liquidezNeta = $saldoTotalCajas + $totalPorCobrar - $totalPorPagar;
+        // ── Liquidez neta por divisa ─────────────────────────────────────────
+        $liquidezNetaPen = $saldoTotalCajasPen + $totalPorCobrarPen - $totalPorPagarPen;
+        $liquidezNetaUsd = $saldoTotalCajasUsd + $totalPorCobrarUsd - $totalPorPagarUsd;
 
         return view('livewire.admin.finanzas.balance.index', compact(
-            'saldoTotalCajas',
             'saldoTotalCajasPen',
             'saldoTotalCajasUsd',
-            'ingresos',
-            'egresos',
-            'balance',
-            'facturadoYPagado',
+            'ingresosPen',
+            'ingresosUsd',
+            'egresosPen',
+            'egresosUsd',
+            'balancePen',
+            'balanceUsd',
+            'facturadoYPagadoPen',
+            'facturadoYPagadoUsd',
             'documentosPagados',
-            'facturadoPendiente',
+            'facturadoPendientePen',
+            'facturadoPendienteUsd',
             'documentosPendientes',
-            'pendienteFacturar',
-            'detallesSinFacturarCount',
-            'totalPorCobrar',
+            'totalPorCobrarPen',
+            'totalPorCobrarUsd',
             'cuentasVencidas',
-            'totalPorPagar',
+            'totalPorPagarPen',
+            'totalPorPagarUsd',
             'cuentasPorPagarVencidas',
-            'liquidezNeta'
+            'liquidezNetaPen',
+            'liquidezNetaUsd',
         ));
     }
 

@@ -236,8 +236,19 @@ class HomeController extends Controller
                     ->map(fn($g) => round($g->sum('total'), 2))
             );
 
+        // Closure para contar unidades vendidas (campo 'cantidad')
+        $agruparCount = fn($detalles, $parentRel, $fechaField = 'fecha_emision') =>
+        $detalles->groupBy(fn($d) => $d->{$parentRel}?->divisa ?? 'PEN')
+            ->map(
+                fn($items) =>
+                $items->groupBy(fn($d) => optional($d->{$parentRel}?->{$fechaField})->format('Y-m'))
+                    ->map(fn($g) => (int) $g->sum('cantidad'))
+            );
+
         $agrupVentas  = $agrupar($ventasDetalles,  'venta');
         $agrupRecibos = $agrupar($recibosDetalles, 'recibos');
+        $countVentas  = $agruparCount($ventasDetalles,  'venta');
+        $countRecibos = $agruparCount($recibosDetalles, 'recibos');
 
         // ── Rellenar los 6 meses por divisa, combinando ambas fuentes ───
         $fillMeses = fn($divisa) => $meses6->map(function ($m) use ($agrupVentas, $agrupRecibos, $divisa) {
@@ -247,10 +258,17 @@ class HomeController extends Controller
             return round((float) $v + (float) $r, 2);
         })->values()->toArray();
 
+        $fillCount = fn($divisa) => $meses6->map(function ($m) use ($countVentas, $countRecibos, $divisa) {
+            $key = $m->format('Y-m');
+            return (int) (($countVentas[$divisa][$key] ?? 0) + ($countRecibos[$divisa][$key] ?? 0));
+        })->values()->toArray();
+
         return response()->json([
-            'labels'  => $labels,
-            'dataPEN' => $fillMeses('PEN'),
-            'dataUSD' => $fillMeses('USD'),
+            'labels'   => $labels,
+            'dataPEN'  => $fillMeses('PEN'),
+            'dataUSD'  => $fillMeses('USD'),
+            'countPEN' => $fillCount('PEN'),
+            'countUSD' => $fillCount('USD'),
         ]);
     }
 

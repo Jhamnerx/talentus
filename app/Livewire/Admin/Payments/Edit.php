@@ -123,7 +123,7 @@ class Edit extends Component
 
         foreach ($facturas as $invoice) {
             $data[] = [
-                'id' => $invoice->id,
+                'id' => (string) $invoice->id,
                 'text' => $invoice->serie_correlativo,
                 'fecha_emision' => $invoice->fecha_emision->format('d-m-Y'),
                 'monto' => $invoice->total,
@@ -132,11 +132,11 @@ class Edit extends Component
         }
 
         // Si hay un documento actual y no está en la lista, agregarlo
-        if ($currentId && !collect($data)->pluck('id')->contains($currentId)) {
+        if ($currentId && !collect($data)->pluck('id')->contains((string) $currentId)) {
             $documentoActual = Ventas::find($currentId);
             if ($documentoActual) {
                 array_unshift($data, [
-                    'id' => $documentoActual->id,
+                    'id' => (string) $documentoActual->id,
                     'text' => $documentoActual->serie_correlativo . ' (Actual)',
                     'fecha_emision' => $documentoActual->fecha_emision->format('d-m-Y'),
                     'monto' => $documentoActual->total,
@@ -159,7 +159,7 @@ class Edit extends Component
 
         foreach ($recibos as $recibo) {
             $data[] = [
-                'id' => $recibo->id,
+                'id' => (string) $recibo->id,
                 'text' => $recibo->serie_numero,
                 'fecha_emision' => $recibo->created_at->format('d-m-Y'),
                 'monto' => $recibo->total,
@@ -168,11 +168,11 @@ class Edit extends Component
         }
 
         // Si hay un documento actual y no está en la lista, agregarlo
-        if ($currentId && !collect($data)->pluck('id')->contains($currentId)) {
+        if ($currentId && !collect($data)->pluck('id')->contains((string) $currentId)) {
             $documentoActual = Recibos::find($currentId);
             if ($documentoActual) {
                 array_unshift($data, [
-                    'id' => $documentoActual->id,
+                    'id' => (string) $documentoActual->id,
                     'text' => $documentoActual->serie_numero . ' (Actual)',
                     'fecha_emision' => $documentoActual->created_at->format('d-m-Y'),
                     'monto' => $documentoActual->total,
@@ -249,8 +249,8 @@ class Edit extends Component
             $this->documentos = $this->loadFacturas();
         }
 
-        // Asignar paymentable_id DESPUÉS de cargar los documentos
-        $this->paymentable_id = $payment->paymentable_id;
+        // Asignar paymentable_id DESPUÉS de cargar los documentos (string para que coincida con los valores del select)
+        $this->paymentable_id = (string) $payment->paymentable_id;
     }
 
     public function closeModal()

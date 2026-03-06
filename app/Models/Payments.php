@@ -239,7 +239,9 @@ class Payments extends Model
         }
 
         if ($this->destination instanceof BankAccount) {
-            return 'BANCO: ' . $this->destination->nombre;
+            $banco  = $this->destination->bank?->description ?? 'Banco';
+            $cuenta = $this->destination->description ?? '';
+            return 'BANCO: ' . $banco . ($cuenta ? ' — ' . $cuenta : '');
         }
 
         return 'Destino desconocido';

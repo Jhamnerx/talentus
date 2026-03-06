@@ -90,10 +90,10 @@ window.dashboardDatepicker = function (fechaInicio, fechaFin) {
                             const day = String(d.getDate()).padStart(2, "0");
                             return `${y}-${m}-${day}`;
                         };
-                        this.$wire.setRangoFecha(
-                            fmt(selectedDates[0]),
-                            fmt(selectedDates[1]),
-                        );
+                        Livewire.dispatch("dashboard-filtro-actualizado", {
+                            fechaInicio: fmt(selectedDates[0]),
+                            fechaFin: fmt(selectedDates[1]),
+                        });
                     }
                 },
             });
@@ -162,6 +162,10 @@ window.ventasBarChart = function (url) {
             const colorPEN = "#6366f1"; // indigo-500
             const colorUSD = "#0ea5e9"; // sky-500
 
+            // Conteo de unidades por mes (puede no existir en gráficas que no lo envíen)
+            const countPEN = data.countPEN ?? [];
+            const countUSD = data.countUSD ?? [];
+
             this.chart = new Chart(canvas, {
                 type: "bar",
                 data: {
@@ -222,9 +226,20 @@ window.ventasBarChart = function (url) {
                         tooltip: {
                             callbacks: {
                                 label: (ctx) => {
-                                    const sym =
-                                        ctx.datasetIndex === 0 ? "S/" : "$";
-                                    return ` ${sym} ${Number(ctx.parsed.y).toLocaleString("es-PE", { minimumFractionDigits: 2 })}`;
+                                    const isPEN = ctx.datasetIndex === 0;
+                                    const sym = isPEN ? "S/" : "$";
+                                    const counts = isPEN ? countPEN : countUSD;
+                                    const qty = counts[ctx.dataIndex] ?? 0;
+                                    const amount = Number(
+                                        ctx.parsed.y,
+                                    ).toLocaleString("es-PE", {
+                                        minimumFractionDigits: 2,
+                                    });
+                                    const uLabel =
+                                        qty === 1 ? "equipo" : "equipos";
+                                    return qty > 0
+                                        ? ` ${qty} ${uLabel} — ${sym} ${amount}`
+                                        : ` ${sym} ${amount}`;
                                 },
                             },
                         },

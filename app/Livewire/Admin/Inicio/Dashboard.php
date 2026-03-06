@@ -15,17 +15,20 @@ class Dashboard extends Component
     public string $fechaInicio = '';
     public string $fechaFin    = '';
 
+    protected $listeners = [
+        'dashboard-filtro-actualizado' => 'actualizarFiltro',
+    ];
+
     public function mount(): void
     {
         $this->fechaInicio = Carbon::now()->startOfMonth()->format('Y-m-d');
         $this->fechaFin    = Carbon::now()->endOfMonth()->format('Y-m-d');
     }
 
-    public function setRangoFecha(string $inicio, string $fin): void
+    public function actualizarFiltro(string $fechaInicio, string $fechaFin): void
     {
-        $this->fechaInicio = $inicio;
-        $this->fechaFin    = $fin;
-        $this->dispatch('dashboard-filtro-actualizado', fechaInicio: $inicio, fechaFin: $fin);
+        $this->fechaInicio = $fechaInicio;
+        $this->fechaFin    = $fechaFin;
     }
 
 

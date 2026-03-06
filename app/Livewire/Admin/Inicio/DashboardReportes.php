@@ -47,7 +47,11 @@ class DashboardReportes extends Component
     {
         ['semanaI' => $semI, 'semanaF' => $semF, 'mesI' => $mesI, 'mesF' => $mesF] = $this->rangos();
 
-        // ── 3. Suspensiones de líneas ───────────────────────────────────
+        // Rango del datepicker (afecta la sección de pagados)
+        $inicio = Carbon::parse($this->fechaInicio)->startOfDay();
+        $fin    = Carbon::parse($this->fechaFin)->endOfDay();
+
+        // ── Suspensiones (siempre semana/mes actuales) ──────────────────
         $suspensionesTotalSemana = Lineas::where('estado', LineasStatus::SUSPENDIDA)
             ->whereBetween('updated_at', [$semI, $semF])
             ->count();
@@ -63,79 +67,73 @@ class DashboardReportes extends Component
             ->limit(20)
             ->get();
 
-        // ── 4. Total ventas facturadas ──────────────────────────────────
-        // (los totales semanales/mensuales se muestran ahora vía chart-facturadas)
-
-        // ── 5. Facturas y recibos PAGADOS ───────────────────────────────
-        $facturasPagadasSemana = Ventas::with(['payments.paymentMethod', 'cliente:id,razon_social', 'metodoPago'])
-            ->where('pago_estado', Ventas::PAID)
-            ->whereBetween('fecha_emision', [$semI, $semF])
+        // ── Pagos por método/destino — rango del datepicker ─────────────
+        // Consulta directa a Payments para evitar desfase fecha_emision vs fecha de pago
+        $metodosFacturasMes = Payments::with(['paymentMethod', 'destination'])
+            ->where('paymentable_type', Ventas::class)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->select(
+                'payment_method_id',
+                'destination_type',
+                'destination_id',
+                DB::raw('SUM(monto) as total'),
+                DB::raw('COUNT(*) as cantidad'),
+                DB::raw('COUNT(DISTINCT paymentable_id) as documentos')
+            )
+            ->groupBy('payment_method_id', 'destination_type', 'destination_id')
             ->get();
 
-        $facturasPagadasMes = Ventas::with(['payments.paymentMethod', 'cliente:id,razon_social', 'metodoPago'])
-            ->where('pago_estado', Ventas::PAID)
-            ->whereBetween('fecha_emision', [$mesI, $mesF])
+        $totalFacturasMes  = $metodosFacturasMes->sum('total');
+        $countFacturasMes  = $metodosFacturasMes->sum('documentos');
+
+        $metodosRecibosMes = Payments::with(['paymentMethod', 'destination'])
+            ->where('paymentable_type', Recibos::class)
+            ->whereBetween('fecha', [$inicio, $fin])
+            ->select(
+                'payment_method_id',
+                'destination_type',
+                'destination_id',
+                DB::raw('SUM(monto) as total'),
+                DB::raw('COUNT(*) as cantidad'),
+                DB::raw('COUNT(DISTINCT paymentable_id) as documentos')
+            )
+            ->groupBy('payment_method_id', 'destination_type', 'destination_id')
             ->get();
 
-        $recibosPagadosSemana = Recibos::with(['payments.paymentMethod', 'clientes:id,razon_social'])
-            ->where('pago_estado', Recibos::PAID)
-            ->whereBetween('fecha_emision', [$semI, $semF])
-            ->whereNull('deleted_at')
-            ->get();
+        $totalRecibosMes  = $metodosRecibosMes->sum('total');
+        $countRecibosMes  = $metodosRecibosMes->sum('documentos');
 
-        $recibosPagadosMes = Recibos::with(['payments.paymentMethod', 'clientes:id,razon_social'])
-            ->where('pago_estado', Recibos::PAID)
-            ->whereBetween('fecha_emision', [$mesI, $mesF])
-            ->whereNull('deleted_at')
-            ->get();
-
-        $metodosFacturasMes = Payments::with('paymentMethod')
-            ->whereHasMorph('paymentable', [Ventas::class])
-            ->whereBetween('fecha', [$mesI, $mesF])
-            ->whereNull('deleted_at')
-            ->select('payment_method_id', DB::raw('SUM(monto) as total'), DB::raw('COUNT(*) as cantidad'))
-            ->groupBy('payment_method_id')
-            ->get();
-
-        $metodosRecibosMes = Payments::with('paymentMethod')
-            ->whereHasMorph('paymentable', [Recibos::class])
-            ->whereBetween('fecha', [$mesI, $mesF])
-            ->whereNull('deleted_at')
-            ->select('payment_method_id', DB::raw('SUM(monto) as total'), DB::raw('COUNT(*) as cantidad'))
-            ->groupBy('payment_method_id')
-            ->get();
-
-        // ── 6. Por cobrar ───────────────────────────────────────────────
-        $facturasPorCobrar = Ventas::with('cliente:id,razon_social')
-            ->where('pago_estado', Ventas::UNPAID)
-            ->whereNotNull('fecha_vencimiento')
-            ->orderBy('fecha_vencimiento')
-            ->select('id', 'serie', 'correlativo', 'total', 'divisa', 'fecha_emision', 'fecha_vencimiento', 'cliente_id')
-            ->limit(30)
+        // ── Por cobrar (totales agrupados por divisa) ───────────────────
+        // Ventas: excluye las que tienen NC/ND (comprobantes.invoice_id) o baja SUNAT (envio_resumen_detalles.venta_id)
+        $facturasPorCobrar = Ventas::where('pago_estado', Ventas::UNPAID)
+            ->whereNotExists(function ($q) {
+                $q->select(DB::raw(1))
+                    ->from('comprobantes')
+                    ->whereColumn('comprobantes.invoice_id', 'ventas.id');
+            })
+            ->whereDoesntHave('envioResumen')
+            ->select('divisa', DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as monto_total'))
+            ->groupBy('divisa')
             ->get()
-            ->map(function ($v) {
-                $v->dias_vencimiento = Carbon::now()->diffInDays($v->fecha_vencimiento, false);
-                return $v;
-            });
+            ->keyBy('divisa');
 
-        $recibosPorCobrar = Recibos::with('cliente:id,razon_social')
-            ->where('pago_estado', Recibos::UNPAID)
-            ->whereNull('deleted_at')
-            ->orderBy('fecha_emision')
-            ->select('id', 'serie', 'numero', 'total', 'divisa', 'fecha_emision', 'clientes_id')
-            ->limit(30)
-            ->get();
+        // Recibos: SoftDeletes filtra automáticamente los eliminados
+        $recibosPorCobrar = Recibos::where('pago_estado', Recibos::UNPAID)
+            ->select('divisa', DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as monto_total'))
+            ->groupBy('divisa')
+            ->get()
+            ->keyBy('divisa');
 
         return view('livewire.admin.inicio.dashboard-reportes', compact(
             'suspensionesTotalSemana',
             'suspensionesTotalMes',
             'suspensionesDetallesMes',
-            'facturasPagadasSemana',
-            'facturasPagadasMes',
-            'recibosPagadosSemana',
-            'recibosPagadosMes',
             'metodosFacturasMes',
+            'totalFacturasMes',
+            'countFacturasMes',
             'metodosRecibosMes',
+            'totalRecibosMes',
+            'countRecibosMes',
             'facturasPorCobrar',
             'recibosPorCobrar',
         ));
