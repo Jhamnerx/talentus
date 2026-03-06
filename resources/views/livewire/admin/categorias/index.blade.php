@@ -81,6 +81,9 @@
                         <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                             <div class="font-semibold text-left">Descripción</div>
                         </th>
+                        <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                            <div class="font-semibold text-left">Facturación GPS</div>
+                        </th>
                         @can('cambiar.estado-categoria')
                             <th class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                 <div class="font-semibold text-center">Estado</div>
@@ -103,6 +106,25 @@
                             </td>
                             <td class="px-2 first:pl-5 last:pr-5 py-3">
                                 <div class="text-gray-500 dark:text-gray-400">{{ $categoria->descripcion }}</div>
+                            </td>
+                            <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
+                                <div class="flex flex-wrap gap-1">
+                                    @if ($categoria->es_equipo_gps)
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/30">
+                                            📡 Equipo GPS
+                                        </span>
+                                    @endif
+                                    @if ($categoria->es_servicio_monitoreo)
+                                        <span
+                                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-300 ring-1 ring-inset ring-violet-500/30">
+                                            🛰️ Monitoreo
+                                        </span>
+                                    @endif
+                                    @if (!$categoria->es_equipo_gps && !$categoria->es_servicio_monitoreo)
+                                        <span class="text-gray-300 dark:text-gray-600 text-xs">&mdash;</span>
+                                    @endif
+                                </div>
                             </td>
                             @can('cambiar.estado-categoria')
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

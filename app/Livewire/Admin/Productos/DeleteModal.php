@@ -4,48 +4,23 @@ namespace App\Livewire\Admin\Productos;
 
 use Livewire\Component;
 use App\Models\Productos;
-use Livewire\Attributes\On;
+use WireUi\Traits\WireUiActions;
 
 class DeleteModal extends Component
 {
-    public ?Productos $producto = null;
-
+    use WireUiActions;
     public function render()
     {
         return view('livewire.admin.productos.delete-modal');
     }
 
-    #[On('open-modal-delete')]
-    public function openModal(Productos $producto): void
+    public function delete(int $id): void
     {
-        $this->producto = $producto;
-        // Disparar la apertura vía Alpine (no via wire:model) para evitar
-        // que el morph de Livewire coincida con toggleScrollbar de WireUI
-        $this->dispatch('do-open-delete-modal');
-    }
+        $producto = Productos::findOrFail($id);
+        $producto->delete();
 
-    public function closeModal(): void
-    {
-        $this->producto = null;
-        $this->dispatch('do-close-delete-modal');
-    }
+        $this->notification()->success('Producto eliminado', 'El producto ha sido eliminado correctamente.');
 
-    public function delete(): void
-    {
-        $this->producto->delete();
-        $this->afterDelete();
-    }
-
-    public function afterDelete(): void
-    {
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'PRODUCTO ELIMINADO',
-            mensaje: 'Se eliminó correctamente el producto'
-        );
-
-        $this->closeModal();
         $this->dispatch('update-table');
     }
 }

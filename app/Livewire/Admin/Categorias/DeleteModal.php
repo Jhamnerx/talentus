@@ -6,9 +6,12 @@ use Exception;
 use Livewire\Component;
 use App\Models\Categoria;
 use Livewire\Attributes\On;
+use WireUi\Traits\WireUiActions;
 
 class DeleteModal extends Component
 {
+    use WireUiActions;
+
     public $modalDelete = false;
     public ?Categoria $categoria = null;
 

@@ -1,0 +1,1 @@
+<?php /**PATH C:\laragon2\www\talentus\storage\framework\views/99aa06d3014798d86001c324468d497f.blade.php ENDPATH**/ ?>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetalleRecibos extends Model
 {
@@ -14,10 +15,14 @@ class DetalleRecibos extends Model
     protected $casts = [
         'cantidad' => 'float',
     ];
-    //Relacion uno a muchos inversa
 
-    public function recibos()
+    public function recibos(): BelongsTo
     {
         return $this->belongsTo(Recibos::class, 'recibos_id');
+    }
+
+    public function producto(): BelongsTo
+    {
+        return $this->belongsTo(Productos::class, 'producto_id');
     }
 }

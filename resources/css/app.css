@@ -1,4 +1,4 @@
-@import "flatpickr/dist/flatpickr.min.css";
+@import "./additional-styles/flatpickr.css";
 @import "tom-select/dist/css/tom-select.bootstrap5.css";
 @import "tailwindcss";
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';

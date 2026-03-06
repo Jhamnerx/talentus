@@ -59,7 +59,9 @@ use Illuminate\Support\Facades\Storage;
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/', [HomeController::class, 'index'])->name('admin.home');
-    Route::get('dashboard', [HomeController::class, 'index'])->name('admin.home');
+    Route::get('dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+    Route::get('dashboard/chart-ventas', [HomeController::class, 'getChartVentas'])->name('admin.dashboard.chart-ventas');
+    Route::get('dashboard/chart-facturadas', [HomeController::class, 'getChartFacturadas'])->name('admin.dashboard.chart-facturadas');
 
     // ==================== FINANZAS ====================
     Route::controller(FinanzasController::class)->prefix('finanzas')->name('finanzas.')->group(function () {

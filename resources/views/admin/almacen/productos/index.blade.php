@@ -1,10 +1,10 @@
 <x-admin-layout>
 
-    <!-- Table -->
-    @livewire('admin.productos.productos-index', ['tipo' => $tipo])
+    @livewire('admin.productos.index', ['tipo' => $tipo], key('productos-index-' . $tipo))
 
-    @livewire('admin.productos.create-modal')
-    @livewire('admin.productos.edit-modal')
-    @livewire('admin.productos.delete-modal')
+    @livewire('admin.productos.create-modal', [], key('create-producto-modal-' . $tipo))
+    @livewire('admin.productos.edit-modal', [], key('edit-producto-modal-' . $tipo))
+    @livewire('admin.productos.delete-modal', [], key('delete-producto-modal-' . $tipo))
+
 
 </x-admin-layout>

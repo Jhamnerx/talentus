@@ -43,7 +43,7 @@
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                             <x-form.input placeholder="ingresa operador"
-                                wire:model.change="items.{{ $clave }}.operador" />
+                                wire:model.live.change="items.{{ $clave }}.operador" />
                         </td>
                         <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 

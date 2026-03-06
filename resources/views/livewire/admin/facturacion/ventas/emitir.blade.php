@@ -791,7 +791,85 @@
 
     </div>
     <livewire:admin.productos.modal-add-producto :deduce_anticipos="$deduce_anticipos" :comprobante_slug="$comprobante_slug" :divisa="$divisa"
-        :tipo_comprobante_id="$tipo_comprobante_id" key="producto-add-">
+        :tipo_comprobante_id="$tipo_comprobante_id" key="producto-add-" />
+
+    {{-- ── Modal selección de IMEI para equipos GPS ──────────────────────── --}}
+    @if ($showImeiModal)
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+            <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-xl w-full max-w-lg mx-4 overflow-hidden">
+
+                {{-- Header --}}
+                <div
+                    class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
+                    <div>
+                        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">📡 Seleccionar IMEI</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                            Producto: <span class="font-medium">{{ $pendingGpsItem['descripcion'] ?? '' }}</span>
+                        </p>
+                    </div>
+                    <button wire:click="cancelarImei"
+                        class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                {{-- Búsqueda --}}
+                <div class="px-6 pt-4">
+                    <input wire:model.live="imeiSearch" type="text"
+                        class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-700 dark:text-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                        placeholder="Buscar por IMEI..." />
+                </div>
+
+                {{-- Lista de dispositivos --}}
+                <div class="px-6 py-3 max-h-72 overflow-y-auto space-y-2">
+                    @forelse ($this->dispositivosImei as $disp)
+                        <button wire:click="confirmarImei({{ $disp->id }})"
+                            class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-slate-700 transition group">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-600 dark:text-indigo-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18" />
+                                </svg>
+                            </span>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold text-slate-700 dark:text-slate-200 truncate">IMEI:
+                                    {{ $disp->imei }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">
+                                    {{ $disp->modelo?->marca ?? 'Sin marca' }} ·
+                                    {{ $disp->modelo?->modelo ?? 'Sin modelo' }}</p>
+                            </div>
+                            <span
+                                class="text-xs bg-emerald-100 text-emerald-700 dark:bg-emerald-900 dark:text-emerald-300 px-2 py-0.5 rounded-full">STOCK</span>
+                        </button>
+                    @empty
+                        <div class="text-center py-8 text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-10 h-10 mx-auto mb-2 opacity-40"
+                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <p class="text-sm">No hay dispositivos en stock para este modelo.</p>
+                        </div>
+                    @endforelse
+                </div>
+
+                {{-- Footer --}}
+                <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                    <button wire:click="cancelarImei"
+                        class="px-4 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
+                        Cancelar
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    @endif
 
 </div>
 @section('js')

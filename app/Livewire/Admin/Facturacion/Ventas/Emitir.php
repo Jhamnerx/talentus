@@ -15,6 +15,7 @@ use App\Models\Series;
 use App\Models\TipoComprobantes;
 use App\Models\Ventas;
 use App\Models\Productos;
+use App\Models\Dispositivos;
 use App\Services\FactilizaService;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
@@ -86,6 +87,11 @@ class Emitir extends Component
     public $cobro_id = null;
     public $notificacion_ids_array = [];
     public $cobro_redirect_back = null;
+
+    // Modal selección de IMEI para equipos GPS
+    public bool $showImeiModal = false;
+    public array $pendingGpsItem = [];
+    public string $imeiSearch = '';
 
 
     /**
@@ -454,15 +460,13 @@ class Emitir extends Component
     function addProducto($selected)
     {
         try {
-            // if ($this->items->contains('producto_id', $selected["producto_id"])) {
-
-            //     $this->dispatch(
-            //         'notify-toast',
-            //         icon: 'error',
-            //         title: 'YA ESTA AÑADIDO',
-            //         mensaje: 'El producto o servicio ya esta en el carrito'
-            //     );
-            // } else {
+            // Si el producto es equipo GPS (es_dispositivo + categoria gps), solicitar IMEI primero
+            if (!empty($selected['es_dispositivo']) && !empty($selected['categoria_es_gps']) && !empty($selected['modelo_id'])) {
+                $this->pendingGpsItem = $selected;
+                $this->imeiSearch = '';
+                $this->showImeiModal = true;
+                return;
+            }
 
             $this->items->push([
                 'producto_id' => $selected["producto_id"],
@@ -503,6 +507,67 @@ class Emitir extends Component
         }
     }
 
+    /** Dispositivos en STOCK del modelo pendiente, filtrados por búsqueda de IMEI */
+    #[Computed]
+    public function dispositivosImei()
+    {
+        if (empty($this->pendingGpsItem['modelo_id'])) {
+            return collect();
+        }
+        return Dispositivos::where('modelo_id', $this->pendingGpsItem['modelo_id'])
+            ->where('estado', Dispositivos::STOCK)
+            ->when($this->imeiSearch, fn($q) => $q->where('imei', 'like', '%' . $this->imeiSearch . '%'))
+            ->limit(50)
+            ->get();
+    }
+
+    /** Confirmar selección de IMEI y agregar item al carrito */
+    public function confirmarImei(int $dispositivoId): void
+    {
+        $dispositivo = Dispositivos::with('modelo')->findOrFail($dispositivoId);
+        $item = $this->pendingGpsItem;
+
+        // Agregar modelo e IMEI a la descripción
+        $item['descripcion'] = $item['descripcion'] . ' IMEI: ' . $dispositivo->imei;
+        $item['dispositivo_id'] = $dispositivo->id;
+
+        $this->items->push([
+            'producto_id'       => $item['producto_id'],
+            'codigo'            => $item['codigo'],
+            'cantidad'          => $item['cantidad'],
+            'unit'              => $item['unit'],
+            'unit_name'         => $item['unit_name'],
+            'descripcion'       => $this->pago_anticipado ? $item['descripcion'] . '***Pago Anticipado***' : $item['descripcion'],
+            'valor_unitario'    => $item['valor_unitario'],
+            'precio_unitario'   => $item['precio_unitario'],
+            'igv'               => $item['igv'] ?? 0,
+            'porcentaje_igv'    => $item['porcentaje_igv'] ?? 0,
+            'icbper'            => $item['icbper'],
+            'total_icbper'      => $item['total_icbper'],
+            'sub_total'         => round($item['valor_unitario'] * $item['cantidad'], 4),
+            'total'             => $item['total'],
+            'codigo_afectacion' => $item['codigo_afectacion'],
+            'afecto_icbper'     => $item['afecto_icbper'],
+            'tipo'              => $item['tipo'],
+            'dispositivo_id'    => $dispositivo->id,
+        ]);
+
+        $this->showImeiModal = false;
+        $this->pendingGpsItem = [];
+        $this->imeiSearch = '';
+        $this->dispatch('reset-selected');
+        $this->reCalTotal();
+    }
+
+    /** Cancelar selección de IMEI */
+    public function cancelarImei(): void
+    {
+        $this->showImeiModal = false;
+        $this->pendingGpsItem = [];
+        $this->imeiSearch = '';
+        $this->dispatch('reset-selected');
+    }
+
     #[On('add-prepayment')]
     public function addPrepayment($prepayments)
     {
@@ -541,6 +606,17 @@ class Emitir extends Component
 
             //CREAR ITEMS DE LA VENTA
             Ventas::createItems($venta, $datos["items"], $this->decrease_stock);
+
+            // Marcar dispositivos GPS como VENDIDO
+            $dispositivosIds = collect($this->items)
+                ->pluck('dispositivo_id')
+                ->filter()
+                ->unique()
+                ->values();
+            if ($dispositivosIds->isNotEmpty()) {
+                Dispositivos::whereIn('id', $dispositivosIds)
+                    ->update(['estado' => Dispositivos::VENDIDO]);
+            }
 
             //SI DETRACCION ES TRUE CREAR DETRACCION
             if ($this->detraccion) {

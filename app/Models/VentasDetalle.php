@@ -46,7 +46,7 @@ class VentasDetalle extends Model
     }
     public function venta(): BelongsTo
     {
-        return $this->belongsTo(\App\Models\Ventas::class);
+        return $this->belongsTo(\App\Models\Ventas::class, 'ventas_id');
     }
 
     public function producto(): BelongsTo

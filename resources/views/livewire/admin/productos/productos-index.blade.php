@@ -1,4 +1,4 @@
-<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
+﻿<div class="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-384 mx-auto">
 
     <!-- Page header -->
     <div class="sm:flex sm:justify-between sm:items-center mb-8">
@@ -41,7 +41,8 @@
             <x-form.select wire:model.live="categoriaFilter" placeholder="Todas las categorías">
                 <x-select.option value="" label="Todas las categorías" />
                 @foreach ($categorias as $categoria)
-                    <x-select.option value="{{ $categoria->id }}" label="{{ $categoria->nombre }}" />
+                    <x-select.option wire:key="categoria-{{ $categoria->id }}" value="{{ $categoria->id }}"
+                        label="{{ $categoria->nombre }}" />
                 @endforeach
             </x-form.select>
 
@@ -114,8 +115,8 @@
                     </thead>
                     <!-- Table body -->
                     <tbody class="text-sm divide-y divide-slate-200 dark:divide-gray-700">
-                        @forelse($productos as $producto)
-                            <tr wire:key='client-{{ $producto->id }}'>
+                        @foreach ($productos as $producto)
+                            <tr wire:key='product-{{ $producto->id }}'>
                                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                                     <div class="text-left font-medium text-slate-800 dark:text-gray-100">
                                         {{ $producto->codigo }}</div>
@@ -157,14 +158,12 @@
                                 </td>
                                 @can('cambiar.estado-producto')
                                     <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
-                                        <div class="form-switch">
-                                            <input type="checkbox" id="toggle-{{ $producto->id }}" class="sr-only"
-                                                wire:click="toggleStatus({{ $producto->id }})"
-                                                {{ $producto->estado ? 'checked' : '' }} />
-                                            <label class="bg-slate-400 dark:bg-slate-600" for="toggle-{{ $producto->id }}">
+                                        <div class="form-switch flex justify-center" x-data="{ on: {{ $producto->estado ? 'true' : 'false' }} }">
+                                            <input type="checkbox" class="sr-only" x-bind:checked="on"
+                                                x-on:click="on = !on; $wire.toggleStatus({{ $producto->id }})" />
+                                            <label class="bg-slate-400 dark:bg-slate-600 cursor-pointer"
+                                                x-on:click="on = !on; $wire.toggleStatus({{ $producto->id }})">
                                                 <span class="bg-white shadow-sm" aria-hidden="true"></span>
-                                                <span
-                                                    class="sr-only">{{ $producto->estado ? 'Activo' : 'Desactivado' }}</span>
                                             </label>
                                         </div>
                                     </td>
@@ -182,7 +181,8 @@
                                                 </button>
                                             @endcan
                                             @can('eliminar-producto')
-                                                <button wire:click.prevent='openModalDelete({{ $producto->id }})'
+                                                <button
+                                                    x-on:click="$dispatch('open-delete-modal', { id: {{ $producto->id }}, nombre: '{{ addslashes($producto->descripcion) }}' })"
                                                     class="text-rose-500 hover:text-rose-600 cursor-pointer">
                                                     <svg class="w-8 h-8 fill-current" viewBox="0 0 32 32">
                                                         <path
@@ -194,13 +194,16 @@
                                     </td>
                                 @endif
                             </tr>
-                        @empty
-                            <tr>
+                        @endforeach
+
+
+                        @if ($productos->count() < 1)
+                            <tr wire:key="no-products">
                                 <td colspan="8" class="px-2 first:pl-5 last:pr-5 py-3 text-center">
                                     <div class="text-slate-500 dark:text-gray-400">No se encontraron productos</div>
                                 </td>
                             </tr>
-                        @endforelse
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -213,6 +216,3 @@
     </div>
 
 </div>
-
-@push('scripts')
-@endpush

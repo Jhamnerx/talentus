@@ -1,7 +1,7 @@
 <x-form.modal.card title="Registrar Usuario" wire:model.live="showModal" align="center" width="2xl">
     <div class="grid grid-cols-12 gap-6 p-4 bg-white rounded-lg shadow-md">
         <div class="col-span-12 sm:col-span-6">
-            <x-form.input wire:model.change="name" label="Nombre (*):" class="mb-2" />
+            <x-form.input wire:model.live.change="name" label="Nombre (*):" class="mb-2" />
         </div>
         <div class="col-span-12 sm:col-span-6">
             <x-form.input wire:model.live="email" type="email" label="Correo Electrónico (*):" class="mb-2"

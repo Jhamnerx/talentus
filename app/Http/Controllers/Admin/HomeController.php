@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\DetalleRecibos;
 use App\Models\Facturas;
+use App\Models\VentasDetalle;
 use App\Models\plantilla;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -188,6 +190,123 @@ class HomeController extends Controller
             ->orderBy('monto', 'desc')
             ->limit(5)
             ->get();
+    }
+
+    /**
+     * Endpoint JSON para los gráficos de barras del Dashboard Reportes.
+     * GET /dashboard/chart-ventas?tipo=gps|monitoreo
+     *
+     * Usa whereHas (sin joins explícitos) para aprovechar EmpresaScope y SoftDeletes
+     * de los modelos padre. Suma el total del detalle (no del comprobante padre)
+     * para que una venta con items mixtos GPS/monitoreo solo cuente lo que corresponde.
+     */
+    public function getChartVentas(Request $request)
+    {
+        Carbon::setLocale('es');
+
+        $tipo = $request->query('tipo', 'gps');
+
+        $meses6      = collect(range(5, 0))->map(fn($i) => Carbon::now()->subMonths($i)->startOfMonth());
+        $chartInicio = $meses6->first();
+        $chartFin    = Carbon::now()->endOfMonth();
+
+        $labels        = $meses6->map(fn($m) => ucfirst($m->isoFormat('MMM YY')))->toArray();
+        $columnaFiltro = $tipo === 'gps' ? 'es_dispositivo' : 'es_servicio_cobro';
+
+        // ── VentasDetalle ───────────────────────────────────────────────
+        // whereHas('venta') aplica EmpresaScope de Ventas automáticamente
+        $ventasDetalles = VentasDetalle::whereHas('producto', fn($q) => $q->where($columnaFiltro, 1))
+            ->whereHas('venta', fn($q) => $q->whereBetween('fecha_emision', [$chartInicio, $chartFin]))
+            ->with('venta:id,fecha_emision,divisa')
+            ->get();
+
+        // ── DetalleRecibos ──────────────────────────────────────────────
+        // whereHas('recibos') aplica EmpresaScope + SoftDeletes de Recibos automáticamente
+        $recibosDetalles = DetalleRecibos::whereHas('producto', fn($q) => $q->where($columnaFiltro, 1))
+            ->whereHas('recibos', fn($q) => $q->whereBetween('fecha_emision', [$chartInicio, $chartFin]))
+            ->with('recibos:id,fecha_emision,divisa')
+            ->get();
+
+        // ── Agrupar en PHP por divisa y mes ─────────────────────────────
+        $agrupar = fn($detalles, $parentRel, $fechaField = 'fecha_emision') =>
+        $detalles->groupBy(fn($d) => $d->{$parentRel}?->divisa ?? 'PEN')
+            ->map(
+                fn($items) =>
+                $items->groupBy(fn($d) => optional($d->{$parentRel}?->{$fechaField})->format('Y-m'))
+                    ->map(fn($g) => round($g->sum('total'), 2))
+            );
+
+        $agrupVentas  = $agrupar($ventasDetalles,  'venta');
+        $agrupRecibos = $agrupar($recibosDetalles, 'recibos');
+
+        // ── Rellenar los 6 meses por divisa, combinando ambas fuentes ───
+        $fillMeses = fn($divisa) => $meses6->map(function ($m) use ($agrupVentas, $agrupRecibos, $divisa) {
+            $key = $m->format('Y-m');
+            $v   = $agrupVentas[$divisa][$key]   ?? 0;
+            $r   = $agrupRecibos[$divisa][$key]  ?? 0;
+            return round((float) $v + (float) $r, 2);
+        })->values()->toArray();
+
+        return response()->json([
+            'labels'  => $labels,
+            'dataPEN' => $fillMeses('PEN'),
+            'dataUSD' => $fillMeses('USD'),
+        ]);
+    }
+
+    /**
+     * Endpoint JSON para el gráfico de Ventas Facturadas (Ventas + Recibos pagados).
+     * GET /dashboard/chart-facturadas
+     *
+     * Ventas: pago_estado=PAID, sin nota de crédito, sin baja.
+     * Recibos: estado=COMPLETADO + pago_estado=PAID.
+     * Separado por divisa (PEN / USD) y fuente (ventas / recibos).
+     */
+    public function getChartFacturadas(Request $request)
+    {
+        Carbon::setLocale('es');
+
+        $meses6      = collect(range(5, 0))->map(fn($i) => Carbon::now()->subMonths($i)->startOfMonth());
+        $chartInicio = $meses6->first();
+        $chartFin    = Carbon::now()->endOfMonth();
+        $labels      = $meses6->map(fn($m) => ucfirst($m->isoFormat('MMM YY')))->toArray();
+
+        // ── Ventas pagadas, sin nota de crédito y sin baja ──────────────
+        $ventas = Ventas::whereBetween('fecha_emision', [$chartInicio, $chartFin])
+            ->where('pago_estado', Ventas::PAID)
+            ->whereNull('nota_credito_id')
+            ->whereNull('id_baja')
+            ->get(['fecha_emision', 'total', 'divisa']);
+
+        // ── Recibos: estado COMPLETADO + pago_estado PAID ───────────────
+        $recibos = Recibos::whereBetween('fecha_emision', [$chartInicio, $chartFin])
+            ->where('estado', Recibos::COMPLETADO)
+            ->where('pago_estado', Recibos::PAID)
+            ->get(['fecha_emision', 'total', 'divisa']);
+
+        // ── Agrupar en PHP por divisa y mes ─────────────────────────────
+        $agrupar = fn($collection) =>
+        $collection->groupBy(fn($r) => $r->divisa ?? 'PEN')
+            ->map(
+                fn($items) =>
+                $items->groupBy(fn($r) => optional($r->fecha_emision)->format('Y-m'))
+                    ->map(fn($g) => round($g->sum('total'), 2))
+            );
+
+        $agrupVentas  = $agrupar($ventas);
+        $agrupRecibos = $agrupar($recibos);
+
+        $fill = fn($agrup, $divisa) => $meses6->map(function ($m) use ($agrup, $divisa) {
+            return round((float) ($agrup[$divisa][$m->format('Y-m')] ?? 0), 2);
+        })->values()->toArray();
+
+        return response()->json([
+            'labels'      => $labels,
+            'ventasPEN'   => $fill($agrupVentas,  'PEN'),
+            'ventasUSD'   => $fill($agrupVentas,  'USD'),
+            'recibosPEN'  => $fill($agrupRecibos, 'PEN'),
+            'recibosUSD'  => $fill($agrupRecibos, 'USD'),
+        ]);
     }
 
     public function getDataFeed()

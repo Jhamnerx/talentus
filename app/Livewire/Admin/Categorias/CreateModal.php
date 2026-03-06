@@ -11,10 +11,15 @@ class CreateModal extends Component
 {
     public $modalCreate = false;
     public $nombre, $descripcion;
+    public bool $es_equipo_gps = false;
+    public bool $es_servicio_monitoreo = false;
 
     public function render()
     {
-        return view('livewire.admin.categorias.create-modal');
+        $equipoGpsOcupado   = Categoria::where('es_equipo_gps', true)->first();
+        $monitoreoOcupado   = Categoria::where('es_servicio_monitoreo', true)->first();
+
+        return view('livewire.admin.categorias.create-modal', compact('equipoGpsOcupado', 'monitoreoOcupado'));
     }
 
     #[On('open-modal-create')]
@@ -37,6 +42,16 @@ class CreateModal extends Component
         $request = new CategoriaRequest();
         $datos = $this->validate($request->rules(), $request->messages());
 
+        // Validar exclusividad de flags
+        if ($this->es_equipo_gps && Categoria::where('es_equipo_gps', true)->exists()) {
+            $this->addError('es_equipo_gps', 'Ya existe una categoría configurada como Equipo GPS.');
+            return;
+        }
+        if ($this->es_servicio_monitoreo && Categoria::where('es_servicio_monitoreo', true)->exists()) {
+            $this->addError('es_servicio_monitoreo', 'Ya existe una categoría configurada como Servicio de Monitoreo.');
+            return;
+        }
+
         try {
             $categoria = Categoria::create($datos);
             $this->closeModal();
@@ -56,6 +71,6 @@ class CreateModal extends Component
 
     public function resetProp()
     {
-        $this->reset(['nombre', 'descripcion']);
+        $this->reset(['nombre', 'descripcion', 'es_equipo_gps', 'es_servicio_monitoreo']);
     }
 }

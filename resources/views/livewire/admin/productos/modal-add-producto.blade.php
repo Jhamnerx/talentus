@@ -32,7 +32,7 @@
             <div class="col-span-4 md:col-span-3">
 
                 <x-form.input id="correlativo_ref" errorless='false' placeholder="1" name="correlativo_ref"
-                    wire:model.change="prepayments.correlativo_ref" />
+                    wire:model.live.change="prepayments.correlativo_ref" />
             </div>
 
             <div class="col-span-12 md:col-span-9 md:col-start-2">
