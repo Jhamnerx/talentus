@@ -50,6 +50,8 @@ class Create extends Component
     // Modal selección de IMEI para equipos GPS
     public bool $showImeiModal = false;
     public array $pendingGpsItem = [];
+    public array $selectedImeis = [];  // [{id, imei}] acumulando selecciones durante el modal
+    public ?int $editingImeiIndex = null;  // índice del item editado, null = modo añadir
     public string $imeiSearch = '';
 
     public $tipo_cambio = 0.00;
@@ -295,38 +297,98 @@ class Create extends Component
         if (empty($this->pendingGpsItem['modelo_id'])) {
             return collect();
         }
+        $excludeIds = collect($this->selectedImeis)->pluck('id')->toArray();
         return Dispositivos::where('modelo_id', $this->pendingGpsItem['modelo_id'])
             ->where('estado', Dispositivos::STOCK)
+            ->whereNotIn('id', $excludeIds)
             ->when($this->imeiSearch, fn($q) => $q->where('imei', 'like', '%' . $this->imeiSearch . '%'))
             ->limit(50)
             ->get();
     }
 
-    /** Confirmar selección de IMEI y agregar item al carrito */
+    /** Cada clic agrega un IMEI; cuando count == cantidad, cierra el modal */
     public function confirmarImei(int $dispositivoId): void
     {
-        $dispositivo = Dispositivos::with('modelo')->findOrFail($dispositivoId);
-        $item = $this->pendingGpsItem;
+        $dispositivo = Dispositivos::findOrFail($dispositivoId);
+        $this->selectedImeis[] = ['id' => $dispositivo->id, 'imei' => $dispositivo->imei];
+        $this->imeiSearch = '';
 
-        $descripcion = $item['descripcion'] . ' IMEI: ' . $dispositivo->imei;
+        $needed = (int) ($this->pendingGpsItem['cantidad'] ?? 1);
+        if (count($this->selectedImeis) < $needed) {
+            return;
+        }
 
-        $total = round((floatval($item['cantidad']) * floatval($item['precio'])), 2);
-        $this->items->push([
-            'producto_id'   => $item['producto_id'],
-            'producto'      => $item['producto'],
-            'descripcion'   => $descripcion,
-            'cantidad'      => $item['cantidad'],
-            'precio'        => $item['precio'],
-            'total'         => $total,
-            'dispositivo_id' => $dispositivo->id,
-        ]);
+        $item       = $this->pendingGpsItem;
+        $imeiList   = collect($this->selectedImeis)->pluck('imei')->join(', ');
+        $imeiIds    = collect($this->selectedImeis)->pluck('id')->toArray();
+        $total      = round((floatval($item['cantidad']) * floatval($item['precio'])), 2);
+        $wasEditing = $this->editingImeiIndex !== null;
+
+        $newItemData = [
+            'producto_id'     => $item['producto_id'],
+            'producto'        => $item['producto'],
+            'descripcion'     => $item['descripcion'],
+            'descripcion_pdf' => $item['descripcion'] . ' IMEI: ' . $imeiList,
+            'imeis'           => $imeiIds,
+            'modelo_id'       => $item['modelo_id'] ?? null,
+            'cantidad'        => $item['cantidad'],
+            'precio'          => $item['precio'],
+            'total'           => $total,
+        ];
+
+        if ($wasEditing) {
+            $itemsArr = $this->items->toArray();
+            $itemsArr[$this->editingImeiIndex] = $newItemData;
+            $this->items = collect($itemsArr);
+        } else {
+            $this->items->push($newItemData);
+        }
 
         $this->total = $this->calcularTotal();
         $this->showImeiModal = false;
         $this->pendingGpsItem = [];
+        $this->selectedImeis = [];
+        $this->editingImeiIndex = null;
         $this->imeiSearch = '';
-        $this->selected = collect();
-        $this->reset('product_selected_id');
+        if (!$wasEditing) {
+            $this->selected = collect();
+            $this->reset('product_selected_id');
+        }
+    }
+
+    /** Eliminar un IMEI de la selección actual (dentro del modal) */
+    public function quitarImeiSeleccionado(int $index): void
+    {
+        unset($this->selectedImeis[$index]);
+        $this->selectedImeis = array_values($this->selectedImeis);
+    }
+
+    /** Abrir modal para editar los IMEIs de un item ya añadido */
+    public function editarImeis(int $index): void
+    {
+        $item = $this->items[$index];
+        $this->editingImeiIndex = $index;
+
+        $this->pendingGpsItem = [
+            'producto_id' => $item['producto_id'],
+            'producto'    => $item['producto'],
+            'descripcion' => $item['descripcion'],  // campo SUNAT limpio, nunca se toca
+            'cantidad'    => $item['cantidad'],
+            'precio'      => $item['precio'],
+            'modelo_id'   => $item['modelo_id'] ?? null,
+        ];
+
+        if (!empty($item['imeis']) && is_array($item['imeis'])) {
+            $dispositivos = Dispositivos::whereIn('id', $item['imeis'])->get(['id', 'imei'])->keyBy('id');
+            $this->selectedImeis = collect($item['imeis'])->map(function ($id) use ($dispositivos) {
+                return ['id' => $id, 'imei' => $dispositivos->get($id)?->imei ?? "ID:{$id}"];
+            })->toArray();
+        } else {
+            $this->selectedImeis = [];
+        }
+
+        $this->imeiSearch = '';
+        $this->showImeiModal = true;
     }
 
     /** Cancelar selección de IMEI */
@@ -334,6 +396,8 @@ class Create extends Component
     {
         $this->showImeiModal = false;
         $this->pendingGpsItem = [];
+        $this->selectedImeis = [];
+        $this->editingImeiIndex = null;
         $this->imeiSearch = '';
         $this->selected = collect();
         $this->reset('product_selected_id');
@@ -428,7 +492,12 @@ class Create extends Component
 
         // Marcar dispositivos GPS como VENDIDO
         $dispositivosIds = collect($this->items)
-            ->pluck('dispositivo_id')
+            ->flatMap(function ($item) {
+                if (!empty($item['imeis']) && is_array($item['imeis'])) {
+                    return $item['imeis'];
+                }
+                return [];
+            })
             ->filter()
             ->unique()
             ->values();

@@ -36,6 +36,7 @@ class VentasDetalle extends Model
         'descuento_factor' => 'decimal:5',
         'sub_total' => 'decimal:2',
         'total' => 'decimal:2',
+        'imeis' => 'array',
     ];
     public function getActivitylogOptions(): LogOptions
     {

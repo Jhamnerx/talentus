@@ -14,6 +14,7 @@ class DetalleRecibos extends Model
     protected $table = 'detalle_recibos';
     protected $casts = [
         'cantidad' => 'float',
+        'imeis' => 'array',
     ];
 
     public function recibos(): BelongsTo

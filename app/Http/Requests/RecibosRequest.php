@@ -38,6 +38,8 @@ class RecibosRequest extends FormRequest
             'items.*.producto_id' => 'required',
             'items.*.producto' => 'required',
             'items.*.descripcion' => 'nullable',
+            'items.*.descripcion_pdf' => 'nullable|string',
+            'items.*.imeis' => 'nullable|array',
             'items.*.cantidad' => 'required|gte:1',
             'items.*.precio' => 'required',
             'items.*.total' => 'required',

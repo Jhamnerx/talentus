@@ -87,6 +87,8 @@ class VentasRequest extends FormRequest
             'items.*.codigo_afectacion' => 'required',
             'items.*.afecto_icbper' => 'required',
             'items.*.tipo' => 'required',
+            'items.*.descripcion_pdf' => 'nullable|string',
+            'items.*.imeis' => 'nullable|array',
 
             //pago anticipado
             'pago_anticipado' => 'boolean',
