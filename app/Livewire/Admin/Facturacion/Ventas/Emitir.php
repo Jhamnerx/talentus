@@ -477,6 +477,7 @@ class Emitir extends Component
                 'unit' => $selected["unit"],
                 'unit_name' => $selected["unit_name"],
                 'descripcion' => $this->pago_anticipado ? $selected["descripcion"] . "***Pago Anticipado***" : $selected["descripcion"],
+                'descripcion_pdf' => null,
                 'valor_unitario' => $selected["valor_unitario"],
                 'precio_unitario' => $selected["precio_unitario"],
                 'igv' => $selected["igv"],
@@ -528,11 +529,15 @@ class Emitir extends Component
     /** Cada clic agrega un IMEI; cuando count == cantidad, cierra el modal */
     public function confirmarImei(int $dispositivoId): void
     {
+        $needed = (int) ($this->pendingGpsItem['cantidad'] ?? 1);
+        if (count($this->selectedImeis) >= $needed) {
+            return;
+        }
+
         $dispositivo = Dispositivos::findOrFail($dispositivoId);
         $this->selectedImeis[] = ['id' => $dispositivo->id, 'imei' => $dispositivo->imei];
         $this->imeiSearch = '';
 
-        $needed = (int) ($this->pendingGpsItem['cantidad'] ?? 1);
         if (count($this->selectedImeis) < $needed) {
             // Mantener modal abierto hasta completar la selección
             return;
@@ -550,8 +555,8 @@ class Emitir extends Component
             'cantidad'          => $item['cantidad'],
             'unit'              => $item['unit'],
             'unit_name'         => $item['unit_name'],
-            'descripcion'       => $this->pago_anticipado ? $item['descripcion'] . '***Pago Anticipado***' : $item['descripcion'],
-            'descripcion_pdf'   => $item['descripcion'] . ' IMEI: ' . $imeiList,
+            'descripcion'       => $this->pago_anticipado ? $item['descripcion'] . ' IMEI: ' . $imeiList . '***Pago Anticipado***' : $item['descripcion'] . ' IMEI: ' . $imeiList,
+            'descripcion_pdf'   => null,
             'imeis'             => $imeiIds,
             'modelo_id'         => $item['modelo_id'] ?? null,
             'valor_unitario'    => $item['valor_unitario'],
@@ -605,7 +610,7 @@ class Emitir extends Component
             'cantidad'          => $item['cantidad'],
             'unit'              => $item['unit'],
             'unit_name'         => $item['unit_name'],
-            'descripcion'       => $item['descripcion'],  // campo SUNAT limpio, nunca se toca
+            'descripcion'       => explode(' IMEI: ', $item['descripcion'])[0],  // base sin IMEIs
             'valor_unitario'    => $item['valor_unitario'],
             'precio_unitario'   => $item['precio_unitario'],
             'igv'               => $item['igv'] ?? 0,

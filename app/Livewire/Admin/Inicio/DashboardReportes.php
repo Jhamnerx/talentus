@@ -117,7 +117,7 @@ class DashboardReportes extends Component
             ->get()
             ->keyBy('divisa');
 
-        // Recibos: SoftDeletes filtra automáticamente los eliminados
+        // Recibos: SoftDeletes filtra automáticamente los eliminados; excluye borradores
         $recibosPorCobrar = Recibos::where('pago_estado', Recibos::UNPAID)
             ->select('divisa', DB::raw('COUNT(*) as cantidad'), DB::raw('SUM(total) as monto_total'))
             ->groupBy('divisa')

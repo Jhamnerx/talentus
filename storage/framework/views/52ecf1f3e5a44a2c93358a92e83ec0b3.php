@@ -731,7 +731,10 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                 <div
                     class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-slate-700">
                     <div>
-                        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">📡 Seleccionar IMEI</h3>
+                        <h3 class="text-base font-semibold text-slate-800 dark:text-slate-100">
+                            📡 <?php echo e($editingImeiIndex !== null ? 'Modificar IMEIs' : 'Seleccionar IMEI'); ?>
+
+                        </h3>
                         <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                             Producto: <span class="font-medium"><?php echo e($pendingGpsItem['descripcion'] ?? ''); ?></span>
                         </p>
@@ -747,14 +750,62 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                 </div>
 
                 
-                <div class="px-6 pt-4">
+                <?php
+                    $needed = (int) ($pendingGpsItem['cantidad'] ?? 1);
+                    $selected = count($selectedImeis);
+                ?>
+                <div class="px-6 pt-3">
+                    <div class="flex items-center justify-between mb-1">
+                        <span class="text-xs font-medium text-slate-600 dark:text-slate-300">
+                            Seleccionados: <span
+                                class="<?php echo e($selected >= $needed ? 'text-emerald-600' : 'text-indigo-600'); ?> font-bold"><?php echo e($selected); ?></span>
+                            / <?php echo e($needed); ?>
+
+                        </span>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selected > 0): ?>
+                            <span class="text-xs text-slate-400"><?php echo e($needed - $selected); ?> pendiente(s)</span>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    </div>
+                    <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5">
+                        <div class="bg-indigo-500 h-1.5 rounded-full transition-all"
+                            style="width: <?php echo e($needed > 0 ? min(100, ($selected / $needed) * 100) : 0); ?>%"></div>
+                    </div>
+                </div>
+
+                
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(count($selectedImeis) > 0): ?>
+                    <div class="px-6 pt-3">
+                        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase mb-1">
+                            Seleccionados</p>
+                        <div class="flex flex-wrap gap-1.5">
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $selectedImeis; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sIndex => $s): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
+                                <span
+                                    class="inline-flex items-center gap-1 text-xs bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-300 px-2 py-0.5 rounded-full">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <?php echo e($s['imei']); ?>
+
+                                    <button wire:click.prevent="quitarImeiSeleccionado(<?php echo e($sIndex); ?>)"
+                                        class="ml-0.5 text-emerald-600 hover:text-red-500 dark:text-emerald-400 dark:hover:text-red-400 font-bold leading-none"
+                                        title="Quitar">&times;</button>
+                                </span>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                        </div>
+                    </div>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                
+                <div class="px-6 pt-3">
                     <input wire:model.live="imeiSearch" type="text"
                         class="w-full rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-sm text-slate-700 dark:text-slate-200 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                         placeholder="Buscar por IMEI..." />
                 </div>
 
                 
-                <div class="px-6 py-3 max-h-72 overflow-y-auto space-y-2">
+                <div class="px-6 py-3 max-h-56 overflow-y-auto space-y-2">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $this->dispositivosImei; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $disp): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
                         <button wire:click="confirmarImei(<?php echo e($disp->id); ?>)"
                             class="w-full text-left flex items-center gap-3 px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-600 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-slate-700 transition group">
@@ -783,13 +834,21 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                     d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
-                            <p class="text-sm">No hay dispositivos en stock para este modelo.</p>
+                            <p class="text-sm">
+                                <?php echo e(count($selectedImeis) > 0 ? 'No hay más dispositivos en stock para este modelo.' : 'No hay dispositivos en stock para este modelo.'); ?>
+
+                            </p>
                         </div>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
 
                 
-                <div class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-end">
+                <div
+                    class="px-6 py-4 border-t border-slate-100 dark:border-slate-700 flex justify-between items-center">
+                    <span class="text-xs text-slate-400 dark:text-slate-500">
+                        <?php echo e($needed > 1 ? 'Selecciona ' . $needed . ' dispositivos uno por uno' : 'Selecciona 1 dispositivo'); ?>
+
+                    </span>
                     <button wire:click="cancelarImei"
                         class="px-4 py-2 text-sm rounded-lg border border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition">
                         Cancelar

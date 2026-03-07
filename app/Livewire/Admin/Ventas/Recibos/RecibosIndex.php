@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Ventas\Recibos;
 
 use App\Models\Recibos;
 use Carbon\Carbon;
+use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -18,6 +19,8 @@ class RecibosIndex extends Component
         'render'
     ];
 
+
+    #[On('recibo-delete')]
     public function render()
     {
 

@@ -8,6 +8,7 @@ use App\Models\Ventas;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Models\EnvioResumen;
+use App\Models\Dispositivos;
 use App\Models\TipoComprobantes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
@@ -151,6 +152,20 @@ class AnularComprobante extends Component
             'anulado' => 'si',
             'id_baja' => $resumen->id
         ]);
+
+        // Revertir dispositivos GPS a STOCK
+        $dispositivosIds = $this->invoice->ventaDetalles()
+            ->whereNotNull('imeis')
+            ->get()
+            ->flatMap(fn($detalle) => $detalle->imeis ?? [])
+            ->filter()
+            ->unique()
+            ->values();
+
+        if ($dispositivosIds->isNotEmpty()) {
+            Dispositivos::whereIn('id', $dispositivosIds)
+                ->update(['estado' => Dispositivos::STOCK]);
+        }
 
         //CREAR DETALLE DE ENVIO DE RESUMEN
         $resumen->envioResumenDetalles()->create([

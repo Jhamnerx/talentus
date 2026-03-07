@@ -168,7 +168,7 @@ class Edit extends Component
             $this->reset('product_selected_id');
 
             //calcular los totales al añadir un producto
-            $this->total = $this->calcularTotal();
+            $this->reCalTotal();
 
             $this->dispatch(
                 'notify-toast',
@@ -233,11 +233,15 @@ class Edit extends Component
     /** Cada clic agrega un IMEI; cuando count == cantidad, cierra el modal */
     public function confirmarImei(int $dispositivoId): void
     {
+        $needed = (int) ($this->pendingGpsItem['cantidad'] ?? 1);
+        if (count($this->selectedImeis) >= $needed) {
+            return;
+        }
+
         $dispositivo = Dispositivos::findOrFail($dispositivoId);
         $this->selectedImeis[] = ['id' => $dispositivo->id, 'imei' => $dispositivo->imei];
         $this->imeiSearch = '';
 
-        $needed = (int) ($this->pendingGpsItem['cantidad'] ?? 1);
         if (count($this->selectedImeis) < $needed) {
             return;
         }
@@ -251,8 +255,8 @@ class Edit extends Component
         $newItemData = [
             'producto_id'     => $item['producto_id'],
             'producto'        => $item['producto'],
-            'descripcion'     => $item['descripcion'],
-            'descripcion_pdf' => $item['descripcion'] . ' IMEI: ' . $imeiList,
+            'descripcion'     => $item['descripcion'] . ' IMEI: ' . $imeiList,
+            'descripcion_pdf' => null,
             'imeis'           => $imeiIds,
             'modelo_id'       => $item['modelo_id'] ?? null,
             'cantidad'        => $item['cantidad'],
@@ -268,7 +272,7 @@ class Edit extends Component
             $this->items->push($newItemData);
         }
 
-        $this->total = $this->calcularTotal();
+        $this->reCalTotal();
         $this->showImeiModal = false;
         $this->pendingGpsItem = [];
         $this->selectedImeis = [];
@@ -296,7 +300,7 @@ class Edit extends Component
         $this->pendingGpsItem = [
             'producto_id' => $item['producto_id'],
             'producto'    => $item['producto'],
-            'descripcion' => $item['descripcion'],  // campo SUNAT limpio, nunca se toca
+            'descripcion' => explode(' IMEI: ', $item['descripcion'])[0],  // base sin IMEIs
             'cantidad'    => $item['cantidad'],
             'precio'      => $item['precio'],
             'modelo_id'   => $item['modelo_id'] ?? null,
@@ -386,26 +390,34 @@ class Edit extends Component
 
             $data = $this->validate($request->rules($this->recibo), $request->messages());
 
+            // Capturar IMEIs anteriores antes de borrar detalles
+            $oldImeiIds = $this->recibo->detalles()
+                ->whereNotNull('imeis')
+                ->get()
+                ->flatMap(fn($d) => $d->imeis ?? [])
+                ->filter()->unique()->values();
+
             $this->recibo->update($data);
 
             $this->recibo->detalles()->delete();
 
             Recibos::createItems($this->recibo, $data["items"]);
 
-            // Marcar dispositivos GPS como VENDIDO
-            $dispositivosIds = collect($this->items)
-                ->flatMap(function ($item) {
-                    if (!empty($item['imeis']) && is_array($item['imeis'])) {
-                        return $item['imeis'];
-                    }
-                    return [];
-                })
-                ->filter()
-                ->unique()
-                ->values();
-            if ($dispositivosIds->isNotEmpty()) {
-                Dispositivos::whereIn('id', $dispositivosIds)
-                    ->update(['estado' => Dispositivos::VENDIDO]);
+            // Nuevos IMEIs del formulario
+            $newImeiIds = collect($this->items)
+                ->flatMap(fn($item) => (!empty($item['imeis']) && is_array($item['imeis'])) ? $item['imeis'] : [])
+                ->filter()->unique()->values();
+
+            // Revertir a STOCK los que se eliminaron
+            $toStock = $oldImeiIds->diff($newImeiIds)->values();
+            if ($toStock->isNotEmpty()) {
+                Dispositivos::whereIn('id', $toStock)->update(['estado' => Dispositivos::STOCK]);
+            }
+
+            // Marcar como VENDIDO los que se añadieron
+            $toVendido = $newImeiIds->diff($oldImeiIds)->values();
+            if ($toVendido->isNotEmpty()) {
+                Dispositivos::whereIn('id', $toVendido)->update(['estado' => Dispositivos::VENDIDO]);
             }
 
             //ACTUALIZAR REGISTROS DE PAYMENT DESDE PAGOS_DETALLE

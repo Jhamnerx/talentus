@@ -229,13 +229,12 @@
 <?php $component = $__componentOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
 <?php unset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
 <?php endif; ?>
-                    <?php $hasPdf = !empty($items[$clave]['descripcion_pdf'] ?? null); $hasImeis = !empty($items[$clave]['imeis'] ?? null); ?>
+                    <?php $hasImeis = !empty($items[$clave]['imeis'] ?? null); ?>
                     <div class="flex flex-wrap items-center gap-3 mt-1">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasImeis): ?>
                             <a href="#" wire:click.prevent="editarImeis(<?php echo e($clave); ?>)" class="text-xs text-indigo-400 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline">✏️ IMEIs</a>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
-                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasImeis): ?>
-                        <div x-data="{ showPdf: <?php echo e($hasPdf ? 'true' : 'false'); ?> }">
+                        <div x-data="{ showPdf: false }">
                             <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
                                 <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
                             </a>
@@ -264,7 +263,6 @@
 <?php endif; ?>
                             </div>
                         </div>
-                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                     </div>
 
                 </td>

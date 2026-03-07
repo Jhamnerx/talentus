@@ -7,21 +7,43 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\App\View\Components\AdminLayout::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['ruta' => 'ventas-recibos']); ?>
+<?php $component->withAttributes([]); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 
-    <!-- Table -->
     <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.ventas.recibos.recibos-index');
+[$__name, $__params] = $__split('admin.dispositivos.dispositivos-index');
 
 $key = null;
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-3865521255-0', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-744008918-0', $key);
+
+$__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__componentSlots);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('admin.dispositivos.show-info');
+
+$key = null;
+$__componentSlots = [];
+
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-744008918-1', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -38,12 +60,12 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.ventas.recibos.reportes');
+[$__name, $__params] = $__split('admin.dispositivos.save');
 
 $key = null;
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-3865521255-1', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-744008918-2', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -60,12 +82,12 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.ventas.recibos.send');
+[$__name, $__params] = $__split('admin.dispositivos.edit');
 
 $key = null;
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-3865521255-2', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-744008918-3', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -82,12 +104,12 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.ventas.recibos.eliminar-recibo');
+[$__name, $__params] = $__split('admin.dispositivos.import');
 
 $key = null;
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-3865521255-3', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-744008918-4', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -111,4 +133,4 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
 <?php unset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
 <?php endif; ?>
-<?php /**PATH C:\laragon2\www\talentus\resources\views/admin/ventas/recibos/index.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon2\www\talentus\resources\views/admin/almacen/dispositivos/index.blade.php ENDPATH**/ ?>

@@ -167,7 +167,8 @@
                                     @if ($detalle->descripcion)
                                         <p class="producto-titulo"><b>{{ $detalle->producto }}</b>.
                                         </p>
-                                        <p class="descripcion">{{ $detalle->descripcion }}</p>
+                                        <p class="descripcion">{{ $detalle->descripcion_pdf ?? $detalle->descripcion }}
+                                        </p>
                                     @else
                                         <h6> {{ $detalle->producto }} </h6>
                                     @endif

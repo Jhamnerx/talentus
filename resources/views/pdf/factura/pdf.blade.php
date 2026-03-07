@@ -159,7 +159,7 @@
                             <tr>
                                 <td>
                                     <p> {{ $detalle->producto }}</p>
-                                    <p class="descripcion">{{ $detalle->descripcion }}</p>
+                                    <p class="descripcion">{{ $detalle->descripcion_pdf ?? $detalle->descripcion }}</p>
 
                                 </td>
                                 <td>{{ $factura->divisa == 'PEN' ? 'S/. ' : '$' }}{{ $detalle->precio }}</td>

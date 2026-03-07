@@ -49,11 +49,13 @@ class Dashboard extends Component
         // Recibos
         $recibosPen = Recibos::whereBetween('fecha_emision', [$inicio, $fin])
             ->where('divisa', 'PEN')
+            ->where('estado', Recibos::COMPLETADO)
             ->whereNull('deleted_at')
             ->sum('total');
 
         $recibosUsd = Recibos::whereBetween('fecha_emision', [$inicio, $fin])
             ->where('divisa', 'USD')
+            ->where('estado', Recibos::COMPLETADO)
             ->whereNull('deleted_at')
             ->sum('total');
 

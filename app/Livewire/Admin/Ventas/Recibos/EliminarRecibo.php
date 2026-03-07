@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Ventas\Recibos;
 
+use App\Models\Dispositivos;
 use App\Models\Recibos;
 use Illuminate\Database\Eloquent\Model;
 use Livewire\Component;
@@ -28,9 +29,20 @@ class EliminarRecibo extends Component
 
     public function eliminar()
     {
+        // Revertir dispositivos GPS a STOCK
+        $dispositivosIds = $this->recibo->detalles()
+            ->whereNotNull('imeis')
+            ->get()
+            ->flatMap(fn($d) => $d->imeis ?? [])
+            ->filter()->unique()->values();
+
+        if ($dispositivosIds->isNotEmpty()) {
+            Dispositivos::whereIn('id', $dispositivosIds)->update(['estado' => Dispositivos::STOCK]);
+        }
+
         $this->recibo->delete();
         $this->dispatch('recibo-delete');
-        $this->dispatch('render');
+        $this->cerrarModal();
     }
 
     public function render()

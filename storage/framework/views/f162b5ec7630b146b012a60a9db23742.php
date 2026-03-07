@@ -80,6 +80,35 @@
 <?php $component = $__componentOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
 <?php unset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
 <?php endif; ?>
+                    <div x-data="{ showPdf: false }" class="mt-1">
+                        <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+                            <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
+                        </a>
+                        <div x-show="showPdf" style="display: none;" class="mt-1">
+                            <?php if (isset($component)) { $__componentOriginal766d51b9779a62d55606e4facdbf6fa8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal766d51b9779a62d55606e4facdbf6fa8 = $attributes; } ?>
+<?php $component = WireUi\Components\TextField\Textarea::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.textarea'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\WireUi\Components\TextField\Textarea::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model.live' => 'selected.descripcion_pdf','placeholder' => 'Descripción para factura impresa']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal766d51b9779a62d55606e4facdbf6fa8)): ?>
+<?php $attributes = $__attributesOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
+<?php unset($__attributesOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8)): ?>
+<?php $component = $__componentOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
+<?php unset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
+<?php endif; ?>
+                        </div>
+                    </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -215,6 +244,41 @@
 <?php $component = $__componentOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
 <?php unset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
 <?php endif; ?>
+                    <?php $hasImeis = !empty($items[$clave]['imeis'] ?? null); ?>
+                    <div class="flex flex-wrap items-center gap-3 mt-1">
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasImeis): ?>
+                            <a href="#" wire:click.prevent="editarImeis(<?php echo e($clave); ?>)" class="text-xs text-indigo-400 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline">✏️ IMEIs</a>
+                        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        <div x-data="{ showPdf: false }">
+                            <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+                                <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
+                            </a>
+                            <div x-show="showPdf" style="display: none;" class="mt-1">
+                                <?php if (isset($component)) { $__componentOriginal766d51b9779a62d55606e4facdbf6fa8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal766d51b9779a62d55606e4facdbf6fa8 = $attributes; } ?>
+<?php $component = WireUi\Components\TextField\Textarea::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('form.textarea'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\WireUi\Components\TextField\Textarea::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model.live' => 'items.'.e($clave).'.descripcion_pdf','placeholder' => 'Descripción para factura impresa']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal766d51b9779a62d55606e4facdbf6fa8)): ?>
+<?php $attributes = $__attributesOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
+<?php unset($__attributesOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8)): ?>
+<?php $component = $__componentOriginal766d51b9779a62d55606e4facdbf6fa8; ?>
+<?php unset($__componentOriginal766d51b9779a62d55606e4facdbf6fa8); ?>
+<?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
                     <?php if (isset($component)) { $__componentOriginal52e32dd6052e70eb6819edea2a97985a = $component; } ?>

@@ -114,7 +114,7 @@ class HomeController extends Controller
         for ($i = 0; $i < $nMeses; $i++) {
 
             //array_push($totales, Carbon::now()->subMonth($i)->format('m'));
-            $total  = Recibos::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->Where('divisa', $divisa)->sum('total');
+            $total  = Recibos::whereMonth('created_at', Carbon::now()->subMonth($i)->format('m'))->where('estado', \App\Models\Recibos::COMPLETADO)->Where('divisa', $divisa)->sum('total');
             array_push(
                 $totales,
                 floatval($total)
@@ -223,7 +223,7 @@ class HomeController extends Controller
         // ── DetalleRecibos ──────────────────────────────────────────────
         // whereHas('recibos') aplica EmpresaScope + SoftDeletes de Recibos automáticamente
         $recibosDetalles = DetalleRecibos::whereHas('producto', fn($q) => $q->where($columnaFiltro, 1))
-            ->whereHas('recibos', fn($q) => $q->whereBetween('fecha_emision', [$chartInicio, $chartFin]))
+            ->whereHas('recibos', fn($q) => $q->whereBetween('fecha_emision', [$chartInicio, $chartFin])->where('estado', \App\Models\Recibos::COMPLETADO))
             ->with('recibos:id,fecha_emision,divisa')
             ->get();
 

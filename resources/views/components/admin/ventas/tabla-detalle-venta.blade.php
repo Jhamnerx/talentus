@@ -38,6 +38,14 @@
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                     <x-form.textarea required wire:model.live="selected.descripcion" />
+                    <div x-data="{ showPdf: false }" class="mt-1">
+                        <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
+                            <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
+                        </a>
+                        <div x-show="showPdf" style="display: none;" class="mt-1">
+                            <x-form.textarea wire:model.live="selected.descripcion_pdf" placeholder="Descripción para factura impresa" />
+                        </div>
+                    </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
@@ -88,13 +96,12 @@
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">
 
                     <x-form.textarea required wire:model.live="items.{{ $clave }}.descripcion" />
-                    @php $hasPdf = !empty($items[$clave]['descripcion_pdf'] ?? null); $hasImeis = !empty($items[$clave]['imeis'] ?? null); @endphp
+                    @php $hasImeis = !empty($items[$clave]['imeis'] ?? null); @endphp
                     <div class="flex flex-wrap items-center gap-3 mt-1">
                         @if($hasImeis)
                             <a href="#" wire:click.prevent="editarImeis({{ $clave }})" class="text-xs text-indigo-400 hover:text-indigo-600 dark:text-indigo-400 dark:hover:text-indigo-300 hover:underline">✏️ IMEIs</a>
                         @endif
-                        @if($hasImeis)
-                        <div x-data="{ showPdf: {{ $hasPdf ? 'true' : 'false' }} }">
+                        <div x-data="{ showPdf: false }">
                             <a href="#" @click.prevent="showPdf = !showPdf" class="text-xs text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300">
                                 <span x-text="showPdf ? '▲ Descripción PDF' : '+ Descripción PDF'"></span>
                             </a>
@@ -102,7 +109,6 @@
                                 <x-form.textarea wire:model.live="items.{{ $clave }}.descripcion_pdf" placeholder="Descripción para factura impresa" />
                             </div>
                         </div>
-                        @endif
                     </div>
                 </td>
                 <td class="px-2 first:pl-5 last:pr-5 py-3 whitespace-nowrap">

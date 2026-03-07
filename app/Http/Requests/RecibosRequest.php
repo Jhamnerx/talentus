@@ -37,8 +37,8 @@ class RecibosRequest extends FormRequest
             'items' => 'array|between:1,100',
             'items.*.producto_id' => 'required',
             'items.*.producto' => 'required',
-            'items.*.descripcion' => 'nullable',
-            'items.*.descripcion_pdf' => 'nullable|string',
+            'items.*.descripcion' => 'nullable|max:500',
+            'items.*.descripcion_pdf' => 'nullable|string|max:500',
             'items.*.imeis' => 'nullable|array',
             'items.*.cantidad' => 'required|gte:1',
             'items.*.precio' => 'required',
@@ -81,7 +81,9 @@ class RecibosRequest extends FormRequest
             'items.*.precio.required' => 'Ingresa un precio',
             'items.*.total.required' => 'Ingresa un precio',
             'items.array' => 'Ingresa como minimo un producto',
-            'items.between' => 'Ingresa como minimo un producto'
+            'items.between' => 'Ingresa como minimo un producto',
+            'items.*.descripcion.max' => 'La descripción no puede superar los 500 caracteres.',
+            'items.*.descripcion_pdf.max' => 'La descripción PDF no puede superar los 500 caracteres.',
         ];
 
         return $messages;

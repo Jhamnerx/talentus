@@ -1,0 +1,1 @@
+device-<?php echo e($dispositivo->id); ?><?php /**PATH C:\laragon2\www\talentus\storage\framework\views/db2490b0dd47a36c1e28eeb00ec1fb9e.blade.php ENDPATH**/ ?>
