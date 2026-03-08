@@ -20,14 +20,6 @@
                     </svg>
                     <span class="hidden xs:block ml-2">Añadir Vehiculo</span>
                 </button>
-
-                {{-- <button wire:click="openModalAddVehiculo()" class="btn bg-emerald-500 hover:bg-emerald-600 text-white">
-                    <svg class="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                        <path
-                            d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                    </svg>
-                    <span class="hidden xs:block ml-2">Registro Rapido</span>
-                </button> --}}
             @endcan
 
         </div>
@@ -691,12 +683,11 @@
                                                         @can('show-vehiculos-vehiculos')
                                                             <li>
                                                                 <a href="{{ route('admin.vehiculos.show', $vehiculo) }}"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-29"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     role="menuitem" tabindex="-1"><svg
                                                                         xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5  mr-3 text-gray-400 group-hover:text-violet-500">
+                                                                        class="h-5 w-5  mr-3 text-gray-400 dark:text-gray-500 group-hover:text-violet-500">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
                                                                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
@@ -713,12 +704,11 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="openModalEdit({{ $vehiculo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-27"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="w-5 h-5 mr-3 text-gray-400 group-hover:text-blue-500">
+                                                                        class="w-5 h-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-blue-500">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
                                                                             d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z">
@@ -733,12 +723,11 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="deleteVehiculo({{ $vehiculo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-28"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     role="menuitem" tabindex="-1">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke="currentColor"
-                                                                        class="h-5 w-5 mr-3 text-gray-400 group-hover:text-red-500">
+                                                                        class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-red-500">
                                                                         <path stroke-linecap="round" stroke-linejoin="round"
                                                                             stroke-width="2"
                                                                             d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
@@ -753,10 +742,9 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="suspendVehiculo({{ $vehiculo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-28"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     role="menuitem" tabindex="-1">
-                                                                    <svg class="h-5 w-5 mr-3 text-gray-500 group-hover:text-rose-700"
+                                                                    <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-rose-700"
                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                         viewBox="0 0 64 64">
                                                                         <g stroke-linecap="round" stroke-width="2"
@@ -783,10 +771,9 @@
                                                             <li>
                                                                 <a href="javascript: void(0)"
                                                                     wire:click.prevent="createMantenimiento({{ $vehiculo->id }})"
-                                                                    class="text-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
-                                                                    disabled="false" id="headlessui-menu-item-28"
+                                                                    class="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 group flex items-center px-4 py-2 text-sm font-normal"
                                                                     role="menuitem" tabindex="-1">
-                                                                    <svg class="h-5 w-5 mr-3 text-gray-500 group-hover:text-blue-700"
+                                                                    <svg class="h-5 w-5 mr-3 text-gray-400 dark:text-gray-500 group-hover:text-blue-700"
                                                                         xmlns="http://www.w3.org/2000/svg"
                                                                         viewBox="0 0 64 64">
                                                                         <g stroke-linecap="round" stroke-width="2"

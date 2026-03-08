@@ -112,6 +112,115 @@
         @endif
     </div>
 
+    {{-- Mantenimiento Vinculado --}}
+    @if ($workOrder->mantenimiento)
+        @php $mt = $workOrder->mantenimiento; @endphp
+        <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center gap-3">
+                <div
+                    class="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900">
+                    <svg class="w-4 h-4 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-base font-semibold text-gray-900 dark:text-white">Mantenimiento Programado Vinculado
+                    </h2>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Esta orden fue generada a partir de un
+                        mantenimiento programado</p>
+                </div>
+            </div>
+
+            <div class="px-6 py-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">N°
+                        Mantenimiento</h3>
+                    <p class="text-sm text-gray-900 dark:text-white font-mono font-semibold">{{ $mt->numero }}</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Estado</h3>
+                    @php
+                        $mtColor = match ($mt->estado->value) {
+                            'PENDIENTE' => 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300',
+                            'COMPLETADA'
+                                => 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300',
+                            'CANCELADO' => 'bg-rose-100 text-rose-800 dark:bg-rose-900/40 dark:text-rose-300',
+                            default => 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                        };
+                    @endphp
+                    <span
+                        class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold {{ $mtColor }}">
+                        {{ $mt->estado->value }}
+                    </span>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Fecha Programada</h3>
+                    <p class="text-sm text-gray-900 dark:text-white font-medium">
+                        {{ $mt->fecha_hora_mantenimiento ? $mt->fecha_hora_mantenimiento->format('d/m/Y') : 'No definida' }}
+                    </p>
+                </div>
+
+                @if ($mt->detalle_trabajo)
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <h3
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                            Detalle del Trabajo</h3>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{{ $mt->detalle_trabajo }}
+                        </p>
+                    </div>
+                @endif
+
+                @if ($mt->nota)
+                    <div class="md:col-span-2 lg:col-span-3">
+                        <h3
+                            class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                            Nota</h3>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{{ $mt->nota }}</p>
+                    </div>
+                @endif
+
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Notificaciones</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium
+                            {{ $mt->notify_admin ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' }}">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                            </svg>
+                            Admin {{ $mt->notify_admin ? '✓' : '✗' }}
+                        </span>
+                        <span
+                            class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium
+                            {{ $mt->notify_client ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400' }}">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            Cliente {{ $mt->notify_client ? '✓' : '✗' }}
+                        </span>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+                        Registrado</h3>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">{{ $mt->created_at->format('d/m/Y H:i') }}</p>
+                </div>
+            </div>
+        </div>
+    @endif
+
     {{-- Acciones Rápidas --}}
     @if (!$workOrder->bloqueado)
         <div class="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
@@ -126,22 +235,22 @@
 
                 @if ($workOrder->estado->value === 'en_proceso')
                     <x-form.button teal icon="qr-code" wire:click="abrirModalDispositivo('imei', 'instalado')"
-                        spinner="abrirModalDispositivo">
+                        spinner="abrirModalDispositivo('imei', 'instalado')">
                         Registrar IMEI
                     </x-form.button>
 
                     <x-form.button purple icon="identification" wire:click="abrirModalDispositivo('sim', 'instalado')"
-                        spinner="abrirModalDispositivo">
+                        spinner="abrirModalDispositivo('sim', 'instalado')">
                         Registrar SIM
                     </x-form.button>
 
                     <x-form.button secondary icon="clipboard-document-list" wire:click="verChecklist('before')"
-                        spinner="verChecklist">
+                        spinner="verChecklist('before')">
                         Checklist Inicial
                     </x-form.button>
 
                     <x-form.button secondary icon="clipboard-document-check" wire:click="verChecklist('after')"
-                        spinner="verChecklist">
+                        spinner="verChecklist('after')">
                         Checklist Final
                     </x-form.button>
 
@@ -568,6 +677,23 @@
                 <x-form.textarea wire:model="observacionesDispositivo" label="Observaciones (Opcional)"
                     placeholder="Agrega notas adicionales..." rows="3" />
             </div>
+
+            {{-- Ubicación de Instalación --}}
+            <div>
+                <x-form.select wire:model.live="ubicacionInstalacion" label="Ubicación de Instalación *"
+                    placeholder="Seleccione una ubicación">
+                    @foreach ($this::UBICACIONES as $ubicacion)
+                        <x-select.option value="{{ $ubicacion }}">{{ $ubicacion }}</x-select.option>
+                    @endforeach
+                </x-form.select>
+            </div>
+
+            @if ($ubicacionInstalacion === 'OTRO')
+                <div>
+                    <x-form.input wire:model="ubicacionPersonalizada" label="Especifica la ubicación *"
+                        placeholder="Ej: Detrás de la consola central..." icon="map-pin" />
+                </div>
+            @endif
         </div>
 
         <x-slot name="footer">

@@ -8,10 +8,11 @@ use App\Enums\WorkOrderStatus;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+use WireUi\Traits\WireUiActions;
 
 class Index extends Component
 {
-    use WithPagination;
+    use WithPagination, WireUiActions;
 
     public $search = '';
     public $estado_filter = '';
@@ -91,19 +92,9 @@ class Index extends Component
         try {
             $orden->iniciar();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
-                title: 'ORDEN INICIADA',
-                mensaje: "Orden {$orden->id} iniciada correctamente"
-            );
+            $this->notification()->success('ORDEN INICIADA', "Orden {$orden->id} iniciada correctamente");
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: $e->getMessage()
-            );
+            $this->notification()->error('ERROR', $e->getMessage());
         }
     }
 
@@ -119,19 +110,9 @@ class Index extends Component
 
             $orden->finalizar();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
-                title: 'ORDEN FINALIZADA',
-                mensaje: "Orden {$orden->id} finalizada correctamente"
-            );
+            $this->notification()->success('ORDEN FINALIZADA', "Orden {$orden->id} finalizada correctamente");
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: $e->getMessage()
-            );
+            $this->notification()->error('ERROR', $e->getMessage());
         }
     }
 
@@ -140,19 +121,9 @@ class Index extends Component
         try {
             $orden->cerrar();
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
-                title: 'ORDEN CERRADA',
-                mensaje: "Orden {$orden->id} cerrada y bloqueada"
-            );
+            $this->notification()->success('ORDEN CERRADA', "Orden {$orden->id} cerrada y bloqueada");
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: $e->getMessage()
-            );
+            $this->notification()->error('ERROR', $e->getMessage());
         }
     }
 
@@ -162,19 +133,9 @@ class Index extends Component
             $orden = WorkOrder::findOrFail($ordenId);
             $orden->cancelar($motivo);
 
-            $this->dispatch(
-                'notify-toast',
-                icon: 'success',
-                title: 'ORDEN CANCELADA',
-                mensaje: "Orden {$orden->id} cancelada correctamente"
-            );
+            $this->notification()->success('ORDEN CANCELADA', "Orden {$orden->id} cancelada correctamente");
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: $e->getMessage()
-            );
+            $this->notification()->error('ERROR', $e->getMessage());
         }
     }
 
@@ -204,34 +165,19 @@ class Index extends Component
     {
         $tipo->update(['is_active' => !$tipo->is_active]);
 
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'ACTUALIZADO',
-            mensaje: "Tipo '{$tipo->nombre}' " . ($tipo->is_active ? 'activado' : 'desactivado')
-        );
+        $this->notification()->success('ACTUALIZADO', "Tipo '{$tipo->nombre}' " . ($tipo->is_active ? 'activado' : 'desactivado'));
     }
 
     public function eliminarTipo(WorkOrderType $tipo)
     {
         if ($tipo->workOrders()->exists()) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: 'No se puede eliminar un tipo con órdenes asociadas'
-            );
+            $this->notification()->error('ERROR', 'No se puede eliminar un tipo con órdenes asociadas');
             return;
         }
 
         $tipo->delete();
 
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'ELIMINADO',
-            mensaje: "Tipo '{$tipo->nombre}' eliminado correctamente"
-        );
+        $this->notification()->success('ELIMINADO', "Tipo '{$tipo->nombre}' eliminado correctamente");
     }
 
     // ========== MÉTODOS PARA EXPORTACIÓN ==========

@@ -32,6 +32,11 @@ class Mantenimiento extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $table = 'mantenimientos';
 
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new EmpresaScope);
+    }
+
     protected $casts = [
         'fecha_hora_mantenimiento' => 'date',
         'estado' => mantenimientoStatus::class,
@@ -84,5 +89,15 @@ class Mantenimiento extends Model
     public function tarea()
     {
         return $this->hasOne(Tareas::class, 'mantenimiento_id')->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function workOrders()
+    {
+        return $this->hasMany(WorkOrder::class)->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function workOrderActivo()
+    {
+        return $this->hasOne(WorkOrder::class)->withoutGlobalScope(EmpresaScope::class)->latest();
     }
 }

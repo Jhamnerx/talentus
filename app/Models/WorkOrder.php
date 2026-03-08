@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -80,6 +81,12 @@ class WorkOrder extends Model
     public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class)
+            ->withoutGlobalScope(EmpresaScope::class);
+    }
+
+    public function mantenimiento(): BelongsTo
+    {
+        return $this->belongsTo(Mantenimiento::class)
             ->withoutGlobalScope(EmpresaScope::class);
     }
 
@@ -160,6 +167,11 @@ class WorkOrder extends Model
         $this->estado = WorkOrderStatus::FINALIZADO;
         $this->fecha_finalizacion = now();
         $this->save();
+
+        // Marcar el mantenimiento vinculado como completado
+        if ($this->mantenimiento_id) {
+            $this->mantenimiento()->update(['estado' => 'COMPLETADA']);
+        }
     }
 
     public function cerrar(): void

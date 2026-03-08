@@ -981,10 +981,10 @@
 
                     <!-- Órdenes de Trabajo -->
                     <li class="pl-4 pr-3 py-2 rounded-lg mb-0.5 last:mb-0 <?php if(in_array(Request::segment(1), ['work-orders'])): ?> <?php echo e('from-violet-500/12 dark:from-violet-500/24 to-violet-500/4'); ?> <?php endif; ?>">
-                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate <?php if(Route::is('admin.work-orders.index')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
+                        <a class="block text-gray-500/90 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition truncate <?php if(Route::is('admin.work-orders.index', 'admin.work-orders.show', 'admin.work-orders.checklist')): ?> <?php echo e('text-violet-500!'); ?> <?php endif; ?>"
                             href="<?php echo e(route('admin.work-orders.index')); ?>">
                             <div class="flex items-center">
-                                <svg class="shrink-0 h-6 w-6 <?php if(Route::is('admin.work-orders.index')): ?> <?php echo e('text-violet-500'); ?><?php else: ?><?php echo e('text-gray-400 dark:text-gray-500'); ?> <?php endif; ?>" 
+                                <svg class="shrink-0 h-6 w-6 <?php if(Route::is('admin.work-orders.index', 'admin.work-orders.show', 'admin.work-orders.checklist')): ?> <?php echo e('text-violet-500'); ?><?php else: ?><?php echo e('text-gray-400 dark:text-gray-500'); ?> <?php endif; ?>" 
                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                                 </svg>

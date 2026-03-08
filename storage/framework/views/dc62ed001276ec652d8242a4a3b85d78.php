@@ -173,34 +173,12 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('admin.vehiculos.save-quick', []);
-
-$key = 'save-quick';
-$__componentSlots = [];
-
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-7', $key);
-
-$__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__componentSlots);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
-    <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
 [$__name, $__params] = $__split('admin.lineas.save', []);
 
 $key = 'lineas-save';
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-8', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-7', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -222,7 +200,7 @@ $__split = function ($name, $params = []) {
 $key = 'dispositivos-save';
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-9', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-8', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 
@@ -244,7 +222,7 @@ $__split = function ($name, $params = []) {
 $key = 'clientes-save';
 $__componentSlots = [];
 
-$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-10', $key);
+$key ??= \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::generateKey('lw-1183868404-9', $key);
 
 $__html = app('livewire')->mount($__name, $__params, $key, $__componentSlots);
 

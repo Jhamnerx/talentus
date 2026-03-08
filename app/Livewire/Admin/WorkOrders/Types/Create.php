@@ -5,9 +5,12 @@ namespace App\Livewire\Admin\WorkOrders\Types;
 use App\Models\WorkOrderType;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use WireUi\Traits\WireUiActions;
 
 class Create extends Component
 {
+    use WireUiActions;
+
     public $showModal = false;
     public $editingId = null;
     public $nombre = '';
@@ -18,6 +21,7 @@ class Create extends Component
     public $requiere_accesorios = false;
     public $requiere_checklist = true;
     public $active = true;
+    public $es_mantenimiento_programado = false;
 
     /**
      * Variables disponibles para usar en la descripción del tipo de orden.
@@ -55,6 +59,7 @@ class Create extends Component
             $this->requiere_accesorios = $tipo->requiere_accesorios;
             $this->requiere_checklist = $tipo->requiere_checklist;
             $this->active = $tipo->active;
+            $this->es_mantenimiento_programado = $tipo->es_mantenimiento_programado;
         } else {
             $this->reset([
                 'editingId',
@@ -65,7 +70,8 @@ class Create extends Component
                 'requiere_sim',
                 'requiere_accesorios',
                 'requiere_checklist',
-                'active'
+                'active',
+                'es_mantenimiento_programado',
             ]);
             $this->requiere_checklist = true;
             $this->active = true;
@@ -90,6 +96,7 @@ class Create extends Component
             'requiere_accesorios' => 'boolean',
             'requiere_checklist' => 'boolean',
             'active' => 'boolean',
+            'es_mantenimiento_programado' => 'boolean',
         ]);
 
         $data = [
@@ -101,6 +108,7 @@ class Create extends Component
             'requiere_accesorios' => $this->requiere_accesorios,
             'requiere_checklist' => $this->requiere_checklist,
             'active' => $this->active,
+            'es_mantenimiento_programado' => $this->es_mantenimiento_programado,
             'empresa_id' => session('empresa'),
         ];
 
@@ -117,12 +125,7 @@ class Create extends Component
 
         $this->dispatch('tipo-guardado');
 
-        $this->dispatch(
-            'notify-toast',
-            icon: 'success',
-            title: 'ÉXITO',
-            mensaje: $mensaje
-        );
+        $this->notification()->success('ÉXITO', $mensaje);
     }
 
     public function render()

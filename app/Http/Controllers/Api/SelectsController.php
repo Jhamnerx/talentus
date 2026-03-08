@@ -385,6 +385,10 @@ class SelectsController extends Controller
             )
             ->withoutGlobalScopes()
             ->when(
+                $request->boolean('solo_disponibles'),
+                fn(Builder $query) => $query->whereDoesntHave('vehiculos', fn($q) => $q->whereNull('vehiculos_dispositivos.fecha_desinstalacion'))
+            )
+            ->when(
                 $request->exists('selected'),
                 fn(Builder $query) => $query->whereIn('imei', $request->input('selected', [])),
                 fn(Builder $query) => $query->limit(50)

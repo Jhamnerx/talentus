@@ -25,7 +25,7 @@ class Checklist extends Component
 
     public int $totalItems = 0;
     public int $completados = 0;
-    public ?int $fotoTemplateId = null; // ID del template para subir foto
+    public ?int $fotoTemplateId = null;
 
     public function mount(WorkOrder $workOrder, string $fase = 'before'): void
     {
@@ -55,7 +55,6 @@ class Checklist extends Component
                 'nombre' => $template->nombre,
                 'descripcion' => $template->descripcion,
                 'categoria' => $template->categoria->value,
-                'requiere_foto' => $template->requiere_foto,
             ];
 
             if ($existing) {
@@ -66,9 +65,15 @@ class Checklist extends Component
         }
     }
 
+    public function seleccionarResultado(int $templateId, string $valor): void
+    {
+        $this->resultados[$templateId] = $valor;
+        $this->guardarItem($templateId);
+    }
+
     public function updatedResultados($value, $templateId): void
     {
-        $this->guardarItem($templateId);
+        // Mantenido como fallback; la acción principal se ejecuta vía seleccionarResultado
     }
 
     public function guardarItem(int $templateId): void
@@ -118,14 +123,15 @@ class Checklist extends Component
         }
 
         $this->validate([
-            "fotos.{$this->fotoTemplateId}" => 'required|image|max:5120', // 5MB
+            "fotos.{$this->fotoTemplateId}" => 'required|image|max:5120',
+        ], [
+            "fotos.{$this->fotoTemplateId}.required" => 'Selecciona una imagen',
+            "fotos.{$this->fotoTemplateId}.image" => 'El archivo debe ser una imagen',
+            "fotos.{$this->fotoTemplateId}.max" => 'La imagen no debe superar 5MB',
         ]);
 
         $foto = $this->fotos[$this->fotoTemplateId];
-        $originalFilename = $foto->getClientOriginalName();
         $extension = $foto->getClientOriginalExtension();
-
-        // Generar nombre descriptivo: orden_fase_item_timestamp.ext
         $nombreItem = Str::slug($this->checklist[$this->fotoTemplateId]['nombre']);
         $nuevoNombre = "{$this->workOrder->codigo}_{$this->fase}_{$nombreItem}_" . time() . ".{$extension}";
 
@@ -135,7 +141,6 @@ class Checklist extends Component
             'private'
         );
 
-        // Crear registro en work_order_photos
         $this->workOrder->photos()->create([
             'filename' => $nuevoNombre,
             'path' => $path,
@@ -145,14 +150,14 @@ class Checklist extends Component
             'tipo' => 'checklist',
             'fase' => $this->fase,
             'descripcion' => $this->checklist[$this->fotoTemplateId]['nombre'] . ' - Fase: ' . strtoupper($this->fase),
-            'latitude' => null, // Obtener del JS si es necesario
+            'latitude' => null,
             'longitude' => null,
             'uploaded_by' => Auth::user()->id,
         ]);
 
         $this->notification([
-            'title' => 'Foto Subida',
-            'description' => 'La evidencia fotográfica se guardó correctamente',
+            'title' => 'Foto Guardada',
+            'description' => 'Evidencia fotográfica guardada correctamente',
             'icon' => 'success',
         ]);
 
@@ -169,6 +174,7 @@ class Checklist extends Component
 
     public function finalizarChecklist(): void
     {
+
         if ($this->completados < $this->totalItems) {
             $this->notification([
                 'title' => 'Checklist Incompleto',
@@ -176,33 +182,6 @@ class Checklist extends Component
                 'icon' => 'error',
             ]);
             return;
-        }
-
-        // Validar que los ítems que requieren foto tengan al menos una foto
-        foreach ($this->checklist as $templateId => $item) {
-            if ($item['requiere_foto'] && isset($this->resultados[$templateId])) {
-                $tieneObservacion = WorkOrderChecklist::where('work_order_id', $this->workOrder->id)
-                    ->where('checklist_template_id', $templateId)
-                    ->where('fase', $this->fase)
-                    ->where('resultado', ChecklistResultado::OBSERVADO)
-                    ->exists();
-
-                if ($tieneObservacion) {
-                    // Verificar si tiene foto
-                    $tieneFoto = $this->workOrder->photos()
-                        ->where('descripcion', 'like', '%' . $item['nombre'] . '%')
-                        ->exists();
-
-                    if (!$tieneFoto) {
-                        $this->notification([
-                            'title' => 'Foto Requerida',
-                            'description' => "El ítem '{$item['nombre']}' requiere evidencia fotográfica",
-                            'icon' => 'error',
-                        ]);
-                        return;
-                    }
-                }
-            }
         }
 
         $this->notification([

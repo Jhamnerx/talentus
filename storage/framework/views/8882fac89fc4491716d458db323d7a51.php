@@ -75,7 +75,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'marca','label' => 'Marca:','placeholder' => 'TOYOTA']); ?>
+<?php $component->withAttributes(['wire:model' => 'marca','label' => 'Marca:','placeholder' => 'TOYOTA']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -100,7 +100,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'modelo','label' => 'Modelo:','placeholder' => 'HILUX']); ?>
+<?php $component->withAttributes(['wire:model' => 'modelo','label' => 'Modelo:','placeholder' => 'HILUX']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -125,7 +125,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'tipo','label' => 'Tipo:','placeholder' => 'PICK UP']); ?>
+<?php $component->withAttributes(['wire:model' => 'tipo','label' => 'Tipo:','placeholder' => 'PICK UP']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -150,7 +150,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'year','label' => 'Año:','placeholder' => '2024']); ?>
+<?php $component->withAttributes(['wire:model' => 'year','label' => 'Año:','placeholder' => '2024']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -175,7 +175,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'color','label' => 'COLOR:','placeholder' => 'ROJO AZUL BLANCO']); ?>
+<?php $component->withAttributes(['wire:model' => 'color','label' => 'COLOR:','placeholder' => 'ROJO AZUL BLANCO']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -200,7 +200,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'motor','label' => 'MOTOR:','placeholder' => '1GDG066086']); ?>
+<?php $component->withAttributes(['wire:model' => 'motor','label' => 'MOTOR:','placeholder' => '1GDG066086']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -225,7 +225,7 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'serie','label' => 'SERIE:','placeholder' => '8AJHA8CD9K2629775']); ?>
+<?php $component->withAttributes(['wire:model' => 'serie','label' => 'SERIE:','placeholder' => '8AJHA8CD9K2629775']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 <?php echo $__env->renderComponent(); ?>
@@ -470,7 +470,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\WireUi\Components\Select\Base::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['label' => 'Seleccionar dispositivo GPS:','autocomplete' => 'off','name' => 'dispositivo_imei','id' => 'dispositivo_imei','wire:model.live' => 'dispositivo_imei','placeholder' => '357073292893290','option-description' => 'option_description','async-data' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('api.dispositivos.index')),'option-label' => 'imei','option-value' => 'imei']); ?>
+<?php $component->withAttributes(['label' => 'Seleccionar dispositivo GPS:','autocomplete' => 'off','name' => 'dispositivo_imei','id' => 'dispositivo_imei','wire:model.live' => 'dispositivo_imei','placeholder' => '357073292893290','option-description' => 'option_description','async-data' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('api.dispositivos.index', ['solo_disponibles' => true])),'option-label' => 'imei','option-value' => 'imei']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
 
@@ -515,8 +515,8 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             <!-- Lista de dispositivos seleccionados -->
             <div class="col-span-12">
                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(count($dispositivos) > 0): ?>
-                    <table class="w-full text-sm text-left text-gray-500">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
                             <tr>
                                 <th scope="col" class="px-6 py-3">IMEI</th>
                                 <th scope="col" class="px-6 py-3">Modelo</th>
@@ -526,17 +526,19 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </thead>
                         <tbody>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $dispositivos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $dispositivo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoop($loop->index); ?><?php endif; ?>
-                                <tr class="bg-white border-b">
-                                    <td class="px-6 py-4"><?php echo e($dispositivo['imei']); ?></td>
-                                    <td class="px-6 py-4"><?php echo e($dispositivo['modelo']); ?></td>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <td class="px-6 py-4 dark:text-gray-300"><?php echo e($dispositivo['imei']); ?></td>
+                                    <td class="px-6 py-4 dark:text-gray-300"><?php echo e($dispositivo['modelo']); ?></td>
                                     <td class="px-6 py-4">
                                         <input type="radio" name="dispositivo_principal"
                                             wire:click="marcarComoPrincipal(<?php echo e($index); ?>)"
-                                            <?php echo e($dispositivo_principal === $index ? 'checked' : ''); ?>>
+                                            <?php echo e($dispositivo_principal === $index ? 'checked' : ''); ?>
+
+                                            class="accent-indigo-500">
                                     </td>
                                     <td class="px-6 py-4">
                                         <button type="button" wire:click="quitarDispositivo(<?php echo e($index); ?>)"
-                                            class="text-red-500 hover:text-red-700">
+                                            class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -550,8 +552,8 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </tbody>
                     </table>
                 <?php else: ?>
-                    <div class="text-center p-4 bg-gray-100 rounded">
-                        <p>No has seleccionado ningún dispositivo</p>
+                    <div class="text-center p-4 bg-gray-100 dark:bg-gray-700 rounded">
+                        <p class="dark:text-gray-300">No has seleccionado ningún dispositivo</p>
                     </div>
                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
             </div>

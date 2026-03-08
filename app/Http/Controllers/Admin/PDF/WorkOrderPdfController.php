@@ -16,6 +16,7 @@ class WorkOrderPdfController extends Controller
             'cliente',
             'tecnico',
             'creador',
+            'mantenimiento',
             'deviceHistory.dispositivo',
             'deviceHistory.simCard',
             'checklists.template',

@@ -26,6 +26,21 @@ class Show extends Component
     public string $codigoDispositivo = '';
     public string $accionDispositivo = 'instalado'; // 'instalado', 'retirado', 'reemplazado'
     public string $observacionesDispositivo = '';
+    public string $ubicacionInstalacion = '';
+    public string $ubicacionPersonalizada = '';
+
+    public const UBICACIONES = [
+        'TABLERO CENTRAL',
+        'TABLERO LADO DERECHO',
+        'TABLERO LADO IZQUIERDO',
+        'DEBAJO DEL ASIENTO',
+        'MALETERO / BAÚL',
+        'CABINA DEL CONDUCTOR',
+        'BAJO EL CAPÓ (MOTOR)',
+        'PUERTA DELANTERA DERECHA',
+        'PUERTA DELANTERA IZQUIERDA',
+        'OTRO',
+    ];
 
     protected $listeners = [
         'work-order-updated' => 'refreshWorkOrder',
@@ -40,6 +55,7 @@ class Show extends Component
             'cliente',
             'tecnico',
             'creador',
+            'mantenimiento.vehiculo',
             'deviceHistory.dispositivo',
             'deviceHistory.simCard',
             'checklists.template',
@@ -59,6 +75,7 @@ class Show extends Component
             'cliente',
             'tecnico',
             'creador',
+            'mantenimiento.vehiculo',
             'deviceHistory.dispositivo',
             'deviceHistory.simCard',
             'checklists.template',
@@ -166,6 +183,8 @@ class Show extends Component
         $this->accionDispositivo = $accion;
         $this->codigoDispositivo = '';
         $this->observacionesDispositivo = '';
+        $this->ubicacionInstalacion = '';
+        $this->ubicacionPersonalizada = '';
     }
 
     public function recibirCodigoEscaneado($codigo)
@@ -178,16 +197,25 @@ class Show extends Component
         $this->validate([
             'codigoDispositivo' => 'required|string',
             'accionDispositivo' => 'required|in:instalado,retirado,reemplazado',
+            'ubicacionInstalacion' => 'required|string',
+            'ubicacionPersonalizada' => 'required_if:ubicacionInstalacion,OTRO|nullable|string|max:255',
         ], [
             'codigoDispositivo.required' => 'El código es obligatorio',
+            'ubicacionInstalacion.required' => 'La ubicación de instalación es obligatoria',
+            'ubicacionPersonalizada.required_if' => 'Debes especificar la ubicación personalizada',
         ]);
 
         try {
+            $ubicacion = $this->ubicacionInstalacion === 'OTRO'
+                ? $this->ubicacionPersonalizada
+                : $this->ubicacionInstalacion;
+
             $data = [
                 'work_order_id' => $this->workOrder->id,
                 'vehiculo_id' => $this->workOrder->vehiculo_id,
                 'fecha_instalacion' => now(),
                 'observaciones' => $this->observacionesDispositivo,
+                'ubicacion_instalacion' => $ubicacion,
             ];
 
             if ($this->tipoDispositivo === 'imei') {

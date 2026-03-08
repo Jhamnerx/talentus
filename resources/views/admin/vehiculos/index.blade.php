@@ -11,7 +11,6 @@
     @livewire('admin.vehiculos.import', [], key('import'))
     @livewire('admin.vehiculos.suspend', [], key('suspend'))
     @livewire('admin.vehiculos.mantenimiento.save', ['update' => session('updated-numero')], key('mantenimiento-save'))
-    @livewire('admin.vehiculos.save-quick', [], key('save-quick'))
     @livewire('admin.lineas.save', [], key('lineas-save'))
     @livewire('admin.dispositivos.save', [], key('dispositivos-save'))
     @livewire('admin.clientes.save', [], key('clientes-save'))

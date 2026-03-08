@@ -26,6 +26,42 @@
         <x-form.datetime.picker label="Fecha Programada *" wire:model.live="fecha_programada"
             parse-format="YYYY-MM-DD HH:mm" display-format="DD-MM-YYYY HH:mm" :clearable="false" />
 
+        {{-- Vincular Mantenimiento Programado (solo cuando el tipo lo requiere) --}}
+        @if ($tipoRequiereMantenimiento)
+            <div
+                class="rounded-lg border border-amber-200 bg-amber-50 p-3
+                        dark:border-amber-600/30 dark:bg-amber-950/20">
+                <div class="mb-2 flex items-center gap-2">
+                    <svg class="h-4 w-4 shrink-0 text-amber-500 dark:text-amber-400" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span class="text-sm font-semibold text-amber-700 dark:text-amber-400">
+                        Mantenimiento Programado
+                    </span>
+                </div>
+
+                @if (!$vehiculo_id)
+                    <p class="text-xs text-amber-600 dark:text-amber-400/80">
+                        Selecciona un vehículo para ver las notificaciones de mantenimiento pendientes.
+                    </p>
+                @elseif ($mantenimientosPendientes->isEmpty())
+                    <p class="text-xs text-amber-600 dark:text-amber-400/80">
+                        No hay mantenimientos programados pendientes para este vehículo.
+                    </p>
+                @else
+                    <x-form.select label="Vincular con Notificación de Mantenimiento" wire:model="mantenimiento_id"
+                        placeholder="Seleccionar mantenimiento programado (opcional)" :options="$mantenimientosPendientes"
+                        option-label="label" option-value="id" :clearable="true" />
+                    <p class="mt-1 text-xs text-amber-600 dark:text-amber-400/80">
+                        Al finalizar la orden, el mantenimiento vinculado se marcará como
+                        <strong class="font-semibold text-amber-700 dark:text-amber-300">completado</strong>.
+                    </p>
+                @endif
+            </div>
+        @endif
+
         {{-- Observaciones --}}
         <x-form.textarea label="Observaciones Iniciales" wire:model="observaciones_inicial"
             placeholder="Información adicional..." rows="3" />

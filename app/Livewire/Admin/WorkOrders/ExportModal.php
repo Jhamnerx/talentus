@@ -7,9 +7,12 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use App\Exports\WorkOrdersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use WireUi\Traits\WireUiActions;
 
 class ExportModal extends Component
 {
+    use WireUiActions;
+
     public $modalExport = false;
     public $export_tecnico_id = '';
     public $export_fecha_inicial = '';
@@ -81,12 +84,7 @@ class ExportModal extends Component
                 'ordenes_trabajo_' . now()->format('Y-m-d_His') . '.xlsx'
             );
         } catch (\Exception $e) {
-            $this->dispatch(
-                'notify-toast',
-                icon: 'error',
-                title: 'ERROR',
-                mensaje: 'Error al exportar: ' . $e->getMessage()
-            );
+            $this->notification()->error('ERROR', 'Error al exportar: ' . $e->getMessage());
         }
     }
 }

@@ -31,6 +31,7 @@ class WorkOrderType extends Model
         'requiere_accesorios' => 'boolean',
         'requiere_checklist' => 'boolean',
         'active' => 'boolean',
+        'es_mantenimiento_programado' => 'boolean',
         'costo_base' => 'decimal:2',
     ];
 
@@ -50,5 +51,10 @@ class WorkOrderType extends Model
     public function scopeActive($query)
     {
         return $query->where('active', true);
+    }
+
+    public function scopeMantenimientoProgramado($query)
+    {
+        return $query->where('es_mantenimiento_programado', true);
     }
 }

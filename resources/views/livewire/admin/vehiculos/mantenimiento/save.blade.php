@@ -5,12 +5,6 @@
             <div class="px-8 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-12 gap-6">
 
-                    <div class="col-span-12 sm:col-span-4">
-
-                        <x-form.input wire:model.live="numero" readonly label="Número:" placeholder="MT2-001" />
-
-                    </div>
-
                     <div class="col-span-12 sm:col-span-4 ">
                         <x-form.select label="Selecciona una Vehiculo:" wire:model.live="vehiculo_id"
                             placeholder="Selecciona una placa" option-description="option_description" :async-data="route('api.vehiculos.index')"

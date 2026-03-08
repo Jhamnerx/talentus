@@ -5,6 +5,7 @@ namespace App\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -382,7 +383,11 @@ class FactilizaService
      */
     public function consultarPlaca(string $placa): array
     {
-        return $this->get("placa/info/{$placa}");
+        $cacheKey = 'factiliza_placa_' . strtoupper($placa);
+
+        return Cache::remember($cacheKey, now()->addMinutes(10), function () use ($placa) {
+            return $this->get("placa/info/{$placa}");
+        });
     }
 
     /**

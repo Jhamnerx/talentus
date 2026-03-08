@@ -16,33 +16,6 @@
             <div class="px-8 py-5 bg-white sm:p-6">
                 <div class="grid grid-cols-12 gap-6">
 
-                    <div class="col-span-12 sm:col-span-4">
-
-                        <?php if (isset($component)) { $__componentOriginal125559500674abc14ca4c750a63c3764 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal125559500674abc14ca4c750a63c3764 = $attributes; } ?>
-<?php $component = WireUi\Components\TextField\Input::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('form.input'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\WireUi\Components\TextField\Input::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['wire:model.live' => 'numero','readonly' => true,'label' => 'Número:','placeholder' => 'MT2-001']); ?>
-<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
-
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal125559500674abc14ca4c750a63c3764)): ?>
-<?php $attributes = $__attributesOriginal125559500674abc14ca4c750a63c3764; ?>
-<?php unset($__attributesOriginal125559500674abc14ca4c750a63c3764); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal125559500674abc14ca4c750a63c3764)): ?>
-<?php $component = $__componentOriginal125559500674abc14ca4c750a63c3764; ?>
-<?php unset($__componentOriginal125559500674abc14ca4c750a63c3764); ?>
-<?php endif; ?>
-
-                    </div>
-
                     <div class="col-span-12 sm:col-span-4 ">
                         <?php if (isset($component)) { $__componentOriginal49b3de13d927faa5a3ecd49fc0b06061 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal49b3de13d927faa5a3ecd49fc0b06061 = $attributes; } ?>

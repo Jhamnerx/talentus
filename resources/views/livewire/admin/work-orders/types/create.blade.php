@@ -57,6 +57,24 @@
             <x-form.toggle wire:model="active" label="Tipo Activo"
                 description="Los tipos inactivos no aparecerán al crear órdenes" />
         </div>
+
+        {{-- Mantenimiento Programado --}}
+        <div
+            class="col-span-2 rounded-lg border border-amber-200 bg-amber-50 p-3
+                    dark:border-amber-600/30 dark:bg-amber-950/20">
+            <div class="flex items-start gap-2 mb-2">
+                <svg class="mt-0.5 h-4 w-4 shrink-0 text-amber-500 dark:text-amber-400" fill="none"
+                    viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span class="text-xs font-semibold text-amber-700 dark:text-amber-400 uppercase tracking-wide">
+                    Mantenimiento Programado
+                </span>
+            </div>
+            <x-form.toggle wire:model="es_mantenimiento_programado" label="Tipo para Mantenimientos Programados"
+                description="Al crear una orden con este tipo, se podrá vincular con una notificación de mantenimiento programado del vehículo" />
+        </div>
     </div>
 
     <x-slot name="footer" class="flex justify-end gap-3">
